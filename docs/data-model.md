@@ -19,6 +19,11 @@
 - `data/sources.csv`
   - One record per evidence source.
   - Primary key: `source_id`
+  - Canonical source registry for all datasets.
+
+- `data/reference/tnea_2026_eligibility.csv`
+  - Detailed, year-specific extraction of official TNEA eligibility rules.
+  - Links to the canonical source registry through `source_id`.
 
 - `data/student_profiles.csv`
   - Anonymous student guidance inputs.
@@ -37,14 +42,16 @@
 
 3. Every `source_id` in `eligibility_rules.csv` must exist in `sources.csv`.
 
-4. All ID fields must be unique within their own file.
+4. Every `source_id` in `reference/tnea_2026_eligibility.csv` must exist in `sources.csv`.
 
-5. Dates must use `YYYY-MM-DD`.
+5. All ID fields must be unique within their own file.
 
-6. `cutoff_mark` in `student_profiles.csv` must equal:
+6. Dates must use `YYYY-MM-DD`.
+
+7. `cutoff_mark` in `student_profiles.csv` must equal:
 
    `maths_mark + (physics_mark + chemistry_mark) / 2`
 
-7. `last_verified_date` must be completed whenever a factual record is added.
+8. `last_verified_date` must be completed whenever a factual record is added.
 
-8. Do not add personal contact information or a student’s name to `student_profiles.csv`.
+9. Do not add personal contact information or a student's name to `student_profiles.csv`.

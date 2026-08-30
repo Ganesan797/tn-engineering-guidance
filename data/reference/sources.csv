@@ -1,4 +1,0 @@
-source_id,source_name,source_type,url,coverage,year,last_verified,authority_level,status
-SRC001,Tamil Nadu Engineering Admissions (TNEA),official_portal,https://www.tneaonline.org,Engineering admissions,2026,2026-08-30,primary,active
-SRC002,TNEA 2026 Information Brochure,official_document,https://static.tneaonline.org/docs/2_Information_Brochure_2026.pdf,TNEA eligibility rules and admission process,2026,2026-08-30,primary,active
-SRC003,Directorate of Technical Education Tamil Nadu,government_portal,https://www.dte.tn.gov.in,Technical education and TNEA,2026,2026-08-30,primary,active
