@@ -19,6 +19,7 @@
 | Field | Definition |
 | --- | --- |
 | `college_id` | Stable unique college identifier. |
+| `tnea_college_code` | Unique college counselling code used in TNEA records. |
 | `college_name` | Official institution name. |
 | `management_type` | Government, government-aided, self-financing, or another verified type. |
 | `district`, `city` | College location. |
