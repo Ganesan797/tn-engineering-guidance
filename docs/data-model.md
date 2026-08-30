@@ -10,6 +10,11 @@
   - One record per college programme/branch.
   - Primary key: `programme_id`
   - Links to college through `college_id`
+  - Links to the branch master through `branch_id`.
+
+- `data/branches.csv`
+  - One record per normalized engineering branch.
+  - Primary key: `branch_id`
 
 - `data/cutoffs.csv`
   - One historical cutoff record per programme, counselling year, and category.
@@ -38,20 +43,22 @@
 
 1. Every `college_id` in `programmes.csv` must exist in `colleges.csv`.
 
-2. Every `programme_id` in `cutoffs.csv` must exist in `programmes.csv`.
+2. Every `branch_id` in `programmes.csv` must exist in `branches.csv`.
 
-3. Every `source_id` in `eligibility_rules.csv` must exist in `sources.csv`.
+3. Every `programme_id` in `cutoffs.csv` must exist in `programmes.csv`.
 
-4. Every `source_id` in `reference/tnea_2026_eligibility.csv` must exist in `sources.csv`.
+4. Every `source_id` in `eligibility_rules.csv` must exist in `sources.csv`.
 
-5. All ID fields must be unique within their own file.
+5. Every `source_id` in `reference/tnea_2026_eligibility.csv` must exist in `sources.csv`.
 
-6. Dates must use `YYYY-MM-DD`.
+6. All ID fields must be unique within their own file.
 
-7. `cutoff_mark` in `student_profiles.csv` must equal:
+7. Dates must use `YYYY-MM-DD`.
+
+8. `cutoff_mark` in `student_profiles.csv` must equal:
 
    `maths_mark + (physics_mark + chemistry_mark) / 2`
 
-8. `last_verified_date` must be completed whenever a factual record is added.
+9. `last_verified_date` must be completed whenever a factual record is added.
 
-9. Do not add personal contact information or a student's name to `student_profiles.csv`.
+10. Do not add personal contact information or a student's name to `student_profiles.csv`.
