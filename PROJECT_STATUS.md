@@ -14,6 +14,7 @@
 - Empty schemas exist for colleges, programmes, cutoffs, canonical eligibility rules, and anonymous student profiles.
 - Project source document and feature-specification template exist.
 - Six-month V1 roadmap and this live status file are now populated for review.
+- Frozen Domain/Data V1 contract artifacts have landed in `docs/domain_data_v1.md` and `docs/domain_data_v1.yaml`.
 
 No executable implementation or automated tests are complete. Files under `src/` and `tests/` are placeholders only.
 

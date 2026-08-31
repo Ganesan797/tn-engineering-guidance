@@ -1,0 +1,1027 @@
+contract:
+  name: domain_data_v1
+  status: FROZEN
+  admission_year: 2026
+
+global_invariants:
+  canonical_ids:
+    - tnea_college_code
+    - branch_id
+  null_equals_false: false
+  null_semantics:
+    "true": explicitly_known_true
+    "false": explicitly_known_false
+    "null": unknown_unanswered_or_unavailable
+  unresolved_required_evidence_outcome: NEEDS_REVIEW
+  unsupported_rule_outcome: NEEDS_REVIEW
+  govt_school_7_5_true_proves_entitlement: false
+  govt_school_7_5_entitlement_without_additional_rule: NEEDS_REVIEW
+  normalized_marks_used_for_minimum_eligibility: false
+  rounded_marks_used_for_minimum_eligibility: false
+
+aggregate_eligibility:
+  priority:
+    - INELIGIBLE
+    - NEEDS_REVIEW
+    - ELIGIBLE
+  algorithm:
+    - "if any required applicable rule outcome == INELIGIBLE: overall = INELIGIBLE"
+    - "else if any required applicable rule outcome == NEEDS_REVIEW: overall = NEEDS_REVIEW"
+    - "else: overall = ELIGIBLE"
+
+enums:
+  qualifying_stream:
+    - HSC_ACADEMIC
+    - HSC_VOCATIONAL
+    - EQUIVALENT_ACADEMIC
+    - EQUIVALENT_VOCATIONAL
+
+  nativity_exception_type:
+    - NONE
+    - TN_NATIVE_STUDIED_OUTSIDE_TN
+    - CENTRAL_GOVT_EMPLOYEE_CHILD
+    - PUBLIC_SECTOR_OR_RECOGNISED_INSTITUTION_EMPLOYEE_CHILD
+    - ALL_INDIA_SERVICE_TN_CADRE_CHILD
+    - OTHER_STATE_STUDIED_IN_TN
+    - SRI_LANKAN_TAMIL_REFUGEE
+    - OCI_PIO_TN_NATIVE
+
+  eligibility_outcome:
+    - ELIGIBLE
+    - INELIGIBLE
+    - NEEDS_REVIEW
+
+  community:
+    - GENERAL
+    - BC
+    - BCM
+    - MBC
+    - DNC
+    - SC
+    - SCA
+    - ST
+
+  vocational_subject_group_code:
+    - "2921"
+    - "2971"
+    - "2922"
+    - "2972"
+    - "2923"
+    - "2973"
+    - "2924"
+    - "2974"
+    - "2925"
+    - "2975"
+    - "2926"
+    - "2976"
+
+  seat_fact_type:
+    - SANCTIONED_INTAKE
+    - CURRENT_VACANCY
+    - QUOTA_VACANCY
+
+  quota:
+    - GENERAL
+    - GOVT_SCHOOL_7_5
+
+  reservation_category:
+    - OC
+    - BC
+    - BCM
+    - MBC
+    - SC
+    - SCA
+    - ST
+
+student_profile:
+  admission_year_is_field: false
+
+  fields:
+    maths_mark:
+      type: number
+      nullable: true
+      meaning: Mathematics mark before ELG032 improvement-mark substitution
+
+    physics_mark:
+      type: number
+      nullable: true
+      meaning: Physics mark before ELG032 improvement-mark substitution
+
+    chemistry_mark:
+      type: number
+      nullable: true
+      meaning: Chemistry mark before ELG032 improvement-mark substitution
+
+    original_maths_mark:
+      type: number
+      nullable: true
+      meaning: Mathematics mark excluding disallowed post-2005 improvement marks
+
+    original_physics_mark:
+      type: number
+      nullable: true
+      meaning: Physics mark excluding disallowed post-2005 improvement marks
+
+    original_chemistry_mark:
+      type: number
+      nullable: true
+      meaning: Chemistry mark excluding disallowed post-2005 improvement marks
+
+    qualifying_stream:
+      type: enum
+      enum: qualifying_stream
+      nullable: true
+      meaning: qualifying examination stream
+
+    community:
+      type: enum
+      enum: community
+      nullable: true
+      meaning: community classification used for minimum eligibility threshold
+
+    govt_school_7_5:
+      type: boolean
+      nullable: true
+      meaning: profile assertion related to government-school 7.5 percent quota
+      proves_entitlement: false
+
+    tamil_nadu_native:
+      type: boolean
+      nullable: true
+      meaning: candidate is established as Tamil Nadu native
+
+    nativity_certificate_available:
+      type: boolean
+      nullable: true
+      meaning: required electronic or digitally signed Nativity Certificate is available
+
+    nativity_exception_type:
+      type: enum
+      enum: nativity_exception_type
+      nullable: true
+      meaning: selects frozen V1 nativity pathway
+
+    studied_in_tamil_nadu:
+      type: boolean
+      nullable: true
+      meaning: legacy summary field
+      used_for_rule_decisions: false
+      override_class_level_history: false
+
+    study_history_evidence_available:
+      type: boolean
+      nullable: true
+      meaning: summary metadata for study-history evidence
+      replaces_class_level_history: false
+
+    parent_evidence_available:
+      type: boolean
+      nullable: true
+      meaning: summary metadata for parent evidence
+      replaces_specific_parent_evidence_fields: false
+
+    required_documents_available:
+      type: boolean
+      nullable: true
+      meaning: all additional rule-specific supporting documents not represented by another dedicated field are available
+
+    parent_tn_service_years:
+      type: number
+      nullable: true
+      meaning: continuous years qualifying parent or guardian served or was employed in Tamil Nadu at application time
+
+    parent_employer_certificate_available:
+      type: boolean
+      nullable: true
+      meaning: employer certificate required by ELG004 or ELG005 is available
+
+    parent_self_declaration_available:
+      type: boolean
+      nullable: true
+      meaning: parent self-declaration required by ELG011 is available
+
+    refugee_identification_available:
+      type: boolean
+      nullable: true
+      meaning: identification certificate required by ELG012 is available
+
+    oci_pio_card_available:
+      type: boolean
+      nullable: true
+      meaning: OCI or PIO card evidence required by ELG013 is available
+
+    vocational_subject_group_code:
+      type: enum
+      enum: vocational_subject_group_code
+      nullable: true
+      meaning: prescribed vocational subject-group code
+
+    vocational_related_subject_mark:
+      type: number
+      nullable: true
+      meaning: related-subject mark used for vocational minimum eligibility
+
+    vocational_theory_mark:
+      type: number
+      nullable: true
+      meaning: vocational theory mark
+
+    vocational_practical_mark:
+      type: number
+      nullable: true
+      meaning: vocational practical mark
+
+    original_vocational_related_subject_mark:
+      type: number
+      nullable: true
+      meaning: related-subject mark excluding disallowed post-2005 improvement marks
+
+    original_vocational_theory_mark:
+      type: number
+      nullable: true
+      meaning: vocational theory mark excluding disallowed post-2005 improvement marks
+
+    original_vocational_practical_mark:
+      type: number
+      nullable: true
+      meaning: vocational practical mark excluding disallowed post-2005 improvement marks
+
+    grade_certificate_used:
+      type: boolean
+      nullable: true
+      meaning: eligibility evidence uses grades instead of direct marks
+
+    actual_marks_available:
+      type: boolean
+      nullable: true
+      meaning: actual marks corresponding to grade evidence are available
+
+    improvement_marks_used:
+      type: boolean
+      nullable: true
+      meaning: supplied marks include improvement marks
+
+    improvement_marks_year:
+      type: integer
+      nullable: true
+      meaning: year improvement marks were obtained
+
+  tn_study_years_or_classes:
+    type: object
+    nullable: false
+    fields:
+      class_8_in_tn:
+        type: boolean
+        nullable: true
+      class_9_in_tn:
+        type: boolean
+        nullable: true
+      class_10_in_tn:
+        type: boolean
+        nullable: true
+      class_11_in_tn:
+        type: boolean
+        nullable: true
+      class_12_in_tn:
+        type: boolean
+        nullable: true
+
+    derived_predicates:
+      ALL_VIII_TO_XII_IN_TN: >-
+        class_8_in_tn == true AND
+        class_9_in_tn == true AND
+        class_10_in_tn == true AND
+        class_11_in_tn == true AND
+        class_12_in_tn == true
+
+      ANY_VIII_TO_XII_OUTSIDE_TN: >-
+        class_8_in_tn == false OR
+        class_9_in_tn == false OR
+        class_10_in_tn == false OR
+        class_11_in_tn == false OR
+        class_12_in_tn == false
+
+    unknown_behavior: >-
+      if a rule requires complete VIII-XII history and any required
+      class field is null, return NEEDS_REVIEW
+
+derived_values:
+  academic_stream: >-
+    qualifying_stream in
+    [HSC_ACADEMIC, EQUIVALENT_ACADEMIC]
+
+  vocational_stream: >-
+    qualifying_stream in
+    [HSC_VOCATIONAL, EQUIVALENT_VOCATIONAL]
+
+  effective_academic_marks:
+    if_post_2005_improvement: >-
+      if improvement_marks_used == true and improvement_marks_year >= 2006,
+      use original_maths_mark, original_physics_mark, original_chemistry_mark
+    otherwise: >-
+      use maths_mark, physics_mark, chemistry_mark
+
+  effective_vocational_marks:
+    if_post_2005_improvement: >-
+      if improvement_marks_used == true and improvement_marks_year >= 2006,
+      use original_vocational_related_subject_mark,
+      original_vocational_theory_mark,
+      original_vocational_practical_mark
+    otherwise: >-
+      use vocational_related_subject_mark,
+      vocational_theory_mark,
+      vocational_practical_mark
+
+  ACADEMIC_AVERAGE: >-
+    (effective_maths_mark +
+     effective_physics_mark +
+     effective_chemistry_mark) / 3
+
+  VOCATIONAL_AVERAGE: >-
+    (effective_vocational_related_subject_mark +
+     effective_vocational_theory_mark +
+     effective_vocational_practical_mark) / 3
+
+  CUTOFF: >-
+    effective_maths_mark +
+    effective_physics_mark / 2 +
+    effective_chemistry_mark / 2
+
+eligibility_result:
+  fields:
+    outcome:
+      type: enum
+      enum: eligibility_outcome
+      nullable: false
+
+    cutoff:
+      type: number
+      nullable: true
+
+    checks:
+      type: array
+      nullable: false
+      item:
+        rule_id:
+          type: string
+          nullable: false
+        outcome:
+          type: enum
+          enum: eligibility_outcome
+          nullable: false
+        reason_code:
+          type: string
+          nullable: false
+        explanation:
+          type: string
+          nullable: false
+        source_id:
+          type: string
+          nullable: false
+        source_page:
+          type: integer
+          nullable: true
+        source_year:
+          type: integer
+          nullable: false
+          fixed: 2026
+
+    blocking_missing_fields:
+      type: array
+      item_type: string
+      nullable: false
+
+    matched_rule_ids:
+      type: array
+      item_type: string
+      nullable: false
+
+admission_seat_fact:
+  fields:
+    admission_year:
+      type: integer
+      nullable: false
+      fixed: 2026
+
+    tnea_college_code:
+      type: string
+      nullable: false
+      canonical_id: true
+
+    branch_id:
+      type: string
+      nullable: false
+      canonical_id: true
+
+    fact_type:
+      type: enum
+      enum: seat_fact_type
+      nullable: false
+
+    seat_count:
+      type: integer
+      nullable: false
+
+    round:
+      type: integer
+      nullable: true
+
+    reservation_category:
+      type: enum
+      enum: reservation_category
+      nullable: true
+
+    quota:
+      type: enum
+      enum: quota
+      nullable: true
+
+    source_id:
+      type: string
+      nullable: false
+
+    source_page:
+      type: integer
+      nullable: true
+
+  validity:
+    SANCTIONED_INTAKE:
+      round: null
+      quota: null
+      meaning: sanctioned intake only
+
+    CURRENT_VACANCY:
+      round: required_if_source_is_round_specific
+      quota: null_unless_source_explicitly_quota_specific
+      reservation_category: populated_only_if_source_separates_categories
+
+    QUOTA_VACANCY:
+      quota: required
+      round: required_if_source_is_round_specific
+      reservation_category: populated_only_if_source_separates_categories
+
+  invariants:
+    sanctioned_intake_is_vacancy: false
+    sanctioned_intake_is_quota_vacancy: false
+    current_vacancy_is_sanctioned_intake: false
+    quota_vacancy_is_general_vacancy: false
+    quota_vacancy_is_sanctioned_intake: false
+
+rules:
+  - rule_id: ELG001
+    source:
+      source_id: SRC002
+      source_page: 1
+      valid_year: 2026
+    required_fields:
+      - qualifying_stream
+    applies_when: always
+    predicate: >-
+      qualifying_stream in
+      [HSC_ACADEMIC, HSC_VOCATIONAL,
+       EQUIVALENT_ACADEMIC, EQUIVALENT_VOCATIONAL]
+    pass: ELIGIBLE
+    fail: no_schema_valid_enum_value_definitively_fails
+    missing: "qualifying_stream == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG002
+    source: {source_id: SRC002, source_page: 1, valid_year: 2026}
+    required_fields:
+      - nativity_exception_type
+      - tn_study_years_or_classes.class_8_in_tn
+      - tn_study_years_or_classes.class_9_in_tn
+      - tn_study_years_or_classes.class_10_in_tn
+      - tn_study_years_or_classes.class_11_in_tn
+      - tn_study_years_or_classes.class_12_in_tn
+    applies_when: "nativity_exception_type == NONE"
+    predicate: "ALL_VIII_TO_XII_IN_TN == true"
+    pass: ELIGIBLE
+    fail: "any required class flag == false -> INELIGIBLE"
+    missing: "any required field == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG003
+    source: {source_id: SRC002, source_page: 1, valid_year: 2026}
+    required_fields:
+      - nativity_exception_type
+      - tamil_nadu_native
+      - tn_study_years_or_classes.class_8_in_tn
+      - tn_study_years_or_classes.class_9_in_tn
+      - tn_study_years_or_classes.class_10_in_tn
+      - tn_study_years_or_classes.class_11_in_tn
+      - tn_study_years_or_classes.class_12_in_tn
+      - nativity_certificate_available
+    applies_when: "nativity_exception_type == TN_NATIVE_STUDIED_OUTSIDE_TN"
+    predicate: >-
+      tamil_nadu_native == true AND
+      ANY_VIII_TO_XII_OUTSIDE_TN == true AND
+      nativity_certificate_available == true
+    pass: ELIGIBLE
+    fail: >-
+      tamil_nadu_native == false OR
+      nativity_certificate_available == false OR
+      all five class flags == true
+      -> INELIGIBLE
+    missing: "any required field == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG004
+    source: {source_id: SRC002, source_page: 1, valid_year: 2026}
+    required_fields:
+      - nativity_exception_type
+      - parent_tn_service_years
+      - parent_employer_certificate_available
+    applies_when: "nativity_exception_type == CENTRAL_GOVT_EMPLOYEE_CHILD"
+    predicate: >-
+      parent_tn_service_years >= 5 AND
+      parent_employer_certificate_available == true
+    pass: ELIGIBLE
+    fail: >-
+      parent_tn_service_years < 5 OR
+      parent_employer_certificate_available == false
+      -> INELIGIBLE
+    missing: "any required field == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG005
+    source: {source_id: SRC002, source_page: 1, valid_year: 2026}
+    required_fields:
+      - nativity_exception_type
+      - parent_tn_service_years
+      - parent_employer_certificate_available
+      - required_documents_available
+    applies_when: >-
+      nativity_exception_type ==
+      PUBLIC_SECTOR_OR_RECOGNISED_INSTITUTION_EMPLOYEE_CHILD
+    predicate: >-
+      parent_tn_service_years >= 5 AND
+      parent_employer_certificate_available == true AND
+      required_documents_available == true
+    pass: ELIGIBLE
+    fail: >-
+      parent_tn_service_years < 5 OR
+      parent_employer_certificate_available == false OR
+      required_documents_available == false
+      -> INELIGIBLE
+    missing: "any required field == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG006
+    source: {source_id: SRC002, source_page: 1, valid_year: 2026}
+    required_fields:
+      - nativity_exception_type
+      - tn_study_years_or_classes.class_8_in_tn
+      - tn_study_years_or_classes.class_9_in_tn
+      - tn_study_years_or_classes.class_10_in_tn
+      - tn_study_years_or_classes.class_11_in_tn
+      - tn_study_years_or_classes.class_12_in_tn
+    applies_when: "nativity_exception_type == OTHER_STATE_STUDIED_IN_TN"
+    predicate: "ALL_VIII_TO_XII_IN_TN == true"
+    pass: ELIGIBLE
+    fail: "any required class flag == false -> INELIGIBLE"
+    missing: "any required class flag == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG007
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - effective_maths_mark
+      - effective_physics_mark
+      - effective_chemistry_mark
+    applies_when: academic_stream
+    predicate: >-
+      effective_maths_mark != null AND
+      effective_physics_mark != null AND
+      effective_chemistry_mark != null
+    pass: ELIGIBLE
+    fail: no_additional_executable_failure_predicate_in_frozen_rule
+    missing: "any required effective mark == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG008
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - vocational_subject_group_code
+      - effective_vocational_related_subject_mark
+      - effective_vocational_theory_mark
+      - effective_vocational_practical_mark
+    applies_when: vocational_stream
+    predicate: >-
+      vocational_subject_group_code in
+      ["2921","2971","2922","2972","2923","2973",
+       "2924","2974","2925","2975","2926","2976"]
+      AND effective_vocational_related_subject_mark != null
+      AND effective_vocational_theory_mark != null
+      AND effective_vocational_practical_mark != null
+    pass: ELIGIBLE
+    fail: >-
+      non-null vocational_subject_group_code outside prescribed set
+      -> INELIGIBLE
+    missing: "any required value == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG009
+    source: {source_id: SRC002, source_page: 9, valid_year: 2026}
+    required_fields:
+      - effective_maths_mark
+      - effective_physics_mark
+      - effective_chemistry_mark
+    applies_when: academic_merit_cutoff_requested
+    predicate: >-
+      cutoff =
+      effective_maths_mark +
+      effective_physics_mark / 2 +
+      effective_chemistry_mark / 2
+    pass: "ELIGIBLE; store calculated value in EligibilityResult.cutoff"
+    fail: never_makes_candidate_ineligible
+    missing: "any required mark == null -> cutoff null; NEEDS_REVIEW"
+
+  - rule_id: ELG010
+    source: {source_id: SRC002, source_page: 9, valid_year: 2026}
+    required_fields: []
+    applies_when: normalized_cross_board_merit_ranking_requested
+    predicate: NOT_DEFINED_BY_FROZEN_V1_EVIDENCE
+    pass: NEEDS_REVIEW
+    fail: NEEDS_REVIEW
+    missing: NEEDS_REVIEW
+    notes:
+      - no_normalization_formula_may_be_invented
+      - not_used_for_minimum_eligibility
+
+  - rule_id: ELG011
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - nativity_exception_type
+      - parent_self_declaration_available
+    applies_when: "nativity_exception_type == ALL_INDIA_SERVICE_TN_CADRE_CHILD"
+    predicate: "parent_self_declaration_available == true"
+    pass: ELIGIBLE
+    fail: "parent_self_declaration_available == false -> INELIGIBLE"
+    missing: "parent_self_declaration_available == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG012
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - nativity_exception_type
+      - refugee_identification_available
+      - required_documents_available
+      - tn_study_years_or_classes
+    applies_when: "nativity_exception_type == SRI_LANKAN_TAMIL_REFUGEE"
+    predicate: NOT_FULLY_DEFINED
+    pass: NEEDS_REVIEW
+    fail: NEEDS_REVIEW
+    missing: NEEDS_REVIEW
+    reason: >-
+      source requires studied in Tamil Nadu but does not define exact
+      classes or study-duration threshold
+
+  - rule_id: ELG013
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - nativity_exception_type
+      - tamil_nadu_native
+      - oci_pio_card_available
+    applies_when: "nativity_exception_type == OCI_PIO_TN_NATIVE"
+    predicate: >-
+      tamil_nadu_native == true AND
+      oci_pio_card_available == true
+    pass: ELIGIBLE
+    fail: >-
+      tamil_nadu_native == false OR
+      oci_pio_card_available == false
+      -> INELIGIBLE
+    missing: "any required field == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG014
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - nativity_exception_type
+    applies_when: >-
+      nativity_exception_type in
+      [CENTRAL_GOVT_EMPLOYEE_CHILD,
+       PUBLIC_SECTOR_OR_RECOGNISED_INSTITUTION_EMPLOYEE_CHILD,
+       ALL_INDIA_SERVICE_TN_CADRE_CHILD,
+       OTHER_STATE_STUDIED_IN_TN]
+    predicate: membership_in_applicable_set
+    pass: "ELIGIBLE; classification = Open Competition"
+    fail: NOT_APPLICABLE
+    missing: >-
+      nativity_exception_type == null and classification required
+      -> NEEDS_REVIEW
+
+  - rule_id: ELG015
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields_by_path:
+      TN_NATIVE_STUDIED_OUTSIDE_TN:
+        - nativity_certificate_available
+      CENTRAL_GOVT_EMPLOYEE_CHILD:
+        - parent_employer_certificate_available
+      PUBLIC_SECTOR_OR_RECOGNISED_INSTITUTION_EMPLOYEE_CHILD:
+        - parent_employer_certificate_available
+        - required_documents_available
+      ALL_INDIA_SERVICE_TN_CADRE_CHILD:
+        - parent_self_declaration_available
+      OTHER_STATE_STUDIED_IN_TN: []
+    applies_when: >-
+      nativity_exception_type in
+      [TN_NATIVE_STUDIED_OUTSIDE_TN,
+       CENTRAL_GOVT_EMPLOYEE_CHILD,
+       PUBLIC_SECTOR_OR_RECOGNISED_INSTITUTION_EMPLOYEE_CHILD,
+       ALL_INDIA_SERVICE_TN_CADRE_CHILD,
+       OTHER_STATE_STUDIED_IN_TN]
+    predicate_by_path:
+      TN_NATIVE_STUDIED_OUTSIDE_TN: "nativity_certificate_available == true"
+      CENTRAL_GOVT_EMPLOYEE_CHILD: "parent_employer_certificate_available == true"
+      PUBLIC_SECTOR_OR_RECOGNISED_INSTITUTION_EMPLOYEE_CHILD: >-
+        parent_employer_certificate_available == true AND
+        required_documents_available == true
+      ALL_INDIA_SERVICE_TN_CADRE_CHILD: "parent_self_declaration_available == true"
+      OTHER_STATE_STUDIED_IN_TN: "true"
+    pass: "all required path fields true -> ELIGIBLE"
+    fail: "any required path field false -> INELIGIBLE"
+    missing: "any required path field null -> NEEDS_REVIEW"
+    must_not_invent_document_requirements_for:
+      - SRI_LANKAN_TAMIL_REFUGEE
+      - OCI_PIO_TN_NATIVE
+
+  - rule_id: ELG016
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - community
+      - effective_maths_mark
+      - effective_physics_mark
+      - effective_chemistry_mark
+    applies_when: "academic_stream AND community == GENERAL"
+    predicate: "ACADEMIC_AVERAGE >= 45.00"
+    pass: ELIGIBLE
+    fail: "ACADEMIC_AVERAGE < 45.00 -> INELIGIBLE"
+    missing: "any required input == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG017
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - community
+      - effective_maths_mark
+      - effective_physics_mark
+      - effective_chemistry_mark
+    applies_when: "academic_stream AND community in [BC, BCM]"
+    predicate: "ACADEMIC_AVERAGE >= 40.00"
+    pass: ELIGIBLE
+    fail: "ACADEMIC_AVERAGE < 40.00 -> INELIGIBLE"
+    missing: "any required input == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG018
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - community
+      - effective_maths_mark
+      - effective_physics_mark
+      - effective_chemistry_mark
+    applies_when: "academic_stream AND community in [MBC, DNC]"
+    predicate: "ACADEMIC_AVERAGE >= 40.00"
+    pass: ELIGIBLE
+    fail: "ACADEMIC_AVERAGE < 40.00 -> INELIGIBLE"
+    missing: "any required input == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG019
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - community
+      - effective_maths_mark
+      - effective_physics_mark
+      - effective_chemistry_mark
+    applies_when: "academic_stream AND community in [SC, SCA, ST]"
+    predicate: "ACADEMIC_AVERAGE >= 40.00"
+    pass: ELIGIBLE
+    fail: "ACADEMIC_AVERAGE < 40.00 -> INELIGIBLE"
+    missing: "any required input == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG020
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - community
+      - effective_vocational_related_subject_mark
+      - effective_vocational_theory_mark
+      - effective_vocational_practical_mark
+    applies_when: "vocational_stream AND community == GENERAL"
+    predicate: "VOCATIONAL_AVERAGE >= 45.00"
+    pass: ELIGIBLE
+    fail: "VOCATIONAL_AVERAGE < 45.00 -> INELIGIBLE"
+    missing: "any required input == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG021
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - community
+      - effective_vocational_related_subject_mark
+      - effective_vocational_theory_mark
+      - effective_vocational_practical_mark
+    applies_when: "vocational_stream AND community in [BC, BCM]"
+    predicate: "VOCATIONAL_AVERAGE >= 40.00"
+    pass: ELIGIBLE
+    fail: "VOCATIONAL_AVERAGE < 40.00 -> INELIGIBLE"
+    missing: "any required input == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG022
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - community
+      - effective_vocational_related_subject_mark
+      - effective_vocational_theory_mark
+      - effective_vocational_practical_mark
+    applies_when: "vocational_stream AND community in [MBC, DNC]"
+    predicate: "VOCATIONAL_AVERAGE >= 40.00"
+    pass: ELIGIBLE
+    fail: "VOCATIONAL_AVERAGE < 40.00 -> INELIGIBLE"
+    missing: "any required input == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG023
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - community
+      - effective_vocational_related_subject_mark
+      - effective_vocational_theory_mark
+      - effective_vocational_practical_mark
+    applies_when: "vocational_stream AND community in [SC, SCA, ST]"
+    predicate: "VOCATIONAL_AVERAGE >= 40.00"
+    pass: ELIGIBLE
+    fail: "VOCATIONAL_AVERAGE < 40.00 -> INELIGIBLE"
+    missing: "any required input == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG024
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - vocational_subject_group_code
+    applies_when: "vocational_stream"
+    predicate: 'vocational_subject_group_code in ["2921","2971"]'
+    pass: ELIGIBLE
+    fail: NOT_APPLICABLE_IF_ANOTHER_PRESCRIBED_GROUP
+    missing: "vocational_subject_group_code == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG025
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - vocational_subject_group_code
+    applies_when: vocational_stream
+    predicate: 'vocational_subject_group_code in ["2922","2972"]'
+    pass: ELIGIBLE
+    fail: NOT_APPLICABLE_IF_ANOTHER_PRESCRIBED_GROUP
+    missing: "vocational_subject_group_code == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG026
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - vocational_subject_group_code
+    applies_when: vocational_stream
+    predicate: 'vocational_subject_group_code in ["2923","2973"]'
+    pass: ELIGIBLE
+    fail: NOT_APPLICABLE_IF_ANOTHER_PRESCRIBED_GROUP
+    missing: "vocational_subject_group_code == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG027
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - vocational_subject_group_code
+    applies_when: vocational_stream
+    predicate: 'vocational_subject_group_code in ["2924","2974"]'
+    pass: ELIGIBLE
+    fail: NOT_APPLICABLE_IF_ANOTHER_PRESCRIBED_GROUP
+    missing: "vocational_subject_group_code == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG028
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - vocational_subject_group_code
+    applies_when: vocational_stream
+    predicate: 'vocational_subject_group_code in ["2925","2975"]'
+    pass: ELIGIBLE
+    fail: NOT_APPLICABLE_IF_ANOTHER_PRESCRIBED_GROUP
+    missing: "vocational_subject_group_code == null -> NEEDS_REVIEW"
+
+  - rule_id: ELG029
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - qualifying_stream
+      - vocational_subject_group_code
+    applies_when: vocational_stream
+    predicate: 'vocational_subject_group_code in ["2926","2976"]'
+    pass: ELIGIBLE
+    fail: NOT_APPLICABLE_IF_ANOTHER_PRESCRIBED_GROUP
+    missing: "vocational_subject_group_code == null -> NEEDS_REVIEW"
+    group_level_failure: >-
+      non-null vocational_subject_group_code outside all ELG024-ELG029
+      prescribed sets -> INELIGIBLE
+
+  - rule_id: ELG030
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - grade_certificate_used
+      - actual_marks_available
+    applies_when: always
+    predicate_cases:
+      - when: "grade_certificate_used == false"
+        result: ELIGIBLE
+        action: use_supplied_marks
+      - when: >-
+          grade_certificate_used == true AND
+          actual_marks_available == true
+        result: ELIGIBLE
+        action: use_actual_supplied_marks
+      - when: >-
+          grade_certificate_used == true AND
+          actual_marks_available == false
+        result: NEEDS_REVIEW
+        action: no_grade_to_mark_conversion
+      - when: "grade_certificate_used == null"
+        result: NEEDS_REVIEW
+      - when: >-
+          grade_certificate_used == true AND
+          actual_marks_available == null
+        result: NEEDS_REVIEW
+    unsupported:
+      grade_to_mark_conversion: true
+
+  - rule_id: ELG031
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - applicable_effective_marks
+    applies_when: minimum_eligibility_calculated
+    predicate: >-
+      compare unrounded raw average directly with threshold
+      AND do not use normalized marks
+    pass: ELIGIBLE
+    fail: implementation_contract_violation_if_rounded_or_normalized
+    missing: "required effective mark unavailable -> NEEDS_REVIEW"
+
+  - rule_id: ELG032
+    source: {source_id: SRC002, source_page: 2, valid_year: 2026}
+    required_fields:
+      - improvement_marks_used
+      - improvement_marks_year
+    applies_when: marks_are_evaluated
+    predicate_cases:
+      - when: "improvement_marks_used == false"
+        result: ELIGIBLE
+        action: use_normal_mark_fields
+
+      - when: >-
+          improvement_marks_used == true AND
+          improvement_marks_year < 2006
+        result: ELIGIBLE
+        action: use_normal_mark_fields
+
+      - when: >-
+          improvement_marks_used == true AND
+          improvement_marks_year >= 2006 AND
+          academic_stream AND
+          original_maths_mark != null AND
+          original_physics_mark != null AND
+          original_chemistry_mark != null
+        result: ELIGIBLE
+        action: use_complete_original_academic_mark_set
+
+      - when: >-
+          improvement_marks_used == true AND
+          improvement_marks_year >= 2006 AND
+          vocational_stream AND
+          original_vocational_related_subject_mark != null AND
+          original_vocational_theory_mark != null AND
+          original_vocational_practical_mark != null
+        result: ELIGIBLE
+        action: use_complete_original_vocational_mark_set
+
+      - when: >-
+          improvement_marks_used == true AND
+          improvement_marks_year >= 2006 AND
+          required_complete_original_mark_set_is_unavailable
+        result: NEEDS_REVIEW
+
+      - when: "improvement_marks_used == null"
+        result: NEEDS_REVIEW
+
+      - when: >-
+          improvement_marks_used == true AND
+          improvement_marks_year == null
+        result: NEEDS_REVIEW
+
+explicit_needs_review_boundaries:
+  ELG010: normalization_formula_not_defined
+  ELG012: exact_tamil_nadu_study_duration_not_defined
+  ELG030: grade_to_mark_conversion_not_defined
+  ELG032: original_marks_missing_when_post_2005_improvement_marks_must_be_excluded
+  GOVT_SCHOOL_7_5: substantive_entitlement_rule_not_present_in_ELG001_ELG032
+
+implementation_freeze:
+  redesign_allowed: false
+  web_research_allowed_during_implementation: false
+  ai_rule_inference_allowed: false
+  guessed_defaults_allowed: false
+  unknown_or_unrepresentable_behavior: NEEDS_REVIEW
