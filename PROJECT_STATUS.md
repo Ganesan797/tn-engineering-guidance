@@ -1,8 +1,10 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** Milestone 0 — Repository and project-control baseline  
-**Current task:** Repository restructuring / project-control setup  
-**Last reviewed:** 2026-08-31
+**Current milestone:** Milestone 1 — Data contracts and validation foundation
+
+**Current task:** Domain/Data Slice 1 foundation complete; awaiting review
+
+**Last reviewed:** 2026-09-01
 
 ## Completed — verified repository evidence only
 
@@ -15,17 +17,18 @@
 - Project source document and feature-specification template exist.
 - Six-month V1 roadmap and this live status file are now populated for review.
 - Frozen Domain/Data V1 contract artifacts have landed in `docs/domain_data_v1.md` and `docs/domain_data_v1.yaml`.
+- Slice 1 implements the frozen domain models and enums, `ADMISSION_YEAR = 2026`, conservative eligibility aggregation, `AdmissionSeatFact` validation, and focused invariant tests.
 
-No executable implementation or automated tests are complete. Files under `src/` and `tests/` are placeholders only.
+No ELG rule predicates, recommendation logic, AI eligibility behavior, data ingestion, or application UI have been implemented.
 
 ## Immediate next task
 
-Approve the repository restructuring target and write the first implementation specification for the data-contract/validation foundation, including fixtures and acceptance tests, before changing source code.
+Review and commit Slice 1 before authorizing implementation of the frozen ELG001–ELG032 rule-execution mapping.
 
 ## Blockers
 
 - `colleges.csv`, `programmes.csv`, `cutoffs.csv`, and canonical `eligibility_rules.csv` contain no data rows, so real recommendations cannot yet be produced.
-- There is no application/toolchain configuration, executable source, validation pipeline, or test suite.
+- There is no data ingestion pipeline or application UI; the executable implementation is limited to the Slice 1 domain foundation.
 - Historical cutoff-band definitions for dream/target/safe guidance are not yet agreed or evidenced.
 - `project_base.docx` is plain text with a `.docx` extension and is not a valid Word document.
 
@@ -41,4 +44,4 @@ Approve the repository restructuring target and write the first implementation s
 
 ## Next review point
 
-After the repository restructuring proposal and validation feature specification are ready, and before implementation begins.
+After Slice 1 review, before any eligibility rule-execution implementation begins.

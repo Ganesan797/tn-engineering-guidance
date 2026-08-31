@@ -1,0 +1,12 @@
+{
+  "name": "tn-engineering-guidance",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/domain/domain.test.ts tests/domain/eligibility.test.ts tests/domain/admission-seat-fact.test.ts"
+  },
+  "engines": {
+    "node": ">=22.6.0"
+  }
+}
