@@ -1,0 +1,680 @@
+TN Engineering Guidance
+PROJECT_SOURCE_BASE.md
+Project: TN Engineering Guidance
+Owner: Ganesan S
+Type: Personal / Hobby Project
+Status: Active Development
+Version: 1.0
+Last Updated: 2026-08-31
+
+1. Executive Summary
+TN Engineering Guidance is a student-focused platform designed to help Tamil Nadu engineering aspirants make informed decisions during the TNEA admission process.
+
+The platform aims to provide:
+
+College discovery
+Branch exploration
+Historical cutoff analysis
+College recommendation engine
+Counseling assistance
+AI-powered guidance (future)
+The long-term objective is to become a trustworthy decision-support platform for students and parents participating in Tamil Nadu Engineering Admissions (TNEA).
+
+2. Mission
+Help Tamil Nadu engineering aspirants make better college and branch decisions through accurate, transparent, and data-driven guidance.
+
+3. Vision
+Build the most trusted engineering admission guidance platform in Tamil Nadu by combining verified admission data, intelligent recommendations, and student-friendly user experiences.
+
+4. Project Principles
+Principle 1: Accuracy First
+All recommendations must be supported by verifiable data.
+
+Bad data is worse than no data.
+
+Rule
+Track every data source.
+Maintain verification dates.
+Validate imported datasets.
+Principle 2: Student First
+Every feature must solve a real student problem.
+
+Before starting any feature ask:
+
+Does this help a student make a better admission decision?
+
+If the answer is "No", move it to the backlog.
+
+Principle 3: Explain Recommendations
+Recommendations should never be black-box decisions.
+
+Students should understand:
+
+Why a college is recommended
+Why another college is excluded
+What factors influenced the result
+Principle 4: AI Assists, Data Decides
+AI should:
+
+Explain
+Summarize
+Guide
+AI should never invent admission information.
+
+5. Problem Statement
+Students currently face the following challenges:
+
+Difficulty identifying eligible colleges
+Lack of historical cutoff understanding
+Confusing branch selection process
+No consolidated comparison platform
+Limited counseling support tools
+Current information is fragmented across:
+
+TNEA documents
+College websites
+Educational portals
+Community discussions
+The platform will consolidate this information into a single decision-support experience.
+
+6. Target Users
+Primary Users
+Students
+Age Group:
+
+17 to 19
+
+Goals:
+
+Find suitable colleges
+Understand admission probability
+Compare branches
+Plan counseling preferences
+Secondary Users
+Parents
+Goals:
+
+Compare colleges
+Understand opportunities
+Assist admission decisions
+Tertiary Users
+Teachers / Career Counselors
+Goals:
+
+Support students
+Provide informed recommendations
+7. Product Goals
+Goal 1
+Enable students to quickly identify eligible colleges based on cutoff.
+
+Goal 2
+Help students understand engineering branches and career paths.
+
+Goal 3
+Provide historical cutoff trend visibility.
+
+Goal 4
+Support informed counseling preference selection.
+
+Goal 5
+Provide conversational guidance using AI.
+
+8. Success Metrics
+MVP Success Metrics
+Users
+50 Test Users
+20 Feedback Responses
+Data
+100+ Colleges
+1,000+ Programs
+3+ Years Historical Cutoffs
+Performance
+Page Load < 3 Seconds
+Mobile Friendly
+99% Availability
+9. User Journeys
+Journey 1: College Recommendation
+Student enters:
+
+Cutoff
+Community
+Preferred Branch
+System returns:
+
+Dream Colleges
+Target Colleges
+Safe Colleges
+Journey 2: College Search
+Student searches by:
+
+College Name
+College Code
+District
+System displays:
+
+Details
+Programs
+Historical Cutoffs
+Journey 3: Branch Exploration
+Student selects branch.
+
+System displays:
+
+Overview
+Core Subjects
+Career Domains
+Related Branches
+Journey 4: AI Guidance
+Student asks:
+
+"I got 185 cutoff. Which colleges can I expect for CSE?"
+
+System:
+
+Queries project data
+Generates recommendation
+Explains reasoning
+10. Core Functional Scope
+College Discovery
+Features:
+
+College Search
+District Filters
+College Profiles
+Branch Explorer
+Features:
+
+Branch Catalog
+Career Mapping
+Related Branch Suggestions
+Cutoff Explorer
+Features:
+
+Historical Trends
+Community Filter
+Branch Filter
+College Filter
+Recommendation Engine
+Features:
+
+Dream Recommendations
+Target Recommendations
+Safe Recommendations
+Counseling Companion
+Future Features:
+
+Preference Order Builder
+Eligibility Checker
+Document Checklist
+11. Technical Architecture
+Frontend
+Next.js
+TypeScript
+Tailwind CSS
+Backend
+Supabase
+PostgreSQL
+Hosting
+Vercel
+Authentication (Future)
+Supabase Auth
+Analytics
+Google Analytics
+Vercel Analytics
+AI Layer (Future)
+OpenAI Models
+Embeddings
+Vector Search
+RAG Architecture
+12. Data Architecture
+Current Source-of-Truth
+CSV Data Repository
+
+Advantages:
+
+Easy Version Control
+Easy Validation
+Easy Reviews
+Git-Friendly
+Core Datasets
+colleges.csv
+Stores:
+
+College Information
+Location
+Type
+Website
+branches.csv
+Stores:
+
+Branch Definitions
+Subjects
+Careers
+Relationships
+programmes.csv
+Stores:
+
+College + Branch Mapping
+cutoffs.csv
+Stores:
+
+Historical Cutoff Data
+sources.csv
+Stores:
+
+Source Registry
+Audit Trail
+eligibility_rules.csv
+Stores:
+
+TNEA Eligibility Rules
+13. Release Roadmap
+Release 1: MVP
+Duration:
+
+8 Weeks
+
+Goal:
+
+Provide college recommendations based on cutoff.
+
+Features:
+
+College Search
+Branch Explorer
+Cutoff Explorer
+Recommendation Engine
+Success Criteria:
+
+A student can obtain meaningful recommendations within 2 minutes.
+
+Release 2: Smart Recommendations
+Duration:
+
+6 Weeks
+
+Goal:
+
+Improve recommendation quality.
+
+Features:
+
+Match Score
+Trend Analysis
+College Comparison
+Success Criteria:
+
+More personalized recommendations.
+
+Release 3: AI Counselor
+Duration:
+
+4 Weeks
+
+Goal:
+
+Provide conversational guidance.
+
+Features:
+
+AI Chat Interface
+RAG Search
+Recommendation Explanations
+Success Criteria:
+
+Students receive data-backed answers.
+
+Release 4: Counseling Companion
+Duration:
+
+4 Weeks
+
+Goal:
+
+Support counseling preparation.
+
+Features:
+
+Eligibility Checker
+Document Checklist
+Preference Generator
+Success Criteria:
+
+Students can simulate counseling preparation.
+
+14. Weekly Execution Plan
+WEEK 1
+Objective
+Project Foundation
+
+Tasks
+Create GitHub Repository Structure
+Setup Next.js
+Setup TypeScript
+Setup Supabase
+Setup Vercel
+Configure CI/CD
+Deliverable
+✅ Application deployed
+
+WEEK 2
+Objective
+Database Setup
+
+Tasks
+Create Database Schema
+Create Migrations
+Add Constraints
+Create Indexes
+Deliverable
+✅ Database Ready
+
+WEEK 3
+Objective
+Data Pipeline
+
+Tasks
+CSV Import Framework
+Validation Engine
+Duplicate Detection
+Data Quality Reports
+Deliverable
+✅ Data Import System
+
+WEEK 4
+Objective
+College Search
+
+Tasks
+College Listing Page
+Search API
+District Filters
+College Detail Page
+Deliverable
+✅ College Search Functional
+
+WEEK 5
+Objective
+Branch Explorer
+
+Tasks
+Branch Directory
+Branch Details
+Career Mapping
+Related Branch Logic
+Deliverable
+✅ Branch Explorer Live
+
+WEEK 6
+Objective
+Cutoff Explorer
+
+Tasks
+Year Filter
+Category Filter
+Branch Filter
+Historical Views
+Deliverable
+✅ Cutoff Explorer Live
+
+WEEK 7
+Objective
+Recommendation Engine
+
+Tasks
+Dream Logic
+Target Logic
+Safe Logic
+Ranking Algorithm
+Deliverable
+✅ Predictive Recommendations
+
+WEEK 8
+Objective
+MVP Release
+
+Tasks
+Mobile Optimization
+Bug Fixing
+Analytics Setup
+SEO Improvements
+Security Review
+Deliverable
+✅ Version 1.0 Released
+
+WEEKS 9-14
+Smart Recommendation Engine
+Tasks
+Match Scores
+College Comparison
+Historical Trend Visualization
+User Preferences
+Ranking Improvements
+Deliverable
+✅ Version 2.0
+
+WEEKS 15-18
+AI Counselor
+Tasks
+Embedding Pipeline
+Vector Search
+Chat Interface
+Explanation System
+Deliverable
+✅ AI Counselor Beta
+
+WEEKS 19-22
+Counseling Companion
+Tasks
+Eligibility Checker
+Preference Builder
+Document Checklist
+Counseling Simulator
+Deliverable
+✅ Counseling Assistant
+
+WEEKS 23-24
+Platform Enhancement
+Tasks
+Tamil Localization
+Analytics Dashboard
+Feedback Collection
+Performance Improvements
+Deliverable
+✅ Version 3.0
+
+15. Backlog Prioritization
+P0 (Critical)
+Must Be Completed
+
+Data Validation
+College Search
+Cutoff Explorer
+Recommendation Engine
+P1 (Important)
+Should Be Completed
+
+Comparison Tool
+Trend Analysis
+Match Scores
+P2 (Valuable)
+Can Be Added Later
+
+AI Counselor
+User Accounts
+Saved Recommendations
+P3 (Future Ideas)
+Optional
+
+Mobile Application
+Notifications
+Student Community
+College Reviews
+16. Codex Development Workflow
+For every feature:
+
+Step 1: Create Feature Specification
+Template
+
+Problem
+What problem is being solved?
+
+Objective
+What outcome is expected?
+
+Requirements
+List requirements.
+
+Acceptance Criteria
+Define success conditions.
+
+Step 2: Assign to Codex
+Prompt Framework
+
+Generate database changes
+Generate APIs
+Generate frontend
+Generate tests
+Follow TypeScript best practices
+Step 3: Review
+Review Areas
+
+Code Quality
+Security
+Scalability
+Accessibility
+Mobile Experience
+Step 4: Test
+Required Testing
+
+Functional Testing
+Edge Cases
+Mobile Testing
+Regression Testing
+Step 5: Deploy
+Workflow
+
+Development
+
+↓
+
+Testing
+
+↓
+
+Production
+
+17. Architecture Decision Records (ADRs)
+ADR-001
+Decision:
+
+Use Supabase
+
+Reason:
+
+Faster Development
+Managed Infrastructure
+Lower Maintenance
+Status:
+
+Approved
+
+ADR-002
+Decision:
+
+Use CSV as Initial Source-of-Truth
+
+Reason:
+
+Easy Validation
+Version Control Friendly
+Simple Data Auditing
+Status:
+
+Approved
+
+ADR-003
+Decision:
+
+AI After MVP
+
+Reason:
+
+Data quality creates value.
+
+AI enhances value.
+
+Status:
+
+Approved
+
+18. Risk Register
+Risk: Poor Data Quality
+Mitigation:
+
+Validation Scripts
+Source Tracking
+Periodic Audits
+Priority:
+
+High
+
+Risk: Feature Creep
+Mitigation:
+
+Follow Roadmap
+Maintain Backlog
+Focus on User Problems
+Priority:
+
+High
+
+Risk: Limited Development Time
+Mitigation:
+
+Restrict to 8 Hours/Week
+Focus on P0 Work
+Timebox All Features
+Priority:
+
+Medium
+
+Risk: Seasonal User Adoption
+Mitigation:
+
+Prepare Before Counseling Season
+Focus on SEO
+Collect Early Feedback
+Priority:
+
+Medium
+
+19. Definition of Success
+Version 1 Success
+A student can:
+
+Enter cutoff
+Select community
+Select branch
+And receive useful recommendations.
+
+Version 2 Success
+A student can:
+
+Compare colleges
+Understand trends
+Make informed decisions
+Version 3 Success
+A student can:
+
+Ask questions naturally
+Receive trustworthy answers
+Understand recommendation reasoning
+20. Golden Rule
+Before implementing any feature, ask:
+
+Will this directly help a Tamil Nadu engineering student make a better college or branch decision?
+
+If the answer is No, move the idea to the backlog.
+
+This rule protects the project from unnecessary complexity and ensures continuous focus on student value.
