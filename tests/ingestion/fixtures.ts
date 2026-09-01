@@ -11,19 +11,20 @@ import {
 export const TEST_SOURCE_ID = "TEST_SRC_2026";
 
 export const TEST_COLLEGES: readonly PilotCollegeRecord[] = [
-  { tnea_college_code: "TEST_CEG", college_name: "CEG", source_id: TEST_SOURCE_ID, source_page: 1 },
-  { tnea_college_code: "TEST_MIT", college_name: "MIT", source_id: TEST_SOURCE_ID, source_page: 1 },
-  { tnea_college_code: "TEST_GCT", college_name: "GCT", source_id: TEST_SOURCE_ID, source_page: 1 },
-  { tnea_college_code: "TEST_PSG", college_name: "PSG Tech", source_id: TEST_SOURCE_ID, source_page: 1 },
-  { tnea_college_code: "TEST_CIT", college_name: "CIT", source_id: TEST_SOURCE_ID, source_page: 1 },
+  { admission_year: ADMISSION_YEAR, tnea_college_code: "TEST_CEG", college_name: "CEG", source_id: TEST_SOURCE_ID, source_page: 1 },
+  { admission_year: ADMISSION_YEAR, tnea_college_code: "TEST_MIT", college_name: "MIT", source_id: TEST_SOURCE_ID, source_page: 1 },
+  { admission_year: ADMISSION_YEAR, tnea_college_code: "TEST_GCT", college_name: "GCT", source_id: TEST_SOURCE_ID, source_page: 1 },
+  { admission_year: ADMISSION_YEAR, tnea_college_code: "TEST_PSG", college_name: "PSG Tech", source_id: TEST_SOURCE_ID, source_page: 1 },
+  { admission_year: ADMISSION_YEAR, tnea_college_code: "TEST_CIT", college_name: "CIT", source_id: TEST_SOURCE_ID, source_page: 1 },
 ];
 
 export const TEST_PROGRAMMES: readonly ProgrammeRecord[] = TEST_COLLEGES.map(
   ({ tnea_college_code }) => ({
     admission_year: ADMISSION_YEAR,
     tnea_college_code,
+    source_branch_code: "CS",
+    programme_name: "COMPUTER SCIENCE AND ENGINEERING",
     branch_id: "CSE",
-    degree: "TEST_DEGREE",
     source_id: TEST_SOURCE_ID,
     source_page: 2,
   }),

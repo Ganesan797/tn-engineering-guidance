@@ -8,12 +8,21 @@ import { ConflictingFactError, DuplicateFactError, IngestionValidationError } fr
 export const PILOT_COLLEGES = ["CEG", "MIT", "GCT", "PSG Tech", "CIT"] as const;
 export type PilotCollegeName = (typeof PILOT_COLLEGES)[number];
 
+const EXACT_CANONICAL_PROGRAMME_NAMES: Readonly<Record<string, string>> = {
+  "COMPUTER SCIENCE AND ENGINEERING": "CSE",
+  "INFORMATION TECHNOLOGY": "IT",
+  "ELECTRONICS AND COMMUNICATION ENGINEERING": "ECE",
+  "ELECTRICAL AND ELECTRONICS ENGINEERING": "EEE",
+  "MECHANICAL ENGINEERING": "MECH",
+};
+
 export interface SourceReference {
   readonly source_id: string;
   readonly source_page: number | null;
 }
 
 export interface PilotCollegeRecord extends SourceReference {
+  readonly admission_year: AdmissionYear;
   readonly tnea_college_code: string;
   readonly college_name: PilotCollegeName;
 }
@@ -21,8 +30,9 @@ export interface PilotCollegeRecord extends SourceReference {
 export interface ProgrammeRecord extends SourceReference {
   readonly admission_year: AdmissionYear;
   readonly tnea_college_code: string;
-  readonly branch_id: string;
-  readonly degree: string;
+  readonly source_branch_code: string;
+  readonly programme_name: string;
+  readonly branch_id: string | null;
 }
 
 function stableRecord(record: object): string {
@@ -55,6 +65,11 @@ export class PilotDataRegistry {
 
   ingestColleges(records: readonly PilotCollegeRecord[]): void {
     for (const record of records) {
+      if (record.admission_year !== ADMISSION_YEAR) {
+        throw new IngestionValidationError(
+          `admission_year must equal ${ADMISSION_YEAR}`,
+        );
+      }
       requireNonEmptyString(record.tnea_college_code, "tnea_college_code");
       if (!PILOT_COLLEGES.includes(record.college_name)) {
         throw new IngestionValidationError(
@@ -96,24 +111,35 @@ export class PilotDataRegistry {
         );
       }
       requireNonEmptyString(record.tnea_college_code, "tnea_college_code");
-      requireNonEmptyString(record.branch_id, "branch_id");
-      requireNonEmptyString(record.degree, "degree");
+      requireNonEmptyString(record.source_branch_code, "source_branch_code");
+      requireNonEmptyString(record.programme_name, "programme_name");
       this.validateProvenance(record);
+
+      const exactBranchId =
+        EXACT_CANONICAL_PROGRAMME_NAMES[record.programme_name] ?? null;
+      if (record.branch_id !== exactBranchId) {
+        throw new IngestionValidationError(
+          `branch_id must match the exact frozen programme mapping for ${record.programme_name}`,
+        );
+      }
 
       if (!this.#colleges.has(record.tnea_college_code)) {
         throw new IngestionValidationError(
           `unknown tnea_college_code: ${record.tnea_college_code}`,
         );
       }
-      if (!this.#allowedBranchIds.has(record.branch_id)) {
+      if (
+        record.branch_id !== null &&
+        !this.#allowedBranchIds.has(record.branch_id)
+      ) {
         throw new IngestionValidationError(
           `unknown branch_id: ${record.branch_id}`,
         );
       }
 
-      const key = this.programmeKey(
+      const key = this.sourceProgrammeKey(
         record.tnea_college_code,
-        record.branch_id,
+        record.source_branch_code,
       );
       const existing = this.#programmes.get(key);
       if (existing !== undefined) {
@@ -131,7 +157,11 @@ export class PilotDataRegistry {
   }
 
   hasProgramme(tneaCollegeCode: string, branchId: string): boolean {
-    return this.#programmes.has(this.programmeKey(tneaCollegeCode, branchId));
+    return [...this.#programmes.values()].some(
+      (programme) =>
+        programme.tnea_college_code === tneaCollegeCode &&
+        programme.branch_id === branchId,
+    );
   }
 
   colleges(): readonly PilotCollegeRecord[] {
@@ -142,7 +172,10 @@ export class PilotDataRegistry {
     return [...this.#programmes.values()].map((record) => ({ ...record }));
   }
 
-  private programmeKey(tneaCollegeCode: string, branchId: string): string {
-    return `${ADMISSION_YEAR}|${tneaCollegeCode}|${branchId}`;
+  private sourceProgrammeKey(
+    tneaCollegeCode: string,
+    sourceBranchCode: string,
+  ): string {
+    return `${ADMISSION_YEAR}|${tneaCollegeCode}|${sourceBranchCode}`;
   }
 }

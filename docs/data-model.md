@@ -4,14 +4,14 @@
 
 - `data/colleges.csv`
   - One record per college.
-  - Primary key: `college_id`
-  - `tnea_college_code` is the unique counselling code used to reconcile historical TNEA records.
+  - Primary key: `admission_year` + `tnea_college_code`.
+  - `tnea_college_code` is the canonical counselling identifier.
 
 - `data/programmes.csv`
-  - One record per college programme/branch.
-  - Primary key: `programme_id`
-  - Links to college through `college_id`
-  - Links to the branch master through `branch_id`.
+  - One source programme per college and source branch code.
+  - Primary key: `admission_year` + `tnea_college_code` + `source_branch_code`.
+  - Links to college through `tnea_college_code`.
+  - Links to the branch master only when `branch_id` is an exact frozen match; unmapped source programmes remain present with an empty `branch_id`.
 
 - `data/branches.csv`
   - One record per normalized engineering branch.
@@ -42,11 +42,11 @@
 
 ## Required validation rules
 
-1. Every `college_id` in `programmes.csv` must exist in `colleges.csv`.
+1. Every `tnea_college_code` in `programmes.csv` must exist in `colleges.csv` for admission year 2026.
 
 2. Every non-empty `tnea_college_code` in `colleges.csv` must be unique.
 
-3. Every `branch_id` in `programmes.csv` must exist in `branches.csv`.
+3. Every non-empty `branch_id` in `programmes.csv` must exist in `branches.csv`; empty values preserve unsupported or specialised source programmes without inference.
 
 4. Every `programme_id` in `cutoffs.csv` must exist in `programmes.csv`.
 

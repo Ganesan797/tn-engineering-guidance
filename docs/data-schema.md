@@ -18,31 +18,25 @@
 
 | Field | Definition |
 | --- | --- |
-| `college_id` | Stable unique college identifier. |
+| `admission_year` | Frozen V1 admission year; must be `2026`. |
 | `tnea_college_code` | Unique college counselling code used in TNEA records. |
 | `college_name` | Official institution name. |
-| `management_type` | Government, government-aided, self-financing, or another verified type. |
-| `district`, `city` | College location. |
-| `website` | Official website URL. |
-| `source_url` | Evidence for the college record. |
-| `last_verified_date` | Verification date in `YYYY-MM-DD` format. |
-| `notes` | Brief factual clarification. |
+| `source_id` | Existing identifier from `sources.csv`. |
+| `source_page` | Page containing the college record in the source document. |
 
 ## `data/programmes.csv`
 
 | Field | Definition |
 | --- | --- |
-| `programme_id` | Stable unique programme identifier. |
-| `college_id` | Existing identifier from `colleges.csv`. |
-| `branch_id` | Existing identifier from `branches.csv`. |
-| `degree` | Award, such as `B.E.` or `B.Tech.` |
-| `duration_years` | Standard programme duration. |
-| `intake` | Approved student intake for the stated academic year. |
-| `academic_year` | Year to which the intake and programme record applies. |
-| `approval_status` | `Active`, `Inactive`, or `Unknown`. |
-| `source_url` | Evidence for the programme record. |
-| `last_verified_date` | Verification date in `YYYY-MM-DD` format. |
-| `notes` | Brief factual clarification. |
+| `admission_year` | Frozen V1 admission year; must be `2026`. |
+| `tnea_college_code` | Canonical join to `colleges.csv`. |
+| `source_branch_code` | Branch code exactly as printed by the source. |
+| `programme_name` | Programme name exactly as represented in the source extraction. |
+| `branch_id` | Frozen canonical branch ID only for an exact non-SS match; otherwise empty. |
+| `source_id` | Existing identifier from `sources.csv`. |
+| `source_page` | Page containing the programme record in the source document. |
+
+The General Academic Seat Matrix category values are not stored in this file and are not interpreted as `SANCTIONED_INTAKE`, `CURRENT_VACANCY`, or `QUOTA_VACANCY`.
 
 ## `data/cutoffs.csv`
 

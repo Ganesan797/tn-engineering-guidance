@@ -2,7 +2,7 @@
 
 **Current milestone:** Milestone 1 — Data contracts and validation foundation
 
-**Current task:** Slice 3 ingestion/provenance pipeline implemented; authoritative 2026 pilot data population pending
+**Current task:** Slice 3 five-college programme evidence persisted and verified through the ingestion pipeline
 
 **Last reviewed:** 2026-09-01
 
@@ -23,19 +23,21 @@
 - Executable TypeScript domain and test infrastructure exists under `src/domain/` and `tests/domain/`, with the test command defined in `package.json`.
 - Slice 3 adds validated 2026 pilot college/programme ingestion and append-only, round/stage-aware `AdmissionSeatFact` snapshot storage with provenance and duplicate/conflict detection.
 - Synthetic Slice 3 fixtures prove all three seat fact types and future vacancy snapshot ingestion without representing test records as real TNEA facts.
-- The combined domain and ingestion suite passes 45 tests; strict TypeScript checking passes for the executable `src/` tree.
+- Authoritative 2026 programme evidence is persisted for CEG, MIT, GCT, PSG Tech, and CIT: 79 source programme rows, including 18 exact canonical mappings and 61 preserved unmapped rows.
+- General Academic Seat Matrix category values are not represented as `AdmissionSeatFact` and are not treated as intake or vacancy facts.
+- The combined domain and ingestion suite passes 51 tests; strict TypeScript checking passes for the executable `src/` tree.
 
 No recommendation logic, college or cutoff ranking, vacancy matching, AI eligibility behavior, automatic source extraction, or application UI have been implemented.
 
 ## Immediate next task
 
-Acquire, validate, and register authoritative 2026 source documents for CEG, MIT, GCT, PSG Tech, and CIT, then populate their canonical college/programme records and any published seat facts through the Slice 3 pipeline.
+Ingest a separately authoritative 2026 sanctioned-intake or round/stage vacancy source when supplied, preserving its exact fact semantics and provenance.
 
 ## Blockers
 
-- `colleges.csv`, `programmes.csv`, `cutoffs.csv`, and canonical `eligibility_rules.csv` contain no data rows, so real recommendations cannot yet be produced.
-- No authoritative 2026 records are present for the five pilot colleges, their programme offerings, sanctioned intake, current vacancies, or quota/category vacancies.
-- Source provenance for future college, programme, intake, and vacancy facts has not yet been registered at document/page granularity.
+- `cutoffs.csv` and canonical `eligibility_rules.csv` contain no data rows, so real recommendations cannot yet be produced.
+- No authoritative 2026 `SANCTIONED_INTAKE`, `CURRENT_VACANCY`, or `QUOTA_VACANCY` records are persisted for the five pilot colleges.
+- Source provenance for future intake and vacancy facts has not yet been registered at document/page granularity.
 
 ## Key agreed decisions
 
@@ -49,4 +51,4 @@ Acquire, validate, and register authoritative 2026 source documents for CEG, MIT
 
 ## Next review point
 
-After authoritative 2026 pilot sources are supplied and registered, before real programme or seat facts are populated.
+When the first authoritative sanctioned-intake or vacancy snapshot is supplied, before it is persisted as `AdmissionSeatFact`.

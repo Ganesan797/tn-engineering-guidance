@@ -1,1 +1,6 @@
-college_id,tnea_college_code,college_name,management_type,district,city,website,source_url,last_verified_date,notes
+admission_year,tnea_college_code,college_name,source_id,source_page
+2026,1,CEG,SRC005,1
+2026,4,MIT,SRC005,3
+2026,2005,GCT,SRC005,95
+2026,2006,PSG Tech,SRC005,96
+2026,2007,CIT,SRC005,98

@@ -57,7 +57,7 @@ test("programme ingestion rejects invalid college and branch identifiers", () =>
       registry.ingestProgrammes([
         { ...TEST_PROGRAMMES[0], branch_id: "UNKNOWN" },
       ]),
-    /unknown branch_id/,
+    /branch_id must match the exact frozen programme mapping/,
   );
 });
 
@@ -103,7 +103,7 @@ test("duplicate and conflicting programme facts are detected", () => {
   assert.throws(
     () =>
       conflictRegistry.ingestProgrammes([
-        { ...TEST_PROGRAMMES[0], degree: "CONFLICTING_TEST_DEGREE" },
+        { ...TEST_PROGRAMMES[0], source_page: 99 },
       ]),
     ConflictingFactError,
   );
