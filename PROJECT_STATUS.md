@@ -2,13 +2,15 @@
 
 **Current milestone:** Milestone 1 — Data contracts and validation foundation
 
-**Current task:** Slice 5 preference-aware choice ordering foundation implemented and verified
+**Current task:** Slice 6 end-to-end guidance service and explainable output contract implemented and verified
 
 **Last reviewed:** 2026-09-01
 
 **Slice 3 commit:** `fade04d`
 
 **Slice 4 commit:** `3601481`
+
+**Slice 5 commit:** `a806ec3`
 
 ## Completed — verified repository evidence only
 
@@ -36,12 +38,15 @@
 - Slice 5 adds explicit branch-preference ordering with neutral missing/unlisted preferences and a disclosed canonical identifier tie-breaker.
 - Location/region and institution-type ordering remain unsupported because those fields are not present as authoritative sourced college data.
 - The full suite passes 67 tests; strict TypeScript checking passes for the executable `src/` tree.
+- Slice 6 adds one application-level `GuidanceRequest` → `GuidanceResult` interface that delegates to the existing eligibility, canonical candidate, snapshot evidence, and branch-ordering modules.
+- Final guidance preserves eligibility checks, cutoff, blocking fields, ordered canonical choices, vacancy state, seat facts, reason codes, and aggregate provenance without duplicating domain logic.
+- The full suite passes 76 tests; strict TypeScript checking passes for the executable `src/` tree.
 
 No prestige/quality score, cutoff probability, historical prediction, hidden weighting, location/institution ordering, AI recommendation, broad TNEA coverage, or application UI have been implemented.
 
 ## Immediate next task
 
-Define the next bounded delivery slice; add location or institution-type ordering only after authoritative sourced fields are deliberately contracted and populated.
+Define the next bounded delivery slice around a consumer boundary or real authoritative seat snapshot; do not add new guidance semantics without a frozen contract.
 
 ## Blockers
 
