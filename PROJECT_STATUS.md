@@ -2,7 +2,7 @@
 
 **Current milestone:** Milestone 1 — Data contracts and validation foundation
 
-**Current task:** Slice 7 thin deterministic JSON application interface implemented and verified
+**Current task:** Slice 8 minimal student-facing responsive guidance UI implemented and verified
 
 **Last reviewed:** 2026-09-01
 
@@ -13,6 +13,8 @@
 **Slice 5 commit:** `a806ec3`
 
 **Slice 6 commit:** `2cecdfa`
+
+**Slice 7 commit:** `da4b29e` (pushed to `origin/main`)
 
 ## Completed — verified repository evidence only
 
@@ -46,12 +48,15 @@
 - Slice 7 adds a framework-free JSON request/response adapter with frozen profile/enum validation, explicit counselling snapshot validation, structured safe errors, and direct delegation to the Slice 6 guidance service.
 - `ELIGIBLE`, `INELIGIBLE`, and `NEEDS_REVIEW` remain successful responses; null and false remain distinct across the external boundary.
 - The full suite passes 88 tests; strict TypeScript checking passes for the executable `src/` tree.
+- Slice 8 adds a framework-free responsive, accessible student form, explicit nullable controls, Slice 7 submission binding, and explainable result/error rendering.
+- The UI preserves API choice order, eligibility states, blocking fields, vacancy evidence semantics, seat facts, reason codes, and provenance without frontend domain logic.
+- The full suite passes 99 tests; strict TypeScript checking passes for the executable `src/` tree.
 
 No prestige/quality score, cutoff probability, historical prediction, hidden weighting, location/institution ordering, AI recommendation, broad TNEA coverage, or application UI have been implemented.
 
 ## Immediate next task
 
-Commit Slice 7, then define a real consumer or authoritative seat-snapshot ingestion workflow without changing the JSON/domain contracts.
+Commit Slice 8, then choose a minimal build/hosting adapter or ingest the first authoritative seat snapshot without changing the UI/API/domain contracts.
 
 ## Blockers
 
