@@ -2,7 +2,7 @@
 
 **Current milestone:** Milestone 1 — Data contracts and validation foundation
 
-**Current task:** Slice 6 end-to-end guidance service and explainable output contract implemented and verified
+**Current task:** Slice 7 thin deterministic JSON application interface implemented and verified
 
 **Last reviewed:** 2026-09-01
 
@@ -11,6 +11,8 @@
 **Slice 4 commit:** `3601481`
 
 **Slice 5 commit:** `a806ec3`
+
+**Slice 6 commit:** `2cecdfa`
 
 ## Completed — verified repository evidence only
 
@@ -41,12 +43,15 @@
 - Slice 6 adds one application-level `GuidanceRequest` → `GuidanceResult` interface that delegates to the existing eligibility, canonical candidate, snapshot evidence, and branch-ordering modules.
 - Final guidance preserves eligibility checks, cutoff, blocking fields, ordered canonical choices, vacancy state, seat facts, reason codes, and aggregate provenance without duplicating domain logic.
 - The full suite passes 76 tests; strict TypeScript checking passes for the executable `src/` tree.
+- Slice 7 adds a framework-free JSON request/response adapter with frozen profile/enum validation, explicit counselling snapshot validation, structured safe errors, and direct delegation to the Slice 6 guidance service.
+- `ELIGIBLE`, `INELIGIBLE`, and `NEEDS_REVIEW` remain successful responses; null and false remain distinct across the external boundary.
+- The full suite passes 88 tests; strict TypeScript checking passes for the executable `src/` tree.
 
 No prestige/quality score, cutoff probability, historical prediction, hidden weighting, location/institution ordering, AI recommendation, broad TNEA coverage, or application UI have been implemented.
 
 ## Immediate next task
 
-Define the next bounded delivery slice around a consumer boundary or real authoritative seat snapshot; do not add new guidance semantics without a frozen contract.
+Commit Slice 7, then define a real consumer or authoritative seat-snapshot ingestion workflow without changing the JSON/domain contracts.
 
 ## Blockers
 

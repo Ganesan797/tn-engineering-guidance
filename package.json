@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test tests/domain/domain.test.ts tests/domain/eligibility.test.ts tests/domain/admission-seat-fact.test.ts tests/domain/rules.test.ts tests/ingestion/pilot-data.test.ts tests/ingestion/snapshot-store.test.ts tests/ingestion/real-pilot-data.test.ts tests/recommendation/recommendation.test.ts tests/application/guidance.test.ts"
+    "test": "node --test tests/domain/domain.test.ts tests/domain/eligibility.test.ts tests/domain/admission-seat-fact.test.ts tests/domain/rules.test.ts tests/ingestion/pilot-data.test.ts tests/ingestion/snapshot-store.test.ts tests/ingestion/real-pilot-data.test.ts tests/recommendation/recommendation.test.ts tests/application/guidance.test.ts tests/api/guidance-api.test.ts"
   },
   "engines": {
     "node": ">=22.6.0"
