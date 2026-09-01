@@ -20,6 +20,8 @@
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_STUDENT_JOURNEY_V1`
 
+**Mission review:** Golden Product Mission V1 is frozen. Mission clarity, Booklet-First alignment, zero-knowledge alignment, native-language and reach direction, personalization, Think-Further direction, trusted-engine boundaries, and the mission review gate passed review. Major student-facing milestones now require `TECHNICAL_DOD = PASS`, `MISSION_ALIGNMENT = PASS`, and `STUDENT_SCENARIO_REVIEW = PASS`.
+
 **Slice 3 commit:** `fade04d`
 
 **Slice 4 commit:** `3601481`
