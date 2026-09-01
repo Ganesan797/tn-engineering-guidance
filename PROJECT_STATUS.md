@@ -2,7 +2,7 @@
 
 **Current milestone:** Milestone 1 — Data contracts and validation foundation
 
-**Current task:** Pre-Slice 3 repository and 2026 source-data readiness audit
+**Current task:** Slice 3 ingestion/provenance pipeline implemented; authoritative 2026 pilot data population pending
 
 **Last reviewed:** 2026-09-01
 
@@ -19,22 +19,23 @@
 - Frozen Domain/Data V1 contract artifacts have landed in `docs/domain_data_v1.md` and `docs/domain_data_v1.yaml`.
 - Slice 1 implements the frozen domain models and enums, `ADMISSION_YEAR = 2026`, conservative eligibility aggregation, `AdmissionSeatFact` validation, and focused invariant tests.
 - Slice 2 implements deterministic ELG001–ELG032 dispatch and execution, explainable sourced checks, missing-field reporting, cutoff calculation, explicit `NEEDS_REVIEW` boundaries, and complete rule-ID test coverage.
-- Slice 2 verification passes with 30 tests and a strict TypeScript compiler check; the Slice 2 changes are complete in the working tree but are not yet committed to repository HEAD.
+- Slice 2 verification passes with 30 tests and a strict TypeScript compiler check and is committed to repository HEAD.
 - Executable TypeScript domain and test infrastructure exists under `src/domain/` and `tests/domain/`, with the test command defined in `package.json`.
+- Slice 3 adds validated 2026 pilot college/programme ingestion and append-only, round/stage-aware `AdmissionSeatFact` snapshot storage with provenance and duplicate/conflict detection.
+- Synthetic Slice 3 fixtures prove all three seat fact types and future vacancy snapshot ingestion without representing test records as real TNEA facts.
+- The combined domain and ingestion suite passes 45 tests; strict TypeScript checking passes for the executable `src/` tree.
 
-No recommendation logic, college or cutoff ranking, vacancy matching, AI eligibility behavior, data ingestion, or application UI have been implemented.
+No recommendation logic, college or cutoff ranking, vacancy matching, AI eligibility behavior, automatic source extraction, or application UI have been implemented.
 
 ## Immediate next task
 
-Commit the verified Slice 2 working tree, then acquire and register the authoritative 2026 pilot college, programme, sanctioned-intake, and vacancy sources before starting Slice 3 data work.
+Acquire, validate, and register authoritative 2026 source documents for CEG, MIT, GCT, PSG Tech, and CIT, then populate their canonical college/programme records and any published seat facts through the Slice 3 pipeline.
 
 ## Blockers
 
 - `colleges.csv`, `programmes.csv`, `cutoffs.csv`, and canonical `eligibility_rules.csv` contain no data rows, so real recommendations cannot yet be produced.
-- Slice 2 is verified but not committed; repository HEAD currently contains Slice 1 only.
-- No authoritative 2026 records are present for the three pilot colleges, their programme offerings, sanctioned intake, current vacancies, or quota/category vacancies.
+- No authoritative 2026 records are present for the five pilot colleges, their programme offerings, sanctioned intake, current vacancies, or quota/category vacancies.
 - Source provenance for future college, programme, intake, and vacancy facts has not yet been registered at document/page granularity.
-- There is no data ingestion pipeline; current executable infrastructure covers domain validation, eligibility aggregation, and deterministic ELG001–ELG032 execution.
 
 ## Key agreed decisions
 
@@ -48,4 +49,4 @@ Commit the verified Slice 2 working tree, then acquire and register the authorit
 
 ## Next review point
 
-After Slice 2 is committed and authoritative 2026 pilot data sources are identified, before any Slice 3 data population begins.
+After authoritative 2026 pilot sources are supplied and registered, before real programme or seat facts are populated.
