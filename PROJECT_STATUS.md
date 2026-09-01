@@ -2,9 +2,11 @@
 
 **Current milestone:** Milestone 1 — Data contracts and validation foundation
 
-**Current task:** Slice 3 five-college programme evidence persisted and verified through the ingestion pipeline
+**Current task:** Slice 4 deterministic recommendation foundation implemented and verified
 
 **Last reviewed:** 2026-09-01
+
+**Slice 3 commit:** `fade04d`
 
 ## Completed — verified repository evidence only
 
@@ -26,12 +28,15 @@
 - Authoritative 2026 programme evidence is persisted for CEG, MIT, GCT, PSG Tech, and CIT: 79 source programme rows, including 18 exact canonical mappings and 61 preserved unmapped rows.
 - General Academic Seat Matrix category values are not represented as `AdmissionSeatFact` and are not treated as intake or vacancy facts.
 - The combined domain and ingestion suite passes 51 tests; strict TypeScript checking passes for the executable `src/` tree.
+- Slice 4 composes eligibility-first evaluation, the 18 supported canonical pilot programmes, explicit snapshot selection, non-inferred vacancy evidence, and per-candidate provenance/reason trails.
+- `INELIGIBLE` returns no normal candidates; `NEEDS_REVIEW` remains visible on provisional candidates; all 61 unmapped programmes remain excluded.
+- The combined domain, ingestion, and recommendation suite passes 60 tests; strict TypeScript checking passes for the executable `src/` tree.
 
-No recommendation logic, college or cutoff ranking, vacancy matching, AI eligibility behavior, automatic source extraction, or application UI have been implemented.
+No cutoff probability, college ranking, preference scoring, AI recommendation, automatic source extraction, broad TNEA coverage, or application UI have been implemented.
 
 ## Immediate next task
 
-Ingest a separately authoritative 2026 sanctioned-intake or round/stage vacancy source when supplied, preserving its exact fact semantics and provenance.
+Define the next bounded delivery slice without adding ranking or probability; ingest separately authoritative 2026 seat facts when supplied.
 
 ## Blockers
 
@@ -51,4 +56,4 @@ Ingest a separately authoritative 2026 sanctioned-intake or round/stage vacancy 
 
 ## Next review point
 
-When the first authoritative sanctioned-intake or vacancy snapshot is supplied, before it is persisted as `AdmissionSeatFact`.
+Before the next product-facing slice or the first real `AdmissionSeatFact` snapshot is persisted.
