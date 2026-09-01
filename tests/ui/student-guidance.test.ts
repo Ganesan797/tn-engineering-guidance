@@ -238,7 +238,7 @@ test("J. identical API state renders identical meaningful HTML", () => {
 test("responsive page uses semantic labelled controls and text status", () => {
   const html = renderStudentGuidancePage({ form: form(), response: null });
   assert.match(html, /<meta name="viewport"/);
-  assert.match(html, /<form id="guidance-form">/);
+  assert.match(html, /<form id="guidance-form"[^>]*>/);
   assert.match(html, /<label for="profile-maths_mark">/);
   assert.match(html, /<button type="submit">Get guidance<\/button>/);
   assert.match(html, /@media\(max-width:35rem\)/);

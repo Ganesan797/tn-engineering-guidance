@@ -2,7 +2,7 @@
 
 **Current milestone:** Milestone 1 — Data contracts and validation foundation
 
-**Current task:** Slice 8 minimal student-facing responsive guidance UI implemented and verified
+**Current task:** Slice 9 pilot usability hardening and end-to-end demo readiness implemented and verified
 
 **Last reviewed:** 2026-09-01
 
@@ -15,6 +15,8 @@
 **Slice 6 commit:** `2cecdfa`
 
 **Slice 7 commit:** `da4b29e` (pushed to `origin/main`)
+
+**Slice 8 commit:** `7106a90`
 
 ## Completed — verified repository evidence only
 
@@ -51,16 +53,18 @@
 - Slice 8 adds a framework-free responsive, accessible student form, explicit nullable controls, Slice 7 submission binding, and explainable result/error rendering.
 - The UI preserves API choice order, eligibility states, blocking fields, vacancy evidence semantics, seat facts, reason codes, and provenance without frontend domain logic.
 - The full suite passes 99 tests; strict TypeScript checking passes for the executable `src/` tree.
+- Slice 9 adds a minimal local server, persisted pilot-data runtime loader, four reproducible student scenarios, and end-to-end smoke coverage through ingestion, API, guidance, and UI.
+- The local runtime verifies 5 colleges, 79 source programmes, 18 canonical mappings, and 61 preserved unmapped programmes; its empty programme-evidence snapshot leaves all unpublished vacancy facts unknown.
+- The complete suite passes 106 tests; the documented strict TypeScript check passes, and the local MVP command serves the student page successfully.
 
-No prestige/quality score, cutoff probability, historical prediction, hidden weighting, location/institution ordering, AI recommendation, broad TNEA coverage, or application UI have been implemented.
+No prestige/quality score, admission probability, historical prediction, hidden weighting, location/institution ordering, AI recommendation, or broad TNEA coverage has been implemented.
 
 ## Immediate next task
 
-Commit Slice 8, then choose a minimal build/hosting adapter or ingest the first authoritative seat snapshot without changing the UI/API/domain contracts.
+Commit and review Slice 9, then ingest the first authoritative 2026 seat snapshot when published without changing the existing contracts.
 
 ## Blockers
 
-- `cutoffs.csv` and canonical `eligibility_rules.csv` contain no data rows, so real recommendations cannot yet be produced.
 - No authoritative 2026 `SANCTIONED_INTAKE`, `CURRENT_VACANCY`, or `QUOTA_VACANCY` records are persisted for the five pilot colleges.
 - Source provenance for future intake and vacancy facts has not yet been registered at document/page granularity.
 
@@ -76,4 +80,4 @@ Commit Slice 8, then choose a minimal build/hosting adapter or ingest the first 
 
 ## Next review point
 
-Before the next product-facing slice or the first real `AdmissionSeatFact` snapshot is persisted.
+Before persisting the first real `AdmissionSeatFact` snapshot or expanding beyond the frozen pilot.

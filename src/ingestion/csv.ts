@@ -24,6 +24,8 @@ const PROGRAMME_HEADERS = [
   "source_page",
 ] as const;
 
+const SOURCE_ID_HEADER = "source_id";
+
 function rows(csv: string, expectedHeaders: readonly string[]): string[][] {
   const lines = csv.trim().split(/\r?\n/);
   if (lines.length < 2) {
@@ -83,4 +85,18 @@ export function parseProgrammeCsv(csv: string): ProgrammeRecord[] {
       source_page: sourcePage(page),
     }),
   );
+}
+
+export function parseRegisteredSourceIds(csv: string): readonly string[] {
+  const lines = csv.trim().split(/\r?\n/);
+  if (lines.length < 2 || lines[0].split(",")[0] !== SOURCE_ID_HEADER) {
+    throw new IngestionValidationError("source registry must contain source_id records");
+  }
+  return lines.slice(1).map((line, index) => {
+    const sourceId = line.split(",", 1)[0]?.trim() ?? "";
+    if (sourceId.length === 0) {
+      throw new IngestionValidationError(`missing source_id at row ${index + 2}`);
+    }
+    return sourceId;
+  });
 }
