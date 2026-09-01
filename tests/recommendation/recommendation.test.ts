@@ -13,6 +13,7 @@ import {
 } from "../../src/ingestion/index.ts";
 import {
   buildDeterministicCandidates,
+  orderCandidateChoices,
   type RecommendationRequest,
 } from "../../src/recommendation/index.ts";
 import { studentProfile } from "../domain/fixtures.ts";
@@ -292,6 +293,112 @@ test("same input and snapshot produce byte-for-byte equivalent output", () => {
   const input = request();
   const first = buildDeterministicCandidates(input, registry, snapshots);
   const second = buildDeterministicCandidates(input, registry, snapshots);
+  assert.equal(JSON.stringify(first), JSON.stringify(second));
+  assert.deepEqual(first, second);
+});
+
+test("explicit branch preference order is the only preference ordering factor", () => {
+  const { registry, snapshots } = pipeline();
+  const candidates = buildDeterministicCandidates(
+    request(),
+    registry,
+    snapshots,
+  ).candidates;
+  const ordered = orderCandidateChoices(candidates, {
+    branch_preference_order: ["ECE", "CSE"],
+  });
+  const firstCse = ordered.findIndex(({ candidate: { branch_id } }) => branch_id === "CSE");
+  const lastEce = ordered.findLastIndex(({ candidate: { branch_id } }) => branch_id === "ECE");
+  assert.ok(firstCse > lastEce);
+  assert.ok(
+    ordered
+      .filter(({ candidate: { branch_id } }) => branch_id === "ECE")
+      .every(({ branch_preference_rank, ordering_reason_codes }) =>
+        branch_preference_rank === 1 &&
+        ordering_reason_codes.includes("BRANCH_PREFERENCE_MATCHED_RANK_1"),
+      ),
+  );
+});
+
+test("missing branch preferences are neutral and explicitly explained", () => {
+  const { registry, snapshots } = pipeline();
+  const candidates = buildDeterministicCandidates(request(), registry, snapshots).candidates;
+  const ordered = orderCandidateChoices(candidates, {
+    branch_preference_order: null,
+  });
+  assert.ok(ordered.every(({ branch_preference_rank }) => branch_preference_rank === null));
+  assert.ok(
+    ordered.every(({ ordering_reason_codes }) =>
+      ordering_reason_codes.includes("BRANCH_PREFERENCE_NEUTRAL_MISSING"),
+    ),
+  );
+});
+
+test("equal branch preferences use only the disclosed canonical tie-breaker", () => {
+  const { registry, snapshots } = pipeline();
+  const candidates = buildDeterministicCandidates(request(), registry, snapshots).candidates;
+  const cseChoices = orderCandidateChoices(candidates, {
+    branch_preference_order: ["CSE"],
+  }).filter(({ candidate: { branch_id } }) => branch_id === "CSE");
+  assert.deepEqual(
+    cseChoices.map(({ candidate: { tnea_college_code } }) => tnea_college_code),
+    ["1", "4", "2005", "2007"],
+  );
+  assert.ok(
+    cseChoices.every(({ ordering_reason_codes }) =>
+      ordering_reason_codes.includes("STABLE_CANONICAL_TIE_BREAKER"),
+    ),
+  );
+});
+
+test("ordering preserves UNKNOWN_OR_UNPUBLISHED vacancy evidence", () => {
+  const { registry, snapshots } = pipeline();
+  const candidates = buildDeterministicCandidates(request(), registry, snapshots).candidates;
+  const ordered = orderCandidateChoices(candidates, {
+    branch_preference_order: ["CSE"],
+  });
+  const mitCse = ordered.find(
+    ({ candidate }) =>
+      candidate.tnea_college_code === "4" && candidate.branch_id === "CSE",
+  );
+  assert.equal(mitCse?.candidate.vacancy_evidence_state, "UNKNOWN_OR_UNPUBLISHED");
+  assert.deepEqual(mitCse?.candidate.applicable_seat_facts, []);
+});
+
+test("ordering preserves NEEDS_REVIEW visibility", () => {
+  const { registry, snapshots } = pipeline();
+  const candidates = buildDeterministicCandidates(
+    request({ profile: studentProfile() }),
+    registry,
+    snapshots,
+  ).candidates;
+  const ordered = orderCandidateChoices(candidates, {
+    branch_preference_order: ["MECH", "CSE"],
+  });
+  assert.ok(
+    ordered.every(
+      ({ candidate: { eligibility_outcome } }) =>
+        eligibility_outcome === "NEEDS_REVIEW",
+    ),
+  );
+});
+
+test("ordering cannot introduce any of the 61 unmapped programmes", () => {
+  const { registry, snapshots } = pipeline();
+  const candidates = buildDeterministicCandidates(request(), registry, snapshots).candidates;
+  const ordered = orderCandidateChoices(candidates, {
+    branch_preference_order: ["CSE", "IT", "ECE", "EEE", "MECH"],
+  });
+  assert.equal(ordered.length, 18);
+  assert.ok(ordered.every(({ candidate }) => !candidate.programme_name.includes("(SS)")));
+});
+
+test("same candidates and preferences produce identical choice order", () => {
+  const { registry, snapshots } = pipeline();
+  const candidates = buildDeterministicCandidates(request(), registry, snapshots).candidates;
+  const preferences = { branch_preference_order: ["EEE", "MECH", "CSE"] } as const;
+  const first = orderCandidateChoices(candidates, preferences);
+  const second = orderCandidateChoices(candidates, preferences);
   assert.equal(JSON.stringify(first), JSON.stringify(second));
   assert.deepEqual(first, second);
 });

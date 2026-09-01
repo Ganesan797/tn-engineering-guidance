@@ -2,11 +2,13 @@
 
 **Current milestone:** Milestone 1 — Data contracts and validation foundation
 
-**Current task:** Slice 4 deterministic recommendation foundation implemented and verified
+**Current task:** Slice 5 preference-aware choice ordering foundation implemented and verified
 
 **Last reviewed:** 2026-09-01
 
 **Slice 3 commit:** `fade04d`
+
+**Slice 4 commit:** `3601481`
 
 ## Completed — verified repository evidence only
 
@@ -31,12 +33,15 @@
 - Slice 4 composes eligibility-first evaluation, the 18 supported canonical pilot programmes, explicit snapshot selection, non-inferred vacancy evidence, and per-candidate provenance/reason trails.
 - `INELIGIBLE` returns no normal candidates; `NEEDS_REVIEW` remains visible on provisional candidates; all 61 unmapped programmes remain excluded.
 - The combined domain, ingestion, and recommendation suite passes 60 tests; strict TypeScript checking passes for the executable `src/` tree.
+- Slice 5 adds explicit branch-preference ordering with neutral missing/unlisted preferences and a disclosed canonical identifier tie-breaker.
+- Location/region and institution-type ordering remain unsupported because those fields are not present as authoritative sourced college data.
+- The full suite passes 67 tests; strict TypeScript checking passes for the executable `src/` tree.
 
-No cutoff probability, college ranking, preference scoring, AI recommendation, automatic source extraction, broad TNEA coverage, or application UI have been implemented.
+No prestige/quality score, cutoff probability, historical prediction, hidden weighting, location/institution ordering, AI recommendation, broad TNEA coverage, or application UI have been implemented.
 
 ## Immediate next task
 
-Define the next bounded delivery slice without adding ranking or probability; ingest separately authoritative 2026 seat facts when supplied.
+Define the next bounded delivery slice; add location or institution-type ordering only after authoritative sourced fields are deliberately contracted and populated.
 
 ## Blockers
 
