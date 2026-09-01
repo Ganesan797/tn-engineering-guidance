@@ -1,10 +1,24 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** Milestone 1 — Data contracts and validation foundation
+**Current milestone:** Product Review Gate — Student Journey V1 definition
 
-**Current task:** Slice 9 pilot usability hardening and end-to-end demo readiness implemented and verified
+**Current task:** Documentation checkpoint and product-design review; feature implementation is paused
 
-**Last reviewed:** 2026-09-01
+**Last reviewed:** 2026-09-02
+
+## Product Review Gate
+
+`PRODUCT_REVIEW_GATE = ACTIVE`
+
+`ENGINEERING_REFERENCE_MVP_V0 = COMPLETE`
+
+**Current state:** The deterministic MVP engine, API, pilot data flow, and minimal UI are working. The first student-facing run exposed a product-experience gap: the current UI reflects backend/domain contracts more than the student's mental model and original guidance mission.
+
+**Decision:** Pause further feature implementation until Student Journey V1 is defined and frozen.
+
+**Next priority:** Golden Product Mission → Student Journey V1 → Student Input/Output V1 → Technical Gap Mapping → re-plan implementation slices.
+
+`CODEX_FEATURE_WORK = PAUSED_PENDING_STUDENT_JOURNEY_V1`
 
 **Slice 3 commit:** `fade04d`
 

@@ -2,6 +2,12 @@
 
 A deterministic, source-backed 2026 engineering-admission guidance MVP for a five-college Tamil Nadu pilot.
 
+## Current Project Phase
+
+Engineering Reference MVP v0 is runnable. The project is now at a Product Review Gate, and further feature implementation is paused while Student Journey V1 is defined. Product direction is being re-grounded in the original India Sudar guidance mission and lessons from the first student-facing MVP.
+
+See [Golden Product Mission](docs/product_mission.md), [Student Journey V1](docs/student_journey_v1.md), and [Project Status](PROJECT_STATUS.md).
+
 ## Run locally
 
 Prerequisite: Node.js 22.6 or newer and npm.
