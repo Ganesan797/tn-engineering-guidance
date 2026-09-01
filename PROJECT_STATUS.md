@@ -2,7 +2,7 @@
 
 **Current milestone:** Milestone 1 — Data contracts and validation foundation
 
-**Current task:** Domain/Data Slice 1 foundation complete; awaiting review
+**Current task:** Pre-Slice 3 repository and 2026 source-data readiness audit
 
 **Last reviewed:** 2026-09-01
 
@@ -18,19 +18,23 @@
 - Six-month V1 roadmap and this live status file are now populated for review.
 - Frozen Domain/Data V1 contract artifacts have landed in `docs/domain_data_v1.md` and `docs/domain_data_v1.yaml`.
 - Slice 1 implements the frozen domain models and enums, `ADMISSION_YEAR = 2026`, conservative eligibility aggregation, `AdmissionSeatFact` validation, and focused invariant tests.
+- Slice 2 implements deterministic ELG001–ELG032 dispatch and execution, explainable sourced checks, missing-field reporting, cutoff calculation, explicit `NEEDS_REVIEW` boundaries, and complete rule-ID test coverage.
+- Slice 2 verification passes with 30 tests and a strict TypeScript compiler check; the Slice 2 changes are complete in the working tree but are not yet committed to repository HEAD.
+- Executable TypeScript domain and test infrastructure exists under `src/domain/` and `tests/domain/`, with the test command defined in `package.json`.
 
-No ELG rule predicates, recommendation logic, AI eligibility behavior, data ingestion, or application UI have been implemented.
+No recommendation logic, college or cutoff ranking, vacancy matching, AI eligibility behavior, data ingestion, or application UI have been implemented.
 
 ## Immediate next task
 
-Review and commit Slice 1 before authorizing implementation of the frozen ELG001–ELG032 rule-execution mapping.
+Commit the verified Slice 2 working tree, then acquire and register the authoritative 2026 pilot college, programme, sanctioned-intake, and vacancy sources before starting Slice 3 data work.
 
 ## Blockers
 
 - `colleges.csv`, `programmes.csv`, `cutoffs.csv`, and canonical `eligibility_rules.csv` contain no data rows, so real recommendations cannot yet be produced.
-- There is no data ingestion pipeline or application UI; the executable implementation is limited to the Slice 1 domain foundation.
-- Historical cutoff-band definitions for dream/target/safe guidance are not yet agreed or evidenced.
-- `project_base.docx` is plain text with a `.docx` extension and is not a valid Word document.
+- Slice 2 is verified but not committed; repository HEAD currently contains Slice 1 only.
+- No authoritative 2026 records are present for the three pilot colleges, their programme offerings, sanctioned intake, current vacancies, or quota/category vacancies.
+- Source provenance for future college, programme, intake, and vacancy facts has not yet been registered at document/page granularity.
+- There is no data ingestion pipeline; current executable infrastructure covers domain validation, eligibility aggregation, and deterministic ELG001–ELG032 execution.
 
 ## Key agreed decisions
 
@@ -44,4 +48,4 @@ Review and commit Slice 1 before authorizing implementation of the frozen ELG001
 
 ## Next review point
 
-After Slice 1 review, before any eligibility rule-execution implementation begins.
+After Slice 2 is committed and authoritative 2026 pilot data sources are identified, before any Slice 3 data population begins.

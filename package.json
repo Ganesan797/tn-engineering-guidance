@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test tests/domain/domain.test.ts tests/domain/eligibility.test.ts tests/domain/admission-seat-fact.test.ts"
+    "test": "node --test tests/domain/domain.test.ts tests/domain/eligibility.test.ts tests/domain/admission-seat-fact.test.ts tests/domain/rules.test.ts"
   },
   "engines": {
     "node": ">=22.6.0"

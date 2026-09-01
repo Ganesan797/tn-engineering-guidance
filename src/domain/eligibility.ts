@@ -1,8 +1,11 @@
 import { ADMISSION_YEAR } from "./constants.ts";
-import { ELIGIBILITY_OUTCOMES, isFrozenEnumValue } from "./enums.ts";
+import {
+  ELIGIBILITY_OUTCOMES,
+  isFrozenEnumValue,
+  type EligibilityOutcome,
+} from "./enums.ts";
 import type {
   EligibilityCheck,
-  EligibilityOutcome,
   EligibilityResult,
 } from "./models.ts";
 import {
