@@ -1,6 +1,6 @@
 # Technical Gap Mapping V1
 
-`TECHNICAL_GAP_MAPPING_STATUS = REVIEW_REQUIRED`
+`TECHNICAL_GAP_MAPPING_STATUS = APPROVED_V1`
 
 `IMPLEMENTATION_PLAN_V1 = NOT_CREATED`
 
@@ -8,11 +8,30 @@
 
 Completion of this gap mapping does not authorize implementation. This document compares the actual Engineering Reference MVP v0 repository with the frozen Golden Product Mission, Student Journey V1, and Student Input & Output V1.
 
+## Mission-Over-Reuse Principle
+
+Engineering Reference MVP v0 is an engineering asset and source of validated knowledge, but it is not a constraint on Product V1.
+
+Priority order:
+
+1. Golden Product Mission
+2. Frozen Student Journey V1
+3. Student Input & Output V1
+4. Simplicity, trustworthiness, and maintainability of Product V1
+5. Reuse of existing implementation
+
+Existing implementation should be reused only when it remains aligned with these priorities. Existing components may be **ADAPTED**, **REPLACED**, or **DROPPED** when retaining them would distort the frozen student journey, expose unnecessary backend complexity, create unnecessary implementation complexity, or otherwise reduce mission alignment.
+
+Previous engineering effort, test count, or implementation completeness alone is not justification for reuse.
+
+Conversely, proven deterministic admission and domain logic must not be rewritten casually. Replacing such logic requires a concrete product or technical reason and equivalent verification coverage.
+
 ## Classification
 
 - **REUSE:** Existing capability is technically suitable and aligned enough to preserve.
 - **ADAPT:** Existing capability is useful but needs modification at a defined boundary.
 - **BUILD:** Required capability does not meaningfully exist.
+- **REPLACE/DROP:** An existing MVP v0 capability or interaction exists, but retaining it would constrain or conflict with Product V1 and it should therefore not be treated as a required foundation.
 - **DEFER:** Not required for the initial redesigned experience or explicitly unauthorized.
 
 ## Current MVP Architecture
@@ -47,12 +66,15 @@ Actual flow:
 | Seat fact semantics | Intake/current/quota vacancy separated and validated | Trustworthy current evidence | REUSE | seat model/store | Real 2026 facts absent | Protect |
 | Vacancy uncertainty | Missing evidence becomes `UNKNOWN_OR_UNPUBLISHED`, never zero | Plain-language uncertainty | REUSE | recommendation foundation | UI terminology needs ADAPT | High |
 | Provenance | Rule, college, programme, and fact references survive result | Optional Level 3 evidence | REUSE | domain/recommendation/guidance | Source labels lack student-oriented document metadata in output | Medium |
-| Candidate generation | Eligibility-first, canonical-only and deterministic | Evidence-supported decision aid | REUSE | `foundation.ts` | Must be invoked only when relevant to the journey | High |
-| Branch ordering | Explicit preferences only; deterministic | Student-led choice assistance | REUSE | `choice-ordering.ts` | Current UI captures it upfront instead of progressively | High |
-| GuidanceResult | Composes factual result, choices, evidence, provenance | Internal trusted result feeding student semantics | REUSE | `application/guidance.ts` | Needs a presentation/view-model boundary, not replacement | High |
-| JSON API | Shape validation, safe errors, domain delegation | Channel-independent trusted service | REUSE | `api/guidance-api.ts` | A progressive client may need smaller purpose-specific adapters | Medium |
+| Candidate generation | Eligibility-first, canonical-only and deterministic | Evidence-supported decision aid invoked when Product V1 requires it | REUSE | `foundation.ts` | Product V1, not this capability, decides when it runs | High |
+| Branch ordering | Explicit preferences only; deterministic | Decision-support utility | REUSE | `choice-ordering.ts` | Must not organize the overall student journey | High |
+| GuidanceResult | Composes factual result, choices, evidence, provenance | Internal trusted result feeding student semantics | REUSE/ADAPT | `application/guidance.ts` | Not automatically the permanent Product V1 presentation contract | High |
+| JSON API | Shape validation, safe errors, domain delegation | Channel-independent trusted service | REUSE/ADAPT | `api/guidance-api.ts` | Purpose-specific interfaces may be added if progressive guidance requires them | Medium |
 | Pilot ingestion | Loads 5 colleges/79 programmes/18 mappings | Initial pilot evidence | REUSE | ingestion/runtime/data | Coverage remains intentionally narrow | Protect |
-| Current UI shell | Responsive semantic HTML and API delegation | Mobile-web foundation | ADAPT | `student-guidance.ts` | Replace large single form and raw result presentation | Highest |
+| Responsive/mobile web infrastructure | Framework-free responsive HTML, server, and API delegation | Useful mobile-web foundation where aligned | REUSE/ADAPT | `student-guidance.ts`, MVP server | Preserve only useful infrastructure, not current interaction assumptions | High |
+| Backend-shaped large form | Nearly the full domain profile is exposed upfront | Progressive minimum-trustworthy input | REPLACE | `student-guidance.ts` | Must not constrain Product V1 | Highest |
+| Raw technical result presentation | Raw outcomes, codes, identifiers, and source references are displayed | Simple semantic output with optional explanation/evidence | ADAPT substantially or REPLACE | Current renderer | Choose the simpler mission-aligned boundary during planning | Highest |
+| Linear form → engine → result assumption | Single interaction path | Guided and direct-entry journeys with exploration and next actions | DROP | Current UI/demo flow | Product V1 must not inherit this assumption | Highest |
 | Progressive input | All profile fields appear upfront | Ask minimum trustworthy information when relevant | BUILD | Existing request mapper can be reused behind it | No journey state/question routing exists | Highest |
 | Direct-entry paths | Demo scenario links, not product journeys | Guided start plus cutoff, exploration, and counselling entry | BUILD | API/service callable independently | No product navigation or entry routing | Highest |
 | Guidance before data | None; page starts with form | Awareness value before marks/profile | BUILD | None in runtime UI | No content delivery model | Highest |
@@ -69,9 +91,9 @@ Actual flow:
 | Exact Tamil copy | Not present and explicitly unfrozen | Downstream reviewed copy | DEFER | None | Requires language/content review | Deferred |
 | Mobile web redesign | Existing page is responsive but backend-shaped | Frozen mobile-first journey | ADAPT | framework-free server/UI/API | Interaction and information architecture must change | Highest |
 | WhatsApp link/share | No share output | Initial reach/share channel | BUILD | Channel-independent service helps later | No safe shareable summary/link capability | Medium after core flow |
-| Shareable guidance summary | No dedicated representation | Student-safe portable summary | BUILD | `GuidanceResult` source | Needs semantic summary contract and privacy review | Medium after output model |
+| Shareable guidance summary | No dedicated representation | Student-safe portable summary | BUILD | Internal guidance output | `PRIORITY = AFTER_CORE_STUDENT_FLOW`; needs semantic summary and privacy review | Later |
 | WhatsApp conversational guidance | None | Future channel reusing trusted layers | DEFER | API/service separation is favorable | Explicitly future; no separate admission logic allowed | Deferred |
-| Current-year seat facts | No real facts persisted; empty demo snapshot | Current sourced facts when published | BUILD (data) | Schema/store/validation reusable | Evidence acquisition and registration, not schema redesign | Data-dependent |
+| Current-year seat facts | No real facts persisted; empty demo snapshot | Current sourced facts when published | BUILD in parallel DATA/EVIDENCE WORKSTREAM | Schema/store/validation = REUSE | Software changes only where consumption/presentation requires them | Data-dependent |
 | Historical cutoff interpretation | Empty `cutoffs.csv`; no prediction | Separately reviewed context if later authorized | DEFER | Schema header only | Methodology and evidence not frozen | Deferred |
 | Location/institution type | Not authoritative in current model | Only if later sourced and authorized | DEFER | None | Data and semantics absent | Deferred |
 | Scheme/support content | No structured content or verified applicability layer | Things Worth Checking and later verified facts | BUILD | Eligibility rules cover only their frozen scope | Needs sourced content taxonomy and safe wording | High |
@@ -81,9 +103,9 @@ Actual flow:
 
 ## Engineering Reference MVP v0 — Reuse Boundary
 
-The following proven assets should not be casually rewritten because the student experience is changing:
+The following proven assets should not be casually rewritten because the student experience is changing. This boundary protects verified logic, not every higher-level contract or interaction:
 
-- `ADMISSION_YEAR = 2026`, frozen enums, `StudentProfile`, and validation semantics
+- `ADMISSION_YEAR = 2026`, frozen enums, and validation semantics
 - ELG001–ELG032 execution, cutoff calculation, sourced checks, and conservative aggregation
 - explicit `ELIGIBLE`, `INELIGIBLE`, and `NEEDS_REVIEW` internal outcomes
 - null-versus-false preservation
@@ -92,26 +114,29 @@ The following proven assets should not be casually rewritten because the student
 - distinct `AdmissionSeatFact` types and append-only snapshot handling
 - missing-vacancy behavior and snapshot selection
 - provenance propagation
-- deterministic candidate generation and explicit branch-preference ordering
-- `GuidanceResult`, API validation/error boundary, and UI-independent service composition
+- deterministic candidate generation as a capability, invoked only when Product V1 calls for it
+- explicit branch-preference ordering as a decision-support utility, not a journey organizer
+- UI-independent guidance service composition and safe API validation/error behavior
 - pilot ingestion and existing deterministic regression tests
 
 Adaptations should wrap or translate these assets at product-facing boundaries. A backend rewrite requires separate technical evidence, not merely a new UI direction.
+
+`StudentProfile` is **REUSE for now** as a trusted backend/domain contract, but it must not dictate the student question journey. `GuidanceResult` is **REUSE/ADAPT** as an internal trusted result, but it is not automatically the permanent Product V1 presentation contract. The JSON API is **REUSE/ADAPT**; purpose-specific interfaces may be introduced if progressive guidance genuinely requires them.
 
 ## Student Experience — Replacement / Adaptation Boundary
 
 The following current behavior is an engineering reference, not a constraint on the redesigned experience:
 
-- one large form exposing nearly the full `StudentProfile` at once
+- one large form exposing nearly the full `StudentProfile` at once — **REPLACE**
 - labels mechanically derived from internal field names
 - required snapshot IDs/stages and counselling enums shown directly to students
 - five branch-order inputs presented before the student's need is established
-- raw outcomes such as `NEEDS_REVIEW`
-- internal rule IDs, reason codes, fact-type enums, source IDs, and canonical codes in primary presentation
-- a linear form-to-result assumption
+- raw outcomes such as `NEEDS_REVIEW` — **ADAPT substantially or REPLACE**
+- internal rule IDs, reason codes, fact-type enums, source IDs, and canonical codes in primary presentation — **ADAPT substantially or REPLACE**
+- a linear form-to-engine-to-result student interaction assumption — **DROP**
 - immediate college-choice output without awareness, exploration, or a consistent next action
 
-The renderer and form mapper are **ADAPT** boundaries. Internal state must remain intact while a student-facing semantic layer controls what is asked, when it is asked, and how results are explained.
+Existing responsive/mobile infrastructure is **REUSE/ADAPT** where useful. The large form is not protected, and the current renderer may be substantially adapted or replaced if that is simpler. Internal trusted state must remain intact while a student-facing semantic layer controls what is asked, when it is asked, and how results are explained.
 
 ## Frozen Journey Stage Mapping
 
@@ -136,9 +161,9 @@ The renderer and form mapper are **ADAPT** boundaries. Internal state must remai
 | Skip irrelevant questions | Domain rules branch internally, UI does not | BUILD |
 | Zero-knowledge entry | No awareness-first product entry | BUILD |
 | Direct entry | Service is callable, but product routes do not exist | BUILD on REUSE service |
-| Student interests beyond branch order | Not defined or captured | DEFER until product/field design authorizes it |
+| Student interest/exploration capability | Required by frozen Stage 5 but not implemented | BUILD; exact interest questions, taxonomy, matching semantics, and final interaction design remain `NOT_YET_FROZEN` |
 
-`StudentProfile` remains a reusable backend contract. The gap is the collection layer that progressively and transparently produces it.
+`StudentProfile` remains a reusable backend contract for now. It is not sacred architecture and must not dictate the student question journey. The gap is the collection layer that progressively and transparently produces trustworthy domain input.
 
 ## Student Output Gap Review
 
@@ -146,7 +171,9 @@ The renderer and form mapper are **ADAPT** boundaries. Internal state must remai
 - **Level 2:** Sourced rule checks and ordering explanations exist and are optional `<details>`, but rule/reason codes require a student-language mapping: **ADAPT**.
 - **Level 3:** Provenance reaches the UI, but raw source IDs/pages need source-registry enrichment and clearer document references: **ADAPT**.
 - **Verified Personal Results:** Strong factual base exists: **REUSE** internally and **ADAPT** for presentation.
-- **Things Worth Checking:** No separate content/data/result contract exists: **BUILD** with explicit uncertainty and source rules.
+- **Things Worth Checking:** No separate content/data/result contract exists: **BUILD** with explicit uncertainty and source rules. It may surface sourced awareness, possible schemes or support worth investigating, potentially relevant certificates, related options, useful questions, and official resources. It must not infer scheme eligibility, imply entitlement, claim admission eligibility, or convert an unsupported possibility into a verified personal result.
+
+Verified Personal Results and Things Worth Checking must remain structurally distinguishable in internal output and student presentation.
 
 ## Progressive Guidance Capability
 
@@ -162,12 +189,24 @@ The branch CSV contains related-branch and career-domain taxonomy, but its notes
 
 ## Native-Language Readiness
 
+`NATIVE_LANGUAGE_CAPABILITY = REQUIRED`
+
+`STUDENT_SEMANTIC_CONTENT_BOUNDARY = BUILD_EARLY`
+
+`HARD_CODED_ENGLISH_DEPENDENCY = AVOID_IN_REDESIGN`
+
+`EXACT_TAMIL_COPY = DEFER_FROM_TECHNICAL_GAP_DESIGN`
+
+`TAMIL_STUDENT_VALIDATION = REQUIRED_BEFORE_RELEVANT_PILOT_OR_RELEASE`
+
+`TRANSLATION_MECHANISM = IMPLEMENTATION_DESIGN_CONCERN`
+
 Domain outputs are structured, making mapping feasible, but nearly all UI copy is hard-coded English in `src/ui/student-guidance.ts`; some labels are generated from field names. There is no centralized student-message catalogue or content/localization boundary.
 
 - Domain/API structured outputs: **REUSE**.
-- Student semantic message keys/view model and centralized content: **BUILD**.
+- Student semantic message keys/view model and centralized content: **BUILD EARLY**.
 - Current renderer: **ADAPT** to consume that layer.
-- Exact Tamil wording and translations: **DEFER** pending separate review.
+- Exact Tamil wording and translations: **DEFER** from technical gap design, but they are required before the relevant real-student pilot. Tamil-student validation is also required before that pilot or release.
 
 ## Channel Readiness
 
@@ -184,6 +223,10 @@ Repository search and recommendation code inspection found no Dream/Target/Safe 
 The deterministic candidate and branch-ordering modules are safe to **REUSE** within the frozen guardrails. Their raw technical explanations require **ADAPT** at the student-facing boundary.
 
 ## Data Gap Review
+
+Current dynamic evidence belongs primarily to a parallel **DATA/EVIDENCE WORKSTREAM**. Existing seat-fact schema, storage, and validation are **REUSE**. Acquiring authoritative current-year seat facts, counselling dates/process, scheme/support facts, operational requirements, and other dynamic TNEA evidence is evidence work first. Software should be built or adapted only where required to consume or present that evidence.
+
+Missing dynamic data must not unnecessarily block early awareness and guidance value.
 
 ### Available and Reusable
 
@@ -326,7 +369,7 @@ These are planning inputs, not implementation slices or authorization.
 
 This gap map preserves the trusted engineering core and identifies a student-product layer that must be planned separately. Human review must confirm the classifications, priorities, content/data boundaries, and implementation themes before an Implementation Plan V1 is created.
 
-`TECHNICAL_GAP_MAPPING_STATUS = REVIEW_REQUIRED`
+`TECHNICAL_GAP_MAPPING_STATUS = APPROVED_V1`
 
 `IMPLEMENTATION_PLAN_V1 = NOT_CREATED`
 

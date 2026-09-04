@@ -1,8 +1,8 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** Product Review Gate — Technical Gap Mapping review
+**Current milestone:** Product Review Gate — Implementation Plan V1 preparation
 
-**Current task:** Human review of the Engineering Reference MVP v0 versus frozen Product V1 technical gap map; feature implementation is paused
+**Current task:** Create and review Implementation Plan V1; feature implementation remains unauthorized
 
 **Last reviewed:** 2026-09-04
 
@@ -38,11 +38,17 @@
 
 `STUDENT_INPUT_OUTPUT_REVIEW = PASS`
 
-`TECHNICAL_GAP_MAPPING = CREATED_REVIEW_REQUIRED`
+`TECHNICAL_GAP_MAPPING = APPROVED_V1`
+
+`TECHNICAL_GAP_MAPPING_REVIEW = PASS`
+
+`MISSION_OVER_REUSE_PRINCIPLE = ACTIVE`
+
+`IMPLEMENTATION_PLAN_V1 = NOT_CREATED`
 
 `IMPLEMENTATION_AUTHORIZED = NO`
 
-**Next priority:** Review Technical Gap Mapping → Create Implementation Plan V1 → Review/freeze Implementation Plan → Explicit implementation authorization.
+**Next priority:** Create and review Implementation Plan V1.
 
 **Slice 3 commit:** `fade04d`
 
@@ -99,7 +105,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Review `docs/technical_gap_mapping_v1.md`; if accepted, create Implementation Plan V1 without automatically authorizing implementation.
+Create and review Implementation Plan V1 without automatically authorizing implementation.
 
 ## Blockers
 
@@ -118,4 +124,4 @@ Review `docs/technical_gap_mapping_v1.md`; if accepted, create Implementation Pl
 
 ## Next review point
 
-After human review of Technical Gap Mapping V1 and before creating Implementation Plan V1.
+After creating Implementation Plan V1 and before freezing or authorizing it.
