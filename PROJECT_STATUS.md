@@ -1,10 +1,10 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** Product Review Gate — Student Journey V1 definition
+**Current milestone:** Product Review Gate — Student Input & Output V1 paper-scenario review
 
 **Current task:** Documentation checkpoint and product-design review; feature implementation is paused
 
-**Last reviewed:** 2026-09-02
+**Last reviewed:** 2026-09-04
 
 ## Product Review Gate
 
@@ -18,9 +18,17 @@
 
 **Next priority:** Golden Product Mission → Student Journey V1 → Student Input/Output V1 → Technical Gap Mapping → re-plan implementation slices.
 
-`CODEX_FEATURE_WORK = PAUSED_PENDING_STUDENT_JOURNEY_V1`
+`CODEX_FEATURE_WORK = PAUSED_PENDING_PRODUCT_REVIEW_AND_IMPLEMENTATION_AUTHORIZATION`
 
 **Mission review:** Golden Product Mission V1 is frozen. Mission clarity, Booklet-First alignment, zero-knowledge alignment, native-language and reach direction, personalization, Think-Further direction, trusted-engine boundaries, and the mission review gate passed review. Major student-facing milestones now require `TECHNICAL_DOD = PASS`, `MISSION_ALIGNMENT = PASS`, and `STUDENT_SCENARIO_REVIEW = PASS`.
+
+`STUDENT_JOURNEY_V1 = FROZEN_V1`
+
+`STUDENT_INPUT_OUTPUT_V1 = LOCKED_V1`
+
+`IMPLEMENTATION_AUTHORIZED = NO`
+
+**Next priority:** Paper Scenario Review → Technical Gap Mapping against Engineering Reference MVP v0 → Implementation Planning → Implementation Authorization.
 
 **Slice 3 commit:** `fade04d`
 
