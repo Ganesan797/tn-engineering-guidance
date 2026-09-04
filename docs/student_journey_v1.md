@@ -1,10 +1,12 @@
 # Student Journey V1
 
-`STATUS = DRAFT`
+`STATUS = FROZEN_V1`
+
+`MISSION_ALIGNMENT = PASS`
 
 `IMPLEMENTATION_AUTHORIZED = NO`
 
-This document is a product specification draft. It does not authorize implementation until the journey is reviewed and frozen.
+This document freezes the Student Journey V1 product contract: the guidance responsibilities and outcomes the product owes the student. It does not freeze exact screens, wording, input fields, visual design, ranking or historical-cutoff methodology, scheme data, admission probability, or implementation architecture. Those require separate downstream review. Freezing this journey does not authorize implementation.
 
 ## 5–10 Minute Value Goal
 
@@ -82,9 +84,10 @@ Basic interest in engineering but limited or uneven knowledge of TNEA, cutoff, a
 
 **Essential guidance**
 
-- what TNEA is at a high level
-- what cutoff means at a high level
-- the high-level counselling flow
+- what TNEA is and where it fits among engineering-admission pathways
+- that the applicable TNEA rules derive an admission merit/cutoff measure from relevant Class 12 marks; explain the 200-mark concept and formula only where supported by the applicable versioned rule
+- that reservation, preferential pathways, concessions, or other support provisions may exist and may be worth checking, without asserting personal eligibility or a specific benefit
+- that counselling involves choices, allotment, and subsequent student actions and may include multiple stages or rounds
 - TNEA is one admission route and other routes may exist
 
 **Personal information needed**
@@ -141,21 +144,26 @@ The reason a field is required, and any effect it has on an admission-related fa
 
 **Purpose**
 
-Translate verified student information into understandable personal guidance while handling uncertainty conservatively.
+Translate verified student information into understandable personal guidance while handling uncertainty conservatively and clearly separating verified results from opportunities worth checking.
 
 **Student enters with**
 
 A verified or partially complete profile sufficient to produce a result, a review state, or a clear statement of what remains missing.
 
-**Essential guidance**
+**Essential guidance: Verified Personal Results**
 
-- eligibility outcome
 - calculated cutoff when deterministically available
-- what is known
-- what is uncertain or missing
-- verified applicable rules, quotas, or schemes where supported
-- what information may be needed next
-- an optional explanation of why the result was produced
+- eligibility outcome when deterministically supported
+- other personally applicable facts established by verified inputs and applicable versioned rules
+- what is known, uncertain, or missing
+- an optional explanation of why each result was produced
+
+**Essential guidance: Things Worth Checking**
+
+- schemes, concessions, quotas, scholarships, certificates, or other relevant opportunities the student may otherwise not discover
+- each item is an awareness prompt unless verified inputs and an applicable authoritative rule establish personal applicability
+- uncertain applicability remains explicit, with official current-year details or source direction supplied when available
+- useful opportunities are not hidden merely because safe personalization is not yet possible
 
 No unsupported likelihood or confidence language is allowed.
 
@@ -165,7 +173,7 @@ Only the trustworthy information required by the applicable frozen rules and the
 
 **Student should leave knowing**
 
-What the verified result means for them, which parts are known, which parts remain uncertain, and what they can provide or do next.
+What the verified result means for them; the difference between a verified personal result and something worth checking; which parts remain uncertain; and what they can provide or do next.
 
 **Next question / next action**
 
@@ -234,10 +242,12 @@ May eventually include evidence-backed:
 Safeguards:
 
 - no guaranteed backup language
-- no Dream/Target/Safety semantics are frozen yet
-- no unsupported probability or confidence
+- Dream/Target/Safe (or equivalent admission-range) classifications are not frozen or authorized by this journey
+- no admission probability, likelihood, confidence, or implied chance claim without a separately validated and authorized evidence model
 - no invented seat availability
 - uncertainty remains visible
+
+Choice-list guidance may help the student structure and order options, but it must not silently turn historical cutoffs or other context into predictive admission categories.
 
 **Personal information needed**
 
@@ -318,6 +328,24 @@ What authoritative source or rule supports it?
 
 The student should not be forced into Level 2 or Level 3 to understand the primary guidance.
 
+## Three-Layer Factual Model
+
+The journey separates the long-lived product responsibility from the rules and facts used to fulfil it:
+
+### Golden Product Concept
+
+What should a student understand or be able to do? Examples include understanding that academic merit matters, that support provisions may exist, that counselling involves choices and allotment, and that choice order matters.
+
+### Versioned Domain Rule
+
+What does the applicable TNEA rule say for a defined admission regime or year? Examples include an exact cutoff formula, eligibility conditions, reservation applicability, and allotment or choice mechanics. These rules must be versioned and authoritatively sourced outside this journey document.
+
+### Current-Year Fact
+
+What are the current dates, fees, seat matrix, vacancies, centres, document deadlines, and other operational details? These facts must carry current authoritative provenance and must not be treated as permanent product concepts.
+
+This document freezes Golden Product Concepts only. It introduces no Versioned Domain Rule or Current-Year Fact.
+
 ## Booklet-to-Journey Mapping
 
 The original India Sudar engineering-guidance material is the minimum awareness and orientation baseline. This mapping is conceptual and must not treat the booklet as a permanent source for time-sensitive facts.
@@ -353,6 +381,20 @@ Review question:
 - clear next action
 - value even without college recommendations
 
+## Native-Language Readiness Test
+
+Every stage passes only when its essential meaning can be expressed in simple conversational Tamil without losing or changing factual meaning. In particular:
+
+- essential guidance must not require English technical vocabulary
+- unavoidable TNEA terms or acronyms must be explainable clearly in Tamil
+- backend and domain status labels must not leak into student-facing language
+- wording must support short, mobile-readable sentences
+- translation must not alter eligibility, quota, cutoff, vacancy, or other factual semantics
+- wording should avoid unnecessary academic or government-language complexity
+- a Tamil-medium Class 12 student should be able to understand the essential concept without additional interpretation
+
+Full Tamil copy is a downstream input/output-design responsibility; it is not frozen by this document.
+
 ## Student Journey Review Criteria
 
 A journey cannot be frozen solely because the document is complete. Before `STUDENT_JOURNEY_STATUS = FROZEN`, all of the following product checks must pass:
@@ -377,11 +419,37 @@ The journey surfaces useful considerations the student may not know to ask about
 
 The student is not left without a clear next direction.
 
+`NATIVE_LANGUAGE_READINESS_TEST = PASS`
+
+Every stage can be expressed in plain, non-academic Tamil without changing its essential meaning or factual safeguards.
+
 `MISSION_ALIGNMENT = PASS`
 
 The journey remains aligned to `docs/product_mission.md`.
 
-## Areas Still To Be Frozen
+## Final Freeze Decision
+
+`STAGE_1_ENGINEERING_AWARENESS = PASS`
+
+`STAGE_2_TNEA_EXPLAINED = PASS`
+
+`STAGE_3_KNOW_THE_STUDENT = PASS`
+
+`STAGE_4_PERSONAL_GUIDANCE = PASS`
+
+`STAGE_5_EXPLORE = PASS`
+
+`STAGE_6_DECISION_SUPPORT = PASS_WITH_GUARDRAIL`
+
+`STAGE_7_NEXT_ACTION = PASS`
+
+`DOMAIN_ASSUMPTIONS_ADDED = NONE`
+
+`STUDENT_JOURNEY_V1_FREEZE_READY = YES`
+
+All seven outcome contracts and all journey review gates have passed. Stage 6 passes with the explicit guardrail that Dream/Target/Safe classifications and admission-probability claims remain unauthorized unless a separate validated evidence model is reviewed and approved.
+
+## Deliberately Deferred From This Freeze
 
 - Stage 1 exact content
 - booklet content mapping details
