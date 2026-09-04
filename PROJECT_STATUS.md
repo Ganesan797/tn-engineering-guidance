@@ -1,8 +1,8 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** Product Review Gate — Student Input & Output V1 paper-scenario review
+**Current milestone:** Product Review Gate — Technical Gap Mapping review
 
-**Current task:** Documentation checkpoint and product-design review; feature implementation is paused
+**Current task:** Human review of the Engineering Reference MVP v0 versus frozen Product V1 technical gap map; feature implementation is paused
 
 **Last reviewed:** 2026-09-04
 
@@ -28,7 +28,21 @@
 
 `IMPLEMENTATION_AUTHORIZED = NO`
 
-**Next priority:** Paper Scenario Review → Technical Gap Mapping against Engineering Reference MVP v0 → Implementation Planning → Implementation Authorization.
+`PAPER_SCENARIO_REVIEW = PASS`
+
+`SCENARIO_A_ZERO_KNOWLEDGE = PASS`
+
+`SCENARIO_B_CUTOFF_DIRECT_ENTRY = PASS`
+
+`SCENARIO_C_COUNSELLING_DIRECT_ENTRY = PASS`
+
+`STUDENT_INPUT_OUTPUT_REVIEW = PASS`
+
+`TECHNICAL_GAP_MAPPING = CREATED_REVIEW_REQUIRED`
+
+`IMPLEMENTATION_AUTHORIZED = NO`
+
+**Next priority:** Review Technical Gap Mapping → Create Implementation Plan V1 → Review/freeze Implementation Plan → Explicit implementation authorization.
 
 **Slice 3 commit:** `fade04d`
 
@@ -85,7 +99,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Commit and review Slice 9, then ingest the first authoritative 2026 seat snapshot when published without changing the existing contracts.
+Review `docs/technical_gap_mapping_v1.md`; if accepted, create Implementation Plan V1 without automatically authorizing implementation.
 
 ## Blockers
 
@@ -104,4 +118,4 @@ Commit and review Slice 9, then ingest the first authoritative 2026 seat snapsho
 
 ## Next review point
 
-Before persisting the first real `AdmissionSeatFact` snapshot or expanding beyond the frozen pilot.
+After human review of Technical Gap Mapping V1 and before creating Implementation Plan V1.
