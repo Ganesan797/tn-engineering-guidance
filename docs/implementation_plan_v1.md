@@ -1,6 +1,6 @@
 # Implementation Plan V1
 
-`STATUS = DRAFT`
+`STATUS = FROZEN_V1`
 
 `IMPLEMENTATION_AUTHORIZED = NO`
 
@@ -97,6 +97,8 @@ AI, LLMs, and agents must not decide or invent:
 
 Trusted deterministic domain logic remains authoritative.
 
+AI, LLM, or agent output must not convert informational, generated, translated, or retrieved content into a Verified Personal Result. Verified Personal Results must originate from an authorized deterministic and evidence-backed path.
+
 `AI_AGENT_CORE_DEPENDENCY = NO`
 
 `LLM_IN_CORE_DECISION_PATH = NO`
@@ -104,6 +106,24 @@ Trusted deterministic domain logic remains authoritative.
 `WHATSAPP_AGENT = DEFER`
 
 Detailed agent architecture is not part of this plan.
+
+## Product V1 Language Policy
+
+`PRIMARY_LANGUAGE = TAMIL`
+
+`SECONDARY_LANGUAGE = ENGLISH`
+
+`BILINGUAL_SUPPORT = YES`
+
+`USER_LANGUAGE_SWITCH = YES`
+
+Product V1 uses one trusted guidance/domain model with separate student-facing language presentations. Tamil is the primary language for the target student experience, and English is also supported.
+
+Eligibility, domain, and admission logic must not be duplicated by language. The semantic/content boundary must allow the same trusted meaning to be rendered in Tamil or English.
+
+Tamil mode should prioritize simple, natural, student-understandable Tamil. Necessary established terms and acronyms such as TNEA, CSE, and ECE may remain where useful, with simple explanations. Tamil and English need not be displayed simultaneously on every screen.
+
+Exact Tamil wording remains a reviewed content task and is not invented or frozen by this planning update.
 
 ## Parallel Workstreams
 
@@ -137,7 +157,7 @@ The sequence is ordered by dependency and student value, not a rigid calendar. E
 
 **DEFER:** Exact Tamil copy, full UI redesign, WhatsApp, AI agents, and recommendation probability.
 
-**Dependencies:** Approved Product V1 documents; D0 governance for factual guidance content.
+**Dependencies:** Approved Product V1 documents. M0 technical and semantic scaffolding may proceed before D0 is fully complete. Factual student guidance content must not be accepted as production-ready or pilot-ready until the applicable D0 source-governance requirements pass.
 
 **Data dependencies:** Enough reviewed source metadata and initial non-time-sensitive awareness content to validate the model. Dynamic seat data is not required.
 
@@ -203,7 +223,7 @@ The sequence is ordered by dependency and student value, not a rigid calendar. E
 
 **DEFER:** Unsupported scheme personalization, predictions, and final Tamil copy.
 
-**Dependencies:** M0–M2.
+**Dependencies:** M0–M2. By M3 acceptance, representative Level 1 student guidance must be manually reviewed in simple Tamil to verify that the semantic/content architecture genuinely supports the target student experience. This does not require complete Tamil copy at M3.
 
 **Data dependencies:** D1 for applicable rules; D2 for any Things Worth Checking content included. Missing seat facts remain unknown.
 
@@ -225,7 +245,15 @@ The sequence is ordered by dependency and student value, not a rigid calendar. E
 
 **DEFER:** Exact interest questions, taxonomy, matching semantics, and final interaction design until separately specified within the milestone; rankings and predictions remain prohibited.
 
-**Dependencies:** M0, M1, and M3; M2 only where personalization is used.
+**Dependencies:** M0, M1, and M3; M2 only where personalization is used. Before M4 implementation authorization, require:
+
+`INTEREST_INPUT_CONTRACT = REVIEWED`
+
+`EXPLORATION_TAXONOMY = REVIEWED`
+
+`MATCHING_SEMANTICS = REVIEWED`
+
+These items are not designed by this plan. Codex must not invent these semantics during M4 implementation.
 
 **Data dependencies:** D0 and relevant parts of D2/D3. General exploration can proceed before dynamic seat evidence.
 
@@ -254,6 +282,8 @@ The sequence is ordered by dependency and student value, not a rigid calendar. E
 **Risks:** Implied admission chance, fabricated vacancy, historical evidence becoming prediction, or system preference overriding student preference.
 
 ### M6 — End-to-End Product V1
+
+M6 is an integration milestone, not a catch-all feature milestone. Major new product capabilities discovered during M6 require separate review and authorization and must not be silently absorbed into M6.
 
 **Student problem:** Individually improved capabilities do not yet form one coherent Product V1 journey.
 
@@ -291,7 +321,7 @@ The sequence is ordered by dependency and student value, not a rigid calendar. E
 
 **DEFER:** Full public production deployment unless separately authorized.
 
-**Dependencies:** M6 acceptance; relevant Tamil content review; native-language readiness completion; manual mobile review; owner reviews; privacy/safe-sharing review where relevant.
+**Dependencies:** M6 acceptance; full relevant Tamil content review; native-language readiness completion; manual mobile review; owner reviews; privacy/safe-sharing review where relevant.
 
 **Data dependencies:** Current-year critical facts used by the pilot must be checked through D1–D4.
 
@@ -312,8 +342,8 @@ No data is ingested by this plan. Every milestone prohibits invented facts and r
 ### D0 — Guidance Content Source Governance
 
 - Define review, version, provenance, expiry/revalidation, and ownership rules for guidance content.
-- **Blocks:** M0 factual content acceptance, but not semantic-boundary scaffolding.
-- **Can proceed without completion:** Internal semantic contracts and non-factual prototypes.
+- **Blocks:** Acceptance of factual student guidance content as production-ready or pilot-ready, but not M0 technical/semantic scaffolding.
+- **Can proceed without completion:** Internal semantic contracts, content infrastructure, and non-factual prototypes.
 
 ### D1 — Current TNEA Rules / Process Evidence
 
@@ -447,10 +477,12 @@ Existing MVP v0 behavior may be replaced or dropped when Product V1 becomes simp
 
 ## Plan Review Status
 
-`IMPLEMENTATION_PLAN_V1_STATUS = DRAFT`
+`IMPLEMENTATION_PLAN_V1_STATUS = FROZEN_V1`
+
+`IMPLEMENTATION_PLAN_V1_REVIEW = PASS`
 
 `IMPLEMENTATION_AUTHORIZED = NO`
 
 `M0_IMPLEMENTATION_AUTHORIZED = NO`
 
-The plan must be human-reviewed before freezing. Neither this draft nor completion of a review automatically authorizes implementation.
+Freezing this reviewed plan does not authorize implementation. M0 requires separate explicit authorization.

@@ -44,11 +44,21 @@
 
 `MISSION_OVER_REUSE_PRINCIPLE = ACTIVE`
 
-`IMPLEMENTATION_PLAN_V1 = DRAFT`
+`IMPLEMENTATION_PLAN_V1 = FROZEN_V1`
+
+`IMPLEMENTATION_PLAN_V1_REVIEW = PASS`
+
+`PRIMARY_STUDENT_LANGUAGE = TAMIL`
+
+`SECONDARY_STUDENT_LANGUAGE = ENGLISH`
+
+`BILINGUAL_SUPPORT = YES`
 
 `IMPLEMENTATION_AUTHORIZED = NO`
 
-**Next priority:** Review Implementation Plan V1 → Freeze plan → Explicitly authorize M0 only.
+`M0_IMPLEMENTATION_AUTHORIZED = NO`
+
+**Next priority:** Review and explicitly authorize M0 — Student Semantic + Content Foundation.
 
 **Slice 3 commit:** `fade04d`
 
@@ -105,7 +115,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Review `docs/implementation_plan_v1.md`, freeze it only after approval, then explicitly authorize M0 only.
+Review and explicitly authorize M0 — Student Semantic + Content Foundation.
 
 ## Blockers
 
