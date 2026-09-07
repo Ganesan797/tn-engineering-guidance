@@ -33,7 +33,8 @@ test("ELIGIBLE scenario traverses API and UI with branch order and provenance", 
   assert.equal(state.response.result.ordered_choices[0].candidate.branch_id, "ECE");
   assert.ok(state.response.result.provenance.some(({ source_id }) => source_id === "SRC005"));
   const html = renderStudentGuidancePage(state);
-  assert.match(html, /Eligibility: ELIGIBLE/);
+  assert.match(html, /meet the checked TNEA eligibility conditions/);
+  assert.match(html, /Your TNEA cutoff: 165 \/ 200/);
   assert.match(html, /Source SRC005/);
 });
 
@@ -41,7 +42,7 @@ test("INELIGIBLE scenario renders reasons and no normal choices", () => {
   const state = submitStudentGuidanceForm(demoScenario("ineligible"), runtime());
   assert.equal(state.response?.ok && state.response.result.eligibility.outcome, "INELIGIBLE");
   const html = renderStudentGuidancePage(state);
-  assert.match(html, /Eligibility: INELIGIBLE/);
+  assert.match(html, /do not meet one or more checked TNEA eligibility conditions/);
   assert.doesNotMatch(html, /Ordered programme choices/);
 });
 
@@ -49,6 +50,10 @@ test("NEEDS_REVIEW scenario retains actionable missing information", () => {
   const state = submitStudentGuidanceForm(demoScenario("needs-review"), runtime());
   assert.equal(state.response?.ok && state.response.result.eligibility.outcome, "NEEDS_REVIEW");
   assert.match(renderStudentGuidancePage(state), /Information still needed/);
+  assert.match(
+    renderStudentGuidancePage(state),
+    /need a little more information to confirm your eligibility/,
+  );
 });
 
 test("unpublished vacancy remains unknown throughout the rendered path", () => {

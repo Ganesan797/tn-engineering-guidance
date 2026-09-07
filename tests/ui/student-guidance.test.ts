@@ -110,7 +110,8 @@ test("A. ELIGIBLE submission reaches Slice 7 and renders ordered choices", () =>
   const state = submitted();
   const html = renderStudentGuidancePage(state);
   assert.equal(state.response?.ok, true);
-  assert.match(html, /Eligibility: ELIGIBLE/);
+  assert.match(html, /meet the checked TNEA eligibility conditions/);
+  assert.match(html, /Your TNEA cutoff: 165 \/ 200/);
   assert.match(html, /Ordered programme choices/);
   assert.match(html, /PSG Tech/);
 });
@@ -122,7 +123,7 @@ test("B. INELIGIBLE renders status and reasons without normal choices", () => {
     }),
   );
   const html = renderStudentGuidancePage(state);
-  assert.match(html, /Eligibility: INELIGIBLE/);
+  assert.match(html, /do not meet one or more checked TNEA eligibility conditions/);
   assert.match(html, /ELG0/);
   assert.doesNotMatch(html, /Ordered programme choices/);
 });
@@ -130,7 +131,7 @@ test("B. INELIGIBLE renders status and reasons without normal choices", () => {
 test("C. NEEDS_REVIEW and missing information remain explicit", () => {
   const state = submitted(form({ profile: studentProfile() }));
   const html = renderStudentGuidancePage(state);
-  assert.match(html, /Eligibility: NEEDS_REVIEW/);
+  assert.match(html, /need a little more information to confirm your eligibility/);
   assert.match(html, /Information still needed/);
   assert.match(html, /Qualifying Stream/);
 });
@@ -152,7 +153,10 @@ test("D. partial form values preserve unknown null separately from false", () =>
   assert.equal(request.profile.govt_school_7_5, false);
   assert.equal(request.profile.tamil_nadu_native, null);
   const state = submitStudentGuidanceForm(request, dependencies());
-  assert.match(renderStudentGuidancePage(state), /Eligibility: NEEDS_REVIEW/);
+  assert.match(
+    renderStudentGuidancePage(state),
+    /need a little more information to confirm your eligibility/,
+  );
 });
 
 test("E. explicit branch preference and API-returned order are unchanged", () => {
@@ -243,4 +247,50 @@ test("responsive page uses semantic labelled controls and text status", () => {
   assert.match(html, /<button type="submit">Get guidance<\/button>/);
   assert.match(html, /@media\(max-width:35rem\)/);
   assert.match(html, /Unknown \/ unanswered/);
+  assert.match(html, /Understand your options first/);
+  assert.match(html, /Engineering includes different branches and fields/);
+});
+
+test("primary guidance hides raw backend terms while optional evidence remains", () => {
+  const html = renderStudentGuidancePage(submitted(form({ profile: studentProfile() })));
+  const primary = html.match(/<div class="student-primary-guidance">([\s\S]*?)<\/div>/)?.[1];
+  assert.ok(primary);
+  assert.doesNotMatch(primary, /NEEDS_REVIEW|ELG\d+|INTERNAL_|reason_code/);
+  assert.match(html, /ELG\d+/);
+  assert.match(html, /Source SRC002/);
+});
+
+test("expanded evidence uses student-safe titles without raw predicate reason codes", () => {
+  const state = submitted(
+    form({
+      profile: eligibleProfile({
+        maths_mark: 10,
+        physics_mark: 10,
+        chemistry_mark: 10,
+      }),
+    }),
+  );
+  assert.equal(state.response?.ok, true);
+  if (state.response?.ok !== true) return;
+  const domainBeforeRendering = structuredClone(state.response.result);
+  const html = renderStudentGuidancePage(state);
+
+  assert.match(html, /Minimum academic marks requirement: Not satisfied/);
+  assert.doesNotMatch(html, /ELG\d{3}_PREDICATE_(?:SATISFIED|FAILED)/);
+  assert.match(html, /Rule reference: ELG016/);
+  assert.match(html, /Source SRC002, page 2/);
+  assert.deepEqual(state.response.result, domainBeforeRendering);
+  assert.equal(
+    state.response.result.eligibility.checks.some(
+      (check) => check.reason_code === "ELG016_PREDICATE_FAILED",
+    ),
+    true,
+  );
+
+  const eligibleHtml = renderStudentGuidancePage(submitted());
+  assert.doesNotMatch(
+    eligibleHtml,
+    /ELG\d{3}_PREDICATE_(?:SATISFIED|FAILED)/,
+  );
+  assert.match(eligibleHtml, /Eligibility rule references: ELG001/);
 });

@@ -1,8 +1,8 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** Product Review Gate — Implementation Plan V1 preparation
+**Current milestone:** M0 — Student Semantic + Content Foundation (accepted)
 
-**Current task:** Create and review Implementation Plan V1; feature implementation remains unauthorized
+**Current task:** M0 is complete and accepted; M1 remains unauthorized
 
 **Last reviewed:** 2026-09-07
 
@@ -14,11 +14,11 @@
 
 **Current state:** The deterministic MVP engine, API, pilot data flow, and minimal UI are working. The first student-facing run exposed a product-experience gap: the current UI reflects backend/domain contracts more than the student's mental model and original guidance mission.
 
-**Decision:** Pause further feature implementation until Student Journey V1 is defined and frozen.
+**Decision:** M0 implementation and human acceptance reviews passed. M1 and later implementation remain unauthorized.
 
-**Next priority:** Golden Product Mission → Student Journey V1 → Student Input/Output V1 → Technical Gap Mapping → re-plan implementation slices.
+**Next priority:** Review and explicitly authorize M1 before any M1 implementation begins.
 
-`CODEX_FEATURE_WORK = PAUSED_PENDING_PRODUCT_REVIEW_AND_IMPLEMENTATION_AUTHORIZATION`
+`CODEX_FEATURE_WORK = PAUSED_PENDING_M1_REVIEW_AND_AUTHORIZATION`
 
 **Mission review:** Golden Product Mission V1 is frozen. Mission clarity, Booklet-First alignment, zero-knowledge alignment, native-language and reach direction, personalization, Think-Further direction, trusted-engine boundaries, and the mission review gate passed review. Major student-facing milestones now require `TECHNICAL_DOD = PASS`, `MISSION_ALIGNMENT = PASS`, and `STUDENT_SCENARIO_REVIEW = PASS`.
 
@@ -26,7 +26,27 @@
 
 `STUDENT_INPUT_OUTPUT_V1 = LOCKED_V1`
 
-`IMPLEMENTATION_AUTHORIZED = NO`
+`IMPLEMENTATION_AUTHORIZED = M0_ONLY_COMPLETE`
+
+`M0_IMPLEMENTATION_AUTHORIZED = YES`
+
+`M0_IMPLEMENTATION = COMPLETE`
+
+`CODEX_TECHNICAL_DOD = PASS`
+
+`OWNER_ENGINEERING_REVIEW = PASS`
+
+`OWNER_STUDENT_REVIEW = PASS`
+
+`MISSION_ALIGNMENT_DOD = PASS`
+
+`RELEVANT_SCENARIO_REVIEW = PASS`
+
+`DOMAIN_ASSUMPTIONS_MADE = NONE`
+
+`M0_ACCEPTED = YES`
+
+`M1_IMPLEMENTATION_AUTHORIZED = NO`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -54,11 +74,7 @@
 
 `BILINGUAL_SUPPORT = YES`
 
-`IMPLEMENTATION_AUTHORIZED = NO`
-
-`M0_IMPLEMENTATION_AUTHORIZED = NO`
-
-**Next priority:** Review and explicitly authorize M0 — Student Semantic + Content Foundation.
+**Implementation Plan V1 remains frozen; completion and acceptance of M0 do not authorize M1.**
 
 **Slice 3 commit:** `fade04d`
 
@@ -110,12 +126,20 @@
 - Slice 9 adds a minimal local server, persisted pilot-data runtime loader, four reproducible student scenarios, and end-to-end smoke coverage through ingestion, API, guidance, and UI.
 - The local runtime verifies 5 colleges, 79 source programmes, 18 canonical mappings, and 61 preserved unmapped programmes; its empty programme-evidence snapshot leaves all unpublished vacancy facts unknown.
 - The complete suite passes 106 tests; the documented strict TypeScript check passes, and the local MVP command serves the student page successfully.
+- M0 implementation adds a language-neutral student-semantic model, a separate English presentation catalogue, structured informational content, and a minimal student-facing proof without changing the trusted domain or API contracts.
+- M0 verification passes 115 tests and strict TypeScript checking. Technical DoD, owner engineering review, owner student review, relevant scenario review, and mission-alignment DoD all pass; M0 is accepted.
 
 No prestige/quality score, admission probability, historical prediction, hidden weighting, location/institution ordering, AI recommendation, or broad TNEA coverage has been implemented.
 
 ## Immediate next task
 
-Review and explicitly authorize M0 — Student Semantic + Content Foundation.
+Review and explicitly authorize M1. Do not begin M1 or later work without that authorization.
+
+## Accepted M0 observations — non-blocking
+
+- The existing MVP-v0 form remains backend-shaped and overwhelming. Target: M1/M2.
+- The Level-2/Level-3 explanation hierarchy can be improved further during Personal Guidance Presentation. Target: M3.
+- Exact reviewed Tamil presentation is not part of M0. Representative Tamil validation remains required by M3.
 
 ## Blockers
 
@@ -134,4 +158,4 @@ Review and explicitly authorize M0 — Student Semantic + Content Foundation.
 
 ## Next review point
 
-After creating Implementation Plan V1 and before freezing or authorizing it.
+M1 scope review and explicit implementation authorization.

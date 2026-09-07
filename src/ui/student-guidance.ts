@@ -12,6 +12,11 @@ import {
   VOCATIONAL_SUBJECT_GROUP_CODES,
 } from "../domain/enums.ts";
 import type { StudentProfile } from "../domain/models.ts";
+import {
+  getInformationalContent,
+  resolveStudentMessage,
+  toStudentGuidanceSemanticView,
+} from "../student-semantics/index.ts";
 
 export type GuidanceJsonBoundary = (
   requestJson: string,
@@ -159,25 +164,34 @@ function counsellingForm(request: GuidanceRequest): string {
 </div></fieldset>`;
 }
 
+function awarenessContent(): string {
+  const content = getInformationalContent("awareness.engineering_choices");
+  return `<section class="awareness" aria-labelledby="awareness-heading"><h2 id="awareness-heading">${escapeHtml(resolveStudentMessage(content.title, "en"))}</h2><p>${escapeHtml(resolveStudentMessage(content.body, "en"))}</p><details><summary>Content source</summary><p>${escapeHtml(content.provenance.document_id)} — ${escapeHtml(content.provenance.section)}</p></details></section>`;
+}
+
 function eligibilityDetails(result: GuidanceApiResponse & { ok: true }): string {
-  const eligibility = result.result.eligibility;
-  const blocking = eligibility.blocking_missing_fields.length === 0
+  const view = toStudentGuidanceSemanticView(result.result);
+  const verified = view.verified_result;
+  const blocking = verified.blocking_missing_fields.length === 0
     ? ""
-    : `<section aria-labelledby="missing-heading"><h3 id="missing-heading">Information still needed</h3><ul>${eligibility.blocking_missing_fields.map((field) => `<li>${escapeHtml(label(field))}</li>`).join("")}</ul></section>`;
-  return `<section class="status" aria-live="polite"><h2>Eligibility: ${escapeHtml(eligibility.outcome)}</h2>${eligibility.cutoff === null ? "" : `<p>Deterministic cutoff: <strong>${escapeHtml(eligibility.cutoff)}</strong></p>`}${blocking}
-<details><summary>Eligibility explanations</summary><ul>${eligibility.checks.map((check) => `<li><strong>${escapeHtml(check.rule_id)} — ${escapeHtml(check.reason_code)}</strong><br />${escapeHtml(check.explanation)}<br /><small>Source ${escapeHtml(check.source_id)}${check.source_page === null ? "" : `, page ${escapeHtml(check.source_page)}`}</small></li>`).join("")}</ul></details></section>`;
+    : `<section aria-labelledby="missing-heading"><h3 id="missing-heading">Information still needed</h3><ul>${verified.blocking_missing_fields.map((field) => `<li>${escapeHtml(label(field))}</li>`).join("")}</ul></section>`;
+  const cutoff = verified.cutoff_message === null
+    ? ""
+    : `<p><strong>${escapeHtml(resolveStudentMessage(verified.cutoff_message, "en"))}</strong></p>`;
+  return `<section class="status" aria-live="polite"><div class="student-primary-guidance"><h2>Your eligibility guidance</h2><p>${escapeHtml(resolveStudentMessage(verified.primary_message, "en"))}</p>${cutoff}${blocking}</div>
+<details><summary>Why and official evidence</summary><ul>${verified.student_checks.map((check) => `<li><strong>${escapeHtml(check.title)}: ${escapeHtml(check.result_text)}</strong><br />${escapeHtml(check.explanation)}<br /><small>Rule reference: ${escapeHtml(check.rule_reference)} · Source ${escapeHtml(check.source_id)}${check.source_page === null ? "" : `, page ${escapeHtml(check.source_page)}`}</small></li>`).join("")}</ul></details></section>`;
 }
 
 function choices(result: GuidanceApiResponse & { ok: true }): string {
   if (result.result.eligibility.outcome === "INELIGIBLE") return "";
-  const cards = result.result.ordered_choices.map(({ position, candidate, ordering_reason_codes, ordering_explanations }) => {
+  const cards = result.result.ordered_choices.map(({ position, candidate, ordering_explanations }) => {
     const vacancy = candidate.vacancy_evidence_state === "UNKNOWN_OR_UNPUBLISHED"
       ? "Vacancy information not published / not available in the current source."
       : "Published seat evidence is available below.";
     const facts = candidate.applicable_seat_facts.length === 0
       ? ""
       : `<ul>${candidate.applicable_seat_facts.map((fact) => `<li>${escapeHtml(fact.fact_type)}: ${escapeHtml(fact.seat_count)} seat(s)${fact.round === null ? "" : `, round ${escapeHtml(fact.round)}`}${fact.reservation_category === null ? "" : `, category ${escapeHtml(fact.reservation_category)}`}${fact.quota === null ? "" : `, quota ${escapeHtml(fact.quota)}`} — source ${escapeHtml(fact.source_id)}${fact.source_page === null ? "" : `, page ${escapeHtml(fact.source_page)}`}</li>`).join("")}</ul>`;
-    return `<article class="choice"><h3>${position}. ${escapeHtml(candidate.college_name)} — ${escapeHtml(candidate.programme_name)}</h3><p>College code ${escapeHtml(candidate.tnea_college_code)} · Branch ${escapeHtml(candidate.branch_id)}</p><p><strong>Vacancy:</strong> ${escapeHtml(vacancy)}</p>${facts}<details><summary>Why this order and evidence</summary><p>${ordering_explanations.map(escapeHtml).join(" ")}</p><p>Reason codes: ${[...ordering_reason_codes, ...candidate.explanation_reason_codes].map(escapeHtml).join(", ")}</p><ul>${candidate.evidence.map((source) => `<li>Source ${escapeHtml(source.source_id)}${source.source_page === null ? "" : `, page ${escapeHtml(source.source_page)}`}</li>`).join("")}</ul></details></article>`;
+    return `<article class="choice"><h3>${position}. ${escapeHtml(candidate.college_name)} — ${escapeHtml(candidate.programme_name)}</h3><p>College code ${escapeHtml(candidate.tnea_college_code)} · Branch ${escapeHtml(candidate.branch_id)}</p><p><strong>Vacancy:</strong> ${escapeHtml(vacancy)}</p>${facts}<details><summary>Why this order and evidence</summary><p>${ordering_explanations.map(escapeHtml).join(" ")}</p><p><small>Eligibility rule references: ${candidate.eligibility_basis.map(escapeHtml).join(", ")}</small></p><ul>${candidate.evidence.map((source) => `<li>Source ${escapeHtml(source.source_id)}${source.source_page === null ? "" : `, page ${escapeHtml(source.source_page)}`}</li>`).join("")}</ul></details></article>`;
   }).join("\n");
   return `<section aria-labelledby="choices-heading"><h2 id="choices-heading">Ordered programme choices</h2>${cards}</section>`;
 }
@@ -317,7 +331,7 @@ export function renderStudentGuidancePage(
 ): string {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>TN Engineering Guidance</title><style>
 :root{font-family:system-ui,sans-serif;color:#172033;background:#f7f8fa}body{margin:0}.page{max-width:70rem;margin:auto;padding:1rem}form,section,.choice,details{background:white;border:1px solid #d8dde6;border-radius:.5rem;padding:1rem;margin-block:1rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.8rem}.field{display:flex;flex-direction:column;gap:.3rem}label,legend{font-weight:650}input,select,button{font:inherit;padding:.65rem;min-height:2.75rem}button{cursor:pointer;background:#174ea6;color:white;border:0;border-radius:.35rem}.status h2,.error h2{margin-top:0}.error{border-color:#a61b1b}.choice h3{margin-top:0}small{color:#46536a}@media(max-width:35rem){.page{padding:.65rem}form,section,.choice,details{padding:.75rem}.grid{grid-template-columns:1fr}}
-</style></head><body><main class="page"><h1>TN Engineering Guidance</h1><p>Enter what you know. Leave unknown answers as “Unknown / unanswered”.</p><form id="guidance-form" method="post" action="/guidance">${profileForm(state.form.profile)}${preferencesForm(state.form)}${counsellingForm(state.form)}
+</style></head><body><main class="page"><h1>TN Engineering Guidance</h1>${awarenessContent()}<p>Enter what you know. Leave unknown answers as “Unknown / unanswered”.</p><form id="guidance-form" method="post" action="/guidance">${profileForm(state.form.profile)}${preferencesForm(state.form)}${counsellingForm(state.form)}
 <input type="hidden" name="eligibility_request.academic_merit_cutoff_requested" value="${escapeHtml(state.form.eligibility_request.academic_merit_cutoff_requested)}" />
 <input type="hidden" name="eligibility_request.normalized_cross_board_merit_ranking_requested" value="${escapeHtml(state.form.eligibility_request.normalized_cross_board_merit_ranking_requested)}" />
 <input type="hidden" name="eligibility_request.govt_school_7_5_entitlement_requested" value="${escapeHtml(state.form.eligibility_request.govt_school_7_5_entitlement_requested)}" />
