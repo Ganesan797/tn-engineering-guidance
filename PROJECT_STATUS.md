@@ -4,7 +4,7 @@
 
 **Current task:** Create and review Implementation Plan V1; feature implementation remains unauthorized
 
-**Last reviewed:** 2026-09-04
+**Last reviewed:** 2026-09-07
 
 ## Product Review Gate
 
@@ -44,11 +44,11 @@
 
 `MISSION_OVER_REUSE_PRINCIPLE = ACTIVE`
 
-`IMPLEMENTATION_PLAN_V1 = NOT_CREATED`
+`IMPLEMENTATION_PLAN_V1 = DRAFT`
 
 `IMPLEMENTATION_AUTHORIZED = NO`
 
-**Next priority:** Create and review Implementation Plan V1.
+**Next priority:** Review Implementation Plan V1 → Freeze plan → Explicitly authorize M0 only.
 
 **Slice 3 commit:** `fade04d`
 
@@ -105,7 +105,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Create and review Implementation Plan V1 without automatically authorizing implementation.
+Review `docs/implementation_plan_v1.md`, freeze it only after approval, then explicitly authorize M0 only.
 
 ## Blockers
 
