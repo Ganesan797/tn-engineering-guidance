@@ -64,6 +64,12 @@ The General Academic Seat Matrix category values are not stored in this file and
 | `reliability_level` | `Primary`, `Secondary`, or `Reference`. |
 | `notes` | Brief factual scope or context. |
 
+## `data/m1_awareness_content_pack_v1.json`
+
+This is the immutable machine-readable manifest for the frozen M1 bilingual awareness pack. It records the pack version, freeze date, audience, admission regime, content item IDs, provenance source IDs, stability classification, and prohibited output classes. The full approved English and Tamil copy and its page-level claim controls live in `docs/m1_awareness_content_pack_v1.md`.
+
+Every `source_id` in the manifest must exist in `data/sources.csv`. A content item marked with a TNEA year must be revalidated before reuse in another admission regime.
+
 ## `data/student_profiles.csv`
 
 | Field | Definition |

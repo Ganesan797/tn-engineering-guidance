@@ -1,0 +1,30 @@
+{
+  "pack_id": "M1-AWARENESS-CONTENT-PACK",
+  "version": "V1",
+  "status": "FROZEN",
+  "frozen_on": "2026-09-12",
+  "audience": "STUDENT_STARTING_WITH_ZERO_KNOWLEDGE",
+  "admission_regime": "TNEA_2026_WHERE_EXPLICITLY_MARKED",
+  "content_document": "docs/m1_awareness_content_pack_v1.md",
+  "source_ids": ["SRC001", "SRC002", "SRC003", "SRC006", "SRC007", "SRC008"],
+  "items": [
+    {"id":"AW-01","topic":"engineering_idea","source_ids":["SRC006","SRC007","SRC008"],"stability":"LONG_LIVED_ORIENTATION"},
+    {"id":"AW-02","topic":"branch_families","source_ids":["SRC006","SRC008"],"stability":"ORIENTATION_WITH_CURRENT_AVAILABILITY_GUARD"},
+    {"id":"AW-03","topic":"tnea_scope","source_ids":["SRC002","SRC008"],"stability":"TNEA_2026"},
+    {"id":"AW-04","topic":"cutoff","source_ids":["SRC002","SRC008"],"stability":"TNEA_2026_GENERAL_ACADEMIC_ONLY"},
+    {"id":"AW-05","topic":"tnea_process","source_ids":["SRC002"],"stability":"TNEA_2026"},
+    {"id":"AW-06","topic":"choice_filling","source_ids":["SRC002"],"stability":"TNEA_2026"},
+    {"id":"AW-07","topic":"compare_branch_and_college","source_ids":["SRC006","SRC008"],"stability":"LONG_LIVED_WITH_CURRENT_FACT_GUARD"},
+    {"id":"AW-08","topic":"support_to_check","source_ids":["SRC002"],"stability":"TNEA_2026_CONDITIONAL"},
+    {"id":"AW-09","topic":"prepare_information","source_ids":["SRC002"],"stability":"TNEA_2026_CONDITIONAL"},
+    {"id":"AW-10","topic":"next_direction","source_ids":["SRC002","SRC006"],"stability":"PRODUCT_COPY_WITH_LINK_REVIEW"}
+  ],
+  "prohibited_outputs": [
+    "PERSONAL_ELIGIBILITY_DECISION",
+    "ADMISSION_PROBABILITY",
+    "GUARANTEED_COLLEGE_OR_BRANCH",
+    "LIVE_VACANCY_OR_SEAT_CLAIM",
+    "UNSOURCED_SALARY_RANGE",
+    "CURRENT_DEADLINE_WITHOUT_FRESH_SOURCE"
+  ]
+}
