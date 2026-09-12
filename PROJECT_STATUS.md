@@ -1,10 +1,10 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** M0 — Student Semantic + Content Foundation (accepted)
+**Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** M0 is complete and accepted; M1 remains unauthorized
+**Current task:** M1 acceptance closeout; M2 remains unauthorized
 
-**Last reviewed:** 2026-09-07
+**Last reviewed:** 2026-09-12
 
 ## Product Review Gate
 
@@ -14,11 +14,11 @@
 
 **Current state:** The deterministic MVP engine, API, pilot data flow, and minimal UI are working. The first student-facing run exposed a product-experience gap: the current UI reflects backend/domain contracts more than the student's mental model and original guidance mission.
 
-**Decision:** M0 implementation and human acceptance reviews passed. M1 and later implementation remain unauthorized.
+**Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Review and explicitly authorize M1 before any M1 implementation begins.
+**Next priority:** Review and explicitly authorize M2 before any M2 implementation begins.
 
-`CODEX_FEATURE_WORK = PAUSED_PENDING_M1_REVIEW_AND_AUTHORIZATION`
+`CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
 **Mission review:** Golden Product Mission V1 is frozen. Mission clarity, Booklet-First alignment, zero-knowledge alignment, native-language and reach direction, personalization, Think-Further direction, trusted-engine boundaries, and the mission review gate passed review. Major student-facing milestones now require `TECHNICAL_DOD = PASS`, `MISSION_ALIGNMENT = PASS`, and `STUDENT_SCENARIO_REVIEW = PASS`.
 
@@ -26,7 +26,9 @@
 
 `STUDENT_INPUT_OUTPUT_V1 = LOCKED_V1`
 
-`IMPLEMENTATION_AUTHORIZED = M0_ONLY_COMPLETE`
+`IMPLEMENTATION_AUTHORIZED = M1_ONLY_COMPLETE`
+
+### Accepted M0 baseline
 
 `M0_IMPLEMENTATION_AUTHORIZED = YES`
 
@@ -46,7 +48,9 @@
 
 `M0_ACCEPTED = YES`
 
-`M1_IMPLEMENTATION_AUTHORIZED = NO`
+`M1_IMPLEMENTATION_AUTHORIZED = YES`
+
+`M2_IMPLEMENTATION_AUTHORIZED = NO`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -74,7 +78,7 @@
 
 `BILINGUAL_SUPPORT = YES`
 
-**Implementation Plan V1 remains frozen; completion and acceptance of M0 do not authorize M1.**
+**Implementation Plan V1 remains frozen. M1 has passed final owner acceptance; M2 remains unauthorized.**
 
 **Slice 3 commit:** `fade04d`
 
@@ -133,7 +137,64 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Review and explicitly authorize M1. Do not begin M1 or later work without that authorization.
+Review and explicitly authorize M2 before implementation. Do not begin M2.
+
+## M1 implementation review
+
+`M1_IMPLEMENTATION_STATUS = COMPLETE`
+
+`M1_CODEX_TECHNICAL_DOD = PASS`
+
+`M1_OWNER_ENGINEERING_REVIEW = PASS`
+
+`M1_OWNER_STUDENT_REVIEW = PASS`
+
+`M1_MISSION_ALIGNMENT_DOD = PASS`
+
+`M1_RELEVANT_SCENARIO_REVIEW = PASS`
+
+`TAMIL_M1_ENTRY_REVIEW = PASS`
+
+`M1_DOMAIN_ASSUMPTIONS_MADE = NONE`
+
+`M1_ACCEPTED = YES`
+
+`M1_SOURCE_POLICY = MINIMUM_REVIEWED_CONTENT_ONLY`
+
+- Default entry offers awareness and three intent routes; no student profile or eligibility evaluation is required for orientation.
+- Personal guidance opens the existing English reference form intentionally, with null personal values and neutral branch preferences. Demo student presets remain only under `/demo`.
+- Counselling entry states the current limitation and provides working introduction/personal-guidance directions.
+- Tamil and English entry use identical route/content semantics. Approved Tamil Student Copy V1 refines Tamil presentation only; frozen English and provenance are unchanged. The integrated M1 experience has passed final owner acceptance. No complete bilingual personal-guidance claim is made.
+- M1-C uses only the frozen M1-B awareness pack for entry awareness, with manifest identities and source provenance preserved. No new unsourced TNEA facts were introduced; full D0/D1 completion is not claimed.
+- Full suite after the Tamil copy update: 127 tests passed. Reproducible strict checking passed via `npm run typecheck` using the locally installed pinned TypeScript dependency. No dependency or toolchain configuration was changed.
+- Local server and browser proof verified entry navigation, intentional blank-form access, language switching, and mobile-width presentation. Automated HTTP smoke coverage proves blank/explicit-input submissions through the existing API and deterministic result/provenance preservation.
+
+### M1-C integration checkpoint
+
+`M1_TAMIL_STUDENT_LANGUAGE_REVIEW = PASS`
+
+`TAMIL_STUDENT_COPY = APPROVED_V1`
+
+- All ten approved Tamil presentation updates are integrated, including takeaways. AW-08's 7.5% reference is verified in existing source SRC002, printed page 4, section 4.1; source relationships are unchanged. The original frozen pack remains the factual authority. M1 has passed final owner acceptance.
+
+`M1_A_HUMAN_ROUTING_REVIEW = PASS`
+
+`M1_B_AWARENESS_CONTENT_PACK = FROZEN_V1`
+
+`M1_B_COMMIT = 8ab1f3e`
+
+`AWARENESS_CONTENT_REVIEW = PASS`
+
+`M1_C_IMPLEMENTATION_AUTHORIZED = YES`
+
+`M1_C_IMPLEMENTATION_STATUS = COMPLETE`
+
+- All ten awareness modules load directly from the frozen document/manifest and source registry; no frozen pack or source data edits were made.
+- Five presentation sections provide optional deeper explanations and evidence. Important scope and uncertainty caveats remain visible; internal AW/SRC identifiers are not student-facing labels.
+- Tamil-capable system font stack, 17–18px body text, 1.7 line height, a 752px desktop column, and full-card accessible entry links are implemented.
+- Governance notices are isolated behind explicit review mode. Normal student entry does not display internal project review messages.
+- Desktop (1100px) and mobile (390px) browser checks cover bilingual awareness, disclosure, named source evidence, and unchanged route transitions. Integrated Tamil/student review passed.
+- M1-A/M1-C application work is accepted and ready for closeout. M2 remains unauthorized.
 
 ## Accepted M0 observations — non-blocking
 
@@ -158,4 +219,4 @@ Review and explicitly authorize M1. Do not begin M1 or later work without that a
 
 ## Next review point
 
-M1 scope review and explicit implementation authorization.
+M2 scope review and explicit implementation authorization.

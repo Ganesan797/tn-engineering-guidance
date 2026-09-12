@@ -3,6 +3,7 @@ import type {
   StudentSemanticKey,
   StudentSemanticMessage,
 } from "./models.ts";
+import { ENTRY_ENGLISH, ENTRY_TAMIL, type EntrySemanticKey } from "./entry-catalogue.ts";
 
 type MessageTemplate = (parameters: Readonly<Record<string, string | number>>) => string;
 
@@ -13,7 +14,7 @@ export class MissingStudentPresentationError extends Error {
   }
 }
 
-const ENGLISH_CATALOGUE: Readonly<Record<StudentSemanticKey, MessageTemplate>> = {
+const ENGLISH_CATALOGUE: Readonly<Partial<Record<StudentSemanticKey, MessageTemplate>>> = {
   "guidance.eligibility.eligible": () =>
     "Based on the information provided, you meet the checked TNEA eligibility conditions.",
   "guidance.eligibility.ineligible": () =>
@@ -30,12 +31,22 @@ const PRESENTATIONS: Partial<
   Record<StudentLanguage, Partial<Record<StudentSemanticKey, MessageTemplate>>>
 > = {
   en: ENGLISH_CATALOGUE,
+  ta: {
+    // Translation proof of the accepted M0 awareness item; pending human review.
+    "content.awareness.engineering_choices.title": () => "முதலில் உங்கள் வாய்ப்புகளைப் புரிந்துகொள்ளலாம்",
+    "content.awareness.engineering_choices.body": () =>
+      "பொறியியலில் வெவ்வேறு பாடப்பிரிவுகள் உள்ளன. கல்லூரியைத் தேர்ந்தெடுக்கும் முன், என்னென்ன வாய்ப்புகள் உள்ளன என்பதைப் புரிந்துகொள்ளலாம்.",
+  },
 };
 
 export function resolveStudentMessage(
   message: StudentSemanticMessage,
   language: StudentLanguage,
 ): string {
+  const entryCatalogue = language === "ta" ? ENTRY_TAMIL : ENTRY_ENGLISH;
+  if (Object.hasOwn(entryCatalogue, message.key)) {
+    return entryCatalogue[message.key as EntrySemanticKey];
+  }
   const template = PRESENTATIONS[language]?.[message.key];
   if (template === undefined) {
     throw new MissingStudentPresentationError(language, message.key);

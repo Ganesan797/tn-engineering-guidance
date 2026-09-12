@@ -2,11 +2,13 @@ import type { GuidanceResult } from "../application/guidance.ts";
 import type { EligibilityOutcome } from "../domain/enums.ts";
 import type { EligibilityCheck } from "../domain/models.ts";
 import type { EvidenceReference } from "../recommendation/foundation.ts";
+import type { EntrySemanticKey } from "./entry-catalogue.ts";
 
 export const STUDENT_LANGUAGES = ["en", "ta"] as const;
 export type StudentLanguage = (typeof STUDENT_LANGUAGES)[number];
 
 export type StudentSemanticKey =
+  | EntrySemanticKey
   | "guidance.eligibility.eligible"
   | "guidance.eligibility.ineligible"
   | "guidance.eligibility.needs_review"
