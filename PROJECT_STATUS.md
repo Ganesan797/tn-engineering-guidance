@@ -2,7 +2,7 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** Freeze the owner-approved Pre-M2 Track A Controlled RAG Experiment Specification V1; implementation remains unauthorized
+**Current task:** Owner review of the isolated Track A controlled RAG validation experiment
 
 **Last reviewed:** 2026-09-13
 
@@ -16,7 +16,7 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Owner authorization for the controlled Track A experiment. Do not begin Track A, Track B, production RAG, or M2 without separate authorization.
+**Next priority:** Review Track A experiment results and limitations. Do not accept Track A or begin production RAG, Track B, or M2 without separate authorization.
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
@@ -78,7 +78,7 @@
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = PRE_M2_CONTROLLED_RAG_VALIDATION_EXPERIMENT`
+`NEXT_ACTIVITY = TRACK_A_EXPERIMENT_OWNER_REVIEW`
 
 `M2_STATUS = NOT_STARTED`
 
@@ -96,9 +96,11 @@
 
 `TRACK_A_TEST_MATRIX = FROZEN_V1`
 
-`TRACK_A_EXPERIMENT_IMPLEMENTATION = NOT_STARTED`
+`TRACK_A_EXPERIMENT_IMPLEMENTATION = COMPLETE`
 
-`TRACK_A_EXPERIMENT_AUTHORIZED = NO`
+`TRACK_A_EXPERIMENT_AUTHORIZED = YES`
+
+`TRACK_A_EXPERIMENT_OWNER_REVIEW = PENDING`
 
 `TRACK_B = PLANNED_NOT_STARTED`
 
@@ -106,7 +108,7 @@
 
 `PRODUCTION_RAG = NOT_AUTHORIZED`
 
-`NEXT_GATE = OWNER AUTHORIZATION FOR CONTROLLED TRACK A EXPERIMENT`
+`NEXT_GATE = OWNER REVIEW OF CONTROLLED TRACK A EXPERIMENT RESULTS`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -193,7 +195,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Await explicit owner authorization for the controlled Track A experiment. Do not begin Track A, Track B, M2, or production RAG implementation.
+Review the Track A experiment result artifact. Do not mark Track A accepted or begin Track B, M2, or production RAG implementation.
 
 ## M1 implementation review
 
@@ -275,4 +277,4 @@ Await explicit owner authorization for the controlled Track A experiment. Do not
 
 ## Next review point
 
-Owner authorization gate for the frozen Pre-M2 Track A Controlled RAG Experiment Specification V1.
+Owner review gate for the controlled Track A experiment results and `PROCEED_WITH_CHANGES` recommendation.
