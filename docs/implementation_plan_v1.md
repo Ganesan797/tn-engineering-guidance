@@ -107,6 +107,10 @@ AI, LLM, or agent output must not convert informational, generated, translated, 
 
 Detailed agent architecture is not part of this plan.
 
+### AI/RAG Architecture Validation Note
+
+The M0–M7 sequence remains unchanged, and accepted M0/M1 work remains valid. From M2 onward, interfaces and contracts should be conversation-ready where practical; this does not require implementing an LLM in M2. Production AI/RAG implementation is not automatically authorized. Before committing to a production RAG architecture, the project will run and separately review a small controlled validation experiment over approved evidence. M6 remains integration of accepted capabilities, not a catch-all feature phase. Other course domains remain deferred.
+
 ## Product V1 Language Policy
 
 `PRIMARY_LANGUAGE = TAMIL`

@@ -67,6 +67,8 @@ AI must not invent or decide:
 - admission outcome
 - unsupported factual claims
 
+The intended standalone Engineering/TNEA MVP may combine a conversational LLM, controlled RAG over approved sources, deterministic admission logic, and structured, historical, or queryable data. Conversation may progressively understand the student and orchestrate approved capabilities, but deterministic admission-critical authority remains unchanged. This architecture clarification preserves the zero-knowledge and Booklet-First mission, and Engineering/TNEA remains the current MVP scope.
+
 ## Student-Facing Simplicity Principle
 
 Backend/domain complexity should remain hidden unless exposing it genuinely helps the student.

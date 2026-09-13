@@ -2,9 +2,9 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** M1 acceptance closeout; M2 remains unauthorized
+**Current task:** Record and freeze the M0 AI/RAG architecture review; M2 remains unauthorized
 
-**Last reviewed:** 2026-09-12
+**Last reviewed:** 2026-09-13
 
 ## Product Review Gate
 
@@ -16,7 +16,7 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Review and explicitly authorize M2 before any M2 implementation begins.
+**Next priority:** Run the pre-M2 controlled RAG validation experiment only after owner review of this documentation checkpoint; M2 remains unauthorized.
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
@@ -51,6 +51,42 @@
 `M1_IMPLEMENTATION_AUTHORIZED = YES`
 
 `M2_IMPLEMENTATION_AUTHORIZED = NO`
+
+### M0 AI/RAG architecture checkpoint
+
+`M0_STATUS = ACCEPTED`
+
+`M1_STATUS = ACCEPTED`
+
+`M0_AI_RAG_ARCHITECTURE_REVIEW = COMPLETE`
+
+`M0_AI_RAG_ARCHITECTURE_ADDENDUM = FROZEN_V1`
+
+`M0_IMPLEMENTATION_REOPENED = NO`
+
+`M1_IMPLEMENTATION_REOPENED = NO`
+
+`PROJECT_RESTART = NO`
+
+`DOMAIN_REWRITE = NO`
+
+`API_REWRITE = NO`
+
+`MILESTONE_SEQUENCE_CHANGED = NO`
+
+`TARGET_ARCHITECTURE = CONVERSATIONAL_LLM + CONTROLLED_RAG + DETERMINISTIC_ENGINE + STRUCTURED_DATA`
+
+`DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
+
+`NEXT_ACTIVITY = PRE_M2_CONTROLLED_RAG_VALIDATION_EXPERIMENT`
+
+`M2_STATUS = NOT_STARTED`
+
+`PRODUCTION_RAG_IMPLEMENTATION_AUTHORIZED = NO`
+
+`LLM_IN_ADMISSION_DECISION_PATH = NO`
+
+`OTHER_COURSE_IMPLEMENTATION = DEFERRED`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -137,7 +173,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Review and explicitly authorize M2 before implementation. Do not begin M2.
+After owner approval of this documentation checkpoint, conduct only the pre-M2 controlled RAG validation experiment under separate authorization. Do not begin M2 or production RAG implementation.
 
 ## M1 implementation review
 
@@ -219,4 +255,4 @@ Review and explicitly authorize M2 before implementation. Do not begin M2.
 
 ## Next review point
 
-M2 scope review and explicit implementation authorization.
+Owner review of the frozen M0 AI/RAG Architecture Addendum V1 before any experiment, M2 work, or production RAG implementation.
