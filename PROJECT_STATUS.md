@@ -2,7 +2,7 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** Owner review of the isolated Track A controlled RAG validation experiment
+**Current task:** Owner review of Track A Pass 2 real-corpus retrieval validation
 
 **Last reviewed:** 2026-09-13
 
@@ -16,7 +16,7 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Review Track A experiment results and limitations. Do not accept Track A or begin production RAG, Track B, or M2 without separate authorization.
+**Next priority:** Review Track A Pass 2 results and decide the separate LLM integration gate. Do not begin live LLM work, production RAG, Track B, or M2 without authorization.
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
@@ -78,11 +78,21 @@
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = TRACK_A_EXPERIMENT_OWNER_REVIEW`
+`NEXT_ACTIVITY = TRACK_A_PASS_2_OWNER_REVIEW`
 
 `M2_STATUS = NOT_STARTED`
 
 `PRODUCTION_RAG_IMPLEMENTATION_AUTHORIZED = NO`
+
+`TRACK_A_PASS_1 = ACCEPTED_AS_PARTIAL`
+
+`TRACK_A_PASS_2 = COMPLETE`
+
+`REAL_CORPUS_VALIDATION = COMPLETE`
+
+`LLM_INTEGRATION_GATE = PENDING_OWNER_REVIEW`
+
+`LLM_INTEGRATION_AUTHORIZED = NO`
 
 `LLM_IN_ADMISSION_DECISION_PATH = NO`
 

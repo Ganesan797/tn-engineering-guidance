@@ -138,3 +138,19 @@ export interface ScenarioEvaluation {
   readonly final_status: ScenarioStatus;
   readonly failure_reason: string | null;
 }
+
+export interface Pass2ScenarioEvaluation {
+  readonly scenario_id: string;
+  readonly expected_route: Capability;
+  readonly actual_route: Capability;
+  readonly expected_source_ids: readonly ApprovedSourceId[];
+  readonly retrieved_source_ids: readonly ApprovedSourceId[];
+  readonly real_vs_synthetic_evidence: "REAL_APPROVED_CORPUS" | "SYNTHETIC_ONLY" | "NONE";
+  readonly source_scope_check: AssertionStatus;
+  readonly year_freshness_check: AssertionStatus;
+  readonly provenance_check: AssertionStatus;
+  readonly deterministic_boundary_check: AssertionStatus;
+  readonly chunking_method: EvidenceChunk["chunking_strategy"] | "NOT_APPLICABLE";
+  readonly final_status: ScenarioStatus;
+  readonly failure_reason: string | null;
+}

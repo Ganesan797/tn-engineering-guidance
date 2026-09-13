@@ -1,4 +1,5 @@
 import type { CorpusSection, Language } from "../src/types.ts";
+import { REAL_APPROVED_CORPUS } from "./real-approved-corpus.ts";
 
 const BASE_METADATA = {
   source_id: "RAG-A08" as const,
@@ -41,7 +42,7 @@ function section(
 }
 
 // Exact reviewed extracts from docs/m1_awareness_content_pack_v1.md.
-export const APPROVED_CORPUS: readonly CorpusSection[] = [
+export const AWARENESS_APPROVED_CORPUS: readonly CorpusSection[] = [
   section(
     "AW-01",
     "Engineering is a group of fields",
@@ -141,3 +142,8 @@ export const APPROVED_CORPUS: readonly CorpusSection[] = [
     ["SRC002"],
   ),
 ] as const;
+
+export const APPROVED_CORPUS: readonly CorpusSection[] = [
+  ...REAL_APPROVED_CORPUS,
+  ...AWARENESS_APPROVED_CORPUS,
+];

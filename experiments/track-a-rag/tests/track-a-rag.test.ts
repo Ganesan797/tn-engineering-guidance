@@ -1,11 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { APPROVED_CORPUS } from "../corpus/approved-corpus.ts";
+import { APPROVED_CORPUS, AWARENESS_APPROVED_CORPUS } from "../corpus/approved-corpus.ts";
+import { REAL_APPROVED_CORPUS } from "../corpus/real-approved-corpus.ts";
 import { TRACK_A_SCENARIOS } from "../scenarios/track-a-scenarios.ts";
 import { fixedSizeChunking, sectionAwareChunking } from "../src/chunking.ts";
 import { invokeDeterministicEligibility } from "../src/deterministic-adapter.ts";
 import { evaluateScenario } from "../src/evaluation.ts";
+import { evaluatePass2Retrieval } from "../src/pass2-evaluation.ts";
 import {
   buildEvidencePacket,
   containsPromptLikeContent,
@@ -71,12 +73,17 @@ function fixtureChunk(
 
 test("source manifest contains each frozen approved source exactly once", () => {
   assert.deepEqual(validateSourceManifest(TRACK_A_SOURCE_MANIFEST), []);
-  assert.deepEqual(availableSourceIds(), ["RAG-A08"]);
+  assert.deepEqual(availableSourceIds(), [
+    "RAG-A01", "RAG-A02", "RAG-A03", "RAG-A04", "RAG-A05", "RAG-A06", "RAG-A08",
+  ]);
 });
 
-test("approved corpus is limited to locally available RAG-A08 evidence", () => {
+test("approved corpus contains only acquired approved evidence and no test fixtures", () => {
   assert.equal(APPROVED_CORPUS.length > 0, true);
-  assert.equal(APPROVED_CORPUS.every(({ metadata }) => metadata.source_id === "RAG-A08"), true);
+  assert.deepEqual(
+    [...new Set(APPROVED_CORPUS.map(({ metadata }) => metadata.source_id))].sort(),
+    ["RAG-A01", "RAG-A02", "RAG-A03", "RAG-A04", "RAG-A05", "RAG-A06", "RAG-A08"],
+  );
   assert.equal(APPROVED_CORPUS.every(({ evidence_class }) => evidence_class === "APPROVED_CORPUS"), true);
 });
 
@@ -84,8 +91,8 @@ test("both chunking methods preserve source, section, language and provenance me
   const sectionChunks = sectionAwareChunking(APPROVED_CORPUS);
   const fixedChunks = fixedSizeChunking(APPROVED_CORPUS, 12);
   for (const chunk of [...sectionChunks, ...fixedChunks]) {
-    assert.equal(chunk.metadata.source_id, "RAG-A08");
-    assert.equal(chunk.metadata.page_or_section.startsWith("AW-"), true);
+    assert.equal(availableSourceIds().includes(chunk.metadata.source_id), true);
+    assert.equal(chunk.metadata.page_or_section.trim().length > 0, true);
     assert.equal(hasCompleteProvenance(chunk), true);
     assert.equal(["ENGLISH", "TAMIL"].includes(chunk.language), true);
   }
@@ -93,8 +100,8 @@ test("both chunking methods preserve source, section, language and provenance me
 
 test("section-aware and fixed-size retrieval both expose ranked evidence", () => {
   const question = "Why does Choice Filling order matter?";
-  const sectionResult = retrieveChunks(question, sectionAwareChunking(APPROVED_CORPUS));
-  const fixedResult = retrieveChunks(question, fixedSizeChunking(APPROVED_CORPUS, 12));
+  const sectionResult = retrieveChunks(question, sectionAwareChunking(AWARENESS_APPROVED_CORPUS));
+  const fixedResult = retrieveChunks(question, fixedSizeChunking(AWARENESS_APPROVED_CORPUS, 12));
   assert.equal(sectionResult[0]?.chunk.metadata.page_or_section, "AW-06");
   assert.equal(fixedResult[0]?.chunk.metadata.page_or_section, "AW-05");
   assert.equal(
@@ -259,7 +266,7 @@ test("scenario matrix contains frozen T01-T15 including both T05 variants", () =
   }
 });
 
-test("scenario evaluation reports unavailable corpus and LLM cases as NOT_RUN", () => {
+test("Pass 1 evaluation still reports generated-answer cases as NOT_RUN without an LLM", () => {
   const chunks = sectionAwareChunking(APPROVED_CORPUS);
   const runtime = { llm_available: false, available_source_ids: availableSourceIds() } as const;
   const t01 = evaluateScenario(TRACK_A_SCENARIOS.find(({ scenario_id }) => scenario_id === "T01")!, chunks, runtime);
@@ -268,7 +275,122 @@ test("scenario evaluation reports unavailable corpus and LLM cases as NOT_RUN", 
   assert.equal(t01.provenance_check, "PASS");
   assert.match(t01.failure_reason ?? "", /No approved live LLM runtime/);
   assert.equal(t03.final_status, "NOT_RUN");
-  assert.match(t03.failure_reason ?? "", /RAG-A03/);
+  assert.match(t03.failure_reason ?? "", /No approved live LLM runtime/);
+});
+
+test("real official corpus preserves required curriculum provenance metadata", () => {
+  assert.equal(REAL_APPROVED_CORPUS.length, 13);
+  assert.equal(REAL_APPROVED_CORPUS.every(({ evidence_class }) => evidence_class === "APPROVED_CORPUS"), true);
+  for (const section of REAL_APPROVED_CORPUS) {
+    assert.equal(section.metadata.reference.startsWith("https://"), true);
+    assert.equal(section.metadata.page_or_section.trim().length > 0, true);
+    assert.equal(section.metadata.access_date, "2026-09-13");
+  }
+  const curricula = REAL_APPROVED_CORPUS.filter(({ metadata }) =>
+    metadata.source_id === "RAG-A03" || metadata.source_id === "RAG-A04"
+  );
+  assert.equal(curricula.length, 6);
+  for (const section of curricula) {
+    assert.equal(section.metadata.source_year, 2026);
+    assert.equal(section.metadata.regulation?.startsWith("R-"), true);
+    assert.match(section.metadata.revision ?? "", /^REVISED_[12]_2026$/);
+    assert.equal(section.metadata.academic_batch, "2026-2027");
+    assert.equal(["CSE", "IT", "ECE"].includes(section.metadata.programme ?? ""), true);
+  }
+});
+
+test("real corpus retrieval distinguishes programme and curriculum scope", () => {
+  const chunks = sectionAwareChunking(REAL_APPROVED_CORPUS);
+  const affiliatedCse = retrieveChunks("What will I study in CSE?", chunks, {
+    institution_scope: "AFFILIATED_INSTITUTIONS", programme: "CSE",
+  });
+  const affiliatedEce = retrieveChunks("Does ECE include programming?", chunks, {
+    institution_scope: "AFFILIATED_INSTITUTIONS", programme: "ECE",
+  });
+  assert.equal(affiliatedCse[0]?.chunk.metadata.source_id, "RAG-A03");
+  assert.equal(affiliatedCse[0]?.chunk.metadata.programme, "CSE");
+  assert.equal(affiliatedEce[0]?.chunk.metadata.source_id, "RAG-A03");
+  assert.match(affiliatedEce[0]?.chunk.text ?? "", /Programming: C/);
+
+  for (const [scope, sourceId] of [
+    ["UNIVERSITY_DEPARTMENTS", "RAG-A04"],
+    ["AFFILIATED_INSTITUTIONS", "RAG-A03"],
+  ] as const) {
+    const results = ["CSE", "IT"].flatMap((programme) => retrieveChunks(
+      "CSE versus IT curriculum", chunks, { institution_scope: scope, programme }, 2,
+    ));
+    assert.equal(results.every(({ chunk }) => chunk.metadata.institution_scope === scope), true);
+    assert.deepEqual(new Set(results.map(({ chunk }) => chunk.metadata.programme)), new Set(["CSE", "IT"]));
+    assert.equal(results.every(({ chunk }) => chunk.metadata.source_id === sourceId), true);
+  }
+});
+
+test("real TNEA evidence satisfies brochure and counselling retrieval", () => {
+  const chunks = sectionAwareChunking(REAL_APPROVED_CORPUS);
+  const cases = [
+    ["What is TNEA?", "RAG-A01"],
+    ["How is TNEA cutoff calculated?", "RAG-A01"],
+    ["I studied in a Government School. What should I check?", "RAG-A01"],
+    ["What happens in counselling?", "RAG-A02"],
+    ["What is Choice Filling and why does order matter?", "RAG-A02"],
+  ] as const;
+  for (const [question, sourceId] of cases) {
+    const result = retrieveChunks(question, chunks, { source_year: 2026 });
+    assert.equal(result[0]?.chunk.metadata.source_id, sourceId);
+    assert.equal(hasCompleteProvenance(result[0]!.chunk), true);
+  }
+});
+
+test("Pass 2 retrieval evaluation runs real evidence without requiring an LLM", () => {
+  const chunks = sectionAwareChunking(APPROVED_CORPUS);
+  const realScenarioIds = [
+    "T01", "T02", "T03", "T04", "T05-A", "T05-B", "T06", "T07", "T08", "T09", "T10", "T11", "T15",
+  ];
+  for (const id of realScenarioIds) {
+    const scenario = TRACK_A_SCENARIOS.find(({ scenario_id }) => scenario_id === id)!;
+    const result = evaluatePass2Retrieval(scenario, chunks);
+    assert.equal(result.final_status, "PASS", `${id}: ${result.failure_reason}`);
+    assert.equal(result.real_vs_synthetic_evidence, "REAL_APPROVED_CORPUS");
+    assert.equal(result.provenance_check, "PASS");
+  }
+  for (const id of ["T12", "T13"]) {
+    const scenario = TRACK_A_SCENARIOS.find(({ scenario_id }) => scenario_id === id)!;
+    const result = evaluatePass2Retrieval(scenario, chunks);
+    assert.equal(result.final_status, "PASS");
+    assert.equal(result.deterministic_boundary_check, "PASS");
+    assert.equal(result.chunking_method, "NOT_APPLICABLE");
+  }
+});
+
+test("current 2026 evidence is selected while a stale-only query still defers", () => {
+  const current = sectionAwareChunking(REAL_APPROVED_CORPUS).filter(
+    ({ metadata }) => metadata.source_id === "RAG-A01",
+  );
+  const stale = fixtureChunk("STALE-CUTOFF", "current cutoff eligibility rule", {
+    source_id: "RAG-A01", source_year: 2025,
+  });
+  const selected = selectEvidence("current cutoff eligibility rule", [...current, stale], { source_year: 2026 });
+  assert.equal(selected.status, "READY");
+  assert.equal(selected.retrieved.every(({ chunk }) => chunk.metadata.source_year === 2026), true);
+  const staleOnly = selectEvidence("current cutoff eligibility rule", [stale], { source_year: 2026 });
+  assert.equal(staleOnly.status, "DEFER");
+});
+
+test("section-aware chunking is at least as precise across each real source class", () => {
+  const cases = [
+    ["What is TNEA?", "A01-TNEA-SCOPE", REAL_APPROVED_CORPUS],
+    ["Why does choice filling order matter?", "A02-CHOICE-FILLING", REAL_APPROVED_CORPUS],
+    ["What will I study in ECE?", "A03-ECE", REAL_APPROVED_CORPUS],
+    ["What is Engineering?", "AW-01-ENGLISH", AWARENESS_APPROVED_CORPUS],
+  ] as const;
+  let sectionWins = 0;
+  for (const [question, expectedSection, corpus] of cases) {
+    const sectionTop = retrieveChunks(question, sectionAwareChunking(corpus))[0]?.chunk.section_id;
+    const fixedTop = retrieveChunks(question, fixedSizeChunking(corpus, 12))[0]?.chunk.section_id;
+    assert.equal(sectionTop, expectedSection);
+    if (fixedTop !== expectedSection) sectionWins += 1;
+  }
+  assert.equal(sectionWins > 0, true);
 });
 
 test("scenario result schema exposes every frozen evaluation field and ranked chunk details", () => {
