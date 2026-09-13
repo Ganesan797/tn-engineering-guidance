@@ -2,7 +2,7 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** Owner review of Track A Pass 2 real-corpus retrieval validation
+**Current task:** Pre-LLM product differentiation clarification recorded; Live LLM experiment remains unstarted
 
 **Last reviewed:** 2026-09-13
 
@@ -16,7 +16,7 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Review Track A Pass 2 results and decide the separate LLM integration gate. Do not begin live LLM work, production RAG, Track B, or M2 without authorization.
+**Next priority:** Review and explicitly authorize the adjusted Live LLM Integration Gate. Do not begin live LLM work, production RAG, Track B, or M2 without authorization.
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
@@ -78,7 +78,7 @@
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = TRACK_A_PASS_2_OWNER_REVIEW`
+`NEXT_ACTIVITY = LIVE_LLM_INTEGRATION_GATE_OWNER_REVIEW`
 
 `M2_STATUS = NOT_STARTED`
 
@@ -86,13 +86,35 @@
 
 `TRACK_A_PASS_1 = ACCEPTED_AS_PARTIAL`
 
-`TRACK_A_PASS_2 = COMPLETE`
+`TRACK_A_PASS_2 = ACCEPTED`
 
 `REAL_CORPUS_VALIDATION = COMPLETE`
 
 `LLM_INTEGRATION_GATE = PENDING_OWNER_REVIEW`
 
 `LLM_INTEGRATION_AUTHORIZED = NO`
+
+`PRE_LLM_PRODUCT_DIFFERENTIATION_REVIEW = COMPLETE`
+
+`PRE_LLM_PRODUCT_DIFFERENTIATION_REVIEW_STATUS = OWNER_APPROVED_V1`
+
+`PRODUCT_DIFFERENTIATION = VALID`
+
+`LIVE_LLM_GATE = PROCEED_WITH_ADJUSTMENT`
+
+`LIVE_LLM_GATE_REQUIRED_DIMENSIONS = [GROUNDED_INTELLIGENCE, GUIDANCE_INTELLIGENCE]`
+
+`M2_IMPACT = MINOR_FORWARD_CLARIFICATION_ONLY`
+
+`REACH_PRODUCT_CONCERN = RECORDED`
+
+`REACH_IMPLEMENTATION = LATER`
+
+`ARCHITECTURE_ADDENDUM = FROZEN_V1`
+
+`TRACK_B = NOT_STARTED_NOT_AUTHORIZED`
+
+`LIVE_LLM_EXPERIMENT_IMPLEMENTATION = NOT_STARTED`
 
 `LLM_IN_ADMISSION_DECISION_PATH = NO`
 
@@ -110,15 +132,15 @@
 
 `TRACK_A_EXPERIMENT_AUTHORIZED = YES`
 
-`TRACK_A_EXPERIMENT_OWNER_REVIEW = PENDING`
+`TRACK_A_EXPERIMENT_OWNER_REVIEW = PASS`
 
-`TRACK_B = PLANNED_NOT_STARTED`
+`TRACK_B = NOT_STARTED_NOT_AUTHORIZED`
 
 `M2_AUTHORIZED = NO`
 
 `PRODUCTION_RAG = NOT_AUTHORIZED`
 
-`NEXT_GATE = OWNER REVIEW OF CONTROLLED TRACK A EXPERIMENT RESULTS`
+`NEXT_GATE = OWNER REVIEW AND EXPLICIT AUTHORIZATION OF THE ADJUSTED LIVE LLM INTEGRATION GATE`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -205,7 +227,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Review the Track A experiment result artifact. Do not mark Track A accepted or begin Track B, M2, or production RAG implementation.
+Review and explicitly authorize the adjusted Live LLM Integration Gate. Do not begin the experiment, Track B, M2, or production RAG implementation automatically.
 
 ## M1 implementation review
 
@@ -287,4 +309,4 @@ Review the Track A experiment result artifact. Do not mark Track A accepted or b
 
 ## Next review point
 
-Owner review gate for the controlled Track A experiment results and `PROCEED_WITH_CHANGES` recommendation.
+Owner review and explicit authorization gate for a bounded Live LLM experiment covering both grounded intelligence and guidance intelligence.
