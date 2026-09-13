@@ -2,7 +2,7 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** Record and freeze the M0 AI/RAG architecture review; M2 remains unauthorized
+**Current task:** Freeze the owner-approved Pre-M2 Track A Controlled RAG Experiment Specification V1; implementation remains unauthorized
 
 **Last reviewed:** 2026-09-13
 
@@ -16,7 +16,7 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Run the pre-M2 controlled RAG validation experiment only after owner review of this documentation checkpoint; M2 remains unauthorized.
+**Next priority:** Owner authorization for the controlled Track A experiment. Do not begin Track A, Track B, production RAG, or M2 without separate authorization.
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
@@ -87,6 +87,26 @@
 `LLM_IN_ADMISSION_DECISION_PATH = NO`
 
 `OTHER_COURSE_IMPLEMENTATION = DEFERRED`
+
+### Pre-M2 Track A specification checkpoint
+
+`PRE_M2_TRACK_A_SPEC = FROZEN_V1`
+
+`TRACK_A_SOURCE_MANIFEST = FROZEN_V1`
+
+`TRACK_A_TEST_MATRIX = FROZEN_V1`
+
+`TRACK_A_EXPERIMENT_IMPLEMENTATION = NOT_STARTED`
+
+`TRACK_A_EXPERIMENT_AUTHORIZED = NO`
+
+`TRACK_B = PLANNED_NOT_STARTED`
+
+`M2_AUTHORIZED = NO`
+
+`PRODUCTION_RAG = NOT_AUTHORIZED`
+
+`NEXT_GATE = OWNER AUTHORIZATION FOR CONTROLLED TRACK A EXPERIMENT`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -173,7 +193,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-After owner approval of this documentation checkpoint, conduct only the pre-M2 controlled RAG validation experiment under separate authorization. Do not begin M2 or production RAG implementation.
+Await explicit owner authorization for the controlled Track A experiment. Do not begin Track A, Track B, M2, or production RAG implementation.
 
 ## M1 implementation review
 
@@ -255,4 +275,4 @@ After owner approval of this documentation checkpoint, conduct only the pre-M2 c
 
 ## Next review point
 
-Owner review of the frozen M0 AI/RAG Architecture Addendum V1 before any experiment, M2 work, or production RAG implementation.
+Owner authorization gate for the frozen Pre-M2 Track A Controlled RAG Experiment Specification V1.
