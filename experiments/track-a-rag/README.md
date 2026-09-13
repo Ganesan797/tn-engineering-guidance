@@ -5,7 +5,7 @@ This directory contains a small, isolated pre-M2 experiment governed by `docs/tr
 ## What is implemented
 
 - a frozen nine-source manifest with explicit local-availability flags;
-- a small approved corpus extracted from the frozen `RAG-A08` M1 Awareness Content Pack;
+- a 27-section approved corpus from acquired A01-A06 official evidence and the frozen A08 awareness pack;
 - fixed-size and section-aware chunking;
 - dependency-free lexical retrieval with hard year and curriculum-scope filters;
 - missing, stale, and conflicting evidence deferral;
@@ -16,7 +16,7 @@ This directory contains a small, isolated pre-M2 experiment governed by `docs/tr
 
 ## What is not implemented
 
-- no LLM runtime;
+- no production LLM runtime; the separate `live-llm` directory contains only a bounded gate harness;
 - no embeddings or vector database;
 - no production retrieval service;
 - no broad source ingestion;
@@ -24,7 +24,7 @@ This directory contains a small, isolated pre-M2 experiment governed by `docs/tr
 
 ## Corpus availability
 
-Only `RAG-A08` is locally available as approved, reviewed text. The other frozen manifest entries remain unavailable until their exact versions are acquired and approved. No replacement text or model memory is used.
+RAG-A01 through A06 and A08 are available as approved normalized experiment evidence. A07 and optional A09 remain unavailable and are not substituted. No model memory is used as evidence.
 
 Experiment-only adversarial fixtures are used to prove scope filtering, stale-evidence deferral, conflict handling, and prompt-injection inertness. They are labelled `SYNTHETIC_TEST_FIXTURE` and are never treated as real guidance evidence.
 

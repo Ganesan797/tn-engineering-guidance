@@ -11,6 +11,8 @@
     "src/**/*.ts",
     "experiments/track-a-rag/src/**/*.ts",
     "experiments/track-a-rag/corpus/**/*.ts",
-    "experiments/track-a-rag/scenarios/**/*.ts"
+    "experiments/track-a-rag/scenarios/**/*.ts",
+    "experiments/track-a-rag/live-llm/src/**/*.ts",
+    "experiments/track-a-rag/live-llm/scenarios/**/*.ts"
   ]
 }

@@ -2,7 +2,7 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** Pre-LLM product differentiation clarification recorded; Live LLM experiment remains unstarted
+**Current task:** Owner review of the bounded Live LLM Integration Gate harness; live scenarios are not run
 
 **Last reviewed:** 2026-09-13
 
@@ -16,7 +16,7 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Review and explicitly authorize the adjusted Live LLM Integration Gate. Do not begin live LLM work, production RAG, Track B, or M2 without authorization.
+**Next priority:** Review the experiment harness and explicitly select/authorize a live model runtime before any live execution. Do not begin production RAG, Track B, or M2.
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
@@ -78,7 +78,7 @@
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = LIVE_LLM_INTEGRATION_GATE_OWNER_REVIEW`
+`NEXT_ACTIVITY = LIVE_LLM_GATE_HARNESS_OWNER_REVIEW`
 
 `M2_STATUS = NOT_STARTED`
 
@@ -114,7 +114,17 @@
 
 `TRACK_B = NOT_STARTED_NOT_AUTHORIZED`
 
-`LIVE_LLM_EXPERIMENT_IMPLEMENTATION = NOT_STARTED`
+`LIVE_LLM_EXPERIMENT_IMPLEMENTATION = HARNESS_COMPLETE_LIVE_EXECUTION_NOT_STARTED`
+
+`LIVE_LLM_GATE_IMPLEMENTATION = PARTIAL`
+
+`LIVE_LLM_GATE_OWNER_REVIEW = PENDING`
+
+`GROUNDED_INTELLIGENCE = PENDING`
+
+`GUIDANCE_INTELLIGENCE = PENDING`
+
+`LIVE_LLM_RUNTIME = NOT_CONFIGURED`
 
 `LLM_IN_ADMISSION_DECISION_PATH = NO`
 
