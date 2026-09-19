@@ -2,9 +2,9 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** The accepted bounded Gemini smoke runner is merged; controlled live-model evaluation remains unrun and requires separate owner authorization
+**Current task:** Complete the bounded Gemini model migration and the remaining Live LLM Gate evaluation before any M2 authorization decision
 
-**Last reviewed:** 2026-09-19
+**Last reviewed:** 2026-09-20
 
 ## Product Review Gate
 
@@ -16,7 +16,7 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Owner decision on whether to authorize the bounded live-model evaluation. Do not begin production RAG, Track B, or M2.
+**Next priority:** Migrate the bounded experiment to the owner-verified replacement model, validate it offline, and obtain focused review before a separately authorized full G01 run. Do not begin production RAG, Track B, or M2.
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
@@ -78,9 +78,9 @@
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = OWNER_DECISION_ON_CONTROLLED_LIVE_MODEL_EVALUATION`
+`NEXT_ACTIVITY = BOUNDED_GEMINI_MODEL_MIGRATION`
 
-`M2_STATUS = NOT_STARTED`
+`M2_STATUS = NOT_AUTHORIZED`
 
 `PRODUCTION_RAG_IMPLEMENTATION_AUTHORIZED = NO`
 
@@ -90,7 +90,7 @@
 
 `REAL_CORPUS_VALIDATION = COMPLETE`
 
-`LLM_INTEGRATION_GATE = PARTIAL_LIVE_EVALUATION_NOT_RUN`
+`LLM_INTEGRATION_GATE = PARTIAL`
 
 `LLM_INTEGRATION_AUTHORIZED = NO`
 
@@ -100,7 +100,7 @@
 
 `PRODUCT_DIFFERENTIATION = VALID`
 
-`LIVE_LLM_GATE = PROCEED_WITH_ADJUSTMENT`
+`LIVE_LLM_GATE = PARTIAL`
 
 `LIVE_LLM_GATE_REQUIRED_DIMENSIONS = [GROUNDED_INTELLIGENCE, GUIDANCE_INTELLIGENCE]`
 
@@ -114,7 +114,7 @@
 
 `TRACK_B = NOT_STARTED_NOT_AUTHORIZED`
 
-`LIVE_LLM_EXPERIMENT_IMPLEMENTATION = HARNESS_COMPLETE_LIVE_EXECUTION_NOT_STARTED`
+`LIVE_LLM_EXPERIMENT_IMPLEMENTATION = HARNESS_COMPLETE_DIAGNOSTIC_COMPLETE_GATE_EVALUATION_PENDING`
 
 `LIVE_LLM_GATE_IMPLEMENTATION = PARTIAL`
 
@@ -130,6 +130,12 @@
 
 `LIVE_LLM_SMOKE_STRICT_BUDGET = FAIL_CLOSED_ZERO_REQUESTS`
 
+`GEMINI_HTTP_DIAGNOSTICS = MERGED`
+
+`G01_DIAGNOSTIC_MODE = IMPLEMENTED_REVIEWED_MERGED`
+
+`G01_DIAGNOSTIC_MODE_MAIN_COMMIT = 094f9e509d3a630deac30e7a847b75b9e1871c2a`
+
 `GEMINI_ADAPTER_TECHNICAL_REVIEW = PASS`
 
 `GEMINI_ADAPTER_APPROVED_SOURCE_COMMIT = 01b8ee1021ec41ccdff66d956a5e18b5813c5a1e`
@@ -142,17 +148,52 @@
 
 `LIVE_LLM_GATE_OWNER_REVIEW = TECHNICAL_ADAPTER_ACCEPTED_LIVE_EVALUATION_PENDING`
 
-`LIVE_MODEL_EVALUATION = NOT_RUN`
+`LIVE_MODEL_EVALUATION = PARTIAL_MINIMAL_PROVIDER_CHECK_ONLY`
+
+`MODEL_MIGRATION = PENDING`
+
+`STRUCTURED_JSON_COMPATIBILITY = NOT_VERIFIED`
+
+`FULL_G01_EVALUATION = NOT_RUN`
+
+`TAMIL_ENGLISH_EXPLANATION_QUALITY = NOT_VERIFIED`
+
+`LIVE_OUTPUT_PROVENANCE_COMPLIANCE = NOT_VERIFIED`
+
+`REMAINING_APPROVED_LIVE_LLM_SCENARIOS = PENDING`
 
 `GROUNDED_INTELLIGENCE = PENDING`
 
 `GUIDANCE_INTELLIGENCE = PENDING`
 
-`LIVE_LLM_RUNTIME = NOT_CONFIGURED`
+`LIVE_LLM_RUNTIME = REPLACEMENT_MODEL_OWNER_VERIFIED_MIGRATION_PENDING`
 
 `LLM_IN_ADMISSION_DECISION_PATH = NO`
 
 `OTHER_COURSE_IMPLEMENTATION = DEFERRED`
+
+### Checkpoint 1 — Live LLM status synchronization
+
+**Repository evidence:** M0 and M1 are accepted; MVP Slices 1–9 are complete; Track A retrieval Pass 2 is accepted. The sanitized Gemini HTTP diagnostic implementation and bounded `DIAGNOSTIC` mode are merged. Repository commit `094f9e509d3a630deac30e7a847b75b9e1871c2a` enforces G01 only, one request, Gemini 2.5 Flash, a 30-second timeout, and the existing USD 0.02 advisory ceiling.
+
+**Owner-reported provider evidence:** The original HTTP 404 was diagnosed as `gemini-2.5-flash` being unavailable to new users for the current API project. The owner verified `gemini-3.6-flash` through the Gemini model-listing API, which reported `generateContent` support, and received `OK` from a minimal generation request through the existing `v1beta` endpoint. This establishes basic endpoint/model availability only; it is not a successful full G01 scenario evaluation.
+
+**Pending Live LLM Gate work:** Model migration is pending. Structured JSON compatibility, full G01 evaluation, Tamil/English explanation quality, and provenance compliance are not verified. The remaining approved Live LLM scenarios are pending.
+
+**Remaining sequence:**
+
+1. Complete the bounded model migration.
+2. Run offline tests, strict typecheck, and secret checks.
+3. Complete focused review and merge.
+4. Run the full G01 scenario only under separate authorization.
+5. Evaluate the remaining approved Live LLM Gate scenarios.
+6. Make an evidence-based gate decision before considering M2 authorization.
+
+**Live LLM acceptance criteria:**
+
+- **G1:** Zero unsupported admission-critical claims.
+- **G2:** Useful progression for a zero-knowledge student.
+- **G3:** Unknown deterministic inputs remain unknown.
 
 ### Pre-M2 Track A specification checkpoint
 
@@ -174,7 +215,7 @@
 
 `PRODUCTION_RAG = NOT_AUTHORIZED`
 
-`NEXT_GATE = OWNER REVIEW AND EXPLICIT AUTHORIZATION OF CONTROLLED LIVE MODEL EVALUATION`
+`NEXT_GATE = REVIEWED_MODEL_MIGRATION_THEN_SEPARATELY_AUTHORIZED_FULL_G01`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -261,7 +302,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Decide whether to authorize the controlled live-model evaluation. Do not begin the experiment, Track B, M2, or production RAG implementation automatically.
+Implement the bounded migration to the owner-verified replacement model, then run offline validation and focused review. Full G01 execution remains a separate authorization step. Do not begin Track B, M2, or production RAG implementation automatically.
 
 ## M1 implementation review
 
@@ -343,4 +384,4 @@ Decide whether to authorize the controlled live-model evaluation. Do not begin t
 
 ## Next review point
 
-Owner review and explicit authorization gate for the still-unrun bounded live-model evaluation covering grounded and guidance intelligence.
+Focused review of the bounded model migration, followed by a separate authorization decision for full G01 execution.
