@@ -26,7 +26,7 @@ export const ALL_LIVE_SCENARIO_IDS = [
     turns.map((_turn, index) => `${journey_id}-T${index + 1}`)),
 ] as const;
 
-export type LiveRunnerMode = "SMOKE" | "FULL";
+export type LiveRunnerMode = "SMOKE" | "FULL" | "DIAGNOSTIC";
 export type CostControl = "NOT_CONFIGURED" | "POST_REQUEST_MONITOR_ONLY" | "STRICT_FAIL_CLOSED";
 
 export interface LiveRunnerConfiguration {
@@ -114,8 +114,8 @@ export function runnerConfigurationFromEnvironment(
   environment: RunnerEnvironment,
 ): LiveRunnerConfiguration {
   const modeRaw = environment.LIVE_LLM_RUN_MODE?.trim().toUpperCase();
-  if (modeRaw !== "SMOKE" && modeRaw !== "FULL") {
-    throw new Error("LIVE_LLM_RUN_MODE must explicitly be SMOKE or FULL");
+  if (modeRaw !== "SMOKE" && modeRaw !== "FULL" && modeRaw !== "DIAGNOSTIC") {
+    throw new Error("LIVE_LLM_RUN_MODE must explicitly be SMOKE, FULL, or DIAGNOSTIC");
   }
   const requestedRaw = environment.LIVE_LLM_SCENARIOS;
   let selected: readonly string[];
@@ -131,6 +131,18 @@ export function runnerConfigurationFromEnvironment(
       throw new Error("SMOKE mode requires GEMINI with gemini-2.5-flash");
     }
     if (runtime.timeout_ms !== 30_000) throw new Error("SMOKE mode requires a 30000ms timeout");
+  } else if (modeRaw === "DIAGNOSTIC") {
+    if (requestedRaw === undefined || requestedRaw.trim() === "") {
+      throw new Error("DIAGNOSTIC mode requires explicit LIVE_LLM_SCENARIOS");
+    }
+    selected = selectScenarioIds(requestedRaw.split(",").map((id) => id.trim()));
+    if (!sameIds(selected, ["G01"])) {
+      throw new Error("DIAGNOSTIC mode requires exactly G01");
+    }
+    if (runtime.provider !== "GEMINI" || runtime.model !== "gemini-2.5-flash") {
+      throw new Error("DIAGNOSTIC mode requires GEMINI with gemini-2.5-flash");
+    }
+    if (runtime.timeout_ms !== 30_000) throw new Error("DIAGNOSTIC mode requires a 30000ms timeout");
   } else {
     if (requestedRaw === undefined || requestedRaw.trim() === "") {
       throw new Error("FULL mode requires explicit LIVE_LLM_SCENARIOS");
@@ -143,15 +155,15 @@ export function runnerConfigurationFromEnvironment(
 
   const maxAttempts = parsePositiveInteger(
     environment.LIVE_LLM_MAX_REQUESTS,
-    modeRaw === "SMOKE" ? 3 : ALL_LIVE_SCENARIO_IDS.length,
+    modeRaw === "SMOKE" ? 3 : (modeRaw === "DIAGNOSTIC" ? 1 : ALL_LIVE_SCENARIO_IDS.length),
   );
   if (maxAttempts === null || maxAttempts !== selected.length) {
     throw new Error("LIVE_LLM_MAX_REQUESTS must equal the explicitly selected scenario count");
   }
   const costCeiling = parseOptionalCost(environment.LIVE_LLM_COST_CEILING_USD);
   if (costCeiling === undefined) throw new Error("LIVE_LLM_COST_CEILING_USD must be a positive number");
-  if (modeRaw === "SMOKE" && costCeiling !== 0.02) {
-    throw new Error("SMOKE mode requires the proposed 0.02 USD cost ceiling");
+  if ((modeRaw === "SMOKE" || modeRaw === "DIAGNOSTIC") && costCeiling !== 0.02) {
+    throw new Error(`${modeRaw} mode requires the proposed 0.02 USD cost ceiling`);
   }
   const strictRaw = environment.LIVE_LLM_STRICT_BUDGET?.trim().toLowerCase();
   if (strictRaw !== undefined && strictRaw !== "true" && strictRaw !== "false") {

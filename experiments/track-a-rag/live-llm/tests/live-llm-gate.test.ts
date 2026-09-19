@@ -574,6 +574,36 @@ test("bounded smoke selection is exact and rejects unknown or duplicate IDs", ()
   assert.throws(() => smokeConfiguration({ LIVE_LLM_SCENARIOS: ALL_LIVE_SCENARIO_IDS.join(",") }), /requires exactly/);
 });
 
+test("diagnostic mode explicitly requires only G01 and one request", () => {
+  const baseEnv = { LIVE_LLM_RUN_MODE: "DIAGNOSTIC", LIVE_LLM_SCENARIOS: "G01", LIVE_LLM_MAX_REQUESTS: "1", LIVE_LLM_COST_CEILING_USD: "0.02" };
+  const configuration = runnerConfigurationFromEnvironment(
+    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    baseEnv,
+  );
+  assert.deepEqual(configuration.selected_scenario_ids, ["G01"]);
+  assert.equal(configuration.max_attempted_requests, 1);
+  
+  assert.throws(() => runnerConfigurationFromEnvironment(
+    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    { ...baseEnv, LIVE_LLM_SCENARIOS: "G05" }
+  ), /requires exactly G01/);
+  
+  assert.throws(() => runnerConfigurationFromEnvironment(
+    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    { ...baseEnv, LIVE_LLM_SCENARIOS: "G01,G05" }
+  ), /requires exactly G01/);
+  
+  assert.throws(() => runnerConfigurationFromEnvironment(
+    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    { ...baseEnv, LIVE_LLM_SCENARIOS: "" }
+  ), /requires explicit/);
+
+  assert.throws(() => runnerConfigurationFromEnvironment(
+    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    { ...baseEnv, LIVE_LLM_MAX_REQUESTS: "2" }
+  ), /must equal the explicitly selected scenario count/);
+});
+
 test("full gate remains explicit and compatible with all 14 frozen scenarios", async () => {
   assert.equal(ALL_LIVE_SCENARIO_IDS.length, 14);
   const configuration = runnerConfigurationFromEnvironment(
