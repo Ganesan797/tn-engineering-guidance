@@ -190,9 +190,10 @@ async function requestJson<T>(
     try {
       body = await response.json() as T;
     } catch {
+      const timedOut = controller.signal.aborted;
       throw new LiveLlmRequestError(
-        "MALFORMED_RESPONSE",
-        "The provider response was not valid JSON",
+        timedOut ? "TIMEOUT" : "MALFORMED_RESPONSE",
+        timedOut ? "The model request timed out" : "The provider response was not valid JSON",
         performance.now() - started,
       );
     }

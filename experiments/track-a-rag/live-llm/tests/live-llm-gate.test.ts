@@ -344,6 +344,39 @@ test("both provider requests use the bounded configurable timeout and cancellati
   ]);
 });
 
+test("timeout cancellation while reading the response body remains classified as TIMEOUT", async () => {
+  const runtime = runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "OPENAI", OPENAI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
+    OPENAI_MODEL: "test-model", LIVE_LLM_TIMEOUT_MS: "100",
+  });
+  assert.ok(runtime);
+  const prepared = prepareLiveTurn({
+    question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS),
+  });
+  const stalledBodyFetch: typeof fetch = async (_input, init) => ({
+    ok: true,
+    status: 200,
+    json: async () => new Promise((_resolve, reject) => {
+      assert.ok(init?.signal);
+      init.signal.addEventListener(
+        "abort",
+        () => reject(new DOMException("aborted", "AbortError")),
+        { once: true },
+      );
+    }),
+  }) as Response;
+  const result = await runPreparedScenario(
+    "BODY-TIMEOUT",
+    createLiveLlmClient(runtime, stalledBodyFetch),
+    prepared,
+  );
+  assert.equal(result.status, "FAILED");
+  if (result.status === "FAILED") {
+    assert.equal(result.failure_classification, "TIMEOUT");
+    assert.equal(result.message, "The model request timed out");
+  }
+});
+
 test("Gemini rejects blocked prompts before accepting otherwise valid JSON", async () => {
   const runtime = runtimeFromEnvironment({
     LIVE_LLM_PROVIDER: "GEMINI", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL: "gemini-2.5-flash",
