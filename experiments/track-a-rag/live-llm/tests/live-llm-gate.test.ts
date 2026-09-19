@@ -3,6 +3,7 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { ERROR_BODY_SIZE_LIMIT } from "../src/http-diagnostics.ts";
 
 import { APPROVED_CORPUS } from "../../corpus/approved-corpus.ts";
 import { sectionAwareChunking } from "../../src/chunking.ts";
@@ -323,7 +324,8 @@ test("Gemini adapter preserves the prompt/output contract and records run metada
   };
   const run = await runPreparedTurn(createLiveLlmClient(runtime, fakeFetch), prepared);
   assert.equal(requests.length, 1);
-  assert.match(requests[0]!.url, /models\/gemini-2\.5-flash:generateContent$/);
+  assert.equal(requests[0]!.url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent");
+  assert.equal(requests[0]!.init?.method, "POST");
   const headers = requests[0]!.init?.headers as Record<string, string>;
   assert.equal(headers["x-goog-api-key"], "TEST_ONLY_NOT_A_SECRET");
   const requestBody = JSON.parse(String(requests[0]!.init?.body)) as Record<string, any>;
@@ -495,6 +497,7 @@ test("scenario failures safely classify network HTTP malformed JSON and provider
     if (result.status === "FAILED") {
       assert.equal(result.scenario_id, id);
       assert.equal(result.provider, "OPENAI");
+      assert.equal(result.provider_error, undefined);
       assert.equal(result.model, "test-model");
       assert.equal(result.failure_classification, classification);
       assert.equal(result.latency_ms >= 0, true);
@@ -716,4 +719,76 @@ test("durable success and failure artifacts are secret checked", async () => {
   } finally {
     await rm(temporaryDirectory, { recursive: true, force: true });
   }
+});
+
+test("Gemini 404 diagnostics propagate through the bounded artifact without raw payloads", async () => {
+  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", LIVE_LLM_MODEL: "gemini-2.5-flash", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
+  assert.ok(runtime);
+  const fakeFetch: typeof fetch = async () => new Response(JSON.stringify({
+    error: { code: 404, status: "NOT_FOUND", message: "Requested model is not available", details: [{ private: "excluded" }] },
+    extra: "excluded",
+  }), { status: 404, headers: { authorization: "excluded" } });
+  const artifact = await executeBoundedLiveRun({ client: createLiveLlmClient(runtime, fakeFetch), configuration: smokeConfiguration() });
+  assert.equal(artifact.status, "STOPPED");
+  assert.equal(artifact.attempted_requests, 1);
+  assert.equal(artifact.transcript[0].failure?.failure_classification, "HTTP_ERROR");
+  assert.deepEqual(artifact.transcript[0].failure?.provider_error, { code: 404, status: "NOT_FOUND", message: "Requested model is not available" });
+  assert.doesNotMatch(JSON.stringify(artifact), /excluded/);
+  assertArtifactContainsNoSecrets(JSON.stringify(artifact), [runtime.apiKey]);
+});
+
+test("Gemini HTTP diagnostics safely discard unusable bodies and bound streaming reads", async () => {
+  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL: "gemini-2.5-flash", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
+  assert.ok(runtime);
+  const prepared = prepareLiveTurn({ question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS) });
+  let cancelled = false;
+  const oversized = new ReadableStream<Uint8Array>({
+    start(controller) { controller.enqueue(new Uint8Array(ERROR_BODY_SIZE_LIMIT)); controller.enqueue(new Uint8Array(1)); },
+    cancel() { cancelled = true; },
+  });
+  for (const body of [null, "", "not JSON", "{}", '{"error":null}', '{"error":[]}', '{"error":{"code":"404","status":"CUSTOM_PRIVATE_VALUE","message":{}}}', oversized,
+    new ReadableStream<Uint8Array>({ start(controller) { controller.error(new Error("private read failure")); } })]) {
+    const result = await runPreparedScenario("BAD_BODY", createLiveLlmClient(runtime, async () => new Response(body, { status: 404 })), prepared);
+    assert.equal(result.status, "FAILED");
+    if (result.status === "FAILED") {
+      assert.equal(result.failure_classification, "HTTP_ERROR");
+      assert.equal(result.provider_error, undefined);
+      assert.doesNotMatch(JSON.stringify(result), /private read failure|CUSTOM_PRIVATE_VALUE/);
+    }
+  }
+  assert.equal(cancelled, true);
+});
+
+test("Gemini diagnostic messages redact credentials before truncation and remove controls", async () => {
+  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL: "gemini-2.5-flash", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
+  assert.ok(runtime);
+  const prepared = prepareLiveTurn({ question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS) });
+  const messages = [runtime.apiKey, "x".repeat(600) + runtime.apiKey, "Authorization: Bearer private-value", "password=private-value", "https://example.invalid/?key=private-value", "AIza" + "X".repeat(30), "sk-" + "X".repeat(30), "-----BEGIN PRIVATE KEY-----\nprivate-value", "access_token=private-value"];
+  for (const message of messages) {
+    const result = await runPreparedScenario("REDACT", createLiveLlmClient(runtime, async () => new Response(JSON.stringify({ error: { message } }), { status: 404 })), prepared);
+    assert.equal(result.status, "FAILED");
+    if (result.status === "FAILED") assert.equal(result.provider_error?.message, "[REDACTED]");
+    assertArtifactContainsNoSecrets(JSON.stringify(result), [runtime.apiKey]);
+  }
+  const result = await runPreparedScenario("CONTROL", createLiveLlmClient(runtime, async () => new Response(JSON.stringify({ error: { message: "a\u0000\u202e" + "b ".repeat(600) } }), { status: 404 })), prepared);
+  if (result.status === "FAILED") {
+    assert.equal(result.provider_error?.message?.length, 512);
+    assert.equal(result.provider_error?.message?.startsWith("a  "), true);
+  } else assert.fail("Expected HTTP failure");
+});
+
+test("Gemini deadline cancels a stalled HTTP error body even when the stream ignores abort", async () => {
+  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL: "gemini-2.5-flash", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", LIVE_LLM_TIMEOUT_MS: "100" });
+  assert.ok(runtime);
+  let cancelled = false;
+  const fakeFetch: typeof fetch = async () => new Response(new ReadableStream({ cancel() { cancelled = true; } }), { status: 404 });
+  const prepared = prepareLiveTurn({ question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS) });
+  const result = await runPreparedScenario("ERROR_BODY_TIMEOUT", createLiveLlmClient(runtime, fakeFetch), prepared);
+  assert.equal(result.status, "FAILED");
+  if (result.status === "FAILED") {
+    assert.equal(result.failure_classification, "TIMEOUT");
+    assert.equal(result.message, "The model request timed out");
+    assert.equal(result.provider_error, undefined);
+  }
+  assert.equal(cancelled, true);
 });

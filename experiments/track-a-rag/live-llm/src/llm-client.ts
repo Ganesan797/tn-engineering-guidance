@@ -1,5 +1,6 @@
 import { SYSTEM_PROMPT, PROMPT_VERSION, serializePromptInput } from "./prompt-contract.ts";
 import { LIVE_OUTPUT_JSON_SCHEMA, parseLiveModelOutput } from "./output-validation.ts";
+import { readGeminiError, type ProviderErrorDiagnostics } from "./http-diagnostics.ts";
 import type {
   LiveLlmClient,
   LiveLlmProvider,
@@ -89,16 +90,19 @@ const MAX_TIMEOUT_MS = 120_000;
 export class LiveLlmRequestError extends Error {
   readonly classification: import("./types.ts").LiveLlmFailureClassification;
   readonly latency_ms: number;
+  readonly provider_error?: ProviderErrorDiagnostics;
 
   constructor(
     classification: import("./types.ts").LiveLlmFailureClassification,
     message: string,
     latencyMs: number,
+    providerError?: ProviderErrorDiagnostics,
   ) {
     super(message);
     this.name = "LiveLlmRequestError";
     this.classification = classification;
     this.latency_ms = latencyMs;
+    this.provider_error = providerError;
   }
 }
 
@@ -163,6 +167,7 @@ async function requestJson<T>(
   url: string,
   init: RequestInit,
   timeoutMs: number,
+  geminiApiKey?: string,
 ): Promise<{ readonly body: T; readonly response: Response; readonly latency_ms: number }> {
   const started = performance.now();
   const controller = new AbortController();
@@ -180,10 +185,16 @@ async function requestJson<T>(
       );
     }
     if (!response.ok) {
+      const diagnostic = geminiApiKey === undefined ? undefined :
+        await readGeminiError(response, controller.signal, geminiApiKey);
+      if (controller.signal.aborted) {
+        throw new LiveLlmRequestError("TIMEOUT", "The model request timed out", performance.now() - started);
+      }
       throw new LiveLlmRequestError(
         "HTTP_ERROR",
         `The provider returned HTTP ${response.status}`,
         performance.now() - started,
+        diagnostic,
       );
     }
     let body: T;
@@ -361,6 +372,7 @@ export class GeminiGenerateContentExperimentClient implements LiveLlmClient {
         }),
       },
       this.#config.timeout_ms,
+      this.#config.apiKey,
     );
     if (body.error) {
       throw new LiveLlmRequestError("PROVIDER_ERROR", "Gemini rejected the experiment request", latencyMs);

@@ -82,6 +82,7 @@ export async function runPreparedScenario(
             ? "OUTPUT_VALIDATION_ERROR"
             : "EXECUTION_ERROR"),
       message,
+      ...(requestError?.provider_error ? { provider_error: requestError.provider_error } : {}),
     };
   }
 }
