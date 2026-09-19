@@ -9,11 +9,15 @@ import { GROUNDED_GATE_SCENARIOS } from "../scenarios/grounded-scenarios.ts";
 import { JOURNEY_SCENARIOS } from "../scenarios/journey-scenarios.ts";
 import { canTransition, requireGuidanceTransition } from "../src/guidance-state.ts";
 import { evaluateAcademicMarksForLiveGate } from "../src/deterministic-bridge.ts";
-import { runtimeFromEnvironment } from "../src/llm-client.ts";
+import {
+  GEMINI_MODEL_OPTIONS,
+  createLiveLlmClient,
+  runtimeFromEnvironment,
+} from "../src/llm-client.ts";
 import { prepareLiveTurn, runPreparedTurn } from "../src/orchestration.ts";
-import { validateLiveModelOutput } from "../src/output-validation.ts";
+import { LIVE_OUTPUT_JSON_SCHEMA, validateLiveModelOutput } from "../src/output-validation.ts";
 import { PROMPT_VERSION, SYSTEM_PROMPT, buildModelInput, serializePromptInput } from "../src/prompt-contract.ts";
-import type { LiveLlmClient, LiveModelInput, LiveModelOutput, StudentState } from "../src/types.ts";
+import type { LiveLlmClient, LiveModelInput, LiveModelOutput, LiveModelRun, StudentState } from "../src/types.ts";
 
 const studentState: StudentState = {
   language: "ENGLISH",
@@ -38,6 +42,21 @@ function validOutput(input: LiveModelInput): LiveModelOutput {
     next_question: "What would you like to understand next?",
     uncertainty_flag: input.route === "EVIDENCE_DEFER",
     recommendation_strength: "NONE",
+  };
+}
+
+function validRun(input: LiveModelInput): LiveModelRun {
+  return {
+    output: validOutput(input),
+    metadata: {
+      provider: "OPENAI",
+      model: "TEST_ONLY",
+      prompt_version: PROMPT_VERSION,
+      latency_ms: 0,
+      usage: { input_tokens: 0, output_tokens: 0, thinking_tokens: null, total_tokens: 0 },
+      estimated_cost_usd: null,
+      cost_basis: "TEST_ONLY",
+    },
   };
 }
 
@@ -98,11 +117,11 @@ test("deterministic result is immutable and must be echoed exactly", async () =>
     deterministicResult: result,
   });
   const client: LiveLlmClient = {
-    provider: "TEST_ONLY", model: "TEST_ONLY", temperature: 0,
-    async generate(input) { return validOutput(input); },
+    provider: "OPENAI", model: "TEST_ONLY", temperature: 0,
+    async generate(input) { return validRun(input); },
   };
-  const output = await runPreparedTurn(client, prepared);
-  assert.equal(output.deterministic_result_echo, JSON.stringify(result));
+  const run = await runPreparedTurn(client, prepared);
+  assert.equal(run.output.deterministic_result_echo, JSON.stringify(result));
   assert.deepEqual(prepared.input.deterministic_result, result);
 
   const altered = { ...validOutput(prepared.input), deterministic_result_echo: JSON.stringify({ ...result, cutoff: 999 }) };
@@ -180,12 +199,105 @@ test("frozen gate scenarios and controlled journeys are completely enumerated", 
   assert.equal(JOURNEY_SCENARIOS.every(({ turns }) => turns.length > 0), true);
 });
 
-test("live runtime is unavailable unless both key and model are explicitly configured", () => {
-  const runtime = runtimeFromEnvironment();
-  if (runtime !== null) {
-    assert.equal(runtime.apiKey.trim().length > 0, true);
-    assert.equal(runtime.model.trim().length > 0, true);
-  } else {
-    assert.equal(runtime, null);
-  }
+test("provider and model selection require a complete unambiguous environment", () => {
+  assert.equal(runtimeFromEnvironment({}), null);
+  assert.equal(runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "UNKNOWN" }), null);
+  assert.equal(runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "GEMINI",
+    LIVE_LLM_MODEL: "gemini-2.5-flash",
+  }), null);
+
+  const gemini = runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "GEMINI",
+    LIVE_LLM_MODEL: "gemini-2.5-flash",
+    GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
+  });
+  assert.equal(gemini?.provider, "GEMINI");
+  assert.equal(gemini?.model, "gemini-2.5-flash");
+  assert.equal(gemini?.temperature, 0);
+  assert.match(gemini?.price?.basis ?? "", /checked 2026-09-19/);
+
+  const legacyOpenAi = runtimeFromEnvironment({
+    OPENAI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
+    OPENAI_MODEL: "owner-approved-model",
+  });
+  assert.equal(legacyOpenAi?.provider, "OPENAI");
+  assert.equal(legacyOpenAi?.model, "owner-approved-model");
+
+  assert.equal(runtimeFromEnvironment({
+    OPENAI_API_KEY: "TEST_ONLY_NOT_A_SECRET", OPENAI_MODEL: "openai-model",
+    GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL: "gemini-2.5-flash",
+  }), null);
+});
+
+test("Gemini adapter preserves the prompt/output contract and records run metadata", async () => {
+  assert.deepEqual(GEMINI_MODEL_OPTIONS, ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.5-pro"]);
+  const runtime = runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "GEMINI",
+    LIVE_LLM_MODEL: "gemini-2.5-flash",
+    GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
+  });
+  assert.ok(runtime);
+  const requests: { url: string; init?: RequestInit }[] = [];
+  const prepared = prepareLiveTurn({
+    question: "What is engineering?",
+    studentState,
+    chunks: sectionAwareChunking(APPROVED_CORPUS),
+  });
+  const fakeFetch: typeof fetch = async (input, init) => {
+    requests.push({ url: String(input), init });
+    return new Response(JSON.stringify({
+      candidates: [{ content: { parts: [{ text: JSON.stringify(validOutput(prepared.input)) }] } }],
+      usageMetadata: {
+        promptTokenCount: 10,
+        candidatesTokenCount: 5,
+        thoughtsTokenCount: 2,
+        totalTokenCount: 17,
+      },
+    }), { status: 200, headers: { "content-type": "application/json" } });
+  };
+  const run = await runPreparedTurn(createLiveLlmClient(runtime, fakeFetch), prepared);
+  assert.equal(requests.length, 1);
+  assert.match(requests[0]!.url, /models\/gemini-2\.5-flash:generateContent$/);
+  const headers = requests[0]!.init?.headers as Record<string, string>;
+  assert.equal(headers["x-goog-api-key"], "TEST_ONLY_NOT_A_SECRET");
+  const requestBody = JSON.parse(String(requests[0]!.init?.body)) as Record<string, any>;
+  assert.equal(requestBody.generationConfig.responseMimeType, "application/json");
+  assert.deepEqual(requestBody.generationConfig.responseJsonSchema, LIVE_OUTPUT_JSON_SCHEMA);
+  assert.match(requestBody.systemInstruction.parts[0].text, /must not decide admission-critical truth/i);
+  assert.equal(run.output.response_text, "A short grounded explanation.");
+  assert.deepEqual(run.metadata.usage, {
+    input_tokens: 10, output_tokens: 5, thinking_tokens: 2, total_tokens: 17,
+  });
+  assert.equal(run.metadata.provider, "GEMINI");
+  assert.equal(run.metadata.model, "gemini-2.5-flash");
+  assert.equal(run.metadata.prompt_version, PROMPT_VERSION);
+  assert.equal(run.metadata.estimated_cost_usd, 0.0000205);
+  assert.equal(run.metadata.latency_ms >= 0, true);
+});
+
+test("OpenAI adapter remains available through the same provider boundary", async () => {
+  const runtime = runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "OPENAI",
+    LIVE_LLM_MODEL: "owner-approved-model",
+    OPENAI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
+    LIVE_LLM_INPUT_USD_PER_MILLION: "1",
+    LIVE_LLM_OUTPUT_USD_PER_MILLION: "2",
+  });
+  assert.ok(runtime);
+  const prepared = prepareLiveTurn({
+    question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS),
+  });
+  const fakeFetch: typeof fetch = async (_input, init) => {
+    const requestBody = JSON.parse(String(init?.body)) as Record<string, any>;
+    assert.equal(requestBody.store, false);
+    assert.equal(requestBody.text.format.type, "json_schema");
+    return new Response(JSON.stringify({
+      output_text: JSON.stringify(validOutput(prepared.input)),
+      usage: { input_tokens: 10, output_tokens: 5, total_tokens: 15 },
+    }), { status: 200, headers: { "content-type": "application/json" } });
+  };
+  const run = await runPreparedTurn(createLiveLlmClient(runtime, fakeFetch), prepared);
+  assert.equal(run.metadata.provider, "OPENAI");
+  assert.equal(run.metadata.estimated_cost_usd, 0.00002);
 });

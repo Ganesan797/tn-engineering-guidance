@@ -81,11 +81,36 @@ export interface PreparedTurn {
   readonly evidence_reason: string | null;
 }
 
+export const LIVE_LLM_PROVIDERS = ["OPENAI", "GEMINI"] as const;
+export type LiveLlmProvider = (typeof LIVE_LLM_PROVIDERS)[number];
+
+export interface LiveModelUsage {
+  readonly input_tokens: number | null;
+  readonly output_tokens: number | null;
+  readonly thinking_tokens: number | null;
+  readonly total_tokens: number | null;
+}
+
+export interface LiveModelRunMetadata {
+  readonly provider: LiveLlmProvider;
+  readonly model: string;
+  readonly prompt_version: string;
+  readonly latency_ms: number;
+  readonly usage: LiveModelUsage;
+  readonly estimated_cost_usd: number | null;
+  readonly cost_basis: string;
+}
+
+export interface LiveModelRun {
+  readonly output: LiveModelOutput;
+  readonly metadata: LiveModelRunMetadata;
+}
+
 export interface LiveLlmClient {
-  readonly provider: string;
+  readonly provider: LiveLlmProvider;
   readonly model: string;
   readonly temperature: number;
-  generate(input: LiveModelInput): Promise<LiveModelOutput>;
+  generate(input: LiveModelInput): Promise<LiveModelRun>;
 }
 
 export type GateCheck = "PASS" | "FAIL" | "MANUAL_REVIEW_REQUIRED" | "NOT_RUN";

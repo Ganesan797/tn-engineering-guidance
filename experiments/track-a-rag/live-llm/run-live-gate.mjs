@@ -2,7 +2,7 @@ import { APPROVED_CORPUS } from "../corpus/approved-corpus.ts";
 import { sectionAwareChunking } from "../src/chunking.ts";
 import { GROUNDED_GATE_SCENARIOS } from "./scenarios/grounded-scenarios.ts";
 import { JOURNEY_SCENARIOS } from "./scenarios/journey-scenarios.ts";
-import { OpenAiResponsesExperimentClient, runtimeFromEnvironment } from "./src/llm-client.ts";
+import { createLiveLlmClient, runtimeFromEnvironment } from "./src/llm-client.ts";
 import { evaluateAcademicMarksForLiveGate } from "./src/deterministic-bridge.ts";
 import { prepareLiveTurn, runPreparedTurn } from "./src/orchestration.ts";
 import { PROMPT_VERSION } from "./src/prompt-contract.ts";
@@ -11,7 +11,7 @@ const runtime = runtimeFromEnvironment();
 if (runtime === null) {
   console.log(JSON.stringify({
     status: "NOT_RUN",
-    reason: "OPENAI_API_KEY and OPENAI_MODEL must both be configured",
+    reason: "Configure LIVE_LLM_PROVIDER, LIVE_LLM_MODEL, and the selected provider's server-side API key",
     prompt_version: PROMPT_VERSION,
     grounded_scenarios: GROUNDED_GATE_SCENARIOS.map(({ scenario_id }) => scenario_id),
     journeys: JOURNEY_SCENARIOS.map(({ journey_id }) => journey_id),
@@ -19,7 +19,7 @@ if (runtime === null) {
   process.exit(0);
 }
 
-const client = new OpenAiResponsesExperimentClient(runtime);
+const client = createLiveLlmClient(runtime);
 const chunks = sectionAwareChunking(APPROVED_CORPUS);
 const transcript = [];
 
@@ -71,14 +71,15 @@ for (const scenario of GROUNDED_GATE_SCENARIOS) {
     deterministicResult,
     allowSyntheticTestFixtures: scenario.fixture_mode === "PROMPT_INJECTION",
   });
-  const output = await runPreparedTurn(client, prepared);
+  const run = await runPreparedTurn(client, prepared);
   transcript.push({
     id: scenario.scenario_id,
     student: scenario.question,
     route: prepared.input.route,
     evidence: prepared.input.retrieved_evidence,
     deterministic_result: prepared.input.deterministic_result,
-    assistant: output,
+    assistant: run.output,
+    model_run: run.metadata,
     review_status: "MANUAL_REVIEW_REQUIRED",
   });
 }
@@ -103,18 +104,29 @@ for (const journey of JOURNEY_SCENARIOS) {
     const prepared = prepareLiveTurn({
       question: turn.student_text, studentState: state, chunks, deterministicResult,
     });
-    const output = await runPreparedTurn(client, prepared);
+    const run = await runPreparedTurn(client, prepared);
     transcript.push({
       id: `${journey.journey_id}-T${turnIndex + 1}`,
       student: turn.student_text,
       route: prepared.input.route,
       evidence: prepared.input.retrieved_evidence,
       deterministic_result: prepared.input.deterministic_result,
-      assistant: output,
+      assistant: run.output,
+      model_run: run.metadata,
       review_status: "MANUAL_REVIEW_REQUIRED",
     });
   }
 }
+
+const totalUsage = transcript.reduce((total, turn) => ({
+  input_tokens: total.input_tokens + (turn.model_run.usage.input_tokens ?? 0),
+  output_tokens: total.output_tokens + (turn.model_run.usage.output_tokens ?? 0),
+  thinking_tokens: total.thinking_tokens + (turn.model_run.usage.thinking_tokens ?? 0),
+  total_tokens: total.total_tokens + (turn.model_run.usage.total_tokens ?? 0),
+}), { input_tokens: 0, output_tokens: 0, thinking_tokens: 0, total_tokens: 0 });
+const totalEstimatedCostUsd = transcript.every((turn) => turn.model_run.estimated_cost_usd !== null)
+  ? transcript.reduce((total, turn) => total + turn.model_run.estimated_cost_usd, 0)
+  : null;
 
 console.log(JSON.stringify({
   status: "OWNER_REVIEW_REQUIRED",
@@ -122,6 +134,10 @@ console.log(JSON.stringify({
   model: client.model,
   temperature: client.temperature,
   prompt_version: PROMPT_VERSION,
+  token_usage: totalUsage,
+  total_latency_ms: transcript.reduce((total, turn) => total + turn.model_run.latency_ms, 0),
+  estimated_cost_usd: totalEstimatedCostUsd,
+  cost_basis: transcript[0]?.model_run.cost_basis ?? "No completed model runs",
   corpus_version: "PASS_2_COMMIT_9842010",
   base_commit: "af51eca063c792397d30027ce022b4141f83fe26",
   run_timestamp: new Date().toISOString(),

@@ -3,7 +3,7 @@ import { routeQuestion } from "../../src/routing.ts";
 import type { EvidenceChunk, RetrievalConstraints } from "../../src/types.ts";
 import { buildModelInput } from "./prompt-contract.ts";
 import { validateLiveModelOutput } from "./output-validation.ts";
-import type { LiveLlmClient, LiveModelOutput, PreparedTurn, StudentState } from "./types.ts";
+import type { LiveLlmClient, LiveModelRun, PreparedTurn, StudentState } from "./types.ts";
 
 export function prepareLiveTurn(input: {
   readonly question: string;
@@ -33,13 +33,13 @@ export function prepareLiveTurn(input: {
 export async function runPreparedTurn(
   client: LiveLlmClient,
   prepared: PreparedTurn,
-): Promise<LiveModelOutput> {
+): Promise<LiveModelRun> {
   const before = JSON.stringify(prepared.input.deterministic_result);
-  const output = await client.generate(structuredClone(prepared.input));
+  const run = await client.generate(structuredClone(prepared.input));
   if (JSON.stringify(prepared.input.deterministic_result) !== before) {
     throw new Error("Experiment client mutated the deterministic result");
   }
-  const issues = validateLiveModelOutput(output, prepared.input);
+  const issues = validateLiveModelOutput(run.output, prepared.input);
   if (issues.length > 0) throw new Error(`LLM output contract failed: ${issues.join("; ")}`);
-  return output;
+  return run;
 }

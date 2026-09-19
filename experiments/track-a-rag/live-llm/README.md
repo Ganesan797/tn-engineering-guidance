@@ -6,7 +6,9 @@ This directory is an experiment-only gate over the accepted Track A retrieval fo
 
 The LLM may choose what to explain or ask next. It may not decide admission-critical truth. Existing deterministic cutoff and eligibility routes remain authoritative. Only the top retrieved approved evidence chunks enter the model input; retrieved text is labelled untrusted document data.
 
-The client uses the OpenAI Responses API directly through built-in `fetch`, requires `OPENAI_API_KEY` and `OPENAI_MODEL`, requests structured JSON output, sets `store: false`, and adds no SDK or framework dependency. Secrets are never written to output.
+The provider adapter supports the existing OpenAI Responses API client and a Gemini `generateContent` client through built-in `fetch`. Both request the same structured JSON contract and add no SDK or framework dependency. OpenAI keeps `store: false`; Gemini sends no stateful conversation identifier and enables no external tools. Provider API keys are read only from the server-side process environment and are never written to output or exposed to the student UI.
+
+Every completed turn records provider, model ID, prompt version, token usage, latency, and estimated cost. Gemini estimates use the documented standard paid text rates captured in the adapter; an owner can override rates with `LIVE_LLM_INPUT_USD_PER_MILLION` and `LIVE_LLM_OUTPUT_USD_PER_MILLION`. An unavailable price is recorded as `null`, never invented.
 
 ## Deterministic validation
 
@@ -18,11 +20,16 @@ npm run typecheck
 ## Explicitly authorized live run only
 
 ```text
-$env:OPENAI_API_KEY="..."
-$env:OPENAI_MODEL="an-owner-approved-model-id"
+$env:LIVE_LLM_PROVIDER="GEMINI"
+$env:LIVE_LLM_MODEL="gemini-2.5-flash"
+$env:GEMINI_API_KEY="..."
 npm run experiment:live-llm
 ```
 
-The runner prints complete evidence and conversation records for owner review. It does not self-score guidance intelligence. When either environment variable is absent, it prints `NOT_RUN` and makes no network request.
+Supported Gemini model options for this controlled harness are `gemini-2.5-flash-lite`, `gemini-2.5-flash`, and `gemini-2.5-pro`. Model selection remains explicit; the harness has no default model.
+
+The existing OpenAI path remains available by setting `LIVE_LLM_PROVIDER=OPENAI`, `LIVE_LLM_MODEL`, and `OPENAI_API_KEY`. The legacy `OPENAI_MODEL` variable is still accepted when `LIVE_LLM_MODEL` is absent.
+
+The runner prints complete evidence, conversation, and run-metadata records for owner review. It does not self-score guidance intelligence. When provider, model, or the selected provider's key is absent, it prints `NOT_RUN` and makes no network request.
 
 The stale-evidence and prompt-injection scenarios remain separately controlled adversarial cases; the basic runner does not silently turn their synthetic fixtures into factual corpus evidence.
