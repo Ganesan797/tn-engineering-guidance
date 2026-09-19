@@ -792,3 +792,63 @@ test("Gemini deadline cancels a stalled HTTP error body even when the stream ign
   }
   assert.equal(cancelled, true);
 });
+
+test("adversarial credential assignments are redacted before artifact checks", async () => {
+  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL: "gemini-2.5-flash", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
+  assert.ok(runtime);
+  const fixtureValue = ["offline", "assignment", "fixture"].join("-");
+  const assignments = ["key=", "KEY =", "KeY\t=", "key\n =", "passwd=", "PASSWD\t =", "PaSsWd\r\n=", "pwd=", "PWD =", "PwD\t=", "pwd\u00a0="];
+  for (const prefix of assignments) {
+    const fakeFetch: typeof fetch = async () => new Response(JSON.stringify({ error: {
+      code: 404, status: "NOT_FOUND", message: `Rejected ${prefix} ${fixtureValue}`,
+    } }), { status: 404 });
+    const artifact = await executeBoundedLiveRun({ client: createLiveLlmClient(runtime, fakeFetch), configuration: smokeConfiguration() });
+    const failure = artifact.transcript[0].failure;
+    assert.equal(failure?.failure_classification, "HTTP_ERROR");
+    assert.equal(failure?.provider_error?.code, 404);
+    assert.equal(failure?.provider_error?.status, "NOT_FOUND");
+    // Boolean assertions ensure a failing test cannot print a credential value.
+    assert.equal(failure?.provider_error?.message === "[REDACTED]", true);
+    const serialized = JSON.stringify(artifact);
+    assert.equal(serialized.includes(fixtureValue), false);
+    let safeArtifactAccepted = true;
+    try { assertArtifactContainsNoSecrets(serialized, [runtime.apiKey, fixtureValue]); } catch { safeArtifactAccepted = false; }
+    assert.equal(safeArtifactAccepted, true);
+    let unsafeArtifactRejected = false;
+    try { assertArtifactContainsNoSecrets(JSON.stringify({ message: `${prefix}${fixtureValue}` }), [fixtureValue]); } catch { unsafeArtifactRejected = true; }
+    assert.equal(unsafeArtifactRejected, true);
+  }
+  const artifact = await executeBoundedLiveRun({
+    client: createLiveLlmClient(runtime, async () => new Response(JSON.stringify({ error: { message: runtime.apiKey } }), { status: 404 })),
+    configuration: smokeConfiguration(),
+  });
+  assert.equal(artifact.transcript[0].failure?.provider_error?.message === "[REDACTED]", true);
+  assert.equal(JSON.stringify(artifact).includes(runtime.apiKey), false);
+});
+
+test("adversarial continuous empty chunks terminate on the first empty read and cancel", async () => {
+  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL: "gemini-2.5-flash", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
+  assert.ok(runtime);
+  for (const prefix of ["", '{"error":{"code":404,']) {
+    let pulls = 0;
+    let cancelled = false;
+    const stream = new ReadableStream<Uint8Array>({
+      pull(controller) {
+        pulls++;
+        // Guard makes a regression fail promptly instead of hanging the test process.
+        if (pulls > 4) { controller.error(new Error("Empty chunk iteration exceeded test bound")); return; }
+        controller.enqueue(new TextEncoder().encode(pulls === 1 ? prefix : ""));
+      },
+      cancel() { cancelled = true; },
+    }, { highWaterMark: 0 });
+    const started = performance.now();
+    const artifact = await executeBoundedLiveRun({ client: createLiveLlmClient(runtime, async () => new Response(stream, { status: 404 })), configuration: smokeConfiguration() });
+    assert.equal(pulls, prefix ? 2 : 1);
+    assert.equal(cancelled, true);
+    assert.equal(performance.now() - started < 1000, true);
+    assert.equal(artifact.attempted_requests, 1);
+    assert.equal(artifact.transcript[0].failure?.failure_classification, "HTTP_ERROR");
+    assert.equal(artifact.transcript[0].failure?.provider_error, undefined);
+    assert.equal(artifact.transcript[0].failure?.message, "The provider returned HTTP 404");
+  }
+});

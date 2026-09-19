@@ -16,6 +16,7 @@ const GOOGLE_STATUSES = new Set([
 function safeMessage(value: string, apiKey: string): string {
   // Fail closed for credential-bearing messages instead of guessing secret boundaries.
   if ((apiKey.length > 0 && (value.includes(apiKey) || value.includes(encodeURIComponent(apiKey)))) ||
+    /\b(?:key|passwd|pwd)\s*=/iu.test(value) ||
     /AIza[\w-]+|\bsk-[\w-]+|-----BEGIN|authorization|bearer\s|basic\s|api[ _-]?key|credential|password|secret|token|cookie|https?:\/\/|[\w-]+\.[\w-]+\.[\w-]+|[A-Za-z0-9_+/=-]{32,}|[{}]/iu.test(value)) {
     return "[REDACTED]";
   }
@@ -39,6 +40,7 @@ export async function readGeminiError(
     while (true) {
       const part = await Promise.race([reader.read(), aborted]);
       if (part.done) break;
+      if (part.value.byteLength === 0) return undefined;
       size += part.value.byteLength;
       if (size > ERROR_BODY_SIZE_LIMIT) return undefined;
       chunks.push(part.value);
