@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import test from "node:test";
 
 import { APPROVED_CORPUS } from "../../corpus/approved-corpus.ts";
@@ -22,6 +25,15 @@ import {
 } from "../src/orchestration.ts";
 import { LIVE_OUTPUT_JSON_SCHEMA, validateLiveModelOutput } from "../src/output-validation.ts";
 import { PROMPT_VERSION, SYSTEM_PROMPT, buildModelInput, serializePromptInput } from "../src/prompt-contract.ts";
+import { assertArtifactContainsNoSecrets, writeRunArtifact } from "../src/artifact-writer.mjs";
+import {
+  ALL_LIVE_SCENARIO_IDS,
+  RequestLimitedClient,
+  SMOKE_SCENARIO_IDS,
+  executeBoundedLiveRun,
+  runnerConfigurationFromEnvironment,
+  selectScenarioIds,
+} from "../src/runner.ts";
 import type { LiveLlmClient, LiveModelInput, LiveModelOutput, LiveModelRun, StudentState } from "../src/types.ts";
 
 const studentState: StudentState = {
@@ -63,6 +75,51 @@ function validRun(input: LiveModelInput): LiveModelRun {
       cost_basis: "TEST_ONLY",
     },
   };
+}
+
+function runnerClient(options: {
+  readonly failAt?: number;
+  readonly missingUsage?: boolean;
+  readonly estimatedCostUsd?: number | null;
+} = {}) {
+  let calls = 0;
+  const client: LiveLlmClient = {
+    provider: "GEMINI",
+    model: "gemini-2.5-flash",
+    temperature: 0,
+    async generate(input) {
+      calls += 1;
+      if (calls === options.failAt) throw new Error("TEST_ONLY provider failure with secret-like detail");
+      const run = validRun(input);
+      return {
+        ...run,
+        metadata: {
+          ...run.metadata,
+          provider: "GEMINI",
+          model: "gemini-2.5-flash",
+          usage: options.missingUsage
+            ? { input_tokens: null, output_tokens: null, thinking_tokens: null, total_tokens: null }
+            : { input_tokens: 10, output_tokens: 5, thinking_tokens: null, total_tokens: 15 },
+          estimated_cost_usd: options.estimatedCostUsd ?? null,
+        },
+      };
+    },
+  };
+  return { client, calls: () => calls };
+}
+
+function smokeConfiguration(overrides: Readonly<Record<string, string | undefined>> = {}) {
+  return runnerConfigurationFromEnvironment(
+    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    {
+      LIVE_LLM_RUN_MODE: "SMOKE",
+      LIVE_LLM_SCENARIOS: "G01,G05,J01-T1",
+      LIVE_LLM_MAX_REQUESTS: "3",
+      LIVE_LLM_COST_CEILING_USD: "0.02",
+      LIVE_LLM_STRICT_BUDGET: "false",
+      ...overrides,
+    },
+  );
 }
 
 test("prompt contract is concise, versioned, and states critical authority boundaries", () => {
@@ -500,4 +557,163 @@ test("OpenAI accepts a representative raw Responses REST payload", async () => {
   assert.deepEqual(run.metadata.usage, {
     input_tokens: 10, output_tokens: 5, thinking_tokens: null, total_tokens: 15,
   });
+});
+
+test("bounded smoke selection is exact and rejects unknown or duplicate IDs", () => {
+  assert.deepEqual(selectScenarioIds(SMOKE_SCENARIO_IDS), ["G01", "G05", "J01-T1"]);
+  assert.throws(() => selectScenarioIds(["G01", "UNKNOWN"]), /Unknown live scenario ID/);
+  assert.throws(() => selectScenarioIds(["G01", "G01"]), /Duplicate live scenario ID/);
+  const configuration = smokeConfiguration();
+  assert.deepEqual(configuration.selected_scenario_ids, SMOKE_SCENARIO_IDS);
+  assert.equal(configuration.max_attempted_requests, 3);
+  assert.equal(configuration.automatic_retries, false);
+  assert.throws(() => smokeConfiguration({ LIVE_LLM_SCENARIOS: undefined }), /requires explicit/);
+  assert.throws(() => smokeConfiguration({ LIVE_LLM_SCENARIOS: ALL_LIVE_SCENARIO_IDS.join(",") }), /requires exactly/);
+});
+
+test("full gate remains explicit and compatible with all 14 frozen scenarios", async () => {
+  assert.equal(ALL_LIVE_SCENARIO_IDS.length, 14);
+  const configuration = runnerConfigurationFromEnvironment(
+    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    {
+      LIVE_LLM_RUN_MODE: "FULL",
+      LIVE_LLM_SCENARIOS: ALL_LIVE_SCENARIO_IDS.join(","),
+      LIVE_LLM_MAX_REQUESTS: "14",
+    },
+  );
+  assert.deepEqual(configuration.selected_scenario_ids, ALL_LIVE_SCENARIO_IDS);
+  const fake = runnerClient();
+  const result = await executeBoundedLiveRun({
+    client: fake.client,
+    configuration,
+    timestamp: "2026-09-19T00:00:00.000Z",
+  });
+  assert.equal(result.status, "OWNER_REVIEW_REQUIRED");
+  assert.equal(result.attempted_requests, 14);
+  assert.equal(result.transcript.length, 14);
+  assert.equal(fake.calls(), 14);
+});
+
+test("request limit counts failed provider attempts and performs no retry", async () => {
+  const fake = runnerClient({ failAt: 1 });
+  const limited = new RequestLimitedClient(fake.client, 1);
+  await assert.rejects(() => limited.generate({} as LiveModelInput));
+  await assert.rejects(() => limited.generate({} as LiveModelInput), /request limit reached/);
+  assert.equal(limited.attempted_requests, 1);
+  assert.equal(fake.calls(), 1);
+});
+
+test("bounded execution stops on first structured provider failure", async () => {
+  const fake = runnerClient({ failAt: 2 });
+  const result = await executeBoundedLiveRun({
+    client: fake.client,
+    configuration: smokeConfiguration(),
+    timestamp: "2026-09-19T00:00:00.000Z",
+  });
+  assert.equal(result.status, "STOPPED");
+  assert.equal(result.attempted_requests, 2);
+  assert.equal(fake.calls(), 2);
+  assert.deepEqual(result.transcript.map(({ id }) => id), ["G01", "G05"]);
+  assert.equal(result.transcript[1]?.failure?.failure_classification, "EXECUTION_ERROR");
+  assert.doesNotMatch(result.transcript[1]?.failure?.message ?? "", /secret-like detail/iu);
+});
+
+test("successful artifact preserves provenance, deterministic result and mechanical evaluation", async () => {
+  const fake = runnerClient();
+  const result = await executeBoundedLiveRun({
+    client: fake.client,
+    configuration: smokeConfiguration(),
+    timestamp: "2026-09-19T00:00:00.000Z",
+  });
+  assert.equal(result.status, "OWNER_REVIEW_REQUIRED");
+  assert.equal(result.transcript.length, 3);
+  assert.equal(result.transcript.every(({ mechanical_evaluation }) => mechanical_evaluation !== null), true);
+  assert.equal(result.transcript[0]?.evidence.some(({ source_id }) => source_id === "RAG-A01"), true);
+  assert.equal(result.transcript[1]?.deterministic_result !== null, true);
+  assert.equal(result.manual_owner_review_required, true);
+});
+
+test("strict budget mode fails closed before any request", async () => {
+  const fake = runnerClient();
+  const result = await executeBoundedLiveRun({
+    client: fake.client,
+    configuration: smokeConfiguration({ LIVE_LLM_STRICT_BUDGET: "true" }),
+    timestamp: "2026-09-19T00:00:00.000Z",
+  });
+  assert.equal(result.status, "NOT_RUN");
+  assert.equal(result.attempted_requests, 0);
+  assert.equal(fake.calls(), 0);
+  assert.equal(result.cost_control, "STRICT_FAIL_CLOSED");
+  assert.equal(result.run_failure?.classification, "STRICT_BUDGET_UNENFORCEABLE");
+});
+
+test("post-request cost monitoring stops further requests without claiming enforcement", async () => {
+  const fake = runnerClient({ estimatedCostUsd: 0.03 });
+  const result = await executeBoundedLiveRun({
+    client: fake.client,
+    configuration: smokeConfiguration(),
+    timestamp: "2026-09-19T00:00:00.000Z",
+  });
+  assert.equal(result.status, "STOPPED");
+  assert.equal(result.cost_control, "POST_REQUEST_MONITOR_ONLY");
+  assert.equal(result.attempted_requests, 1);
+  assert.equal(fake.calls(), 1);
+  assert.equal(result.run_failure?.classification, "COST_CEILING_EXCEEDED_AFTER_REQUEST");
+});
+
+test("incomplete live telemetry remains null rather than becoming measured zero", async () => {
+  const fake = runnerClient({ missingUsage: true });
+  const result = await executeBoundedLiveRun({
+    client: fake.client,
+    configuration: smokeConfiguration(),
+    timestamp: "2026-09-19T00:00:00.000Z",
+  });
+  assert.equal(result.telemetry_complete, false);
+  assert.deepEqual(result.token_usage, {
+    input_tokens: null, output_tokens: null, thinking_tokens: null, total_tokens: null,
+  });
+  assert.equal(result.estimated_cost_usd, null);
+});
+
+test("durable success and failure artifacts are secret checked", async () => {
+  const temporaryDirectory = await mkdtemp(join(tmpdir(), "live-llm-artifact-"));
+  try {
+    const success = await executeBoundedLiveRun({
+      client: runnerClient().client,
+      configuration: smokeConfiguration(),
+      timestamp: "2026-09-19T00:00:00.000Z",
+    });
+    const successPath = await writeRunArtifact(success, {
+      outputDirectory: temporaryDirectory,
+      forbiddenValues: ["TEST_ONLY_API_SECRET"],
+    });
+    const persisted = JSON.parse(await readFile(successPath, "utf8"));
+    assert.deepEqual(persisted.selected_scenario_ids, ["G01", "G05", "J01-T1"]);
+    assert.equal(persisted.transcript[0].mechanical_evaluation.grounding, "PASS");
+
+    const failure = await executeBoundedLiveRun({
+      client: runnerClient({ failAt: 1 }).client,
+      configuration: smokeConfiguration(),
+      timestamp: "2026-09-19T00:00:01.000Z",
+    });
+    const failurePath = await writeRunArtifact(failure, {
+      outputDirectory: temporaryDirectory,
+      forbiddenValues: ["TEST_ONLY_API_SECRET"],
+    });
+    const persistedFailure = JSON.parse(await readFile(failurePath, "utf8"));
+    assert.equal(persistedFailure.status, "STOPPED");
+    assert.equal(persistedFailure.transcript[0].failure.failure_classification, "EXECUTION_ERROR");
+    assert.doesNotMatch(JSON.stringify(persistedFailure), /TEST_ONLY_API_SECRET|secret-like detail/iu);
+
+    assert.throws(
+      () => assertArtifactContainsNoSecrets('{"value":"TEST_ONLY_API_SECRET"}', ["TEST_ONLY_API_SECRET"]),
+      /configured secret/,
+    );
+    assert.throws(
+      () => assertArtifactContainsNoSecrets('{"authorization":"Bearer anything"}'),
+      /credential-shaped/,
+    );
+  } finally {
+    await rm(temporaryDirectory, { recursive: true, force: true });
+  }
 });

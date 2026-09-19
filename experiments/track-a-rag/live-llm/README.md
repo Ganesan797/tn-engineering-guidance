@@ -19,17 +19,33 @@ npm run typecheck
 
 ## Explicitly authorized live run only
 
+The runner never defaults to the full gate. The bounded smoke run requires an explicit mode, exact scenario list, request count, timeout, model, and proposed cost ceiling:
+
 ```text
 $env:LIVE_LLM_PROVIDER="GEMINI"
 $env:LIVE_LLM_MODEL="gemini-2.5-flash"
+$env:LIVE_LLM_RUN_MODE="SMOKE"
+$env:LIVE_LLM_SCENARIOS="G01,G05,J01-T1"
+$env:LIVE_LLM_MAX_REQUESTS="3"
+$env:LIVE_LLM_TIMEOUT_MS="30000"
+$env:LIVE_LLM_COST_CEILING_USD="0.02"
+$env:LIVE_LLM_STRICT_BUDGET="false"
 $env:GEMINI_API_KEY="..."
 npm run experiment:live-llm
 ```
+
+The three smoke scenarios cover a grounded factual response, preservation of an unknown deterministic input, and Tamil zero-knowledge progression. Failed requests count against the three-request limit, there are no automatic retries, and the run stops at the first provider or validation failure.
+
+The USD 0.02 value is a proposed post-request ceiling, not a guaranteed pre-request spending limit: authoritative output token counts are unavailable before a request. Setting `LIVE_LLM_STRICT_BUDGET=true` therefore fails closed before any provider request. With strict mode disabled, the runner records observed estimates and stops before another request after an observed estimate exceeds the ceiling.
+
+Each run writes one secret-checked JSON artifact to the Git-ignored `output/` directory. It records configuration, selected scenarios, transcripts, evidence and provenance, deterministic results, structured failures, mechanical evaluation, latency, nullable usage, estimated cost, and telemetry completeness. Mechanical checks do not replace manual owner review.
+
+The complete 14-scenario gate remains available only through explicit `LIVE_LLM_RUN_MODE=FULL` with all 14 scenario IDs in canonical order and `LIVE_LLM_MAX_REQUESTS=14`. It is never selected as a fallback.
 
 Supported Gemini model options for this controlled harness are `gemini-2.5-flash-lite`, `gemini-2.5-flash`, and `gemini-2.5-pro`. Model selection remains explicit; the harness has no default model.
 
 The existing OpenAI path remains available by setting `LIVE_LLM_PROVIDER=OPENAI`, `LIVE_LLM_MODEL`, and `OPENAI_API_KEY`. The legacy `OPENAI_MODEL` variable is still accepted when `LIVE_LLM_MODEL` is absent.
 
-The runner prints complete evidence, conversation, and run-metadata records for owner review. It does not self-score guidance intelligence. When provider, model, or the selected provider's key is absent, it prints `NOT_RUN` and makes no network request.
+The runner prints a safe artifact summary for owner review. It does not self-score guidance intelligence. When provider, model, or the selected provider's key is absent, it prints `NOT_RUN` and makes no network request.
 
 The stale-evidence and prompt-injection scenarios remain separately controlled adversarial cases; the basic runner does not silently turn their synthetic fixtures into factual corpus evidence.
