@@ -2,7 +2,7 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** Gemini adapter technical review is accepted and merged; controlled live-model evaluation remains unrun and requires separate owner authorization
+**Current task:** The accepted bounded Gemini smoke runner is merged; controlled live-model evaluation remains unrun and requires separate owner authorization
 
 **Last reviewed:** 2026-09-19
 
@@ -117,6 +117,18 @@
 `LIVE_LLM_EXPERIMENT_IMPLEMENTATION = HARNESS_COMPLETE_LIVE_EXECUTION_NOT_STARTED`
 
 `LIVE_LLM_GATE_IMPLEMENTATION = PARTIAL`
+
+`LIVE_LLM_SMOKE_RUNNER = MERGED_READY_FOR_SEPARATE_OWNER_AUTHORIZATION`
+
+`LIVE_LLM_SMOKE_RUNNER_APPROVED_COMMIT = fdd36e34f63c85c9d94af9bd932f40881a18a7a5`
+
+`LIVE_LLM_SMOKE_SCENARIOS = [G01, G05, J01-T1]`
+
+`LIVE_LLM_SMOKE_MAX_REQUESTS = 3`
+
+`LIVE_LLM_SMOKE_COST_CEILING = ADVISORY_USD_0_02`
+
+`LIVE_LLM_SMOKE_STRICT_BUDGET = FAIL_CLOSED_ZERO_REQUESTS`
 
 `GEMINI_ADAPTER_TECHNICAL_REVIEW = PASS`
 
