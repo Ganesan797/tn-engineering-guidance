@@ -14,7 +14,12 @@ import {
   createLiveLlmClient,
   runtimeFromEnvironment,
 } from "../src/llm-client.ts";
-import { prepareLiveTurn, runPreparedTurn } from "../src/orchestration.ts";
+import {
+  aggregateLiveTelemetry,
+  prepareLiveTurn,
+  runPreparedScenario,
+  runPreparedTurn,
+} from "../src/orchestration.ts";
 import { LIVE_OUTPUT_JSON_SCHEMA, validateLiveModelOutput } from "../src/output-validation.ts";
 import { PROMPT_VERSION, SYSTEM_PROMPT, buildModelInput, serializePromptInput } from "../src/prompt-contract.ts";
 import type { LiveLlmClient, LiveModelInput, LiveModelOutput, LiveModelRun, StudentState } from "../src/types.ts";
@@ -247,7 +252,10 @@ test("Gemini adapter preserves the prompt/output contract and records run metada
   const fakeFetch: typeof fetch = async (input, init) => {
     requests.push({ url: String(input), init });
     return new Response(JSON.stringify({
-      candidates: [{ content: { parts: [{ text: JSON.stringify(validOutput(prepared.input)) }] } }],
+      candidates: [{
+        content: { parts: [{ text: JSON.stringify(validOutput(prepared.input)) }] },
+        finishReason: "STOP",
+      }],
       usageMetadata: {
         promptTokenCount: 10,
         candidatesTokenCount: 5,
@@ -300,4 +308,163 @@ test("OpenAI adapter remains available through the same provider boundary", asyn
   const run = await runPreparedTurn(createLiveLlmClient(runtime, fakeFetch), prepared);
   assert.equal(run.metadata.provider, "OPENAI");
   assert.equal(run.metadata.estimated_cost_usd, 0.00002);
+});
+
+test("both provider requests use the bounded configurable timeout and cancellation signal", async () => {
+  assert.equal(runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "OPENAI", OPENAI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
+    OPENAI_MODEL: "test-model", LIVE_LLM_TIMEOUT_MS: "99",
+  }), null);
+  assert.equal(runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "OPENAI", OPENAI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
+    OPENAI_MODEL: "test-model", LIVE_LLM_TIMEOUT_MS: "120001",
+  }), null);
+  const prepared = prepareLiveTurn({
+    question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS),
+  });
+  const abortingFetch: typeof fetch = async (_input, init) => new Promise<Response>((_resolve, reject) => {
+    assert.ok(init?.signal);
+    init.signal.addEventListener("abort", () => reject(new DOMException("aborted", "AbortError")), { once: true });
+  });
+  const configurations = [
+    runtimeFromEnvironment({
+      LIVE_LLM_PROVIDER: "OPENAI", OPENAI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
+      OPENAI_MODEL: "test-model", LIVE_LLM_TIMEOUT_MS: "100",
+    }),
+    runtimeFromEnvironment({
+      LIVE_LLM_PROVIDER: "GEMINI", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
+      GEMINI_MODEL: "gemini-2.5-flash", LIVE_LLM_TIMEOUT_MS: "100",
+    }),
+  ];
+  assert.equal(configurations.every(Boolean), true);
+  const results = await Promise.all(configurations.map((configuration, index) =>
+    runPreparedScenario(`TIMEOUT-${index}`, createLiveLlmClient(configuration!, abortingFetch), prepared)));
+  assert.deepEqual(results.map((result) => result.status === "FAILED" && result.failure_classification), [
+    "TIMEOUT", "TIMEOUT",
+  ]);
+});
+
+test("Gemini rejects blocked prompts before accepting otherwise valid JSON", async () => {
+  const runtime = runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "GEMINI", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL: "gemini-2.5-flash",
+  });
+  assert.ok(runtime);
+  const prepared = prepareLiveTurn({
+    question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS),
+  });
+  const fakeFetch: typeof fetch = async () => new Response(JSON.stringify({
+    promptFeedback: { blockReason: "SAFETY" },
+    candidates: [{
+      finishReason: "STOP",
+      content: { parts: [{ text: JSON.stringify(validOutput(prepared.input)) }] },
+    }],
+  }), { status: 200 });
+  const result = await runPreparedScenario("BLOCKED", createLiveLlmClient(runtime, fakeFetch), prepared);
+  assert.equal(result.status, "FAILED");
+  if (result.status === "FAILED") assert.equal(result.failure_classification, "PROVIDER_ERROR");
+});
+
+test("Gemini rejects every tested unsuccessful finish reason even when JSON is valid", async () => {
+  const runtime = runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "GEMINI", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL: "gemini-2.5-flash",
+  });
+  assert.ok(runtime);
+  const prepared = prepareLiveTurn({
+    question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS),
+  });
+  for (const finishReason of ["MAX_TOKENS", "SAFETY", "RECITATION", "FINISH_REASON_UNSPECIFIED"]) {
+    const fakeFetch: typeof fetch = async () => new Response(JSON.stringify({
+      candidates: [{
+        finishReason,
+        content: { parts: [{ text: JSON.stringify(validOutput(prepared.input)) }] },
+      }],
+    }), { status: 200 });
+    const result = await runPreparedScenario(finishReason, createLiveLlmClient(runtime, fakeFetch), prepared);
+    assert.equal(result.status, "FAILED");
+    if (result.status === "FAILED") assert.equal(result.failure_classification, "PROVIDER_ERROR");
+  }
+});
+
+test("scenario failures safely classify network HTTP malformed JSON and provider errors", async () => {
+  const runtime = runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "OPENAI", OPENAI_API_KEY: "TEST_ONLY_NOT_A_SECRET", OPENAI_MODEL: "test-model",
+  });
+  assert.ok(runtime);
+  const prepared = prepareLiveTurn({
+    question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS),
+  });
+  const fixtures: readonly [string, typeof fetch, string][] = [
+    ["NETWORK", async () => { throw new Error("socket exposed-secret"); }, "NETWORK_ERROR"],
+    ["HTTP", async () => new Response(JSON.stringify({ error: { message: "provider exposed-secret" } }), { status: 429 }), "HTTP_ERROR"],
+    ["JSON", async () => new Response("not-json", { status: 200 }), "MALFORMED_RESPONSE"],
+    ["PROVIDER", async () => new Response(JSON.stringify({ error: { message: "provider exposed-secret" } }), { status: 200 }), "PROVIDER_ERROR"],
+  ];
+  for (const [id, fakeFetch, classification] of fixtures) {
+    const result = await runPreparedScenario(id, createLiveLlmClient(runtime, fakeFetch), prepared);
+    assert.equal(result.status, "FAILED");
+    if (result.status === "FAILED") {
+      assert.equal(result.scenario_id, id);
+      assert.equal(result.provider, "OPENAI");
+      assert.equal(result.model, "test-model");
+      assert.equal(result.failure_classification, classification);
+      assert.equal(result.latency_ms >= 0, true);
+      assert.doesNotMatch(result.message, /exposed-secret|TEST_ONLY_NOT_A_SECRET/iu);
+    }
+  }
+});
+
+test("missing provider usage stays null and makes aggregate telemetry explicitly incomplete", async () => {
+  const runtime = runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "GEMINI", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL: "gemini-2.5-flash",
+  });
+  assert.ok(runtime);
+  const prepared = prepareLiveTurn({
+    question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS),
+  });
+  const fakeFetch: typeof fetch = async () => new Response(JSON.stringify({
+    candidates: [{
+      finishReason: "STOP",
+      content: { parts: [{ text: JSON.stringify(validOutput(prepared.input)) }] },
+    }],
+  }), { status: 200 });
+  const run = await runPreparedTurn(createLiveLlmClient(runtime, fakeFetch), prepared);
+  assert.deepEqual(run.metadata.usage, {
+    input_tokens: null, output_tokens: null, thinking_tokens: null, total_tokens: null,
+  });
+  assert.deepEqual(aggregateLiveTelemetry([run.metadata]), {
+    complete: false,
+    input_tokens: null,
+    output_tokens: null,
+    thinking_tokens: null,
+    total_tokens: null,
+    estimated_cost_usd: null,
+    total_latency_ms: run.metadata.latency_ms,
+  });
+});
+
+test("OpenAI accepts a representative raw Responses REST payload", async () => {
+  const runtime = runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "OPENAI", OPENAI_API_KEY: "TEST_ONLY_NOT_A_SECRET", OPENAI_MODEL: "test-model",
+  });
+  assert.ok(runtime);
+  const prepared = prepareLiveTurn({
+    question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS),
+  });
+  const fakeFetch: typeof fetch = async () => new Response(JSON.stringify({
+    id: "resp_test",
+    object: "response",
+    status: "completed",
+    output: [{
+      type: "message",
+      role: "assistant",
+      content: [{ type: "output_text", text: JSON.stringify(validOutput(prepared.input)), annotations: [] }],
+    }],
+    usage: { input_tokens: 10, output_tokens: 5, total_tokens: 15 },
+  }), { status: 200, headers: { "content-type": "application/json" } });
+  const run = await runPreparedTurn(createLiveLlmClient(runtime, fakeFetch), prepared);
+  assert.equal(run.output.response_text, "A short grounded explanation.");
+  assert.equal(run.metadata.provider, "OPENAI");
+  assert.deepEqual(run.metadata.usage, {
+    input_tokens: 10, output_tokens: 5, thinking_tokens: null, total_tokens: 15,
+  });
 });

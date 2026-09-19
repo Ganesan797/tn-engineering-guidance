@@ -10,6 +10,13 @@ import type {
 
 interface ResponsesApiBody {
   readonly output_text?: string;
+  readonly output?: readonly {
+    readonly type?: string;
+    readonly content?: readonly {
+      readonly type?: string;
+      readonly text?: string;
+    }[];
+  }[];
   readonly error?: { readonly message?: string };
   readonly usage?: {
     readonly input_tokens?: number;
@@ -68,11 +75,32 @@ export interface LiveRuntimeConfiguration {
   readonly apiKey: string;
   readonly model: string;
   readonly temperature: number;
+  readonly timeout_ms: number;
   readonly price: TokenPrice | null;
 }
 
 type RuntimeEnvironment = Readonly<Record<string, string | undefined>>;
 type FetchImplementation = typeof fetch;
+
+const DEFAULT_TIMEOUT_MS = 30_000;
+const MIN_TIMEOUT_MS = 100;
+const MAX_TIMEOUT_MS = 120_000;
+
+export class LiveLlmRequestError extends Error {
+  readonly classification: import("./types.ts").LiveLlmFailureClassification;
+  readonly latency_ms: number;
+
+  constructor(
+    classification: import("./types.ts").LiveLlmFailureClassification,
+    message: string,
+    latencyMs: number,
+  ) {
+    super(message);
+    this.name = "LiveLlmRequestError";
+    this.classification = classification;
+    this.latency_ms = latencyMs;
+  }
+}
 
 function processEnvironment(): RuntimeEnvironment {
   return (globalThis as unknown as {
@@ -104,6 +132,13 @@ function optionalPrice(environment: RuntimeEnvironment): TokenPrice | null {
   };
 }
 
+function configuredTimeout(environment: RuntimeEnvironment): number | null {
+  const raw = environment.LIVE_LLM_TIMEOUT_MS?.trim();
+  if (!raw) return DEFAULT_TIMEOUT_MS;
+  const value = Number(raw);
+  return Number.isInteger(value) && value >= MIN_TIMEOUT_MS && value <= MAX_TIMEOUT_MS ? value : null;
+}
+
 export function runtimeFromEnvironment(
   environment: RuntimeEnvironment = processEnvironment(),
 ): LiveRuntimeConfiguration | null {
@@ -112,14 +147,71 @@ export function runtimeFromEnvironment(
   const apiKey = (provider === "OPENAI" ? environment.OPENAI_API_KEY : environment.GEMINI_API_KEY)?.trim();
   const model = (environment.LIVE_LLM_MODEL ??
     (provider === "OPENAI" ? environment.OPENAI_MODEL : environment.GEMINI_MODEL))?.trim();
-  if (!apiKey || !model || !/^[A-Za-z0-9._-]+$/u.test(model)) return null;
+  const timeoutMs = configuredTimeout(environment);
+  if (!apiKey || !model || !/^[A-Za-z0-9._-]+$/u.test(model) || timeoutMs === null) return null;
   const price = optionalPrice(environment) ??
     (provider === "GEMINI" ? GEMINI_STANDARD_TEXT_PRICES[model] ?? null : null);
-  return { provider, apiKey, model, temperature: 0, price };
+  return { provider, apiKey, model, temperature: 0, timeout_ms: timeoutMs, price };
 }
 
 function finiteCount(value: unknown): number | null {
   return typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : null;
+}
+
+async function requestJson<T>(
+  fetchImplementation: FetchImplementation,
+  url: string,
+  init: RequestInit,
+  timeoutMs: number,
+): Promise<{ readonly body: T; readonly response: Response; readonly latency_ms: number }> {
+  const started = performance.now();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  let response: Response;
+  try {
+    try {
+      response = await fetchImplementation(url, { ...init, signal: controller.signal });
+    } catch {
+      const latency = performance.now() - started;
+      throw new LiveLlmRequestError(
+        controller.signal.aborted ? "TIMEOUT" : "NETWORK_ERROR",
+        controller.signal.aborted ? "The model request timed out" : "The model request could not reach the provider",
+        latency,
+      );
+    }
+    if (!response.ok) {
+      throw new LiveLlmRequestError(
+        "HTTP_ERROR",
+        `The provider returned HTTP ${response.status}`,
+        performance.now() - started,
+      );
+    }
+    let body: T;
+    try {
+      body = await response.json() as T;
+    } catch {
+      throw new LiveLlmRequestError(
+        "MALFORMED_RESPONSE",
+        "The provider response was not valid JSON",
+        performance.now() - started,
+      );
+    }
+    return { body, response, latency_ms: performance.now() - started };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function openAiOutputText(body: ResponsesApiBody): string | null {
+  const direct = body.output_text?.trim();
+  if (direct) return direct;
+  const text = body.output
+    ?.flatMap(({ content }) => content ?? [])
+    .filter(({ type }) => type === "output_text")
+    .map(({ text: value }) => value ?? "")
+    .join("")
+    .trim();
+  return text || null;
 }
 
 function estimatedCost(usage: LiveModelUsage, price: TokenPrice | null): {
@@ -145,8 +237,19 @@ function buildRun(
   latencyMs: number,
 ): LiveModelRun {
   const cost = estimatedCost(usage, config.price);
+  let output: LiveModelRun["output"];
+  try {
+    output = parseLiveModelOutput(text, input);
+  } catch (error) {
+    const malformed = error instanceof Error && /not valid JSON/iu.test(error.message);
+    throw new LiveLlmRequestError(
+      malformed ? "MALFORMED_RESPONSE" : "OUTPUT_VALIDATION_ERROR",
+      malformed ? "The model output was not valid JSON" : "The model output failed the required contract",
+      latencyMs,
+    );
+  }
   return {
-    output: parseLiveModelOutput(text, input),
+    output,
     metadata: {
       provider: config.provider,
       model: config.model,
@@ -175,8 +278,10 @@ export class OpenAiResponsesExperimentClient implements LiveLlmClient {
   }
 
   async generate(input: LiveModelInput): Promise<LiveModelRun> {
-    const started = performance.now();
-    const response = await this.#fetch("https://api.openai.com/v1/responses", {
+    const { body, latency_ms: latencyMs } = await requestJson<ResponsesApiBody>(
+      this.#fetch,
+      "https://api.openai.com/v1/responses",
+      {
       method: "POST",
       headers: {
         authorization: `Bearer ${this.#config.apiKey}`,
@@ -199,12 +304,17 @@ export class OpenAiResponsesExperimentClient implements LiveLlmClient {
         },
         metadata: { experiment: "track_a_live_llm_gate", prompt_version: PROMPT_VERSION },
       }),
-    });
-    const latencyMs = performance.now() - started;
-    const body = await response.json() as ResponsesApiBody;
-    if (!response.ok) throw new Error(`OpenAI experiment request failed: ${body.error?.message ?? response.status}`);
-    if (!body.output_text) throw new Error("OpenAI experiment response did not contain output_text");
-    return buildRun(this.#config, body.output_text, input, {
+      },
+      this.#config.timeout_ms,
+    );
+    if (body.error) {
+      throw new LiveLlmRequestError("PROVIDER_ERROR", "OpenAI rejected the experiment request", latencyMs);
+    }
+    const text = openAiOutputText(body);
+    if (text === null) {
+      throw new LiveLlmRequestError("MALFORMED_RESPONSE", "OpenAI returned no model output", latencyMs);
+    }
+    return buildRun(this.#config, text, input, {
       input_tokens: finiteCount(body.usage?.input_tokens),
       output_tokens: finiteCount(body.usage?.output_tokens),
       thinking_tokens: null,
@@ -229,8 +339,8 @@ export class GeminiGenerateContentExperimentClient implements LiveLlmClient {
   }
 
   async generate(input: LiveModelInput): Promise<LiveModelRun> {
-    const started = performance.now();
-    const response = await this.#fetch(
+    const { body, latency_ms: latencyMs } = await requestJson<GeminiApiBody>(
+      this.#fetch,
       `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(this.model)}:generateContent`,
       {
         method: "POST",
@@ -249,17 +359,24 @@ export class GeminiGenerateContentExperimentClient implements LiveLlmClient {
           },
         }),
       },
+      this.#config.timeout_ms,
     );
-    const latencyMs = performance.now() - started;
-    const body = await response.json() as GeminiApiBody;
-    if (!response.ok) throw new Error(`Gemini experiment request failed: ${body.error?.message ?? response.status}`);
-    const text = body.candidates?.[0]?.content?.parts
+    if (body.error) {
+      throw new LiveLlmRequestError("PROVIDER_ERROR", "Gemini rejected the experiment request", latencyMs);
+    }
+    if (body.promptFeedback?.blockReason && body.promptFeedback.blockReason !== "BLOCK_REASON_UNSPECIFIED") {
+      throw new LiveLlmRequestError("PROVIDER_ERROR", "Gemini blocked the prompt", latencyMs);
+    }
+    const candidate = body.candidates?.[0];
+    if (candidate?.finishReason !== "STOP") {
+      throw new LiveLlmRequestError("PROVIDER_ERROR", "Gemini did not complete successfully", latencyMs);
+    }
+    const text = candidate.content?.parts
       ?.map((part) => part.text ?? "")
       .join("")
       .trim();
     if (!text) {
-      const reason = body.promptFeedback?.blockReason ?? body.candidates?.[0]?.finishReason ?? "missing text";
-      throw new Error(`Gemini experiment response did not contain text: ${reason}`);
+      throw new LiveLlmRequestError("MALFORMED_RESPONSE", "Gemini returned no model output", latencyMs);
     }
     return buildRun(this.#config, text, input, {
       input_tokens: finiteCount(body.usageMetadata?.promptTokenCount),

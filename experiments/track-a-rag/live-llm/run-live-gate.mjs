@@ -4,7 +4,7 @@ import { GROUNDED_GATE_SCENARIOS } from "./scenarios/grounded-scenarios.ts";
 import { JOURNEY_SCENARIOS } from "./scenarios/journey-scenarios.ts";
 import { createLiveLlmClient, runtimeFromEnvironment } from "./src/llm-client.ts";
 import { evaluateAcademicMarksForLiveGate } from "./src/deterministic-bridge.ts";
-import { prepareLiveTurn, runPreparedTurn } from "./src/orchestration.ts";
+import { aggregateLiveTelemetry, prepareLiveTurn, runPreparedScenario } from "./src/orchestration.ts";
 import { PROMPT_VERSION } from "./src/prompt-contract.ts";
 
 const runtime = runtimeFromEnvironment();
@@ -71,17 +71,17 @@ for (const scenario of GROUNDED_GATE_SCENARIOS) {
     deterministicResult,
     allowSyntheticTestFixtures: scenario.fixture_mode === "PROMPT_INJECTION",
   });
-  const run = await runPreparedTurn(client, prepared);
-  transcript.push({
+  const result = await runPreparedScenario(scenario.scenario_id, client, prepared);
+  const shared = {
     id: scenario.scenario_id,
     student: scenario.question,
     route: prepared.input.route,
     evidence: prepared.input.retrieved_evidence,
     deterministic_result: prepared.input.deterministic_result,
-    assistant: run.output,
-    model_run: run.metadata,
-    review_status: "MANUAL_REVIEW_REQUIRED",
-  });
+  };
+  transcript.push(result.status === "COMPLETED"
+    ? { ...shared, assistant: result.run.output, model_run: result.run.metadata, review_status: "MANUAL_REVIEW_REQUIRED" }
+    : { ...shared, failure: result, review_status: "FAILED" });
 }
 
 for (const journey of JOURNEY_SCENARIOS) {
@@ -104,29 +104,23 @@ for (const journey of JOURNEY_SCENARIOS) {
     const prepared = prepareLiveTurn({
       question: turn.student_text, studentState: state, chunks, deterministicResult,
     });
-    const run = await runPreparedTurn(client, prepared);
-    transcript.push({
+    const scenarioId = `${journey.journey_id}-T${turnIndex + 1}`;
+    const result = await runPreparedScenario(scenarioId, client, prepared);
+    const shared = {
       id: `${journey.journey_id}-T${turnIndex + 1}`,
       student: turn.student_text,
       route: prepared.input.route,
       evidence: prepared.input.retrieved_evidence,
       deterministic_result: prepared.input.deterministic_result,
-      assistant: run.output,
-      model_run: run.metadata,
-      review_status: "MANUAL_REVIEW_REQUIRED",
-    });
+    };
+    transcript.push(result.status === "COMPLETED"
+      ? { ...shared, assistant: result.run.output, model_run: result.run.metadata, review_status: "MANUAL_REVIEW_REQUIRED" }
+      : { ...shared, failure: result, review_status: "FAILED" });
   }
 }
 
-const totalUsage = transcript.reduce((total, turn) => ({
-  input_tokens: total.input_tokens + (turn.model_run.usage.input_tokens ?? 0),
-  output_tokens: total.output_tokens + (turn.model_run.usage.output_tokens ?? 0),
-  thinking_tokens: total.thinking_tokens + (turn.model_run.usage.thinking_tokens ?? 0),
-  total_tokens: total.total_tokens + (turn.model_run.usage.total_tokens ?? 0),
-}), { input_tokens: 0, output_tokens: 0, thinking_tokens: 0, total_tokens: 0 });
-const totalEstimatedCostUsd = transcript.every((turn) => turn.model_run.estimated_cost_usd !== null)
-  ? transcript.reduce((total, turn) => total + turn.model_run.estimated_cost_usd, 0)
-  : null;
+const completedMetadata = transcript.flatMap((turn) => turn.model_run ? [turn.model_run] : []);
+const telemetry = aggregateLiveTelemetry(completedMetadata);
 
 console.log(JSON.stringify({
   status: "OWNER_REVIEW_REQUIRED",
@@ -134,10 +128,16 @@ console.log(JSON.stringify({
   model: client.model,
   temperature: client.temperature,
   prompt_version: PROMPT_VERSION,
-  token_usage: totalUsage,
-  total_latency_ms: transcript.reduce((total, turn) => total + turn.model_run.latency_ms, 0),
-  estimated_cost_usd: totalEstimatedCostUsd,
-  cost_basis: transcript[0]?.model_run.cost_basis ?? "No completed model runs",
+  token_usage: {
+    input_tokens: telemetry.input_tokens,
+    output_tokens: telemetry.output_tokens,
+    thinking_tokens: telemetry.thinking_tokens,
+    total_tokens: telemetry.total_tokens,
+  },
+  telemetry_complete: telemetry.complete,
+  total_latency_ms: telemetry.total_latency_ms,
+  estimated_cost_usd: telemetry.estimated_cost_usd,
+  cost_basis: completedMetadata[0]?.cost_basis ?? "No completed model runs",
   corpus_version: "PASS_2_COMMIT_9842010",
   base_commit: "af51eca063c792397d30027ce022b4141f83fe26",
   run_timestamp: new Date().toISOString(),

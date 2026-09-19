@@ -8,7 +8,7 @@ The LLM may choose what to explain or ask next. It may not decide admission-crit
 
 The provider adapter supports the existing OpenAI Responses API client and a Gemini `generateContent` client through built-in `fetch`. Both request the same structured JSON contract and add no SDK or framework dependency. OpenAI keeps `store: false`; Gemini sends no stateful conversation identifier and enables no external tools. Provider API keys are read only from the server-side process environment and are never written to output or exposed to the student UI.
 
-Every completed turn records provider, model ID, prompt version, token usage, latency, and estimated cost. Gemini estimates use the documented standard paid text rates captured in the adapter; an owner can override rates with `LIVE_LLM_INPUT_USD_PER_MILLION` and `LIVE_LLM_OUTPUT_USD_PER_MILLION`. An unavailable price is recorded as `null`, never invented.
+Every completed turn records provider, model ID, prompt version, token usage, latency, and estimated cost. Missing usage remains `null` and marks aggregate telemetry incomplete rather than being counted as zero. Failed turns produce safe scenario-level classifications without provider payloads or secrets. Both providers use a 30-second request timeout by default; an owner may set `LIVE_LLM_TIMEOUT_MS` from 100 through 120000 milliseconds. Gemini estimates use the documented standard paid text rates captured in the adapter; an owner can override rates with `LIVE_LLM_INPUT_USD_PER_MILLION` and `LIVE_LLM_OUTPUT_USD_PER_MILLION`. An unavailable price is recorded as `null`, never invented.
 
 ## Deterministic validation
 

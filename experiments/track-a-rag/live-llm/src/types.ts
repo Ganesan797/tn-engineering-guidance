@@ -106,6 +106,46 @@ export interface LiveModelRun {
   readonly metadata: LiveModelRunMetadata;
 }
 
+export const LIVE_LLM_FAILURE_CLASSIFICATIONS = [
+  "TIMEOUT",
+  "NETWORK_ERROR",
+  "HTTP_ERROR",
+  "MALFORMED_RESPONSE",
+  "PROVIDER_ERROR",
+  "OUTPUT_VALIDATION_ERROR",
+  "DETERMINISTIC_BOUNDARY_VIOLATION",
+  "EXECUTION_ERROR",
+] as const;
+export type LiveLlmFailureClassification = (typeof LIVE_LLM_FAILURE_CLASSIFICATIONS)[number];
+
+export interface LiveScenarioFailure {
+  readonly status: "FAILED";
+  readonly scenario_id: string;
+  readonly provider: LiveLlmProvider;
+  readonly model: string;
+  readonly latency_ms: number;
+  readonly failure_classification: LiveLlmFailureClassification;
+  readonly message: string;
+}
+
+export interface LiveScenarioSuccess {
+  readonly status: "COMPLETED";
+  readonly scenario_id: string;
+  readonly run: LiveModelRun;
+}
+
+export type LiveScenarioResult = LiveScenarioSuccess | LiveScenarioFailure;
+
+export interface AggregateLiveTelemetry {
+  readonly complete: boolean;
+  readonly input_tokens: number | null;
+  readonly output_tokens: number | null;
+  readonly thinking_tokens: number | null;
+  readonly total_tokens: number | null;
+  readonly estimated_cost_usd: number | null;
+  readonly total_latency_ms: number;
+}
+
 export interface LiveLlmClient {
   readonly provider: LiveLlmProvider;
   readonly model: string;
