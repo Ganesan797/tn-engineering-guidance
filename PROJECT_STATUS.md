@@ -2,9 +2,9 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** Owner review of the bounded Live LLM Integration Gate harness; live scenarios are not run
+**Current task:** Gemini adapter technical review is accepted and merged; controlled live-model evaluation remains unrun and requires separate owner authorization
 
-**Last reviewed:** 2026-09-13
+**Last reviewed:** 2026-09-19
 
 ## Product Review Gate
 
@@ -16,7 +16,7 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Review the experiment harness and explicitly select/authorize a live model runtime before any live execution. Do not begin production RAG, Track B, or M2.
+**Next priority:** Owner decision on whether to authorize the bounded live-model evaluation. Do not begin production RAG, Track B, or M2.
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
@@ -78,7 +78,7 @@
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = LIVE_LLM_GATE_HARNESS_OWNER_REVIEW`
+`NEXT_ACTIVITY = OWNER_DECISION_ON_CONTROLLED_LIVE_MODEL_EVALUATION`
 
 `M2_STATUS = NOT_STARTED`
 
@@ -90,7 +90,7 @@
 
 `REAL_CORPUS_VALIDATION = COMPLETE`
 
-`LLM_INTEGRATION_GATE = PENDING_OWNER_REVIEW`
+`LLM_INTEGRATION_GATE = PARTIAL_LIVE_EVALUATION_NOT_RUN`
 
 `LLM_INTEGRATION_AUTHORIZED = NO`
 
@@ -118,7 +118,19 @@
 
 `LIVE_LLM_GATE_IMPLEMENTATION = PARTIAL`
 
-`LIVE_LLM_GATE_OWNER_REVIEW = PENDING`
+`GEMINI_ADAPTER_TECHNICAL_REVIEW = PASS`
+
+`GEMINI_ADAPTER_APPROVED_SOURCE_COMMIT = 01b8ee1021ec41ccdff66d956a5e18b5813c5a1e`
+
+`GEMINI_ADAPTER_MERGED_TO_MAIN = YES`
+
+`GEMINI_ADAPTER_MAIN_MERGE_RESULT = 01b8ee1021ec41ccdff66d956a5e18b5813c5a1e`
+
+`GEMINI_ADAPTER_REVIEW_TESTS = 173_PASSED`
+
+`LIVE_LLM_GATE_OWNER_REVIEW = TECHNICAL_ADAPTER_ACCEPTED_LIVE_EVALUATION_PENDING`
+
+`LIVE_MODEL_EVALUATION = NOT_RUN`
 
 `GROUNDED_INTELLIGENCE = PENDING`
 
@@ -150,7 +162,7 @@
 
 `PRODUCTION_RAG = NOT_AUTHORIZED`
 
-`NEXT_GATE = OWNER REVIEW AND EXPLICIT AUTHORIZATION OF THE ADJUSTED LIVE LLM INTEGRATION GATE`
+`NEXT_GATE = OWNER REVIEW AND EXPLICIT AUTHORIZATION OF CONTROLLED LIVE MODEL EVALUATION`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -237,7 +249,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Review and explicitly authorize the adjusted Live LLM Integration Gate. Do not begin the experiment, Track B, M2, or production RAG implementation automatically.
+Decide whether to authorize the controlled live-model evaluation. Do not begin the experiment, Track B, M2, or production RAG implementation automatically.
 
 ## M1 implementation review
 
@@ -319,4 +331,4 @@ Review and explicitly authorize the adjusted Live LLM Integration Gate. Do not b
 
 ## Next review point
 
-Owner review and explicit authorization gate for a bounded Live LLM experiment covering both grounded intelligence and guidance intelligence.
+Owner review and explicit authorization gate for the still-unrun bounded live-model evaluation covering grounded and guidance intelligence.

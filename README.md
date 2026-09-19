@@ -4,7 +4,7 @@ A deterministic, source-backed 2026 engineering-admission guidance MVP for a fiv
 
 ## Current Project Phase
 
-Product V1 M0 is accepted. M1-A routing has passed human routing review; M1-B Awareness Content Pack V1 is frozen at `8ab1f3e`. M1-C integrates its ten bilingual modules into five short awareness sections for human review. M1 is not yet accepted, and M2 remains unauthorized. The implementation plan remains frozen.
+Product V1 M0 and M1 are accepted. The reviewed Gemini adapter is merged, while the bounded Live LLM Integration Gate remains partial because live-model evaluation has not run. M2 remains unauthorized. See [Project Status](PROJECT_STATUS.md) for authoritative milestone status.
 
 See [Golden Product Mission](docs/product_mission.md), [Student Journey V1](docs/student_journey_v1.md), [Student Input & Output V1](docs/student_input_output_v1.md), [Technical Gap Mapping V1](docs/technical_gap_mapping_v1.md), [Implementation Plan V1](docs/implementation_plan_v1.md), and [Project Status](PROJECT_STATUS.md).
 
@@ -49,7 +49,7 @@ Manual scenarios:
 3. **Counselling:** Open counselling help and confirm its limitation message and working links into the process, choices, support and next-direction content. No completed choice-builder is promised.
 4. **Language:** Repeat the entry routes in Tamil and English. Review all Tamil wording, limitation messages, and return actions. Check the first screen at mobile width and use keyboard navigation.
 
-M1-C reads factual awareness content from [the frozen pack](docs/m1_awareness_content_pack_v1.md), [its manifest](data/m1_awareness_content_pack_v1.json), and the source registry. [Approved Tamil Student Copy V1](docs/m1_tamil_student_copy_v1.md) refines only the Tamil presentation of those same ten identities; English and source mappings are unchanged. The Tamil copy is human-approved, while final M1 acceptance remains pending. AW-08's numeric 7.5% reference was verified against existing source SRC002, printed page 4, section 4.1. Source labels use registry names, with original IDs retained internally. This is not a claim of full D0/D1 completion or pilot-ready bilingual personal guidance. Representative personal-result Tamil validation remains required by M3.
+M1-C reads factual awareness content from [the frozen pack](docs/m1_awareness_content_pack_v1.md), [its manifest](data/m1_awareness_content_pack_v1.json), and the source registry. [Approved Tamil Student Copy V1](docs/m1_tamil_student_copy_v1.md) refines only the Tamil presentation of those same ten identities; English and source mappings are unchanged. M1 and its Tamil entry copy are accepted. AW-08's numeric 7.5% reference was verified against existing source SRC002, printed page 4, section 4.1. Source labels use registry names, with original IDs retained internally. This is not a claim of full D0/D1 completion or pilot-ready bilingual personal guidance. Representative personal-result Tamil validation remains required by M3.
 
 Normal entry pages omit internal governance notices. Add `&review=1` to an entry URL with a query string (for example `/?lang=ta&review=1`) to display an isolated development-review notice. It does not change content, routing, or domain results.
 
