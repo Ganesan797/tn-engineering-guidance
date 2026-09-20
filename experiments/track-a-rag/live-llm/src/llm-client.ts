@@ -90,19 +90,28 @@ const MAX_TIMEOUT_MS = 120_000;
 export class LiveLlmRequestError extends Error {
   readonly classification: import("./types.ts").LiveLlmFailureClassification;
   readonly latency_ms: number;
+  readonly http_status?: number;
   readonly provider_error?: ProviderErrorDiagnostics;
+  readonly usage?: LiveModelUsage;
+  readonly estimated_cost_usd?: number | null;
 
   constructor(
     classification: import("./types.ts").LiveLlmFailureClassification,
     message: string,
     latencyMs: number,
     providerError?: ProviderErrorDiagnostics,
+    httpStatus?: number,
+    usage?: LiveModelUsage,
+    estimatedCostUsd?: number | null,
   ) {
     super(message);
     this.name = "LiveLlmRequestError";
     this.classification = classification;
     this.latency_ms = latencyMs;
+    this.http_status = httpStatus;
     this.provider_error = providerError;
+    this.usage = usage;
+    this.estimated_cost_usd = estimatedCostUsd;
   }
 }
 
@@ -195,6 +204,7 @@ async function requestJson<T>(
         `The provider returned HTTP ${response.status}`,
         performance.now() - started,
         diagnostic,
+        response.status,
       );
     }
     let body: T;
@@ -258,6 +268,10 @@ function buildRun(
       malformed ? "MALFORMED_RESPONSE" : "OUTPUT_VALIDATION_ERROR",
       malformed ? "The model output was not valid JSON" : "The model output failed the required contract",
       latencyMs,
+      undefined,
+      undefined,
+      usage,
+      cost.value,
     );
   }
   return {
@@ -374,29 +388,43 @@ export class GeminiGenerateContentExperimentClient implements LiveLlmClient {
       this.#config.timeout_ms,
       this.#config.apiKey,
     );
+    const usage: LiveModelUsage = {
+      input_tokens: finiteCount(body.usageMetadata?.promptTokenCount),
+      output_tokens: finiteCount(body.usageMetadata?.candidatesTokenCount),
+      thinking_tokens: finiteCount(body.usageMetadata?.thoughtsTokenCount),
+      total_tokens: finiteCount(body.usageMetadata?.totalTokenCount),
+    };
+    const attemptCost = estimatedCost(usage, this.#config.price).value;
     if (body.error) {
-      throw new LiveLlmRequestError("PROVIDER_ERROR", "Gemini rejected the experiment request", latencyMs);
+      throw new LiveLlmRequestError(
+        "PROVIDER_ERROR", "Gemini rejected the experiment request", latencyMs,
+        undefined, undefined, usage, attemptCost,
+      );
     }
     if (body.promptFeedback?.blockReason && body.promptFeedback.blockReason !== "BLOCK_REASON_UNSPECIFIED") {
-      throw new LiveLlmRequestError("PROVIDER_ERROR", "Gemini blocked the prompt", latencyMs);
+      throw new LiveLlmRequestError(
+        "PROVIDER_ERROR", "Gemini blocked the prompt", latencyMs,
+        undefined, undefined, usage, attemptCost,
+      );
     }
     const candidate = body.candidates?.[0];
     if (candidate?.finishReason !== "STOP") {
-      throw new LiveLlmRequestError("PROVIDER_ERROR", "Gemini did not complete successfully", latencyMs);
+      throw new LiveLlmRequestError(
+        "PROVIDER_ERROR", "Gemini did not complete successfully", latencyMs,
+        undefined, undefined, usage, attemptCost,
+      );
     }
     const text = candidate.content?.parts
       ?.map((part) => part.text ?? "")
       .join("")
       .trim();
     if (!text) {
-      throw new LiveLlmRequestError("MALFORMED_RESPONSE", "Gemini returned no model output", latencyMs);
+      throw new LiveLlmRequestError(
+        "MALFORMED_RESPONSE", "Gemini returned no model output", latencyMs,
+        undefined, undefined, usage, attemptCost,
+      );
     }
-    return buildRun(this.#config, text, input, {
-      input_tokens: finiteCount(body.usageMetadata?.promptTokenCount),
-      output_tokens: finiteCount(body.usageMetadata?.candidatesTokenCount),
-      thinking_tokens: finiteCount(body.usageMetadata?.thoughtsTokenCount),
-      total_tokens: finiteCount(body.usageMetadata?.totalTokenCount),
-    }, latencyMs);
+    return buildRun(this.#config, text, input, usage, latencyMs);
   }
 }
 

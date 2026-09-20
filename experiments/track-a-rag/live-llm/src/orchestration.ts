@@ -82,6 +82,9 @@ export async function runPreparedScenario(
             ? "OUTPUT_VALIDATION_ERROR"
             : "EXECUTION_ERROR"),
       message,
+      ...(requestError?.http_status === undefined ? {} : { http_status: requestError.http_status }),
+      ...(requestError?.usage === undefined ? {} : { usage: requestError.usage }),
+      ...(requestError?.estimated_cost_usd === undefined ? {} : { estimated_cost_usd: requestError.estimated_cost_usd }),
       ...(requestError?.provider_error ? { provider_error: requestError.provider_error } : {}),
     };
   }

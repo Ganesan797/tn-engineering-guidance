@@ -14,12 +14,13 @@ const SANITIZER_VERSION = "LIVE_LLM_EVIDENCE_SANITIZER_V1";
 const RAW_KEYS = [
   "schema_version", "source_commit", "status", "provider", "model", "prompt_version", "run_timestamp",
   "selected_scenario_ids", "attempted_requests", "max_attempted_requests", "automatic_retries", "timeout_ms",
+  "max_retries_per_scenario",
   "cost_ceiling_usd", "cost_control", "token_usage", "telemetry_complete", "total_latency_ms",
   "estimated_cost_usd", "run_failure", "manual_owner_review_required", "transcript",
 ];
 const TRANSCRIPT_KEYS = [
   "id", "student", "route", "evidence", "deterministic_result", "assistant", "model_run", "failure",
-  "mechanical_evaluation", "review_status",
+  "mechanical_evaluation", "review_status", "attempts",
 ];
 const EVIDENCE_KEYS = [
   "source_id", "title", "page_or_section", "text", "reference", "source_year", "institution_scope",
@@ -33,8 +34,15 @@ const ASSISTANT_KEYS = [
 const MODEL_RUN_KEYS = ["provider", "model", "prompt_version", "latency_ms", "usage", "estimated_cost_usd", "cost_basis"];
 const USAGE_KEYS = ["input_tokens", "output_tokens", "thinking_tokens", "total_tokens"];
 const EVALUATION_KEYS = ["grounding", "routing", "guidance", "language", "security", "uncertainty", "reasons"];
-const FAILURE_KEYS = ["provider_error", "status", "scenario_id", "provider", "model", "latency_ms", "failure_classification", "message"];
+const FAILURE_KEYS = [
+  "provider_error", "http_status", "usage", "estimated_cost_usd", "status", "scenario_id", "provider", "model",
+  "latency_ms", "failure_classification", "message",
+];
 const PROVIDER_ERROR_KEYS = ["code", "status", "message"];
+const ATTEMPT_KEYS = [
+  "attempt_number", "status", "latency_ms", "usage", "estimated_cost_usd", "failure_classification",
+  "http_status", "message", "provider_error",
+];
 const TOKEN_USAGE_KEYS = ["input_tokens", "output_tokens", "thinking_tokens", "total_tokens"];
 const RUN_FAILURE_KEYS = ["classification", "message"];
 const ENVELOPE_KEYS = [
@@ -94,6 +102,10 @@ function assertSafeTranscriptText(entry) {
     }
   }
   if (entry.failure !== undefined) assertSafeReviewText(entry.failure.message, `Scenario ${entry.id} failure`);
+  for (const attempt of entry.attempts ?? []) {
+    assertSafeReviewText(attempt.message, `Scenario ${entry.id} attempt message`);
+    assertSafeReviewText(attempt.provider_error?.message, `Scenario ${entry.id} attempt provider message`);
+  }
 }
 
 function assertNestedAllowlist(entry, index) {
@@ -109,9 +121,32 @@ function assertNestedAllowlist(entry, index) {
   if (entry.mechanical_evaluation !== null) assertAllowedKeys(entry.mechanical_evaluation, EVALUATION_KEYS, `${label}.mechanical_evaluation`);
   if (entry.failure !== undefined) {
     assertAllowedKeys(entry.failure, FAILURE_KEYS, `${label}.failure`);
+    if (entry.failure.usage !== undefined) assertAllowedKeys(entry.failure.usage, USAGE_KEYS, `${label}.failure.usage`);
     if (entry.failure.provider_error !== undefined) {
       assertAllowedKeys(entry.failure.provider_error, PROVIDER_ERROR_KEYS, `${label}.failure.provider_error`);
     }
+  }
+  if (entry.attempts !== undefined) {
+    if (!Array.isArray(entry.attempts) || entry.attempts.length === 0) throw new Error(`${label}.attempts must be a non-empty array`);
+    entry.attempts.forEach((attempt, attemptIndex) => {
+      assertAllowedKeys(attempt, ATTEMPT_KEYS, `${label}.attempts[${attemptIndex}]`);
+      assertAllowedKeys(attempt.usage, USAGE_KEYS, `${label}.attempts[${attemptIndex}].usage`);
+      if (attempt.provider_error !== undefined) {
+        assertAllowedKeys(attempt.provider_error, PROVIDER_ERROR_KEYS, `${label}.attempts[${attemptIndex}].provider_error`);
+      }
+      if (attempt.attempt_number !== attemptIndex + 1) throw new Error(`${label}.attempts must be sequential`);
+      if (attempt.status !== "COMPLETED" && attempt.status !== "FAILED") throw new Error(`${label}.attempt status is invalid`);
+      if (typeof attempt.latency_ms !== "number" || !Number.isFinite(attempt.latency_ms) || attempt.latency_ms < 0) {
+        throw new Error(`${label}.attempt latency is invalid`);
+      }
+      if (attempt.status === "COMPLETED" &&
+        (attempt.failure_classification !== null || attempt.http_status !== null || attempt.message !== null)) {
+        throw new Error(`${label}.completed attempt contains failure data`);
+      }
+      if (attempt.status === "FAILED" && (attempt.failure_classification === null || typeof attempt.message !== "string")) {
+        throw new Error(`${label}.failed attempt lacks failure data`);
+      }
+    });
   }
 }
 
@@ -158,11 +193,43 @@ export function validateSanitizedArtifact(rawArtifact) {
         throw new Error(`Scenario ${entry.id} model metadata does not match the artifact`);
       }
       assertExact(entry.mechanical_evaluation, evaluateMechanically(canonical.prepared.input, entry.assistant), `Scenario ${entry.id} mechanical evaluation`);
+      if (entry.attempts !== undefined && entry.attempts.at(-1)?.status !== "COMPLETED") {
+        throw new Error(`Scenario ${entry.id} final attempt does not match successful transcript`);
+      }
+      if (entry.attempts !== undefined) {
+        const finalAttempt = entry.attempts.at(-1);
+        assertExact(finalAttempt?.latency_ms, entry.model_run.latency_ms, `Scenario ${entry.id} final attempt latency`);
+        assertExact(finalAttempt?.usage, entry.model_run.usage, `Scenario ${entry.id} final attempt usage`);
+        assertExact(finalAttempt?.estimated_cost_usd, entry.model_run.estimated_cost_usd, `Scenario ${entry.id} final attempt cost`);
+      }
     } else if (entry.failure === undefined || entry.model_run !== undefined || entry.mechanical_evaluation !== null) {
       throw new Error(`Scenario ${entry.id} has an inconsistent failed transcript`);
     } else if (entry.failure.scenario_id !== entry.id || entry.failure.provider !== raw.provider || entry.failure.model !== raw.model) {
       throw new Error(`Scenario ${entry.id} failure metadata does not match the artifact`);
+    } else if (entry.attempts !== undefined && entry.attempts.at(-1)?.status !== "FAILED") {
+      throw new Error(`Scenario ${entry.id} final attempt does not match failed transcript`);
+    } else if (entry.attempts !== undefined) {
+      const finalAttempt = entry.attempts.at(-1);
+      assertExact(finalAttempt?.latency_ms, entry.failure.latency_ms, `Scenario ${entry.id} final attempt latency`);
+      assertExact(finalAttempt?.failure_classification, entry.failure.failure_classification, `Scenario ${entry.id} final attempt classification`);
+      assertExact(finalAttempt?.http_status, entry.failure.http_status ?? null, `Scenario ${entry.id} final attempt HTTP status`);
+      assertExact(finalAttempt?.message, entry.failure.message, `Scenario ${entry.id} final attempt message`);
+      assertExact(finalAttempt?.usage, entry.failure.usage ?? { input_tokens: null, output_tokens: null, thinking_tokens: null, total_tokens: null }, `Scenario ${entry.id} final attempt usage`);
+      assertExact(finalAttempt?.estimated_cost_usd, entry.failure.estimated_cost_usd ?? null, `Scenario ${entry.id} final attempt cost`);
     }
+  }
+
+  const entriesWithAttempts = raw.transcript.filter((entry) => entry.attempts !== undefined);
+  if (entriesWithAttempts.length > 0) {
+    if (entriesWithAttempts.length !== raw.transcript.length) throw new Error("Artifact mixes legacy and attempt-aware transcripts");
+    if (!Number.isInteger(raw.max_retries_per_scenario) || raw.max_retries_per_scenario < 0) {
+      throw new Error("Artifact has an invalid retry limit");
+    }
+    if (entriesWithAttempts.some((entry) => entry.attempts.length > raw.max_retries_per_scenario + 1)) {
+      throw new Error("Artifact exceeds its per-scenario retry limit");
+    }
+    const recordedAttempts = entriesWithAttempts.reduce((total, entry) => total + entry.attempts.length, 0);
+    if (recordedAttempts !== raw.attempted_requests) throw new Error("Artifact attempt count is inconsistent");
   }
 
   const serialized = JSON.stringify(raw);

@@ -18,6 +18,7 @@ import { canTransition, requireGuidanceTransition } from "../src/guidance-state.
 import { evaluateAcademicMarksForLiveGate } from "../src/deterministic-bridge.ts";
 import {
   GEMINI_MODEL_OPTIONS,
+  LiveLlmRequestError,
   createLiveLlmClient,
   runtimeFromEnvironment,
 } from "../src/llm-client.ts";
@@ -40,7 +41,9 @@ import {
 } from "../review-evidence.mjs";
 import {
   ALL_LIVE_SCENARIO_IDS,
+  MAX_RETRIES_PER_SCENARIO,
   RequestLimitedClient,
+  RESUME_SCENARIO_IDS,
   SMOKE_SCENARIO_IDS,
   executeBoundedLiveRun,
   runnerConfigurationFromEnvironment,
@@ -133,6 +136,48 @@ function smokeConfiguration(overrides: Readonly<Record<string, string | undefine
       LIVE_LLM_SCENARIOS: "G01,G05,J01-T1",
       LIVE_LLM_MAX_REQUESTS: "3",
       LIVE_LLM_COST_CEILING_USD: "0.02",
+      LIVE_LLM_STRICT_BUDGET: "false",
+      ...overrides,
+    },
+  );
+}
+
+function httpFailureClient(status: number, failures: number) {
+  let calls = 0;
+  const client: LiveLlmClient = {
+    provider: "GEMINI",
+    model: GEMINI_MODEL,
+    temperature: 0,
+    async generate(input) {
+      calls += 1;
+      if (calls <= failures) {
+        throw new LiveLlmRequestError("HTTP_ERROR", `The provider returned HTTP ${status}`, 10, undefined, status);
+      }
+      const run = validRun(input);
+      return {
+        ...run,
+        metadata: {
+          ...run.metadata,
+          provider: "GEMINI",
+          model: GEMINI_MODEL,
+          latency_ms: 20,
+          usage: { input_tokens: 10, output_tokens: 5, thinking_tokens: 2, total_tokens: 17 },
+          estimated_cost_usd: 0.001,
+        },
+      };
+    },
+  };
+  return { client, calls: () => calls };
+}
+
+function resumeConfiguration(overrides: Readonly<Record<string, string | undefined>> = {}) {
+  return runnerConfigurationFromEnvironment(
+    { provider: "GEMINI", model: GEMINI_MODEL, timeout_ms: 30_000 },
+    {
+      LIVE_LLM_RUN_MODE: "RESUME",
+      LIVE_LLM_SCENARIOS: RESUME_SCENARIO_IDS.join(","),
+      LIVE_LLM_MAX_REQUESTS: "39",
+      LIVE_LLM_COST_CEILING_USD: "0.08",
       LIVE_LLM_STRICT_BUDGET: "false",
       ...overrides,
     },
@@ -374,10 +419,19 @@ test("Gemini adapter classifies malformed and contract-invalid structured output
   ] as const) {
     const fakeFetch: typeof fetch = async () => new Response(JSON.stringify({
       candidates: [{ content: { parts: [{ text }] }, finishReason: "STOP" }],
+      usageMetadata: {
+        promptTokenCount: 10, candidatesTokenCount: 5, thoughtsTokenCount: 2, totalTokenCount: 17,
+      },
     }), { status: 200 });
     const result = await runPreparedScenario(id, createLiveLlmClient(runtime, fakeFetch), prepared);
     assert.equal(result.status, "FAILED");
-    if (result.status === "FAILED") assert.equal(result.failure_classification, classification);
+    if (result.status === "FAILED") {
+      assert.equal(result.failure_classification, classification);
+      assert.deepEqual(result.usage, {
+        input_tokens: 10, output_tokens: 5, thinking_tokens: 2, total_tokens: 17,
+      });
+      assert.equal(result.estimated_cost_usd, 0.00003375);
+    }
   }
 });
 
@@ -538,6 +592,7 @@ test("scenario failures safely classify network HTTP malformed JSON and provider
       assert.equal(result.provider_error, undefined);
       assert.equal(result.model, "test-model");
       assert.equal(result.failure_classification, classification);
+      assert.equal(result.http_status, id === "HTTP" ? 429 : undefined);
       assert.equal(result.latency_ms >= 0, true);
       assert.doesNotMatch(result.message, /exposed-secret|TEST_ONLY_NOT_A_SECRET/iu);
     }
@@ -664,6 +719,128 @@ test("full gate remains explicit and compatible with all 14 frozen scenarios", a
   assert.equal(result.attempted_requests, 14);
   assert.equal(result.transcript.length, 14);
   assert.equal(fake.calls(), 14);
+});
+
+test("resume mode starts at G02 and preserves the frozen remaining scenario order", () => {
+  const configuration = resumeConfiguration();
+  assert.deepEqual(configuration.selected_scenario_ids, ALL_LIVE_SCENARIO_IDS.slice(1));
+  assert.equal(configuration.selected_scenario_ids.includes("G01"), false);
+  assert.equal(configuration.selected_scenario_ids.length, 13);
+  assert.equal(configuration.max_attempted_requests, 39);
+  assert.equal(configuration.automatic_retries, true);
+  assert.equal(configuration.max_retries_per_scenario, MAX_RETRIES_PER_SCENARIO);
+  assert.throws(
+    () => resumeConfiguration({ LIVE_LLM_SCENARIOS: ALL_LIVE_SCENARIO_IDS.join(",") }),
+    /RESUME mode requires exactly/,
+  );
+  assert.throws(() => resumeConfiguration({ LIVE_LLM_MAX_REQUESTS: "38" }), /maximum attempts/);
+  assert.throws(
+    () => runnerConfigurationFromEnvironment(
+      { provider: "OPENAI", model: GEMINI_MODEL, timeout_ms: 30_000 },
+      {
+        LIVE_LLM_RUN_MODE: "RESUME",
+        LIVE_LLM_SCENARIOS: RESUME_SCENARIO_IDS.join(","),
+        LIVE_LLM_MAX_REQUESTS: "39",
+      },
+    ),
+    /requires GEMINI/,
+  );
+});
+
+test("resume retries only bounded transient HTTP statuses and records every attempt", async () => {
+  for (const status of [429, 502, 503, 504]) {
+    const fake = httpFailureClient(status, 1);
+    const delays: number[] = [];
+    const result = await executeBoundedLiveRun({
+      client: fake.client,
+      configuration: resumeConfiguration(),
+      sourceCommit: TEST_SOURCE_COMMIT,
+      timestamp: "2026-09-20T12:00:00.000Z",
+      retryControl: { sleep: async (delay) => { delays.push(delay); }, random: () => 0.5, baseDelayMs: 500 },
+    });
+    assert.equal(result.status, "OWNER_REVIEW_REQUIRED");
+    assert.equal(result.selected_scenario_ids[0], "G02");
+    assert.equal(result.selected_scenario_ids.includes("G01"), false);
+    assert.equal(result.attempted_requests, 14);
+    assert.equal(fake.calls(), 14);
+    assert.deepEqual(delays, [750]);
+    assert.deepEqual(result.transcript[0]?.attempts.map(({ status: value }) => value), ["FAILED", "COMPLETED"]);
+    assert.equal(result.transcript[0]?.attempts[0]?.http_status, status);
+    assert.equal(result.transcript[0]?.attempts[0]?.estimated_cost_usd, null);
+    assert.deepEqual(result.transcript[0]?.attempts[0]?.usage, {
+      input_tokens: null, output_tokens: null, thinking_tokens: null, total_tokens: null,
+    });
+    assert.equal(result.transcript[0]?.attempts[1]?.estimated_cost_usd, 0.001);
+    assert.equal(result.transcript[0]?.attempts[1]?.usage.total_tokens, 17);
+    assert.equal(result.total_latency_ms, 270);
+    if (status === 503) {
+      const candidate = createReviewCandidate(Buffer.from(JSON.stringify(result)));
+      assert.equal(candidate.sanitized_artifact.transcript[0]?.attempts.length, 2);
+      assert.equal(validateReviewEvidence(candidate).sanitized_artifact.transcript[0]?.attempts[0]?.http_status, 503);
+    }
+  }
+});
+
+test("resume caps retries at two and does not retry other HTTP failures", async () => {
+  const transient = httpFailureClient(503, Number.POSITIVE_INFINITY);
+  const delays: number[] = [];
+  const stopped = await executeBoundedLiveRun({
+    client: transient.client,
+    configuration: resumeConfiguration(),
+    sourceCommit: TEST_SOURCE_COMMIT,
+    retryControl: { sleep: async (delay) => { delays.push(delay); }, random: () => 0.5, baseDelayMs: 500 },
+  });
+  assert.equal(stopped.status, "STOPPED");
+  assert.equal(stopped.attempted_requests, 3);
+  assert.equal(transient.calls(), 3);
+  assert.deepEqual(delays, [750, 1500]);
+  assert.equal(stopped.transcript.length, 1);
+  assert.equal(stopped.transcript[0]?.id, "G02");
+  assert.equal(stopped.transcript[0]?.attempts.length, 3);
+  assert.equal(stopped.transcript[0]?.failure?.http_status, 503);
+
+  for (const status of [400, 404, 500, 501]) {
+    const nonRetryable = httpFailureClient(status, Number.POSITIVE_INFINITY);
+    const noRetryDelays: number[] = [];
+    const result = await executeBoundedLiveRun({
+      client: nonRetryable.client,
+      configuration: resumeConfiguration(),
+      sourceCommit: TEST_SOURCE_COMMIT,
+      retryControl: { sleep: async (delay) => { noRetryDelays.push(delay); } },
+    });
+    assert.equal(result.attempted_requests, 1);
+    assert.equal(nonRetryable.calls(), 1);
+    assert.deepEqual(noRetryDelays, []);
+    assert.equal(result.transcript[0]?.attempts.length, 1);
+  }
+});
+
+test("failed Gemini attempts retain available usage and cost telemetry", async () => {
+  const runtime = runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "GEMINI", LIVE_LLM_MODEL: GEMINI_MODEL,
+    GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
+  });
+  assert.ok(runtime);
+  const fakeFetch: typeof fetch = async () => new Response(JSON.stringify({
+    candidates: [{ content: { parts: [{ text: "not-json" }] }, finishReason: "STOP" }],
+    usageMetadata: {
+      promptTokenCount: 10, candidatesTokenCount: 5, thoughtsTokenCount: 2, totalTokenCount: 17,
+    },
+  }), { status: 200 });
+  const result = await executeBoundedLiveRun({
+    client: createLiveLlmClient(runtime, fakeFetch),
+    configuration: resumeConfiguration(),
+    sourceCommit: TEST_SOURCE_COMMIT,
+  });
+  assert.equal(result.status, "STOPPED");
+  assert.equal(result.attempted_requests, 1);
+  assert.equal(result.transcript[0]?.failure?.failure_classification, "MALFORMED_RESPONSE");
+  assert.deepEqual(result.transcript[0]?.attempts[0]?.usage, {
+    input_tokens: 10, output_tokens: 5, thinking_tokens: 2, total_tokens: 17,
+  });
+  assert.equal(result.transcript[0]?.attempts[0]?.estimated_cost_usd, 0.00003375);
+  assert.equal(validateReviewEvidence(createReviewCandidate(Buffer.from(JSON.stringify(result))))
+    .sanitized_artifact.transcript[0]?.attempts[0]?.estimated_cost_usd, 0.00003375);
 });
 
 test("request limit counts failed provider attempts and performs no retry", async () => {

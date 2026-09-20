@@ -25,8 +25,12 @@ export const ALL_LIVE_SCENARIO_IDS = [
   ...JOURNEY_SCENARIOS.flatMap(({ journey_id, turns }) =>
     turns.map((_turn, index) => `${journey_id}-T${index + 1}`)),
 ] as const;
+export const RESUME_SCENARIO_IDS = ALL_LIVE_SCENARIO_IDS.slice(1);
+export const MAX_RETRIES_PER_SCENARIO = 2;
+const RETRYABLE_HTTP_STATUSES = new Set([429, 502, 503, 504]);
+const RETRY_BASE_DELAY_MS = 500;
 
-export type LiveRunnerMode = "SMOKE" | "FULL" | "DIAGNOSTIC";
+export type LiveRunnerMode = "SMOKE" | "FULL" | "DIAGNOSTIC" | "RESUME";
 export type CostControl = "NOT_CONFIGURED" | "POST_REQUEST_MONITOR_ONLY" | "STRICT_FAIL_CLOSED";
 
 export interface LiveRunnerConfiguration {
@@ -36,7 +40,8 @@ export interface LiveRunnerConfiguration {
   readonly model: string;
   readonly timeout_ms: number;
   readonly max_attempted_requests: number;
-  readonly automatic_retries: false;
+  readonly automatic_retries: boolean;
+  readonly max_retries_per_scenario: number;
   readonly cost_ceiling_usd: number | null;
   readonly strict_budget: boolean;
 }
@@ -47,11 +52,24 @@ export interface LiveRunnerTranscript {
   readonly route: LiveModelInput["route"];
   readonly evidence: readonly ModelEvidence[];
   readonly deterministic_result: unknown | null;
+  readonly attempts: readonly LiveRunnerAttempt[];
   readonly assistant?: LiveModelRun["output"];
   readonly model_run?: LiveModelRun["metadata"];
   readonly failure?: LiveScenarioFailure;
   readonly mechanical_evaluation: GateEvaluation | null;
   readonly review_status: "MANUAL_REVIEW_REQUIRED" | "FAILED";
+}
+
+export interface LiveRunnerAttempt {
+  readonly attempt_number: number;
+  readonly status: "COMPLETED" | "FAILED";
+  readonly latency_ms: number;
+  readonly usage: import("./types.ts").LiveModelUsage;
+  readonly estimated_cost_usd: number | null;
+  readonly failure_classification: import("./types.ts").LiveLlmFailureClassification | null;
+  readonly http_status: number | null;
+  readonly message: string | null;
+  readonly provider_error?: import("./http-diagnostics.ts").ProviderErrorDiagnostics;
 }
 
 export interface LiveRunArtifact {
@@ -65,7 +83,8 @@ export interface LiveRunArtifact {
   readonly selected_scenario_ids: readonly string[];
   readonly attempted_requests: number;
   readonly max_attempted_requests: number;
-  readonly automatic_retries: false;
+  readonly automatic_retries: boolean;
+  readonly max_retries_per_scenario: number;
   readonly timeout_ms: number;
   readonly cost_ceiling_usd: number | null;
   readonly cost_control: CostControl;
@@ -115,8 +134,8 @@ export function runnerConfigurationFromEnvironment(
   environment: RunnerEnvironment,
 ): LiveRunnerConfiguration {
   const modeRaw = environment.LIVE_LLM_RUN_MODE?.trim().toUpperCase();
-  if (modeRaw !== "SMOKE" && modeRaw !== "FULL" && modeRaw !== "DIAGNOSTIC") {
-    throw new Error("LIVE_LLM_RUN_MODE must explicitly be SMOKE, FULL, or DIAGNOSTIC");
+  if (modeRaw !== "SMOKE" && modeRaw !== "FULL" && modeRaw !== "DIAGNOSTIC" && modeRaw !== "RESUME") {
+    throw new Error("LIVE_LLM_RUN_MODE must explicitly be SMOKE, FULL, DIAGNOSTIC, or RESUME");
   }
   const requestedRaw = environment.LIVE_LLM_SCENARIOS;
   let selected: readonly string[];
@@ -144,6 +163,18 @@ export function runnerConfigurationFromEnvironment(
       throw new Error("DIAGNOSTIC mode requires GEMINI with gemini-3.6-flash");
     }
     if (runtime.timeout_ms !== 30_000) throw new Error("DIAGNOSTIC mode requires a 30000ms timeout");
+  } else if (modeRaw === "RESUME") {
+    if (requestedRaw === undefined || requestedRaw.trim() === "") {
+      throw new Error("RESUME mode requires explicit LIVE_LLM_SCENARIOS");
+    }
+    selected = selectScenarioIds(requestedRaw.split(",").map((id) => id.trim()));
+    if (!sameIds(selected, RESUME_SCENARIO_IDS)) {
+      throw new Error(`RESUME mode requires exactly ${RESUME_SCENARIO_IDS.join(",")}`);
+    }
+    if (runtime.provider !== "GEMINI" || runtime.model !== "gemini-3.6-flash") {
+      throw new Error("RESUME mode requires GEMINI with gemini-3.6-flash");
+    }
+    if (runtime.timeout_ms !== 30_000) throw new Error("RESUME mode requires a 30000ms timeout");
   } else {
     if (requestedRaw === undefined || requestedRaw.trim() === "") {
       throw new Error("FULL mode requires explicit LIVE_LLM_SCENARIOS");
@@ -154,12 +185,15 @@ export function runnerConfigurationFromEnvironment(
     }
   }
 
+  const expectedAttempts = selected.length * (modeRaw === "RESUME" ? MAX_RETRIES_PER_SCENARIO + 1 : 1);
   const maxAttempts = parsePositiveInteger(
     environment.LIVE_LLM_MAX_REQUESTS,
-    modeRaw === "SMOKE" ? 3 : (modeRaw === "DIAGNOSTIC" ? 1 : ALL_LIVE_SCENARIO_IDS.length),
+    expectedAttempts,
   );
-  if (maxAttempts === null || maxAttempts !== selected.length) {
-    throw new Error("LIVE_LLM_MAX_REQUESTS must equal the explicitly selected scenario count");
+  if (maxAttempts === null || maxAttempts !== expectedAttempts) {
+    throw new Error(modeRaw === "RESUME"
+      ? "LIVE_LLM_MAX_REQUESTS must equal the maximum attempts allowed by RESUME mode"
+      : "LIVE_LLM_MAX_REQUESTS must equal the explicitly selected scenario count");
   }
   const costCeiling = parseOptionalCost(environment.LIVE_LLM_COST_CEILING_USD);
   if (costCeiling === undefined) throw new Error("LIVE_LLM_COST_CEILING_USD must be a positive number");
@@ -177,7 +211,8 @@ export function runnerConfigurationFromEnvironment(
     model: runtime.model,
     timeout_ms: runtime.timeout_ms,
     max_attempted_requests: maxAttempts,
-    automatic_retries: false,
+    automatic_retries: modeRaw === "RESUME",
+    max_retries_per_scenario: modeRaw === "RESUME" ? MAX_RETRIES_PER_SCENARIO : 0,
     cost_ceiling_usd: costCeiling,
     strict_budget: strictRaw === "true",
   };
@@ -340,7 +375,8 @@ function artifact(input: {
     selected_scenario_ids: input.configuration.selected_scenario_ids,
     attempted_requests: input.attemptedRequests,
     max_attempted_requests: input.configuration.max_attempted_requests,
-    automatic_retries: false,
+    automatic_retries: input.configuration.automatic_retries,
+    max_retries_per_scenario: input.configuration.max_retries_per_scenario,
     timeout_ms: input.configuration.timeout_ms,
     cost_ceiling_usd: input.configuration.cost_ceiling_usd,
     cost_control: costControl(input.configuration),
@@ -351,7 +387,8 @@ function artifact(input: {
       total_tokens: telemetry.total_tokens,
     },
     telemetry_complete: telemetry.complete,
-    total_latency_ms: telemetry.total_latency_ms,
+    total_latency_ms: input.transcript.flatMap(({ attempts }) => attempts)
+      .reduce((total, attempt) => total + attempt.latency_ms, 0),
     estimated_cost_usd: telemetry.estimated_cost_usd,
     run_failure: input.runFailure,
     manual_owner_review_required: true,
@@ -364,6 +401,11 @@ export async function executeBoundedLiveRun(input: {
   readonly configuration: LiveRunnerConfiguration;
   readonly sourceCommit: string;
   readonly timestamp?: string;
+  readonly retryControl?: {
+    readonly sleep?: (delayMs: number) => Promise<void>;
+    readonly random?: () => number;
+    readonly baseDelayMs?: number;
+  };
 }): Promise<LiveRunArtifact> {
   if (!/^[0-9a-f]{40}$/u.test(input.sourceCommit)) {
     throw new Error("A full lowercase Git source commit is required before live execution");
@@ -388,12 +430,51 @@ export async function executeBoundedLiveRun(input: {
   }
 
   const limitedClient = new RequestLimitedClient(input.client, input.configuration.max_attempted_requests);
+  const sleep = input.retryControl?.sleep ?? ((delayMs: number) => new Promise<void>((resolve) => setTimeout(resolve, delayMs)));
+  const random = input.retryControl?.random ?? Math.random;
+  const baseDelayMs = input.retryControl?.baseDelayMs ?? RETRY_BASE_DELAY_MS;
   const chunks = sectionAwareChunking(APPROVED_CORPUS);
   const transcript: LiveRunnerTranscript[] = [];
   let runFailure: LiveRunArtifact["run_failure"] = null;
   for (const id of input.configuration.selected_scenario_ids) {
     const scenario = prepareScenario(id, chunks);
-    const result = await runPreparedScenario(id, limitedClient, scenario.prepared);
+    const attempts: LiveRunnerAttempt[] = [];
+    let result: Awaited<ReturnType<typeof runPreparedScenario>>;
+    for (let attemptNumber = 1; ; attemptNumber += 1) {
+      result = await runPreparedScenario(id, limitedClient, scenario.prepared);
+      attempts.push(result.status === "COMPLETED"
+        ? {
+            attempt_number: attemptNumber,
+            status: "COMPLETED",
+            latency_ms: result.run.metadata.latency_ms,
+            usage: result.run.metadata.usage,
+            estimated_cost_usd: result.run.metadata.estimated_cost_usd,
+            failure_classification: null,
+            http_status: null,
+            message: null,
+          }
+        : {
+            attempt_number: attemptNumber,
+            status: "FAILED",
+            latency_ms: result.latency_ms,
+            usage: result.usage ?? { input_tokens: null, output_tokens: null, thinking_tokens: null, total_tokens: null },
+            estimated_cost_usd: result.estimated_cost_usd ?? null,
+            failure_classification: result.failure_classification,
+            http_status: result.http_status ?? null,
+            message: result.message,
+            ...(result.provider_error ? { provider_error: result.provider_error } : {}),
+          });
+      const retryNumber = attemptNumber;
+      const shouldRetry = result.status === "FAILED" &&
+        input.configuration.automatic_retries &&
+        retryNumber <= input.configuration.max_retries_per_scenario &&
+        result.failure_classification === "HTTP_ERROR" &&
+        result.http_status !== undefined && RETRYABLE_HTTP_STATUSES.has(result.http_status);
+      if (!shouldRetry) break;
+      const exponentialDelay = baseDelayMs * 2 ** (retryNumber - 1);
+      const jitter = Math.floor(exponentialDelay * Math.max(0, Math.min(1, random())));
+      await sleep(exponentialDelay + jitter);
+    }
     if (result.status === "FAILED") {
       transcript.push({
         id,
@@ -401,6 +482,7 @@ export async function executeBoundedLiveRun(input: {
         route: scenario.prepared.input.route,
         evidence: scenario.prepared.input.retrieved_evidence,
         deterministic_result: scenario.prepared.input.deterministic_result,
+        attempts,
         failure: result,
         mechanical_evaluation: null,
         review_status: "FAILED",
@@ -413,6 +495,7 @@ export async function executeBoundedLiveRun(input: {
       route: scenario.prepared.input.route,
       evidence: scenario.prepared.input.retrieved_evidence,
       deterministic_result: scenario.prepared.input.deterministic_result,
+      attempts,
       assistant: result.run.output,
       model_run: result.run.metadata,
       mechanical_evaluation: evaluateMechanically(scenario.prepared.input, result.run.output),

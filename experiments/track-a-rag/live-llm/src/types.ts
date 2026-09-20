@@ -120,6 +120,9 @@ export type LiveLlmFailureClassification = (typeof LIVE_LLM_FAILURE_CLASSIFICATI
 
 export interface LiveScenarioFailure {
   readonly provider_error?: import("./http-diagnostics.ts").ProviderErrorDiagnostics;
+  readonly http_status?: number;
+  readonly usage?: LiveModelUsage;
+  readonly estimated_cost_usd?: number | null;
   readonly status: "FAILED";
   readonly scenario_id: string;
   readonly provider: LiveLlmProvider;
