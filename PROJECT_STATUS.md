@@ -2,7 +2,7 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** Complete the bounded Gemini model migration and the remaining Live LLM Gate evaluation before any M2 authorization decision
+**Current task:** Complete focused owner review and evidence reconciliation for the recorded G01 execution before any further Live LLM request or M2 authorization decision
 
 **Last reviewed:** 2026-09-20
 
@@ -16,7 +16,7 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Migrate the bounded experiment to the owner-verified replacement model, validate it offline, and obtain focused review before a separately authorized full G01 run. Do not begin production RAG, Track B, or M2.
+**Next priority:** Review the saved G01 output and sanitized artifact for guidance, language, schema, and provenance evidence, then record the owner decision. This task does not authorize another live request. Do not begin production RAG, Track B, or M2.
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
@@ -78,7 +78,7 @@
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = BOUNDED_GEMINI_MODEL_MIGRATION`
+`NEXT_ACTIVITY = FOCUSED_G01_OWNER_REVIEW_AND_EVIDENCE_RECONCILIATION`
 
 `M2_STATUS = NOT_AUTHORIZED`
 
@@ -114,7 +114,7 @@
 
 `TRACK_B = NOT_STARTED_NOT_AUTHORIZED`
 
-`LIVE_LLM_EXPERIMENT_IMPLEMENTATION = HARNESS_COMPLETE_DIAGNOSTIC_COMPLETE_GATE_EVALUATION_PENDING`
+`LIVE_LLM_EXPERIMENT_IMPLEMENTATION = HARNESS_COMPLETE_G01_EXECUTED_OWNER_DECISION_PENDING`
 
 `LIVE_LLM_GATE_IMPLEMENTATION = PARTIAL`
 
@@ -146,27 +146,29 @@
 
 `GEMINI_ADAPTER_REVIEW_TESTS = 173_PASSED`
 
-`LIVE_LLM_GATE_OWNER_REVIEW = TECHNICAL_ADAPTER_ACCEPTED_LIVE_EVALUATION_PENDING`
+`LIVE_LLM_GATE_OWNER_REVIEW = G01_PENDING_OWNER_DECISION_REMAINING_SCENARIOS_PENDING`
 
-`LIVE_MODEL_EVALUATION = PARTIAL_MINIMAL_PROVIDER_CHECK_ONLY`
+`LIVE_MODEL_EVALUATION = PARTIAL_G01_EXECUTED`
 
-`MODEL_MIGRATION = PENDING`
+`MODEL_MIGRATION = COMPLETE`
 
-`STRUCTURED_JSON_COMPATIBILITY = NOT_VERIFIED`
+`STRUCTURED_JSON_COMPATIBILITY = EXPLICIT_EVIDENCE_PENDING`
 
-`FULL_G01_EVALUATION = NOT_RUN`
+`FULL_G01_EXECUTION = COMPLETE`
 
-`TAMIL_ENGLISH_EXPLANATION_QUALITY = NOT_VERIFIED`
+`FULL_G01_EVALUATION = PENDING_OWNER_DECISION`
 
-`LIVE_OUTPUT_PROVENANCE_COMPLIANCE = NOT_VERIFIED`
+`TAMIL_ENGLISH_EXPLANATION_QUALITY = MANUAL_REVIEW_REQUIRED`
+
+`LIVE_OUTPUT_PROVENANCE_COMPLIANCE = EXPLICIT_EVIDENCE_PENDING`
 
 `REMAINING_APPROVED_LIVE_LLM_SCENARIOS = PENDING`
 
-`GROUNDED_INTELLIGENCE = PENDING`
+`GROUNDED_INTELLIGENCE = G01_PASS`
 
-`GUIDANCE_INTELLIGENCE = PENDING`
+`GUIDANCE_INTELLIGENCE = G01_MANUAL_REVIEW_REQUIRED`
 
-`LIVE_LLM_RUNTIME = REPLACEMENT_MODEL_OWNER_VERIFIED_MIGRATION_PENDING`
+`LIVE_LLM_RUNTIME = GEMINI_3_6_FLASH_G01_EXECUTED`
 
 `LLM_IN_ADMISSION_DECISION_PATH = NO`
 
@@ -178,16 +180,51 @@
 
 **Owner-reported provider evidence:** The original HTTP 404 was diagnosed as `gemini-2.5-flash` being unavailable to new users for the current API project. The owner verified `gemini-3.6-flash` through the Gemini model-listing API, which reported `generateContent` support, and received `OK` from a minimal generation request through the existing `v1beta` endpoint. This establishes basic endpoint/model availability only; it is not a successful full G01 scenario evaluation.
 
-**Pending Live LLM Gate work:** Model migration is pending. Structured JSON compatibility, full G01 evaluation, Tamil/English explanation quality, and provenance compliance are not verified. The remaining approved Live LLM scenarios are pending.
+**Checkpoint 1 outcome:** The bounded migration to `gemini-3.6-flash` was subsequently implemented, validated offline, reviewed, and merged at repository commit `a77652d97e049a1626df95d01385415221872413`. The existing `v1beta` `generateContent` endpoint and runner contracts were preserved. Offline validation did not establish live structured JSON compatibility.
+
+### Checkpoint 3 — Controlled G01 execution status
+
+**Evidence basis:** The following live-run results are recorded from the supplied execution handoff. Repository evidence confirms that the approved Gemini model migration is present at the current main commit. This status update does not include a raw provider response, live artifact, or credential and does not independently upgrade evidence marked for manual review or explicit confirmation.
+
+| Result | Recorded value |
+| --- | --- |
+| Provider / model | `GEMINI` / `gemini-3.6-flash` |
+| Scenario | `G01` — What is TNEA? |
+| Attempted requests | `1` |
+| Automatic retries | `false` |
+| Run failure | `null` |
+| Grounding | `PASS` |
+| Routing | `PASS` |
+| Guidance | `MANUAL_REVIEW_REQUIRED` |
+| Language | `MANUAL_REVIEW_REQUIRED` |
+| Security | `NOT_RUN` |
+| Uncertainty | `NOT_RUN` |
+| Unsupported claims detected | `NONE` |
+| Telemetry | `COMPLETE` |
+| Latency | `8.56 seconds` |
+| Estimated cost | `USD 0.00516225` |
+| Schema validation | `EXPLICIT_EVIDENCE_PENDING` |
+| Final G01 acceptance | `PENDING_OWNER_DECISION` |
+
+**Quality finding:** The response should explicitly clarify that TNEA does not cover every engineering admission route. This finding remains part of the owner review; G01 is not fully accepted.
+
+### Frozen-plan milestone reconciliation
+
+**Checks already passed:** The bounded model migration and its offline validation are merged. For the supplied G01 execution, routing and grounding passed, no unsupported admission-critical claims were detected, the run completed without a reported failure or retry, and telemetry is complete. These results satisfy the recorded portions of G1 but do not complete the milestone gate.
+
+**Checks requiring manual review:** Guidance usefulness and progression for a zero-knowledge student, Tamil/English language quality, the quality clarification above, owner engineering review, owner student review, and relevant-scenario review remain pending. These checks are required by the frozen implementation plan and include the unresolved G2 assessment.
+
+**Checks not executed:** Security and uncertainty checks were not run. The remaining approved Live LLM scenarios and broader bilingual-equivalence review are also pending. G3 must be evaluated in an applicable scenario where deterministic inputs are unknown.
+
+**Checks requiring additional evidence:** Explicit schema-validation evidence, citation and provenance compliance for the live output, and the final owner G01 decision remain pending. Grounding `PASS` is retained as supplied evidence and does not by itself establish provenance compliance.
 
 **Remaining sequence:**
 
-1. Complete the bounded model migration.
-2. Run offline tests, strict typecheck, and secret checks.
-3. Complete focused review and merge.
-4. Run the full G01 scenario only under separate authorization.
-5. Evaluate the remaining approved Live LLM Gate scenarios.
-6. Make an evidence-based gate decision before considering M2 authorization.
+1. Complete a focused owner review of the saved G01 output and sanitized artifact, covering guidance, language, schema evidence, provenance, and the recorded quality finding without making another live request.
+2. Record the final G01 decision.
+3. Seek separate authorization before any remaining approved Live LLM Gate execution.
+4. Evaluate the remaining approved Live LLM Gate scenarios.
+5. Make an evidence-based gate decision before considering M2 authorization.
 
 **Live LLM acceptance criteria:**
 
@@ -215,7 +252,7 @@
 
 `PRODUCTION_RAG = NOT_AUTHORIZED`
 
-`NEXT_GATE = REVIEWED_MODEL_MIGRATION_THEN_SEPARATELY_AUTHORIZED_FULL_G01`
+`NEXT_GATE = FOCUSED_G01_OWNER_REVIEW_NO_NEW_LIVE_REQUEST`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -302,7 +339,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Implement the bounded migration to the owner-verified replacement model, then run offline validation and focused review. Full G01 execution remains a separate authorization step. Do not begin Track B, M2, or production RAG implementation automatically.
+Complete a focused owner review of the saved G01 output and sanitized artifact for guidance, language, explicit schema evidence, provenance, and the recorded scope clarification. Do not make another live request or begin Track B, M2, or production RAG implementation automatically.
 
 ## M1 implementation review
 
@@ -384,4 +421,4 @@ Implement the bounded migration to the owner-verified replacement model, then ru
 
 ## Next review point
 
-Focused review of the bounded model migration, followed by a separate authorization decision for full G01 execution.
+Focused owner review and evidence reconciliation for the recorded G01 execution, followed by the final G01 acceptance decision.
