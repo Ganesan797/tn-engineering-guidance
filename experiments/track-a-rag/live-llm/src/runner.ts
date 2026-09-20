@@ -56,6 +56,7 @@ export interface LiveRunnerTranscript {
 
 export interface LiveRunArtifact {
   readonly schema_version: "LIVE_LLM_RUN_V1";
+  readonly source_commit: string;
   readonly status: "OWNER_REVIEW_REQUIRED" | "STOPPED" | "NOT_RUN";
   readonly provider: LiveLlmProvider;
   readonly model: string;
@@ -305,6 +306,10 @@ function prepareScenario(id: string, chunks: readonly EvidenceChunk[]) {
   throw new Error(`Unknown live scenario ID: ${id}`);
 }
 
+export function prepareCanonicalLiveScenario(id: string) {
+  return prepareScenario(id, sectionAwareChunking(APPROVED_CORPUS));
+}
+
 function telemetryFrom(transcript: readonly LiveRunnerTranscript[]): AggregateLiveTelemetry {
   return aggregateLiveTelemetry(transcript.flatMap(({ model_run }) => model_run === undefined ? [] : [model_run]));
 }
@@ -316,6 +321,7 @@ function costControl(configuration: LiveRunnerConfiguration): CostControl {
 
 function artifact(input: {
   readonly configuration: LiveRunnerConfiguration;
+  readonly sourceCommit: string;
   readonly timestamp: string;
   readonly status: LiveRunArtifact["status"];
   readonly attemptedRequests: number;
@@ -325,6 +331,7 @@ function artifact(input: {
   const telemetry = telemetryFrom(input.transcript);
   return {
     schema_version: "LIVE_LLM_RUN_V1",
+    source_commit: input.sourceCommit,
     status: input.status,
     provider: input.configuration.provider,
     model: input.configuration.model,
@@ -355,8 +362,12 @@ function artifact(input: {
 export async function executeBoundedLiveRun(input: {
   readonly client: LiveLlmClient;
   readonly configuration: LiveRunnerConfiguration;
+  readonly sourceCommit: string;
   readonly timestamp?: string;
 }): Promise<LiveRunArtifact> {
+  if (!/^[0-9a-f]{40}$/u.test(input.sourceCommit)) {
+    throw new Error("A full lowercase Git source commit is required before live execution");
+  }
   const timestamp = input.timestamp ?? new Date().toISOString();
   if (input.client.provider !== input.configuration.provider || input.client.model !== input.configuration.model) {
     throw new Error("Configured client does not match verified runner provider/model");
@@ -364,6 +375,7 @@ export async function executeBoundedLiveRun(input: {
   if (input.configuration.strict_budget && input.configuration.cost_ceiling_usd !== null) {
     return artifact({
       configuration: input.configuration,
+      sourceCommit: input.sourceCommit,
       timestamp,
       status: "NOT_RUN",
       attemptedRequests: 0,
@@ -419,6 +431,7 @@ export async function executeBoundedLiveRun(input: {
   }
   return artifact({
     configuration: input.configuration,
+    sourceCommit: input.sourceCommit,
     timestamp,
     status: transcript.some(({ failure }) => failure !== undefined) || runFailure !== null
       ? "STOPPED"

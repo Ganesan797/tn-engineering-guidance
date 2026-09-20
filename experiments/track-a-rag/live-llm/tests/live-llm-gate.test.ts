@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -28,6 +28,13 @@ import { LIVE_OUTPUT_JSON_SCHEMA, validateLiveModelOutput } from "../src/output-
 import { PROMPT_VERSION, SYSTEM_PROMPT, buildModelInput, serializePromptInput } from "../src/prompt-contract.ts";
 import { assertArtifactContainsNoSecrets, writeRunArtifact } from "../src/artifact-writer.mjs";
 import {
+  approveReviewCandidate,
+  createReviewCandidate,
+  exportReviewCandidate,
+  sha256,
+  validateReviewEvidence,
+} from "../review-evidence.mjs";
+import {
   ALL_LIVE_SCENARIO_IDS,
   RequestLimitedClient,
   SMOKE_SCENARIO_IDS,
@@ -38,6 +45,7 @@ import {
 import type { LiveLlmClient, LiveModelInput, LiveModelOutput, LiveModelRun, StudentState } from "../src/types.ts";
 
 const GEMINI_MODEL = "gemini-3.6-flash";
+const TEST_SOURCE_COMMIT = "a".repeat(40);
 
 const studentState: StudentState = {
   language: "ENGLISH",
@@ -643,6 +651,7 @@ test("full gate remains explicit and compatible with all 14 frozen scenarios", a
   const result = await executeBoundedLiveRun({
     client: fake.client,
     configuration,
+    sourceCommit: TEST_SOURCE_COMMIT,
     timestamp: "2026-09-19T00:00:00.000Z",
   });
   assert.equal(result.status, "OWNER_REVIEW_REQUIRED");
@@ -665,6 +674,7 @@ test("bounded execution stops on first structured provider failure", async () =>
   const result = await executeBoundedLiveRun({
     client: fake.client,
     configuration: smokeConfiguration(),
+    sourceCommit: TEST_SOURCE_COMMIT,
     timestamp: "2026-09-19T00:00:00.000Z",
   });
   assert.equal(result.status, "STOPPED");
@@ -680,6 +690,7 @@ test("successful artifact preserves provenance, deterministic result and mechani
   const result = await executeBoundedLiveRun({
     client: fake.client,
     configuration: smokeConfiguration(),
+    sourceCommit: TEST_SOURCE_COMMIT,
     timestamp: "2026-09-19T00:00:00.000Z",
   });
   assert.equal(result.status, "OWNER_REVIEW_REQUIRED");
@@ -695,6 +706,7 @@ test("strict budget mode fails closed before any request", async () => {
   const result = await executeBoundedLiveRun({
     client: fake.client,
     configuration: smokeConfiguration({ LIVE_LLM_STRICT_BUDGET: "true" }),
+    sourceCommit: TEST_SOURCE_COMMIT,
     timestamp: "2026-09-19T00:00:00.000Z",
   });
   assert.equal(result.status, "NOT_RUN");
@@ -709,6 +721,7 @@ test("post-request cost monitoring stops further requests without claiming enfor
   const result = await executeBoundedLiveRun({
     client: fake.client,
     configuration: smokeConfiguration(),
+    sourceCommit: TEST_SOURCE_COMMIT,
     timestamp: "2026-09-19T00:00:00.000Z",
   });
   assert.equal(result.status, "STOPPED");
@@ -723,6 +736,7 @@ test("incomplete live telemetry remains null rather than becoming measured zero"
   const result = await executeBoundedLiveRun({
     client: fake.client,
     configuration: smokeConfiguration(),
+    sourceCommit: TEST_SOURCE_COMMIT,
     timestamp: "2026-09-19T00:00:00.000Z",
   });
   assert.equal(result.telemetry_complete, false);
@@ -738,6 +752,7 @@ test("durable success and failure artifacts are secret checked", async () => {
     const success = await executeBoundedLiveRun({
       client: runnerClient().client,
       configuration: smokeConfiguration(),
+      sourceCommit: TEST_SOURCE_COMMIT,
       timestamp: "2026-09-19T00:00:00.000Z",
     });
     const successPath = await writeRunArtifact(success, {
@@ -751,6 +766,7 @@ test("durable success and failure artifacts are secret checked", async () => {
     const failure = await executeBoundedLiveRun({
       client: runnerClient({ failAt: 1 }).client,
       configuration: smokeConfiguration(),
+      sourceCommit: TEST_SOURCE_COMMIT,
       timestamp: "2026-09-19T00:00:01.000Z",
     });
     const failurePath = await writeRunArtifact(failure, {
@@ -782,7 +798,7 @@ test("Gemini 404 diagnostics propagate through the bounded artifact without raw 
     error: { code: 404, status: "NOT_FOUND", message: "Requested model is not available", details: [{ private: "excluded" }] },
     extra: "excluded",
   }), { status: 404, headers: { authorization: "excluded" } });
-  const artifact = await executeBoundedLiveRun({ client: createLiveLlmClient(runtime, fakeFetch), configuration: smokeConfiguration() });
+  const artifact = await executeBoundedLiveRun({ client: createLiveLlmClient(runtime, fakeFetch), configuration: smokeConfiguration(), sourceCommit: TEST_SOURCE_COMMIT });
   assert.equal(artifact.status, "STOPPED");
   assert.equal(artifact.attempted_requests, 1);
   assert.equal(artifact.transcript[0].failure?.failure_classification, "HTTP_ERROR");
@@ -856,7 +872,7 @@ test("adversarial credential assignments are redacted before artifact checks", a
     const fakeFetch: typeof fetch = async () => new Response(JSON.stringify({ error: {
       code: 404, status: "NOT_FOUND", message: `Rejected ${prefix} ${fixtureValue}`,
     } }), { status: 404 });
-    const artifact = await executeBoundedLiveRun({ client: createLiveLlmClient(runtime, fakeFetch), configuration: smokeConfiguration() });
+    const artifact = await executeBoundedLiveRun({ client: createLiveLlmClient(runtime, fakeFetch), configuration: smokeConfiguration(), sourceCommit: TEST_SOURCE_COMMIT });
     const failure = artifact.transcript[0].failure;
     assert.equal(failure?.failure_classification, "HTTP_ERROR");
     assert.equal(failure?.provider_error?.code, 404);
@@ -875,6 +891,7 @@ test("adversarial credential assignments are redacted before artifact checks", a
   const artifact = await executeBoundedLiveRun({
     client: createLiveLlmClient(runtime, async () => new Response(JSON.stringify({ error: { message: runtime.apiKey } }), { status: 404 })),
     configuration: smokeConfiguration(),
+    sourceCommit: TEST_SOURCE_COMMIT,
   });
   assert.equal(artifact.transcript[0].failure?.provider_error?.message === "[REDACTED]", true);
   assert.equal(JSON.stringify(artifact).includes(runtime.apiKey), false);
@@ -896,7 +913,7 @@ test("adversarial continuous empty chunks terminate on the first empty read and 
       cancel() { cancelled = true; },
     }, { highWaterMark: 0 });
     const started = performance.now();
-    const artifact = await executeBoundedLiveRun({ client: createLiveLlmClient(runtime, async () => new Response(stream, { status: 404 })), configuration: smokeConfiguration() });
+    const artifact = await executeBoundedLiveRun({ client: createLiveLlmClient(runtime, async () => new Response(stream, { status: 404 })), configuration: smokeConfiguration(), sourceCommit: TEST_SOURCE_COMMIT });
     assert.equal(pulls, prefix ? 2 : 1);
     assert.equal(cancelled, true);
     assert.equal(performance.now() - started < 1000, true);
@@ -905,4 +922,65 @@ test("adversarial continuous empty chunks terminate on the first empty read and 
     assert.equal(artifact.transcript[0].failure?.provider_error, undefined);
     assert.equal(artifact.transcript[0].failure?.message, "The provider returned HTTP 404");
   }
+});
+
+test("shared evidence export hashes, validates and explicitly approves a canonical artifact", async () => {
+  const artifact = await executeBoundedLiveRun({
+    client: runnerClient().client,
+    configuration: smokeConfiguration(),
+    sourceCommit: TEST_SOURCE_COMMIT,
+    timestamp: "2026-09-20T10:00:00.000Z",
+  });
+  assert.equal(artifact.source_commit, TEST_SOURCE_COMMIT);
+  const rawBytes = Buffer.from(`${JSON.stringify(artifact, null, 2)}\n`);
+  const candidate = createReviewCandidate(rawBytes, "2026-09-20T10:01:00.000Z");
+  assert.equal(candidate.source_artifact_sha256, sha256(rawBytes));
+  assert.equal(candidate.approval_status, "CANDIDATE");
+  assert.equal(validateReviewEvidence(candidate).sanitized_artifact.transcript.length, 3);
+
+  const temporaryDirectory = await mkdtemp(join(tmpdir(), "live-llm-review-evidence-"));
+  try {
+    const rawPath = join(temporaryDirectory, "raw.json");
+    const candidatePath = join(temporaryDirectory, "candidate.json");
+    const approvedPath = join(temporaryDirectory, "approved.json");
+    await writeFile(rawPath, rawBytes);
+    await exportReviewCandidate(rawPath, candidatePath, { verifyAuthority: false });
+    const approved = await approveReviewCandidate(
+      rawPath,
+      candidatePath,
+      approvedPath,
+      "2026-09-20T10:02:00.000Z",
+      { verifyAuthority: false },
+    );
+    assert.equal(approved.approval_status, "OWNER_APPROVED");
+    assert.equal(validateReviewEvidence(JSON.parse(await readFile(approvedPath, "utf8"))).approval_status, "OWNER_APPROVED");
+  } finally {
+    await rm(temporaryDirectory, { recursive: true, force: true });
+  }
+});
+
+test("shared evidence export rejects non-allowlisted fields, credentials and sensitive or noncanonical input", async () => {
+  const artifact = await executeBoundedLiveRun({
+    client: runnerClient().client,
+    configuration: smokeConfiguration(),
+    sourceCommit: TEST_SOURCE_COMMIT,
+    timestamp: "2026-09-20T10:00:00.000Z",
+  });
+
+  assert.throws(
+    () => createReviewCandidate(Buffer.from(JSON.stringify({ ...artifact, raw_headers: { authorization: "excluded" } }))),
+    /non-allowlisted fields/,
+  );
+
+  const credential = structuredClone(artifact);
+  credential.transcript[0]!.assistant!.response_text = "Rejected key=private-value";
+  assert.throws(() => createReviewCandidate(Buffer.from(JSON.stringify(credential))), /credential-shaped or sensitive/);
+
+  const sensitiveStudent = structuredClone(artifact);
+  sensitiveStudent.transcript[0]!.student = "student@example.invalid";
+  assert.throws(() => createReviewCandidate(Buffer.from(JSON.stringify(sensitiveStudent))), /canonical scenario/);
+
+  const unknownScenario = structuredClone(artifact);
+  unknownScenario.selected_scenario_ids = ["G99"];
+  assert.throws(() => createReviewCandidate(Buffer.from(JSON.stringify(unknownScenario))), /noncanonical scenario ID/);
 });

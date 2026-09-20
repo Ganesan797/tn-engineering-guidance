@@ -40,6 +40,38 @@ The USD 0.02 value is a proposed post-request ceiling, not a guaranteed pre-requ
 
 Each run writes one secret-checked JSON artifact to the Git-ignored `output/` directory. It records configuration, selected scenarios, transcripts, evidence and provenance, deterministic results, structured failures, mechanical evaluation, latency, nullable usage, estimated cost, and telemetry completeness. Mechanical checks do not replace manual owner review.
 
+The runner also requires a clean repository and records the full Git source commit before making a request. This makes the raw evidence traceable to the exact runner, scenario, prompt, and validator implementation.
+
+## Shared review evidence
+
+Evidence has three separate classes:
+
+1. Raw execution artifacts stay local under the Git-ignored `output/` directory.
+2. Sanitized review evidence may enter `review-evidence/approved/` only after explicit owner approval.
+3. Manual summaries describe decisions but never substitute for structured validation evidence.
+
+Export is offline and creates an ignored candidate. It verifies canonical scenario identity, rejects altered student input, reruns the existing output validator and mechanical evaluator, computes the raw artifact SHA-256, applies field allowlists, and rejects credential-shaped or sensitive content:
+
+```text
+npm run evidence:live-llm -- export --artifact experiments/track-a-rag/live-llm/output/<artifact>.json
+```
+
+The owner reviews the candidate in `output/review-candidates/`. Approval is a separate explicit command and requires both the unchanged raw artifact and the `--owner-approved` flag. It writes a tracked review-evidence file but never stages, commits, or pushes it:
+
+```text
+npm run evidence:live-llm -- approve --artifact experiments/track-a-rag/live-llm/output/<artifact>.json --candidate experiments/track-a-rag/live-llm/output/review-candidates/<artifact>.candidate.json --owner-approved
+```
+
+After owner approval, run tests and secret checks, inspect the review-evidence diff, then commit and push the approved file through the normal review process.
+
+Codex validates the same committed evidence offline with:
+
+```text
+npm run evidence:live-llm -- validate --evidence experiments/track-a-rag/live-llm/review-evidence/approved/<evidence>.review.json
+```
+
+Validation reconstructs each frozen scenario from the repository, checks the recorded source commit, reruns the structured-output validator, and confirms the recorded evidence, deterministic result, and mechanical evaluation. No command in this workflow makes a provider request or performs a Git action.
+
 The complete 14-scenario gate remains available only through explicit `LIVE_LLM_RUN_MODE=FULL` with all 14 scenario IDs in canonical order and `LIVE_LLM_MAX_REQUESTS=14`. It is never selected as a fallback.
 
 Supported Gemini model options for this controlled harness are `gemini-2.5-flash-lite`, `gemini-3.6-flash`, and `gemini-2.5-pro`. Model selection remains explicit; the harness has no default model. Offline structured-output tests do not establish live structured JSON compatibility for `gemini-3.6-flash`.

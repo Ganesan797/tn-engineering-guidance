@@ -7,6 +7,7 @@
     "test": "node --test tests/domain/domain.test.ts tests/domain/eligibility.test.ts tests/domain/admission-seat-fact.test.ts tests/domain/rules.test.ts tests/ingestion/pilot-data.test.ts tests/ingestion/snapshot-store.test.ts tests/ingestion/real-pilot-data.test.ts tests/recommendation/recommendation.test.ts tests/application/guidance.test.ts tests/api/guidance-api.test.ts tests/student-semantics/student-semantics.test.ts tests/ui/student-guidance.test.ts tests/ui/student-entry.test.ts tests/smoke/pilot-demo.test.ts experiments/track-a-rag/tests/track-a-rag.test.ts experiments/track-a-rag/live-llm/tests/live-llm-gate.test.ts",
     "typecheck": "tsc -p tsconfig.json",
     "experiment:live-llm": "node --experimental-strip-types experiments/track-a-rag/live-llm/run-live-gate.mjs",
+    "evidence:live-llm": "node --experimental-strip-types experiments/track-a-rag/live-llm/review-evidence.mjs",
     "start:mvp": "node --experimental-strip-types scripts/mvp-server.mjs"
   },
   "devDependencies": {

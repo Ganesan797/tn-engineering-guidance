@@ -1,4 +1,6 @@
+import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
+import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { writeRunArtifact } from "./src/artifact-writer.mjs";
@@ -29,9 +31,17 @@ try {
   process.exit();
 }
 
-const client = createLiveLlmClient(runtime);
-const artifact = await executeBoundedLiveRun({ client, configuration });
 const currentDirectory = dirname(fileURLToPath(import.meta.url));
+const repositoryRoot = resolve(currentDirectory, "../../..");
+const repositoryStatus = execFileSync("git", ["-C", repositoryRoot, "status", "--porcelain", "--untracked-files=all"], {
+  encoding: "utf8",
+}).trim();
+if (repositoryStatus !== "") throw new Error("Live execution requires a clean repository so evidence matches its source commit");
+const sourceCommit = execFileSync("git", ["-C", repositoryRoot, "rev-parse", "HEAD"], {
+  encoding: "utf8",
+}).trim();
+const client = createLiveLlmClient(runtime);
+const artifact = await executeBoundedLiveRun({ client, configuration, sourceCommit });
 const outputDirectory = process.env.LIVE_LLM_OUTPUT_DIR?.trim() || join(currentDirectory, "output");
 const artifactPath = await writeRunArtifact(artifact, {
   outputDirectory,
