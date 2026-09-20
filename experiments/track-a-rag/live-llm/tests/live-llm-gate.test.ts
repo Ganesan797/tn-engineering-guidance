@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { execFileSync, spawnSync } from "node:child_process";
+import { realpathSync } from "node:fs";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import { ERROR_BODY_SIZE_LIMIT } from "../src/http-diagnostics.ts";
 
 import { APPROVED_CORPUS } from "../../corpus/approved-corpus.ts";
@@ -26,13 +29,14 @@ import {
 } from "../src/orchestration.ts";
 import { LIVE_OUTPUT_JSON_SCHEMA, validateLiveModelOutput } from "../src/output-validation.ts";
 import { PROMPT_VERSION, SYSTEM_PROMPT, buildModelInput, serializePromptInput } from "../src/prompt-contract.ts";
-import { assertArtifactContainsNoSecrets, writeRunArtifact } from "../src/artifact-writer.mjs";
+import { assertArtifactContainsNoSecrets, assertSafeRawOutputDirectory, writeRunArtifact } from "../src/artifact-writer.mjs";
 import {
   approveReviewCandidate,
   createReviewCandidate,
   exportReviewCandidate,
   sha256,
   validateReviewEvidence,
+  verifyValidationAuthority,
 } from "../review-evidence.mjs";
 import {
   ALL_LIVE_SCENARIO_IDS,
@@ -45,7 +49,9 @@ import {
 import type { LiveLlmClient, LiveModelInput, LiveModelOutput, LiveModelRun, StudentState } from "../src/types.ts";
 
 const GEMINI_MODEL = "gemini-3.6-flash";
-const TEST_SOURCE_COMMIT = "a".repeat(40);
+const TEST_SOURCE_COMMIT = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../../..");
+const EVIDENCE_COMMAND = resolve(dirname(fileURLToPath(import.meta.url)), "../review-evidence.mjs");
 
 const studentState: StudentState = {
   language: "ENGLISH",
@@ -944,13 +950,12 @@ test("shared evidence export hashes, validates and explicitly approves a canonic
     const candidatePath = join(temporaryDirectory, "candidate.json");
     const approvedPath = join(temporaryDirectory, "approved.json");
     await writeFile(rawPath, rawBytes);
-    await exportReviewCandidate(rawPath, candidatePath, { verifyAuthority: false });
+    await exportReviewCandidate(rawPath, candidatePath);
     const approved = await approveReviewCandidate(
       rawPath,
       candidatePath,
       approvedPath,
       "2026-09-20T10:02:00.000Z",
-      { verifyAuthority: false },
     );
     assert.equal(approved.approval_status, "OWNER_APPROVED");
     assert.equal(validateReviewEvidence(JSON.parse(await readFile(approvedPath, "utf8"))).approval_status, "OWNER_APPROVED");
@@ -983,4 +988,93 @@ test("shared evidence export rejects non-allowlisted fields, credentials and sen
   const unknownScenario = structuredClone(artifact);
   unknownScenario.selected_scenario_ids = ["G99"];
   assert.throws(() => createReviewCandidate(Buffer.from(JSON.stringify(unknownScenario))), /noncanonical scenario ID/);
+
+  for (const field of ["provider", "model", "prompt_version"] as const) {
+    const inconsistent = structuredClone(artifact);
+    inconsistent[field] = field === "provider" ? "OPENAI" : "INCONSISTENT";
+    assert.throws(() => createReviewCandidate(Buffer.from(JSON.stringify(inconsistent))), /model metadata does not match/);
+  }
+});
+
+test("raw output destinations must be outside the repository or ignored by Git", async () => {
+  const ignored = join(REPOSITORY_ROOT, "experiments", "track-a-rag", "live-llm", "output");
+  assert.equal(assertSafeRawOutputDirectory(ignored, REPOSITORY_ROOT), resolve(ignored));
+  const outside = await mkdtemp(join(tmpdir(), "live-llm-raw-output-"));
+  try {
+    assert.equal(assertSafeRawOutputDirectory(outside, REPOSITORY_ROOT), realpathSync.native(outside));
+  } finally {
+    await rm(outside, { recursive: true, force: true });
+  }
+  assert.throws(
+    () => assertSafeRawOutputDirectory(join(REPOSITORY_ROOT, "experiments", "track-a-rag", "live-llm", "unsafe-output"), REPOSITORY_ROOT),
+    /must be ignored by Git/,
+  );
+});
+
+test("approval fails without explicit owner action and rejects a mismatched raw hash", async () => {
+  const missingApproval = spawnSync(process.execPath, [
+    "--experimental-strip-types", EVIDENCE_COMMAND, "approve", "--artifact", "missing.json", "--candidate", "missing.json",
+  ], { encoding: "utf8" });
+  assert.notEqual(missingApproval.status, 0);
+  assert.match(missingApproval.stderr, /explicit --owner-approved flag/);
+
+  const artifact = await executeBoundedLiveRun({
+    client: runnerClient().client,
+    configuration: smokeConfiguration(),
+    sourceCommit: TEST_SOURCE_COMMIT,
+    timestamp: "2026-09-20T10:00:00.000Z",
+  });
+  const temporaryDirectory = await mkdtemp(join(tmpdir(), "live-llm-hash-mismatch-"));
+  try {
+    const rawPath = join(temporaryDirectory, "raw.json");
+    const changedRawPath = join(temporaryDirectory, "changed-raw.json");
+    const candidatePath = join(temporaryDirectory, "candidate.json");
+    await writeFile(rawPath, `${JSON.stringify(artifact, null, 2)}\n`);
+    await writeFile(changedRawPath, JSON.stringify(artifact));
+    await exportReviewCandidate(rawPath, candidatePath);
+    await assert.rejects(
+      approveReviewCandidate(changedRawPath, candidatePath, join(temporaryDirectory, "approved.json")),
+      /does not match the supplied raw artifact/,
+    );
+  } finally {
+    await rm(temporaryDirectory, { recursive: true, force: true });
+  }
+});
+
+test("authority verification rejects unavailable, non-ancestor and changed source contracts", async () => {
+  const repository = await mkdtemp(join(tmpdir(), "live-llm-authority-"));
+  const authorityFile = join(repository, "experiments", "track-a-rag", "live-llm", "src", "prompt-contract.ts");
+  const git = (...args: string[]) => execFileSync("git", args, { cwd: repository, encoding: "utf8" }).trim();
+  try {
+    git("init", "--quiet");
+    git("config", "user.name", "Offline Test");
+    git("config", "user.email", "offline-test@example.invalid");
+    await mkdir(dirname(authorityFile), { recursive: true });
+    await writeFile(authorityFile, "export const VERSION = 'V1';\n");
+    git("add", ".");
+    git("commit", "--quiet", "-m", "source");
+    const sourceCommit = git("rev-parse", "HEAD");
+    assert.doesNotThrow(() => verifyValidationAuthority(sourceCommit, { repositoryRoot: repository }));
+
+    git("switch", "--quiet", "-c", "other");
+    await writeFile(join(repository, "other.txt"), "other\n");
+    git("add", ".");
+    git("commit", "--quiet", "-m", "other");
+    const nonAncestor = git("rev-parse", "HEAD");
+
+    git("switch", "--quiet", "--detach", sourceCommit);
+    git("switch", "--quiet", "-c", "review");
+    await writeFile(join(repository, "review.txt"), "review\n");
+    git("add", ".");
+    git("commit", "--quiet", "-m", "review");
+    assert.throws(() => verifyValidationAuthority(nonAncestor, { repositoryRoot: repository }), /unavailable, is not an ancestor/);
+    assert.throws(() => verifyValidationAuthority("f".repeat(40), { repositoryRoot: repository }), /unavailable, is not an ancestor/);
+
+    await writeFile(authorityFile, "export const VERSION = 'V2';\n");
+    git("add", ".");
+    git("commit", "--quiet", "-m", "changed contract");
+    assert.throws(() => verifyValidationAuthority(sourceCommit, { repositoryRoot: repository }), /different validation authority/);
+  } finally {
+    await rm(repository, { recursive: true, force: true });
+  }
 });

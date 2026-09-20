@@ -3,7 +3,7 @@ import { dirname, join } from "node:path";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { writeRunArtifact } from "./src/artifact-writer.mjs";
+import { assertSafeRawOutputDirectory, writeRunArtifact } from "./src/artifact-writer.mjs";
 import { createLiveLlmClient, runtimeFromEnvironment } from "./src/llm-client.ts";
 import { executeBoundedLiveRun, runnerConfigurationFromEnvironment } from "./src/runner.ts";
 import { PROMPT_VERSION } from "./src/prompt-contract.ts";
@@ -40,9 +40,12 @@ if (repositoryStatus !== "") throw new Error("Live execution requires a clean re
 const sourceCommit = execFileSync("git", ["-C", repositoryRoot, "rev-parse", "HEAD"], {
   encoding: "utf8",
 }).trim();
+const outputDirectory = assertSafeRawOutputDirectory(
+  process.env.LIVE_LLM_OUTPUT_DIR?.trim() || join(currentDirectory, "output"),
+  repositoryRoot,
+);
 const client = createLiveLlmClient(runtime);
 const artifact = await executeBoundedLiveRun({ client, configuration, sourceCommit });
-const outputDirectory = process.env.LIVE_LLM_OUTPUT_DIR?.trim() || join(currentDirectory, "output");
 const artifactPath = await writeRunArtifact(artifact, {
   outputDirectory,
   forbiddenValues: [runtime.apiKey],

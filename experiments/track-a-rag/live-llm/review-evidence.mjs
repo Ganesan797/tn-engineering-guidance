@@ -52,9 +52,8 @@ const SENSITIVE_TEXT = [
 const currentDirectory = dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = resolve(currentDirectory, "../../..");
 const VALIDATION_AUTHORITY_PATHS = [
-  "experiments/track-a-rag/live-llm/src/output-validation.ts",
-  "experiments/track-a-rag/live-llm/src/evaluation.ts",
-  "experiments/track-a-rag/live-llm/src/runner.ts",
+  "experiments/track-a-rag/live-llm/run-live-gate.mjs",
+  "experiments/track-a-rag/live-llm/src",
   "experiments/track-a-rag/live-llm/scenarios",
   "experiments/track-a-rag/corpus",
   "experiments/track-a-rag/src",
@@ -124,6 +123,7 @@ export function validateSanitizedArtifact(rawArtifact) {
     throw new Error("Raw artifact must record a full lowercase Git source commit");
   }
   assertString(raw.provider, "provider");
+  if (raw.provider !== "OPENAI" && raw.provider !== "GEMINI") throw new Error("Unsupported artifact provider");
   assertString(raw.model, "model");
   assertString(raw.prompt_version, "prompt_version");
   if (typeof raw.run_timestamp !== "string" || Number.isNaN(Date.parse(raw.run_timestamp))) throw new Error("Invalid run timestamp");
@@ -154,9 +154,14 @@ export function validateSanitizedArtifact(rawArtifact) {
       }
       const issues = validateLiveModelOutput(entry.assistant, canonical.prepared.input);
       if (issues.length > 0) throw new Error(`Scenario ${entry.id} output validation failed: ${issues.join("; ")}`);
+      if (entry.model_run.provider !== raw.provider || entry.model_run.model !== raw.model || entry.model_run.prompt_version !== raw.prompt_version) {
+        throw new Error(`Scenario ${entry.id} model metadata does not match the artifact`);
+      }
       assertExact(entry.mechanical_evaluation, evaluateMechanically(canonical.prepared.input, entry.assistant), `Scenario ${entry.id} mechanical evaluation`);
     } else if (entry.failure === undefined || entry.model_run !== undefined || entry.mechanical_evaluation !== null) {
       throw new Error(`Scenario ${entry.id} has an inconsistent failed transcript`);
+    } else if (entry.failure.scenario_id !== entry.id || entry.failure.provider !== raw.provider || entry.failure.model !== raw.model) {
+      throw new Error(`Scenario ${entry.id} failure metadata does not match the artifact`);
     }
   }
 
@@ -204,11 +209,12 @@ export function validateReviewEvidence(value) {
   return structuredClone(envelope);
 }
 
-function verifyValidationAuthority(sourceCommit) {
+export function verifyValidationAuthority(sourceCommit, options = {}) {
+  const validationRepositoryRoot = options.repositoryRoot === undefined ? repositoryRoot : resolve(options.repositoryRoot);
   try {
-    execFileSync("git", ["-C", repositoryRoot, "cat-file", "-e", `${sourceCommit}^{commit}`], { stdio: "ignore" });
-    execFileSync("git", ["-C", repositoryRoot, "merge-base", "--is-ancestor", sourceCommit, "HEAD"], { stdio: "ignore" });
-    execFileSync("git", ["-C", repositoryRoot, "diff", "--quiet", sourceCommit, "HEAD", "--", ...VALIDATION_AUTHORITY_PATHS], { stdio: "ignore" });
+    execFileSync("git", ["-C", validationRepositoryRoot, "cat-file", "-e", `${sourceCommit}^{commit}`], { stdio: "ignore" });
+    execFileSync("git", ["-C", validationRepositoryRoot, "merge-base", "--is-ancestor", sourceCommit, "HEAD"], { stdio: "ignore" });
+    execFileSync("git", ["-C", validationRepositoryRoot, "diff", "--quiet", sourceCommit, "HEAD", "--", ...VALIDATION_AUTHORITY_PATHS], { stdio: "ignore" });
   } catch {
     throw new Error("Recorded source commit is unavailable, is not an ancestor, or uses different validation authority");
   }
