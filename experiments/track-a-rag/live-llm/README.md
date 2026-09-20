@@ -23,7 +23,7 @@ The runner never defaults to the full gate. The bounded smoke run requires an ex
 
 ```text
 $env:LIVE_LLM_PROVIDER="GEMINI"
-$env:LIVE_LLM_MODEL="gemini-2.5-flash"
+$env:LIVE_LLM_MODEL="gemini-3.6-flash"
 $env:LIVE_LLM_RUN_MODE="SMOKE"
 $env:LIVE_LLM_SCENARIOS="G01,G05,J01-T1"
 $env:LIVE_LLM_MAX_REQUESTS="3"
@@ -42,7 +42,7 @@ Each run writes one secret-checked JSON artifact to the Git-ignored `output/` di
 
 The complete 14-scenario gate remains available only through explicit `LIVE_LLM_RUN_MODE=FULL` with all 14 scenario IDs in canonical order and `LIVE_LLM_MAX_REQUESTS=14`. It is never selected as a fallback.
 
-Supported Gemini model options for this controlled harness are `gemini-2.5-flash-lite`, `gemini-2.5-flash`, and `gemini-2.5-pro`. Model selection remains explicit; the harness has no default model.
+Supported Gemini model options for this controlled harness are `gemini-2.5-flash-lite`, `gemini-3.6-flash`, and `gemini-2.5-pro`. Model selection remains explicit; the harness has no default model. Offline structured-output tests do not establish live structured JSON compatibility for `gemini-3.6-flash`.
 
 The existing OpenAI path remains available by setting `LIVE_LLM_PROVIDER=OPENAI`, `LIVE_LLM_MODEL`, and `OPENAI_API_KEY`. The legacy `OPENAI_MODEL` variable is still accepted when `LIVE_LLM_MODEL` is absent.
 

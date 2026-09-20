@@ -127,8 +127,8 @@ export function runnerConfigurationFromEnvironment(
     if (!sameIds(selected, SMOKE_SCENARIO_IDS)) {
       throw new Error(`SMOKE mode requires exactly ${SMOKE_SCENARIO_IDS.join(",")}`);
     }
-    if (runtime.provider !== "GEMINI" || runtime.model !== "gemini-2.5-flash") {
-      throw new Error("SMOKE mode requires GEMINI with gemini-2.5-flash");
+    if (runtime.provider !== "GEMINI" || runtime.model !== "gemini-3.6-flash") {
+      throw new Error("SMOKE mode requires GEMINI with gemini-3.6-flash");
     }
     if (runtime.timeout_ms !== 30_000) throw new Error("SMOKE mode requires a 30000ms timeout");
   } else if (modeRaw === "DIAGNOSTIC") {
@@ -139,8 +139,8 @@ export function runnerConfigurationFromEnvironment(
     if (!sameIds(selected, ["G01"])) {
       throw new Error("DIAGNOSTIC mode requires exactly G01");
     }
-    if (runtime.provider !== "GEMINI" || runtime.model !== "gemini-2.5-flash") {
-      throw new Error("DIAGNOSTIC mode requires GEMINI with gemini-2.5-flash");
+    if (runtime.provider !== "GEMINI" || runtime.model !== "gemini-3.6-flash") {
+      throw new Error("DIAGNOSTIC mode requires GEMINI with gemini-3.6-flash");
     }
     if (runtime.timeout_ms !== 30_000) throw new Error("DIAGNOSTIC mode requires a 30000ms timeout");
   } else {

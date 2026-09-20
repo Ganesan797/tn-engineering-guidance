@@ -43,7 +43,7 @@ interface GeminiApiBody {
 
 export const GEMINI_MODEL_OPTIONS = [
   "gemini-2.5-flash-lite",
-  "gemini-2.5-flash",
+  "gemini-3.6-flash",
   "gemini-2.5-pro",
 ] as const;
 
@@ -59,10 +59,10 @@ const GEMINI_STANDARD_TEXT_PRICES: Readonly<Record<string, TokenPrice>> = {
     outputUsdPerMillion: 0.40,
     basis: "Gemini Developer API standard paid text rates checked 2026-09-19",
   },
-  "gemini-2.5-flash": {
-    inputUsdPerMillion: 0.30,
-    outputUsdPerMillion: 2.50,
-    basis: "Gemini Developer API standard paid text rates checked 2026-09-19",
+  "gemini-3.6-flash": {
+    inputUsdPerMillion: 0.75,
+    outputUsdPerMillion: 3.75,
+    basis: "Gemini Developer API introductory standard paid text rates through 2026-12-31, checked 2026-09-20",
   },
   "gemini-2.5-pro": {
     inputUsdPerMillion: 1.25,

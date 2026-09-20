@@ -37,6 +37,8 @@ import {
 } from "../src/runner.ts";
 import type { LiveLlmClient, LiveModelInput, LiveModelOutput, LiveModelRun, StudentState } from "../src/types.ts";
 
+const GEMINI_MODEL = "gemini-3.6-flash";
+
 const studentState: StudentState = {
   language: "ENGLISH",
   knowledge_stage: "BEGINNER",
@@ -86,7 +88,7 @@ function runnerClient(options: {
   let calls = 0;
   const client: LiveLlmClient = {
     provider: "GEMINI",
-    model: "gemini-2.5-flash",
+    model: GEMINI_MODEL,
     temperature: 0,
     async generate(input) {
       calls += 1;
@@ -97,7 +99,7 @@ function runnerClient(options: {
         metadata: {
           ...run.metadata,
           provider: "GEMINI",
-          model: "gemini-2.5-flash",
+          model: GEMINI_MODEL,
           usage: options.missingUsage
             ? { input_tokens: null, output_tokens: null, thinking_tokens: null, total_tokens: null }
             : { input_tokens: 10, output_tokens: 5, thinking_tokens: null, total_tokens: 15 },
@@ -111,7 +113,7 @@ function runnerClient(options: {
 
 function smokeConfiguration(overrides: Readonly<Record<string, string | undefined>> = {}) {
   return runnerConfigurationFromEnvironment(
-    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    { provider: "GEMINI", model: GEMINI_MODEL, timeout_ms: 30_000 },
     {
       LIVE_LLM_RUN_MODE: "SMOKE",
       LIVE_LLM_SCENARIOS: "G01,G05,J01-T1",
@@ -267,18 +269,18 @@ test("provider and model selection require a complete unambiguous environment", 
   assert.equal(runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "UNKNOWN" }), null);
   assert.equal(runtimeFromEnvironment({
     LIVE_LLM_PROVIDER: "GEMINI",
-    LIVE_LLM_MODEL: "gemini-2.5-flash",
+    LIVE_LLM_MODEL: GEMINI_MODEL,
   }), null);
 
   const gemini = runtimeFromEnvironment({
     LIVE_LLM_PROVIDER: "GEMINI",
-    LIVE_LLM_MODEL: "gemini-2.5-flash",
+    LIVE_LLM_MODEL: GEMINI_MODEL,
     GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
   });
   assert.equal(gemini?.provider, "GEMINI");
-  assert.equal(gemini?.model, "gemini-2.5-flash");
+  assert.equal(gemini?.model, GEMINI_MODEL);
   assert.equal(gemini?.temperature, 0);
-  assert.match(gemini?.price?.basis ?? "", /checked 2026-09-19/);
+  assert.match(gemini?.price?.basis ?? "", /checked 2026-09-20/);
 
   const legacyOpenAi = runtimeFromEnvironment({
     OPENAI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
@@ -289,15 +291,15 @@ test("provider and model selection require a complete unambiguous environment", 
 
   assert.equal(runtimeFromEnvironment({
     OPENAI_API_KEY: "TEST_ONLY_NOT_A_SECRET", OPENAI_MODEL: "openai-model",
-    GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL: "gemini-2.5-flash",
+    GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL,
   }), null);
 });
 
 test("Gemini adapter preserves the prompt/output contract and records run metadata", async () => {
-  assert.deepEqual(GEMINI_MODEL_OPTIONS, ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.5-pro"]);
+  assert.deepEqual(GEMINI_MODEL_OPTIONS, ["gemini-2.5-flash-lite", GEMINI_MODEL, "gemini-2.5-pro"]);
   const runtime = runtimeFromEnvironment({
     LIVE_LLM_PROVIDER: "GEMINI",
-    LIVE_LLM_MODEL: "gemini-2.5-flash",
+    LIVE_LLM_MODEL: GEMINI_MODEL,
     GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
   });
   assert.ok(runtime);
@@ -324,7 +326,7 @@ test("Gemini adapter preserves the prompt/output contract and records run metada
   };
   const run = await runPreparedTurn(createLiveLlmClient(runtime, fakeFetch), prepared);
   assert.equal(requests.length, 1);
-  assert.equal(requests[0]!.url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent");
+  assert.equal(requests[0]!.url, "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent");
   assert.equal(requests[0]!.init?.method, "POST");
   const headers = requests[0]!.init?.headers as Record<string, string>;
   assert.equal(headers["x-goog-api-key"], "TEST_ONLY_NOT_A_SECRET");
@@ -337,10 +339,32 @@ test("Gemini adapter preserves the prompt/output contract and records run metada
     input_tokens: 10, output_tokens: 5, thinking_tokens: 2, total_tokens: 17,
   });
   assert.equal(run.metadata.provider, "GEMINI");
-  assert.equal(run.metadata.model, "gemini-2.5-flash");
+  assert.equal(run.metadata.model, GEMINI_MODEL);
   assert.equal(run.metadata.prompt_version, PROMPT_VERSION);
-  assert.equal(run.metadata.estimated_cost_usd, 0.0000205);
+  assert.equal(run.metadata.estimated_cost_usd, 0.00003375);
   assert.equal(run.metadata.latency_ms >= 0, true);
+});
+
+test("Gemini adapter classifies malformed and contract-invalid structured output", async () => {
+  const runtime = runtimeFromEnvironment({
+    LIVE_LLM_PROVIDER: "GEMINI", LIVE_LLM_MODEL: GEMINI_MODEL,
+    GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
+  });
+  assert.ok(runtime);
+  const prepared = prepareLiveTurn({
+    question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS),
+  });
+  for (const [id, text, classification] of [
+    ["MALFORMED", "not-json", "MALFORMED_RESPONSE"],
+    ["INVALID_CONTRACT", JSON.stringify({ response_text: "Incomplete" }), "OUTPUT_VALIDATION_ERROR"],
+  ] as const) {
+    const fakeFetch: typeof fetch = async () => new Response(JSON.stringify({
+      candidates: [{ content: { parts: [{ text }] }, finishReason: "STOP" }],
+    }), { status: 200 });
+    const result = await runPreparedScenario(id, createLiveLlmClient(runtime, fakeFetch), prepared);
+    assert.equal(result.status, "FAILED");
+    if (result.status === "FAILED") assert.equal(result.failure_classification, classification);
+  }
 });
 
 test("OpenAI adapter remains available through the same provider boundary", async () => {
@@ -392,7 +416,7 @@ test("both provider requests use the bounded configurable timeout and cancellati
     }),
     runtimeFromEnvironment({
       LIVE_LLM_PROVIDER: "GEMINI", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET",
-      GEMINI_MODEL: "gemini-2.5-flash", LIVE_LLM_TIMEOUT_MS: "100",
+      GEMINI_MODEL, LIVE_LLM_TIMEOUT_MS: "100",
     }),
   ];
   assert.equal(configurations.every(Boolean), true);
@@ -438,7 +462,7 @@ test("timeout cancellation while reading the response body remains classified as
 
 test("Gemini rejects blocked prompts before accepting otherwise valid JSON", async () => {
   const runtime = runtimeFromEnvironment({
-    LIVE_LLM_PROVIDER: "GEMINI", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL: "gemini-2.5-flash",
+    LIVE_LLM_PROVIDER: "GEMINI", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL,
   });
   assert.ok(runtime);
   const prepared = prepareLiveTurn({
@@ -458,7 +482,7 @@ test("Gemini rejects blocked prompts before accepting otherwise valid JSON", asy
 
 test("Gemini rejects every tested unsuccessful finish reason even when JSON is valid", async () => {
   const runtime = runtimeFromEnvironment({
-    LIVE_LLM_PROVIDER: "GEMINI", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL: "gemini-2.5-flash",
+    LIVE_LLM_PROVIDER: "GEMINI", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL,
   });
   assert.ok(runtime);
   const prepared = prepareLiveTurn({
@@ -508,7 +532,7 @@ test("scenario failures safely classify network HTTP malformed JSON and provider
 
 test("missing provider usage stays null and makes aggregate telemetry explicitly incomplete", async () => {
   const runtime = runtimeFromEnvironment({
-    LIVE_LLM_PROVIDER: "GEMINI", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL: "gemini-2.5-flash",
+    LIVE_LLM_PROVIDER: "GEMINI", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", GEMINI_MODEL,
   });
   assert.ok(runtime);
   const prepared = prepareLiveTurn({
@@ -577,29 +601,29 @@ test("bounded smoke selection is exact and rejects unknown or duplicate IDs", ()
 test("diagnostic mode explicitly requires only G01 and one request", () => {
   const baseEnv = { LIVE_LLM_RUN_MODE: "DIAGNOSTIC", LIVE_LLM_SCENARIOS: "G01", LIVE_LLM_MAX_REQUESTS: "1", LIVE_LLM_COST_CEILING_USD: "0.02" };
   const configuration = runnerConfigurationFromEnvironment(
-    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    { provider: "GEMINI", model: GEMINI_MODEL, timeout_ms: 30_000 },
     baseEnv,
   );
   assert.deepEqual(configuration.selected_scenario_ids, ["G01"]);
   assert.equal(configuration.max_attempted_requests, 1);
   
   assert.throws(() => runnerConfigurationFromEnvironment(
-    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    { provider: "GEMINI", model: GEMINI_MODEL, timeout_ms: 30_000 },
     { ...baseEnv, LIVE_LLM_SCENARIOS: "G05" }
   ), /requires exactly G01/);
   
   assert.throws(() => runnerConfigurationFromEnvironment(
-    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    { provider: "GEMINI", model: GEMINI_MODEL, timeout_ms: 30_000 },
     { ...baseEnv, LIVE_LLM_SCENARIOS: "G01,G05" }
   ), /requires exactly G01/);
   
   assert.throws(() => runnerConfigurationFromEnvironment(
-    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    { provider: "GEMINI", model: GEMINI_MODEL, timeout_ms: 30_000 },
     { ...baseEnv, LIVE_LLM_SCENARIOS: "" }
   ), /requires explicit/);
 
   assert.throws(() => runnerConfigurationFromEnvironment(
-    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    { provider: "GEMINI", model: GEMINI_MODEL, timeout_ms: 30_000 },
     { ...baseEnv, LIVE_LLM_MAX_REQUESTS: "2" }
   ), /must equal the explicitly selected scenario count/);
 });
@@ -607,7 +631,7 @@ test("diagnostic mode explicitly requires only G01 and one request", () => {
 test("full gate remains explicit and compatible with all 14 frozen scenarios", async () => {
   assert.equal(ALL_LIVE_SCENARIO_IDS.length, 14);
   const configuration = runnerConfigurationFromEnvironment(
-    { provider: "GEMINI", model: "gemini-2.5-flash", timeout_ms: 30_000 },
+    { provider: "GEMINI", model: GEMINI_MODEL, timeout_ms: 30_000 },
     {
       LIVE_LLM_RUN_MODE: "FULL",
       LIVE_LLM_SCENARIOS: ALL_LIVE_SCENARIO_IDS.join(","),
@@ -752,7 +776,7 @@ test("durable success and failure artifacts are secret checked", async () => {
 });
 
 test("Gemini 404 diagnostics propagate through the bounded artifact without raw payloads", async () => {
-  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", LIVE_LLM_MODEL: "gemini-2.5-flash", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
+  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", LIVE_LLM_MODEL: GEMINI_MODEL, GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
   assert.ok(runtime);
   const fakeFetch: typeof fetch = async () => new Response(JSON.stringify({
     error: { code: 404, status: "NOT_FOUND", message: "Requested model is not available", details: [{ private: "excluded" }] },
@@ -768,7 +792,7 @@ test("Gemini 404 diagnostics propagate through the bounded artifact without raw 
 });
 
 test("Gemini HTTP diagnostics safely discard unusable bodies and bound streaming reads", async () => {
-  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL: "gemini-2.5-flash", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
+  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL, GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
   assert.ok(runtime);
   const prepared = prepareLiveTurn({ question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS) });
   let cancelled = false;
@@ -790,7 +814,7 @@ test("Gemini HTTP diagnostics safely discard unusable bodies and bound streaming
 });
 
 test("Gemini diagnostic messages redact credentials before truncation and remove controls", async () => {
-  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL: "gemini-2.5-flash", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
+  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL, GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
   assert.ok(runtime);
   const prepared = prepareLiveTurn({ question: "What is engineering?", studentState, chunks: sectionAwareChunking(APPROVED_CORPUS) });
   const messages = [runtime.apiKey, "x".repeat(600) + runtime.apiKey, "Authorization: Bearer private-value", "password=private-value", "https://example.invalid/?key=private-value", "AIza" + "X".repeat(30), "sk-" + "X".repeat(30), "-----BEGIN PRIVATE KEY-----\nprivate-value", "access_token=private-value"];
@@ -808,7 +832,7 @@ test("Gemini diagnostic messages redact credentials before truncation and remove
 });
 
 test("Gemini deadline cancels a stalled HTTP error body even when the stream ignores abort", async () => {
-  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL: "gemini-2.5-flash", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", LIVE_LLM_TIMEOUT_MS: "100" });
+  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL, GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET", LIVE_LLM_TIMEOUT_MS: "100" });
   assert.ok(runtime);
   let cancelled = false;
   const fakeFetch: typeof fetch = async () => new Response(new ReadableStream({ cancel() { cancelled = true; } }), { status: 404 });
@@ -824,7 +848,7 @@ test("Gemini deadline cancels a stalled HTTP error body even when the stream ign
 });
 
 test("adversarial credential assignments are redacted before artifact checks", async () => {
-  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL: "gemini-2.5-flash", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
+  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL, GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
   assert.ok(runtime);
   const fixtureValue = ["offline", "assignment", "fixture"].join("-");
   const assignments = ["key=", "KEY =", "KeY\t=", "key\n =", "passwd=", "PASSWD\t =", "PaSsWd\r\n=", "pwd=", "PWD =", "PwD\t=", "pwd\u00a0="];
@@ -857,7 +881,7 @@ test("adversarial credential assignments are redacted before artifact checks", a
 });
 
 test("adversarial continuous empty chunks terminate on the first empty read and cancel", async () => {
-  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL: "gemini-2.5-flash", GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
+  const runtime = runtimeFromEnvironment({ LIVE_LLM_PROVIDER: "GEMINI", GEMINI_MODEL, GEMINI_API_KEY: "TEST_ONLY_NOT_A_SECRET" });
   assert.ok(runtime);
   for (const prefix of ["", '{"error":{"code":404,']) {
     let pulls = 0;
