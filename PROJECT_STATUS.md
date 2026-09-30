@@ -2,9 +2,9 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** Complete focused owner review and evidence reconciliation for the recorded G01 execution before any further Live LLM request or M2 authorization decision
+**Current task:** Record the owner-reviewed G02–G05 Live LLM evidence and the accepted Guidance Delivery Responsibility Model, then return project attention to bounded student-facing development
 
-**Last reviewed:** 2026-09-20
+**Last reviewed:** 2026-09-30
 
 ## Product Review Gate
 
@@ -16,7 +16,7 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Review the saved G01 output and sanitized artifact for guidance, language, schema, and provenance evidence, then record the owner decision. This task does not authorize another live request. Do not begin production RAG, Track B, or M2.
+**Next priority:** Complete this documentation alignment and select one bounded student-facing task that delivers student value or unblocks an agreed milestone. Further Gemini execution is paused. Do not begin production RAG, Track B, or M2 without separate authorization.
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
@@ -78,7 +78,7 @@
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = FOCUSED_G01_OWNER_REVIEW_AND_EVIDENCE_RECONCILIATION`
+`NEXT_ACTIVITY = DOCUMENTATION_ALIGNMENT_THEN_OWNER_SELECTED_STUDENT_FACING_TASK`
 
 `M2_STATUS = NOT_AUTHORIZED`
 
@@ -114,7 +114,7 @@
 
 `TRACK_B = NOT_STARTED_NOT_AUTHORIZED`
 
-`LIVE_LLM_EXPERIMENT_IMPLEMENTATION = HARNESS_COMPLETE_G01_EXECUTED_OWNER_DECISION_PENDING`
+`LIVE_LLM_EXPERIMENT_IMPLEMENTATION = HARNESS_COMPLETE_G01_TO_G05_PARTIALLY_EXECUTED`
 
 `LIVE_LLM_GATE_IMPLEMENTATION = PARTIAL`
 
@@ -146,13 +146,13 @@
 
 `GEMINI_ADAPTER_REVIEW_TESTS = 173_PASSED`
 
-`LIVE_LLM_GATE_OWNER_REVIEW = G01_PENDING_OWNER_DECISION_REMAINING_SCENARIOS_PENDING`
+`LIVE_LLM_GATE_OWNER_REVIEW = G01_PRIOR_STATUS_G02_TO_G05_REVIEWED_REMAINING_SCENARIOS_PENDING`
 
-`LIVE_MODEL_EVALUATION = PARTIAL_G01_EXECUTED`
+`LIVE_MODEL_EVALUATION = PARTIAL_G01_TO_G05`
 
 `MODEL_MIGRATION = COMPLETE`
 
-`STRUCTURED_JSON_COMPATIBILITY = EXPLICIT_EVIDENCE_PENDING`
+`STRUCTURED_JSON_COMPATIBILITY = PARTIAL_G02_TO_G04_ACCEPTED_G05_OUTPUT_VALIDATION_FAILURE`
 
 `FULL_G01_EXECUTION = COMPLETE`
 
@@ -162,13 +162,19 @@
 
 `LIVE_OUTPUT_PROVENANCE_COMPLIANCE = EXPLICIT_EVIDENCE_PENDING`
 
-`REMAINING_APPROVED_LIVE_LLM_SCENARIOS = PENDING`
+`REMAINING_APPROVED_LIVE_LLM_SCENARIOS = G06_G07_G08_J01_T1_J02_T1_J03_T1_J04_T1_J05_EN_T1_J05_TA_T1_UNEXECUTED`
 
-`GROUNDED_INTELLIGENCE = G01_PASS`
+`GROUNDED_INTELLIGENCE = PARTIAL_MECHANICAL_PASS_DOES_NOT_ESTABLISH_GUIDANCE_QUALITY`
 
-`GUIDANCE_INTELLIGENCE = G01_MANUAL_REVIEW_REQUIRED`
+`GUIDANCE_INTELLIGENCE = PARTIAL_G03_GUIDANCE_QUALITY_FAIL`
 
-`LIVE_LLM_RUNTIME = GEMINI_3_6_FLASH_G01_EXECUTED`
+`LIVE_LLM_RUNTIME = GEMINI_3_6_FLASH_G01_TO_G05_PARTIAL_EXECUTION`
+
+`FURTHER_GEMINI_EXECUTION = PAUSED`
+
+`RETRY_RESUME_SHARED_EVIDENCE_INFRASTRUCTURE = SUFFICIENT_CLOSED_FOR_CURRENT_STAGE`
+
+`GUIDANCE_DELIVERY_RESPONSIBILITY_MODEL = ACCEPTED`
 
 `LLM_IN_ADMISSION_DECISION_PATH = NO`
 
@@ -208,22 +214,53 @@
 
 **Quality finding:** The response should explicitly clarify that TNEA does not cover every engineering admission route. This finding remains part of the owner review; G01 is not fully accepted.
 
+### Owner-reviewed G02–G05 experiment record
+
+The owner-reviewed outcomes below are recorded in the append-only [Live LLM Integration Gate Results V2](docs/live_llm_integration_gate_results_v2.md). They supplement, and do not rewrite, the historical V1 record.
+
+| Scenario | Owner-reviewed outcome | Evidence and limitation |
+| --- | --- | --- |
+| G02 | `PASS` with a minor quality finding | A live response completed and passed mechanical grounding/routing checks. This scenario result does not complete the overall gate. |
+| G03 | `GUIDANCE_QUALITY_FAIL` | The student asked for CSE versus IT in CEG, but the response discussed CSE versus ECE despite mechanical grounding/routing `PASS`. Attempt 1 received HTTP 503 `UNAVAILABLE`; the bounded permitted retry succeeded on attempt 2. |
+| G04 | `PASS` | A live response completed and passed the reviewed scenario outcome. This scenario result does not complete the overall gate. |
+| G05 | `FAIL — OUTPUT_VALIDATION_ERROR` | The provider returned a response, but it failed the required structured-output contract. No conclusion about the deterministic cutoff formula follows from this failure. |
+
+G03 demonstrates that grounded content and a nominally correct route do not establish that an answer satisfies the student's actual question. The existing manual guidance-quality review must explicitly check **question/entity fidelity**. This is a bounded rubric refinement, not authorization for a semantic-matching subsystem.
+
+G05 remains primarily a deterministic-responsibility scenario. A later domain review should determine whether a simple cutoff-calculation request is unnecessarily coupled to broader eligibility inputs. That question is recorded but unresolved.
+
+G01 retains its previously recorded evidence and findings. G06–G08 and J01-T1–J05-TA-T1 remain unexecuted. The Live LLM Gate remains `PARTIAL`; further Gemini execution is `PAUSED`; M2 remains `NOT_AUTHORIZED`.
+
+### Guidance Delivery Responsibility Model
+
+The accepted [Guidance Delivery Responsibility Model](docs/guidance_delivery_responsibility_model_v1.md) distinguishes three primary product responsibilities:
+
+1. **Structured/authoritative guidance:** governed facts plus deterministic calculations, validation, filtering, and selection. Verified facts derive authority from governed sources; they are not all described as deterministic.
+2. **Canonical reviewed guidance:** frequent student questions maintained as reviewed, student-friendly Tamil/English guidance with source, review, and version governance, normally deliverable without an LLM call.
+3. **AI-assisted guidance:** novel, ambiguous, comparative, personalized, or conversational questions where controlled retrieval, synthesis, or explanation adds genuine value. The LLM cannot override structured or authoritative results.
+
+This responsibility model is an evidence-driven delivery refinement. It does not replace the frozen Three-Layer Factual Model, deterministic authority, Golden Product Mission, Student Journey, or scenario definitions. Scenario responsibility labels are analytical metadata only.
+
+The planned approximately 100-question dataset is a progressive product-discovery and evaluation activity, not an MVP prerequisite. Student discussions may provide authentic questions and misconceptions, but never admission authority. Personally identifying information must be removed, and admission-critical answers must be verified independently against governed authoritative sources.
+
+For future AI turns, prefer a compact relevant context containing the student-profile summary, applicable structured/deterministic result, relevant retrieved evidence, and recent relevant exchanges. This is a future guideline, not a current implementation requirement; it must preserve necessary continuity and data minimization.
+
 ### Frozen-plan milestone reconciliation
 
 **Checks already passed:** The bounded model migration and its offline validation are merged. For the supplied G01 execution, routing and grounding passed, no unsupported admission-critical claims were detected, the run completed without a reported failure or retry, and telemetry is complete. These results satisfy the recorded portions of G1 but do not complete the milestone gate.
 
-**Checks requiring manual review:** Guidance usefulness and progression for a zero-knowledge student, Tamil/English language quality, the quality clarification above, owner engineering review, owner student review, and relevant-scenario review remain pending. These checks are required by the frozen implementation plan and include the unresolved G2 assessment.
+**Checks requiring manual review:** G01 retains its recorded review status. G03 failed guidance quality because it did not preserve the requested comparison entities. Tamil/English language quality and the remaining applicable owner engineering, owner student, and relevant-scenario reviews remain pending.
 
-**Checks not executed:** Security and uncertainty checks were not run. The remaining approved Live LLM scenarios and broader bilingual-equivalence review are also pending. G3 must be evaluated in an applicable scenario where deterministic inputs are unknown.
+**Checks not executed:** G06–G08 and J01-T1–J05-TA-T1 remain unexecuted. Security, uncertainty, unknown-input preservation in the applicable live scenario, and broader bilingual-equivalence review remain pending.
 
-**Checks requiring additional evidence:** Explicit schema-validation evidence, citation and provenance compliance for the live output, and the final owner G01 decision remain pending. Grounding `PASS` is retained as supplied evidence and does not by itself establish provenance compliance.
+**Checks requiring additional evidence:** The remaining live scenarios and their required manual reviews still need evidence before a final gate decision. Mechanical grounding/routing results do not independently establish student-intent satisfaction. G05 requires a future valid structured response before its remaining live criteria can be evaluated.
 
 **Remaining sequence:**
 
-1. Complete a focused owner review of the saved G01 output and sanitized artifact, covering guidance, language, schema evidence, provenance, and the recorded quality finding without making another live request.
-2. Record the final G01 decision.
-3. Seek separate authorization before any remaining approved Live LLM Gate execution.
-4. Evaluate the remaining approved Live LLM Gate scenarios.
+1. Complete documentation alignment for the accepted experiment learning and responsibility model.
+2. Return attention to one owner-selected, bounded student-facing development task.
+3. Keep further Gemini execution paused unless separately authorized.
+4. If resumed later, evaluate the remaining frozen scenarios without changing their contracts.
 5. Make an evidence-based gate decision before considering M2 authorization.
 
 **Live LLM acceptance criteria:**
@@ -252,7 +289,7 @@
 
 `PRODUCTION_RAG = NOT_AUTHORIZED`
 
-`NEXT_GATE = FOCUSED_G01_OWNER_REVIEW_NO_NEW_LIVE_REQUEST`
+`NEXT_GATE = OWNER_SELECTION_OF_BOUNDED_STUDENT_FACING_TASK_NO_M2_AUTHORIZATION`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -339,7 +376,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Complete a focused owner review of the saved G01 output and sanitized artifact for guidance, language, explicit schema evidence, provenance, and the recorded scope clarification. Do not make another live request or begin Track B, M2, or production RAG implementation automatically.
+After documentation alignment, select one bounded student-facing task that delivers meaningful student value or unblocks an agreed milestone. Further Gemini execution remains paused; do not begin Track B, M2, or production RAG automatically.
 
 ## M1 implementation review
 
@@ -421,4 +458,4 @@ Complete a focused owner review of the saved G01 output and sanitized artifact f
 
 ## Next review point
 
-Focused owner review and evidence reconciliation for the recorded G01 execution, followed by the final G01 acceptance decision.
+Owner review of the documentation alignment, followed by selection of one bounded student-facing task. Live LLM Gate completion and M2 authorization remain separate future decisions.
