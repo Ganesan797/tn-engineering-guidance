@@ -2,9 +2,9 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** Record the owner-reviewed G02–G05 Live LLM evidence and the accepted Guidance Delivery Responsibility Model, then return project attention to bounded student-facing development
+**Current task:** Develop the reviewed A01–A07 awareness content through focused source verification and volunteer Tamil review; final factual and Tamil approval remain pending
 
-**Last reviewed:** 2026-09-30
+**Last reviewed:** 2026-10-02
 
 ## Product Review Gate
 
@@ -16,7 +16,7 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Complete this documentation alignment and select one bounded student-facing task that delivers student value or unblocks an agreed milestone. Further Gemini execution is paused. Do not begin production RAG, Track B, or M2 without separate authorization.
+**Next priority:** Address the A01–A07 source and coverage gaps and obtain volunteer Tamil review within content development. The original intent review and guidance draft are preserved verbatim; the current acceptance boundary is recorded in [Awareness content review decision](docs/student_pov_awareness_review_decision_v1.md). Further Gemini execution is paused. Production implementation, Track B and M2 remain unauthorized.
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
@@ -78,7 +78,7 @@
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = DOCUMENTATION_ALIGNMENT_THEN_OWNER_SELECTED_STUDENT_FACING_TASK`
+`NEXT_ACTIVITY = A01_TO_A07_FOCUSED_CONTENT_FOLLOW_UPS`
 
 `M2_STATUS = NOT_AUTHORIZED`
 
@@ -152,7 +152,7 @@
 
 `MODEL_MIGRATION = COMPLETE`
 
-`STRUCTURED_JSON_COMPATIBILITY = PARTIAL_G02_TO_G04_ACCEPTED_G05_OUTPUT_VALIDATION_FAILURE`
+`STRUCTURED_JSON_COMPATIBILITY = G02_TO_G04_CONTRACT_VALID_G05_OUTPUT_VALIDATION_FAILURE`
 
 `FULL_G01_EXECUTION = COMPLETE`
 
@@ -257,8 +257,8 @@ For future AI turns, prefer a compact relevant context containing the student-pr
 
 **Remaining sequence:**
 
-1. Complete documentation alignment for the accepted experiment learning and responsibility model.
-2. Return attention to one owner-selected, bounded student-facing development task.
+1. Documentation alignment for the accepted experiment learning and responsibility model is committed at `33a264a19daa866aa30fa49e733be089af59025d` and pushed.
+2. Continue owner-accepted A01–A07 content development with focused verification and Tamil review; final factual and Tamil approval remain pending.
 3. Keep further Gemini execution paused unless separately authorized.
 4. If resumed later, evaluate the remaining frozen scenarios without changing their contracts.
 5. Make an evidence-based gate decision before considering M2 authorization.
@@ -289,7 +289,7 @@ For future AI turns, prefer a compact relevant context containing the student-pr
 
 `PRODUCTION_RAG = NOT_AUTHORIZED`
 
-`NEXT_GATE = OWNER_SELECTION_OF_BOUNDED_STUDENT_FACING_TASK_NO_M2_AUTHORIZATION`
+`NEXT_GATE = A01_TO_A07_FACTUAL_AND_TAMIL_REVIEW_NO_M2_AUTHORIZATION`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -335,7 +335,7 @@ For future AI turns, prefer a compact relevant context containing the student-pr
 
 - Repository skeleton exists for data, documentation, source modules, and tests.
 - CSV data dictionary and relationship/validation rules are documented.
-- Source registry contains four official/primary references.
+- Source registry currently contains eight references (`SRC001`–`SRC008`); their allowed uses and limitations remain source-specific.
 - Detailed TNEA 2026 eligibility reference contains 32 sourced rules.
 - Branch master contains five normalized core engineering branches.
 - Empty schemas exist for colleges, programmes, cutoffs, canonical eligibility rules, and anonymous student profiles.
@@ -344,7 +344,7 @@ For future AI turns, prefer a compact relevant context containing the student-pr
 - Frozen Domain/Data V1 contract artifacts have landed in `docs/domain_data_v1.md` and `docs/domain_data_v1.yaml`.
 - Slice 1 implements the frozen domain models and enums, `ADMISSION_YEAR = 2026`, conservative eligibility aggregation, `AdmissionSeatFact` validation, and focused invariant tests.
 - Slice 2 implements deterministic ELG001–ELG032 dispatch and execution, explainable sourced checks, missing-field reporting, cutoff calculation, explicit `NEEDS_REVIEW` boundaries, and complete rule-ID test coverage.
-- Slice 2 verification passes with 30 tests and a strict TypeScript compiler check and is committed to repository HEAD.
+- Historical Slice 2 verification recorded 30 passing tests and a strict TypeScript compiler check. This is milestone evidence, not a current-HEAD test run.
 - Executable TypeScript domain and test infrastructure exists under `src/domain/` and `tests/domain/`, with the test command defined in `package.json`.
 - Slice 3 adds validated 2026 pilot college/programme ingestion and append-only, round/stage-aware `AdmissionSeatFact` snapshot storage with provenance and duplicate/conflict detection.
 - Synthetic Slice 3 fixtures prove all three seat fact types and future vacancy snapshot ingestion without representing test records as real TNEA facts.
@@ -376,7 +376,9 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-After documentation alignment, select one bounded student-facing task that delivers meaningful student value or unblocks an agreed milestone. Further Gemini execution remains paused; do not begin Track B, M2, or production RAG automatically.
+Complete the focused factual-source and Tamil-review follow-ups for A01–A07. The 168-question corpus remains an external exploratory draft; the 20-intent review and A01–A07 response are now preserved as repository review records. Their original wording is unchanged. Content-development acceptance does not approve all factual claims, Tamil wording, the full intent taxonomy, or implementation. See [the dated decision and artifact inventory](docs/student_pov_awareness_review_decision_v1.md).
+
+Historical test counts below and above refer to their named milestones. This documentation reconciliation ran preservation and integrity checks only, not the application suite or typecheck.
 
 ## M1 implementation review
 
@@ -452,10 +454,10 @@ After documentation alignment, select one bounded student-facing task that deliv
 - Accuracy, traceability, student value, and explainability take priority over feature breadth.
 - Versioned CSV files are the initial source of truth; Supabase/PostgreSQL is the planned serving layer.
 - V1 guidance is deterministic and uses cutoff, community/category, and preferred branch.
-- AI assists only after MVP and must never invent admission facts.
+- Bounded pre-M2 AI experiments have been conducted separately from production authorization. Further Gemini execution is paused; AI must never invent admission facts or replace deterministic authority.
 - No student name or contact information is stored in the anonymous profile dataset.
 - Planned product stack: Next.js, TypeScript, Tailwind CSS, Supabase/PostgreSQL, and Vercel; implementation is not yet present.
 
 ## Next review point
 
-Owner review of the documentation alignment, followed by selection of one bounded student-facing task. Live LLM Gate completion and M2 authorization remain separate future decisions.
+Focused A01–A07 factual and volunteer Tamil review. Live LLM Gate completion and M2 authorization remain separate future decisions.

@@ -1,5 +1,7 @@
 # Guidance Delivery Responsibility Model V1
 
+**Decision recorded:** 2026-09-30. The accepted model was documented in commit `33a264a19daa866aa30fa49e733be089af59025d`. This date records the owner decision; it does not authorize implementation.
+
 `STATUS = OWNER_ACCEPTED_DOCUMENTATION_ALIGNMENT`
 
 `LIVE_LLM_GATE = PARTIAL`

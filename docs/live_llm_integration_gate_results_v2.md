@@ -1,5 +1,7 @@
 # Live LLM Integration Gate Results V2
 
+**Decision recorded:** 2026-09-30. **Evidence-reference reconciliation:** 2026-10-02.
+
 `RESULT_STATUS = OWNER_REVIEWED_PARTIAL`
 
 `LIVE_LLM_GATE = PARTIAL`
@@ -13,6 +15,10 @@
 This append-only record documents the owner-reviewed G02–G05 experiment outcomes and the learning accepted from them. It supplements the historical [V1 results](live_llm_integration_gate_results_v1.md); it does not rewrite V1, alter the frozen scenarios, authorize another live request, or establish production readiness.
 
 The run used `GEMINI` / `gemini-3.6-flash` through the existing bounded Live LLM runner. The retained sanitized evidence records five requests, complete telemetry, and an estimated total cost of USD 0.0120585. Raw provider payloads and credentials are excluded from this document.
+
+Execution reference: `live-llm-run-2026-09-30T02-34-56-075Z.json`, timestamp `2026-09-30T02:34:56.075Z`, source commit `06fbaf9ed1588a3bda16f4c24625b27649f16e93`. The sanitized candidate records raw SHA-256 `4f18cfccef764a67632788dc4fa764d79c9dd4aad6422673e0da32414e4a275d`. Its local location is `experiments/track-a-rag/live-llm/output/review-candidates/live-llm-run-2026-09-30T02-34-56-075Z.candidate.json` in the owner's execution checkout. It remains `CANDIDATE`; no approved execution JSON is tracked in this repository. This document is an owner-reviewed summary, not a substitute for the original execution evidence.
+
+Owner acceptance reference: the September 30 instruction to document the accepted G02–G05 outcomes and subsequent documentation approval, persisted in commit `33a264a19daa866aa30fa49e733be089af59025d`. Machine statuses are separate: G02–G04 have mechanical grounding/routing PASS and guidance/language MANUAL_REVIEW_REQUIRED; later owner outcomes appear below. G03's contract-valid output does not mean guidance-quality acceptance. G02's minor quality finding was supplied without its exact detail; that detail remains pending rather than inferred.
 
 ## Owner-reviewed outcomes
 
