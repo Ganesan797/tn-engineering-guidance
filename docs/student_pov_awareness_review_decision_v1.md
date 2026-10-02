@@ -16,7 +16,23 @@
 
 `M2_STATUS = NOT_AUTHORIZED`
 
-## Owner decision and authority
+## Subsequent owner decision — A01–A07 V2, 2026-10-02
+
+Ganesan reviewed [A01–A07 V2](student_pov_awareness_batch_a01_a07_v2.md), present at commit `58c779f58461cd85c9591e271355b07fa5d8341c`, and found the answers satisfactory. The owner **accepts the revised content direction**. This is the supplied owner decision, not an inference from the paper review.
+
+`V2_OWNER_ANSWER_REVIEW = SATISFACTORY`
+
+`V2_CONTENT_DIRECTION = OWNER_ACCEPTED`
+
+`VOLUNTEER_TAMIL_EQUIVALENCE_REVIEW = PENDING`
+
+`ACTUAL_STUDENT_VALIDATION = PENDING`
+
+The [V2 evidence note](student_pov_awareness_evidence_v2.md) and its source limitations remain in force, including Q021's need for matching historical admission context before any numeric comparison. This decision does not confer unrestricted factual release approval, erase conditions, approve the complete taxonomy or authorize implementation. Final factual approval remains separate; the satisfactory answer review is complete.
+
+The next content batch, [INT-05–INT-08 B01–B08](student_pov_admission_batch_int05_int08_v1.md), is prepared for **Ganesan's answer review**, with [evidence](student_pov_admission_evidence_int05_int08_v1.md) and [39-question coverage/paper review](student_pov_admission_coverage_int05_int08_v1.md). That new batch is not included in the A01–A07 V2 acceptance. Gemini remains PAUSED; Live LLM Gate PARTIAL; M2 NOT_AUTHORIZED.
+
+## Historical V1 owner decision and authority
 
 The owner accepted the supplied A01–A07 review for content development with focused follow-ups. This permits progress on the awareness content; it does not establish final factual or Tamil approval, publication readiness, implementation authorization, or approval of every proposed intent in the 20-intent map.
 
@@ -41,7 +57,7 @@ These identify the saved response text, not raw experiment artifacts. Git workin
 
 A separately named `student_question_corpus_v1_draft (1).md` exists beside the working input. Its equivalence has not been established; the named original remains the reviewed input.
 
-## Focused follow-ups
+## Historical V1 focused follow-ups (subsequent V2 research and decision above govern current status)
 
 - Keep the four evidence classes distinct. Q016/Q017/Q022 are marked paraphrased in SOURCE_REF despite their discovered ORIGIN; Q023–Q025 are synthetic language examples. Correct any future normalized metadata explicitly rather than modifying the raw input or silently claiming authentic wording.
 - Review the proposed 20-intent grouping. Saving it does not approve its taxonomy or turn the 168 questions into 168 FAQs.
@@ -59,4 +75,4 @@ This documentation task verifies original-response preservation, changed-file sc
 
 The accepted learning commit `33a264a19daa866aa30fa49e733be089af59025d` was pushed before this reconciliation. The new review files and this decision enter Git through the owner's explicit authorization to save, commit and push the documentation. No raw corpus or unapproved execution evidence is committed.
 
-Next content task: review the exact branch-comparison source gaps in A04/A05 while preserving the requested entities and keeping factual approval pending until evidence is reviewed. No new infrastructure or M2 work is authorized.
+Historical next task at V1 preservation: review A04/A05 branch-comparison source gaps. The separately preserved V2 research subsequently addressed answer completeness; its source limitations remain. Current next task: Ganesan reviews INT-05–INT-08 answers. Volunteer Tamil-equivalence review and actual student validation remain pending for both batches. No infrastructure or M2 work is authorized.
