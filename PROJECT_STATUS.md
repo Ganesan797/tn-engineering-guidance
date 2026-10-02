@@ -18,6 +18,10 @@
 
 **Next priority:** Address the A01–A07 source and coverage gaps and obtain volunteer Tamil review within content development. The original intent review and guidance draft are preserved verbatim; the current acceptance boundary is recorded in [Awareness content review decision](docs/student_pov_awareness_review_decision_v1.md). Further Gemini execution is paused. Production implementation, Track B and M2 remain unauthorized.
 
+**A01–A07 coverage review (2026-10-02):** The [question-level review and paper walkthrough](docs/student_pov_awareness_coverage_review_v1.md) accounts for all 31 assigned questions: **7 ANSWERED, 15 PARTIAL, 9 DEFERRED**. These assess answer completeness only; final factual approval, volunteer Tamil approval and actual student validation remain pending. Content-development acceptance remains in force. The paper walkthrough is PARTIAL against the 5–10-minute value goal: comparison deferrals, repeated next questions and the missing explicit admission-pathway handoff limit progression. It does not require all seven journey stages in one batch.
+
+**Focused correction order:** Preserve supplied comparison entities and context; use existing scoped curriculum extracts to improve direct coverage; connect to approved pathway/navigation content; resolve six evidence-label conflicts in future normalized metadata; verify remaining factual gaps and obtain Tamil/student review. The review proposes corrections only. The original A01–A07 batch, intent map and raw corpus remain unchanged. No application tests or live requests were run for this review.
+
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
 **Mission review:** Golden Product Mission V1 is frozen. Mission clarity, Booklet-First alignment, zero-knowledge alignment, native-language and reach direction, personalization, Think-Further direction, trusted-engine boundaries, and the mission review gate passed review. Major student-facing milestones now require `TECHNICAL_DOD = PASS`, `MISSION_ALIGNMENT = PASS`, and `STUDENT_SCENARIO_REVIEW = PASS`.
