@@ -142,3 +142,85 @@ Q026–Q051 remain PRODUCT_COVERAGE_QUESTION; this batch's Q010/Q011/Q012/Q021 r
 ## Validation and status
 
 Validate the table's 31 unique IDs against INT-01–INT-04 and the original corpus, recalculate counts, check links and changed-file scope, and verify the original batch remains unchanged. Application tests and typecheck are not relevant to this documentation-only review and were not executed. No live API calls, frozen-contract changes or new implementation authorization. Live LLM Gate remains PARTIAL; Gemini remains PAUSED; M2 remains NOT_AUTHORIZED.
+
+---
+
+## V2 research revision reassessment — 2026-10-02
+
+This section records the reassessment of [A01–A07 V2](student_pov_awareness_batch_a01_a07_v2.md) and supersedes the V1 answer-completeness counts above. The V1 review and [original batch](student_pov_awareness_batch_a01_a07_v1.md) remain unchanged as historical evidence. Research provenance is in [the V2 evidence note](student_pov_awareness_evidence_v2.md).
+
+`BEFORE = 7 ANSWERED / 15 PARTIAL / 9 DEFERRED`
+
+`AFTER = 31 ANSWERED / 0 PARTIAL / 0 DEFERRED`
+
+`FACTUAL_APPROVAL = PENDING_OWNER_REVIEW`
+
+`TAMIL_APPROVAL = PENDING_VOLUNTEER_REVIEW`
+
+An `ANSWERED` result means the revision gives a direct, understandable response and a relevant next direction. It does not automatically approve the facts, Tamil wording or product implementation.
+
+| ID | Unit | V2 coverage | Completeness reason |
+|---|---|---|---|
+| Q025 | A01 | ANSWERED | Gives a marks-free three-question starting route; synthetic evidence label preserved. |
+| Q026 | A01 | ANSWERED | Defines engineering with concrete systems. |
+| Q027 | A01 | ANSWERED | Explains why students may choose engineering without asserting universal fit. |
+| Q028 | A01 | ANSWERED | Gives concrete cross-field work examples. |
+| Q034 | A01 | ANSWERED | Directly tells the student where to start. |
+| Q035 | A01 | ANSWERED | Covers study demands, practical work, curriculum variation, outcome limits and sequence. |
+| Q030 | A02 | ANSWERED | Supplies a bounded fit exploration and avoids an aptitude verdict. |
+| Q031 | A02 | ANSWERED | Explains actual maths expectations and preparation without a readiness threshold. |
+| Q032 | A02 | ANSWERED | Names useful learnable interests/skills and avoids innate-skill assumptions. |
+| Q029 | A03 | ANSWERED | Compares engineering with one scoped science-degree example and discloses variation. |
+| Q033 | A03 | ANSWERED | Provides official broad post-Class-12 option families and a verification next step. |
+| Q036 | A04 | ANSWERED | Retains a manageable, non-ranked branch-family map. |
+| Q037 | A04 | ANSWERED | Explains CSE focus, subjects and practical work. |
+| Q038 | A04 | ANSWERED | Explains IT focus, overlap and curriculum-specific limits. |
+| Q039 | A04 | ANSWERED | Explains ECE focus, subjects and labs, including computing overlap. |
+| Q040 | A04 | ANSWERED | Explains EEE focus, subjects and labs. |
+| Q041 | A04 | ANSWERED | Explains Mechanical focus, subjects and practical work. |
+| Q042 | A04 | ANSWERED | Explains Civil focus, subjects and practical/field work. |
+| Q043 | A04 | ANSWERED | Explains AI & DS and CSE (AI & ML) on an equivalent curriculum scope. |
+| Q044 | A04 | ANSWERED | Gives branch examples and a precise exact-syllabus inspection method. |
+| Q010 | A05 | ANSWERED | Directly compares CSE/AI&DS, retains both entities and gives conditional choice guidance. |
+| Q011 | A05 | ANSWERED | Directly compares IT/CSE and separates cutoff similarity from curriculum content. |
+| Q049 | A05 | ANSWERED | Preserves and completes the requested four-way comparison. |
+| Q050 | A05 | ANSWERED | Provides a concrete curriculum checklist. |
+| Q012 | A06 | ANSWERED | Directly addresses Mechanical/Civil, popularity pressure and conditional value. |
+| Q021 | A06 | ANSWERED | Explains why no single cutoff exists, lists all matching dimensions and gives the official lookup; no prediction. |
+| Q047 | A06 | ANSWERED | Gives an activity/content method for branch-interest exploration. |
+| Q048 | A06 | ANSWERED | Directly rejects placement-only choice and explains how to scope placement evidence. |
+| Q045 | A07 | ANSWERED | Gives branch-linked career families with explicit employer/skill conditions. |
+| Q046 | A07 | ANSWERED | Explains a possible non-CSE-to-software route, requirements and restrictions without promising entry. |
+| Q051 | A07 | ANSWERED | Explains how career change can occur and what must be checked or learned. |
+
+### Regression and progression checks
+
+- The seven previously answered questions (Q025, Q026, Q034, Q036, Q047, Q048, Q050) remain direct and retain their scope limits.
+- Q010/Q011 retain the named pair; Q049 retains all four entities; Q046 retains the stated software goal.
+- Q021 separates curriculum/interest from historical admission feasibility and requires college, year, route/round, category/quota and programme/seat-type matching.
+- No answer treats similar historical cutoffs as evidence of similar curricula.
+- Every unit now has a context-specific next direction. A01 closes with a transition to the frozen Stage 2 question, “How do I enter engineering?”
+
+### Paper review: zero-knowledge 5–10-minute path after V2
+
+The student turns below are `SYNTHETIC_LANGUAGE_EXAMPLE` prompts for paper review, not observed testimony. Times are planning estimates, not measured user performance.
+
+| Planned time | Student turn | V2 progression |
+|---|---|---|
+| 0–2 min | “I do not know what engineering is. Where do I start?” | A01 defines engineering, shows real work and gives a three-question start without requesting marks. |
+| 2–4 min | “Computers interest me. What would I study?” | A04 explains CSE and IT with subjects and practical work; it continues the stated interest instead of looping. |
+| 4–6 min | “How are CSE and IT different?” | A05 explains overlap and named emphasis under a common curriculum scope, while warning that exact institutions differ. |
+| 6–8 min | “Maths worries me. Can I still consider engineering?” | A02 states that maths continues, names example topics, gives preparation steps and avoids an aptitude judgment. |
+| 8–10 min | “What do I do next?” | The transition points to “How do I enter engineering?” and the already frozen TNEA/pathway stage, before marks or college lists. |
+
+**Paper outcome:** PASS for content progression against the awareness portion of the 5–10-minute value goal. This does not validate the full seven-stage journey. Actual zero-knowledge student timing, comprehension and Tamil usability remain pending.
+
+### Remaining review gaps after research
+
+1. Owner factual review must confirm that each claim stays within its cited institution/regulation and that “broader” or “focus” wording does not imply universal programme equivalence.
+2. Volunteer/native-speaker review must check all Tamil for naturalness, terminology and semantic equivalence. Tamil remains draft.
+3. Q021 has no defensible numeric answer without the missing college/year/stream/round/category/quota/programme context. The response is complete because it explains the limitation and exact official lookup path.
+4. Career content identifies possibilities and conditions. Current target-employer eligibility remains a later, role-specific lookup; no universal hiring claim is open or implied.
+5. Actual student validation remains pending. The paper walkthrough is not user research.
+
+The six corpus evidence-label corrections recorded above remain unchanged. No source research converted a synthetic or paraphrased item into discovered student evidence.

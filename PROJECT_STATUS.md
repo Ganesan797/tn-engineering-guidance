@@ -2,7 +2,7 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** Develop the reviewed A01–A07 awareness content through focused source verification and volunteer Tamil review; final factual and Tamil approval remain pending
+**Current task:** Review the researched A01–A07 V2 awareness revision; answer completeness is closed while final factual, Tamil and actual-student approval remain pending
 
 **Last reviewed:** 2026-10-02
 
@@ -16,11 +16,11 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Address the A01–A07 source and coverage gaps and obtain volunteer Tamil review within content development. The original intent review and guidance draft are preserved verbatim; the current acceptance boundary is recorded in [Awareness content review decision](docs/student_pov_awareness_review_decision_v1.md). Further Gemini execution is paused. Production implementation, Track B and M2 remain unauthorized.
+**Next priority:** Conduct one focused owner factual-scope and volunteer Tamil-equivalence review of [A01–A07 V2](docs/student_pov_awareness_batch_a01_a07_v2.md). The intent review and V1 batch remain preserved as historical baselines. Further Gemini execution is paused. Production implementation, Track B and M2 remain unauthorized.
 
-**A01–A07 coverage review (2026-10-02):** The [question-level review and paper walkthrough](docs/student_pov_awareness_coverage_review_v1.md) accounts for all 31 assigned questions: **7 ANSWERED, 15 PARTIAL, 9 DEFERRED**. These assess answer completeness only; final factual approval, volunteer Tamil approval and actual student validation remain pending. Content-development acceptance remains in force. The paper walkthrough is PARTIAL against the 5–10-minute value goal: comparison deferrals, repeated next questions and the missing explicit admission-pathway handoff limit progression. It does not require all seven journey stages in one batch.
+**A01–A07 research revision (2026-10-02):** The updated [question-level review and paper walkthrough](docs/student_pov_awareness_coverage_review_v1.md) records **31 ANSWERED, 0 PARTIAL, 0 DEFERRED**, improved from **7/15/9**. `ANSWERED` measures direct response completeness only. The [evidence note](docs/student_pov_awareness_evidence_v2.md) scopes curriculum, post-Class-12, historical-cutoff and occupation claims. Final factual approval, volunteer Tamil approval and actual student validation remain pending. The revised paper walkthrough passes the awareness portion of the 5–10-minute progression goal; it does not validate the full seven-stage journey.
 
-**Focused correction order:** Preserve supplied comparison entities and context; use existing scoped curriculum extracts to improve direct coverage; connect to approved pathway/navigation content; resolve six evidence-label conflicts in future normalized metadata; verify remaining factual gaps and obtain Tamil/student review. The review proposes corrections only. The original A01–A07 batch, intent map and raw corpus remain unchanged. No application tests or live requests were run for this review.
+**Research outcome:** V2 preserves supplied entities, completes Q049's four-way comparison, separates curriculum from historical cutoff evidence, adds scoped branch/career explanations, and connects awareness to “How do I enter engineering?”. Q021 correctly remains non-numeric without the required college/year/route/round/category/quota/programme context. The original A01–A07 batch, intent map and raw corpus remain unchanged. No application tests or live requests were run.
 
 `CODEX_FEATURE_WORK = PAUSED_PENDING_M2_REVIEW_AND_AUTHORIZATION`
 
@@ -82,7 +82,7 @@
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = A01_TO_A07_FOCUSED_CONTENT_FOLLOW_UPS`
+`NEXT_ACTIVITY = A01_TO_A07_V2_FACTUAL_AND_TAMIL_REVIEW`
 
 `M2_STATUS = NOT_AUTHORIZED`
 
@@ -262,7 +262,7 @@ For future AI turns, prefer a compact relevant context containing the student-pr
 **Remaining sequence:**
 
 1. Documentation alignment for the accepted experiment learning and responsibility model is committed at `33a264a19daa866aa30fa49e733be089af59025d` and pushed.
-2. Continue owner-accepted A01–A07 content development with focused verification and Tamil review; final factual and Tamil approval remain pending.
+2. Review the completed A01–A07 V2 research revision for factual scope and Tamil equivalence; answer completeness is 31/31, while final approvals remain pending.
 3. Keep further Gemini execution paused unless separately authorized.
 4. If resumed later, evaluate the remaining frozen scenarios without changing their contracts.
 5. Make an evidence-based gate decision before considering M2 authorization.
@@ -380,7 +380,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Complete the focused factual-source and Tamil-review follow-ups for A01–A07. The 168-question corpus remains an external exploratory draft; the 20-intent review and A01–A07 response are now preserved as repository review records. Their original wording is unchanged. Content-development acceptance does not approve all factual claims, Tamil wording, the full intent taxonomy, or implementation. See [the dated decision and artifact inventory](docs/student_pov_awareness_review_decision_v1.md).
+Review the A01–A07 V2 claims within their cited scope and complete volunteer Tamil equivalence review. The 168-question corpus remains an external exploratory draft. Its exact 31 assigned wordings were used without changing the corpus; V1 remains the historical batch. Research completion does not approve factual wording, Tamil, the full intent taxonomy or implementation.
 
 Historical test counts below and above refer to their named milestones. This documentation reconciliation ran preservation and integrity checks only, not the application suite or typecheck.
 
@@ -464,4 +464,4 @@ Historical test counts below and above refer to their named milestones. This doc
 
 ## Next review point
 
-Focused A01–A07 factual and volunteer Tamil review. Live LLM Gate completion and M2 authorization remain separate future decisions.
+Focused owner factual-scope and volunteer Tamil-equivalence review of A01–A07 V2. Actual student validation, Live LLM Gate completion and M2 authorization remain separate future decisions.
