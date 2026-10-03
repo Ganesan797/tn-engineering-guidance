@@ -1,6 +1,6 @@
 # M2 One-Journey Readiness Proposal V1
 
-**Prepared:** 2026-10-03. **Status:** REVIEW_PROPOSAL. `M2_STATUS = NOT_AUTHORIZED`. `LIVE_LLM_GATE = PARTIAL`. `FURTHER_GEMINI_EXECUTION = PAUSED`.
+**Prepared:** 2026-10-03. **Status at preparation:** REVIEW_PROPOSAL; `M2_STATUS = NOT_AUTHORIZED` then. **Subsequent decision:** Ganesan [authorized the bounded one-journey scope](m2_one_journey_authorization_decision_2026-10-03.md) on 2026-10-03. `LIVE_LLM_GATE = PARTIAL`. `FURTHER_GEMINI_EXECUTION = PAUSED`.
 
 ## Student outcome and boundary
 
@@ -44,4 +44,4 @@ The owner must explicitly decide **whether the partial Live LLM Gate blocks even
 
 If the owner instead requires a completed Live LLM Gate before any M2 work, the decision remains **HOLD**. Evidence still missing for gate completion includes correction and re-evaluation of G03 question/entity fidelity, a contract-valid G05 result followed by applicable evaluation, the nine unexecuted frozen scenarios, manual zero-knowledge guidance and Tamil/English review, uncertainty/security review, and a final owner decision against **G1** zero unsupported admission-critical claims, **G2** useful zero-knowledge progression, and **G3** unknown deterministic inputs staying unknown. G02/G04 passes and mechanical grounding/routing do not close these gaps. Any future live request requires separate authorization; this proposal schedules none.
 
-**Current recommendation for owner review:** Consider only the bounded deterministic/canonical M2 slice after its question-to-domain and D0/D1 evidence is ready. Keep `LIVE_LLM_GATE = PARTIAL`, `FURTHER_GEMINI_EXECUTION = PAUSED`, and `M2_STATUS = NOT_AUTHORIZED` until an explicit decision is recorded. No implementation follows from accepting this proposal alone.
+**Recommendation at proposal time:** Consider only the bounded deterministic/canonical M2 slice after its question-to-domain and D0/D1 evidence is ready. Keep `LIVE_LLM_GATE = PARTIAL`, `FURTHER_GEMINI_EXECUTION = PAUSED`, and `M2_STATUS = NOT_AUTHORIZED` until an explicit decision is recorded. The later dated decision records that limited authorization; this proposal remains the paper design, not implementation evidence.
