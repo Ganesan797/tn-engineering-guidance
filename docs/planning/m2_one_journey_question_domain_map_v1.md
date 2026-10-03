@@ -21,4 +21,19 @@
 
 **State boundary:** This local journey retains only the entered year, academic-route response, improvement response/year and up to three marks in a bounded form state. No name, contact detail, certificate or profile is stored by this path. Input is validated on every step. This is a single guided flow, not a general chat interface.
 
+## Optional prepared-question collection — later bounded decision, 2026-10-03
+
+Ganesan [authorized optional access to the 70 prepared questions](m2_optional_question_collection_decision_2026-10-03.md). `/journey/questions` is reachable from every journey screen; the main short path is unchanged. The collection takes no student inputs and supplies reviewed content only, never a new personal calculation. Exact question-to-unit assignments and per-ID URLs appear in the [updated audit](m2_one_journey_question_reachability_audit_2026-10-03.md).
+
+| Optional student step | Saved content / response class | Inputs | Next direction |
+| --- | --- | --- | --- |
+| Understand engineering, fit and alternatives | A01–A03; reviewed content with draft Tamil | None | Awareness or study; saved fit/learning checklist, no aptitude verdict |
+| Explore branches, comparisons and careers | A04–A07; reviewed content and conditional examples | None | Study or compare, then TNEA; Q049 preserves four-way comparison; Q021 cannot supply a numeric admission cutoff without matching historical context |
+| Understand admission routes | B01–B03; dated content | None | Route; Q053 links B02/B03. B03 explicitly excludes lateral-entry assessment by the first-year check |
+| Understand process and preparation | B04–B05; dated content | None | Route or preparation; Q070 links B08 for rank/score distinction |
+| Understand eligibility dimensions and special histories | B06–B07; dated explanation, personal uncertainty retained | None | Official route/help or preparation; Q081 links B03/B08. No inferred personal eligibility |
+| Explain a calculated score | B08; reviewed explanation alongside unchanged deterministic result | No additional inputs | Return to route or original result tab; score is not rank, seat or eligibility approval |
+
+Personal-check links to this optional collection open a separate tab so the existing form/result remains available, without putting marks in URLs. Batches and evidence notes are loaded directly; the other 98 corpus questions have no answer pages. Final factual/Tamil approval and student validation remain pending.
+
 **Owner Finding 01 — Stage 1 screen-review PASS, owner reported (2026-10-03):** The initial `/journey` gave only `AW-01` before moving toward TNEA. The focused Stage 1 revision adds a short A01 study/work explanation and A04 field map on the start screen, a grouped “What would I study?” screen, and a “How are fields different?” screen. Ganesan reports the revised screens look good. All three are marks-free, preserve reviewed A01–A07 V2 source/regulation limits and disclose pending Tamil/factual approval. They do not expand the frozen scenario set or decide a branch. The [question-reachability audit](m2_one_journey_question_reachability_audit_2026-10-03.md) separates saved answer coverage from what this bounded journey renders. Screen-review PASS does not establish volunteer Tamil equivalence, real-student usefulness or M2 acceptance.

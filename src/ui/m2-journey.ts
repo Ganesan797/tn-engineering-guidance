@@ -124,6 +124,10 @@ export function renderM2Journey(
       body = `<h1>உங்கள் அடுத்த தெளிவான படி</h1><section class="card">${score}${status}<p><strong>அடுத்து:</strong> ${next}</p>${result ? `<details><summary>ஏன்? ஆதாரம்</summary><p>இந்த 2026 கணக்கீடும் சரிபார்ப்பு நிலையும் திட்டத்தின் சரிபார்க்கப்பட்ட விதிகளிலிருந்து வருகின்றன. ஆதாரம்: <a href="${escape(official.url)}">${escape(official.name)}</a>, பக்கம் 9 (கட்-ஆஃப்), பக்கம் 3 (மேம்பாட்டுத் தேர்வு).</p></details>` : ""}</section>${retry}<nav class="actions">${journeyNav("prepare", "தயாரிப்பு வழிகாட்டலைப் பார்க்க", state)}${link("/journey?step=check", "புதிய சரிபார்ப்பைத் தொடங்க")}</nav>`;
     }
   }
+  const preserveCheck = page === "check" || Object.values(state).some((value) => value !== null);
+  if (page === "route") body += `<p><a href="/journey/questions?id=Q060"${preserveCheck ? ' target="_blank" rel="noopener"' : ""}>டிப்ளமோ முடித்தவரா? நேரடி இரண்டாம் ஆண்டு வழியைப் பார்க்க${preserveCheck ? " (புதிய தாவல்)" : ""}</a>. முதல் ஆண்டு தனிப்பட்ட சரிபார்ப்பு இந்த வழியை மதிப்பிடாது.</p>`;
+  if (page === "check" && nextJourneyQuestion(state) === null) body += `<p><a href="/journey/questions?id=Q002" target="_blank" rel="noopener">கட்-ஆஃப், சதவீதம், தரவரிசை — விளக்கம் (புதிய தாவல்)</a></p>`;
+  body += `<p><a href="/journey/questions"${preserveCheck ? ' target="_blank" rel="noopener"' : ""}>கேள்விகளை ஆராயலாம் — விருப்பத் தொகுப்பு${preserveCheck ? " (புதிய தாவல்)" : ""}</a></p>`;
   const sources = page === "awareness" || page === "study" || page === "compare" ? item("AW-01").sources : [official];
   const reviewState = page === "awareness" || page === "study" || page === "compare"
     ? "M1 அறிமுகத் தமிழ் ஏற்கப்பட்டுள்ளது; A01–A07 V2 தமிழ் வரைவு தன்னார்வ மொழி மற்றும் இறுதி உண்மைத் தகவல் மதிப்பாய்வுக்காகக் காத்திருக்கிறது."

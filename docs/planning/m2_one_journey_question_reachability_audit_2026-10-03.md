@@ -1,5 +1,37 @@
 # Bounded M2 Journey — Question Reachability Audit (2026-10-03)
 
+## Current optional-collection audit
+
+The later [owner scope decision](m2_optional_question_collection_decision_2026-10-03.md) authorizes optional discovery of all prepared answers. **Current reachability: 70 DIRECT, 0 PARTIAL, 0 DOCUMENTED_ONLY** through the question collection, replacing the reachability totals in the historical baseline below. This means access to the complete saved answer, not a new factual/Tamil approval or proof of student comprehension. The short journey itself remains intentionally selective.
+
+For **each ID** in the table, its exact question/answer URL is `/journey/questions?id=<ID>` (for example `/journey/questions?id=Q049`). `/journey/questions` shows its saved wording under the listed unit's student-friendly topic. Each answer displays the whole assigned saved unit, Tamil first and English in a disclosure, its saved next action, evidence/limits and the explicit journey-return path below. Related questions share the same reviewed unit rather than requiring a 70-step flow.
+
+| Unit | Every question ID — all DIRECT | Return path / next direction |
+| --- | --- | --- |
+| A01 | Q025, Q026, Q027, Q028, Q034, Q035 | `/journey?step=awareness`; begin with study/work and interests |
+| A02 | Q030, Q031, Q032 | `/journey?step=study`; preparation/support, no aptitude verdict |
+| A03 | Q029, Q033 | `/journey?step=awareness`; compare study routes |
+| A04 | Q036, Q037, Q038, Q039, Q040, Q041, Q042, Q043, Q044 | `/journey?step=study`; inspect subjects/practicals and exact syllabus |
+| A05 | Q010, Q011, Q049, Q050 | `/journey?step=compare`; exact four-way computing comparison and curriculum checks |
+| A06 | Q012, Q021, Q047, Q048 | `/journey?step=compare`; preserve interests and conditional historical comparisons |
+| A07 | Q045, Q046, Q051 | `/journey?step=study`; conditional career pathways, no employment promises |
+| B01 | Q052, Q053, Q054, Q055, Q056, Q057, Q058 | `/journey?step=route`; also Q059/B02 and Q060/B03 links |
+| B02 | Q059 | `/journey?step=route`; institution-specific official requirements |
+| B03 | Q060, Q061, Q062, Q063 | `/journey?step=route`; saved TNLEA direction and explicit first-year-check exclusion |
+| B04 | Q001, Q064, Q065, Q066, Q067, Q068, Q069, Q070 | `/journey?step=route`; official process/help; Q070 links Q086/B08 |
+| B05 | Q007, Q071, Q082 | `/journey?step=prepare`; private preparation checklist |
+| B06 | Q072, Q073, Q074, Q075 | `/journey?step=route`; eligibility dimensions, no personal verdict |
+| B07 | Q076, Q077, Q078, Q079, Q080, Q081, Q083 | `/journey?step=prepare`; official case clarification; Q081 links Q060/B03 and Q002/B08 |
+| B08 | Q002, Q084, Q085, Q086, Q087 | `/journey?step=route`; score/rank distinction; result opens Q002 separately to retain the result |
+
+**Content satisfaction and limits:** The saved question-level coverage reviews classify 31 awareness and 39 admission answers as complete explanations. Inspection found no additional missing answer introduced by this rendering. Q053 needs the linked B02/B03 units to complete the route map; Q070/Q081 keep their saved cross-unit mappings. Q049 keeps CSE, IT, AI & DS and AI & ML. Q021 remains explicitly non-numeric without matching historical context; B02 institution terms and B07 individual cases remain conditional. These are disclosed evidence limits, not verified personal outcomes. Saved next-action/limit text sometimes remains English; volunteer Tamil-equivalence and student usability review must assess that language burden before release. No missing source wording was reconstructed.
+
+**Checks actually run:** all 70 HTTP question pages return their expected unit; independent ID-to-unit assertions, saved Tamil/next-action checks, rejected Q003/Q168, cross-links, B03 exclusion, B08 result link and unchanged personal-check paths pass. Full offline suite **208/208**; strict typecheck PASS. Mobile browser inspection of topic expansion, Q049 and return navigation checks usable wrapping without horizontal overflow. This is technical/paper review only; no student validation is claimed.
+
+**Remaining 98:** Not in either prepared batch and not exposed as answered. **Owner Finding 01:** previous Stage 1 screen-review PASS retained; this optional collection awaits owner review. Factual release, volunteer Tamil, actual student reviews and M2 acceptance remain pending. No merge, new model request or admission-rule change.
+
+## Historical baseline before the optional collection
+
 **Basis:** Review branch `codex/m2-owner-finding-01-stage1` at `6f340291148e17097a403515f8cb1ee16602b111`; rendered `/journey` pages and their content-loading code; [A01–A07 V2](../content/awareness/student_pov_awareness_batch_a01_a07_v2.md) and [B01–B08](../content/admission/student_pov_admission_batch_int05_int08_v1.md). Ganesan reports **Owner Finding 01 Stage 1 screen-review PASS** on 2026-10-03. This is an owner screen judgment, not final factual approval, volunteer Tamil equivalence, timed student validation or M2 acceptance. No merge decision is made here.
 
 The 168-question working corpus has **70 unique IDs answered in these two saved batches** (31 awareness + 39 admission). The **other 98 IDs** are outside these batches and this audit; they are neither claimed answered in `/journey` nor automatically M2 requirements. Batch `ANSWERED` measures saved response completeness. The classifications below measure **reachability in this bounded, first-year journey**, not factual or language release approval:

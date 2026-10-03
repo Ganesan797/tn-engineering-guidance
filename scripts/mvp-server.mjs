@@ -14,6 +14,7 @@ import { blankReferenceRequest } from "../src/ui/reference-request.ts";
 import { parseAwarenessPack, applyApprovedTamilStudentCopy } from "../src/student-semantics/awareness.ts";
 import { answerJourneyQuestion, EMPTY_JOURNEY, parseJourneyState, retryUnknown } from "../src/m2/journey.ts";
 import { renderM2Journey } from "../src/ui/m2-journey.ts";
+import { loadQuestionCollection, renderQuestionCollection } from "../src/ui/explore-questions.ts";
 
 const root = new URL("../", import.meta.url);
 const awareness = applyApprovedTamilStudentCopy(parseAwarenessPack(
@@ -28,6 +29,10 @@ const runtime = createPilotRuntime({
 });
 const reviewedAdmissionBatch = readFileSync(new URL("docs/content/admission/student_pov_admission_batch_int05_int08_v1.md", root), "utf8");
 const reviewedAwarenessBatch = readFileSync(new URL("docs/content/awareness/student_pov_awareness_batch_a01_a07_v2.md", root), "utf8");
+const questions = loadQuestionCollection(reviewedAwarenessBatch, reviewedAdmissionBatch,
+  readFileSync(new URL("docs/content/admission/student_pov_admission_coverage_int05_int08_v1.md", root), "utf8"),
+  readFileSync(new URL("docs/content/awareness/student_pov_awareness_evidence_v2.md", root), "utf8"),
+  readFileSync(new URL("docs/content/admission/student_pov_admission_evidence_int05_int08_v1.md", root), "utf8"));
 
 function scenarioName(url) {
   const value = url.searchParams.get("scenario") ?? "eligible";
@@ -53,6 +58,11 @@ const server = createServer(async (request, response) => {
   const url = new URL(request.url ?? "/", "http://localhost");
   const language = url.searchParams.get("lang") === "en" ? "en" : "ta";
   const entry = entryStateFromUrl(url);
+  if (request.method === "GET" && url.pathname === "/journey/questions") {
+    const page = renderQuestionCollection(questions, url.searchParams.get("id"), url.searchParams.get("evidence"));
+    send(response, page.status, page.html);
+    return;
+  }
   if (request.method === "GET" && url.pathname === "/journey") {
     const step = url.searchParams.get("step");
     const page = step === "study" || step === "compare" || step === "route" || step === "prepare" || step === "check" ? step : "awareness";
