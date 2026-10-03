@@ -69,6 +69,11 @@ const server = createServer(async (request, response) => {
       }
       const values = new URLSearchParams(Buffer.concat(chunks).toString("utf8"));
       const state = parseJourneyState(values.get("state") ?? "");
+      const navigate = values.get("navigate");
+      if (navigate === "route" || navigate === "prepare" || navigate === "check") {
+        send(response, 200, renderM2Journey(navigate, awareness, reviewedAdmissionBatch, runtime, state));
+        return;
+      }
       const next = values.get("retry") === "1" ? retryUnknown(state)
         : answerJourneyQuestion(state, values.get("unknown") === "1" ? "unknown" : values.get("answer") ?? "");
       send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, runtime, next));

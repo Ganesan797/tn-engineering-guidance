@@ -41,6 +41,11 @@ function link(href: string, label: string, primary = false): string {
   return `<a class="action${primary ? " primary" : ""}" href="${href}">${label}</a>`;
 }
 
+function journeyNav(page: "route" | "prepare" | "check", label: string, state: JourneyState, primary = false): string {
+  if (Object.values(state).every((value) => value === null)) return link(`/journey?step=${page}`, label, primary);
+  return `<form action="/journey" method="post"><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><button class="${primary ? "primary" : ""}" name="navigate" value="${page}" type="submit">${label}</button></form>`;
+}
+
 export function renderM2Journey(
   page: JourneyPage,
   pack: AwarenessPack,
@@ -64,9 +69,9 @@ export function renderM2Journey(
   if (page === "awareness") {
     body = `<h1>பொறியியல் பற்றி இங்கே தொடங்கலாம்</h1><p>மதிப்பெண்கள் இப்போது தேவையில்லை. முதலில் வழியைப் புரிந்துகொள்ளலாம்.</p>${approved("AW-01")}<nav class="actions">${link("/journey?step=route", "பொறியியலில் எப்படி சேரலாம்?", true)}${link("/journey?step=check", "என் நிலையை நேரடியாகச் சரிபார்க்க", false)}</nav>`;
   } else if (page === "route") {
-    body = `<h1>முதல் ஆண்டு TNEA வழி</h1>${approved("AW-03")}${approved("AW-05")}<details class="card"><summary>மதிப்பாய்வு செய்யப்பட்ட கூடுதல் விளக்கம் (B01, B04)</summary><p class="review">இந்தத் தமிழ் வரைவு தன்னார்வ மொழி மதிப்பாய்வு பெறவில்லை.</p>${contentMarkup(reviewedTamilUnit(reviewedBatch, "B01"))}${contentMarkup(reviewedTamilUnit(reviewedBatch, "B04"))}</details><nav class="actions">${link("/journey?step=prepare", "எதைத் தயார்செய்ய வேண்டும்?", true)}${link("/journey?step=check", "விருப்பப்பட்டால் என் நிலையைச் சரிபார்க்க")}</nav>`;
+    body = `<h1>முதல் ஆண்டு TNEA வழி</h1>${approved("AW-03")}${approved("AW-05")}<details class="card"><summary>மதிப்பாய்வு செய்யப்பட்ட கூடுதல் விளக்கம் (B01, B04)</summary><p class="review">இந்தத் தமிழ் வரைவு தன்னார்வ மொழி மதிப்பாய்வு பெறவில்லை.</p>${contentMarkup(reviewedTamilUnit(reviewedBatch, "B01"))}${contentMarkup(reviewedTamilUnit(reviewedBatch, "B04"))}</details><nav class="actions">${journeyNav("prepare", "எதைத் தயார்செய்ய வேண்டும்?", state, true)}${journeyNav("check", "விருப்பப்பட்டால் என் நிலையைச் சரிபார்க்க", state)}</nav>`;
   } else if (page === "prepare") {
-    body = `<h1>விண்ணப்பத்திற்கு முன் தயாராகலாம்</h1><p>ஆவணங்களை இங்கே பதிவேற்ற வேண்டாம். உங்கள் சேர்க்கை ஆண்டுக்கான அதிகாரப்பூர்வ அறிவிப்பைப் பாருங்கள்.</p><section class="card" data-content-id="B05"><h2>2026 ஆவண வழிகாட்டல் — மதிப்பாய்வு வரைவு</h2>${contentMarkup(reviewedTamilUnit(reviewedBatch, "B05"))}</section><nav class="actions">${link("/journey?step=check", "விருப்பப்பட்டால் என் நிலையைச் சரிபார்க்க", true)}${link("/journey?step=route", "TNEA வழிக்குத் திரும்ப")}</nav>`;
+    body = `<h1>விண்ணப்பத்திற்கு முன் தயாராகலாம்</h1><p>ஆவணங்களை இங்கே பதிவேற்ற வேண்டாம். உங்கள் சேர்க்கை ஆண்டுக்கான அதிகாரப்பூர்வ அறிவிப்பைப் பாருங்கள்.</p><section class="card" data-content-id="B05"><h2>2026 ஆவண வழிகாட்டல் — மதிப்பாய்வு வரைவு</h2>${contentMarkup(reviewedTamilUnit(reviewedBatch, "B05"))}</section><nav class="actions">${journeyNav("check", "விருப்பப்பட்டால் என் நிலையைச் சரிபார்க்க", state, true)}${journeyNav("route", "TNEA வழிக்குத் திரும்ப", state)}</nav>`;
   } else {
     const question = nextJourneyQuestion(state);
     if (question !== null) {
@@ -79,7 +84,7 @@ export function renderM2Journey(
         ? `<fieldset><legend>${title}</legend>${spec.choices.map(([value, label]) => `<label><input type="radio" name="answer" value="${value}" required>${label}</label>`).join("")}</fieldset>`
         : markInput;
       const context = [state.year === 2026 ? "ஆண்டு: 2026" : "", typeof state.maths === "number" ? "கணித மதிப்பெண் சேர்க்கப்பட்டது" : "", typeof state.physics === "number" ? "இயற்பியல் மதிப்பெண் சேர்க்கப்பட்டது" : ""].filter(Boolean).join(" · ");
-      body = `<h1>விருப்பத் தனிப்பட்ட சரிபார்ப்பு</h1><p>ஒரே நேரத்தில் தேவையான ஒரு கேள்வி மட்டும். தெரியாததைத் தெரியாது என்றே வைத்துக்கொள்ளலாம்.</p>${context ? `<p class="notice">${context}</p>` : ""}${error ? `<p role="alert">${escape(error)}</p>` : ""}<form class="card" action="/journey" method="post"><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><p>${originalMarks ? "2006-க்குப் பிறகு பெற்ற மேம்பாட்டு மதிப்பெண் பயன்படுத்தப்படாது; சான்றிலுள்ள அசல் மதிப்பெண்ணை அளிக்கவும்." : spec.why}</p>${options}<div class="actions"><button class="primary" type="submit">தொடர்க</button><button type="submit" name="unknown" value="1" formnovalidate>எனக்குத் தெரியாது</button></div></form>${link("/journey?step=route", "வழி விளக்கத்திற்குத் திரும்ப")}`;
+      body = `<h1>விருப்பத் தனிப்பட்ட சரிபார்ப்பு</h1><p>ஒரே நேரத்தில் தேவையான ஒரு கேள்வி மட்டும். தெரியாததைத் தெரியாது என்றே வைத்துக்கொள்ளலாம்.</p>${context ? `<p class="notice">${context}</p>` : ""}${error ? `<p role="alert">${escape(error)}</p>` : ""}<form class="card" action="/journey" method="post"><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><p>${originalMarks ? "2006-க்குப் பிறகு பெற்ற மேம்பாட்டு மதிப்பெண் பயன்படுத்தப்படாது; சான்றிலுள்ள அசல் மதிப்பெண்ணை அளிக்கவும்." : spec.why}</p>${options}<div class="actions"><button class="primary" type="submit">தொடர்க</button><button type="submit" name="unknown" value="1" formnovalidate>எனக்குத் தெரியாது</button></div></form>${journeyNav("route", "வழி விளக்கத்திற்குத் திரும்ப", state)}`;
     } else {
       const result = journeyGuidanceResult(state, dependencies);
       const unknown = state.year === "unknown" || state.stream === "unknown" || state.improvement === "unknown" || state.improvement_year === "unknown" || [state.maths, state.physics, state.chemistry].includes("unknown");
@@ -95,7 +100,7 @@ export function renderM2Journey(
         : cutoff === null || cutoff === undefined ? "தெரியாத விவரத்தைப் பதிவு செய்து, மதிப்பெண் சான்றைப் பார்த்துப் பிறகு தொடருங்கள்; தேவைப்பட்டால் அதிகாரப்பூர்வ TNEA உதவி மையத்தில் கேளுங்கள்."
         : "மற்ற தகுதி விவரங்களை அதிகாரப்பூர்வ விதிகளுடன் சரிபார்க்கவும்; வெளியிடப்படும் தரவரிசை மற்றும் இடங்களை தனியாகப் பார்க்கவும்.";
       const retry = unknown ? `<form action="/journey" method="post"><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><button name="retry" value="1" type="submit">தெரியாத பதிலை இப்போது அளிக்க</button></form>` : "";
-      body = `<h1>உங்கள் அடுத்த தெளிவான படி</h1><section class="card">${score}${status}<p><strong>அடுத்து:</strong> ${next}</p>${result ? `<details><summary>ஏன்? ஆதாரம்</summary><p>இந்த 2026 கணக்கீடும் சரிபார்ப்பு நிலையும் திட்டத்தின் சரிபார்க்கப்பட்ட விதிகளிலிருந்து வருகின்றன. ஆதாரம்: <a href="${escape(official.url)}">${escape(official.name)}</a>, பக்கம் 9 (கட்-ஆஃப்), பக்கம் 3 (மேம்பாட்டுத் தேர்வு).</p></details>` : ""}</section>${retry}<nav class="actions">${link("/journey?step=prepare", "தயாரிப்பு வழிகாட்டலைப் பார்க்க")}${link("/journey?step=check", "புதிய சரிபார்ப்பைத் தொடங்க")}</nav>`;
+      body = `<h1>உங்கள் அடுத்த தெளிவான படி</h1><section class="card">${score}${status}<p><strong>அடுத்து:</strong> ${next}</p>${result ? `<details><summary>ஏன்? ஆதாரம்</summary><p>இந்த 2026 கணக்கீடும் சரிபார்ப்பு நிலையும் திட்டத்தின் சரிபார்க்கப்பட்ட விதிகளிலிருந்து வருகின்றன. ஆதாரம்: <a href="${escape(official.url)}">${escape(official.name)}</a>, பக்கம் 9 (கட்-ஆஃப்), பக்கம் 3 (மேம்பாட்டுத் தேர்வு).</p></details>` : ""}</section>${retry}<nav class="actions">${journeyNav("prepare", "தயாரிப்பு வழிகாட்டலைப் பார்க்க", state)}${link("/journey?step=check", "புதிய சரிபார்ப்பைத் தொடங்க")}</nav>`;
     }
   }
   const sources = page === "awareness" ? item("AW-01").sources : [official];

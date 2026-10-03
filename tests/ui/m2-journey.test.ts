@@ -138,6 +138,24 @@ test("local server serves the Tamil journey and advances a posted answer", async
         assert.ok(encoded);
         saved = encoded.replaceAll("&quot;", '"').replaceAll("&amp;", "&");
         parseJourneyState(saved);
+        if (answer === "86") {
+          const route = await fetch(`${base}/journey`, { method: "POST", body: new URLSearchParams({ state: saved, navigate: "route" }) });
+          assert.equal(route.status, 200);
+          const routeHtml = await route.text();
+          assert.match(routeHtml, /name="navigate" value="prepare"/);
+          const routeState = routeHtml.match(/name="state" value="([^"]+)"/)?.[1];
+          assert.ok(routeState);
+          const prepare = await fetch(`${base}/journey`, { method: "POST", body: new URLSearchParams({ state: routeState.replaceAll("&quot;", '"'), navigate: "prepare" }) });
+          assert.equal(prepare.status, 200);
+          const prepareHtml = await prepare.text();
+          assert.match(prepareHtml, /name="navigate" value="check"/);
+          const prepareState = prepareHtml.match(/name="state" value="([^"]+)"/)?.[1];
+          assert.ok(prepareState);
+          const resumed = await fetch(`${base}/journey`, { method: "POST", body: new URLSearchParams({ state: prepareState.replaceAll("&quot;", '"'), navigate: "check" }) });
+          const resumedHtml = await resumed.text();
+          assert.match(resumedHtml, /இயற்பியல் மதிப்பெண்/);
+          assert.match(resumedHtml, /கணித மதிப்பெண் சேர்க்கப்பட்டது/);
+        }
       }
     }
     const invalid = await fetch(`${base}/journey`, { method: "POST", body: "state=%7B%7D&answer=2026" });
