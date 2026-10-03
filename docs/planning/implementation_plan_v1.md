@@ -10,10 +10,10 @@ This document translates the frozen product direction and approved Technical Gap
 
 Authority order:
 
-1. `docs/product_mission.md`
-2. `docs/student_journey_v1.md`
-3. `docs/student_input_output_v1.md`
-4. `docs/technical_gap_mapping_v1.md`
+1. `docs/product/product_mission.md`
+2. `docs/product/student_journey_v1.md`
+3. `docs/product/student_input_output_v1.md`
+4. `docs/planning/technical_gap_mapping_v1.md`
 5. this implementation plan
 
 `MISSION_OVER_REUSE = ACTIVE`

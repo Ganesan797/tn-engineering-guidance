@@ -16,9 +16,9 @@ import { parseAwarenessPack, applyApprovedTamilStudentCopy } from "../src/studen
 const root = new URL("../", import.meta.url);
 const awareness = applyApprovedTamilStudentCopy(parseAwarenessPack(
   readFileSync(new URL("data/m1_awareness_content_pack_v1.json", root), "utf8"),
-  readFileSync(new URL("docs/m1_awareness_content_pack_v1.md", root), "utf8"),
+  readFileSync(new URL("docs/content/m1/m1_awareness_content_pack_v1.md", root), "utf8"),
   readFileSync(new URL("data/sources.csv", root), "utf8"),
-), readFileSync(new URL("docs/m1_tamil_student_copy_v1.md", root), "utf8"));
+), readFileSync(new URL("docs/content/m1/m1_tamil_student_copy_v1.md", root), "utf8"));
 const runtime = createPilotRuntime({
   sources_csv: readFileSync(new URL("data/sources.csv", root), "utf8"),
   colleges_csv: readFileSync(new URL("data/colleges.csv", root), "utf8"),

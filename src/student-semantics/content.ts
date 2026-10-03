@@ -7,7 +7,7 @@ export const ENGINEERING_CHOICES_AWARENESS: InformationalContentItem = {
   title: { key: "content.awareness.engineering_choices.title" },
   body: { key: "content.awareness.engineering_choices.body" },
   provenance: {
-    document_id: "docs/product_mission.md",
+    document_id: "docs/product/product_mission.md",
     section: "Zero-Knowledge Entry Principle",
   },
   governance_status: "M0_REVIEW_PROOF_NOT_PILOT_READY",

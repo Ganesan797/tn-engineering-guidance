@@ -4,9 +4,9 @@
 
 ## Baseline and authorities
 
-Fetched local main and origin/main both resolved to `58c779f58461cd85c9591e271355b07fa5d8341c`; working tree was clean. The [saved intent map](student_question_intent_review_v1.md) assigns 39 unique questions to INT-05–INT-08. Exact wording was read from the owner's external `student_question_corpus_v1_draft.md` at its recorded Dropbox Downloads location; no missing wording was reconstructed and the raw input was not changed or copied wholesale into Git.
+Fetched local main and origin/main both resolved to `58c779f58461cd85c9591e271355b07fa5d8341c`; working tree was clean. The [saved intent map](../student_question_intent_review_v1.md) assigns 39 unique questions to INT-05–INT-08. Exact wording was read from the owner's external `student_question_corpus_v1_draft.md` at its recorded Dropbox Downloads location; no missing wording was reconstructed and the raw input was not changed or copied wholesale into Git.
 
-Product authority remains [Product Mission](product_mission.md), [Student Journey](student_journey_v1.md), [Student Input/Output](student_input_output_v1.md), the [responsibility model](guidance_delivery_responsibility_model_v1.md) and approved [M1 awareness content](m1_awareness_content_pack_v1.md). Existing `data/reference/tnea_2026_eligibility.csv` and the approved experiment corpus were useful indexes, but the official 2026 documents were read directly for the new answers. No rule/data/code file was edited.
+Product authority remains [Product Mission](../../product/product_mission.md), [Student Journey](../../product/student_journey_v1.md), [Student Input/Output](../../product/student_input_output_v1.md), the [responsibility model](../../product/guidance_delivery_responsibility_model_v1.md) and approved [M1 awareness content](../m1/m1_awareness_content_pack_v1.md). Existing `../../../data/reference/tnea_2026_eligibility.csv` and the approved experiment corpus were useful indexes, but the official 2026 documents were read directly for the new answers. No rule/data/code file was edited.
 
 ## Sources and exact claim locations
 

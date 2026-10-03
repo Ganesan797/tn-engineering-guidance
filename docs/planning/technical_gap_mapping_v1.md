@@ -38,17 +38,17 @@ Conversely, proven deterministic admission and domain logic must not be rewritte
 
 | Layer | Responsibility | Important files | Input | Output/dependencies | Isolation finding |
 |---|---|---|---|---|---|
-| Persisted pilot evidence | Stores source registry, five colleges, programmes, branch taxonomy, and frozen eligibility references | `data/sources.csv`, `data/colleges.csv`, `data/programmes.csv`, `data/branches.csv`, `data/reference/tnea_2026_eligibility.csv` | Versioned source-backed rows | CSV evidence for ingestion/rules | Data is separate from UI; cutoff and canonical eligibility CSV schemas currently have no rows. |
-| Pilot ingestion | Parses and validates 2026 colleges/programmes, exact mappings, provenance, duplicates, and conflicts | `src/ingestion/csv.ts`, `src/ingestion/pilot-data.ts` | Persisted CSV strings and registered source IDs | `PilotDataRegistry` | Appropriately isolated and reusable. |
-| Seat snapshot store | Validates and appends stage-specific seat facts without overwriting snapshots | `src/ingestion/snapshot-store.ts`, `src/domain/admission-seat-fact.ts` | `AdmissionSeatFactSnapshot` | Immutable snapshot access | Appropriately isolated; no authoritative real seat facts are currently loaded. |
-| Domain contracts | Defines 2026 types, enums, null semantics, and validation | `src/domain/constants.ts`, `enums.ts`, `models.ts`, `validation.ts` | Structured values | Validated domain objects | Independent of presentation. |
-| Eligibility and cutoff | Executes ELG001–ELG032, produces sourced checks, cutoff, missing fields, and conservative aggregation | `src/domain/rules.ts`, `src/domain/eligibility.ts` | `StudentProfile`, `EligibilityEvaluationRequest` | `EligibilityResult` | Deterministic logic is isolated from UI and should be preserved. |
-| Candidate generation | Runs eligibility, selects a snapshot, filters canonical programmes, applies seat evidence, preserves unknowns and provenance | `src/recommendation/foundation.ts` | Profile, context, registry, snapshots | `RecommendationResult` | Deterministic and presentation-independent. |
-| Choice ordering | Orders by explicit branch preference with a disclosed stable canonical tie-breaker | `src/recommendation/choice-ordering.ts` | Candidates and explicit preferences | `OrderedChoice[]` | No subjective ranking or prediction. |
-| Guidance orchestration | Composes eligibility, candidates, evidence, ordering, and aggregate provenance | `src/application/guidance.ts` | `GuidanceRequest`, dependencies | `GuidanceResult` | Thin application boundary; domain logic is delegated. |
-| External adapter | Validates JSON shape/enums/context and returns safe success/error JSON | `src/api/guidance-api.ts` | JSON request | `GuidanceApiResponse` | Reusable channel-independent boundary, though request shape mirrors backend contracts. |
-| Student UI | Renders one large HTML form and raw-ish result details; delegates submission to API | `src/ui/student-guidance.ts` | `GuidanceRequest`, API response | Responsive HTML | Domain logic is not duplicated, but student experience is backend-shaped. |
-| Demo runtime | Loads persisted CSVs, creates an empty evidence snapshot, serves the UI, and supplies fixed test/demo profiles | `src/application/pilot-runtime.ts`, `src/demo/scenarios.ts`, `scripts/mvp-server.mjs` | Repository data and HTTP form values | Runnable local MVP | Suitable as engineering/demo infrastructure, not the target product journey. |
+| Persisted pilot evidence | Stores source registry, five colleges, programmes, branch taxonomy, and frozen eligibility references | `../../data/sources.csv`, `../../data/colleges.csv`, `../../data/programmes.csv`, `../../data/branches.csv`, `../../data/reference/tnea_2026_eligibility.csv` | Versioned source-backed rows | CSV evidence for ingestion/rules | Data is separate from UI; cutoff and canonical eligibility CSV schemas currently have no rows. |
+| Pilot ingestion | Parses and validates 2026 colleges/programmes, exact mappings, provenance, duplicates, and conflicts | `../../src/ingestion/csv.ts`, `../../src/ingestion/pilot-data.ts` | Persisted CSV strings and registered source IDs | `PilotDataRegistry` | Appropriately isolated and reusable. |
+| Seat snapshot store | Validates and appends stage-specific seat facts without overwriting snapshots | `../../src/ingestion/snapshot-store.ts`, `../../src/domain/admission-seat-fact.ts` | `AdmissionSeatFactSnapshot` | Immutable snapshot access | Appropriately isolated; no authoritative real seat facts are currently loaded. |
+| Domain contracts | Defines 2026 types, enums, null semantics, and validation | `../../src/domain/constants.ts`, `enums.ts`, `models.ts`, `validation.ts` | Structured values | Validated domain objects | Independent of presentation. |
+| Eligibility and cutoff | Executes ELG001–ELG032, produces sourced checks, cutoff, missing fields, and conservative aggregation | `../../src/domain/rules.ts`, `../../src/domain/eligibility.ts` | `StudentProfile`, `EligibilityEvaluationRequest` | `EligibilityResult` | Deterministic logic is isolated from UI and should be preserved. |
+| Candidate generation | Runs eligibility, selects a snapshot, filters canonical programmes, applies seat evidence, preserves unknowns and provenance | `../../src/recommendation/foundation.ts` | Profile, context, registry, snapshots | `RecommendationResult` | Deterministic and presentation-independent. |
+| Choice ordering | Orders by explicit branch preference with a disclosed stable canonical tie-breaker | `../../src/recommendation/choice-ordering.ts` | Candidates and explicit preferences | `OrderedChoice[]` | No subjective ranking or prediction. |
+| Guidance orchestration | Composes eligibility, candidates, evidence, ordering, and aggregate provenance | `../../src/application/guidance.ts` | `GuidanceRequest`, dependencies | `GuidanceResult` | Thin application boundary; domain logic is delegated. |
+| External adapter | Validates JSON shape/enums/context and returns safe success/error JSON | `../../src/api/guidance-api.ts` | JSON request | `GuidanceApiResponse` | Reusable channel-independent boundary, though request shape mirrors backend contracts. |
+| Student UI | Renders one large HTML form and raw-ish result details; delegates submission to API | `../../src/ui/student-guidance.ts` | `GuidanceRequest`, API response | Responsive HTML | Domain logic is not duplicated, but student experience is backend-shaped. |
+| Demo runtime | Loads persisted CSVs, creates an empty evidence snapshot, serves the UI, and supplies fixed test/demo profiles | `../../src/application/pilot-runtime.ts`, `../../src/demo/scenarios.ts`, `../../scripts/mvp-server.mjs` | Repository data and HTTP form values | Runnable local MVP | Suitable as engineering/demo infrastructure, not the target product journey. |
 
 Actual flow:
 
@@ -58,7 +58,7 @@ Actual flow:
 
 | Capability | Current state | Target need | Classification | Existing assets | Gap | Priority |
 |---|---|---|---|---|---|---|
-| Deterministic eligibility | All 32 frozen rules execute with sourced checks | Trusted factual result | REUSE | `src/domain/rules.ts` | None at engine level | Protect |
+| Deterministic eligibility | All 32 frozen rules execute with sourced checks | Trusted factual result | REUSE | `../../src/domain/rules.ts` | None at engine level | Protect |
 | Cutoff calculation | Deterministic when supported inputs exist | Simple student cutoff result | REUSE | `rules.ts`, `EligibilityResult` | Presentation needs adaptation separately | Protect |
 | Conservative uncertainty | Explicit `NEEDS_REVIEW`, blocking fields, null distinct from false | Preserve internally; explain simply | REUSE | domain, API, tests | Student wording is technical | Protect |
 | Canonical identifiers | `tnea_college_code + branch_id` joins | Stable evidence-backed programme identity | REUSE | ingestion/recommendation | Internal identifiers should usually be hidden in Level 1 | Protect |
@@ -83,7 +83,7 @@ Actual flow:
 | Level 3 evidence | Source IDs/pages shown | Optional understandable authoritative evidence | ADAPT | provenance arrays | Map IDs to source names/documents/dates/links where available | Medium |
 | Verified vs worth checking | Verified engine output exists; second class absent | Clearly separated output classes | BUILD | Eligibility/fact outputs support verified class | No safe opportunity-content model | High |
 | Engineering/TNEA awareness | No application content | Stages 1–2 orientation | BUILD | Product docs; source registry | Add versioned structured guidance content, not AI/RAG initially | Highest |
-| Branch exploration | Branch CSV has five internal taxonomy rows | Student-oriented branch discovery | ADAPT | `data/branches.csv` | Content breadth, sourcing, and student language need review | High |
+| Branch exploration | Branch CSV has five internal taxonomy rows | Student-oriented branch discovery | ADAPT | `../../data/branches.csv` | Content breadth, sourcing, and student language need review | High |
 | College exploration | Programme identities shown only as candidates | Exploration independent of recommendation | BUILD | pilot colleges/programmes | No exploration model or student-oriented metadata | Medium |
 | Think-Further prompts | No safe prompt/opportunity system | Relevant questions and possibilities | BUILD | Product contract only | Requires structured sourced/qualified content and applicability boundaries | High |
 | Next actions | Missing fields appear; no consistent action contract | Every interaction gives direction | BUILD | blocking fields can inform actions | No student-facing next-action model | Highest |
@@ -201,7 +201,7 @@ The branch CSV contains related-branch and career-domain taxonomy, but its notes
 
 `TRANSLATION_MECHANISM = IMPLEMENTATION_DESIGN_CONCERN`
 
-Domain outputs are structured, making mapping feasible, but nearly all UI copy is hard-coded English in `src/ui/student-guidance.ts`; some labels are generated from field names. There is no centralized student-message catalogue or content/localization boundary.
+Domain outputs are structured, making mapping feasible, but nearly all UI copy is hard-coded English in `../../src/ui/student-guidance.ts`; some labels are generated from field names. There is no centralized student-message catalogue or content/localization boundary.
 
 - Domain/API structured outputs: **REUSE**.
 - Student semantic message keys/view model and centralized content: **BUILD EARLY**.

@@ -30,7 +30,7 @@ Ganesan reviewed [A01–A07 V2](student_pov_awareness_batch_a01_a07_v2.md), pres
 
 The [V2 evidence note](student_pov_awareness_evidence_v2.md) and its source limitations remain in force, including Q021's need for matching historical admission context before any numeric comparison. This decision does not confer unrestricted factual release approval, erase conditions, approve the complete taxonomy or authorize implementation. Final factual approval remains separate; the satisfactory answer review is complete.
 
-The next content batch, [INT-05–INT-08 B01–B08](student_pov_admission_batch_int05_int08_v1.md), is prepared for **Ganesan's answer review**, with [evidence](student_pov_admission_evidence_int05_int08_v1.md) and [39-question coverage/paper review](student_pov_admission_coverage_int05_int08_v1.md). That new batch is not included in the A01–A07 V2 acceptance. Gemini remains PAUSED; Live LLM Gate PARTIAL; M2 NOT_AUTHORIZED.
+The next content batch, [INT-05–INT-08 B01–B08](../admission/student_pov_admission_batch_int05_int08_v1.md), is prepared for **Ganesan's answer review**, with [evidence](../admission/student_pov_admission_evidence_int05_int08_v1.md) and [39-question coverage/paper review](../admission/student_pov_admission_coverage_int05_int08_v1.md). That new batch is not included in the A01–A07 V2 acceptance. Gemini remains PAUSED; Live LLM Gate PARTIAL; M2 NOT_AUTHORIZED.
 
 ## Historical V1 owner decision and authority
 
@@ -43,7 +43,7 @@ The frozen Product Mission, Student Journey V1, Student Input/Output V1 and appr
 | Artifact | Location | Evidence and review status |
 | --- | --- | --- |
 | Raw 168-question corpus | `C:/Users/Ganesan S/Dropbox/My PC (DESKTOP-0AC6TMJ)/Downloads/student_question_corpus_v1_draft.md` | External exploratory working input; unchanged, not copied into Git and not approved as project authority |
-| 20-intent review | [student_question_intent_review_v1.md](student_question_intent_review_v1.md) | Full original assistant response saved verbatim; proposed taxonomy, not an independently discovered question dataset |
+| 20-intent review | [student_question_intent_review_v1.md](../student_question_intent_review_v1.md) | Full original assistant response saved verbatim; proposed taxonomy, not an independently discovered question dataset |
 | A01–A07 batch | [student_pov_awareness_batch_a01_a07_v1.md](student_pov_awareness_batch_a01_a07_v1.md) | Full original assistant response saved verbatim; accepted for content development with the approval limits above |
 
 Both responses were recovered from the original conversation record, not reconstructed from a summary. Their historical statements, including “FILES_CHANGED = NONE” and pending-review wording, describe when those responses were issued. This dated decision supplies the subsequent acceptance status without rewriting them. Existing absolute reference links are preserved as part of the verbatim responses; this does not make those paths portable implementation requirements.

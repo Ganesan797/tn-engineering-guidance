@@ -1,6 +1,6 @@
 # Track A Controlled RAG Validation Experiment
 
-This directory contains a small, isolated pre-M2 experiment governed by `docs/track_a_controlled_rag_experiment_spec_v1.md`. It is not production RAG architecture and does not authorize M2.
+This directory contains a small, isolated pre-M2 experiment governed by `docs/experiments/track_a_controlled_rag_experiment_spec_v1.md`. It is not production RAG architecture and does not authorize M2.
 
 ## What is implemented
 

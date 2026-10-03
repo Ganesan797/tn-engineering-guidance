@@ -5,7 +5,7 @@
   "frozen_on": "2026-09-12",
   "audience": "STUDENT_STARTING_WITH_ZERO_KNOWLEDGE",
   "admission_regime": "TNEA_2026_WHERE_EXPLICITLY_MARKED",
-  "content_document": "docs/m1_awareness_content_pack_v1.md",
+  "content_document": "docs/content/m1/m1_awareness_content_pack_v1.md",
   "source_ids": ["SRC001", "SRC002", "SRC003", "SRC006", "SRC007", "SRC008"],
   "items": [
     {"id":"AW-01","topic":"engineering_idea","source_ids":["SRC006","SRC007","SRC008"],"stability":"LONG_LIVED_ORIENTATION"},

@@ -6,6 +6,8 @@
 
 **Last reviewed:** 2026-10-02
 
+**Documentation navigation (2026-10-02):** Documents are grouped by product, planning, architecture, content, experiments and templates. Start with the [documentation guide](docs/README.md); awareness and admission folders keep answers, evidence and reviews together. Original conversation records remain preserved. Relocation and reference checks passed, and the existing automated suite passed 199 tests after updating document-loading paths. This organization change does not change content approval or implementation authorization.
+
 ## Product Review Gate
 
 `PRODUCT_REVIEW_GATE = ACTIVE`
@@ -16,13 +18,13 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Ganesan reviews the answers in [INT-05–INT-08 B01–B08](docs/student_pov_admission_batch_int05_int08_v1.md). Volunteer Tamil-equivalence review and actual student validation remain pending. The intent map, raw corpus and A01–A07 baselines remain preserved. Further Gemini execution is paused. Production implementation, Track B and M2 remain unauthorized.
+**Next priority:** Ganesan reviews the answers in [INT-05–INT-08 B01–B08](docs/content/admission/student_pov_admission_batch_int05_int08_v1.md). Volunteer Tamil-equivalence review and actual student validation remain pending. The intent map, raw corpus and A01–A07 baselines remain preserved. Further Gemini execution is paused. Production implementation, Track B and M2 remain unauthorized.
 
-**A01–A07 research revision (2026-10-02):** The updated [question-level review and paper walkthrough](docs/student_pov_awareness_coverage_review_v1.md) records **31 ANSWERED, 0 PARTIAL, 0 DEFERRED**, improved from **7/15/9**. `ANSWERED` measures direct response completeness only. The [evidence note](docs/student_pov_awareness_evidence_v2.md) scopes curriculum, post-Class-12, historical-cutoff and occupation claims. Final factual approval, volunteer Tamil approval and actual student validation remain pending. The revised paper walkthrough passes the awareness portion of the 5–10-minute progression goal; it does not validate the full seven-stage journey.
+**A01–A07 research revision (2026-10-02):** The updated [question-level review and paper walkthrough](docs/content/awareness/student_pov_awareness_coverage_review_v1.md) records **31 ANSWERED, 0 PARTIAL, 0 DEFERRED**, improved from **7/15/9**. `ANSWERED` measures direct response completeness only. The [evidence note](docs/content/awareness/student_pov_awareness_evidence_v2.md) scopes curriculum, post-Class-12, historical-cutoff and occupation claims. Final factual approval, volunteer Tamil approval and actual student validation remain pending. The revised paper walkthrough passes the awareness portion of the 5–10-minute progression goal; it does not validate the full seven-stage journey.
 
-**Owner decision (2026-10-02):** Ganesan found A01–A07 V2 answers satisfactory and accepted the revised content direction. The [dated decision](docs/student_pov_awareness_review_decision_v1.md) records this separately from pending volunteer Tamil-equivalence review, actual student validation and final factual release approval. Recorded source limitations remain unchanged.
+**Owner decision (2026-10-02):** Ganesan found A01–A07 V2 answers satisfactory and accepted the revised content direction. The [dated decision](docs/content/awareness/student_pov_awareness_review_decision_v1.md) records this separately from pending volunteer Tamil-equivalence review, actual student validation and final factual release approval. Recorded source limitations remain unchanged.
 
-**INT-05–INT-08 content preparation (2026-10-02):** Four saved intents, **39 unique assigned questions**, eight consolidated units: admission routes, management quota, diploma entry, TNEA process, documents, minimum eligibility/boards, special histories, and cutoff/rank. [Question-level coverage and paper review](docs/student_pov_admission_coverage_int05_int08_v1.md) records **39 ANSWERED, 0 PARTIAL, 0 DEFERRED** for response completeness only. Exact corpus wording and cross-intent connections are retained. The [evidence note](docs/student_pov_admission_evidence_int05_int08_v1.md) dates admission rules to 2026; 2027 rules are not verified. It flags conflicting grievance windows, institution-specific management terms and individual-case uncertainty. New-batch owner answer review, factual approval, Tamil review and actual student validation remain pending. This is content research/documentation, not implementation or live validation.
+**INT-05–INT-08 content preparation (2026-10-02):** Four saved intents, **39 unique assigned questions**, eight consolidated units: admission routes, management quota, diploma entry, TNEA process, documents, minimum eligibility/boards, special histories, and cutoff/rank. [Question-level coverage and paper review](docs/content/admission/student_pov_admission_coverage_int05_int08_v1.md) records **39 ANSWERED, 0 PARTIAL, 0 DEFERRED** for response completeness only. Exact corpus wording and cross-intent connections are retained. The [evidence note](docs/content/admission/student_pov_admission_evidence_int05_int08_v1.md) dates admission rules to 2026; 2027 rules are not verified. It flags conflicting grievance windows, institution-specific management terms and individual-case uncertainty. New-batch owner answer review, factual approval, Tamil review and actual student validation remain pending. This is content research/documentation, not implementation or live validation.
 
 **Research outcome:** V2 preserves supplied entities, completes Q049's four-way comparison, separates curriculum from historical cutoff evidence, adds scoped branch/career explanations, and connects awareness to “How do I enter engineering?”. Q021 correctly remains non-numeric without the required college/year/route/round/category/quota/programme context. The original A01–A07 batch, intent map and raw corpus remain unchanged. No application tests or live requests were run.
 
@@ -224,7 +226,7 @@
 
 ### Owner-reviewed G02–G05 experiment record
 
-The owner-reviewed outcomes below are recorded in the append-only [Live LLM Integration Gate Results V2](docs/live_llm_integration_gate_results_v2.md). They supplement, and do not rewrite, the historical V1 record.
+The owner-reviewed outcomes below are recorded in the append-only [Live LLM Integration Gate Results V2](docs/experiments/live_llm_integration_gate_results_v2.md). They supplement, and do not rewrite, the historical V1 record.
 
 | Scenario | Owner-reviewed outcome | Evidence and limitation |
 | --- | --- | --- |
@@ -241,7 +243,7 @@ G01 retains its previously recorded evidence and findings. G06–G08 and J01-T1�
 
 ### Guidance Delivery Responsibility Model
 
-The accepted [Guidance Delivery Responsibility Model](docs/guidance_delivery_responsibility_model_v1.md) distinguishes three primary product responsibilities:
+The accepted [Guidance Delivery Responsibility Model](docs/product/guidance_delivery_responsibility_model_v1.md) distinguishes three primary product responsibilities:
 
 1. **Structured/authoritative guidance:** governed facts plus deterministic calculations, validation, filtering, and selection. Verified facts derive authority from governed sources; they are not all described as deterministic.
 2. **Canonical reviewed guidance:** frequent student questions maintained as reviewed, student-friendly Tamil/English guidance with source, review, and version governance, normally deliverable without an LLM call.
@@ -349,7 +351,7 @@ For future AI turns, prefer a compact relevant context containing the student-pr
 - Empty schemas exist for colleges, programmes, cutoffs, canonical eligibility rules, and anonymous student profiles.
 - Project source document and feature-specification template exist.
 - Six-month V1 roadmap and this live status file are now populated for review.
-- Frozen Domain/Data V1 contract artifacts have landed in `docs/domain_data_v1.md` and `docs/domain_data_v1.yaml`.
+- Frozen Domain/Data V1 contract artifacts have landed in `docs/architecture/domain_data_v1.md` and `docs/architecture/domain_data_v1.yaml`.
 - Slice 1 implements the frozen domain models and enums, `ADMISSION_YEAR = 2026`, conservative eligibility aggregation, `AdmissionSeatFact` validation, and focused invariant tests.
 - Slice 2 implements deterministic ELG001–ELG032 dispatch and execution, explainable sourced checks, missing-field reporting, cutoff calculation, explicit `NEEDS_REVIEW` boundaries, and complete rule-ID test coverage.
 - Historical Slice 2 verification recorded 30 passing tests and a strict TypeScript compiler check. This is milestone evidence, not a current-HEAD test run.

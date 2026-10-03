@@ -2,7 +2,7 @@
 
 **Prepared:** 2026-10-02. **Status:** READY_FOR_OWNER_ANSWER_REVIEW. Factual and Tamil approval: PENDING. Actual student validation: PENDING.
 
-This continues [A01–A07 V2](student_pov_awareness_batch_a01_a07_v2.md) from “How do I enter engineering?”. It groups 39 questions into eight guidance units, B01–B08. The [coverage review](student_pov_admission_coverage_int05_int08_v1.md) preserves exact corpus wording and primary intent assignments. Q001/Q002/Q007 retain the corpus's DISCOVERED_STUDENT_QUESTION label without newly authenticating their external provenance; the other 36 are PRODUCT_COVERAGE_QUESTION. Student-need statements are PARAPHRASED_STUDENT_NEED; new Tamil answers are editorial drafts. Paper conversation examples are SYNTHETIC_LANGUAGE_EXAMPLE.
+This continues [A01–A07 V2](../awareness/student_pov_awareness_batch_a01_a07_v2.md) from “How do I enter engineering?”. It groups 39 questions into eight guidance units, B01–B08. The [coverage review](student_pov_admission_coverage_int05_int08_v1.md) preserves exact corpus wording and primary intent assignments. Q001/Q002/Q007 retain the corpus's DISCOVERED_STUDENT_QUESTION label without newly authenticating their external provenance; the other 36 are PRODUCT_COVERAGE_QUESTION. Student-need statements are PARAPHRASED_STUDENT_NEED; new Tamil answers are editorial drafts. Paper conversation examples are SYNTHETIC_LANGUAGE_EXAMPLE.
 
 **Year boundary:** Admission rules below are explicitly **2026** examples. No 2027 rules were verified in this research; do not carry thresholds, dates, documents or processes forward automatically. No statement means applications are open today. Check the official notice for the student's intended year before acting.
 

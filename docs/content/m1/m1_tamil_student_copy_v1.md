@@ -4,7 +4,7 @@
 
 `M1_TAMIL_STUDENT_LANGUAGE_REVIEW = PASS`
 
-Presentation refinement authorized by human review on 2026-09-12. The factual authority remains `docs/m1_awareness_content_pack_v1.md` and its manifest at commit `8ab1f3e`. This file supplies only Tamil titles, content and takeaways for the same AW identities. English and source mappings are unchanged. Paragraph wrapping and list formatting are presentation only.
+Presentation refinement authorized by human review on 2026-09-12. The factual authority remains `docs/content/m1/m1_awareness_content_pack_v1.md` and its manifest at commit `8ab1f3e`. This file supplies only Tamil titles, content and takeaways for the same AW identities. English and source mappings are unchanged. Paragraph wrapping and list formatting are presentation only.
 
 AW-08 numeric verification: existing source `SRC002`, TNEA 2026 Information Brochure, printed page 4, section 4.1, explicitly states 7.5 percentage seats on a preferential basis for qualifying Government School students. This is within AW-08's existing pp.3–6 provenance. The approved reference to 7.5% is retained as conditional awareness, not personal entitlement. Verified against https://static.tneaonline.org/docs/2_Information_Brochure_2026.pdf on 2026-09-12.
 

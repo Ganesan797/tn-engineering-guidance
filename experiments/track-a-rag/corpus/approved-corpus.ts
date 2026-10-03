@@ -8,7 +8,7 @@ const BASE_METADATA = {
   source_type: "FROZEN_PROJECT_CONTENT",
   source_year: 2026,
   document_version: "V1",
-  reference: "docs/m1_awareness_content_pack_v1.md",
+  reference: "docs/content/m1/m1_awareness_content_pack_v1.md",
   approval_status: "APPROVED" as const,
   access_date: "2026-09-13",
 };
@@ -41,7 +41,7 @@ function section(
   };
 }
 
-// Exact reviewed extracts from docs/m1_awareness_content_pack_v1.md.
+// Exact reviewed extracts from docs/content/m1/m1_awareness_content_pack_v1.md.
 export const AWARENESS_APPROVED_CORPUS: readonly CorpusSection[] = [
   section(
     "AW-01",

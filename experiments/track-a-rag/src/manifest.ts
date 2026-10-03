@@ -114,11 +114,11 @@ export const TRACK_A_SOURCE_MANIFEST: readonly SourceManifestEntry[] = [
     source_type: "FROZEN_PROJECT_CONTENT",
     source_year: 2026,
     document_version: "V1",
-    reference: "docs/m1_awareness_content_pack_v1.md",
+    reference: "docs/content/m1/m1_awareness_content_pack_v1.md",
     approval_status: "APPROVED",
     access_date: "2026-09-13",
     available_locally: true,
-    local_reference: "docs/m1_awareness_content_pack_v1.md",
+    local_reference: "docs/content/m1/m1_awareness_content_pack_v1.md",
     primary_uses: ["approved explanations", "student awareness", "existing provenance"],
   },
   {

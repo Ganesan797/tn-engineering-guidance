@@ -10,13 +10,13 @@ import { blankReferenceRequest } from "../../src/ui/reference-request.ts";
 import { resolveStudentMessage, MissingStudentPresentationError, M1_ENTRY_COPY_REVIEW } from "../../src/student-semantics/index.ts";
 import { parseAwarenessPack, applyApprovedTamilStudentCopy, AWARENESS_GROUPS } from "../../src/student-semantics/awareness.ts";
 
-const packDocument = readFileSync(new URL("../../docs/m1_awareness_content_pack_v1.md", import.meta.url), "utf8");
+const packDocument = readFileSync(new URL("../../docs/content/m1/m1_awareness_content_pack_v1.md", import.meta.url), "utf8").replaceAll("\r\n", "\n");
 const frozenPack = parseAwarenessPack(
   readFileSync(new URL("../../data/m1_awareness_content_pack_v1.json", import.meta.url), "utf8"),
   packDocument,
   readFileSync(new URL("../../data/sources.csv", import.meta.url), "utf8"),
 );
-const tamilCopyDocument = readFileSync(new URL("../../docs/m1_tamil_student_copy_v1.md", import.meta.url), "utf8");
+const tamilCopyDocument = readFileSync(new URL("../../docs/content/m1/m1_tamil_student_copy_v1.md", import.meta.url), "utf8").replaceAll("\r\n", "\n");
 const pack = applyApprovedTamilStudentCopy(frozenPack, tamilCopyDocument);
 
 const context = { snapshot_id: "CONFIGURED_EVIDENCE", snapshot_stage: null };

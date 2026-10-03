@@ -425,7 +425,7 @@ Every stage can be expressed in plain, non-academic Tamil without changing its e
 
 `MISSION_ALIGNMENT = PASS`
 
-The journey remains aligned to `docs/product_mission.md`.
+The journey remains aligned to `docs/product/product_mission.md`.
 
 ## Final Freeze Decision
 
