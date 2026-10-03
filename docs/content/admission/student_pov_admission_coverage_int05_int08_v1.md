@@ -1,6 +1,6 @@
 # INT-05–INT-08 Question Coverage and Paper Review V1
 
-**Date:** 2026-10-02. **Batch:** [B01–B08](student_pov_admission_batch_int05_int08_v1.md). **Evidence:** [official-source note](student_pov_admission_evidence_int05_int08_v1.md).
+**Date:** 2026-10-02. **Batch:** [B01–B08](student_pov_admission_batch_int05_int08_v1.md). **Evidence:** [official-source note](student_pov_admission_evidence_int05_int08_v1.md). **Subsequent decision:** [Owner answer review accepted 2026-10-03](student_pov_admission_owner_review_decision_v1.md).
 
 ## Scope and classification
 
@@ -77,7 +77,7 @@ This is a synthetic conversation and qualitative 5–10-minute progression check
 
 ## Focused review gaps and boundaries
 
-- **Owner answer review:** This new batch is ready for Ganesan's review; it is not covered by the separate A01–A07 V2 acceptance.
+- **Owner answer review:** Ganesan accepted B01–B08 answers on 2026-10-03 in a separate decision from A01–A07 V2. The remaining limits below continue to apply.
 - **Tamil:** All units have equivalent-intent Tamil drafts; volunteer review must check naturalness, technical terms and preservation of each condition. No Tamil approval is inferred from English completeness.
 - **Grievance timing:** Two official 2026 sources conflict (five days versus one week). A controlling rank-list notice/authority clarification is still needed before stating a fixed deadline. The answer directs prompt official checking and does not choose a deadline.
 - **Future year:** 2027 eligibility, documents, dates and availability are NOT VERIFIED. The batch expressly labels the available 2026 rules.

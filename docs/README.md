@@ -4,11 +4,12 @@ Start with [Project Status](../PROJECT_STATUS.md) for the current task and appro
 
 ## Content to review
 
-- [Admission answers B01–B08](content/admission/student_pov_admission_batch_int05_int08_v1.md) — INT-05–INT-08; awaiting owner answer review.
+- [Admission answers B01–B08](content/admission/student_pov_admission_batch_int05_int08_v1.md) — INT-05–INT-08; [owner answer review accepted](content/admission/student_pov_admission_owner_review_decision_v1.md), with remaining release reviews identified there.
 - [Admission evidence](content/admission/student_pov_admission_evidence_int05_int08_v1.md) and [question coverage](content/admission/student_pov_admission_coverage_int05_int08_v1.md).
 - [Awareness answers A01–A07 V2](content/awareness/student_pov_awareness_batch_a01_a07_v2.md) — content direction accepted; see the [review decision](content/awareness/student_pov_awareness_review_decision_v1.md) for approval limits.
 - [Awareness evidence](content/awareness/student_pov_awareness_evidence_v2.md) and [question coverage](content/awareness/student_pov_awareness_coverage_review_v1.md).
 - [Student question and intent map](content/student_question_intent_review_v1.md).
+- [M2 one-journey readiness proposal](planning/m2_one_journey_readiness_proposal_v1.md) — review only; no M2 authorization.
 
 Tamil-equivalence review and actual student validation remain pending. Answer coverage is not final release approval.
 

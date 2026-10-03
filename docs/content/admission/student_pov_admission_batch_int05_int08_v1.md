@@ -1,6 +1,6 @@
 # Student POV Admission Guidance — INT-05–INT-08 V1
 
-**Prepared:** 2026-10-02. **Status:** READY_FOR_OWNER_ANSWER_REVIEW. Factual and Tamil approval: PENDING. Actual student validation: PENDING.
+**Prepared:** 2026-10-02. **Owner answer review:** ACCEPTED 2026-10-03; see the [dated decision](student_pov_admission_owner_review_decision_v1.md). Final factual release and Tamil approval: PENDING. Actual student validation: PENDING.
 
 This continues [A01–A07 V2](../awareness/student_pov_awareness_batch_a01_a07_v2.md) from “How do I enter engineering?”. It groups 39 questions into eight guidance units, B01–B08. The [coverage review](student_pov_admission_coverage_int05_int08_v1.md) preserves exact corpus wording and primary intent assignments. Q001/Q002/Q007 retain the corpus's DISCOVERED_STUDENT_QUESTION label without newly authenticating their external provenance; the other 36 are PRODUCT_COVERAGE_QUESTION. Student-need statements are PARAPHRASED_STUDENT_NEED; new Tamil answers are editorial drafts. Paper conversation examples are SYNTHETIC_LANGUAGE_EXAMPLE.
 
@@ -270,4 +270,4 @@ The word “cutoff” is also used for a **past closing score of a college/branc
 
 Use one relevant unit at a time; this is not a 39-question form. A novice can leave knowing the route, the process, the difference between eligibility/score/rank, and the next document or official notice to check. If uncertain, keep the missing fact unknown and provide a specific official-help route.
 
-Ganesan's answer review is pending for this new batch. Tamil-equivalence review and actual student validation are separate. Gemini remains PAUSED, Live LLM Gate PARTIAL, and M2 NOT_AUTHORIZED.
+Ganesan accepted the B01–B08 answers on 2026-10-03. Source limitations, final factual release approval, Tamil-equivalence review and actual student validation remain separate. Gemini remains PAUSED, Live LLM Gate PARTIAL, and M2 NOT_AUTHORIZED.

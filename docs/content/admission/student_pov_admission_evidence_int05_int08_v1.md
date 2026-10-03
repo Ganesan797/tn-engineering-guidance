@@ -1,6 +1,6 @@
 # INT-05–INT-08 Admission Evidence Note V1
 
-**Research/access date:** 2026-10-02. **Admission year:** 2026, except S6's explicitly stated 2024–27 handbook period. **Approval:** source-backed review draft; Ganesan's answer review pending. This note is content evidence, not a new registry, schema or executable rule set.
+**Research/access date:** 2026-10-02. **Admission year:** 2026, except S6's explicitly stated 2024–27 handbook period. **Approval at research time:** source-backed review draft. [Ganesan accepted the answers on 2026-10-03](student_pov_admission_owner_review_decision_v1.md); the source limits below remain. This note is content evidence, not a new registry, schema or executable rule set.
 
 ## Baseline and authorities
 
@@ -55,7 +55,7 @@ All six source families were retrieved/read during this task. The external PDF/p
 4. **Management quota:** S6 explains disclosure obligations, not institution-specific 2026 terms. No target college is provided. The exact seat share, fee, eligibility notice, selection and refund terms require that institution's applicable official notice before action. This does not prevent answering the introductory meaning of Q059.
 5. **Personal cases:** The corpus supplies questions, not verified student files. Board equivalence, special nativity, vocational group, improvement interpretation and other personal cases remain subject to evidence and authority review. No personal result is fabricated.
 6. **Calculation:** The invented 90/80/70 example verifies only arithmetic on a stated 100-mark scale. Normalisation needs official data/rules; rank needs the year's official list. The G05 coupling issue remains the previously recorded future domain follow-up, not a resolved implementation finding.
-7. **Approval:** Owner review of this new batch, native-speaker Tamil equivalence and actual student validation remain pending. A source-backed draft is not final release approval.
+7. **Approval:** Owner answer review was accepted on 2026-10-03. Native-speaker Tamil equivalence, final factual release approval and actual student validation remain pending. A source-backed draft is not final release approval.
 
 ## Evidence classes and controls
 

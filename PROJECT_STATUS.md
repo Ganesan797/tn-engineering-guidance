@@ -2,9 +2,9 @@
 
 **Current milestone:** M1 — Awareness-First Entry + Direct Entry (accepted)
 
-**Current task:** Owner answer review of the prepared INT-05–INT-08 admission guidance batch; A01–A07 V2 content direction is owner-accepted, with source limitations, final factual approval, volunteer Tamil review and actual student validation preserved
+**Current task:** Review the one-journey M2 readiness proposal; B01–B08 answers and A01–A07 V2 content direction are owner-accepted, with source limitations, final factual approval, volunteer Tamil review and actual student validation preserved
 
-**Last reviewed:** 2026-10-02
+**Last reviewed:** 2026-10-03
 
 **Documentation navigation (2026-10-02):** Documents are grouped by product, planning, architecture, content, experiments and templates. Start with the [documentation guide](docs/README.md); awareness and admission folders keep answers, evidence and reviews together. Original conversation records remain preserved. Relocation and reference checks passed, and the existing automated suite passed 199 tests after updating document-loading paths. This organization change does not change content approval or implementation authorization.
 
@@ -18,13 +18,15 @@
 
 **Decision:** M0 and M1 are accepted. M2 and later milestones remain unauthorized.
 
-**Next priority:** Ganesan reviews the answers in [INT-05–INT-08 B01–B08](docs/content/admission/student_pov_admission_batch_int05_int08_v1.md). Volunteer Tamil-equivalence review and actual student validation remain pending. The intent map, raw corpus and A01–A07 baselines remain preserved. Further Gemini execution is paused. Production implementation, Track B and M2 remain unauthorized.
+**Next priority:** Ganesan reviews the [one-journey M2 readiness proposal](docs/planning/m2_one_journey_readiness_proposal_v1.md), including the specific decision on whether a bounded deterministic/canonical M2 slice can receive separate authorization while the Live LLM Gate remains partial. Volunteer Tamil-equivalence review and actual student validation remain pending. The intent map, raw corpus and A01–A07 baselines remain preserved. Further Gemini execution is paused. Production implementation, Track B and M2 remain unauthorized.
 
 **A01–A07 research revision (2026-10-02):** The updated [question-level review and paper walkthrough](docs/content/awareness/student_pov_awareness_coverage_review_v1.md) records **31 ANSWERED, 0 PARTIAL, 0 DEFERRED**, improved from **7/15/9**. `ANSWERED` measures direct response completeness only. The [evidence note](docs/content/awareness/student_pov_awareness_evidence_v2.md) scopes curriculum, post-Class-12, historical-cutoff and occupation claims. Final factual approval, volunteer Tamil approval and actual student validation remain pending. The revised paper walkthrough passes the awareness portion of the 5–10-minute progression goal; it does not validate the full seven-stage journey.
 
 **Owner decision (2026-10-02):** Ganesan found A01–A07 V2 answers satisfactory and accepted the revised content direction. The [dated decision](docs/content/awareness/student_pov_awareness_review_decision_v1.md) records this separately from pending volunteer Tamil-equivalence review, actual student validation and final factual release approval. Recorded source limitations remain unchanged.
 
-**INT-05–INT-08 content preparation (2026-10-02):** Four saved intents, **39 unique assigned questions**, eight consolidated units: admission routes, management quota, diploma entry, TNEA process, documents, minimum eligibility/boards, special histories, and cutoff/rank. [Question-level coverage and paper review](docs/content/admission/student_pov_admission_coverage_int05_int08_v1.md) records **39 ANSWERED, 0 PARTIAL, 0 DEFERRED** for response completeness only. Exact corpus wording and cross-intent connections are retained. The [evidence note](docs/content/admission/student_pov_admission_evidence_int05_int08_v1.md) dates admission rules to 2026; 2027 rules are not verified. It flags conflicting grievance windows, institution-specific management terms and individual-case uncertainty. New-batch owner answer review, factual approval, Tamil review and actual student validation remain pending. This is content research/documentation, not implementation or live validation.
+**INT-05–INT-08 content preparation (2026-10-02):** Four saved intents, **39 unique assigned questions**, eight consolidated units: admission routes, management quota, diploma entry, TNEA process, documents, minimum eligibility/boards, special histories, and cutoff/rank. [Question-level coverage and paper review](docs/content/admission/student_pov_admission_coverage_int05_int08_v1.md) records **39 ANSWERED, 0 PARTIAL, 0 DEFERRED** for response completeness only. Exact corpus wording and cross-intent connections are retained. The [evidence note](docs/content/admission/student_pov_admission_evidence_int05_int08_v1.md) dates admission rules to 2026; 2027 rules are not verified. It flags conflicting grievance windows, institution-specific management terms and individual-case uncertainty. Ganesan [accepted the B01–B08 answers](docs/content/admission/student_pov_admission_owner_review_decision_v1.md) on 2026-10-03. Final factual release approval, Tamil review and actual student validation remain pending. This is content research/documentation, not implementation or live validation.
+
+**M2 readiness proposal (2026-10-03):** The [one-journey proposal](docs/planning/m2_one_journey_readiness_proposal_v1.md) maps zero-knowledge TNEA orientation to optional, progressive personal input and a deterministic result or explicit unknown. It identifies existing capabilities, missing question-to-domain and D0/D1 evidence, and the owner decision needed on the partial Live LLM Gate. It neither authorizes M2 nor schedules a live request.
 
 **Research outcome:** V2 preserves supplied entities, completes Q049's four-way comparison, separates curriculum from historical cutoff evidence, adds scoped branch/career explanations, and connects awareness to “How do I enter engineering?”. Q021 correctly remains non-numeric without the required college/year/route/round/category/quota/programme context. The original A01–A07 batch, intent map and raw corpus remain unchanged. No application tests or live requests were run.
 
@@ -88,7 +90,7 @@
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = INT05_TO_INT08_OWNER_ANSWER_REVIEW`
+`NEXT_ACTIVITY = REVIEW_ONE_JOURNEY_M2_READINESS_AND_GATE_BOUNDARY`
 
 `M2_STATUS = NOT_AUTHORIZED`
 
@@ -268,7 +270,7 @@ For future AI turns, prefer a compact relevant context containing the student-pr
 **Remaining sequence:**
 
 1. Documentation alignment for the accepted experiment learning and responsibility model is committed at `33a264a19daa866aa30fa49e733be089af59025d` and pushed.
-2. Review INT-05–INT-08 answers (39/39 response-complete). A01–A07 V2 direction is owner-accepted; source limitations, final factual approval, volunteer Tamil review and actual student validation remain separate pending work.
+2. Review the one-journey M2 readiness proposal. B01–B08 answers and A01–A07 V2 direction are owner-accepted; source limitations, final factual approval, volunteer Tamil review and actual student validation remain separate pending work.
 3. Keep further Gemini execution paused unless separately authorized.
 4. If resumed later, evaluate the remaining frozen scenarios without changing their contracts.
 5. Make an evidence-based gate decision before considering M2 authorization.
@@ -299,7 +301,7 @@ For future AI turns, prefer a compact relevant context containing the student-pr
 
 `PRODUCTION_RAG = NOT_AUTHORIZED`
 
-`NEXT_GATE = INT05_TO_INT08_OWNER_ANSWER_REVIEW_NO_M2_AUTHORIZATION`
+`NEXT_GATE = OWNER_REVIEW_OF_ONE_JOURNEY_M2_READINESS_NO_M2_AUTHORIZATION`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -386,7 +388,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Ganesan reviews the prepared INT-05–INT-08 answers and their dated conditions. The 168-question corpus remains an external exploratory draft; exact wording for all 39 assigned questions is preserved in the new coverage review. A01–A07 V1/V2 remain unchanged. A01–A07 V2 content direction is owner-accepted; volunteer Tamil equivalence and actual student validation remain pending. Source limitations and final factual approval are not overridden by answer completeness. No full taxonomy or implementation approval is implied.
+Ganesan reviews the one-journey M2 proposal and decides whether the partial Live LLM Gate permits separate consideration of a bounded deterministic/canonical progressive-input slice. The 168-question corpus remains an external exploratory draft; exact wording for all 39 assigned questions is preserved in the admission coverage review. A01–A07 V2 content direction and B01–B08 answers are owner-accepted; volunteer Tamil equivalence and actual student validation remain pending. Source limitations and final factual approval are not overridden by answer completeness. No full taxonomy or implementation approval is implied.
 
 Historical test counts below and above refer to their named milestones. This documentation reconciliation ran preservation and integrity checks only, not the application suite or typecheck.
 
@@ -470,4 +472,4 @@ Historical test counts below and above refer to their named milestones. This doc
 
 ## Next review point
 
-Ganesan’s answer review of INT-05–INT-08. Volunteer Tamil-equivalence review, final factual approval within source scope and actual student validation remain pending; Live LLM Gate completion and M2 authorization remain separate future decisions.
+Ganesan’s review of the one-journey M2 readiness proposal and explicit decision on the partial Live LLM Gate boundary. Volunteer Tamil-equivalence review, final factual approval within source scope and actual student validation remain pending; M2 authorization remains a separate future decision.
