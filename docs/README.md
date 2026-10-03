@@ -9,9 +9,9 @@ Start with [Project Status](../PROJECT_STATUS.md) for the current task and appro
 - [Awareness answers A01–A07 V2](content/awareness/student_pov_awareness_batch_a01_a07_v2.md) — content direction accepted; see the [review decision](content/awareness/student_pov_awareness_review_decision_v1.md) for approval limits.
 - [Awareness evidence](content/awareness/student_pov_awareness_evidence_v2.md) and [question coverage](content/awareness/student_pov_awareness_coverage_review_v1.md).
 - [Student question and intent map](content/student_question_intent_review_v1.md).
-- [M2 one-journey readiness proposal](planning/m2_one_journey_readiness_proposal_v1.md) and [dated bounded authorization](planning/m2_one_journey_authorization_decision_2026-10-03.md) — only the specified journey is authorized; implementation and acceptance remain pending.
+- [M2 one-journey readiness proposal](planning/m2_one_journey_readiness_proposal_v1.md) and [dated bounded authorization](planning/m2_one_journey_authorization_decision_2026-10-03.md) — the specified journey is implemented for review; M2 acceptance remains pending.
 
-Tamil-equivalence review and actual student validation remain pending. Answer coverage is not final release approval.
+The [M2 question-to-domain map](planning/m2_one_journey_question_domain_map_v1.md) records the single progressive path. Tamil-equivalence review and actual student validation remain pending. Answer coverage is not final release approval.
 
 ## Folder guide
 

@@ -1,8 +1,8 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** M2 — Progressive Student Input (one bounded journey authorized; implementation not started)
+**Current milestone:** M2 — Progressive Student Input (one bounded journey implemented; acceptance pending)
 
-**Current task:** Prepare Task 2 within the [bounded M2 authorization](docs/planning/m2_one_journey_authorization_decision_2026-10-03.md); the journey has not been implemented
+**Current task:** Review the implemented single Tamil journey against the [bounded M2 authorization](docs/planning/m2_one_journey_authorization_decision_2026-10-03.md); M2 milestone acceptance and student validation remain pending
 
 **Last reviewed:** 2026-10-03
 
@@ -18,7 +18,7 @@
 
 **Decision:** M0 and M1 are accepted. Ganesan authorized **one bounded M2 student journey** on 2026-10-03. M2 is not implemented or accepted; later milestones remain unauthorized.
 
-**Next priority:** Execute Task 2 only within the [dated bounded M2 decision](docs/planning/m2_one_journey_authorization_decision_2026-10-03.md): map progressive student questions to existing domain fields and rules, then build the single first-year TNEA path over existing content and deterministic services. Volunteer Tamil-equivalence, factual release and actual student validation remain pending. Gemini execution, production RAG, Track B and later milestones remain unauthorized.
+**Next priority:** Review the [question-to-domain map](docs/planning/m2_one_journey_question_domain_map_v1.md) and the implemented one-journey flow, then obtain the remaining factual release, volunteer Tamil, actual student and frozen M2 completion reviews. Gemini execution, production RAG, Track B and later milestones remain unauthorized.
 
 **A01–A07 research revision (2026-10-02):** The updated [question-level review and paper walkthrough](docs/content/awareness/student_pov_awareness_coverage_review_v1.md) records **31 ANSWERED, 0 PARTIAL, 0 DEFERRED**, improved from **7/15/9**. `ANSWERED` measures direct response completeness only. The [evidence note](docs/content/awareness/student_pov_awareness_evidence_v2.md) scopes curriculum, post-Class-12, historical-cutoff and occupation claims. Final factual approval, volunteer Tamil approval and actual student validation remain pending. The revised paper walkthrough passes the awareness portion of the 5–10-minute progression goal; it does not validate the full seven-stage journey.
 
@@ -28,9 +28,11 @@
 
 **M2 readiness proposal (2026-10-03):** The [one-journey proposal](docs/planning/m2_one_journey_readiness_proposal_v1.md) maps zero-knowledge TNEA orientation to optional, progressive personal input and a deterministic result or explicit unknown. Its earlier `NOT_AUTHORIZED` state was superseded for this bounded scope by the [later owner decision](docs/planning/m2_one_journey_authorization_decision_2026-10-03.md). The proposal remains a paper design; no implementation or live request occurred in this documentation task.
 
+**Bounded M2 implementation (2026-10-03):** A local mobile-first Tamil path at `/journey` starts with approved M1 awareness without marks, explains the 2026 first-year TNEA route, offers a preparation page using reviewed B05 with its draft-language notice, and provides an optional direct-entry personal cutoff check. The [question-to-domain map](docs/planning/m2_one_journey_question_domain_map_v1.md) ties each question to the reviewed content, source and existing `StudentProfile`/ELG009/ELG032 fields. The flow asks one question at a time, retains submitted answers in a bounded form state, preserves “I don't know” as null for the engine, and uses the existing guidance service. A supported cutoff is shown separately from broader eligibility, which may remain `NEEDS_REVIEW`. Other/unknown admission years and unsupported streams produce no personal calculation. No student data is persisted by this path. Focused offline tests **7/7**, full offline suite **206/206**, and strict TypeScript typecheck passed. This is implementation evidence only: M2 completion, factual release approval, volunteer Tamil equivalence, actual student validation and the Live LLM Gate remain pending. No Gemini request was made.
+
 **Research outcome:** V2 preserves supplied entities, completes Q049's four-way comparison, separates curriculum from historical cutoff evidence, adds scoped branch/career explanations, and connects awareness to “How do I enter engineering?”. Q021 correctly remains non-numeric without the required college/year/route/round/category/quota/programme context. The original A01–A07 batch, intent map and raw corpus remain unchanged. No application tests or live requests were run.
 
-`CODEX_FEATURE_WORK = M2_ONE_JOURNEY_AUTHORIZED_NOT_STARTED`
+`CODEX_FEATURE_WORK = M2_ONE_JOURNEY_IMPLEMENTED_PENDING_REVIEW`
 
 **Mission review:** Golden Product Mission V1 is frozen. Mission clarity, Booklet-First alignment, zero-knowledge alignment, native-language and reach direction, personalization, Think-Further direction, trusted-engine boundaries, and the mission review gate passed review. Major student-facing milestones now require `TECHNICAL_DOD = PASS`, `MISSION_ALIGNMENT = PASS`, and `STUDENT_SCENARIO_REVIEW = PASS`.
 
@@ -90,9 +92,9 @@
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = TASK_2_BOUNDED_M2_ONE_JOURNEY_IMPLEMENTATION`
+`NEXT_ACTIVITY = BOUNDED_M2_JOURNEY_REVIEW_AND_STUDENT_VALIDATION`
 
-`M2_STATUS = AUTHORIZED_BOUNDED_ONE_JOURNEY_NOT_STARTED`
+`M2_STATUS = BOUNDED_ONE_JOURNEY_IMPLEMENTED_PENDING_ACCEPTANCE`
 
 `PRODUCTION_RAG_IMPLEMENTATION_AUTHORIZED = NO`
 
@@ -270,7 +272,7 @@ For future AI turns, prefer a compact relevant context containing the student-pr
 **Remaining sequence:**
 
 1. Documentation alignment for the accepted experiment learning and responsibility model is committed at `33a264a19daa866aa30fa49e733be089af59025d` and pushed.
-2. Ganesan reviewed the one-journey proposal and authorized only the bounded deterministic/canonical M2 path on 2026-10-03. Next, prepare the question-to-domain mapping and implement that path. B01–B08 answers and A01–A07 V2 direction are owner-accepted; source limitations, final factual approval, volunteer Tamil review and actual student validation remain separate pending work.
+2. Ganesan authorized the bounded deterministic/canonical M2 path on 2026-10-03. The [question-to-domain map](docs/planning/m2_one_journey_question_domain_map_v1.md) and one local mobile-first Tamil journey are implemented for review. B01–B08 answers and A01–A07 V2 direction are owner-accepted; source limitations, final factual approval, volunteer Tamil review and actual student validation remain separate pending work.
 3. Keep further Gemini execution paused unless separately authorized.
 4. If resumed later, evaluate the remaining frozen scenarios without changing their contracts.
 5. Complete the Live LLM Gate and make a separate evidence-based decision before any production LLM or AI-assisted guidance; the bounded M2 authorization does not close that gate.
@@ -301,7 +303,7 @@ For future AI turns, prefer a compact relevant context containing the student-pr
 
 `PRODUCTION_RAG = NOT_AUTHORIZED`
 
-`NEXT_GATE = BOUNDED_M2_TECHNICAL_AND_MISSION_REVIEW_AFTER_IMPLEMENTATION`
+`NEXT_GATE = BOUNDED_M2_TECHNICAL_MISSION_OWNER_AND_STUDENT_REVIEW`
 
 `PAPER_SCENARIO_REVIEW = PASS`
 
@@ -329,7 +331,7 @@ For future AI turns, prefer a compact relevant context containing the student-pr
 
 `BILINGUAL_SUPPORT = YES`
 
-**Implementation Plan V1 remains frozen. M1 has passed final owner acceptance; only the one-journey M2 scope is authorized, not implemented or accepted.**
+**Implementation Plan V1 remains frozen. M1 has passed final owner acceptance; the one-journey M2 scope is implemented locally but has not passed milestone acceptance.**
 
 **Slice 3 commit:** `fade04d`
 
@@ -388,9 +390,9 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-**Task 2:** Prepare the approved question-to-domain/rule mapping, then implement only the authorized zero-knowledge Tamil to first-year TNEA progressive-input journey over reviewed content and existing deterministic services. Preserve direct entry, prior answers and unknown/null values. The 168-question corpus remains an external exploratory draft; A01–A07 V2 content direction and B01–B08 answers are owner-accepted, while volunteer Tamil equivalence, final factual release approval and actual student validation remain pending. No broader taxonomy or later-milestone authorization is implied.
+Review the implemented journey against the [mapping](docs/planning/m2_one_journey_question_domain_map_v1.md) and dated authorization. The local flow starts without marks, explains the 2026 first-year TNEA route, offers preparation and a voluntary check, asks one field at a time, retains entered answers and unknowns, and shows the existing engine cutoff only when supported. Eligibility may remain `NEEDS_REVIEW`. Volunteer Tamil equivalence, final factual release approval, actual student validation of the 5–10-minute goal, and the frozen technical/mission/owner/scenario completion reviews remain pending. No broader taxonomy or later milestone is authorized.
 
-Historical test counts below and above refer to their named milestones. This documentation reconciliation ran preservation and integrity checks only, not the application suite or typecheck.
+Historical test counts below and above refer to their named milestones. The bounded M2 implementation was checked with focused local tests, the existing offline suite and strict typecheck; its test outcome is recorded in the implementation note above. No live model request was made.
 
 ## M1 implementation review
 
@@ -472,4 +474,4 @@ Historical test counts below and above refer to their named milestones. This doc
 
 ## Next review point
 
-Task 2 implementation review for the authorized single M2 journey, including the question-to-domain mapping, deterministic/unknown boundaries, Tamil and student usefulness. Final factual release approval and Live LLM Gate completion remain separate future decisions.
+Focused owner and student review of the implemented single M2 journey, including the mapping, deterministic/unknown boundaries, Tamil equivalence and actual 5–10-minute usefulness. Final factual release approval and Live LLM Gate completion remain separate future decisions.

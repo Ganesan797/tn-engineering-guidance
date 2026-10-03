@@ -12,6 +12,8 @@ import { entryStateFromUrl } from "../src/student-entry/routing.ts";
 import { renderStudentEntryPage, renderReferenceGuidancePage } from "../src/ui/student-entry.ts";
 import { blankReferenceRequest } from "../src/ui/reference-request.ts";
 import { parseAwarenessPack, applyApprovedTamilStudentCopy } from "../src/student-semantics/awareness.ts";
+import { answerJourneyQuestion, EMPTY_JOURNEY, parseJourneyState, retryUnknown } from "../src/m2/journey.ts";
+import { renderM2Journey } from "../src/ui/m2-journey.ts";
 
 const root = new URL("../", import.meta.url);
 const awareness = applyApprovedTamilStudentCopy(parseAwarenessPack(
@@ -24,6 +26,7 @@ const runtime = createPilotRuntime({
   colleges_csv: readFileSync(new URL("data/colleges.csv", root), "utf8"),
   programmes_csv: readFileSync(new URL("data/programmes.csv", root), "utf8"),
 });
+const reviewedAdmissionBatch = readFileSync(new URL("docs/content/admission/student_pov_admission_batch_int05_int08_v1.md", root), "utf8");
 
 function scenarioName(url) {
   const value = url.searchParams.get("scenario") ?? "eligible";
@@ -49,6 +52,32 @@ const server = createServer(async (request, response) => {
   const url = new URL(request.url ?? "/", "http://localhost");
   const language = url.searchParams.get("lang") === "en" ? "en" : "ta";
   const entry = entryStateFromUrl(url);
+  if (request.method === "GET" && url.pathname === "/journey") {
+    const step = url.searchParams.get("step");
+    const page = step === "route" || step === "prepare" || step === "check" ? step : "awareness";
+    send(response, 200, renderM2Journey(page, awareness, reviewedAdmissionBatch, runtime, EMPTY_JOURNEY));
+    return;
+  }
+  if (request.method === "POST" && url.pathname === "/journey") {
+    try {
+      const chunks = [];
+      let total = 0;
+      for await (const chunk of request) {
+        total += chunk.length;
+        if (total > 4096) throw new Error("Request is too large");
+        chunks.push(chunk);
+      }
+      const values = new URLSearchParams(Buffer.concat(chunks).toString("utf8"));
+      const state = parseJourneyState(values.get("state") ?? "");
+      const next = values.get("retry") === "1" ? retryUnknown(state)
+        : answerJourneyQuestion(state, values.get("unknown") === "1" ? "unknown" : values.get("answer") ?? "");
+      send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, runtime, next));
+    } catch {
+      send(response, 400, renderM2Journey("check", awareness, reviewedAdmissionBatch, runtime, EMPTY_JOURNEY,
+        "பதில் ஏற்கப்படவில்லை. விவரத்தைச் சரிபார்த்து மீண்டும் தொடங்குங்கள்."));
+    }
+    return;
+  }
   if (request.method === "GET" && entry !== null) {
     send(response, 200, renderStudentEntryPage(entry, awareness, undefined, {
       section: url.searchParams.get("section") ?? undefined,

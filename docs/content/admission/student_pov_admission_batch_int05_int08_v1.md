@@ -270,4 +270,4 @@ The word “cutoff” is also used for a **past closing score of a college/branc
 
 Use one relevant unit at a time; this is not a 39-question form. A novice can leave knowing the route, the process, the difference between eligibility/score/rank, and the next document or official notice to check. If uncertain, keep the missing fact unknown and provide a specific official-help route.
 
-Ganesan accepted the B01–B08 answers on 2026-10-03. Source limitations, final factual release approval, Tamil-equivalence review and actual student validation remain separate. Gemini remains PAUSED, Live LLM Gate PARTIAL, and M2 NOT_AUTHORIZED.
+Ganesan accepted the B01–B08 answers on 2026-10-03. Source limitations, final factual release approval, Tamil-equivalence review and actual student validation remain separate. Gemini remains PAUSED and the Live LLM Gate PARTIAL. A later [bounded M2 decision](../../planning/m2_one_journey_authorization_decision_2026-10-03.md) authorizes only one local student journey; it does not confer factual release or Tamil approval.
