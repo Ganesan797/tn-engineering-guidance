@@ -2,7 +2,7 @@
 
 **Current milestone:** M2 — Progressive Student Input (one bounded journey implemented; acceptance pending)
 
-**Current task:** Obtain factual-scope, volunteer Tamil-equivalence and actual student reviews of the bounded journey using the [validation preparation](docs/planning/m2_one_journey_validation_plan_2026-10-03.md); M2 milestone acceptance remains pending
+**Current task:** Ganesan re-review of Owner Finding 01's revised Stage 1, followed by factual-scope, volunteer Tamil-equivalence and actual student reviews; M2 milestone acceptance remains pending
 
 **Last reviewed:** 2026-10-03
 
@@ -31,6 +31,10 @@
 **Bounded M2 implementation (2026-10-03):** A local mobile-first Tamil path at `/journey` starts with approved M1 awareness without marks, explains the 2026 first-year TNEA route, offers a preparation page using reviewed B05 with its draft-language notice, and provides an optional direct-entry personal cutoff check. The [question-to-domain map](docs/planning/m2_one_journey_question_domain_map_v1.md) ties each question to the reviewed content, source and existing `StudentProfile`/ELG009/ELG032 fields. The flow asks one question at a time, retains submitted answers in a bounded form state, preserves “I don't know” as null for the engine, and uses the existing guidance service. A supported cutoff is shown separately from broader eligibility, which may remain `NEEDS_REVIEW`. Other/unknown admission years and unsupported streams produce no personal calculation. No student data is persisted by this path. Focused offline tests **7/7**, full offline suite **206/206**, and strict TypeScript typecheck passed. This is implementation evidence only: M2 completion, factual release approval, volunteer Tamil equivalence, actual student validation and the Live LLM Gate remain pending. No Gemini request was made.
 
 **Bounded M2 local validation preparation (2026-10-03):** The [procedure and review checklist](docs/planning/m2_one_journey_validation_plan_2026-10-03.md) records the observed local zero-knowledge and direct-entry pages, synthetic 2026 academic 86/78/81 result (engine cutoff 165.5/200 with separate `NEEDS_REVIEW`), unknown-mark result and retry with earlier input retained. A reproducible loss of answers when visiting route guidance mid-check was corrected with bounded POST form-state navigation; no student profile is persisted and marks are not placed in URLs. Focused journey tests **7/7**, full offline suite **206/206**, and strict TypeScript typecheck passed after this correction. The short Tamil-first 5–10-minute test, empty privacy-conscious observation form, factual-claim checklist and Tamil-equivalence checklist are prepared only. No student participated; no factual release or volunteer Tamil approval is claimed. M2 acceptance remains open, Gemini remains paused and the Live LLM Gate remains partial.
+
+**Owner Finding 01 — OPEN, re-review pending (2026-10-03):** Ganesan found the initial bounded journey too quick to become TNEA-focused. The focused Stage 1 revision retains approved AW-01 and adds reviewed A01 study/work and A04 field-map content on `/journey`; separate marks-free `/journey?step=study` and `/journey?step=compare` pages reuse A01/A04/A05/A06 V2 Tamil drafts with their evidence limits. Students may explore one field, move to TNEA, or directly enter the personal check; no branch choice is required. The [question-to-domain map](docs/planning/m2_one_journey_question_domain_map_v1.md) and [review checklist](docs/planning/m2_one_journey_validation_plan_2026-10-03.md) cover the revision. Local served-page checks passed; the full offline suite passed **206/206** and strict TypeScript typecheck passed. This technical change does not close the owner finding, approve draft Tamil or establish the 5–10-minute outcome. Gemini stays paused, Live LLM Gate stays partial, and M2 is not accepted.
+
+`OWNER_FINDING_01 = OPEN_PENDING_GANESAN_RE_REVIEW`
 
 **Research outcome:** V2 preserves supplied entities, completes Q049's four-way comparison, separates curriculum from historical cutoff evidence, adds scoped branch/career explanations, and connects awareness to “How do I enter engineering?”. Q021 correctly remains non-numeric without the required college/year/route/round/category/quota/programme context. The original A01–A07 batch, intent map and raw corpus remain unchanged. No application tests or live requests were run.
 
@@ -392,7 +396,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Use the [prepared validation plan](docs/planning/m2_one_journey_validation_plan_2026-10-03.md) for a real Tamil-first 5–10-minute student session and separate Ganesan factual-scope and volunteer Tamil-equivalence reviews. The local flow and navigation have passed offline checks; human comprehension, factual release, Tamil approval and frozen technical/mission/owner/scenario completion reviews remain pending. No broader taxonomy or later milestone is authorized.
+First obtain Ganesan's re-review of the revised Stage 1 under Owner Finding 01. Then use the [validation plan](docs/planning/m2_one_journey_validation_plan_2026-10-03.md) for a real Tamil-first 5–10-minute student session and separate factual-scope and volunteer Tamil-equivalence reviews. Human comprehension, factual release, Tamil approval and frozen technical/mission/owner/scenario completion reviews remain pending. No broader taxonomy or later milestone is authorized.
 
 Historical test counts below and above refer to their named milestones. The bounded M2 implementation was checked with focused local tests, the existing offline suite and strict typecheck; its test outcome is recorded in the implementation note above. No live model request was made.
 

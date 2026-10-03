@@ -7,7 +7,7 @@ import { createPilotRuntime } from "../../src/application/pilot-runtime.ts";
 import { answerJourneyQuestion, EMPTY_JOURNEY, journeyGuidanceResult, nextJourneyQuestion, parseJourneyState, retryUnknown } from "../../src/m2/journey.ts";
 import { applyApprovedTamilStudentCopy, parseAwarenessPack } from "../../src/student-semantics/awareness.ts";
 import { renderStudentEntryPage } from "../../src/ui/student-entry.ts";
-import { renderM2Journey, reviewedTamilUnit } from "../../src/ui/m2-journey.ts";
+import { renderM2Journey, reviewedAwarenessTamilQuestion, reviewedTamilUnit } from "../../src/ui/m2-journey.ts";
 
 const load = (path: string) => readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
 const pack = applyApprovedTamilStudentCopy(parseAwarenessPack(
@@ -16,29 +16,47 @@ const pack = applyApprovedTamilStudentCopy(parseAwarenessPack(
   load("data/sources.csv"),
 ), load("docs/content/m1/m1_tamil_student_copy_v1.md"));
 const reviewed = load("docs/content/admission/student_pov_admission_batch_int05_int08_v1.md");
+const awarenessReviewed = load("docs/content/awareness/student_pov_awareness_batch_a01_a07_v2.md");
 const runtime = () => createPilotRuntime({
   sources_csv: load("data/sources.csv"), colleges_csv: load("data/colleges.csv"),
   programmes_csv: load("data/programmes.csv"),
 });
 
-test("zero-knowledge Tamil path provides awareness and TNEA orientation before marks", () => {
-  const start = renderM2Journey("awareness", pack, reviewed, runtime());
+test("zero-knowledge Tamil path offers engineering and branch awareness before TNEA or marks", () => {
+  const start = renderM2Journey("awareness", pack, reviewed, awarenessReviewed, runtime());
   assert.match(start, /<html lang="ta"/);
   assert.match(start, /data-content-id="AW-01"/);
-  assert.match(start, /மதிப்பெண்கள் இப்போது தேவையில்லை/);
+  assert.match(start, /மதிப்பெண்களோ கல்லூரித் தேர்வோ இப்போது தேவையில்லை/);
+  assert.match(start, /data-content-id="A01"/);
+  assert.match(start, /data-content-id="A04"/);
+  assert.match(start, /\/journey\?step=study/);
+  assert.match(start, /\/journey\?step=compare/);
+  assert.match(start, /\/journey\?step=route/);
   assert.doesNotMatch(start, /name="answer"|type="number"/);
-  const route = renderM2Journey("route", pack, reviewed, runtime());
+  const study = renderM2Journey("study", pack, reviewed, awarenessReviewed, runtime());
+  assert.match(study, /Q037|CSE/);
+  assert.match(study, /ECE/);
+  assert.match(study, /Mechanical/);
+  assert.match(study, /Civil/);
+  assert.doesNotMatch(study, /name="answer"|type="number"/);
+  const compare = renderM2Journey("compare", pack, reviewed, awarenessReviewed, runtime());
+  assert.match(compare, /data-content-id="A06"/);
+  assert.match(compare, /data-content-id="A05"/);
+  assert.match(compare, /திறன் தீர்ப்பு அல்ல/);
+  assert.doesNotMatch(compare, /name="answer"|type="number"/);
+  assert.match(reviewedAwarenessTamilQuestion(awarenessReviewed, "A04", "Q041"), /Mechanical/);
+  const route = renderM2Journey("route", pack, reviewed, awarenessReviewed, runtime());
   assert.match(route, /data-content-id="AW-03"/);
   assert.match(route, /data-content-id="AW-05"/);
   assert.match(route, /B01, B04/);
   assert.match(route, /\/journey\?step=prepare/);
-  assert.match(renderM2Journey("prepare", pack, reviewed, runtime()), /data-content-id="B05"/);
+  assert.match(renderM2Journey("prepare", pack, reviewed, awarenessReviewed, runtime()), /data-content-id="B05"/);
   assert.match(reviewedTamilUnit(reviewed, "B01"), /TNEA/);
 });
 
 test("informed student can enter the optional check directly", () => {
   assert.match(renderStudentEntryPage({ route: "personal", language: "ta" }, pack), /\/journey\?step=check/);
-  const check = renderM2Journey("check", pack, reviewed, runtime());
+  const check = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime());
   assert.match(check, /எந்த ஆண்டு/);
   assert.doesNotMatch(check, /data-content-id="AW-01"/);
 });
@@ -55,7 +73,7 @@ test("progressive answers survive the form round trip and the engine supplies th
   assert.equal(result?.eligibility.cutoff, 165.5);
   assert.ok(result?.eligibility.checks.some((check) => check.rule_id === "ELG009" && check.source_id === "SRC002"));
   assert.equal(result?.eligibility.outcome, "NEEDS_REVIEW");
-  const html = renderM2Journey("check", pack, reviewed, runtime(), state);
+  const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
   assert.match(html, /165.5 \/ 200/);
   assert.match(html, /NEEDS_REVIEW/);
   assert.doesNotMatch(html, /இடம் உறுதி/);
@@ -70,7 +88,7 @@ test("unknown is null for the engine, never false or zero, and known answers rem
   assert.equal(result?.eligibility.cutoff, null);
   assert.equal(result?.eligibility.outcome, "NEEDS_REVIEW");
   assert.ok(result?.eligibility.blocking_missing_fields.includes("improvement_marks_used"));
-  assert.match(renderM2Journey("check", pack, reviewed, runtime(), state), /தகவல் இன்னும் தெரியவில்லை/);
+  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state), /தகவல் இன்னும் தெரியவில்லை/);
   const resumed = retryUnknown(parseJourneyState(JSON.stringify(state)));
   assert.equal(resumed.year, 2026);
   assert.equal(resumed.stream, "academic");
@@ -84,7 +102,7 @@ test("unknown is null for the engine, never false or zero, and known answers rem
 test("year and route guards reject unsupported personal calculations", () => {
   const otherYear = answerJourneyQuestion(EMPTY_JOURNEY, "other");
   assert.equal(journeyGuidanceResult(otherYear, runtime()), null);
-  assert.match(renderM2Journey("check", pack, reviewed, runtime(), otherYear), /2026 விதியை அடுத்த ஆண்டுக்கு/);
+  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), otherYear), /2026 விதியை அடுத்த ஆண்டுக்கு/);
   const otherStream = answerJourneyQuestion(answerJourneyQuestion(EMPTY_JOURNEY, "2026"), "other");
   assert.equal(journeyGuidanceResult(otherStream, runtime()), null);
   assert.throws(() => answerJourneyQuestion(EMPTY_JOURNEY, "2027"));
@@ -93,7 +111,7 @@ test("year and route guards reject unsupported personal calculations", () => {
 
 test("post-2005 improvement uses original marks and never silently uses improved marks", () => {
   const awaitingOriginal = ["2026", "academic", "yes", "2026"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
-  assert.match(renderM2Journey("check", pack, reviewed, runtime(), awaitingOriginal), /அசல் கணித மதிப்பெண்/);
+  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), awaitingOriginal), /அசல் கணித மதிப்பெண்/);
   const missing = ["2026", "academic", "yes", "2026", "unknown"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
   assert.equal(journeyGuidanceResult(missing, runtime())?.eligibility.cutoff, null);
   const complete = ["2026", "academic", "yes", "2026", "86", "78", "81"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
@@ -120,7 +138,14 @@ test("local server serves the Tamil journey and advances a posted answer", async
     });
     const awareness = await fetch(`${base}/journey`);
     assert.equal(awareness.status, 200);
-    assert.match(await awareness.text(), /data-content-id="AW-01"/);
+    const awarenessHtml = await awareness.text();
+    assert.match(awarenessHtml, /data-content-id="AW-01"/);
+    assert.match(awarenessHtml, /\/journey\?step=study/);
+    for (const step of ["study", "compare"]) {
+      const exploration = await fetch(`${base}/journey?step=${step}`);
+      assert.equal(exploration.status, 200);
+      assert.doesNotMatch(await exploration.text(), /name="answer"|type="number"/);
+    }
     const direct = await fetch(`${base}/journey?step=check`);
     assert.match(await direct.text(), /எந்த ஆண்டு/);
     let saved = JSON.stringify(EMPTY_JOURNEY);
@@ -155,6 +180,10 @@ test("local server serves the Tamil journey and advances a posted answer", async
           const resumedHtml = await resumed.text();
           assert.match(resumedHtml, /இயற்பியல் மதிப்பெண்/);
           assert.match(resumedHtml, /கணித மதிப்பெண் சேர்க்கப்பட்டது/);
+          const awarenessReturn = await fetch(`${base}/journey`, { method: "POST", body: new URLSearchParams({ state: saved, navigate: "awareness" }) });
+          const awarenessReturnHtml = await awarenessReturn.text();
+          assert.match(awarenessReturnHtml, /data-content-id="A01"/);
+          assert.match(awarenessReturnHtml, /name="navigate" value="check"/);
         }
       }
     }

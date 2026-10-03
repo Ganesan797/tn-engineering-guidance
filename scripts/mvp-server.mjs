@@ -27,6 +27,7 @@ const runtime = createPilotRuntime({
   programmes_csv: readFileSync(new URL("data/programmes.csv", root), "utf8"),
 });
 const reviewedAdmissionBatch = readFileSync(new URL("docs/content/admission/student_pov_admission_batch_int05_int08_v1.md", root), "utf8");
+const reviewedAwarenessBatch = readFileSync(new URL("docs/content/awareness/student_pov_awareness_batch_a01_a07_v2.md", root), "utf8");
 
 function scenarioName(url) {
   const value = url.searchParams.get("scenario") ?? "eligible";
@@ -54,8 +55,8 @@ const server = createServer(async (request, response) => {
   const entry = entryStateFromUrl(url);
   if (request.method === "GET" && url.pathname === "/journey") {
     const step = url.searchParams.get("step");
-    const page = step === "route" || step === "prepare" || step === "check" ? step : "awareness";
-    send(response, 200, renderM2Journey(page, awareness, reviewedAdmissionBatch, runtime, EMPTY_JOURNEY));
+    const page = step === "study" || step === "compare" || step === "route" || step === "prepare" || step === "check" ? step : "awareness";
+    send(response, 200, renderM2Journey(page, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY));
     return;
   }
   if (request.method === "POST" && url.pathname === "/journey") {
@@ -70,15 +71,15 @@ const server = createServer(async (request, response) => {
       const values = new URLSearchParams(Buffer.concat(chunks).toString("utf8"));
       const state = parseJourneyState(values.get("state") ?? "");
       const navigate = values.get("navigate");
-      if (navigate === "route" || navigate === "prepare" || navigate === "check") {
-        send(response, 200, renderM2Journey(navigate, awareness, reviewedAdmissionBatch, runtime, state));
+      if (navigate === "awareness" || navigate === "study" || navigate === "compare" || navigate === "route" || navigate === "prepare" || navigate === "check") {
+        send(response, 200, renderM2Journey(navigate, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, state));
         return;
       }
       const next = values.get("retry") === "1" ? retryUnknown(state)
         : answerJourneyQuestion(state, values.get("unknown") === "1" ? "unknown" : values.get("answer") ?? "");
-      send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, runtime, next));
+      send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, next));
     } catch {
-      send(response, 400, renderM2Journey("check", awareness, reviewedAdmissionBatch, runtime, EMPTY_JOURNEY,
+      send(response, 400, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY,
         "பதில் ஏற்கப்படவில்லை. விவரத்தைச் சரிபார்த்து மீண்டும் தொடங்குங்கள்."));
     }
     return;
