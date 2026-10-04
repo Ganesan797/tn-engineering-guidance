@@ -2,7 +2,7 @@
 
 **Current milestone:** M2 — Progressive Student Input (one bounded journey implemented; acceptance pending)
 
-**Current task:** T03 COMPLETE: factual-scope and human Tamil-equivalence reviews PASS_OWNER_REPORTED by Ganesan. Next: T04 real-student validation. Start with the [single T03 worksheet](docs/planning/t03_factual_tamil_review_worksheet_2026-10-04.md).
+**Current task:** T04 UI-readiness pass technically checked on local review branch; proposed content baseline `139e670d64134faecead4778d81a9d13cc4b56e0` awaits owner UI confirmation. See the [observed defects and walkthrough](docs/planning/t04_ui_readiness_2026-10-04.md). T03 remains COMPLETE for unchanged wording; T04 real-student validation NOT RUN; M2 acceptance PENDING.
 
 **Last reviewed:** 2026-10-04
 
@@ -32,7 +32,7 @@
 
 `T03_TAMIL_EQUIVALENCE_REVIEW = PASS_OWNER_REPORTED`
 
-**Next priority:** Arrange and conduct T04 real-student validation using the prepared procedure on the reviewed content. T04 remains NOT RUN; M2 acceptance PENDING.
+**Next priority:** Ganesan confirms the proposed T04 UI baseline, then arranges real-student validation using the prepared procedure. Only existing start choices moved earlier; no factual/Tamil wording, conditions or rules changed. Focused tests 11/11, full offline suite 210/210 and strict typecheck freshly passed; the phone walkthrough is technical evidence only. Existing review notices remain unchanged and documented. T04 NOT RUN; M2 acceptance PENDING.
 
 **A01–A07 research revision (2026-10-02):** The updated [question-level review and paper walkthrough](docs/content/awareness/student_pov_awareness_coverage_review_v1.md) records **31 ANSWERED, 0 PARTIAL, 0 DEFERRED**, improved from **7/15/9**. `ANSWERED` measures direct response completeness only. The [evidence note](docs/content/awareness/student_pov_awareness_evidence_v2.md) scopes curriculum, post-Class-12, historical-cutoff and occupation claims. Final factual approval, volunteer Tamil approval and actual student validation remain pending. The revised paper walkthrough passes the awareness portion of the 5–10-minute progression goal; it does not validate the full seven-stage journey.
 

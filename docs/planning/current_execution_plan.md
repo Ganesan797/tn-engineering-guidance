@@ -73,7 +73,7 @@ Future model economics should measure **cost per successfully guided student jou
 - **Dependencies:** Stable T02 revision; T03 assessment of factual/language safety for the tested material; [prepared procedure and privacy-conscious observation template](m2_one_journey_validation_plan_2026-10-03.md).
 - **Authorization:** Bounded validation preparation is authorized and complete. Human sessions still need owner arrangement and appropriate consent/privacy handling; T01 does not execute a session or authorize broader deployment.
 - **Completion evidence:** Actual dated, anonymous observations tied to revision: hesitations, misunderstandings, elapsed time, explained next action, zero-knowledge/direct-entry/unknown/retained-input behavior where applicable, and disposition of findings. No personal certificates or identifiable profiles committed.
-- **Status:** NOT_RUN_WITH_REAL_STUDENTS. Local and paper checks do not satisfy this task.
+- **Status:** NOT_RUN_WITH_REAL_STUDENTS. The [bounded UI-readiness record](t04_ui_readiness_2026-10-04.md) proposes local review-branch content commit `139e670d64134faecead4778d81a9d13cc4b56e0`: start choices moved earlier without wording/meaning changes. Fresh focused tests 11/11, full offline suite 210/210, typecheck and phone walkthrough passed. T03 attribution is retained for unchanged content; owner visual baseline confirmation remains outstanding. Existing review notices were intentionally not rewritten. Local and paper checks do not satisfy T04.
 - **Next:** Arrange the bounded session on reviewed material and record what happened; do not infer comprehension from technical tests. This is M2 validation, not completion or authorization of M7's later pilot.
 
 ### T05 — Explicit M2 acceptance decision
@@ -141,4 +141,4 @@ Do not rewrite frozen documents, original content or experiment history to erase
 
 **Executed on 2026-10-04:** fetched origin; verified clean tree, matching main/review remote heads and fast-forward ancestry; verified T01 is the direct child of `ed03a420…` and changes only `PROJECT_STATUS.md`, `docs/README.md` and this plan. Full offline suite **210/210 PASS** and strict `npm run typecheck` **PASS** were freshly executed. Existing secret-guard tests passed; integration file secret-pattern, documentation-link, status-consistency and whitespace checks accompany the decision commit. No live model call, implementation change or human session occurred.
 
-**NEXT_SINGLE_ACTION:** Arrange and conduct T04 real-student validation using the prepared procedure on the reviewed content.
+**NEXT_SINGLE_ACTION:** Ganesan confirms the proposed T04 phone UI baseline, then arranges the prepared real-student validation session.
