@@ -2,15 +2,15 @@
 
 **Current milestone:** M2 — Progressive Student Input (one bounded journey implemented; acceptance pending)
 
-**Current task:** T01 documentation reconciliation completed; next is T02: obtain and persist Owner Finding 02’s explicit PASS/FIX outcome, then decide any FIX scope and reviewed-branch merge separately.
+**Current task:** T02 owner PASS and merge authorization recorded; next is T03: separate factual release and human Tamil-equivalence reviews.
 
 **Last reviewed:** 2026-10-04
 
 **Single current task map:** [Current execution plan — T01–T06](docs/planning/current_execution_plan.md). It records task owners, dependencies, authorization, completion evidence, future workstreams and dated supersession. The entries below preserve milestone and experiment history; they are not competing execution queues.
 
-**Verified branch distinction (T01):** local/remote main `84e3e84f7da1033b3014da06c9054382b34f7398`; local/remote review baseline `ed03a420b86b1a0970d79741c175b48b4d77c07e`. Optional question revisions remain unmerged. Ganesan reports Owner Finding 02 re-review completed, but has not supplied PASS/FIX; the finding stays open. Production model and visible question limit remain undecided; conversational implementation and production RAG remain unauthorized. T01 performs documentation integrity checks only; previously recorded test counts below were not rerun.
+**Integration record (2026-10-04):** The [dated owner decision](docs/planning/m2_owner_finding_02_decision_2026-10-04.md) records PASS at `ed03a420b86b1a0970d79741c175b48b4d77c07e`, no FIX items and explicit merge authorization after checks. Later T01 commit `1e15c98dc0990c4b13316eceff4b3dfc4657b1c7` changes documentation only. Main baseline was `84e3e84f7da1033b3014da06c9054382b34f7398`; fast-forward integration and remote verification are recorded in the accompanying commit report. This supersedes T01's missing-outcome/unmerged snapshot. Production model and visible question limit remain undecided; conversational implementation and production RAG remain unauthorized.
 
-**Owner Finding 02 — OPEN_OUTCOME_NOT_SUPPLIED (2026-10-04):** Ganesan reports re-review completed; its explicit PASS/FIX outcome is still missing. The optional question collection now has separate Tamil-default and English views. Each selected question receives its own short direct answer, relevant detail, localized next action and evidence limit, derived from the preserved A01–A07 V2/B01–B08 material. [Every ID's mapping, status and URLs](docs/planning/m2_question_specific_answer_mapping_2026-10-04.md) are recorded: **69 DIRECT and 1 PARTIAL (Q021) in each language**, with all **70 Tamil question/answer pairs pending volunteer equivalence review**. Q021's numeric ECE cutoff/comparison lacks required historical dimensions; reachability is not evidence of a resolved answer. Q010/Q011/Q049 retain their distinct requested comparisons. Language switches preserve question/topic; the original personal-check tab and deterministic behavior remain intact. Focused tests **11/11**, full offline suite **210/210**, strict typecheck PASS. The short marks-free journey remains primary, with no mandatory collection steps; the 5–10-minute goal remains unverified with real students. Owner outcome recording, final factual release, Tamil equivalence, student validation and M2 acceptance remain pending. Gemini PAUSED; Live LLM Gate PARTIAL. Historical 70-DIRECT reachability below predates this question-specific completeness review.
+**Owner Finding 02 — PASS_OWNER_REPORTED (2026-10-04):** Ganesan explicitly passed language presentation and question-specific answer relevance at `ed03a420b86b1a0970d79741c175b48b4d77c07e`; remaining FIX items: none. The optional question collection now has separate Tamil-default and English views. Each selected question receives its own short direct answer, relevant detail, localized next action and evidence limit, derived from the preserved A01–A07 V2/B01–B08 material. [Every ID's mapping, status and URLs](docs/planning/m2_question_specific_answer_mapping_2026-10-04.md) are recorded: **69 DIRECT and 1 PARTIAL (Q021) in each language**, with all **70 Tamil question/answer pairs pending volunteer equivalence review**. Q021's numeric ECE cutoff/comparison lacks required historical dimensions; reachability is not evidence of a resolved answer. Q010/Q011/Q049 retain their distinct requested comparisons. Language switches preserve question/topic; the original personal-check tab and deterministic behavior remain intact. Focused tests **11/11**, full offline suite **210/210**, strict typecheck PASS. The short marks-free journey remains primary, with no mandatory collection steps; the 5–10-minute goal remains unverified with real students. Owner outcome is recorded; final factual release, human Tamil equivalence, student validation and M2 acceptance remain pending. Fresh pre-merge checks passed: full offline suite 210/210 and strict typecheck; the focused count is historical, not a separate rerun. Gemini PAUSED; Live LLM Gate PARTIAL. Historical 70-DIRECT reachability below predates this question-specific completeness review.
 
 **Documentation navigation (2026-10-02):** Documents are grouped by product, planning, architecture, content, experiments and templates. Start with the [documentation guide](docs/README.md); awareness and admission folders keep answers, evidence and reviews together. Original conversation records remain preserved. Relocation and reference checks passed, and the existing automated suite passed 199 tests after updating document-loading paths. This organization change does not change content approval or implementation authorization.
 
@@ -24,7 +24,7 @@
 
 **Decision:** M0 and M1 are accepted. Ganesan authorized **one bounded M2 student journey** on 2026-10-03. That journey is implemented and locally exercised, but M2 is not accepted; later milestones remain unauthorized.
 
-**Next priority:** Follow [T02 in the current execution plan](docs/planning/current_execution_plan.md): capture the explicit review outcome before resolving authorized FIX items and separately deciding merge. T03–T05 retain factual/Tamil review, real-student validation and explicit M2 acceptance.
+**Next priority:** Follow [T03 in the current execution plan](docs/planning/current_execution_plan.md): conduct separate factual-scope and human Tamil-equivalence reviews. T04–T05 retain real-student validation and explicit M2 acceptance.
 
 **A01–A07 research revision (2026-10-02):** The updated [question-level review and paper walkthrough](docs/content/awareness/student_pov_awareness_coverage_review_v1.md) records **31 ANSWERED, 0 PARTIAL, 0 DEFERRED**, improved from **7/15/9**. `ANSWERED` measures direct response completeness only. The [evidence note](docs/content/awareness/student_pov_awareness_evidence_v2.md) scopes curriculum, post-Class-12, historical-cutoff and occupation claims. Final factual approval, volunteer Tamil approval and actual student validation remain pending. The revised paper walkthrough passes the awareness portion of the 5–10-minute progression goal; it does not validate the full seven-stage journey.
 
@@ -44,7 +44,7 @@
 
 `OWNER_FINDING_01_SCREEN_REVIEW = PASS_OWNER_REPORTED`
 
-`OWNER_FINDING_01_RELEASE_FOLLOW_UP = OPTIONAL_COLLECTION_OWNER_REVIEW_AND_TAMIL_STUDENT_REVIEWS_PENDING`
+`OWNER_FINDING_01_RELEASE_FOLLOW_UP = FACTUAL_TAMIL_STUDENT_REVIEWS_PENDING`
 
 **Research outcome:** V2 preserves supplied entities, completes Q049's four-way comparison, separates curriculum from historical cutoff evidence, adds scoped branch/career explanations, and connects awareness to “How do I enter engineering?”. Q021 correctly remains non-numeric without the required college/year/route/round/category/quota/programme context. The original A01–A07 batch, intent map and raw corpus remain unchanged. No application tests or live requests were run.
 
@@ -406,7 +406,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Use [T02 in the current execution plan](docs/planning/current_execution_plan.md): Ganesan supplies Owner Finding 02 PASS/FIX and the revision reviewed. A reported completed review does not imply PASS or merge authorization. Subsequent tasks and review evidence are maintained in that single map.
+Use [T03 in the current execution plan](docs/planning/current_execution_plan.md): Ganesan assigns factual and Tamil reviewers to the integrated revision using the prepared checklist and question map. Record separate reviewer/date/commit, scope, evidence limits and PASS/FIX outcomes. Owner Finding 02 PASS and merge do not satisfy these release gates.
 
 Historical test counts below and above refer to their named milestones. The bounded M2 implementation was checked with focused local tests, the existing offline suite and strict typecheck; its test outcome is recorded in the implementation note above. No live model request was made.
 
@@ -490,4 +490,4 @@ Historical test counts below and above refer to their named milestones. The boun
 
 ## Next review point
 
-Record the Owner Finding 02 outcome under [T02](docs/planning/current_execution_plan.md), then follow T03–T05 for remaining human reviews and explicit M2 acceptance. Live LLM learning and conversational proposals remain separate, authorization-controlled workstreams.
+Complete T03 factual and human Tamil-equivalence reviews, then follow T04–T05 for real-student validation and explicit M2 acceptance. Live LLM learning and conversational proposals remain separate, authorization-controlled workstreams.

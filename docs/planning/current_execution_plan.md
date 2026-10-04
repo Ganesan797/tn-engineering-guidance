@@ -6,7 +6,7 @@
 
 The frozen [Product Mission](../product/product_mission.md), [Student Journey V1](../product/student_journey_v1.md) and [Input/Output V1](../product/student_input_output_v1.md) govern product decisions. The [implementation plan](implementation_plan_v1.md), [architecture addendum](../architecture/m0_ai_rag_architecture_addendum_v1.md) and [delivery responsibility model](../product/guidance_delivery_responsibility_model_v1.md) retain their responsibilities and milestone boundaries. Later explicit, dated authorizations determine permitted execution scope; an older status snapshot does not override them.
 
-Fetched and verified before T01 editing:
+Historical baseline fetched and verified before T01 editing (superseded by T02 below):
 
 | Ref | Full commit | Interpretation |
 | --- | --- | --- |
@@ -18,9 +18,9 @@ The working tree was clean. T01 adds documentation on this review branch; the SH
 ### Current state and evidence classification
 
 - **M0/M1:** accepted in the repository acceptance records summarized in Project Status.
-- **M2:** authorized within the [2026-10-03 bounded decision](m2_one_journey_authorization_decision_2026-10-03.md), implemented, acceptance pending. The [optional 70-question decision](m2_optional_question_collection_decision_2026-10-03.md) extends only the stated scope. Main contains the original journey; the later optional question revisions are on the unmerged review branch.
+- **M2:** authorized within the [2026-10-03 bounded decision](m2_one_journey_authorization_decision_2026-10-03.md), implemented, acceptance pending. The [optional 70-question decision](m2_optional_question_collection_decision_2026-10-03.md) extends only the stated scope. The original journey and later optional question revisions are approved for fast-forward integration under T02; the accompanying integration report verifies final main/remote heads.
 - **Owner Finding 01:** owner-reported Stage 1 screen-review PASS; this does not approve factual release, Tamil equivalence or student usefulness.
-- **Owner Finding 02:** Ganesan reports re-review completed in the 2026-10-04 T01 instruction. **PASS/FIX outcome has not been explicitly supplied.** Keep the finding **OPEN_OUTCOME_NOT_SUPPLIED**; do not infer PASS, invent FIX items or authorize merge. The earlier [answer map](m2_question_specific_answer_mapping_2026-10-04.md) and [audit](m2_one_journey_question_reachability_audit_2026-10-03.md) describe the implementation awaiting this outcome.
+- **Owner Finding 02:** **PASS_OWNER_REPORTED** for language presentation and question-specific answer relevance at `ed03a420b86b1a0970d79741c175b48b4d77c07e`; remaining FIX items: none. The [2026-10-04 decision](m2_owner_finding_02_decision_2026-10-04.md) authorizes merge after checks, not factual release, human Tamil equivalence, student validation or M2 acceptance.
 - **Question coverage:** recorded implementation completeness is 69 DIRECT and Q021 PARTIAL in each language. All 70 Tamil question/answer pairs need volunteer equivalence review; the other 98 corpus questions are not represented as answered. Reachability and answer completeness do not establish factual release approval.
 - **Human gates:** factual release, Tamil equivalence and actual student validation remain pending. Prepared procedures and local/paper walkthroughs are not human approvals.
 - **Live LLM:** Gate PARTIAL; Gemini execution PAUSED. Preserve the [accepted experiment learning](../experiments/live_llm_integration_gate_results_v2.md): G02 PASS with minor finding; G03 guidance-quality failure despite grounding/routing PASS and bounded HTTP 503 recovery; G04 PASS; G05 OUTPUT_VALIDATION_ERROR. G01 retains its recorded evidence/acceptance limits; remaining frozen scenarios are unexecuted. These results do not authorize production use.
@@ -44,17 +44,17 @@ Future model economics should measure **cost per successfully guided student jou
 - **Authorization:** Documentation-only changes, commit and push to the review branch authorized by the 2026-10-04 T01 instruction. No application edits or merge.
 - **Completion evidence:** Branch verification; task/status consistency; valid local links; whitespace check; exact documentation-only diff; successful commit/push and clean working tree reported with the final SHA.
 - **Status:** Documentation reconciliation and integrity validation complete; persistence is evidenced by the commit/push report accompanying this revision.
-- **Next:** T02 — obtain the explicit Owner Finding 02 result.
+- **Next:** T01 complete; follow the T02 integration record and T03 human reviews.
 
 ### T02 — Persist Owner Finding 02 result, resolve FIX items, decide merge separately
 
 - **Purpose / deliverable:** Dated owner outcome tied to the reviewed commit/screens/questions; a bounded FIX list if applicable, re-review evidence and a separate reviewed-branch merge decision.
 - **Owner:** Ganesan supplies PASS/FIX and decides merge; Codex records the outcome and implements only explicitly authorized corrections.
 - **Dependencies:** T01; explicit outcome for the `ed03a42` implementation baseline (or the exact revision actually reviewed).
-- **Authorization:** Outcome capture is the next decision to obtain. This T01 task does not authorize implementation fixes or merge. Prior scope is not blanket approval of unspecified fixes; record their bounded authorization before execution.
+- **Authorization:** Ganesan explicitly supplied PASS, no FIX items and conditional merge/push authorization on 2026-10-04. No implementation change or human release approval is granted by that decision.
 - **Completion evidence:** Explicit PASS/FIX with affected IDs/URLs and observations; for FIX, authorized changes, appropriate offline checks and owner re-review; explicit merge/defer decision and, only if authorized, verified resulting branch heads. Passing tests is not owner PASS.
-- **Status:** BLOCKED_ON_OWNER_OUTCOME. Re-review activity reported complete; finding remains OPEN_OUTCOME_NOT_SUPPLIED. Merge undecided.
-- **Next:** Ganesan supplies PASS or the precise FIX items for Owner Finding 02; capture the result before asking for the separate merge decision.
+- **Status:** Owner decision and pre-merge checks COMPLETE; no FIX work required. Fast-forward integration/push completion is evidenced by the accompanying verified main/remote commit report.
+- **Next:** T03 factual release and human Tamil-equivalence reviews; merge does not accept M2.
 
 ### T03 — Factual release and human Tamil-equivalence reviews
 
@@ -64,7 +64,7 @@ Future model economics should measure **cost per successfully guided student jou
 - **Authorization:** Required human review gate within bounded M2; preparation exists. T01 grants no factual release or volunteer approval and authorizes no content fixes.
 - **Completion evidence:** Named reviewer/date/commit, screens and question IDs reviewed, claim/source/year limits, PASS/FIX and disposition of corrections; separate Tamil record covering meaning, numbers, conditions, language switching and next actions. Resolve or explicitly constrain Q021 and other source gaps rather than fabricating facts.
 - **Status:** PENDING — factual release and all 70 Tamil pairs remain unapproved.
-- **Next:** Ganesan assigns reviewers and the stable revision after T02's outcome; preserve the distinction between content-direction acceptance and release approval.
+- **Next:** Ganesan assigns factual and Tamil reviewers to integrated main using the prepared checklist and all 70 question pairs; record separate outcomes and preserve Q021’s evidence gap.
 
 ### T04 — Bounded M2 real-student validation
 
@@ -127,7 +127,7 @@ These names are distinct from the existing repository experiment names. Their li
 | **2026-09-30** delivery responsibility model and experiment-results V2: M2 NOT_AUTHORIZED | Superseded only for bounded M2 by the **2026-10-03 decision**. The experiment findings, model responsibilities and production restrictions remain active. |
 | Earlier **2026-10-03** readiness proposal: M2 not authorized | The later same-day authorization explicitly resolves this transition; no Live LLM Gate closure was required for this non-LLM scope. |
 | **2026-10-03 authorization**: execution NOT_STARTED | Decision-time snapshot, followed by implementation and validation preparation in main `84e3e84…`, summarized in Project Status. It is not a claim that implementation is still absent. |
-| **2026-10-03 optional collection** and **2026-10-04 answer map**: awaiting owner review | They remain implementation/review evidence on the unmerged branch. The owner's **2026-10-04 T01 report** updates review activity to completed-reported, but supplies no PASS/FIX outcome. Finding closure and merge are still undecided. |
+| **2026-10-03 optional collection** and **2026-10-04 answer map**: awaiting owner review | Historical implementation-time snapshots. The later **2026-10-04 explicit decision** passes language presentation and question-specific relevance at `ed03a420…`, states no FIX items and authorizes merge after checks. This supersedes T01’s missing-outcome state without approving factual release, Tamil equivalence, student validation or M2 acceptance. |
 
 Do not rewrite frozen documents, original content or experiment history to erase these snapshots. Follow the dated authorization links and the current task statuses above. No other chats are automatically synchronized by updating this repository.
 
@@ -137,4 +137,8 @@ Do not rewrite frozen documents, original content or experiment history to erase
 
 **Prior reported evidence, not rerun here:** main's bounded journey reported 7/7 focused and 206/206 full offline tests plus typecheck; review commit `ed03a42…` reported 11/11 focused and 210/210 full offline tests plus typecheck. T01 runs no application tests, typecheck, browser walkthrough, model request or human session. Documentation integrity checks do not imply new implementation or product acceptance.
 
-**NEXT_SINGLE_ACTION:** Ganesan supplies the explicit Owner Finding 02 PASS/FIX outcome, identifying any FIX items and the revision reviewed; record it under T02 before a separate merge decision.
+## Verification record for T02
+
+**Executed on 2026-10-04:** fetched origin; verified clean tree, matching main/review remote heads and fast-forward ancestry; verified T01 is the direct child of `ed03a420…` and changes only `PROJECT_STATUS.md`, `docs/README.md` and this plan. Full offline suite **210/210 PASS** and strict `npm run typecheck` **PASS** were freshly executed. Existing secret-guard tests passed; integration file secret-pattern, documentation-link, status-consistency and whitespace checks accompany the decision commit. No live model call, implementation change or human session occurred.
+
+**NEXT_SINGLE_ACTION:** T03 — Ganesan assigns factual-scope and human Tamil-equivalence reviewers to integrated main and records separate, attributable outcomes using the prepared checklist and question map.

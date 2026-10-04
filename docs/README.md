@@ -2,7 +2,7 @@
 
 Start with [Project Status](../PROJECT_STATUS.md) for the project state and [Current execution plan — T01–T06](planning/current_execution_plan.md) for the single current task map, owners, dependencies, authorization and next decisions.
 
-The guided journey remains primary; governed Q&A is optional exploration. Optional bilingual question revisions remain on the unmerged review branch. Ganesan reports Owner Finding 02 re-review completed, but its PASS/FIX outcome has not been supplied. The current plan preserves that open decision and separates future conversational work from the frozen M3–M7 roadmap.
+The guided journey remains primary; governed Q&A is optional exploration. Ganesan's [Owner Finding 02 decision](planning/m2_owner_finding_02_decision_2026-10-04.md) passes language presentation and question-specific relevance at `ed03a420…`, with no FIX items, and authorizes integration after checks. T03 factual release and human Tamil-equivalence reviews are next; student validation and M2 acceptance remain pending. Future conversational work remains separate from the frozen M3–M7 roadmap.
 
 ## Content to review
 
