@@ -53,18 +53,18 @@ Future model economics should measure **cost per successfully guided student jou
 - **Dependencies:** T01; explicit outcome for the `ed03a42` implementation baseline (or the exact revision actually reviewed).
 - **Authorization:** Ganesan explicitly supplied PASS, no FIX items and conditional merge/push authorization on 2026-10-04. No implementation change or human release approval is granted by that decision.
 - **Completion evidence:** Explicit PASS/FIX with affected IDs/URLs and observations; for FIX, authorized changes, appropriate offline checks and owner re-review; explicit merge/defer decision and, only if authorized, verified resulting branch heads. Passing tests is not owner PASS.
-- **Status:** Owner decision and pre-merge checks COMPLETE; no FIX work required. Fast-forward integration/push completion is evidenced by the accompanying verified main/remote commit report.
+- **Status:** COMPLETE. Owner PASS, no FIX items; fast-forward integration and push verified at `e052f1d6453af03e5c389dbcb739ce41836d5c92` (local main and origin/main). No M2 acceptance implied.
 - **Next:** T03 factual release and human Tamil-equivalence reviews; merge does not accept M2.
 
 ### T03 — Factual release and human Tamil-equivalence reviews
 
-- **Purpose / deliverable:** Separate, attributable reviews of factual scope/source applicability and Tamil/English semantic equivalence for the bounded journey and prepared question copy.
+- **Purpose / deliverable:** Separate, attributable reviews of factual scope/source applicability and Tamil/English semantic equivalence for the bounded journey and prepared question copy, recorded in the [single T03 worksheet](t03_factual_tamil_review_worksheet_2026-10-04.md).
 - **Owner:** Ganesan for factual-scope disposition; designated human Tamil volunteers for equivalence (reviewers not yet recorded); Codex supports evidence preparation, not human approval.
 - **Dependencies:** Stable T02 review target; [validation checklist](m2_one_journey_validation_plan_2026-10-03.md), [answer map](m2_question_specific_answer_mapping_2026-10-04.md), saved content/evidence. Evidence preparation can proceed alongside T02; final sign-off must identify the actual reviewed revision.
-- **Authorization:** Required human review gate within bounded M2; preparation exists. T01 grants no factual release or volunteer approval and authorizes no content fixes.
+- **Authorization:** The 2026-10-04 T03 instruction authorizes worksheet preparation, documentation integrity checks, commit and push only. Human review is required; no content/rule fixes, factual release or volunteer approval is granted by preparation.
 - **Completion evidence:** Named reviewer/date/commit, screens and question IDs reviewed, claim/source/year limits, PASS/FIX and disposition of corrections; separate Tamil record covering meaning, numbers, conditions, language switching and next actions. Resolve or explicitly constrain Q021 and other source gaps rather than fabricating facts.
-- **Status:** PENDING — factual release and all 70 Tamil pairs remain unapproved.
-- **Next:** Ganesan assigns factual and Tamil reviewers to integrated main using the prepared checklist and all 70 question pairs; record separate outcomes and preserve Q021’s evidence gap.
+- **Status:** PREPARATION_COMPLETE; HUMAN_REVIEWS_NOT_REVIEWED. The worksheet covers 20 screen/state/control items and all 70 question pairs with separate factual/Tamil outcomes. Main baseline `e052f1d…` verified after fetch; exact content snapshots, IDs, source references, links, whitespace and documentation-only scope checked. Prior test counts remain historical; no application tests/typecheck, model calls or human sessions executed in this preparation.
+- **Next:** Ganesan starts the [worksheet](t03_factual_tamil_review_worksheet_2026-10-04.md) at J01 in its practical order; assign a separate human Tamil reviewer to the same version. Record individual outcomes; preserve Q021 PARTIAL and specific evidence gaps.
 
 ### T04 — Bounded M2 real-student validation
 
@@ -141,4 +141,4 @@ Do not rewrite frozen documents, original content or experiment history to erase
 
 **Executed on 2026-10-04:** fetched origin; verified clean tree, matching main/review remote heads and fast-forward ancestry; verified T01 is the direct child of `ed03a420…` and changes only `PROJECT_STATUS.md`, `docs/README.md` and this plan. Full offline suite **210/210 PASS** and strict `npm run typecheck` **PASS** were freshly executed. Existing secret-guard tests passed; integration file secret-pattern, documentation-link, status-consistency and whitespace checks accompany the decision commit. No live model call, implementation change or human session occurred.
 
-**NEXT_SINGLE_ACTION:** T03 — Ganesan assigns factual-scope and human Tamil-equivalence reviewers to integrated main and records separate, attributable outcomes using the prepared checklist and question map.
+**NEXT_SINGLE_ACTION:** Ganesan begins the [T03 worksheet](t03_factual_tamil_review_worksheet_2026-10-04.md) at J01 (primary awareness screen); record the factual-scope outcome and assign the separate Tamil review without inferring approval.

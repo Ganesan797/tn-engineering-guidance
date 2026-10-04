@@ -2,7 +2,7 @@
 
 **Current milestone:** M2 — Progressive Student Input (one bounded journey implemented; acceptance pending)
 
-**Current task:** T02 owner PASS and merge authorization recorded; next is T03: separate factual release and human Tamil-equivalence reviews.
+**Current task:** T03 review preparation complete; Ganesan’s factual-scope review and separate human Tamil-equivalence review are NOT REVIEWED. Start with the [single T03 worksheet](docs/planning/t03_factual_tamil_review_worksheet_2026-10-04.md).
 
 **Last reviewed:** 2026-10-04
 
@@ -24,7 +24,7 @@
 
 **Decision:** M0 and M1 are accepted. Ganesan authorized **one bounded M2 student journey** on 2026-10-03. That journey is implemented and locally exercised, but M2 is not accepted; later milestones remain unauthorized.
 
-**Next priority:** Follow [T03 in the current execution plan](docs/planning/current_execution_plan.md): conduct separate factual-scope and human Tamil-equivalence reviews. T04–T05 retain real-student validation and explicit M2 acceptance.
+**Next priority:** Open the [T03 worksheet](docs/planning/t03_factual_tamil_review_worksheet_2026-10-04.md) at practical review order / J01. It covers 20 primary-screen, result, uncertainty and navigation items plus all 70 implemented English/Tamil pairs at main `e052f1d6453af03e5c389dbcb739ce41836d5c92`. Each factual and Tamil outcome is NOT REVIEWED. Q021 stays PARTIAL; source-year, grievance timing, improvement citation/wording and personal-condition limits are explicit. T04–T05 retain real-student validation and explicit M2 acceptance. Preparation checks cover exact snapshot/ID coverage, links, whitespace and documentation-only scope; application tests/typecheck were not rerun.
 
 **A01–A07 research revision (2026-10-02):** The updated [question-level review and paper walkthrough](docs/content/awareness/student_pov_awareness_coverage_review_v1.md) records **31 ANSWERED, 0 PARTIAL, 0 DEFERRED**, improved from **7/15/9**. `ANSWERED` measures direct response completeness only. The [evidence note](docs/content/awareness/student_pov_awareness_evidence_v2.md) scopes curriculum, post-Class-12, historical-cutoff and occupation claims. Final factual approval, volunteer Tamil approval and actual student validation remain pending. The revised paper walkthrough passes the awareness portion of the 5–10-minute progression goal; it does not validate the full seven-stage journey.
 
@@ -406,7 +406,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Use [T03 in the current execution plan](docs/planning/current_execution_plan.md): Ganesan assigns factual and Tamil reviewers to the integrated revision using the prepared checklist and question map. Record separate reviewer/date/commit, scope, evidence limits and PASS/FIX outcomes. Owner Finding 02 PASS and merge do not satisfy these release gates.
+Use [T03 in the current execution plan](docs/planning/current_execution_plan.md): Ganesan begins J01 in the [review worksheet](docs/planning/t03_factual_tamil_review_worksheet_2026-10-04.md) and assigns a separate human Tamil reviewer to the same content baseline. Record separate reviewer/date/commit, scope, evidence limits and PASS/FIX outcomes. Owner Finding 02 PASS and merge do not satisfy these release gates.
 
 Historical test counts below and above refer to their named milestones. The bounded M2 implementation was checked with focused local tests, the existing offline suite and strict typecheck; its test outcome is recorded in the implementation note above. No live model request was made.
 

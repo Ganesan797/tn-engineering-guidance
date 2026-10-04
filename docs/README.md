@@ -6,6 +6,8 @@ The guided journey remains primary; governed Q&A is optional exploration. Ganesa
 
 ## Content to review
 
+- [T03 factual-scope and human Tamil review worksheet](planning/t03_factual_tamil_review_worksheet_2026-10-04.md) — start with the practical order, then J01; 20 journey/control items and all 70 question pairs, with independent NOT REVIEWED outcomes.
+
 - [Admission answers B01–B08](content/admission/student_pov_admission_batch_int05_int08_v1.md) — INT-05–INT-08; [owner answer review accepted](content/admission/student_pov_admission_owner_review_decision_v1.md), with remaining release reviews identified there.
 - [Admission evidence](content/admission/student_pov_admission_evidence_int05_int08_v1.md) and [question coverage](content/admission/student_pov_admission_coverage_int05_int08_v1.md).
 - [Awareness answers A01–A07 V2](content/awareness/student_pov_awareness_batch_a01_a07_v2.md) — content direction accepted; see the [review decision](content/awareness/student_pov_awareness_review_decision_v1.md) for approval limits.
