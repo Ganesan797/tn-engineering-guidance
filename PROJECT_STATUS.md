@@ -2,7 +2,7 @@
 
 **Current milestone:** M2 — Progressive Student Input (one bounded journey implemented; acceptance pending)
 
-**Current task:** T03 partially complete: factual-scope review PASS_OWNER_REPORTED; separate human Tamil-equivalence review PENDING. Start with the [single T03 worksheet](docs/planning/t03_factual_tamil_review_worksheet_2026-10-04.md).
+**Current task:** T03 COMPLETE: factual-scope and human Tamil-equivalence reviews PASS_OWNER_REPORTED by Ganesan. Next: T04 real-student validation. Start with the [single T03 worksheet](docs/planning/t03_factual_tamil_review_worksheet_2026-10-04.md).
 
 **Last reviewed:** 2026-10-04
 
@@ -28,7 +28,11 @@
 
 `T03_FACTUAL_SCOPE_REVIEW = PASS_OWNER_REPORTED`
 
-**Next priority:** Assign and complete the separate human Tamil-equivalence review of the same content baseline. Individual Tamil outcomes remain NOT REVIEWED; T04 actual student validation NOT RUN; M2 acceptance PENDING. T03 is not complete.
+**T03 human Tamil decision (2026-10-04):** Ganesan reports human Tamil-equivalence PASS for J01–J20 and all 70 prepared question/answer pairs at `e052f1d6453af03e5c389dbcb739ce41836d5c92`. All 90 Tamil outcomes are attributed to this batch decision, without item-specific observations. This is Ganesan’s human review, not independent volunteer approval. Current content matches the reviewed baseline. Both T03 reviews are PASS_OWNER_REPORTED and T03 is COMPLETE; earlier pending Tamil-review snapshots are superseded for this exact scope. Existing limitations remain; Q021 stays PARTIAL.
+
+`T03_TAMIL_EQUIVALENCE_REVIEW = PASS_OWNER_REPORTED`
+
+**Next priority:** Arrange and conduct T04 real-student validation using the prepared procedure on the reviewed content. T04 remains NOT RUN; M2 acceptance PENDING.
 
 **A01–A07 research revision (2026-10-02):** The updated [question-level review and paper walkthrough](docs/content/awareness/student_pov_awareness_coverage_review_v1.md) records **31 ANSWERED, 0 PARTIAL, 0 DEFERRED**, improved from **7/15/9**. `ANSWERED` measures direct response completeness only. The [evidence note](docs/content/awareness/student_pov_awareness_evidence_v2.md) scopes curriculum, post-Class-12, historical-cutoff and occupation claims. Final factual approval, volunteer Tamil approval and actual student validation remain pending. The revised paper walkthrough passes the awareness portion of the 5–10-minute progression goal; it does not validate the full seven-stage journey.
 
@@ -410,7 +414,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Use [T03 in the current execution plan](docs/planning/current_execution_plan.md): assign and complete the separate human Tamil-equivalence review of the same content baseline. Record reviewer/date/commit and item findings independently of the owner-reported factual batch PASS.
+Use [T04 in the current execution plan](docs/planning/current_execution_plan.md): Arrange and conduct T04 real-student validation using the prepared procedure on the reviewed content. Follow the [prepared procedure and privacy-conscious template](docs/planning/m2_one_journey_validation_plan_2026-10-03.md); record actual observations before any M2 acceptance decision.
 
 Historical test counts below and above refer to their named milestones. The bounded M2 implementation was checked with focused local tests, the existing offline suite and strict typecheck; its test outcome is recorded in the implementation note above. No live model request was made.
 
@@ -494,4 +498,4 @@ Historical test counts below and above refer to their named milestones. The boun
 
 ## Next review point
 
-Complete the outstanding T03 human Tamil-equivalence review, then follow T04–T05 for real-student validation and explicit M2 acceptance. Live LLM learning and conversational proposals remain separate, authorization-controlled workstreams.
+T03 is complete with Ganesan’s two owner-reported reviews. Follow T04–T05 for real-student validation and explicit M2 acceptance. Live LLM learning and conversational proposals remain separate, authorization-controlled workstreams.

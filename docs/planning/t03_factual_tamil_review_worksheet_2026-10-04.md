@@ -1,10 +1,10 @@
 # T03 — Factual-scope and human Tamil-equivalence worksheet
 
-**Prepared:** 2026-10-04. **State:** T03 PARTIALLY COMPLETE; FACTUAL SCOPE PASS_OWNER_REPORTED; HUMAN TAMIL REVIEW PENDING.
+**Prepared:** 2026-10-04. **State:** T03 COMPLETE; FACTUAL SCOPE AND HUMAN TAMIL EQUIVALENCE PASS_OWNER_REPORTED.
 
 **Exact content baseline:** `e052f1d6453af03e5c389dbcb739ce41836d5c92`, verified clean local main and origin/main after fetch. All source links below identify that content version; this documentation update does not change it. Before reviewing a later checkout, compare the linked files with this revision and record the actual commit. Do not transfer PASS to changed wording automatically.
 
-**Entry point:** start with the practical order below, then Part 1 J01. This single worksheet reuses the [existing screen checklist and privacy template](m2_one_journey_validation_plan_2026-10-03.md), [question-to-domain map](m2_one_journey_question_domain_map_v1.md) and [answer mapping](m2_question_specific_answer_mapping_2026-10-04.md). It supplies two independent outcome fields for every review item. The factual fields now record the batch decision below; the practical order and original checklists remain reference procedures for the outstanding human review.
+**Entry point:** start with the practical order below, then Part 1 J01. This single worksheet reuses the [existing screen checklist and privacy template](m2_one_journey_validation_plan_2026-10-03.md), [question-to-domain map](m2_one_journey_question_domain_map_v1.md) and [answer mapping](m2_question_specific_answer_mapping_2026-10-04.md). It supplies two independent outcome fields for every review item. Both outcome fields now record the separate owner-reported batch decisions below; the practical order and original checklists remain historical review procedures.
 
 [Current execution plan](current_execution_plan.md) · [Project Status](../../PROJECT_STATUS.md) · [Owner Finding 02 decision](m2_owner_finding_02_decision_2026-10-04.md) · [bounded authorization](m2_one_journey_authorization_decision_2026-10-03.md). Owner Finding 02 PASS covers presentation/relevance only; it grants neither factual release nor human Tamil approval. Historical OPEN/not-authorized snapshots in earlier records are superseded only as stated by those dated decisions.
 
@@ -17,9 +17,18 @@
 - **Evidence basis:** explicit owner-reported batch decision in the task instruction. Each factual PASS below is attributed to this decision, not an invented item-specific observation or fresh external-source verification.
 - **Content comparison:** fetched main `a7d1e9fd14a90d7012be6e9eee0423c6c29286ad` matches the reviewed baseline for all implementation, student-facing content inputs, rules and source/evidence files. Only the four prior documentation-preparation/status files differ. No affected content items were found; this record changes documentation only.
 - **Limits:** all recorded source/year/scope limitations and known gaps remain. Q021 stays PARTIAL in both languages; the missing matched historical evidence is not completed by this factual-scope PASS. The improvement citation/boundary, grievance timing and other recorded evidence flags are not silently resolved.
-- **Separate gates:** human Tamil equivalence PENDING; individual Tamil outcomes NOT REVIEWED; actual student validation T04 NOT RUN; M2 acceptance PENDING. T03 is only partially complete.
+- **Decision-time state:** Tamil review was outstanding when this factual decision was recorded; the subsequent Tamil decision below supersedes that pending state. T04 remains NOT RUN and M2 acceptance PENDING.
 
-**NEXT_SINGLE_ACTION:** Assign and complete the separate human Tamil-equivalence review of the same content baseline.
+## Owner-reported human Tamil batch decision — 2026-10-04
+
+`T03_TAMIL_EQUIVALENCE_REVIEW = PASS_OWNER_REPORTED`
+
+- **Human reviewer:** Ganesan. **Date:** 2026-10-04. **Reviewed content baseline:** `e052f1d6453af03e5c389dbcb739ce41836d5c92`.
+- **Scope:** J01–J20 and all 70 prepared question/answer pairs. All 90 Tamil outcomes below attribute this explicit batch decision; no item-specific observations were supplied or invented. This is Ganesan’s human review, **not independent volunteer approval**.
+- **Content verification:** fetched local main and origin/main `4352a7caf7d825a3f4b61bb0d8e9aa55957fdccc` differ from the reviewed baseline only in documentation-preparation/status files. All implementation, student-facing content inputs, rules and source/evidence records match; no changed content items require exclusion. No fresh external-source verification is claimed.
+- **T03:** COMPLETE — both reviews PASS_OWNER_REPORTED. All source/year/scope limitations and known evidence gaps remain; Q021 stays PARTIAL. T04 NOT RUN; M2 acceptance PENDING. This dated decision supersedes earlier pending Tamil-review wording in this worksheet and referenced historical records for this reviewed scope, without changing the saved content or its implementation metadata.
+
+**NEXT_SINGLE_ACTION:** Arrange and conduct T04 real-student validation using the prepared procedure on the reviewed content.
 
 ## Practical review order
 
@@ -33,7 +42,7 @@ Optional local viewing from repository root: `npm run start:mvp`; default `http:
 
 ## Recording rules and common checks
 
-Allowed outcome for **each** factual and Tamil row: **NOT REVIEWED / PASS / FIX / NEEDS EVIDENCE**. Blank reviewer/date/finding cells are intentionally empty. PASS must name reviewer, date and exact baseline, with scope/conditions; FIX must quote the offending phrase and smallest requested correction; NEEDS EVIDENCE must name the claim and missing source/year/page. Do not put real marks, certificates, contact details or identifiable student stories here. No automatic aggregate approval. The explicit factual batch decision below is recorded as PASS in the worksheet outcome vocabulary and classified as PASS_OWNER_REPORTED; no item-specific observations were supplied.
+Allowed outcome for **each** factual and Tamil row: **NOT REVIEWED / PASS / FIX / NEEDS EVIDENCE**. Blank reviewer/date/finding cells are intentionally empty. PASS must name reviewer, date and exact baseline, with scope/conditions; FIX must quote the offending phrase and smallest requested correction; NEEDS EVIDENCE must name the claim and missing source/year/page. Do not put real marks, certificates, contact details or identifiable student stories here. No automatic aggregate approval. The explicit factual and Tamil batch decisions above are recorded as PASS in the worksheet outcome vocabulary and classified as PASS_OWNER_REPORTED; no item-specific observations were supplied.
 
 **Factual checklist F (apply to every item):** direct answer and exact entities; source/page and applicable year; qualifications/exceptions; no invented admission/college/career outcome; cutoff versus minimum eligibility versus normalised merit/rank; reservation/concession proof versus guaranteed entitlement; unknowns preserved; useful next action; no mandatory marks/branch/bank for awareness. Direct answer completeness is not factual release approval.
 
@@ -112,32 +121,32 @@ Priority: primary journey → results/uncertainty → every next action → all 
 
 | Item | Priority / comparison basis | Tamil outcome | Human reviewer | Date | Finding / evidence |
 | --- | --- | --- | --- | --- | --- |
-| J01 — `/journey` | 1 — Primary journey; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J02 — `/journey?step=study` | 1 — Primary journey; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J03 — `/journey?step=compare` | 1 — Primary journey; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J04 — `/journey?step=route` | 1 — Primary journey; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J05 — `/journey?step=prepare` | 1 — Primary journey; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J06 — `/journey?step=check` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J07 — `POST /journey after year/stream` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J08 — `POST /journey after improvement answer` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J09 — `POST /journey result: 2026, academic, no improvement, 86/78/81` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J10 — `POST /journey result: unknown year or other year` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J11 — `POST /journey result: 2026, unknown/other stream` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J12 — `POST /journey: unknown improvement/year or any one subject` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J13 — `POST /journey: result status variants` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J14 — `POST /journey: invalid input/error` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J15 — `/journey?step=check direct entry; /personal entry` | 3 — Next actions and navigation; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J16 — `All /journey screens` | 3 — Next actions and navigation; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J17 — `/journey/questions?lang=ta and ?lang=en; 15 topics` | 3 — Next actions and navigation; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J18 — `/journey/questions?lang=ta&id=Q060 and Q002` | 3 — Next actions and navigation; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J19 — `/journey/questions invalid ID/topic; missing-translation conditional` | 3 — Next actions and navigation; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
-| J20 — `/journey → study/compare (optional) → route → prepare` | 3 — Next actions and navigation; apply T to the Part 1 selector, including all disclosures and conditions | NOT REVIEWED | | | |
+| J01 — `/journey` | 1 — Primary journey; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J02 — `/journey?step=study` | 1 — Primary journey; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J03 — `/journey?step=compare` | 1 — Primary journey; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J04 — `/journey?step=route` | 1 — Primary journey; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J05 — `/journey?step=prepare` | 1 — Primary journey; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J06 — `/journey?step=check` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J07 — `POST /journey after year/stream` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J08 — `POST /journey after improvement answer` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J09 — `POST /journey result: 2026, academic, no improvement, 86/78/81` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J10 — `POST /journey result: unknown year or other year` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J11 — `POST /journey result: 2026, unknown/other stream` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J12 — `POST /journey: unknown improvement/year or any one subject` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J13 — `POST /journey: result status variants` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J14 — `POST /journey: invalid input/error` | 2 — Inputs/results/uncertainty; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J15 — `/journey?step=check direct entry; /personal entry` | 3 — Next actions and navigation; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J16 — `All /journey screens` | 3 — Next actions and navigation; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J17 — `/journey/questions?lang=ta and ?lang=en; 15 topics` | 3 — Next actions and navigation; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J18 — `/journey/questions?lang=ta&id=Q060 and Q002` | 3 — Next actions and navigation; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J19 — `/journey/questions invalid ID/topic; missing-translation conditional` | 3 — Next actions and navigation; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
+| J20 — `/journey → study/compare (optional) → route → prepare` | 3 — Next actions and navigation; apply T to the Part 1 selector, including all disclosures and conditions | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ## All 70 question pairs — item records for Parts 1 and 2
 
 Jump to: [A01](#q025--a01) · [A02](#q030--a02) · [A03](#q029--a03) · [A04](#q036--a04) · [A05](#q010--a05) · [A06](#q012--a06) · [A07](#q045--a07) · [B01](#q052--b01) · [B02](#q059--b02) · [B03](#q060--b03) · [B04](#q001--b04) · [B05](#q071--b05) · [B06](#q072--b06) · [B07](#q076--b07) · [B08](#q002--b08). Q082 belongs to B05 and retains its saved later position; it is also covered in its own card.
 
-Each card includes an immutable link to the **actual implemented** JSON entry and a verbatim snapshot of its English/Tamil question, answer, detail, next action and limit. These are review copies, not new approved answers. The source key register above supplies year/title/URL; per-entry locations below preserve the implementation citations. Check each mapped claim against the detailed evidence note; multiple citations do not automatically prove every sentence. Apply F and T independently. Current completeness: **69 DIRECT + Q021 PARTIAL per language**; all 70 Tamil pairs remain pending human equivalence. The other 98 corpus questions are outside this review.
+Each card includes an immutable link to the **actual implemented** JSON entry and a verbatim snapshot of its English/Tamil question, answer, detail, next action and limit. These are review copies, not new approved answers. The source key register above supplies year/title/URL; per-entry locations below preserve the implementation citations. Check each mapped claim against the detailed evidence note; multiple citations do not automatically prove every sentence. Apply F and T independently. Current completeness: **69 DIRECT + Q021 PARTIAL per language**; all 70 Tamil pairs now have Ganesan’s owner-reported human equivalence PASS; saved draft metadata is unchanged and does not claim independent volunteer approval. The other 98 corpus questions are outside this review.
 
 ### Q025 — A01
 
@@ -181,7 +190,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q026 — A01
 
@@ -225,7 +234,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q027 — A01
 
@@ -269,7 +278,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q028 — A01
 
@@ -313,7 +322,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q034 — A01
 
@@ -357,7 +366,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q035 — A01
 
@@ -401,7 +410,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q030 — A02
 
@@ -445,7 +454,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q031 — A02
 
@@ -489,7 +498,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q032 — A02
 
@@ -533,7 +542,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q029 — A03
 
@@ -577,7 +586,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q033 — A03
 
@@ -621,7 +630,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q036 — A04
 
@@ -665,7 +674,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q037 — A04
 
@@ -709,7 +718,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q038 — A04
 
@@ -753,7 +762,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q039 — A04
 
@@ -797,7 +806,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q040 — A04
 
@@ -841,7 +850,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q041 — A04
 
@@ -885,7 +894,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q042 — A04
 
@@ -929,7 +938,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q043 — A04
 
@@ -973,7 +982,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q044 — A04
 
@@ -1017,7 +1026,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q010 — A05
 
@@ -1061,7 +1070,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q011 — A05
 
@@ -1105,7 +1114,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q049 — A05
 
@@ -1149,7 +1158,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q050 — A05
 
@@ -1193,7 +1202,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q012 — A06
 
@@ -1237,7 +1246,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q021 — A06
 
@@ -1281,7 +1290,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q047 — A06
 
@@ -1325,7 +1334,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q048 — A06
 
@@ -1369,7 +1378,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q045 — A07
 
@@ -1413,7 +1422,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q046 — A07
 
@@ -1457,7 +1466,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q051 — A07
 
@@ -1501,7 +1510,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q052 — B01
 
@@ -1545,7 +1554,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q053 — B01
 
@@ -1589,7 +1598,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q054 — B01
 
@@ -1633,7 +1642,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q055 — B01
 
@@ -1677,7 +1686,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q056 — B01
 
@@ -1721,7 +1730,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q057 — B01
 
@@ -1765,7 +1774,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q058 — B01
 
@@ -1809,7 +1818,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q059 — B02
 
@@ -1853,7 +1862,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q060 — B03
 
@@ -1897,7 +1906,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q061 — B03
 
@@ -1941,7 +1950,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q062 — B03
 
@@ -1985,7 +1994,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q063 — B03
 
@@ -2029,7 +2038,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q001 — B04
 
@@ -2073,7 +2082,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q064 — B04
 
@@ -2117,7 +2126,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q065 — B04
 
@@ -2161,7 +2170,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q066 — B04
 
@@ -2205,7 +2214,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q067 — B04
 
@@ -2249,7 +2258,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q068 — B04
 
@@ -2293,7 +2302,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q069 — B04
 
@@ -2337,7 +2346,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q070 — B04
 
@@ -2381,7 +2390,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q071 — B05
 
@@ -2425,7 +2434,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q007 — B05
 
@@ -2469,7 +2478,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q072 — B06
 
@@ -2513,7 +2522,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q073 — B06
 
@@ -2557,7 +2566,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q074 — B06
 
@@ -2601,7 +2610,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q075 — B06
 
@@ -2645,7 +2654,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q076 — B07
 
@@ -2689,7 +2698,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q077 — B07
 
@@ -2733,7 +2742,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q078 — B07
 
@@ -2777,7 +2786,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q079 — B07
 
@@ -2821,7 +2830,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q080 — B07
 
@@ -2865,7 +2874,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q081 — B07
 
@@ -2909,7 +2918,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q082 — B05
 
@@ -2953,7 +2962,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q083 — B07
 
@@ -2997,7 +3006,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q002 — B08
 
@@ -3041,7 +3050,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q084 — B08
 
@@ -3085,7 +3094,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q085 — B08
 
@@ -3129,7 +3138,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q086 — B08
 
@@ -3173,7 +3182,7 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ### Q087 — B08
 
@@ -3217,14 +3226,14 @@ Each card includes an immutable link to the **actual implemented** JSON entry an
 | Review | Outcome | Reviewer | Date | Finding / evidence / conditions |
 | --- | --- | --- | --- | --- |
 | Factual — Ganesan | PASS | Ganesan | 2026-10-04 | Owner-reported batch decision above; no item-specific observation supplied; existing limits remain. |
-| Human Tamil — apply T to all fields above and rendered navigation | NOT REVIEWED | | | |
+| Human Tamil — apply T to all fields above and rendered navigation | PASS | Ganesan | 2026-10-04 | Owner-reported human Tamil batch decision above; not independent volunteer approval; no item-specific observation supplied. |
 
 ## Review completion record — separate gate outcomes
 
 | Gate | Outcome | Reviewer / date / actual commit | Findings and residual limits |
 | --- | --- | --- | --- |
 | Factual scope: J01–J20 and all 70 IDs | PASS_OWNER_REPORTED | Ganesan / 2026-10-04 / e052f1d6453af03e5c389dbcb739ce41836d5c92 | Explicit batch decision; existing limitations and Q021 PARTIAL preserved. |
-| Human Tamil: J01–J20 and all 70 pairs | PENDING | | Individual outcomes remain NOT REVIEWED. |
+| Human Tamil: J01–J20 and all 70 pairs | PASS_OWNER_REPORTED | Ganesan / 2026-10-04 / e052f1d6453af03e5c389dbcb739ce41836d5c92 | Explicit human batch decision; not independent volunteer approval; no item-specific observations supplied. |
 | Actual student validation (T04, separate procedure) | NOT RUN | | No real-student evidence supplied. |
 | M2 acceptance (T05, explicit owner decision) | PENDING | | No acceptance decision supplied. |
 
