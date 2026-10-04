@@ -129,6 +129,17 @@ test("zero-knowledge Tamil path offers engineering and branch awareness before T
   assert.match(start, /மதிப்பெண்களோ கல்லூரித் தேர்வோ இப்போது தேவையில்லை/);
   assert.match(start, /data-content-id="A01"/);
   assert.match(start, /data-content-id="A04"/);
+  // Let students choose a route after the introduction, before optional expanded examples.
+  const introAt = start.indexOf('data-content-id="AW-01"');
+  const choicesAt = start.indexOf('<nav class="actions">');
+  const expandedAt = start.indexOf('data-content-id="A01"');
+  assert.ok(introAt < choicesAt && choicesAt < expandedAt);
+  const choices = start.slice(choicesAt, start.indexOf('</nav>', choicesAt));
+  for (const step of ['study', 'compare', 'route', 'check']) {
+    assert.ok(choices.includes('/journey?step=' + step));
+  }
+  assert.equal((start.match(/<nav class="actions">/g) ?? []).length, 1);
+
   assert.match(start, /\/journey\?step=study/);
   assert.match(start, /\/journey\?step=compare/);
   assert.match(start, /\/journey\?step=route/);
