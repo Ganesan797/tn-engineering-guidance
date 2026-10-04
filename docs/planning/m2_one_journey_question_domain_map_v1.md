@@ -1,5 +1,7 @@
 # M2 One-Journey Question-to-Domain Map V1
 
+**2026-10-04 presentation correction:** Owner Finding 02 remains OPEN. The [question-specific answer map](m2_question_specific_answer_mapping_2026-10-04.md) supersedes grouped-answer rendering for the optional collection. Each of the 70 IDs has separate Tamil/English question, answer, next action and evidence-limit copy; 69 DIRECT and Q021 PARTIAL in each language. All Tamil pairs await volunteer equivalence review. No deterministic field, calculation, unknown handling or admission boundary in the map below changes. Language switching applies to the optional collection and retains its question/topic; the primary journey stays Tamil. State-bearing journey links preserve the personal-check tab.
+
 **Prepared:** 2026-10-03 for the [bounded authorization](m2_one_journey_authorization_decision_2026-10-03.md). **Scope:** one first-year TNEA academic journey. This is an implementation mapping for review, not a new admission rule or content approval.
 
 | Student step and guidance | Response class | Minimum input / trusted field | Skip, unknown and next action |

@@ -1,6 +1,16 @@
 # Bounded M2 Journey — Question Reachability Audit (2026-10-03)
 
-## Current optional-collection audit
+## Current correction — Owner Finding 02, 2026-10-04
+
+**OPEN_PENDING_OWNER_REVIEW.** The original collection made 70 saved units reachable but did not ensure language consistency or a direct answer to the selected question. It has been replaced by separate Tamil/English question-specific views. **Reachable: 70 IDs / 140 localized answer URLs. Completeness in each language: 69 DIRECT, 1 PARTIAL (Q021). Tamil approval: all 70 pairs PENDING_VOLUNTEER_EQUIVALENCE.** The remaining 98 corpus questions are not presented as answered.
+
+The [per-ID answer map](m2_question_specific_answer_mapping_2026-10-04.md) records every English status, Tamil draft status, evidence limit and exact URL. The [presentation copy](../../data/m2_question_answers_v1.json) carries the question, short direct answer, relevant detail, localized next action, source location and limit. It is an editorial adaptation of the preserved batches, not a new factual authority. New translations remain drafts.
+
+Q010 now answers the conditional CSE/AI & Data Science choice; Q011 answers IT/CSE differences and rejects cutoff similarity as curriculum evidence; Q049 compares all four named fields. Q021 explicitly lacks the matching college/year/stream/round/category/quota/seat-type evidence needed to answer its numeric and admission-comparison request. Other conditional explanations do not establish personal eligibility or outcomes. The earlier batch-level `ANSWERED` classification and the historical 70 DIRECT reachability count below must not be read as 70 fully resolved question-specific answers.
+
+The primary Tamil journey and marks-free entry remain unchanged. Language switches retain the selected question/topic. Existing state-bearing journey links open the collection in another tab, leaving entered answers intact. B03 explicitly excludes first-year personal assessment; the calculated result still links B08. Automated checks cover 140 localized answer routes, 30 topic routes, next directions, language switching, missing translation, exact comparisons and personal-path regression. Focused tests **11/11**, full suite **210/210**, strict typecheck PASS. Human factual/Tamil/student release reviews and M2 acceptance remain pending.
+
+## Historical optional-collection audit — 2026-10-03
 
 The later [owner scope decision](m2_optional_question_collection_decision_2026-10-03.md) authorizes optional discovery of all prepared answers. **Current reachability: 70 DIRECT, 0 PARTIAL, 0 DOCUMENTED_ONLY** through the question collection, replacing the reachability totals in the historical baseline below. This means access to the complete saved answer, not a new factual/Tamil approval or proof of student comprehension. The short journey itself remains intentionally selective.
 

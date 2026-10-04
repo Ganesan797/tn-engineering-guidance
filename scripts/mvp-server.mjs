@@ -32,7 +32,8 @@ const reviewedAwarenessBatch = readFileSync(new URL("docs/content/awareness/stud
 const questions = loadQuestionCollection(reviewedAwarenessBatch, reviewedAdmissionBatch,
   readFileSync(new URL("docs/content/admission/student_pov_admission_coverage_int05_int08_v1.md", root), "utf8"),
   readFileSync(new URL("docs/content/awareness/student_pov_awareness_evidence_v2.md", root), "utf8"),
-  readFileSync(new URL("docs/content/admission/student_pov_admission_evidence_int05_int08_v1.md", root), "utf8"));
+  readFileSync(new URL("docs/content/admission/student_pov_admission_evidence_int05_int08_v1.md", root), "utf8"),
+  readFileSync(new URL("data/m2_question_answers_v1.json", root), "utf8"));
 
 function scenarioName(url) {
   const value = url.searchParams.get("scenario") ?? "eligible";
@@ -59,7 +60,7 @@ const server = createServer(async (request, response) => {
   const language = url.searchParams.get("lang") === "en" ? "en" : "ta";
   const entry = entryStateFromUrl(url);
   if (request.method === "GET" && url.pathname === "/journey/questions") {
-    const page = renderQuestionCollection(questions, url.searchParams.get("id"), url.searchParams.get("evidence"));
+    const page = renderQuestionCollection(questions, url.searchParams.get("id"), url.searchParams.get("evidence"), language, url.searchParams.get("topic"));
     send(response, page.status, page.html);
     return;
   }

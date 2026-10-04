@@ -22,53 +22,93 @@ const awarenessReviewed = load("docs/content/awareness/student_pov_awareness_bat
 const admissionCoverage = load("docs/content/admission/student_pov_admission_coverage_int05_int08_v1.md");
 const collection = loadQuestionCollection(awarenessReviewed, reviewed, admissionCoverage,
   load("docs/content/awareness/student_pov_awareness_evidence_v2.md"),
-  load("docs/content/admission/student_pov_admission_evidence_int05_int08_v1.md"));
+  load("docs/content/admission/student_pov_admission_evidence_int05_int08_v1.md"), load("data/m2_question_answers_v1.json"));
 const runtime = () => createPilotRuntime({
   sources_csv: load("data/sources.csv"), colleges_csv: load("data/colleges.csv"),
   programmes_csv: load("data/programmes.csv"),
 });
 
-test("optional collection exposes exactly the 70 prepared IDs with saved answers and next directions", () => {
-  const expected = [1, 2, 7, 10, 11, 12, 21, ...Array.from({ length: 63 }, (_, i) => i + 25)].map((n) => `Q${String(n).padStart(3, "0")}`);
-  assert.deepEqual(collection.questions.map((q) => q.id).sort(), expected.sort());
-  const assignments: Record<string, number[]> = {
-    A01: [25, 26, 27, 28, 34, 35], A02: [30, 31, 32], A03: [29, 33],
-    A04: [36, 37, 38, 39, 40, 41, 42, 43, 44], A05: [10, 11, 49, 50],
-    A06: [12, 21, 47, 48], A07: [45, 46, 51], B01: [52, 53, 54, 55, 56, 57, 58],
-    B02: [59], B03: [60, 61, 62, 63], B04: [1, 64, 65, 66, 67, 68, 69, 70],
-    B05: [7, 71, 82], B06: [72, 73, 74, 75], B07: [76, 77, 78, 79, 80, 81, 83], B08: [2, 84, 85, 86, 87],
-  };
-  for (const [unit, ids] of Object.entries(assignments)) {
-    assert.deepEqual(collection.questions.filter((q) => q.unit === unit).map((q) => q.id).sort(), ids.map((n) => `Q${String(n).padStart(3, "0")}`).sort());
+test("all 70 question-specific answers have separate localized copy, limits and next directions", () => {
+  const expected = [1, 2, 7, 10, 11, 12, 21, ...Array.from({ length: 63 }, (_, i) => i + 25)].map((n) => `Q${String(n).padStart(3, "0")}`).sort();
+  assert.deepEqual([...collection.answers.keys()].sort(), expected);
+  for (const lang of ["ta", "en"] as const) {
+    let direct = 0;
+    for (const q of collection.questions) {
+      const a = collection.answers.get(q.id)!;
+      assert.equal(a.unit, q.unit);
+      const copy = a[lang]!;
+      assert.ok(copy.answer.length < 650, `${q.id}: short first paragraph`);
+      const page = renderQuestionCollection(collection, q.id, null, lang);
+      assert.equal(page.status, 200);
+      assert.match(page.html, new RegExp(`<html lang="${lang}"`));
+      assert.ok(page.html.includes(contentMarkup(copy.answer)));
+      assert.ok(page.html.includes(contentMarkup(copy.next)));
+      assert.ok(page.html.includes(contentMarkup(copy.limit)));
+      assert.ok(page.html.includes(`id=${a.nextId}`));
+      if (lang === "ta") {
+        assert.match(copy.question, /[\u0B80-\u0BFF]/);
+        assert.match(copy.next, /[\u0B80-\u0BFF]/);
+        assert.equal(copy.review, "PENDING_VOLUNTEER_EQUIVALENCE");
+        assert.ok(!page.html.includes(contentMarkup(a.en.answer)));
+        assert.doesNotMatch(page.html, /English — reviewed answer|Next action|What remains conditional/);
+      } else assert.doesNotMatch(copy.question + copy.answer + copy.detail + copy.next + copy.limit, /[\u0B80-\u0BFF]/);
+      direct += Number(copy.status === "DIRECT");
+    }
+    assert.equal(direct, 69);
+    assert.equal(collection.answers.get("Q021")![lang]!.status, "PARTIAL");
   }
-  const index = renderQuestionCollection(collection).html;
-  assert.equal((index.match(/class="question"/g) ?? []).length, 70);
-  for (const q of collection.questions) {
-    const response = renderQuestionCollection(collection, q.id);
-    assert.equal(response.status, 200);
-    assert.ok(response.html.includes(contentMarkup(collection.units.get(q.unit)!.tamil)));
-    const nextText = collection.units.get(q.unit)!.next.replace(/\[([^\]]+)\]\(https:\/\/[^)]+\)/g, "$1");
-    assert.ok(response.html.replace(/<[^>]+>/g, "").includes(contentMarkup(nextText).replace(/<[^>]+>/g, "")));
-    assert.match(response.html, /\/journey\?step=/);
-    assert.match(response.html, /\/journey\/questions\?evidence=/);
-  }
-  assert.equal(collection.questions.find((q) => q.id === "Q049")?.wording, "How different are CSE, IT, AI & Data Science and AI & ML?");
-  assert.equal(collection.questions.find((q) => q.id === "Q037")?.wording, "What is Computer Science and Engineering (CSE)?");
-  const comparison = renderQuestionCollection(collection, "Q049").html;
-  for (const term of ["CSE", "IT", "AI &amp; DS", "AI &amp; ML"]) assert.ok(comparison.includes(term));
-  assert.equal(renderQuestionCollection(collection, "Q003").status, 404);
   assert.equal(renderQuestionCollection(collection, "Q168").status, 404);
-  assert.match(renderQuestionCollection(collection, "Q070").html, /href="\/journey\/questions\?id=Q086"/);
-  for (const id of ["Q060", "Q002"]) assert.ok(renderQuestionCollection(collection, "Q081").html.includes(`href="/journey/questions?id=${id}"`));
-  assert.throws(() => loadQuestionCollection(awarenessReviewed.replace("Q037 “", "Q999 “"), reviewed, admissionCoverage, "", ""));
+  assert.equal(renderQuestionCollection(collection, null, null, "ta", "unknown").status, 404);
+});
+
+test("shared units preserve question-specific intent and all exact comparison subjects", () => {
+  for (const lang of ["ta", "en"] as const) {
+    for (const unit of collection.units.keys()) {
+      const answers = collection.questions.filter((q) => q.unit === unit).map((q) => collection.answers.get(q.id)![lang]!.answer);
+      assert.equal(new Set(answers).size, answers.length, unit);
+    }
+    const ten = collection.answers.get("Q010")![lang]!;
+    const eleven = collection.answers.get("Q011")![lang]!;
+    const four = collection.answers.get("Q049")![lang]!;
+    for (const term of ["CSE", "AI & Data Science"]) assert.ok(ten.answer.includes(term));
+    for (const term of ["CSE", "IT"]) assert.ok(eleven.answer.includes(term));
+    for (const term of ["CSE", "IT", "AI & Data Science", "AI & ML"]) assert.ok(four.answer.includes(term));
+    assert.doesNotMatch(renderQuestionCollection(collection, "Q010", null, lang).html, /<strong>Q011|<strong>Q049/);
+  }
+  assert.match(collection.answers.get("Q011")!.en.detail, /cutoffs.*not|cutoffs.*\*\*not\*\*/i);
+  assert.match(collection.answers.get("Q021")!.en.limit, /college.*year.*stream.*round.*category/);
+});
+
+test("language switch retains question or topic and missing Tamil never falls back to English", () => {
+  for (const lang of ["ta", "en"] as const) {
+    const other = lang === "ta" ? "en" : "ta";
+    const question = renderQuestionCollection(collection, "Q049", null, lang, "A05").html;
+    assert.ok(question.includes(`lang=${other}&amp;id=Q049&amp;topic=A05`));
+    const topic = renderQuestionCollection(collection, null, null, lang, "A05").html;
+    assert.ok(topic.includes(`lang=${other}&amp;topic=A05`));
+    for (const id of ["Q010", "Q011", "Q049", "Q050"]) assert.ok(topic.includes(`id=${id}`));
+  }
+  const answers = new Map(collection.answers);
+  answers.set("Q049", { ...answers.get("Q049")!, ta: undefined });
+  const missing = renderQuestionCollection({ ...collection, answers }, "Q049");
+  assert.equal(missing.status, 503);
+  assert.match(missing.html, /data-missing-translation/);
+  assert.ok(!missing.html.includes(collection.answers.get("Q049")!.en.answer));
+  assert.equal(renderQuestionCollection({ ...collection, answers }, "Q049", null, "en").status, 200);
+  const entries = JSON.parse(load("data/m2_question_answers_v1.json"));
+  delete entries.find((a: { id: string }) => a.id === "Q049").ta;
+  const loaded = loadQuestionCollection(awarenessReviewed, reviewed, admissionCoverage, "", "", JSON.stringify(entries));
+  assert.equal(renderQuestionCollection(loaded, "Q049").status, 503);
+  entries.find((a: { id: string }) => a.id === "Q010").unit = "A04";
+  assert.throws(() => loadQuestionCollection(awarenessReviewed, reviewed, admissionCoverage, "", "", JSON.stringify(entries)), /mapping mismatch/);
 });
 
 test("lateral entry is informational and cutoff explanation preserves the result tab", () => {
   const lateral = renderQuestionCollection(collection, "Q060").html;
   assert.match(lateral, /data-guidance-unit="B03"/);
-  assert.match(lateral, /தகுதியைக் கணக்கிடாது/);
+  assert.match(lateral, /தகுதியை மதிப்பிடாது/);
   assert.doesNotMatch(lateral, /href="\/journey\?step=check"/);
-  assert.match(lateral, /href="https:\/\/www.tnlea.com\/"/);
+  assert.match(lateral, /href="https:\/\/www.tnlea.com\//);
   const state = ["2026", "academic", "no", "86", "78", "81"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
   const result = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
   assert.match(result, /id=Q002" target="_blank"/);
@@ -204,13 +244,21 @@ test("local server serves the Tamil journey and advances a posted answer", async
     assert.match(awarenessHtml, /\/journey\/questions/);
     const catalogue = await fetch(`${base}/journey/questions`);
     assert.equal(catalogue.status, 200);
-    for (const q of collection.questions) {
-      const response = await fetch(`${base}/journey/questions?id=${q.id}`);
+    for (const q of collection.questions) for (const lang of ["ta", "en"]) {
+      const response = await fetch(`${base}/journey/questions?id=${q.id}&lang=${lang}`);
       assert.equal(response.status, 200);
-      assert.ok((await response.text()).includes(`data-guidance-unit="${q.unit}"`));
+      const html = await response.text();
+      assert.ok(html.includes(`data-guidance-unit="${q.unit}"`));
+      assert.ok(html.includes(`<html lang="${lang}"`));
+    }
+    for (const unit of collection.units.keys()) for (const lang of ["ta", "en"]) {
+      const response = await fetch(`${base}/journey/questions?topic=${unit}&lang=${lang}`);
+      assert.equal(response.status, 200);
+      const html = await response.text();
+      for (const q of collection.questions.filter((q) => q.unit === unit)) assert.ok(html.includes(`id=${q.id}`));
     }
     assert.equal((await fetch(`${base}/journey/questions?id=Q168`)).status, 404);
-    for (const source of ["awareness", "admission"]) assert.equal((await fetch(`${base}/journey/questions?evidence=${source}`)).status, 200);
+    assert.equal((await fetch(`${base}/journey/questions?evidence=admission`)).status, 404);
     for (const step of ["study", "compare"]) {
       const exploration = await fetch(`${base}/journey?step=${step}`);
       assert.equal(exploration.status, 200);

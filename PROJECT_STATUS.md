@@ -2,9 +2,11 @@
 
 **Current milestone:** M2 — Progressive Student Input (one bounded journey implemented; acceptance pending)
 
-**Current task:** Owner review of the authorized optional 70-question collection, then factual-scope, volunteer Tamil-equivalence and actual student reviews; M2 milestone acceptance remains pending
+**Current task:** Owner Finding 02 re-review of separate Tamil/English, question-specific answers; factual-scope, volunteer Tamil-equivalence and actual student reviews remain pending; M2 is not accepted
 
-**Last reviewed:** 2026-10-03
+**Last reviewed:** 2026-10-04
+
+**Owner Finding 02 — OPEN_PENDING_OWNER_REVIEW (2026-10-04):** The optional question collection now has separate Tamil-default and English views. Each selected question receives its own short direct answer, relevant detail, localized next action and evidence limit, derived from the preserved A01–A07 V2/B01–B08 material. [Every ID's mapping, status and URLs](docs/planning/m2_question_specific_answer_mapping_2026-10-04.md) are recorded: **69 DIRECT and 1 PARTIAL (Q021) in each language**, with all **70 Tamil question/answer pairs pending volunteer equivalence review**. Q021's numeric ECE cutoff/comparison lacks required historical dimensions; reachability is not evidence of a resolved answer. Q010/Q011/Q049 retain their distinct requested comparisons. Language switches preserve question/topic; the original personal-check tab and deterministic behavior remain intact. Focused tests **11/11**, full offline suite **210/210**, strict typecheck PASS. The short marks-free journey remains primary, with no mandatory collection steps; the 5–10-minute goal remains unverified with real students. Owner re-review, final factual release, Tamil equivalence, student validation and M2 acceptance remain pending. Gemini PAUSED; Live LLM Gate PARTIAL. Historical 70-DIRECT reachability below predates this question-specific completeness review.
 
 **Documentation navigation (2026-10-02):** Documents are grouped by product, planning, architecture, content, experiments and templates. Start with the [documentation guide](docs/README.md); awareness and admission folders keep answers, evidence and reviews together. Original conversation records remain preserved. Relocation and reference checks passed, and the existing automated suite passed 199 tests after updating document-loading paths. This organization change does not change content approval or implementation authorization.
 

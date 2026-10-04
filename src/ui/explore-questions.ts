@@ -2,11 +2,19 @@ import { contentMarkup } from "./student-entry.ts";
 
 export interface PreparedQuestion { id: string; wording: string; unit: string }
 export interface PreparedUnit { id: string; tamil: string; english: string; why: string; next: string; limits: string }
+export type QuestionLanguage = "ta" | "en";
+export interface LocalizedAnswer { question: string; answer: string; detail: string; next: string; limit: string; status: "DIRECT" | "PARTIAL"; review?: string }
+export interface QuestionAnswer {
+  id: string; unit: string; source: string; en: LocalizedAnswer; ta?: LocalizedAnswer;
+  nextId: string; related?: string[];
+  evidence: { key: string; url: string; location: string; locationTa: string; note: string }[];
+}
 export interface QuestionCollection {
   questions: readonly PreparedQuestion[];
   units: ReadonlyMap<string, PreparedUnit>;
   awarenessEvidence: string;
   admissionEvidence: string;
+  answers: ReadonlyMap<string, QuestionAnswer>;
 }
 
 const TOPICS = [
@@ -33,7 +41,7 @@ const escape = (text: string) => text.replaceAll("&", "&amp;").replaceAll("<", "
 const reviewedMarkup = (text: string) => contentMarkup(text).replace(/\[([^\]]+)\]\((https:\/\/[^\s)]+)\)/g, '<a href="$2">$1</a>');
 
 // Load wording and answers from the saved documents; no generated answer catalogue.
-export function loadQuestionCollection(awareness: string, admission: string, admissionCoverage: string, awarenessEvidence: string, admissionEvidence: string): QuestionCollection {
+export function loadQuestionCollection(awareness: string, admission: string, admissionCoverage: string, awarenessEvidence: string, admissionEvidence: string, answerJson: string): QuestionCollection {
   const a = normalize(awareness);
   const b = normalize(admission);
   const questions: PreparedQuestion[] = [];
@@ -69,27 +77,55 @@ export function loadQuestionCollection(awareness: string, admission: string, adm
     units.set(id, { id, english, tamil, why, next, limits });
   }
   for (const q of questions) if (!units.has(q.unit)) throw new Error(`Unknown guidance for ${q.id}`);
-  return { questions, units, awarenessEvidence, admissionEvidence };
+  const entries: QuestionAnswer[] = JSON.parse(answerJson);
+  if (!Array.isArray(entries) || entries.length !== 70 || new Set(entries.map((a) => a.id)).size !== 70) throw new Error("Expected 70 question-specific answers");
+  const answers = new Map(entries.map((a) => [a.id, a]));
+  for (const q of questions) {
+    const a = answers.get(q.id);
+    if (!a || a.unit !== q.unit || !answers.has(a.nextId)) throw new Error(`Answer mapping mismatch: ${q.id}`);
+    for (const lang of ["en", "ta"] as const) {
+      const copy = a[lang];
+      // Missing Tamil is rendered as an explicit unavailable page, never English fallback.
+      if (!copy && lang === "ta") continue;
+      if (!copy || [copy.question, copy.answer, copy.next, copy.limit].some((s) => typeof s !== "string" || !s.trim()) || !["DIRECT", "PARTIAL"].includes(copy.status)) throw new Error(`Incomplete ${lang} answer: ${q.id}`);
+    }
+    if (q.id !== "Q025" && a.en.question !== q.wording) throw new Error(`Question wording mismatch: ${q.id}`);
+    if (a.ta && a.ta.review !== "PENDING_VOLUNTEER_EQUIVALENCE") throw new Error(`Unapproved Tamil review state: ${q.id}`);
+    if (!a.evidence.length || a.evidence.some((e) => !/^https:\/\//.test(e.url) || !e.location || !e.locationTa)) throw new Error(`Missing evidence: ${q.id}`);
+    if (a.related?.some((id) => !answers.has(id))) throw new Error(`Invalid related answer: ${q.id}`);
+  }
+  return { questions, units, awarenessEvidence, admissionEvidence, answers };
 }
 
 const CSS = `*{box-sizing:border-box}body{margin:0;background:#f7f8fa;color:#172033;font:17px/1.65 "Nirmala UI","Noto Sans Tamil",system-ui,sans-serif}main{max-width:740px;margin:auto;padding:16px;overflow-wrap:anywhere}h1{font-size:1.5rem}h2{font-size:1.15rem}a{color:#174ea6}a:focus-visible,summary:focus-visible{outline:3px solid #174ea6;outline-offset:3px}.card{background:white;border:1px solid #d8dde6;border-radius:10px;padding:16px;margin:16px 0}.question{display:block;padding:12px 0}.actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}.actions a{padding:10px;border:1px solid #174ea6;border-radius:7px}summary{cursor:pointer;padding:10px 0}pre{white-space:pre-wrap;font:inherit;overflow-wrap:anywhere}.notice{border-left:4px solid #a96800;padding:10px;background:#fff6e7}ul,ol{padding-left:1.3rem}`;
-const questionLink = (q: PreparedQuestion) => `<a class="question" href="/journey/questions?id=${q.id}"><strong>${q.id}</strong> — ${escape(q.wording)}</a>`;
-
-export function renderQuestionCollection(collection: QuestionCollection, id: string | null = null, evidence: string | null = null): { status: number; html: string } {
-  const notice = `<p class="notice">பதில்களின் கருத்து வளர்ச்சி உரிமையாளரால் ஏற்கப்பட்டது. இறுதி உண்மைத் தகவல் ஒப்புதல், தன்னார்வத் தமிழ் மதிப்பாய்வு, மாணவர் பயன்பாட்டுச் சோதனை இன்னும் முடியவில்லை. சேர்க்கைத் தகவல்கள் 2026-க்கானவை; அடுத்த ஆண்டுக்கும் பொருந்தும் என்று கருதாதீர்கள்.</p>`;
-  const shell = (body: string) => `<!doctype html><html lang="ta"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>கேள்விகளை ஆராயலாம் — TN Engineering Guidance</title><style>${CSS}</style></head><body><main><nav class="actions"><a href="/journey">குறுகிய வழிகாட்டலுக்குத் திரும்ப</a><a href="/journey/questions">எல்லா தயாரான கேள்விகளும்</a></nav>${notice}${body}</main></body></html>`;
-  if (evidence !== null) {
-    if (evidence !== "awareness" && evidence !== "admission") return { status: 404, html: shell("<h1>ஆதாரம் கிடைக்கவில்லை</h1>") };
-    const note = evidence === "awareness" ? collection.awarenessEvidence : collection.admissionEvidence;
-    return { status: 200, html: shell(`<h1>பதில்களின் ஆதாரங்களும் வரம்புகளும்</h1><p>சேமிக்கப்பட்ட ஆதாரக் குறிப்பு — அசல் உரை:</p><pre>${escape(note)}</pre>`) };
-  }
-  if (id === null) return { status: 200, html: shell(`<h1>கேள்விகளை ஆராயலாம்</h1><p>விருப்பப்பட்ட தலைப்பை மட்டும் திறக்கலாம். இந்த 70 தயாரான கேள்விகளையும் படிக்க வேண்டிய கட்டாயம் இல்லை; மதிப்பெண்கள் தேவையில்லை. கேள்விகளின் அசல் சொற்கள் கீழே உள்ளன; பதிலில் தமிழ் வரைவும் ஆங்கிலமும் கிடைக்கும்.</p>${TOPICS.map(([unit, title]) => `<details class="card" id="${unit}"><summary>${title}</summary>${collection.questions.filter((q) => q.unit === unit).map(questionLink).join("")}</details>`).join("")}`) };
-  const question = collection.questions.find((q) => q.id === id);
-  if (!question) return { status: 404, html: shell("<h1>இந்தக் கேள்விக்கு இங்கு தயாரான பதில் இல்லை</h1>") };
-  const unit = collection.units.get(question.unit)!;
-  const topic = TOPICS.find(([key]) => key === question.unit)!;
-  const related = collection.questions.filter((q) => q.unit === question.unit && q.id !== id);
-  const routeExtras = question.unit === "B01" ? `<p>மற்ற சேர்க்கை வழிகளையும் பார்க்க: <a href="/journey/questions?id=Q059">Q059 — நிர்வாக ஒதுக்கீடு</a>; <a href="/journey/questions?id=Q060">Q060 — நேரடி இரண்டாம் ஆண்டு சேர்க்கை</a>.</p>` : question.id === "Q070" ? `<p><a href="/journey/questions?id=Q086">B08 — கட்-ஆஃப் மற்றும் தரவரிசை விளக்கம்</a></p>` : question.id === "Q081" ? `<p><a href="/journey/questions?id=Q060">B03 — டிப்ளமோ வழி</a>; <a href="/journey/questions?id=Q002">B08 — கட்-ஆஃப் விளக்கம்</a></p>` : "";
-  const lateral = question.unit === "B03" ? `<p class="notice">இது நேரடி இரண்டாம் ஆண்டு வழிக்கான விளக்கம். தளத்தின் முதல் ஆண்டு தனிப்பட்ட சரிபார்ப்பு இந்த வழியின் தகுதியைக் கணக்கிடாது.</p>` : "";
-  return { status: 200, html: shell(`<h1>${question.id} — ${escape(question.wording)}</h1><p>${escape(topic[1])} · ${unit.id}. தொடர்புடைய கேள்விகள் ஒரே மதிப்பாய்வு செய்யப்பட்ட விளக்கத்தைப் பகிர்கின்றன.</p>${lateral}<section class="card" data-guidance-unit="${unit.id}"><h2>தமிழ் வரைவு</h2>${reviewedMarkup(unit.tamil)}<details><summary>English — reviewed answer</summary>${reviewedMarkup(unit.english)}</details></section><section class="card"><h2>அடுத்த செயல் / Next action</h2>${reviewedMarkup(unit.next)}${unit.why ? `<details><summary>Explain why — saved guidance</summary>${reviewedMarkup(unit.why)}</details>` : ""}${routeExtras}<p><strong>வரம்புகள் / Limits:</strong></p>${reviewedMarkup(unit.limits)}<a href="/journey/questions?evidence=${unit.id.startsWith("A") ? "awareness" : "admission"}">முழு ஆதாரக் குறிப்பைப் பார்க்க</a></section><nav class="actions"><a href="/journey?step=${topic[2]}">தொடர்புடைய வழிகாட்டல் படிக்குத் திரும்ப</a><a href="/journey/questions#${unit.id}">இந்தத் தலைப்பில் மேலும் ஆராய</a></nav><details><summary>இதே விளக்கத்தில் தொடர்புடைய கேள்விகள்</summary>${related.map(questionLink).join("")}</details>`) };
+const EN_TOPICS = ["Engineering: where to start", "Interests, maths and learning", "Engineering and other study routes", "What would I study?", "Compare computing fields", "Choosing a field", "Careers and changing direction", "Engineering admission routes", "Management quota", "Diploma and second-year entry", "TNEA application to joining", "Information and documents", "Eligibility, subjects and boards", "Nativity and special situations", "Cutoff, percentage and rank"];
+const COPY = {
+  ta: { title: "கேள்விகளை ஆராயலாம்", home: "குறுகிய தமிழ் வழிகாட்டலுக்குத் திரும்ப", all: "எல்லாத் தலைப்புகளும்", intro: "உங்களுக்கு வேண்டிய தலைப்பை மட்டும் பாருங்கள். எல்லா 70 கேள்விகளையும் படிக்க வேண்டியதில்லை. மதிப்பெண், பிரிவுத் தேர்வு அல்லது கல்லூரிப் பட்டியல் தேவையில்லை.", notice: "இது மதிப்பாய்வுக்கான வரைவு. முந்தைய உள்ளடக்கத்தின் நோக்கம் ஏற்கப்பட்டது; இந்தக் கேள்விவாரி வடிவமும் தமிழ் மொழிபெயர்ப்பும் இன்னும் மதிப்பாய்வில் உள்ளன. இறுதி உண்மைத் தகவல் ஒப்புதல், தன்னார்வத் தமிழ் மதிப்பாய்வு, மாணவர் சோதனை முடியவில்லை. சேர்க்கை விளக்கங்கள் 2026 விதிகளைச் சார்ந்தவை; அடுத்த ஆண்டுக்கும் பொருந்தும் என்று கருதாதீர்கள்.", next: "அடுத்து என்ன செய்யலாம்?", why: "மேலும் புரிந்துகொள்ள", limits: "எது இன்னும் உறுதியாகவில்லை?", evidence: "ஆதாரங்களைப் பார்க்க", source: "ஆதாரம்", related: "தொடர்புள்ள கேள்விகள்", return: "தொடர்புடைய தமிழ் வழிகாட்டல் படிக்குச் செல்ல", more: "இந்தத் தலைப்பில் மேலும் பார்க்க", partial: "பகுதி விளக்கம் — கீழே உள்ள இடைவெளி இன்னும் தீரவில்லை.", missing: "இந்தக் கேள்விக்கான தமிழ் மொழிபெயர்ப்பு இன்னும் தயாராகவில்லை. ஆங்கிலத்தைத் தமிழாகக் காட்டவில்லை; விரும்பினால் மொழியை மாற்றிப் பார்க்கலாம்.", notFound: "இந்தக் கேள்விக்கு இங்கு தயாரான பதில் இல்லை", lateral: "இது நேரடி இரண்டாம் ஆண்டு வழி. முதல் ஆண்டு தனிப்பட்ட சரிபார்ப்பு இதன் தகுதியை மதிப்பிடாது." },
+  en: { title: "Explore questions", home: "Return to the short Tamil journey", all: "All topics", intro: "Explore only what you need. You do not have to read all 70 questions. No marks, branch choice or college list is required.", notice: "Review draft. The earlier content direction was accepted; these question-specific edits and Tamil translations still need review. Final factual approval, volunteer Tamil equivalence and student testing are pending. Admission explanations refer to 2026 rules; do not assume they apply next year.", next: "What can I do next?", why: "Understand a little more", limits: "What remains conditional?", evidence: "View evidence", source: "Source", related: "Related questions", return: "Go to the relevant Tamil journey step", more: "Explore this topic", partial: "Partial answer — the evidence gap below remains unresolved.", missing: "This English answer is not available.", notFound: "No prepared answer is available for this question", lateral: "This is a direct-second-year route. The first-year personal check does not assess lateral-entry eligibility." },
+} as const;
+export function questionUrl(id: string | null, lang: QuestionLanguage, topic: string | null = null): string {
+  const params = new URLSearchParams({ lang });
+  if (id) params.set("id", id);
+  if (topic) params.set("topic", topic);
+  return `/journey/questions?${params}`;
+}
+export function renderQuestionCollection(collection: QuestionCollection, id: string | null = null, evidence: string | null = null, lang: QuestionLanguage = "ta", selectedTopic: string | null = null): { status: number; html: string } {
+  const t = COPY[lang];
+  const topic = TOPICS.find(([unit]) => unit === selectedTopic);
+  const title = (unit: string) => lang === "ta" ? TOPICS.find(([key]) => key === unit)![1] : EN_TOPICS[TOPICS.findIndex(([key]) => key === unit)];
+  const switchUrl = questionUrl(id, lang === "ta" ? "en" : "ta", topic?.[0] ?? null);
+  const shell = (body: string) => `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${t.title}</title><style>${CSS}</style></head><body><main><nav class="actions"><a href="/journey">${t.home}</a><a href="${questionUrl(null, lang)}">${t.all}</a><a lang="${lang === "ta" ? "en" : "ta"}" data-language-switch href="${escape(switchUrl)}">${lang === "ta" ? "English" : "தமிழ்"}</a></nav>${body}<aside class="notice">${t.notice}</aside></main></body></html>`;
+  const link = (qid: string) => {
+    const a = collection.answers.get(qid)!;
+    return `<a class="question" href="${escape(questionUrl(qid, lang, a.unit))}"><strong>${a.id}</strong> — ${escape(a[lang]?.question ?? t.missing)}</a>`;
+  };
+  if (evidence !== null) return { status: 404, html: shell(`<h1>${t.notFound}</h1>`) };
+  if (selectedTopic !== null && !topic) return { status: 404, html: shell(`<h1>${t.notFound}</h1>`) };
+  if (id === null) return { status: 200, html: shell(`<h1>${topic ? escape(title(topic[0])) : t.title}</h1><p>${t.intro}</p>${topic ? collection.questions.filter((q) => q.unit === topic[0]).map((q) => link(q.id)).join("") : TOPICS.map(([unit]) => `<a class="question card" href="${escape(questionUrl(null, lang, unit))}">${escape(title(unit))}</a>`).join("")}`) };
+  const answer = collection.answers.get(id);
+  if (!answer) return { status: 404, html: shell(`<h1>${t.notFound}</h1>`) };
+  const copy = answer[lang];
+  if (!copy || !copy.question || !copy.answer || !copy.next || !copy.limit) return { status: 503, html: shell(`<h1>${escape(id)}</h1><p data-missing-translation>${t.missing}</p>`) };
+  const step = TOPICS.find(([unit]) => unit === answer.unit)![2];
+  return { status: 200, html: shell(`<h1>${id} — ${escape(copy.question)}</h1><section class="card" data-guidance-unit="${answer.unit}" data-answer-status="${copy.status}"><div data-direct-answer>${reviewedMarkup(copy.answer)}</div>${copy.status === "PARTIAL" ? `<p class="notice">${t.partial}</p>` : ""}${answer.unit === "B03" ? `<p class="notice">${t.lateral}</p>` : ""}${copy.detail ? `<details><summary>${t.why}</summary>${reviewedMarkup(copy.detail)}</details>` : ""}</section><section class="card"><h2>${t.next}</h2>${reviewedMarkup(copy.next)}${link(answer.nextId)}<h2>${t.limits}</h2>${reviewedMarkup(copy.limit)}<details><summary>${t.evidence}</summary>${answer.evidence.map((e) => `<p><a href="${escape(e.url)}" target="_blank" rel="noopener">${t.source} ${escape(e.key)}</a> — ${escape(lang === "ta" ? e.locationTa : e.location)}</p>`).join("")}</details></section>${answer.related?.length ? `<section><h2>${t.related}</h2>${answer.related.map(link).join("")}</section>` : ""}<nav class="actions"><a href="/journey?step=${step}">${t.return}</a><a href="${escape(questionUrl(null, lang, answer.unit))}">${t.more}</a></nav>`) };
 }
