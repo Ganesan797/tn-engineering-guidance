@@ -28,6 +28,35 @@ const runtime = () => createPilotRuntime({
   programmes_csv: load("data/programmes.csv"),
 });
 
+test("all displayed question copy matches the October 5 owner-reviewed bilingual fields", () => {
+  const review = load("docs/planning/t03_bilingual_conversational_review_final_2026-10-05.md");
+  const sections = review.split(/^### (?=Q\d{3} —)/m).slice(1);
+  assert.equal(sections.length, 70);
+  for (const section of sections) {
+    const id = /^Q\d{3}/.exec(section)?.[0];
+    assert.ok(id);
+    const answer = collection.answers.get(id);
+    assert.ok(answer, id);
+    const final = section.split("**Final bilingual conversational copy — 2026-10-05**")[1];
+    assert.ok(final, id);
+    for (const [lang, heading, nextHeading] of [
+      ["en", "English", "**Tamil — final recommended**"],
+      ["ta", "Tamil", "**Detailed update comments**"],
+    ] as const) {
+      const copy = answer[lang]!;
+      const block = final.split(`**${heading} — final recommended**`)[1]?.split(nextHeading)[0];
+      assert.ok(block, `${id} ${lang}`);
+      for (const field of ["question", "answer", "detail", "next", "limit"] as const) {
+        const value = new RegExp(`\\*\\*${field}:\\*\\* (.*)`).exec(block)?.[1].trim();
+        assert.ok(value !== undefined, `${id} ${lang}.${field}`);
+        assert.equal(copy[field], value === "(No additional detail displayed.)" ? "" : value, `${id} ${lang}.${field}`);
+      }
+    }
+  }
+  assert.equal(collection.answers.get("Q021")?.en.status, "PARTIAL");
+  assert.equal(collection.answers.get("Q021")?.ta?.status, "PARTIAL");
+});
+
 test("all 70 question-specific answers have separate localized copy, limits and next directions", () => {
   const expected = [1, 2, 7, 10, 11, 12, 21, ...Array.from({ length: 63 }, (_, i) => i + 25)].map((n) => `Q${String(n).padStart(3, "0")}`).sort();
   assert.deepEqual([...collection.answers.keys()].sort(), expected);

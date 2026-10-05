@@ -1,5 +1,7 @@
 # T04 bounded UI-readiness pass — 2026-10-04
 
+**2026-10-05 branch reconciliation:** This dated record describes the original UI-only pass. After `origin/main` added the October 5 owner-reviewed bilingual copy, the two local commits were rebased without conflict as `bc3f0ea8d7a3cbb67899578e94b317181a4b126a` (UI placement) and `2825572248982e4baf1a588a9a9285548f2effcc` (this record/status). The subsequent [wording reconciliation](t04_wording_reconciliation_2026-10-05.md) changes question-page copy, so this original UI-only commit is not the combined T04 candidate or a frozen student-test baseline. The original SHA references below remain historical evidence for the pre-rebase local pass.
+
 ## Inspection record before implementation edits
 
 Baseline: `1aefe20f023169c38d87f4b865ee61d133e70263` (clean integrated main). Inspected the actual locally served journey in the in-app browser at 390×844; unknown-result/retry also checked at 320×740. This is a technical walkthrough, not a student session or owner approval.

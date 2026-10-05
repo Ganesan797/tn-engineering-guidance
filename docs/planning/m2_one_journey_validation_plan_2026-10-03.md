@@ -1,5 +1,7 @@
 # Bounded M2 Journey — Validation Preparation (2026-10-03)
 
+**2026-10-05 status overlay:** The checklists and empty observation template below remain the T04 procedure. The 2026-10-04 [T03 worksheet](t03_factual_tamil_review_worksheet_2026-10-04.md) records Ganesan's factual and Tamil PASS at its original baseline; the [October 5 bilingual editorial copy](t03_bilingual_conversational_review_final_2026-10-05.md) is applied to the 70 question pages on a [combined review candidate](t04_wording_reconciliation_2026-10-05.md). Ganesan's placement/wording confirmation and an authorized merge are needed before recording the exact stable T04 baseline. The earlier pending-review wording below is the historical state when this plan was drafted. No real-student session has run; do not fill the template from the technical walkthrough.
+
 **Status:** LOCAL_WALKTHROUGH_COMPLETE; STUDENT_TEST_NOT_RUN; FACTUAL_SCOPE_REVIEW_PENDING; VOLUNTEER_TAMIL_REVIEW_PENDING. This is preparation for the [October 3 bounded authorization](m2_one_journey_authorization_decision_2026-10-03.md), not M2 acceptance. The [question-to-domain map](m2_one_journey_question_domain_map_v1.md) and frozen [Product Mission](../product/product_mission.md), [Student Journey](../product/student_journey_v1.md) and [Input/Output](../product/student_input_output_v1.md) govern review. Gemini stays paused.
 
 ## Verified local walkthrough
