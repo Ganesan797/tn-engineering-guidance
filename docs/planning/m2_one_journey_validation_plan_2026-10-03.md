@@ -12,6 +12,8 @@ The walkthrough exposed one bounded navigation defect: moving from a partially a
 
 ## Short Tamil-first student session — not yet run
 
+**Entry and private-phone access:** Start the existing local server with `npm run start:mvp`; its default entry is `http://127.0.0.1:3000/journey`. It listens on loopback, so a phone cannot open the desktop's LAN IP directly. If a physical phone is used and the desktop already has an authenticated SSH server on a trusted private network, use a temporary phone-to-desktop local port forward to `127.0.0.1:3000`, restrict SSH access to the intended device/private network, and close the tunnel after the session. Do not expose the MVP server through public hosting, a public tunnel or router port forwarding. If that private access is not available, arrange it before a physical-phone session; a phone-sized desktop walkthrough remains technical rehearsal, not real-student validation. Record the exact main commit and device/access method with the anonymous observation.
+
 Recruit students with little engineering-admission knowledge and obtain their assent under the appropriate local research process. Use a phone-sized browser at `/journey`; do not ask for names, contact details, actual marks or certificates. If a check needs values, use the clearly labelled synthetic 2026 academic example above. Do not imply that the 2026 rule is current for another year.
 
 1. Start a 5–10-minute timer. Say only: “இந்தப் பக்கத்தை உதவி இல்லாமல் தொடங்குங்கள். பொறியியல் சேர்க்கையைப் பற்றி புரிந்துகொண்டு, அடுத்து நீங்கள் செய்யக்கூடிய ஒரு பயனுள்ள செயலைத் தேர்ந்தெடுங்கள்.” Do not explain TNEA or direct their clicks.

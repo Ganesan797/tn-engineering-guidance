@@ -1,6 +1,6 @@
 # Current execution plan
 
-**Updated:** 2026-10-10. **Owner:** Ganesan. **Current task map:** T01–T06 below. [Project Status](../../PROJECT_STATUS.md) summarizes state; [documentation guide](../README.md) provides navigation. Keep task status and next actions here rather than maintaining competing task lists. This map records direction and authorization boundaries; it does not authorize every listed task.
+**Updated:** 2026-10-10. **Owner:** Ganesan. **Current task map:** T01–T06 below. [Project Status](../../PROJECT_STATUS.md) summarizes state; [documentation guide](../README.md) provides navigation. Keep task status and next actions here rather than maintaining competing task lists. This map records direction and authorization boundaries; it does not authorize every listed task. Pre-T04 fetch verified clean local and remote `main` at `27d9c0db675e9a302efb1efb37976aaa02faa994`, a documentation-only descendant of the reviewed implementation `4d77c34a41ae16a5b9a21ebc5e89dc81075bec40`.
 
 ## Authority and verified baseline
 
