@@ -6,6 +6,8 @@
 
 **Last reviewed:** 2026-10-10
 
+**October 10 conversational copy candidate:** Ganesan [approved A01–A05 and passed A06–B08 for conversational wording](docs/planning/t03_conversational_copy_sync_decision_2026-10-10.md). The [exact owner-supplied bilingual source](docs/planning/t03_bilingual_conversational_copy_refined_2026-10-10.md) governs the 70 question-page copy fields on a separate, unmerged review branch. This editorial decision preserves the earlier T03 factual/Tamil review attribution and all source limitations; it is not new external verification or independent volunteer approval. Q021 remains PARTIAL; T04 is NOT RUN and M2 acceptance is PENDING. The unmerged layout review is a separate branch.
+
 **Single current task map:** [Current execution plan — T01–T06](docs/planning/current_execution_plan.md). It records task owners, dependencies, authorization, completion evidence, future workstreams and dated supersession. The entries below preserve milestone and experiment history; they are not competing execution queues.
 
 **Integration record (2026-10-04):** The [dated owner decision](docs/planning/m2_owner_finding_02_decision_2026-10-04.md) records PASS at `ed03a420b86b1a0970d79741c175b48b4d77c07e`, no FIX items and explicit merge authorization after checks. Later T01 commit `1e15c98dc0990c4b13316eceff4b3dfc4657b1c7` changes documentation only. Main baseline was `84e3e84f7da1033b3014da06c9054382b34f7398`; fast-forward integration and remote verification are recorded in the accompanying commit report. This supersedes T01's missing-outcome/unmerged snapshot. Production model and visible question limit remain undecided; conversational implementation and production RAG remain unauthorized.

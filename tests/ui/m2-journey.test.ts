@@ -28,28 +28,27 @@ const runtime = () => createPilotRuntime({
   programmes_csv: load("data/programmes.csv"),
 });
 
-test("all displayed question copy matches the October 5 owner-reviewed bilingual fields", () => {
-  const review = load("docs/planning/t03_bilingual_conversational_review_final_2026-10-05.md");
-  const sections = review.split(/^### (?=Q\d{3} —)/m).slice(1);
+test("all displayed question copy matches the October 10 owner-approved bilingual source", () => {
+  const review = load("docs/planning/t03_bilingual_conversational_copy_refined_2026-10-10.md");
+  const sections = [...review.replaceAll("\r\n", "\n").matchAll(/^### (Q\d{3}) — (A\d{2}|B\d{2})\n([\s\S]*?)(?=^### Q\d{3} —|^## Completion summary)/gm)];
   assert.equal(sections.length, 70);
-  for (const section of sections) {
-    const id = /^Q\d{3}/.exec(section)?.[0];
-    assert.ok(id);
+  const fieldValue = (section: string, key: string) => {
+    const lines = section.split("\n");
+    const start = lines.indexOf(`${key} =`);
+    assert.notEqual(start, -1, key);
+    let end = start + 1;
+    while (end < lines.length && !/^[A-Z][A-Z0-9_]+ =$/.test(lines[end])) end++;
+    const value = lines.slice(start + 1, end).join("\n").trim();
+    return value === "(No additional detail displayed.)" ? "" : value;
+  };
+  for (const [, id, unit, section] of sections) {
     const answer = collection.answers.get(id);
     assert.ok(answer, id);
-    const final = section.split("**Final bilingual conversational copy — 2026-10-05**")[1];
-    assert.ok(final, id);
-    for (const [lang, heading, nextHeading] of [
-      ["en", "English", "**Tamil — final recommended**"],
-      ["ta", "Tamil", "**Detailed update comments**"],
-    ] as const) {
+    assert.equal(answer.unit, unit, id);
+    for (const lang of ["en", "ta"] as const) {
       const copy = answer[lang]!;
-      const block = final.split(`**${heading} — final recommended**`)[1]?.split(nextHeading)[0];
-      assert.ok(block, `${id} ${lang}`);
       for (const field of ["question", "answer", "detail", "next", "limit"] as const) {
-        const value = new RegExp(`\\*\\*${field}:\\*\\* (.*)`).exec(block)?.[1].trim();
-        assert.ok(value !== undefined, `${id} ${lang}.${field}`);
-        assert.equal(copy[field], value === "(No additional detail displayed.)" ? "" : value, `${id} ${lang}.${field}`);
+        assert.equal(copy[field], fieldValue(section, `${field.toUpperCase()}_${lang.toUpperCase()}`), `${id} ${lang}.${field}`);
       }
     }
   }
