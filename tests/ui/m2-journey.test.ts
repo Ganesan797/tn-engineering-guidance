@@ -163,6 +163,10 @@ test("zero-knowledge Tamil path offers engineering and branch awareness before T
   const choicesAt = start.indexOf('<nav class="actions">');
   const expandedAt = start.indexOf('data-content-id="A01"');
   assert.ok(introAt < choicesAt && choicesAt < expandedAt);
+  const awarenessParagraphs = pack.items.find((item) => item.id === "AW-01")!.presentations.ta.body.split(/\n\n+/);
+  assert.ok(start.indexOf(contentMarkup(awarenessParagraphs[0])) < choicesAt);
+  assert.ok(choicesAt < start.indexOf(contentMarkup(awarenessParagraphs[1])));
+  for (const paragraph of awarenessParagraphs) assert.ok(start.includes(contentMarkup(paragraph)));
   const choices = start.slice(choicesAt, start.indexOf('</nav>', choicesAt));
   for (const step of ['study', 'compare', 'route', 'check']) {
     assert.ok(choices.includes('/journey?step=' + step));
@@ -174,18 +178,27 @@ test("zero-knowledge Tamil path offers engineering and branch awareness before T
   assert.match(start, /\/journey\?step=route/);
   assert.doesNotMatch(start, /name="answer"|type="number"/);
   const study = renderM2Journey("study", pack, reviewed, awarenessReviewed, runtime());
+  assert.ok(study.indexOf("தேர்ந்தெடுக்க வேண்டியதில்லை") < study.indexOf('<nav class="actions">'));
+  assert.ok(study.indexOf('<nav class="actions">') < study.indexOf('data-content-id="A04"'));
   assert.match(study, /Q037|CSE/);
   assert.match(study, /ECE/);
   assert.match(study, /Mechanical/);
   assert.match(study, /Civil/);
   assert.doesNotMatch(study, /name="answer"|type="number"/);
   const compare = renderM2Journey("compare", pack, reviewed, awarenessReviewed, runtime());
+  assert.ok(compare.indexOf("திறன் தீர்ப்பு அல்ல") < compare.indexOf('<nav class="actions">'));
+  assert.ok(compare.indexOf('<nav class="actions">') < compare.indexOf('data-content-id="A06"'));
   assert.match(compare, /data-content-id="A06"/);
   assert.match(compare, /data-content-id="A05"/);
   assert.match(compare, /திறன் தீர்ப்பு அல்ல/);
   assert.doesNotMatch(compare, /name="answer"|type="number"/);
   assert.match(reviewedAwarenessTamilQuestion(awarenessReviewed, "A04", "Q041"), /Mechanical/);
   const route = renderM2Journey("route", pack, reviewed, awarenessReviewed, runtime());
+  const routeParagraphs = pack.items.find((item) => item.id === "AW-03")!.presentations.ta.body.split(/\n\n+/);
+  const routeChoicesAt = route.indexOf('<nav class="actions">');
+  assert.ok(route.indexOf(contentMarkup(routeParagraphs[2])) < routeChoicesAt);
+  assert.ok(routeChoicesAt < route.indexOf('data-content-id="AW-05"'));
+  for (const paragraph of routeParagraphs) assert.ok(route.includes(contentMarkup(paragraph)));
   assert.match(route, /data-content-id="AW-03"/);
   assert.match(route, /data-content-id="AW-05"/);
   assert.match(route, /B01, B04/);
