@@ -22,7 +22,7 @@ The baseline integrates copy-sync `9aa80fe1dc965fdd84b63bd833922c78ae3e69ea`, co
 
 Applicable owner evidence is assembled with its original scope: [October 4 factual/Tamil reviews](t03_factual_tamil_review_worksheet_2026-10-04.md) at e052f1d; [October 9 placement/wording review](t04_wording_reconciliation_2026-10-05.md) at 4d77c34; [October 10 conversational-copy approval](t03_conversational_copy_sync_decision_2026-10-10.md); and explicit owner integration authorization for the three exact revisions. This does not invent fresh item-specific verification, independent volunteer approval or student observations at the merged SHA.
 
-| Current field | Value |
+| Amendment-time field (superseded only where stated by the later acceptance below) | Value |
 | --- | --- |
 | M2_IMPLEMENTATION | COMPLETE_FOR_BOUNDED_SCOPE |
 | M2_ACCEPTANCE | PENDING_OWNER_DECISION |
@@ -68,4 +68,20 @@ Each criterion requires evidence at the exact candidate; listing criteria does n
 
 READY_FOR_HOSTING is readiness evidence, not purchase/deployment permission. M7-H1 still requires explicit owner authorization. M3–M7 implementation remains separately authorized.
 
-**NEXT_SINGLE_ACTION:** Ganesan explicitly accepts or defers bounded M2 at a67fc4c9ed24f7061631782cd63c839cf098cfe8, acknowledging mandatory later T04 and preserved evidence limitations.
+**Amendment-time next action (completed by the later decision below):** Ganesan explicitly accepts or defers bounded M2 at a67fc4c9ed24f7061631782cd63c839cf098cfe8, acknowledging mandatory later T04 and preserved evidence limitations.
+
+## Explicit bounded M2 owner acceptance — 2026-10-11
+
+**Reviewer / decision owner:** Ganesan. **Evidence classification:** PASS_OWNER_REPORTED. This later explicit decision completes M2-C3/T05 and supersedes the amendment-time pending acceptance fields above.
+
+M2_ACCEPTANCE = PASS_OWNER_REPORTED
+
+M2_ACCEPTED_BASELINE = a67fc4c9ed24f7061631782cd63c839cf098cfe8
+
+Ganesan accepts this exact baseline as the completed implementation for the bounded M2 Progressive Student Input scope. He confirms progressive input in the authorized journey; integrated approved bilingual question guidance, compare conversational copy and action placement; preserved deterministic authority and UNKNOWN/NEEDS_REVIEW; cutoff separate from broader eligibility/admission conclusions; and satisfactory technical, mobile and owner-review evidence for this bounded acceptance. Q021 remains PARTIAL with all recorded limitations. This is the supplied owner decision, not a new Codex human review or fresh factual/source verification.
+
+Acceptance is implementation-scoped only: T04_STATUS = NOT_RUN; STUDENT_VALIDATED = NO; T04_PLACEMENT = MANDATORY_LATER_VALIDATION_BEFORE_PILOT_READINESS; INITIAL_T04_COHORT = 2_TO_3_REMOTE_STUDENTS_EXPLORATORY. No actual student outcome or pilot readiness is claimed. The existing mandatory-validation window/checkpoint obligation and frozen 3–5-student preparation intent remain.
+
+GEMINI_STATUS = PAUSED; LIVE_LLM_GATE = PARTIAL; PRODUCTION_MODEL = UNDECIDED; M3_IMPLEMENTATION_AUTHORIZED = NOT_AUTHORIZED. Conversational Guidance V1, LLM integration, hosting and M3–M7 implementation are not authorized by this acceptance. M2 implementation acceptance does not automatically pass their gates. Historical factual/Tamil reviews retain their original scope and attribution.
+
+**NEXT_SINGLE_ACTION:** T06 / M3 bounded gap assessment and proposal for Personal Guidance Presentation; planning only, followed by a separate owner implementation decision. This documentation task does not execute that assessment.
