@@ -1,5 +1,6 @@
 import { createGuidance, type GuidanceDependencies, type GuidanceResult } from "../application/guidance.ts";
 import { blankReferenceRequest } from "../ui/reference-request.ts";
+import type { JourneyAssessmentScope, JourneyGuidanceEvaluation, JourneyInputState } from "../student-semantics/personal-guidance.ts";
 
 export const JOURNEY_FIELDS = [
   "year", "stream", "improvement", "improvement_year",
@@ -86,7 +87,7 @@ export function journeyGuidanceResult(
   state: JourneyState,
   dependencies: GuidanceDependencies,
 ): GuidanceResult | null {
-  if (state.year !== 2026 || state.stream !== "academic") return null;
+  if (journeyAssessmentScope(state).kind !== "SUPPORTED") return null;
   const snapshot = dependencies.snapshots.snapshots()[0];
   const blank = blankReferenceRequest({ snapshot_id: snapshot.snapshot_id, snapshot_stage: snapshot.stage });
   const improvedAfter2005 = state.improvement === true && typeof state.improvement_year === "number" && state.improvement_year >= 2006;
@@ -101,4 +102,24 @@ export function journeyGuidanceResult(
       : { maths_mark: entered[0], physics_mark: entered[1], chemistry_mark: entered[2] }),
   };
   return createGuidance({ ...blank, profile }, dependencies);
+}
+
+// The existing supported-path guard lives here once. This describes scope, not eligibility.
+function journeyAssessmentScope(state: JourneyState): JourneyAssessmentScope {
+  const field = state.year !== 2026 ? "year" : state.stream !== "academic" ? "stream" : null;
+  if (field === null) return { kind: "SUPPORTED" };
+  const answer = state[field];
+  return { kind: answer === null ? "UNANSWERED" : answer === "unknown" ? "UNKNOWN" : "UNSUPPORTED", field };
+}
+
+export function evaluateJourneyGuidance(state: JourneyState, dependencies: GuidanceDependencies): JourneyGuidanceEvaluation {
+  // Snapshot and validate before evaluation so context and result describe the same answers.
+  const answers = Object.freeze(parseJourneyState(JSON.stringify(state)));
+  const inputs = Object.freeze(Object.fromEntries(JOURNEY_FIELDS.map((field) => [
+    field, answers[field] === null ? "UNANSWERED" : answers[field] === "unknown" ? "UNKNOWN" : "SUPPLIED",
+  ])) as Record<JourneyField, JourneyInputState>);
+  return Object.freeze({
+    context: Object.freeze({ answers, inputs, scope: Object.freeze(journeyAssessmentScope(answers)), next_question: nextJourneyQuestion(answers) }),
+    result: journeyGuidanceResult(answers, dependencies),
+  });
 }

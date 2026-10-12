@@ -2,7 +2,7 @@ import type { GuidanceDependencies } from "../application/guidance.ts";
 import type { AwarenessPack } from "../student-semantics/awareness.ts";
 import { contentMarkup } from "./student-entry.ts";
 import {
-  EMPTY_JOURNEY, journeyGuidanceResult, nextJourneyQuestion,
+  EMPTY_JOURNEY, evaluateJourneyGuidance, nextJourneyQuestion,
   type JourneyField, type JourneyState,
 } from "../m2/journey.ts";
 
@@ -116,7 +116,8 @@ export function renderM2Journey(
       const context = [state.year === 2026 ? "ஆண்டு: 2026" : "", typeof state.maths === "number" ? "கணித மதிப்பெண் சேர்க்கப்பட்டது" : "", typeof state.physics === "number" ? "இயற்பியல் மதிப்பெண் சேர்க்கப்பட்டது" : ""].filter(Boolean).join(" · ");
       body = `<h1>விருப்பத் தனிப்பட்ட சரிபார்ப்பு</h1><p>ஒரே நேரத்தில் தேவையான ஒரு கேள்வி மட்டும். தெரியாததைத் தெரியாது என்றே வைத்துக்கொள்ளலாம்.</p>${context ? `<p class="notice">${context}</p>` : ""}${error ? `<p role="alert">${escape(error)}</p>` : ""}<form class="card" action="/journey" method="post"><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><p>${originalMarks ? "2006-க்குப் பிறகு பெற்ற மேம்பாட்டு மதிப்பெண் பயன்படுத்தப்படாது; சான்றிலுள்ள அசல் மதிப்பெண்ணை அளிக்கவும்." : spec.why}</p>${options}<div class="actions"><button class="primary" type="submit">தொடர்க</button><button type="submit" name="unknown" value="1" formnovalidate>எனக்குத் தெரியாது</button></div></form>${journeyNav("route", "வழி விளக்கத்திற்குத் திரும்ப", state)}`;
     } else {
-      const result = journeyGuidanceResult(state, dependencies);
+      const evaluation = evaluateJourneyGuidance(state, dependencies);
+      const result = evaluation.result;
       const unknown = state.year === "unknown" || state.stream === "unknown" || state.improvement === "unknown" || state.improvement_year === "unknown" || [state.maths, state.physics, state.chemistry].includes("unknown");
       const cutoff = result?.eligibility.cutoff;
       const score = cutoff === null || cutoff === undefined
