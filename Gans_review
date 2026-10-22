@@ -211,3 +211,137 @@ E0
  → M7 Private pilot
 
 This avoids waiting until the end to learn whether students can use the product remotely, while keeping the first hosted deployment small, private and inexpensive.
+
+
+
+//prompt
+
+Use your October 22 review as context, but do not ask Codex to implement the entire roadmap. Start with a read-only repository review, then authorize one milestone at a time.
+
+## Prompt 1 — Repository and roadmap review
+
+Copy this into your system Codex:
+
+Act as the mission manager and technical lead for this repository.
+
+Project constraints:
+- One engineer and Codex are the only implementation resources.
+- Preserve the deterministic, source-backed eligibility and cutoff engine.
+- Tamil-first guidance and zero-knowledge student usability are primary.
+- AI must not decide or invent eligibility, cutoff, rank, vacancy, seat availability or admission outcome.
+- Avoid unnecessary frameworks, databases, documentation and infrastructure.
+- Historical documents may contain superseded status statements. Determine current state from the latest dated accepted decisions.
+
+Read-only task:
+1. Inspect the repository structure, source, data, tests and current documentation.
+2. Read the product authorities in this order:
+   - docs/product/product_mission.md
+   - docs/product/student_journey_v1.md
+   - docs/product/student_input_output_v1.md
+   - docs/planning/implementation_plan_v1.md
+   - PROJECT_STATUS.md
+   - docs/planning/current_execution_plan.md
+   - docs/planning/m3_personal_guidance_presentation_contract_v1.md
+3. Trace the current student journey from the HTTP server through M2 state, application guidance, deterministic rules, student semantics and UI.
+4. Inspect the controlled RAG and Live LLM experiments, but do not run a model or make network requests.
+5. Verify or correct the October 22 assessment below using repository evidence.
+6. Do not edit files, install packages, run live services, deploy, or implement anything.
+
+October 22 assessment:
+- M0 and M1 are accepted.
+- Bounded M2 is accepted; real-student validation is outstanding.
+- Results remain too technical.
+- M3 personal-guidance presentation is the next product capability.
+- A chat-shaped Tamil-first UI should reuse M2 state and deterministic services.
+- Temporary private hosting is needed before remote student validation.
+- Controlled RAG should follow initial UI validation.
+- An LLM is optional and should follow controlled retrieval validation.
+- Decision support depends on sufficient authoritative data.
+
+Proposed delivery sequence:
+E0 Engineering baseline
+→ M3-A Chat UI
+→ M3-B Personal guidance
+→ H1 Temporary private hosting
+→ V1 First remote student validation
+→ M4 Controlled RAG
+→ LLM-G Optional LLM gate
+→ M5 Decision support when evidence permits
+→ M6 Integration
+→ H2 Hardened hosting
+→ M7 Private pilot
+
+Return:
+A. Current implemented capabilities.
+B. Current product and technical gaps.
+C. Corrections required to the October 22 assessment.
+D. Reuse/adapt/build/defer decisions.
+E. File-level plan for E0, M3-A and M3-B.
+F. Dependencies and risks for H1 hosting.
+G. Exact acceptance criteria for each next milestone.
+H. The single smallest implementation slice you recommend doing first.
+
+Keep the answer concise and evidence-based. Reference exact repository files. Do not create another roadmap document.
+
+## Prompt 2 — First implementation
+
+After reviewing its response, use:
+
+Implement only E0, the reproducible engineering baseline.
+
+Authorized scope:
+- Define the exact Node version.
+- Add or update the dependency lockfile using the existing package manager.
+- Add CI for the existing test command and TypeScript type checking.
+- Add a simple GET /health endpoint.
+- Correct only clearly stale top-level setup/status instructions.
+- Preserve all domain, eligibility, recommendation, student journey, UI and RAG behaviour.
+
+Constraints:
+- Do not implement chat, M3 presentation, RAG, LLM, hosting or deployment.
+- Do not add a database or frontend framework.
+- Do not rewrite historical documents.
+- Do not create unnecessary planning documents.
+- Preserve unrelated existing changes.
+
+Before editing, inspect the relevant files and state the exact intended changes. Then implement the complete bounded slice, run checks appropriate to the changes, and report:
+- files changed;
+- behaviour changed;
+- tests/checks executed;
+- failures or unavailable checks;
+- remaining work;
+- whether E0 acceptance criteria are satisfied.
+
+## Prompt 3 — Chat foundation
+
+After E0 passes:
+
+Implement only M3-A: a deterministic Tamil-first /chat foundation.
+
+Reuse:
+- src/m2/journey.ts
+- existing awareness content
+- existing deterministic application services
+- existing Tamil/English presentation boundaries
+
+Deliver:
+- GET /chat initial conversation.
+- POST handling for conversation turns.
+- Intent choices for starting from the beginning, understanding engineering, checking cutoff and exploring prepared questions.
+- One question at a time.
+- “I don’t know,” restart and language-switch behaviour.
+- Mobile-friendly accessible chat messages and quick replies.
+- Validated bounded conversation state.
+- No permanent student-data storage.
+- Focused automated tests.
+
+Do not:
+- duplicate eligibility rules;
+- change domain outcomes;
+- add RAG or an LLM;
+- add a database or frontend framework;
+- implement M3 result redesign beyond what is required to connect the existing result.
+
+Run focused tests and type checking. Report the exact student journeys now supported and all remaining M3-B gaps.
+
+This sequence lets Codex verify your strategy first, then deliver reviewable technical slices without absorbing the entire roadmap into one uncontrolled task
