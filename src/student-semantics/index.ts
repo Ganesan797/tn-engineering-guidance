@@ -5,3 +5,4 @@ export * from "./content.ts";
 export * from "./entry-catalogue.ts";
 export * from "./personal-guidance.ts";
 export * from "./provenance.ts";
+export * from "./things-worth-checking.ts";

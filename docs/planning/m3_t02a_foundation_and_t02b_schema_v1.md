@@ -6,6 +6,8 @@ M3-T02A = PASS_OWNER_REVIEW at correction commit `0b5490091015eac42832ea09e19ebe
 
 **T02C authorization/status overlay (2026-10-22):** Owner reports T02B PASS_OWNER_REVIEW at `9fcc59acc73af1f49ec08b20d8ad4bae103385ea` and authorizes bounded T02C only. The earlier T02B pending-review/T02C-unauthorized statements above are historical. T02C = IMPLEMENTED_FOR_REVIEW; T02D/T03 and merge remain NOT_AUTHORIZED. Main remains unchanged. T04_STATUS = NOT_RUN; STUDENT_VALIDATED = NO; Q021_STATUS = PARTIAL; GEMINI_STATUS = PAUSED; LIVE_LLM_GATE = PARTIAL.
 
+**T02D authorization/status overlay:** Owner authorizes governed Things Worth Checking structure from `749887c99774b32bd973d437b0339f7ffe939e72`. T02A/T02B = OWNER_REVIEW_PASS; T02C = TECHNICALLY_COMPLETE with OWNER_ACCEPTANCE_RECOMMENDED, not a new recorded acceptance. T02D = IMPLEMENTED_FOR_REVIEW. Earlier T02D-unauthorized statements are historical. T03, merge, hosting and model/student execution remain unauthorized by this task.
+
 M2_ACCEPTED_BASELINE = `a67fc4c9ed24f7061631782cd63c839cf098cfe8`; branch base = `02c5a028e5f1eef79d826f8ff23dea9ea5ffde15`. T04_STATUS = NOT_RUN; STUDENT_VALIDATED = NO; Q021_STATUS = PARTIAL; GEMINI_STATUS = PAUSED; LIVE_LLM_GATE = PARTIAL.
 
 Authority: [M3-T01 proposed presentation contract](m3_personal_guidance_presentation_contract_v1.md), owner T02A acceptance and subsequent T02B implementation authorization, and the [frozen M3 responsibility](implementation_plan_v1.md). The original schema-only state is superseded for this bounded T02B implementation, not later work. This record does not amend frozen product contracts.
@@ -127,6 +129,31 @@ IMPROVEMENT_SOURCE_LOCATION records the exact checked document URL/year, section
 
 T02C compatibility audit: 14 profiles x 8 capability-request combinations compared to accepted T02B commit `9fcc59acc73af1f49ec08b20d8ad4bae103385ea`, allowing only ELG032.source_page 2 -> 3: 112/112 PASS. All other domain result fields and the entire T02B explanation sidecar remain exactly equal. GuidanceResult provenance naturally reflects the corrected page reference; eligibility/cutoff/check decisions do not change.
 
+## T02D governed Things Worth Checking structure
+
+[Things Worth Checking](../../src/student-semantics/things-worth-checking.ts) defines a separate INFORMATION section and items, outside the unchanged deterministic GuidanceResult. The semantic foundation exposes `things_worth_checking` alongside its personal-result fields. No result UI or automatic content selection is added.
+
+Each item contains a stable identity derived from its existing canonical content ID; Tamil/English references to question/answer/next/limit fields; a general usefulness message reference; an approved official next URL already present in that answer's evidence; the existing APPROVED_CONTENT_LEVEL provenance structure and limits; content version, explicit owner-reported review/language status and HUMAN_REVIEW_PENDING for new wrapper wording. It does not contain an eligibility result, personalized applicability, benefit entitlement or predicted admission outcome.
+
+The builder accepts only a trusted governance selection and existing QuestionCollection/source registry. It receives no StudentProfile, marks, eligibility, preferences or candidate list. Selections are review/configuration references, not a new content catalogue. Production defaults to no selection and an honest empty state; later authorized integration must supply the actual reviewed scope/version. Tests demonstrate reuse with the existing Q002 cutoff explanation and its official brochure reference, not a new or automatically personalized answer.
+
+Admission-year scope must match explicitly: semantic integration supplies the known validated journey year, or null. No other year or student intent is inferred. A year-scoped item requires the corresponding explicit official evidence year. Scheme/support and personal-result selection classes are excluded; general explanations cannot be promoted to personal conclusions.
+
+Enforcement excludes PENDING/FIX_REQUIRED content or language reviews, missing review references/membership, mismatched versions, PARTIAL answers, absent Tamil, empty required wording, unavailable/unsafe evidence, missing locations/limits and unapproved or unrelated official directions. Registry membership alone does not establish official direction approval: the trusted content review must explicitly approve it and it must occur in that answer's own evidence. This review metadata must never come from student requests. Historical PENDING_VOLUNTEER_EQUIVALENCE in canonical records is not changed or represented as independent volunteer approval; the explicit owner-review scope remains attributable to its named record/version.
+
+The plain candidate-data projection reapplies these gates and resolves existing bilingual text at use time. It omits internal item/content/source/review identities from visible fields; no raw backend explanation is used. The wrapper explicitly states that general guidance does not confirm eligibility, entitlement or admission. Missing items do not mean no opportunities exist. This is a semantic data projection for later reviewed UI work, not a new screen or language release.
+
+### New wrapper copy — HUMAN_REVIEW_PENDING
+
+These four presentation pairs add no admission facts and do not duplicate canonical guidance. All need owner/human acceptance before release. Canonical wording/evidence remains unchanged.
+
+| Key | English candidate | Tamil candidate |
+| --- | --- | --- |
+| heading | Things worth checking | மேலும் அறிந்து சரிபார்க்க வேண்டியவை |
+| scope | General guidance only. These items do not confirm your eligibility, entitlement or admission. | இவை பொதுவான வழிகாட்டல்கள் மட்டுமே. உங்கள் தகுதி, சலுகை பெறும் உரிமை அல்லது சேர்க்கையை இவை உறுதிப்படுத்தாது. |
+| usefulness | This general explanation may help you understand what to check next. | அடுத்து எதைச் சரிபார்க்கலாம் என்பதைப் புரிந்துகொள்ள இந்தப் பொதுவான விளக்கம் உதவலாம். |
+| empty | No approved general guidance items are available for this scope. This does not mean that no options exist. | இந்த வரம்பிற்குள் காட்டுவதற்கு ஒப்புதல் பெற்ற பொதுவான வழிகாட்டல்கள் இப்போது இல்லை. வாய்ப்புகளே இல்லை என்று இதற்குப் பொருள் அல்ல. |
+
 ## Remaining gap status
 
 | Gap | Current state |
@@ -137,7 +164,7 @@ T02C compatibility audit: 14 profiles x 8 capability-request combinations compar
 | 04 Claim-level provenance | IMPLEMENTED_AND_TESTED at declared precision; T02C owner review pending. |
 | 05 Improvement-source conflict | RESOLVED_AGAINST_OFFICIAL_2026_BROCHURE; evidence-only metadata corrected; T02C owner review pending. |
 | 06 Semantic/language mappings | FOUNDATION_IMPLEMENTED; candidate copy PENDING_HUMAN_REVIEW; finer explanations depend on later T02B. Not fully closed. |
-| 07 Things Worth Checking | NOT_IMPLEMENTED; T02D remains separate. |
+| 07 Things Worth Checking | GOVERNED_STRUCTURE_IMPLEMENTED_AND_TESTED; new wrapper copy HUMAN_REVIEW_PENDING; owner review pending. |
 
 All seven must close before M3 acceptance under owner direction. T02A technical completion is not human wording approval, M3 acceptance, T04 execution or authorization of later units.
 
@@ -145,10 +172,12 @@ All seven must close before M3 acceptance under owner direction. T02A technical 
 
 Focused tests: [personal guidance foundation](../../tests/student-semantics/personal-guidance.test.ts), existing semantic tests and journey tests. Cover null/unknown/false, supported/unsupported contexts, snapshot association, reason-sensitive/fallback/negative categories, bilingual key resolution, no technical-message leakage, result equivalence and retained-state/retry. Existing journey integration verifies current rendering remains operational. Run full offline suite and strict typecheck; no browser redesign, live calls or student session.
 
-Owner next reviews T02C implementation and factual disposition on this branch. No merge or T02D/T03 execution is authorized. Existing candidate language-review limits remain. Frozen documents and accepted M2 baseline remain unchanged; the one evidence CSV row correction is explicitly recorded above.
+Owner next reviews T02D structure and candidate wrapper wording, with T02C acceptance still separately attributable. No merge or T03 execution is authorized. Existing candidate language-review limits remain. Frozen documents and accepted M2 baseline remain unchanged; the prior evidence CSV row correction is explicitly recorded above.
 
 Executed verification: focused semantic/journey tests 29/29 PASS; full offline suite 221/221 PASS; strict typecheck PASS. The initial sandboxed focused run passed 28 tests but its existing HTTP integration test could not connect to loopback (EACCES); the complete focused suite passed when rerun with local-network permission. Full-suite provider tests use offline mocks; no Gemini/model execution occurred. Documentation links and whitespace are checked before commit. No browser redesign or human/student review was performed.
 
 The 29/221 counts above are original T02A history; the correction counts are recorded earlier. T02B focused verification: 46/46 PASS including new [sidecar tests](../../tests/domain/explanation.test.ts), T02A regressions, existing domain rules and journey integration. Full offline suite 232/232 PASS; strict typecheck PASS. Final documentation/whitespace checks are recorded with the T02B commit report. No new technical identifiers are rendered; current reference rendering is also tested for absence of sidecar field names.
 
 T02C verification: focused provenance/T02A/T02B tests 29/29 PASS; full offline suite 240/240 PASS; strict typecheck PASS; 11 local documentation links resolve; whitespace PASS. UI/API, StudentProfile, T02B sidecar code, frozen documents, source registry and main are unchanged. Only the relevant evidence row and emitted source-page metadata changed alongside the new semantic provenance mappings. No model call, new language release, T04, hosting, T02D or T03 execution occurred.
+
+T02D verification: focused Things Worth Checking/provenance/T02A/T02B tests 38/38 PASS; full offline suite 249/249 PASS; strict typecheck PASS. Tests cover review/version/scope/evidence rejection, safe empty state, exact bilingual canonical reuse, no raw-ID projection, revocation at resolution and unchanged deterministic result/sidecar. T02D changes no domain, data, StudentProfile, rule, API, UI or hosting code. Main, frozen contracts and T04/Gemini/Live LLM statuses remain unchanged. Four new wrapper pairs remain HUMAN_REVIEW_PENDING.

@@ -3,6 +3,7 @@ import type { JourneyField, JourneyState } from "../m2/journey.ts";
 import type { StudentLanguage } from "./models.ts";
 import type { ExplanationSidecarV1 } from "../domain/explanation.ts";
 import { personalClaimEvidence, type ClaimEvidence, type PresentationSourceRegistry } from "./provenance.ts";
+import { buildThingsWorthChecking, type GeneralGuidanceOptions, type ThingsWorthChecking } from "./things-worth-checking.ts";
 
 export type JourneyAssessmentScope =
   | { readonly kind: "SUPPORTED" }
@@ -64,11 +65,12 @@ export interface PersonalGuidanceFoundation {
   readonly issues: readonly PersonalGuidanceIssue[];
   readonly checks: readonly PersonalGuidanceIssue[];
   readonly evidence: readonly ClaimEvidence[];
+  readonly things_worth_checking: ThingsWorthChecking;
   readonly primary_action: { readonly kind: PersonalGuidanceAction; readonly message: PersonalGuidanceMessageKey; readonly field?: JourneyField };
   readonly human_review: "PENDING";
 }
 
-export function toPersonalGuidanceFoundation(evaluation: JourneyGuidanceEvaluation, sources?: PresentationSourceRegistry): PersonalGuidanceFoundation {
+export function toPersonalGuidanceFoundation(evaluation: JourneyGuidanceEvaluation, sources?: PresentationSourceRegistry, generalGuidance?: GeneralGuidanceOptions): PersonalGuidanceFoundation {
   const { context, result } = evaluation;
   const issues: PersonalGuidanceIssue[] = [];
   if (context.scope.kind !== "SUPPORTED") {
@@ -110,7 +112,11 @@ export function toPersonalGuidanceFoundation(evaluation: JourneyGuidanceEvaluati
   return {
     evaluation, basis: "basis", primary, cutoff: result?.eligibility.cutoff ?? null,
     cutoff_eligibility_limit: result?.eligibility.cutoff !== null && result?.eligibility.cutoff !== undefined && result.eligibility.outcome === "NEEDS_REVIEW" ? "cutoff_unresolved" : null,
-    issues, checks, evidence: result && sources ? personalClaimEvidence(result, sources) : [], primary_action, human_review: "PENDING",
+    issues, checks, evidence: result && sources ? personalClaimEvidence(result, sources) : [],
+    things_worth_checking: buildThingsWorthChecking(generalGuidance ? {
+      ...generalGuidance,
+      admission_year: typeof context.answers.year === "number" ? context.answers.year : null,
+    } : undefined), primary_action, human_review: "PENDING",
   };
 }
 
