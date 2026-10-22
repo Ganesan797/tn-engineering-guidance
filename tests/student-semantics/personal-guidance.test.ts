@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { createPilotRuntime } from "../../src/application/pilot-runtime.ts";
+import { createGuidance } from "../../src/application/guidance.ts";
+import { demoScenario } from "../../src/demo/scenarios.ts";
 import { answerJourneyQuestion, EMPTY_JOURNEY, evaluateJourneyGuidance, journeyGuidanceResult, nextJourneyQuestion, retryUnknown, type JourneyState } from "../../src/m2/journey.ts";
 import { PERSONAL_GUIDANCE_MESSAGES, resolvePersonalGuidanceMessage, toPersonalGuidanceFoundation } from "../../src/student-semantics/personal-guidance.ts";
 
@@ -80,13 +82,34 @@ test("reason-sensitive mapping uses explicit codes and neutral fallback, never b
   assert.equal(mapped.primary_action.kind, "VERIFY_CONDITION");
 });
 
-test("an emitted negative outcome stays distinct from unresolved result", () => {
-  const evaluated = evaluateJourneyGuidance(complete, runtime);
-  assert.ok(evaluated.result);
-  const mapped = toPersonalGuidanceFoundation({ ...evaluated, result: { ...evaluated.result, eligibility: { ...evaluated.result.eligibility, outcome: "INELIGIBLE" } } });
+test("a real failed-check fixture keeps negative status and uses neutral bilingual action wording", () => {
+  const evaluated = evaluateJourneyGuidance({ ...complete, maths: 10, physics: 10, chemistry: 10 }, runtime);
+  // Existing demo supplies the broader profile facts required for a real negative check.
+  const result = createGuidance(demoScenario("ineligible"), runtime);
+  assert.equal(result.eligibility.outcome, "INELIGIBLE");
+  const failedCheck = result.eligibility.checks.find((check) => check.outcome === "INELIGIBLE");
+  assert.ok(failedCheck);
+  const mapped = toPersonalGuidanceFoundation({ ...evaluated, result });
   assert.equal(mapped.primary.category, "KNOWN_NEGATIVE_RESULT");
   assert.equal(mapped.primary_action.kind, "VERIFY_CONDITION");
-  assert.equal(mapped.cutoff, 165.5);
+  assert.equal(mapped.checks.find((check) => check.trace.rule_id === failedCheck.rule_id)?.category, "KNOWN_NEGATIVE_RESULT");
+  assert.equal(mapped.cutoff, result.eligibility.cutoff);
+  assert.equal(resolvePersonalGuidanceMessage(mapped.primary_action.message, "en"), "Check this condition against the official guidance.");
+  assert.equal(resolvePersonalGuidanceMessage(mapped.primary_action.message, "ta"), "இந்த நிபந்தனையை அதிகாரப்பூர்வ வழிகாட்டலுடன் சரிபாருங்கள்.");
+});
+
+test("earlier unanswered improvement takes priority over later unknown Physics using existing navigation", () => {
+  const state: JourneyState = { ...EMPTY_JOURNEY, year: 2026, stream: "academic", physics: "unknown" };
+  const evaluation = evaluateJourneyGuidance(state, runtime);
+  const mapped = toPersonalGuidanceFoundation(evaluation);
+  assert.equal(nextJourneyQuestion(state), "improvement");
+  assert.equal(evaluation.context.next_question, "improvement");
+  assert.equal(evaluation.context.retry_question, null);
+  assert.equal(evaluation.context.inputs.physics, "UNKNOWN");
+  assert.equal(mapped.primary.category, "MISSING_INFORMATION");
+  assert.deepEqual(mapped.primary_action, { kind: "PROVIDE_EXISTING_INPUT", message: "provide", field: "improvement" });
+  assert.deepEqual(evaluation.result, journeyGuidanceResult(state, runtime));
+  assert.equal(nextJourneyQuestion(retryUnknown(state)), "improvement");
 });
 
 test("Tamil/English resolve identical semantic keys, categories and actions without technical leakage", () => {
@@ -123,4 +146,6 @@ test("retry retains known marks and resumes the existing question", () => {
   assert.equal(retried.physics, null);
   assert.equal(nextJourneyQuestion(retried), "physics");
   assert.equal(evaluateJourneyGuidance(retried, runtime).context.next_question, "physics");
+  assert.equal(evaluateJourneyGuidance(state, runtime).context.retry_question, "physics");
+  assert.equal(evaluateJourneyGuidance(retried, runtime).context.retry_question, null);
 });

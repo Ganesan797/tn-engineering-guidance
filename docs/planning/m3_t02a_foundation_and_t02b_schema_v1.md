@@ -12,7 +12,7 @@ Authority: [M3-T01 proposed presentation contract](m3_personal_guidance_presenta
 
 [evaluateJourneyGuidance](../../src/m2/journey.ts) validates and snapshots the bounded answers, classifies every existing input as UNANSWERED / UNKNOWN / SUPPLIED, and returns context alongside the result produced by the unchanged deterministic guidance service. False and zero remain supplied values; null never becomes false/zero.
 
-The existing year/stream gate is centralized in journeyAssessmentScope, retaining exactly the previous supported-path guard. Scope describes the first year/stream boundary: unanswered, explicitly unknown or known unsupported. It infers no diploma, intent or admission route. next_question comes from the existing nextJourneyQuestion function. Context and result share the same validated answer snapshot; they are not independently reconstructed from result fields.
+The existing year/stream gate is centralized in journeyAssessmentScope, retaining exactly the previous supported-path guard. Scope describes the first year/stream boundary: unanswered, explicitly unknown or known unsupported. It infers no diploma, intent or admission route. next_question comes from the existing nextJourneyQuestion function. retry_question is derived from the existing retryUnknown -> nextJourneyQuestion transition only when no active unanswered question exists. The semantic adapter uses next_question first, then retry_question, without scanning unknown fields. Context and result share the same validated answer snapshot; they are not independently reconstructed from result fields.
 
 [toPersonalGuidanceFoundation](../../src/student-semantics/personal-guidance.ts) returns language-neutral categories, message keys, actions, original evaluation and trace identifiers. Input issues concern the existing active question or explicit unknown; unasked fields are not converted into new requests. The overall eligibility outcome remains authoritative. INELIGIBLE is distinct from uncertainty; a cutoff with NEEDS_REVIEW carries a separate limitation message.
 
@@ -38,12 +38,16 @@ All 16 pairs in PERSONAL_GUIDANCE_MESSAGES are new implementation candidate copy
 | eligible | Based on your answers, the checked eligibility conditions are met. This does not guarantee admission. | உங்கள் பதில்களின் அடிப்படையில், சரிபார்க்கப்பட்ட தகுதி நிபந்தனைகள் நிறைவேறுகின்றன. இது சேர்க்கைக்கு உத்தரவாதம் அல்ல. |
 | cutoff_unresolved | Your cutoff is available, but full eligibility is not confirmed. The cutoff alone does not confirm admission. | உங்கள் கட்-ஆஃப் கிடைத்துள்ளது; முழுத் தகுதி இன்னும் உறுதிப்படுத்தப்படவில்லை. கட்-ஆஃப் மட்டும் சேர்க்கையை உறுதிப்படுத்தாது. |
 | original_marks | The check reports that the required original marks are unavailable. | தேவையான அசல் மதிப்பெண்கள் கிடைக்கவில்லை என்று சரிபார்ப்பு தெரிவிக்கிறது. |
-| normalization | This check has no supported method for comparing normalized marks across school boards. | பள்ளி வாரியங்களுக்கு இடையில் சீராக்கப்பட்ட மதிப்பெண்களை ஒப்பிட இந்தச் சரிபார்ப்பில் ஆதரிக்கப்பட்ட முறை இல்லை. |
+| normalization | This check cannot normalize marks across school boards using the available evidence. | கிடைத்துள்ள ஆதாரங்களைக் கொண்டு, வெவ்வேறு பள்ளி வாரியங்களின் மதிப்பெண்களை ஒரே அளவில் மாற்றிக் கணக்கிட இந்தச் சரிபார்ப்பால் முடியாது. |
 | provide | Answer the existing question when you can. | முடியும்போது தற்போதுள்ள கேள்விக்குப் பதில் அளிக்கலாம். |
 | retry | Retry when you know the answer, or continue learning without guessing. | பதில் தெரிந்ததும் மீண்டும் முயலலாம்; அல்லது ஊகிக்காமல் தகவல்களைத் தொடர்ந்து அறியலாம். |
 | official | Check the official information for your year and study path. | உங்கள் ஆண்டு மற்றும் படிப்பு வழிக்கான அதிகாரப்பூர்வ தகவலைச் சரிபாருங்கள். |
-| verify | Check the unresolved condition against the official guidance. | இன்னும் உறுதியாகாத நிபந்தனையை அதிகாரப்பூர்வ வழிகாட்டலுடன் சரிபாருங்கள். |
+| verify | Check this condition against the official guidance. | இந்த நிபந்தனையை அதிகாரப்பூர்வ வழிகாட்டலுடன் சரிபாருங்கள். |
 | prepare | Continue with the existing preparation guidance. | தற்போதுள்ள தயாரிப்பு வழிகாட்டலைத் தொடரலாம். |
+
+Focused correction pass: the active unanswered question now takes precedence over a later unknown answer. Neutral verify wording applies to negative and unresolved states. Normalization describes the unavailable operation; its Tamil candidate remains HUMAN_REVIEW_PENDING. Tests include the exact improvement-unanswered/Physics-unknown case and a real failed-check result from the existing ineligible demo fixture.
+
+Correction verification: focused semantic/journey tests 30/30 PASS; full offline suite 222/222 PASS; strict typecheck PASS. Domain/application/API schemas, StudentProfile, eligibility logic, renderer and proposed T02B schema remain unchanged in this correction pass. Main remains at `02c5a028e5f1eef79d826f8ff23dea9ea5ffde15`; no merge is authorized.
 
 ## T02B proposed shared schema — documentation only
 

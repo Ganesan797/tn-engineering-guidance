@@ -118,8 +118,13 @@ export function evaluateJourneyGuidance(state: JourneyState, dependencies: Guida
   const inputs = Object.freeze(Object.fromEntries(JOURNEY_FIELDS.map((field) => [
     field, answers[field] === null ? "UNANSWERED" : answers[field] === "unknown" ? "UNKNOWN" : "SUPPLIED",
   ])) as Record<JourneyField, JourneyInputState>);
+  const next_question = nextJourneyQuestion(answers);
+  // Ask the existing active question first. Only expose a retry target if the
+  // unchanged retry/navigation transition actually resumes an unknown answer.
+  const retryCandidate = next_question === null ? nextJourneyQuestion(retryUnknown(answers)) : null;
+  const retry_question = retryCandidate !== null && answers[retryCandidate] === "unknown" ? retryCandidate : null;
   return Object.freeze({
-    context: Object.freeze({ answers, inputs, scope: Object.freeze(journeyAssessmentScope(answers)), next_question: nextJourneyQuestion(answers) }),
+    context: Object.freeze({ answers, inputs, scope: Object.freeze(journeyAssessmentScope(answers)), next_question, retry_question }),
     result: journeyGuidanceResult(answers, dependencies),
   });
 }

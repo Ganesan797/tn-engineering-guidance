@@ -18,6 +18,7 @@ export interface JourneyGuidanceEvaluation {
     readonly inputs: Readonly<Record<JourneyField, JourneyInputState>>;
     readonly scope: JourneyAssessmentScope;
     readonly next_question: JourneyField | null;
+    readonly retry_question: JourneyField | null;
   };
   readonly result: GuidanceResult | null;
 }
@@ -34,11 +35,12 @@ export const PERSONAL_GUIDANCE_MESSAGES = {
   eligible: { en: "Based on your answers, the checked eligibility conditions are met. This does not guarantee admission.", ta: "உங்கள் பதில்களின் அடிப்படையில், சரிபார்க்கப்பட்ட தகுதி நிபந்தனைகள் நிறைவேறுகின்றன. இது சேர்க்கைக்கு உத்தரவாதம் அல்ல." },
   cutoff_unresolved: { en: "Your cutoff is available, but full eligibility is not confirmed. The cutoff alone does not confirm admission.", ta: "உங்கள் கட்-ஆஃப் கிடைத்துள்ளது; முழுத் தகுதி இன்னும் உறுதிப்படுத்தப்படவில்லை. கட்-ஆஃப் மட்டும் சேர்க்கையை உறுதிப்படுத்தாது." },
   original_marks: { en: "The check reports that the required original marks are unavailable.", ta: "தேவையான அசல் மதிப்பெண்கள் கிடைக்கவில்லை என்று சரிபார்ப்பு தெரிவிக்கிறது." },
-  normalization: { en: "This check has no supported method for comparing normalized marks across school boards.", ta: "பள்ளி வாரியங்களுக்கு இடையில் சீராக்கப்பட்ட மதிப்பெண்களை ஒப்பிட இந்தச் சரிபார்ப்பில் ஆதரிக்கப்பட்ட முறை இல்லை." },
+  // HUMAN_REVIEW_PENDING: owner-supplied Tamil candidate; not language-release approval.
+  normalization: { en: "This check cannot normalize marks across school boards using the available evidence.", ta: "கிடைத்துள்ள ஆதாரங்களைக் கொண்டு, வெவ்வேறு பள்ளி வாரியங்களின் மதிப்பெண்களை ஒரே அளவில் மாற்றிக் கணக்கிட இந்தச் சரிபார்ப்பால் முடியாது." },
   provide: { en: "Answer the existing question when you can.", ta: "முடியும்போது தற்போதுள்ள கேள்விக்குப் பதில் அளிக்கலாம்." },
   retry: { en: "Retry when you know the answer, or continue learning without guessing.", ta: "பதில் தெரிந்ததும் மீண்டும் முயலலாம்; அல்லது ஊகிக்காமல் தகவல்களைத் தொடர்ந்து அறியலாம்." },
   official: { en: "Check the official information for your year and study path.", ta: "உங்கள் ஆண்டு மற்றும் படிப்பு வழிக்கான அதிகாரப்பூர்வ தகவலைச் சரிபாருங்கள்." },
-  verify: { en: "Check the unresolved condition against the official guidance.", ta: "இன்னும் உறுதியாகாத நிபந்தனையை அதிகாரப்பூர்வ வழிகாட்டலுடன் சரிபாருங்கள்." },
+  verify: { en: "Check this condition against the official guidance.", ta: "இந்த நிபந்தனையை அதிகாரப்பூர்வ வழிகாட்டலுடன் சரிபாருங்கள்." },
   prepare: { en: "Continue with the existing preparation guidance.", ta: "தற்போதுள்ள தயாரிப்பு வழிகாட்டலைத் தொடரலாம்." },
 } as const satisfies Record<string, Record<StudentLanguage, string>>;
 export type PersonalGuidanceMessageKey = keyof typeof PERSONAL_GUIDANCE_MESSAGES;
@@ -69,9 +71,8 @@ export function toPersonalGuidanceFoundation(evaluation: JourneyGuidanceEvaluati
       : context.scope.kind === "UNKNOWN" ? "UNKNOWN_INFORMATION" : "MISSING_INFORMATION";
     issues.push({ category, message: category === "UNSUPPORTED_SCOPE" ? "unsupported" : category === "UNKNOWN_INFORMATION" ? "unknown" : "missing", trace: { field: context.scope.field } });
   } else {
-    const unknown = (Object.keys(context.inputs) as JourneyField[]).find((field) => context.inputs[field] === "UNKNOWN");
-    if (unknown) issues.push({ category: "UNKNOWN_INFORMATION", message: "unknown", trace: { field: unknown } });
-    else if (context.next_question !== null) issues.push({ category: "MISSING_INFORMATION", message: "missing", trace: { field: context.next_question } });
+    if (context.next_question !== null) issues.push({ category: "MISSING_INFORMATION", message: "missing", trace: { field: context.next_question } });
+    else if (context.retry_question !== null) issues.push({ category: "UNKNOWN_INFORMATION", message: "unknown", trace: { field: context.retry_question } });
   }
   const checks: PersonalGuidanceIssue[] = (result?.eligibility.checks ?? []).map((check) => {
     const trace = { rule_id: check.rule_id, reason_code: check.reason_code };
