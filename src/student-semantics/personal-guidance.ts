@@ -2,6 +2,7 @@ import type { GuidanceResult } from "../application/guidance.ts";
 import type { JourneyField, JourneyState } from "../m2/journey.ts";
 import type { StudentLanguage } from "./models.ts";
 import type { ExplanationSidecarV1 } from "../domain/explanation.ts";
+import { personalClaimEvidence, type ClaimEvidence, type PresentationSourceRegistry } from "./provenance.ts";
 
 export type JourneyAssessmentScope =
   | { readonly kind: "SUPPORTED" }
@@ -62,11 +63,12 @@ export interface PersonalGuidanceFoundation {
   readonly cutoff_eligibility_limit: "cutoff_unresolved" | null;
   readonly issues: readonly PersonalGuidanceIssue[];
   readonly checks: readonly PersonalGuidanceIssue[];
+  readonly evidence: readonly ClaimEvidence[];
   readonly primary_action: { readonly kind: PersonalGuidanceAction; readonly message: PersonalGuidanceMessageKey; readonly field?: JourneyField };
   readonly human_review: "PENDING";
 }
 
-export function toPersonalGuidanceFoundation(evaluation: JourneyGuidanceEvaluation): PersonalGuidanceFoundation {
+export function toPersonalGuidanceFoundation(evaluation: JourneyGuidanceEvaluation, sources?: PresentationSourceRegistry): PersonalGuidanceFoundation {
   const { context, result } = evaluation;
   const issues: PersonalGuidanceIssue[] = [];
   if (context.scope.kind !== "SUPPORTED") {
@@ -108,7 +110,7 @@ export function toPersonalGuidanceFoundation(evaluation: JourneyGuidanceEvaluati
   return {
     evaluation, basis: "basis", primary, cutoff: result?.eligibility.cutoff ?? null,
     cutoff_eligibility_limit: result?.eligibility.cutoff !== null && result?.eligibility.cutoff !== undefined && result.eligibility.outcome === "NEEDS_REVIEW" ? "cutoff_unresolved" : null,
-    issues, checks, primary_action, human_review: "PENDING",
+    issues, checks, evidence: result && sources ? personalClaimEvidence(result, sources) : [], primary_action, human_review: "PENDING",
   };
 }
 

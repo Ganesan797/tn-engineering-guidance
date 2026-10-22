@@ -65,6 +65,8 @@ const RULE_PAGES: Readonly<Record<RuleId, number>> = Object.fromEntries(
     const number = Number(ruleId.slice(3));
     if (number <= 6) return [ruleId, 1];
     if (number === 9 || number === 10) return [ruleId, 9];
+    // Official 2026 brochure: printed p.3, PDF position 4 (verified in M3-T02C).
+    if (number === 32) return [ruleId, 3];
     return [ruleId, 2];
   }),
 ) as Readonly<Record<RuleId, number>>;

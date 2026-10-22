@@ -1,8 +1,10 @@
-# M3-T02A foundation and implemented T02B explanation sidecar
+# M3-T02 foundation, explanation sidecar and evidence closure
 
 Date: 2026-10-12. Review branch: `codex/m3-t02a-context-foundation`.
 
 M3-T02A = PASS_OWNER_REVIEW at correction commit `0b5490091015eac42832ea09e19ebe7ea82fdfc4`. The owner approved both T02B schemas and subsequently authorized their implementation. T02B = IMPLEMENTED_FOR_REVIEW; owner implementation review pending. Merge authorization is NOT_GRANTED. M3 is not accepted; T02C/T02D/T03 remain unauthorized by this task.
+
+**T02C authorization/status overlay (2026-10-22):** Owner reports T02B PASS_OWNER_REVIEW at `9fcc59acc73af1f49ec08b20d8ad4bae103385ea` and authorizes bounded T02C only. The earlier T02B pending-review/T02C-unauthorized statements above are historical. T02C = IMPLEMENTED_FOR_REVIEW; T02D/T03 and merge remain NOT_AUTHORIZED. Main remains unchanged. T04_STATUS = NOT_RUN; STUDENT_VALIDATED = NO; Q021_STATUS = PARTIAL; GEMINI_STATUS = PAUSED; LIVE_LLM_GATE = PARTIAL.
 
 M2_ACCEPTED_BASELINE = `a67fc4c9ed24f7061631782cd63c839cf098cfe8`; branch base = `02c5a028e5f1eef79d826f8ff23dea9ea5ffde15`. T04_STATUS = NOT_RUN; STUDENT_VALIDATED = NO; Q021_STATUS = PARTIAL; GEMINI_STATUS = PAUSED; LIVE_LLM_GATE = PARTIAL.
 
@@ -91,21 +93,49 @@ The union variants include an availability discriminator named `status`. AVAILAB
 | operands[].input_field | Origin of selected operand | Existing normal/original selection branch -> adapter | Required field; null if trusted logic did not establish an origin | Internal field identifier; localized origin wording only. Do not duplicate improvement conditions. |
 | cutoff_trace.result | Already-produced cutoff | Existing cutoffEvaluation.cutoff -> adapter | Required field; number only AVAILABLE; null otherwise | Display permitted; must equal unchanged result.eligibility.cutoff. |
 
-Actual capture points: per-check blocker lists are copied from RuleEvaluation before flattening; community and requested entitlement aggregate additions are recorded where the existing Set additions occur. effectiveMarks records academic origins inside its existing normal/original selection branches, with no second improvement predicate. ELG009 attaches selected operands and its already-computed cutoff at the existing calculation point. The formula, result aggregation and legacy blocker Set/order are unchanged. No source metadata is corrected. Internal RuleEvaluation gains cutoffTrace; no new admission rule or StudentProfile field is added.
+Actual capture points: per-check blocker lists are copied from RuleEvaluation before flattening; community and requested entitlement aggregate additions are recorded where the existing Set additions occur. effectiveMarks records academic origins inside its existing normal/original selection branches, with no second improvement predicate. ELG009 attaches selected operands and its already-computed cutoff at the existing calculation point. The formula, result aggregation and legacy blocker Set/order are unchanged. T02B made no source metadata correction; the later T02C location correction is recorded below. Internal RuleEvaluation gains cutoffTrace; no new admission rule or StudentProfile field is added.
 
-Schema refinements, without semantic deviation: reusable ExplainedEvaluation<T> envelopes at domain/recommendation/application boundaries; a named TNEA_ACADEMIC_CUTOFF identity; AVAILABLE operands typed with numeric values; input_field restricted to existing StudentProfile keys or null. Internal academic_origins is optional for backward compatibility with direct exported rule callers. No parallel eligibility evaluation is introduced. Existing source/page disagreement is not reconciled here.
+Schema refinements, without semantic deviation: reusable ExplainedEvaluation<T> envelopes at domain/recommendation/application boundaries; a named TNEA_ACADEMIC_CUTOFF identity; AVAILABLE operands typed with numeric values; input_field restricted to existing StudentProfile keys or null. Internal academic_origins is optional for backward compatibility with direct exported rule callers. No parallel eligibility evaluation is introduced. T02B left the source/page disagreement untouched; the later T02C disposition is below.
 
 Backward compatibility evidence: an independent read-only audit loaded the exact pre-T02B evaluator from accepted commit `0b5490091015eac42832ea09e19ebe7ea82fdfc4` and compared 14 profiles across all 8 capability-request combinations: 112/112 exact legacy result matches (outcomes, cutoff, check/blocker order, explanations and source fields). Focused spies assert each of the 32 executors runs once per guidance call, including the negative early-return path. Existing API/result fixtures remain unchanged.
+
+## T02C implemented provenance precision
+
+[Provenance adapter](../../src/student-semantics/provenance.ts) resolves the existing source registry without changing its identities. Each ClaimEvidence carries an internal claim_id, precision, trace and supporting references: source identity/title/link, source year when known, recorded/verified location, printed page/PDF position where established, location status and explicit evidence_limit.
+
+- CHECK_LEVEL: maps only an emitted check's own source/year/page. Ordinary pages are RECORDED, not claimed freshly verified. The cutoff claim links to the existing calculation check; an overall eligibility document reference is not promoted to one exact proof paragraph.
+- APPROVED_CONTENT_LEVEL: requires an existing question in the governed collection plus explicit review-scope membership, version and review reference from a trusted owner/content-review caller. It copies only that answer's evidence, preserves its English/Tamil limits and labels support as whole-answer, not sentence-level. Year is supplied per exact evidence URL or remains null; a review date/content year cannot fill every reference year. This scope argument is an internal governance dependency, never accepted from student requests. No new item is approved or selected here.
+- DOCUMENT_LEVEL: lower-precision general source support, with no asserted page or source-validity year derived from retrieval/publication dates. Aggregate personal guidance references use only sources from its actual eligibility checks, not unrelated programme sources. A consistent year explicitly supplied by those checks is retained; otherwise it remains unknown.
+
+Missing registry entries produce no substituted reference. A conflicting improvement reference yields UNRESOLVED with no precise page. The student reference projection removes source IDs and location-status enums, retains human-readable limits and rejects raw SRC/ELG wording rather than displaying it. Candidate evidence limits are implementation metadata for later reviewed UI mapping, not new approved Level-3 screens.
+
+toPersonalGuidanceFoundation accepts an optional source registry and adds internal evidence mappings when a result exists. Existing callers without a registry receive an empty evidence list; current rendering is unchanged. Approved-content/document helpers are available for later authorized consumers only. No Things Worth Checking section, new content, evidence screen, scheme applicability or domain inference is introduced.
+
+## G05 official factual reconciliation — 2026-10-22
+
+Document: **Tamil Nadu Engineering Admissions 2026 — Information Brochure**, Information and Instructions to Candidates; official SRC002 [registered URL](https://static.tneaonline.org/docs/2_Information_Brochure_2026.pdf). The downloaded document identifies 2026 on its cover and contains 38 PDF pages; no separate revision identifier was established. SHA-256: `2242626455a14caf7613494626b4d8bcc903607c3e8dcdf209b5291ba6a2bb88`.
+
+Verification used PDF text extraction and visual inspection of the complete relevant page. The **Improvement marks** paragraph is on **printed page 3, PDF position 4 (one-based; zero-based index 3)**. The cover precedes printed page 1. Relevant exact excerpt:
+
+> improvement marks obtained by the candidates including Other State candidates from 2006 onwards will not be considered.
+
+The paragraph cites G.O. No.184 HE (J2), 09.06.2005, and G.O.(st) No.143 HE (J2), 06.05.2008. This verification resolves the location only; it does not reinterpret admission rules or verify student documents. The conflicting page-2 reference is incorrect for this passage, not merely an alternative printed/PDF notation.
+
+Evidence-only corrections: ELG032's emitted source_page changes 2 -> 3 in RULE_PAGES; the corresponding [eligibility reference CSV](../../data/reference/tnea_2026_eligibility.csv) row changes source_page, verification date and location note only. Rule value/predicates/outcomes/formula are unchanged. Existing journey/admission material already pointing to printed page 3 is retained. Source registry identities/URLs and frozen architecture documents remain unchanged; historical page-2 statements there are not silently normalized. No other rule's location is claimed reverified.
+
+IMPROVEMENT_SOURCE_LOCATION records the exact checked document URL/year, section, printed/PDF positions, verification date and checksum. VERIFIED requires matching source identity, URL, year and emitted page. A stale page 2, missing page or conflicting URL cannot inherit this verification.
+
+T02C compatibility audit: 14 profiles x 8 capability-request combinations compared to accepted T02B commit `9fcc59acc73af1f49ec08b20d8ad4bae103385ea`, allowing only ELG032.source_page 2 -> 3: 112/112 PASS. All other domain result fields and the entire T02B explanation sidecar remain exactly equal. GuidanceResult provenance naturally reflects the corrected page reference; eligibility/cutoff/check decisions do not change.
 
 ## Remaining gap status
 
 | Gap | Current state |
 | --- | --- |
 | 01 Context ambiguity | PASS_OWNER_REVIEW for T02A correction; regressions retained. |
-| 02 Blocker association | IMPLEMENTED_AND_TESTED; check-owned and aggregate blockers separated; T02B owner review pending. |
-| 03 Calculation trace | IMPLEMENTED_AND_TESTED; selected operands/origins and existing cutoff transported; T02B owner review pending. |
-| 04 Claim-level provenance | NOT_IMPLEMENTED; T02C remains separate. |
-| 05 Improvement-source conflict | UNRESOLVED; no external reconciliation or reference correction performed. |
+| 02 Blocker association | PASS_OWNER_REVIEW for accepted T02B; behavior preserved. |
+| 03 Calculation trace | PASS_OWNER_REVIEW for accepted T02B; behavior preserved. |
+| 04 Claim-level provenance | IMPLEMENTED_AND_TESTED at declared precision; T02C owner review pending. |
+| 05 Improvement-source conflict | RESOLVED_AGAINST_OFFICIAL_2026_BROCHURE; evidence-only metadata corrected; T02C owner review pending. |
 | 06 Semantic/language mappings | FOUNDATION_IMPLEMENTED; candidate copy PENDING_HUMAN_REVIEW; finer explanations depend on later T02B. Not fully closed. |
 | 07 Things Worth Checking | NOT_IMPLEMENTED; T02D remains separate. |
 
@@ -115,8 +145,10 @@ All seven must close before M3 acceptance under owner direction. T02A technical 
 
 Focused tests: [personal guidance foundation](../../tests/student-semantics/personal-guidance.test.ts), existing semantic tests and journey tests. Cover null/unknown/false, supported/unsupported contexts, snapshot association, reason-sensitive/fallback/negative categories, bilingual key resolution, no technical-message leakage, result equivalence and retained-state/retry. Existing journey integration verifies current rendering remains operational. Run full offline suite and strict typecheck; no browser redesign, live calls or student session.
 
-Owner next reviews T02B implementation and verification evidence on this branch. No merge or T02C/T02D/T03 execution is authorized. Existing candidate language-review limits remain. Frozen docs, data and accepted M2 baseline remain unchanged.
+Owner next reviews T02C implementation and factual disposition on this branch. No merge or T02D/T03 execution is authorized. Existing candidate language-review limits remain. Frozen documents and accepted M2 baseline remain unchanged; the one evidence CSV row correction is explicitly recorded above.
 
 Executed verification: focused semantic/journey tests 29/29 PASS; full offline suite 221/221 PASS; strict typecheck PASS. The initial sandboxed focused run passed 28 tests but its existing HTTP integration test could not connect to loopback (EACCES); the complete focused suite passed when rerun with local-network permission. Full-suite provider tests use offline mocks; no Gemini/model execution occurred. Documentation links and whitespace are checked before commit. No browser redesign or human/student review was performed.
 
 The 29/221 counts above are original T02A history; the correction counts are recorded earlier. T02B focused verification: 46/46 PASS including new [sidecar tests](../../tests/domain/explanation.test.ts), T02A regressions, existing domain rules and journey integration. Full offline suite 232/232 PASS; strict typecheck PASS. Final documentation/whitespace checks are recorded with the T02B commit report. No new technical identifiers are rendered; current reference rendering is also tested for absence of sidecar field names.
+
+T02C verification: focused provenance/T02A/T02B tests 29/29 PASS; full offline suite 240/240 PASS; strict typecheck PASS; 11 local documentation links resolve; whitespace PASS. UI/API, StudentProfile, T02B sidecar code, frozen documents, source registry and main are unchanged. Only the relevant evidence row and emitted source-page metadata changed alongside the new semantic provenance mappings. No model call, new language release, T04, hosting, T02D or T03 execution occurred.
