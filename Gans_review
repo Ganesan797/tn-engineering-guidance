@@ -1,0 +1,117 @@
+review October 22
+Yes. Technical verdict: the trusted deterministic foundation is strong, but the student-facing architecture is only partially ready to achieve the mission. I would prioritize M3 and safety work before adding more LLM capability.
+
+## Highest-priority findings
+
+Domain ranges are not fully validated
+
+The API accepts any finite mark, including negative values or marks above 100. It could calculate an invalid cutoff below 0 or above 200. Similar checks are missing for years, rounds, service years, and negative seat counts.
+
+Relevant files:
+
+tn-engineering-guidance-main/tn-engineering-guidance-main/src/api/guidance-api.ts
+tn-engineering-guidance-main/tn-engineering-guidance-main/src/domain/validation.ts
+tn-engineering-guidance-main/tn-engineering-guidance-main/src/domain/admission-seat-fact.ts
+
+Add domain-level bounded validators and tests. UI constraints alone are insufficient.
+
+Two competing student experiences exist
+
+The Tamil M2 journey follows the mission: progressive questions, unknown answers and guidance before marks.
+
+The older reference page exposes the backend contract through a very large form containing rule-related fields, snapshots, quotas, rounds and raw enums. It is useful as engineering tooling but conflicts with the mission if treated as the real product.
+
+Good path: tn-engineering-guidance-main/tn-engineering-guidance-main/src/ui/m2-journey.ts
+Technical form: tn-engineering-guidance-main/tn-engineering-guidance-main/src/ui/student-guidance.ts
+
+Make /journey the canonical product surface. Clearly isolate the reference form under development tooling.
+
+Tamil presentation is fragmented
+
+The general semantic presentation layer supports eligibility results only in English. Tamil result wording is separately hard-coded into the M2 renderer.
+
+tn-engineering-guidance-main/tn-engineering-guidance-main/src/student-semantics/catalogue.ts
+tn-engineering-guidance-main/tn-engineering-guidance-main/src/student-semantics/guidance-view.ts
+
+M3 should introduce one bilingual presentation model containing:
+
+verified result
+understandable uncertainty
+information still needed
+things worth checking
+next action
+optional explanation
+resolved source names and links
+
+Both Tamil and English should render from this model rather than separate implementations.
+
+Programme output can be misleading
+
+When eligibility is NEEDS_REVIEW, the engine still returns all 18 mapped programmes. The UI calls them “Ordered programme choices,” even though eligibility is unresolved and no vacancy evidence exists.
+
+tn-engineering-guidance-main/tn-engineering-guidance-main/src/recommendation/foundation.ts
+tn-engineering-guidance-main/tn-engineering-guidance-main/src/ui/student-guidance.ts
+
+Either suppress this list until sufficient evidence exists or label it as “programmes covered by this pilot,” not recommendations or choices.
+
+Evidence ingestion is too brittle for yearly updates
+
+Current concerns include:
+
+Rules and source pages are hard-coded in TypeScript.
+Reviewed Markdown is parsed at runtime using string splitting and regular expressions.
+CSV parsing uses simple comma splitting and cannot safely handle quoted commas.
+The year is globally frozen to 2026.
+
+Create a versioned, schema-validated guidance bundle generated during review:
+
+approved source documents
+        ↓
+reviewed structured JSON
+        ↓
+schema + provenance + freshness validation
+        ↓
+immutable yearly bundle
+        ↓
+deterministic engine and presentation
+
+This will make 2027 updates safer and auditable.
+
+Pilot hosting requires security work
+
+The local server correctly avoids persistence and keeps marks out of URLs, but a hosted pilot should add:
+
+request-size limits to every POST route
+Cache-Control: no-store
+security headers and CSP
+HTTPS and controlled participant access
+rate limiting
+log redaction
+explicit session expiry
+privacy and consent handling
+
+See tn-engineering-guidance-main/tn-engineering-guidance-main/scripts/mvp-server.mjs.
+
+## What is already technically strong
+
+Unknown and false values remain distinct.
+Eligibility aggregation is conservative.
+Cutoff and eligibility remain separate.
+Every rule result carries provenance.
+Unmapped programmes are excluded rather than guessed.
+Missing vacancy is never interpreted as zero vacancy.
+The LLM/RAG experiment is isolated from admission authority.
+Tests cover deterministic behavior, provenance, unknown values and bilingual question routing.
+
+## Recommended implementation order
+
+Add domain range validation and adversarial tests.
+Make the progressive journey the only student-facing personal-guidance path.
+Implement the unified bilingual M3 result model.
+Correct programme-list semantics for incomplete eligibility.
+Replace runtime Markdown/naive CSV parsing with reviewed structured artifacts.
+Add accessibility, mobile E2E and privacy/security checks.
+Conduct real-student T04 validation.
+Revisit LLM integration only after these foundations are accepted.
+
+I attempted to run the test suite, but the runner produced no output and stalled in this workspace, so I interrupted it. The repository’s recorded baseline reports 211 passing tests, but I did not independently reconfirm that result during this review. 
