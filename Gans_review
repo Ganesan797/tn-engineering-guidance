@@ -1,117 +1,213 @@
-review October 22
-Yes. Technical verdict: the trusted deterministic foundation is strong, but the student-facing architecture is only partially ready to achieve the mission. I would prioritize M3 and safety work before adding more LLM capability.
+review October 22:
 
-## Highest-priority findings
 
-Domain ranges are not fully validated
+## Mission-manager review
 
-The API accepts any finite mark, including negative values or marks above 100. It could calculate an invalid cutoff below 0 or above 200. Similar checks are missing for years, rounds, service years, and negative seat counts.
+Strengths:
 
-Relevant files:
+Deterministic, source-backed eligibility and cutoff logic.
+Good uncertainty handling: unknown is not converted into false.
+Tamil-first, awareness-first journey exists.
+Provenance and rule-level explanations are preserved.
+AI cannot override admission-critical results.
 
-tn-engineering-guidance-main/tn-engineering-guidance-main/src/api/guidance-api.ts
-tn-engineering-guidance-main/tn-engineering-guidance-main/src/domain/validation.ts
-tn-engineering-guidance-main/tn-engineering-guidance-main/src/domain/admission-seat-fact.ts
+Main gaps:
 
-Add domain-level bounded validators and tests. UI constraints alone are insufficient.
+Results are still more technical than student-friendly.
+No real-student validation.
+No authoritative vacancy/current operational data.
+Development setup is not fully reproducible: no lockfile, stale README status.
+Deployment, privacy and security are not pilot-ready.
 
-Two competing student experiences exist
+## Recommended direction
 
-The Tamil M2 journey follows the mission: progressive questions, unknown answers and guidance before marks.
+ Priority    Work                                 Completion condition
+━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1           Repository hygiene                   Lockfile, Node version file, CI, current README, repeatable tests
+──────────  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────
+ 2           M3 personal-guidance presentation    Student sees simple result, uncertainty, explanation, evidence and next action
+──────────  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────
+ 3           Scenario validation                  Zero-knowledge, partial-input and direct-entry journeys pass automated tests
+──────────  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────
+ 4           Student observation                  2–3 students complete the journey in roughly 5–10 minutes without major misunderstanding
+──────────  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────
+ 5           Evidence expansion                   Add only authoritative current-year process, document and support information
+──────────  ───────────────────────────────────  ──────────────────────────────────────────────────────────────────────────────────────────
+ 6           Private pilot deployment             HTTPS, restricted access, no indexing, minimal logs and expiry plan
 
-The older reference page exposes the backend contract through a very large form containing rule-related fields, snapshots, quotas, rounds and raw enums. It is useful as engineering tooling but conflicts with the mission if treated as the real product.
+## M3 technical design
 
-Good path: tn-engineering-guidance-main/tn-engineering-guidance-main/src/ui/m2-journey.ts
-Technical form: tn-engineering-guidance-main/tn-engineering-guidance-main/src/ui/student-guidance.ts
+Keep the deterministic engine unchanged. Introduce one student-facing view model:
 
-Make /journey the canonical product surface. Clearly isolate the reference form under development tooling.
+PersonalGuidanceView
+├── simple_summary
+├── verified_results
+├── missing_or_uncertain_information
+├── things_worth_checking
+├── explanation
+├── evidence
+└── next_action
 
-Tamil presentation is fragmented
+The UI should render this contract instead of exposing raw GuidanceResult, rule IDs or backend field names.
 
-The general semantic presentation layer supports eligibility results only in English. Tamil result wording is separately hard-coded into the M2 renderer.
+Every result page should answer:
 
-tn-engineering-guidance-main/tn-engineering-guidance-main/src/student-semantics/catalogue.ts
-tn-engineering-guidance-main/tn-engineering-guidance-main/src/student-semantics/guidance-view.ts
+What does this mean for me?
+What is still unknown?
+Why did I get this result?
+What should I do next?
 
-M3 should introduce one bilingual presentation model containing:
+## Architecture guidance
 
-verified result
-understandable uncertainty
-information still needed
-things worth checking
-next action
-optional explanation
-resolved source names and links
+Keep the current TypeScript modular monolith.
 
-Both Tamil and English should render from this model rather than separate implementations.
+Do not yet:
 
-Programme output can be misleading
+Rewrite it in Next.js.
+Add Supabase or user accounts.
+Build production RAG.
+Add admission prediction.
+Expand beyond the five-college pilot.
+Build WhatsApp integration.
 
-When eligibility is NEEDS_REVIEW, the engine still returns all 18 mapped programmes. The UI calls them “Ordered programme choices,” even though eligibility is unresolved and no vacancy evidence exists.
+Add infrastructure only when validated student needs require it.
 
-tn-engineering-guidance-main/tn-engineering-guidance-main/src/recommendation/foundation.ts
-tn-engineering-guidance-main/tn-engineering-guidance-main/src/ui/student-guidance.ts
+## Essential engineering improvements
 
-Either suppress this list until sufficient evidence exists or label it as “programmes covered by this pilot,” not recommendations or choices.
+Commit a package lockfile and define the exact Node version.
+Add CI for tests, type checking and data validation.
+Replace or strengthen the simple comma-splitting CSV parser before importing complex data.
+Add request-size limits to every POST endpoint.
+Add security headers and HTML-escaping tests.
+Never log marks, certificates or profiles.
+Create mobile browser tests for the three primary journeys.
+Resolve the README/project-status contradiction.
 
-Evidence ingestion is too brittle for yearly updates
+## Data direction
 
-Current concerns include:
+Maintain two clearly separated stores:
 
-Rules and source pages are hard-coded in TypeScript.
-Reviewed Markdown is parsed at runtime using string splitting and regular expressions.
-CSV parsing uses simple comma splitting and cannot safely handle quoted commas.
-The year is globally frozen to 2026.
+Stable guidance content: awareness, branch explanations and basic TNEA concepts.
+Time-sensitive facts: dates, documents, vacancies, seats and counselling updates.
 
-Create a versioned, schema-validated guidance bundle generated during review:
+Every time-sensitive fact should have source, page/section, applicable year, verification date and expiry/review date. Missing facts must remain explicitly unknown.
 
-approved source documents
-        ↓
-reviewed structured JSON
-        ↓
-schema + provenance + freshness validation
-        ↓
-immutable yearly bundle
-        ↓
-deterministic engine and presentation
+## Role split
 
-This will make 2027 updates safer and auditable.
+The engineer should own:
 
-Pilot hosting requires security work
+Product decisions.
+Source approval.
+Tamil quality review.
+Security/deployment approval.
+Final student acceptance.
 
-The local server correctly avoids persistence and keeps marks out of URLs, but a hosted pilot should add:
+Codex should handle:
 
-request-size limits to every POST route
-Cache-Control: no-store
-security headers and CSP
-HTTPS and controlled participant access
-rate limiting
-log redaction
-explicit session expiry
-privacy and consent handling
+Implementation drafts.
+Tests and scenario fixtures.
+Refactoring and validation scripts.
+Documentation consistency.
+Data-quality checks.
+Review checklists.
 
-See tn-engineering-guidance-main/tn-engineering-guidance-main/scripts/mvp-server.mjs.
+The immediate next action should be the bounded M3 presentation work described in docs/planning/implementation_plan_v1.md, followed immediately by a small student-observation round. That is the shortest path from “technically correct prototype” to “mission-serving product.”
 
-## What is already technically strong
 
-Unknown and false values remain distinct.
-Eligibility aggregation is conservative.
-Cutoff and eligibility remain separate.
-Every rule result carries provenance.
-Unmapped programmes are excluded rather than guessed.
-Missing vacancy is never interpreted as zero vacancy.
-The LLM/RAG experiment is isolated from admission authority.
-Tests cover deterministic behavior, provenance, unknown values and bilingual question routing.
+//
 
-## Recommended implementation order
+Give Codex one bounded instruction at a time:
 
-Add domain range validation and adversarial tests.
-Make the progressive journey the only student-facing personal-guidance path.
-Implement the unified bilingual M3 result model.
-Correct programme-list semantics for incomplete eligibility.
-Replace runtime Markdown/naive CSV parsing with reviewed structured artifacts.
-Add accessibility, mobile E2E and privacy/security checks.
-Conduct real-student T04 validation.
-Revisit LLM integration only after these foundations are accepted.
+“Inspect the current journey and propose a chat data contract. Do not edit.”
+“Implement /chat using the existing M2 state and deterministic services. Do not add RAG.”
+“Add chat tests without changing domain rules.”
+“Review this screenshot from a zero-knowledge student’s perspective.”
+“Implement only the three approved usability fixes.”
 
-I attempted to run the test suite, but the runner produced no output and stalled in this workspace, so I interrupted it. The repository’s recorded baseline reports 211 passing tests, but I did not independently reconfirm that result during this review. 
+
+# Updated milestone sequence
+
+ Milestone                            Student outcome                                       Main technical work                                                                       Completion gate
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ E0 — Engineering baseline            Reliable product builds                               Node version, lockfile, CI, tests, /health                                                Clean install and tests pass
+───────────────────────────────────  ────────────────────────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────  ───────────────────────────────────────────────────────
+ M3-A — Chat UI                       Tamil-first conversational journey                    /chat, sessions, quick replies, unknown/restart/language controls                         Core journeys work on mobile
+───────────────────────────────────  ────────────────────────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────  ───────────────────────────────────────────────────────
+ M3-B — Personal guidance             Understandable cutoff, uncertainty and next action    Result card, Why, Evidence, Things Worth Checking                                         No backend terminology or misleading results
+───────────────────────────────────  ────────────────────────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────  ───────────────────────────────────────────────────────
+ H1 — Temporary validation hosting    Remote students can access the test safely            Managed Node host, HTTPS, private access, 0.0.0.0, PORT, noindex, minimal logs, expiry    Owner verifies exact version on phone
+───────────────────────────────────  ────────────────────────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────  ───────────────────────────────────────────────────────
+ V1 — First remote validation         Product is tested without engineer assistance         2–3 students, anonymous observation, three journeys                                       Critical comprehension problems identified and fixed
+───────────────────────────────────  ────────────────────────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────  ───────────────────────────────────────────────────────
+ M4 — Controlled RAG                  Students can explore grounded questions               Approved retrieval, routing, citations, evidence status                                   No unsupported or uncited factual answers
+───────────────────────────────────  ────────────────────────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────  ───────────────────────────────────────────────────────
+ LLM-G — Optional LLM gate            Natural-language conversation where useful            Model adapter, structured output, validation, budget and fallback                         Demonstrated improvement over deterministic retrieval
+───────────────────────────────────  ────────────────────────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────  ───────────────────────────────────────────────────────
+ M5 — Decision support                Student-controlled counselling choices                Preferences, evidence-backed ordering, unknown vacancy                                    Requires sufficient authoritative data
+───────────────────────────────────  ────────────────────────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────  ───────────────────────────────────────────────────────
+ M6 — Integration                     One coherent guidance experience                      Shared state, UI/RAG integration, end-to-end tests                                        All accepted journeys pass
+───────────────────────────────────  ────────────────────────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────  ───────────────────────────────────────────────────────
+ H2 — Pilot hosting readiness         Stable, safer remote pilot environment                Hardened deployment, security, monitoring, rollback and privacy checks                    Hosting-readiness review passes
+───────────────────────────────────  ────────────────────────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────  ───────────────────────────────────────────────────────
+ M7 — Private student pilot           Integrated product validated remotely                 3–5 students, findings and release decision                                               Explicit pilot-readiness decision
+
+## H1 — Temporary validation hosting
+
+This is intentionally small and disposable.
+
+Technical work:
+
+Change the server to use:
+
+server.listen(Number(process.env.PORT ?? 3000), "0.0.0.0");
+
+Add /health.
+Add a production start command.
+Commit a dependency lockfile.
+Deploy to a managed Node/container host.
+Enable HTTPS.
+Restrict access to invited testers.
+Add robots.txt and X-Robots-Tag: noindex.
+Disable request-body and profile logging.
+Add security headers and body-size limits.
+Record exact code/data version.
+Set a shutdown date.
+
+Restrictions:
+
+No names, phone numbers or certificates.
+Prefer synthetic marks during the first test.
+No LLM keys required.
+No public indexing.
+No permanent database.
+Stop the endpoint after observation.
+
+## H2 — Hardened pilot hosting
+
+After UI, RAG and optional LLM integration:
+
+Rate limiting.
+Secret management.
+Structured privacy-safe monitoring.
+Error correlation without student data.
+Deployment rollback.
+Versioned data snapshot.
+Access revocation.
+Backup/shutdown procedure.
+LLM request and cost controls if enabled.
+Mobile and security verification.
+
+## Revised execution order
+
+E0
+ → M3-A Chat UI
+ → M3-B Personal guidance
+ → H1 Temporary private hosting
+ → V1 First remote student validation
+ → M4 Controlled RAG
+ → LLM-G Optional LLM
+ → M6 Integration
+ → H2 Hardened hosting
+ → M7 Private pilot
+
+This avoids waiting until the end to learn whether students can use the product remotely, while keeping the first hosted deployment small, private and inexpensive.
