@@ -1,5 +1,6 @@
 import type { GuidanceDependencies } from "../application/guidance.ts";
 import type { AwarenessPack } from "../student-semantics/awareness.ts";
+import { renderM3PersonalResult, type M3PresentationOptions } from "./m3-personal-result.ts";
 import { contentMarkup } from "./student-entry.ts";
 import {
   EMPTY_JOURNEY, evaluateJourneyGuidance, nextJourneyQuestion,
@@ -8,7 +9,7 @@ import {
 
 export type JourneyPage = "awareness" | "study" | "compare" | "route" | "prepare" | "check";
 
-const STYLE = `*{box-sizing:border-box}body{margin:0;background:#f7f8fa;color:#172033;font:17px/1.65 "Nirmala UI","Noto Sans Tamil","Latha",system-ui,sans-serif}main{max-width:720px;margin:auto;padding:16px}h1{font-size:1.55rem;line-height:1.35}h2{font-size:1.2rem;line-height:1.4}p{margin:.7rem 0 1rem}.card{background:#fff;border:1px solid #d8dde6;border-radius:12px;padding:1.1rem;margin:1rem 0}.actions{display:flex;flex-wrap:wrap;gap:.65rem;margin:1.3rem 0}a,button{color:#174ea6}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #174ea6;outline-offset:3px}.action,button{display:inline-block;border:1px solid #174ea6;border-radius:8px;padding:.75rem 1rem;background:#fff;font:inherit;text-decoration:none;cursor:pointer}.primary{background:#174ea6;color:#fff}.notice{font-size:.9rem;color:#46536a}.review{border-left:4px solid #a96800;padding:.5rem .8rem;background:#fff6e7}input[type=number]{display:block;width:100%;max-width:14rem;font:inherit;padding:.7rem;margin:.5rem 0 1rem}fieldset{border:0;padding:0;margin:0}label{display:block;margin:.85rem 0}label:has(input[type=radio]){padding:.7rem;border:1px solid #d8dde6;border-radius:8px}input[type=radio]{margin-right:.7rem}details{margin:1rem 0}summary{cursor:pointer}ul,ol{padding-left:1.4rem}li{margin:.5rem 0}@media(min-width:700px){main{padding:28px}}`;
+const STYLE = `*{box-sizing:border-box}body{margin:0;background:#f7f8fa;color:#172033;font:17px/1.65 "Nirmala UI","Noto Sans Tamil","Latha",system-ui,sans-serif}main{max-width:720px;margin:auto;padding:16px}h1{font-size:1.55rem;line-height:1.35}h2{font-size:1.2rem;line-height:1.4}p{margin:.7rem 0 1rem}.card{background:#fff;border:1px solid #d8dde6;border-radius:12px;padding:1.1rem;margin:1rem 0}.actions{display:flex;flex-wrap:wrap;gap:.65rem;margin:1.3rem 0}a,button{color:#174ea6}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #174ea6;outline-offset:3px}.action,button{display:inline-block;border:1px solid #174ea6;border-radius:8px;padding:.75rem 1rem;background:#fff;font:inherit;text-decoration:none;cursor:pointer}.primary{background:#174ea6;color:#fff}.notice{font-size:.9rem;color:#46536a}.review{border-left:4px solid #a96800;padding:.5rem .8rem;background:#fff6e7}input[type=number]{display:block;width:100%;max-width:14rem;font:inherit;padding:.7rem;margin:.5rem 0 1rem}fieldset{border:0;padding:0;margin:0}label{display:block;margin:.85rem 0}label:has(input[type=radio]){padding:.7rem;border:1px solid #d8dde6;border-radius:8px}input[type=radio]{margin-right:.7rem}details{margin:1rem 0}summary{cursor:pointer;padding:.6rem 0;min-height:44px}.m3-result{overflow-wrap:anywhere}.m3-result h3{font-size:1.05rem}.cutoff-score{font-size:1.8rem;margin:.4rem 0}.evidence-reference{border-left:3px solid #d8dde6;padding-left:.8rem}.m3-result button{max-width:100%}ul,ol{padding-left:1.4rem}li{margin:.5rem 0}@media(min-width:700px){main{padding:28px}}`;
 
 function escape(value: string): string {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
@@ -66,6 +67,7 @@ export function renderM2Journey(
   dependencies: GuidanceDependencies,
   state: JourneyState = EMPTY_JOURNEY,
   error?: string,
+  presentation: M3PresentationOptions = {},
 ): string {
   const item = (id: string) => {
     const found = pack.items.find((candidate) => candidate.id === id);
@@ -117,21 +119,7 @@ export function renderM2Journey(
       body = `<h1>விருப்பத் தனிப்பட்ட சரிபார்ப்பு</h1><p>ஒரே நேரத்தில் தேவையான ஒரு கேள்வி மட்டும். தெரியாததைத் தெரியாது என்றே வைத்துக்கொள்ளலாம்.</p>${context ? `<p class="notice">${context}</p>` : ""}${error ? `<p role="alert">${escape(error)}</p>` : ""}<form class="card" action="/journey" method="post"><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><p>${originalMarks ? "2006-க்குப் பிறகு பெற்ற மேம்பாட்டு மதிப்பெண் பயன்படுத்தப்படாது; சான்றிலுள்ள அசல் மதிப்பெண்ணை அளிக்கவும்." : spec.why}</p>${options}<div class="actions"><button class="primary" type="submit">தொடர்க</button><button type="submit" name="unknown" value="1" formnovalidate>எனக்குத் தெரியாது</button></div></form>${journeyNav("route", "வழி விளக்கத்திற்குத் திரும்ப", state)}`;
     } else {
       const evaluation = evaluateJourneyGuidance(state, dependencies);
-      const result = evaluation.result;
-      const unknown = state.year === "unknown" || state.stream === "unknown" || state.improvement === "unknown" || state.improvement_year === "unknown" || [state.maths, state.physics, state.chemistry].includes("unknown");
-      const cutoff = result?.eligibility.cutoff;
-      const score = cutoff === null || cutoff === undefined
-        ? `<p><strong>${unknown ? "தகவல் இன்னும் தெரியவில்லை" : "இந்தப் பாதையில் கணக்கிட முடியவில்லை"}.</strong> கட்-ஆஃப் மதிப்பெண்ணை ஊகிக்க முடியாது.</p>`
-        : `<p><strong>சரிபார்க்கப்பட்ட 2026 கல்விப் பிரிவு கட்-ஆஃப்: ${cutoff} / 200.</strong></p>`;
-      const status = result
-        ? `<p data-status="${result.eligibility.outcome}">முழு தகுதி நிலை: <strong>${result.eligibility.outcome === "NEEDS_REVIEW" ? "மேலும் சரிபார்ப்பு தேவை" : result.eligibility.outcome === "ELIGIBLE" ? "விதிகளின்படி தகுதி உள்ளது" : "விதிகளின்படி தகுதி இல்லை"}</strong>. இது கல்லூரி இடம் அல்லது தரவரிசை உறுதி அல்ல.</p>`
-        : `<p data-status="UNKNOWN">இந்த சேர்க்கை ஆண்டு அல்லது படிப்பு வழிக்கான தனிப்பட்ட முடிவு இங்கு <strong>இன்னும் தெரியவில்லை</strong>.</p>`;
-      const next = state.year !== 2026 ? "உங்கள் ஆண்டுக்கான அதிகாரப்பூர்வ சேர்க்கை அறிவிப்பைப் பாருங்கள். 2026 விதியை அடுத்த ஆண்டுக்கு மாற்றிப் பயன்படுத்தாதீர்கள்."
-        : state.stream !== "academic" ? "உங்கள் படிப்பு வழிக்கான அதிகாரப்பூர்வ தகுதி விதியைச் சரிபார்க்கவும். டிப்ளமோ என்றால் நேரடி இரண்டாம் ஆண்டு வழியைப் பாருங்கள்."
-        : cutoff === null || cutoff === undefined ? "தெரியாத விவரத்தைப் பதிவு செய்து, மதிப்பெண் சான்றைப் பார்த்துப் பிறகு தொடருங்கள்; தேவைப்பட்டால் அதிகாரப்பூர்வ TNEA உதவி மையத்தில் கேளுங்கள்."
-        : "மற்ற தகுதி விவரங்களை அதிகாரப்பூர்வ விதிகளுடன் சரிபார்க்கவும்; வெளியிடப்படும் தரவரிசை மற்றும் இடங்களை தனியாகப் பார்க்கவும்.";
-      const retry = unknown ? `<form action="/journey" method="post"><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><button name="retry" value="1" type="submit">தெரியாத பதிலை இப்போது அளிக்க</button></form>` : "";
-      body = `<h1>உங்கள் அடுத்த தெளிவான படி</h1><section class="card">${score}${status}<p><strong>அடுத்து:</strong> ${next}</p>${result ? `<details><summary>ஏன்? ஆதாரம்</summary><p>இந்த 2026 கணக்கீடும் சரிபார்ப்பு நிலையும் திட்டத்தின் சரிபார்க்கப்பட்ட விதிகளிலிருந்து வருகின்றன. ஆதாரம்: <a href="${escape(official.url)}">${escape(official.name)}</a>, பக்கம் 9 (கட்-ஆஃப்), பக்கம் 3 (மேம்பாட்டுத் தேர்வு).</p></details>` : ""}</section>${retry}<nav class="actions">${journeyNav("prepare", "தயாரிப்பு வழிகாட்டலைப் பார்க்க", state)}${link("/journey?step=check", "புதிய சரிபார்ப்பைத் தொடங்க")}</nav>`;
+      body = renderM3PersonalResult(evaluation, presentation);
     }
   }
   const preserveCheck = page === "check" || Object.values(state).some((value) => value !== null);

@@ -141,7 +141,8 @@ test("lateral entry is informational and cutoff explanation preserves the result
   const result = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
   assert.match(result, /id=Q002" target="_blank"/);
   assert.match(result, /165.5 \/ 200/);
-  assert.match(result, /NEEDS_REVIEW/);
+  assert.match(result, /முழுத் தகுதி இன்னும் உறுதிப்படுத்தப்படவில்லை/);
+  assert.doesNotMatch(result, /NEEDS_REVIEW/);
   assert.match(renderM2Journey("route", pack, reviewed, awarenessReviewed, runtime()), /id=Q060/);
   for (const page of ["awareness", "study", "compare", "route", "prepare"] as const) {
     const withInputs = renderM2Journey(page, pack, reviewed, awarenessReviewed, runtime(), state);
@@ -227,7 +228,8 @@ test("progressive answers survive the form round trip and the engine supplies th
   assert.equal(result?.eligibility.outcome, "NEEDS_REVIEW");
   const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
   assert.match(html, /165.5 \/ 200/);
-  assert.match(html, /NEEDS_REVIEW/);
+  assert.match(html, /முழுத் தகுதி இன்னும் உறுதிப்படுத்தப்படவில்லை/);
+  assert.doesNotMatch(html, /NEEDS_REVIEW/);
   assert.doesNotMatch(html, /இடம் உறுதி/);
 });
 
@@ -240,7 +242,7 @@ test("unknown is null for the engine, never false or zero, and known answers rem
   assert.equal(result?.eligibility.cutoff, null);
   assert.equal(result?.eligibility.outcome, "NEEDS_REVIEW");
   assert.ok(result?.eligibility.blocking_missing_fields.includes("improvement_marks_used"));
-  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state), /தகவல் இன்னும் தெரியவில்லை/);
+  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state), /இந்தப் பதில் இன்னும் தெரியவில்லை/);
   const resumed = retryUnknown(parseJourneyState(JSON.stringify(state)));
   assert.equal(resumed.year, 2026);
   assert.equal(resumed.stream, "academic");
@@ -254,7 +256,7 @@ test("unknown is null for the engine, never false or zero, and known answers rem
 test("year and route guards reject unsupported personal calculations", () => {
   const otherYear = answerJourneyQuestion(EMPTY_JOURNEY, "other");
   assert.equal(journeyGuidanceResult(otherYear, runtime()), null);
-  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), otherYear), /2026 விதியை அடுத்த ஆண்டுக்கு/);
+  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), otherYear), /நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழியை/);
   const otherStream = answerJourneyQuestion(answerJourneyQuestion(EMPTY_JOURNEY, "2026"), "other");
   assert.equal(journeyGuidanceResult(otherStream, runtime()), null);
   assert.throws(() => answerJourneyQuestion(EMPTY_JOURNEY, "2027"));

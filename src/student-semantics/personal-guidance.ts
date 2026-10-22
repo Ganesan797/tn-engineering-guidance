@@ -70,6 +70,11 @@ export interface PersonalGuidanceFoundation {
   readonly human_review: "PENDING";
 }
 
+// Selection and visible projection must use this same validated journey scope.
+export function journeyGeneralGuidanceOptions(evaluation: JourneyGuidanceEvaluation, options?: GeneralGuidanceOptions): GeneralGuidanceOptions | undefined {
+  return options ? { ...options, admission_year: typeof evaluation.context.answers.year === "number" ? evaluation.context.answers.year : null } : undefined;
+}
+
 export function toPersonalGuidanceFoundation(evaluation: JourneyGuidanceEvaluation, sources?: PresentationSourceRegistry, generalGuidance?: GeneralGuidanceOptions): PersonalGuidanceFoundation {
   const { context, result } = evaluation;
   const issues: PersonalGuidanceIssue[] = [];
@@ -113,10 +118,7 @@ export function toPersonalGuidanceFoundation(evaluation: JourneyGuidanceEvaluati
     evaluation, basis: "basis", primary, cutoff: result?.eligibility.cutoff ?? null,
     cutoff_eligibility_limit: result?.eligibility.cutoff !== null && result?.eligibility.cutoff !== undefined && result.eligibility.outcome === "NEEDS_REVIEW" ? "cutoff_unresolved" : null,
     issues, checks, evidence: result && sources ? personalClaimEvidence(result, sources) : [],
-    things_worth_checking: buildThingsWorthChecking(generalGuidance ? {
-      ...generalGuidance,
-      admission_year: typeof context.answers.year === "number" ? context.answers.year : null,
-    } : undefined), primary_action, human_review: "PENDING",
+    things_worth_checking: buildThingsWorthChecking(journeyGeneralGuidanceOptions(evaluation, generalGuidance)), primary_action, human_review: "PENDING",
   };
 }
 

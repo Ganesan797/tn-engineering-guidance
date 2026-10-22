@@ -1,0 +1,146 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+import { createPilotRuntime } from "../../src/application/pilot-runtime.ts";
+import { createGuidanceWithExplanation } from "../../src/application/guidance.ts";
+import { demoScenario } from "../../src/demo/scenarios.ts";
+import { EMPTY_JOURNEY, evaluateJourneyGuidance, journeyGuidanceResult } from "../../src/m2/journey.ts";
+import { parsePresentationSources } from "../../src/student-semantics/provenance.ts";
+import { GENERAL_GUIDANCE_MESSAGES, type GeneralGuidanceOptions } from "../../src/student-semantics/things-worth-checking.ts";
+import { loadQuestionCollection } from "../../src/ui/explore-questions.ts";
+import { M3_COPY, renderM3PersonalResult } from "../../src/ui/m3-personal-result.ts";
+
+const load = (name: string) => readFileSync(new URL(`../../${name}`, import.meta.url), "utf8");
+const sources = parsePresentationSources(load("data/sources.csv"));
+const runtime = createPilotRuntime({ sources_csv: load("data/sources.csv"), colleges_csv: load("data/colleges.csv"), programmes_csv: load("data/programmes.csv") });
+const state = { ...EMPTY_JOURNEY, year: 2026 as const, stream: "academic" as const, improvement: false, maths: 86, physics: 78, chemistry: 81 };
+const evaluated = evaluateJourneyGuidance(state, runtime);
+const render = (value = evaluated) => renderM3PersonalResult(value, { sources });
+const visible = (html: string) => html.replace(/<[^>]*>/g, " ");
+const collection = loadQuestionCollection(
+  load("docs/content/awareness/student_pov_awareness_batch_a01_a07_v2.md"),
+  load("docs/content/admission/student_pov_admission_batch_int05_int08_v1.md"),
+  load("docs/content/admission/student_pov_admission_coverage_int05_int08_v1.md"),
+  load("docs/content/awareness/student_pov_awareness_evidence_v2.md"),
+  load("docs/content/admission/student_pov_admission_evidence_int05_int08_v1.md"), load("data/m2_question_answers_v1.json"));
+// Test-only reviewed selection; production defaults to no selection.
+const generalGuidance: GeneralGuidanceOptions = {
+  collection, sources, content_version: "accepted-test-scope", admission_year: 2026,
+  selections: [{ content_id: "Q002", scope: "GENERAL_EXPLANATION", admission_year: 2026, official_source_id: "SRC002", review: {
+    content_ids: ["Q002"], version: "accepted-test-scope", review_reference: "owner-review-fixture", status: "PASS_OWNER_REPORTED",
+    languages: { ta: "PASS_OWNER_REPORTED", en: "PASS_OWNER_REPORTED" }, official_direction_approved: true,
+    source_years: { [sources.get("SRC002")!.url]: 2026 },
+  } }],
+};
+
+test("165.5 plus uncertainty has separate cutoff, eligibility, explanations and evidence", () => {
+  const html = render();
+  assert.match(html, /165.5 \/ 200/);
+  assert.match(html, /முழுத் தகுதி இன்னும் உறுதிப்படுத்தப்படவில்லை/);
+  for (const key of ["personal", "eligibility", "why", "evidence", "limit"] as const) assert.ok(html.includes(M3_COPY[key][0]));
+  assert.ok(html.indexOf(M3_COPY.personal[0]) < html.indexOf(GENERAL_GUIDANCE_MESSAGES.heading.ta));
+  assert.match(html, /data-language-review="pending"/);
+  assert.match(html, /English — wording for review/);
+  assert.match(html, /Based on your answers, this condition is met/);
+  assert.equal(evaluated.result?.eligibility.outcome, "NEEDS_REVIEW");
+});
+
+test("unknown, unanswered and unsupported contexts have supported distinct actions", () => {
+  const unknown = render(evaluateJourneyGuidance({ ...state, physics: "unknown" }, runtime));
+  assert.match(unknown, /name="retry" value="1"/);
+  assert.match(unknown, /இந்தப் பதில் இன்னும் தெரியவில்லை/);
+  const unanswered = render(evaluateJourneyGuidance({ ...state, improvement: null, physics: "unknown" }, runtime));
+  assert.match(unanswered, /name="navigate" value="check"/);
+  assert.doesNotMatch(unanswered, /name="retry"/);
+  const unsupported = render(evaluateJourneyGuidance({ ...state, year: "other" }, runtime));
+  assert.match(unsupported, /நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழியை/);
+  assert.match(unsupported, /href="https:\/\/www.tneaonline.org"/);
+  assert.doesNotMatch(unsupported, /165.5|டிப்ளமோ/);
+});
+
+test("real failed checks remain negative with neutral official-check action", () => {
+  const actual = createGuidanceWithExplanation(demoScenario("ineligible"), runtime);
+  const html = render({ ...evaluated, ...actual });
+  assert.equal(actual.result.eligibility.outcome, "INELIGIBLE");
+  assert.match(html, /a checked condition is not met/);
+  assert.match(html, /Check this condition against the official guidance/);
+  assert.match(html, /இந்த நிபந்தனையை அதிகாரப்பூர்வ வழிகாட்டலுடன்/);
+});
+
+test("improvement operands and original origins come from the trusted sidecar", () => {
+  const evaluation = evaluateJourneyGuidance({ ...state, improvement: true, improvement_year: 2006 }, runtime);
+  const html = render(evaluation);
+  assert.match(html, /165.5 \/ 200/);
+  assert.match(html, /From the original mark entry before improvement/);
+  assert.match(html, /Mathematics: <strong>86/);
+  assert.match(html, /Physics: <strong>78/);
+  assert.match(html, /Printed page: 3 · PDF page position: 4/);
+});
+
+test("incomplete and originless traces stay explicit without fabricated numbers", () => {
+  const html = render(evaluateJourneyGuidance({ ...state, physics: "unknown" }, runtime));
+  assert.match(html, /The calculation is incomplete/);
+  assert.match(html, /Physics: <strong>Unknown/);
+  assert.doesNotMatch(html, /165.5/);
+  const trace = evaluated.explanation!.cutoff_trace;
+  assert.equal(trace.status, "AVAILABLE");
+  if (trace.status !== "AVAILABLE") return;
+  const unknownOrigin = render({ ...evaluated, explanation: { ...evaluated.explanation!, cutoff_trace: { ...trace, operands: [ { ...trace.operands[0], input_field: null }, trace.operands[1], trace.operands[2] ] } } });
+  assert.match(unknownOrigin, /The mark-entry origin is unknown/);
+  // Display copies the already-produced result, rather than recalculating operands.
+  const sentinel = render({ ...evaluated, explanation: { ...evaluated.explanation!, cutoff_trace: { ...trace, result: 123.25 } } });
+  assert.match(sentinel, /123.25 \/ 200/);
+});
+
+test("missing and scoped provenance never becomes exact verified evidence", () => {
+  assert.match(renderM3PersonalResult(evaluated), /A source for this claim is unavailable/);
+  const html = render();
+  assert.match(html, /not separate evidence for every explanation sentence/);
+  assert.match(html, /no single paragraph confirms full eligibility/);
+  assert.match(html, /has not been freshly verified/);
+  const result = structuredClone(evaluated.result!);
+  result.eligibility.checks = result.eligibility.checks.map(check => check.rule_id === "ELG032" ? { ...check, source_page: 2 } : check);
+  const stale = render({ ...evaluated, result });
+  assert.match(stale, /The precise page location is unresolved/);
+  assert.doesNotMatch(stale, /PDF page position: 4/);
+});
+
+test("general selection and projection share journey scope, never caller-supplied year", () => {
+  const good = renderM3PersonalResult(evaluated, { sources, generalGuidance });
+  assert.ok(good.includes(collection.answers.get("Q002")!.en.question));
+  const outside = evaluateJourneyGuidance({ ...state, year: "other" }, runtime);
+  const html = renderM3PersonalResult(outside, { sources, generalGuidance });
+  assert.ok(!html.includes(collection.answers.get("Q002")!.en.question));
+  assert.ok(html.includes(GENERAL_GUIDANCE_MESSAGES.empty.en));
+  const unknown = evaluateJourneyGuidance({ ...state, year: "unknown" }, runtime);
+  assert.ok(renderM3PersonalResult(unknown, { sources, generalGuidance }).includes(GENERAL_GUIDANCE_MESSAGES.empty.en));
+});
+
+test("empty section retains preparation action and rejects pending content", () => {
+  const html = render();
+  const general = html.slice(html.indexOf('class="card general-guidance"'));
+  assert.ok(general.includes(GENERAL_GUIDANCE_MESSAGES.empty.ta));
+  assert.match(general, /name="navigate" value="prepare"/);
+  const pending = { ...generalGuidance, selections: generalGuidance.selections.map(selection => ({ ...selection, review: { ...selection.review, status: "PENDING" as const } })) };
+  assert.ok(renderM3PersonalResult(evaluated, { sources, generalGuidance: pending }).includes(GENERAL_GUIDANCE_MESSAGES.empty.ta));
+});
+
+test("all expanded visible content is escaped and excludes raw technical identifiers", () => {
+  for (const value of [evaluated, evaluateJourneyGuidance({ ...state, physics: "unknown" }, runtime)]) {
+    const html = renderM3PersonalResult(value, { sources, generalGuidance });
+    assert.doesNotMatch(visible(html), /ELG\d+|SRC\d+|Q\d{3}|NEEDS_REVIEW|UNKNOWN_OR_UNPUBLISHED|blocking_missing_fields|maths_mark|cutoff_trace|PASS_OWNER_REPORTED/);
+  }
+  const malicious = new Map(sources);
+  malicious.set("SRC002", { ...sources.get("SRC002")!, title: '<script>alert("x")</script>' });
+  assert.doesNotMatch(renderM3PersonalResult(evaluated, { sources: malicious }), /<script>/);
+});
+
+test("rendering preserves existing results, sidecar and navigation context", () => {
+  for (const current of [state, { ...state, physics: "unknown" as const }, { ...state, improvement: true, improvement_year: 2006 }, { ...state, year: "other" as const }]) {
+    const evaluation = evaluateJourneyGuidance(current, runtime);
+    const before = JSON.stringify(evaluation);
+    render(evaluation);
+    assert.equal(JSON.stringify(evaluation), before);
+    assert.deepEqual(evaluation.result, journeyGuidanceResult(current, runtime));
+  }
+});
