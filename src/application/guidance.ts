@@ -5,13 +5,14 @@ import type {
   PilotDataRegistry,
 } from "../ingestion/index.ts";
 import {
-  buildDeterministicCandidates,
+  buildDeterministicCandidatesWithExplanation,
   orderCandidateChoices,
   type ChoiceOrderingPreferences,
   type EvidenceReference,
   type OrderedChoice,
   type RecommendationRequest,
 } from "../recommendation/index.ts";
+import type { ExplainedEvaluation } from "../domain/explanation.ts";
 
 export type GuidanceCounsellingContext = Pick<
   RecommendationRequest,
@@ -70,7 +71,14 @@ export function createGuidance(
   request: GuidanceRequest,
   dependencies: GuidanceDependencies,
 ): GuidanceResult {
-  const recommendation = buildDeterministicCandidates(
+  return createGuidanceWithExplanation(request, dependencies).result;
+}
+
+export function createGuidanceWithExplanation(
+  request: GuidanceRequest,
+  dependencies: GuidanceDependencies,
+): ExplainedEvaluation<GuidanceResult> {
+  const evaluation = buildDeterministicCandidatesWithExplanation(
     {
       profile: request.profile,
       eligibility_request: request.eligibility_request,
@@ -79,19 +87,23 @@ export function createGuidance(
     dependencies.registry,
     dependencies.snapshots,
   );
+  const recommendation = evaluation.result;
   const orderedChoices = orderCandidateChoices(
     recommendation.candidates,
     request.preferences,
   );
 
   return {
-    eligibility: recommendation.eligibility,
-    selected_snapshot_id: recommendation.selected_snapshot_id,
-    selected_snapshot_stage: recommendation.selected_snapshot_stage,
-    ordered_choices: orderedChoices,
-    provenance: collectProvenance(
-      recommendation.eligibility,
-      orderedChoices,
-    ),
+    explanation: evaluation.explanation,
+    result: {
+      eligibility: recommendation.eligibility,
+      selected_snapshot_id: recommendation.selected_snapshot_id,
+      selected_snapshot_stage: recommendation.selected_snapshot_stage,
+      ordered_choices: orderedChoices,
+      provenance: collectProvenance(
+        recommendation.eligibility,
+        orderedChoices,
+      ),
+    },
   };
 }

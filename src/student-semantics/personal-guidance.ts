@@ -1,6 +1,7 @@
 import type { GuidanceResult } from "../application/guidance.ts";
 import type { JourneyField, JourneyState } from "../m2/journey.ts";
 import type { StudentLanguage } from "./models.ts";
+import type { ExplanationSidecarV1 } from "../domain/explanation.ts";
 
 export type JourneyAssessmentScope =
   | { readonly kind: "SUPPORTED" }
@@ -21,6 +22,8 @@ export interface JourneyGuidanceEvaluation {
     readonly retry_question: JourneyField | null;
   };
   readonly result: GuidanceResult | null;
+  // Internal transport for later explanation mapping; never rendered directly.
+  readonly explanation: ExplanationSidecarV1 | null;
 }
 
 // Candidate copy only. Every bilingual pair requires owner/human review before UI release.

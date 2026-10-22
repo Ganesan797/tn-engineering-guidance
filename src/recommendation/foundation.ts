@@ -7,6 +7,7 @@ import type {
 } from "../domain/index.ts";
 import {
   evaluateEligibility,
+  evaluateEligibilityWithExplanation,
   type EligibilityEvaluationRequest,
 } from "../domain/rules.ts";
 import type {
@@ -16,6 +17,7 @@ import type {
   ProgrammeRecord,
 } from "../ingestion/index.ts";
 import { IngestionValidationError } from "../ingestion/errors.ts";
+import type { ExplainedEvaluation } from "../domain/explanation.ts";
 
 export type VacancyEvidenceState = "PUBLISHED" | "UNKNOWN_OR_UNPUBLISHED";
 
@@ -138,10 +140,19 @@ export function buildDeterministicCandidates(
   registry: PilotDataRegistry,
   snapshotStore: AdmissionSeatFactSnapshotStore,
 ): RecommendationResult {
-  const eligibility = evaluateEligibility(
+  return buildDeterministicCandidatesWithExplanation(request, registry, snapshotStore).result;
+}
+
+export function buildDeterministicCandidatesWithExplanation(
+  request: RecommendationRequest,
+  registry: PilotDataRegistry,
+  snapshotStore: AdmissionSeatFactSnapshotStore,
+): ExplainedEvaluation<RecommendationResult> {
+  const evaluation = evaluateEligibilityWithExplanation(
     request.profile,
     request.eligibility_request,
   );
+  const eligibility = evaluation.result;
   const snapshot = selectedSnapshot(
     snapshotStore,
     request.snapshot_id,
@@ -150,10 +161,13 @@ export function buildDeterministicCandidates(
 
   if (eligibility.outcome === "INELIGIBLE") {
     return {
-      eligibility,
-      selected_snapshot_id: snapshot.snapshot_id,
-      selected_snapshot_stage: snapshot.stage,
-      candidates: [],
+      explanation: evaluation.explanation,
+      result: {
+        eligibility,
+        selected_snapshot_id: snapshot.snapshot_id,
+        selected_snapshot_stage: snapshot.stage,
+        candidates: [],
+      },
     };
   }
 
@@ -209,9 +223,12 @@ export function buildDeterministicCandidates(
   });
 
   return {
-    eligibility,
-    selected_snapshot_id: snapshot.snapshot_id,
-    selected_snapshot_stage: snapshot.stage,
-    candidates,
+    explanation: evaluation.explanation,
+    result: {
+      eligibility,
+      selected_snapshot_id: snapshot.snapshot_id,
+      selected_snapshot_stage: snapshot.stage,
+      candidates,
+    },
   };
 }

@@ -1,4 +1,5 @@
-import { createGuidance, type GuidanceDependencies, type GuidanceResult } from "../application/guidance.ts";
+import { createGuidanceWithExplanation, type GuidanceDependencies, type GuidanceResult } from "../application/guidance.ts";
+import type { ExplainedEvaluation } from "../domain/explanation.ts";
 import { blankReferenceRequest } from "../ui/reference-request.ts";
 import type { JourneyAssessmentScope, JourneyGuidanceEvaluation, JourneyInputState } from "../student-semantics/personal-guidance.ts";
 
@@ -87,6 +88,13 @@ export function journeyGuidanceResult(
   state: JourneyState,
   dependencies: GuidanceDependencies,
 ): GuidanceResult | null {
+  return explainedJourneyResult(state, dependencies)?.result ?? null;
+}
+
+function explainedJourneyResult(
+  state: JourneyState,
+  dependencies: GuidanceDependencies,
+): ExplainedEvaluation<GuidanceResult> | null {
   if (journeyAssessmentScope(state).kind !== "SUPPORTED") return null;
   const snapshot = dependencies.snapshots.snapshots()[0];
   const blank = blankReferenceRequest({ snapshot_id: snapshot.snapshot_id, snapshot_stage: snapshot.stage });
@@ -101,7 +109,7 @@ export function journeyGuidanceResult(
       ? { original_maths_mark: entered[0], original_physics_mark: entered[1], original_chemistry_mark: entered[2] }
       : { maths_mark: entered[0], physics_mark: entered[1], chemistry_mark: entered[2] }),
   };
-  return createGuidance({ ...blank, profile }, dependencies);
+  return createGuidanceWithExplanation({ ...blank, profile }, dependencies);
 }
 
 // The existing supported-path guard lives here once. This describes scope, not eligibility.
@@ -123,8 +131,10 @@ export function evaluateJourneyGuidance(state: JourneyState, dependencies: Guida
   // unchanged retry/navigation transition actually resumes an unknown answer.
   const retryCandidate = next_question === null ? nextJourneyQuestion(retryUnknown(answers)) : null;
   const retry_question = retryCandidate !== null && answers[retryCandidate] === "unknown" ? retryCandidate : null;
+  const evaluation = explainedJourneyResult(answers, dependencies);
   return Object.freeze({
     context: Object.freeze({ answers, inputs, scope: Object.freeze(journeyAssessmentScope(answers)), next_question, retry_question }),
-    result: journeyGuidanceResult(answers, dependencies),
+    result: evaluation?.result ?? null,
+    explanation: evaluation?.explanation ?? null,
   });
 }

@@ -1,12 +1,12 @@
-# M3-T02A foundation and proposed T02B explanation sidecar
+# M3-T02A foundation and implemented T02B explanation sidecar
 
 Date: 2026-10-12. Review branch: `codex/m3-t02a-context-foundation`.
 
-M3-T02A implementation is authorized only for context and semantic mapping foundation. T02B is authorized for schema design only: NOT_IMPLEMENTED; NOT_COMPLETE. Merge authorization is NOT_GRANTED. M3 is not accepted; later units remain unauthorized.
+M3-T02A = PASS_OWNER_REVIEW at correction commit `0b5490091015eac42832ea09e19ebe7ea82fdfc4`. The owner approved both T02B schemas and subsequently authorized their implementation. T02B = IMPLEMENTED_FOR_REVIEW; owner implementation review pending. Merge authorization is NOT_GRANTED. M3 is not accepted; T02C/T02D/T03 remain unauthorized by this task.
 
 M2_ACCEPTED_BASELINE = `a67fc4c9ed24f7061631782cd63c839cf098cfe8`; branch base = `02c5a028e5f1eef79d826f8ff23dea9ea5ffde15`. T04_STATUS = NOT_RUN; STUDENT_VALIDATED = NO; Q021_STATUS = PARTIAL; GEMINI_STATUS = PAUSED; LIVE_LLM_GATE = PARTIAL.
 
-Authority: [M3-T01 proposed presentation contract](m3_personal_guidance_presentation_contract_v1.md), owner authorization for T02A and design-only T02B, and the [frozen M3 responsibility](implementation_plan_v1.md). This record does not amend frozen product contracts.
+Authority: [M3-T01 proposed presentation contract](m3_personal_guidance_presentation_contract_v1.md), owner T02A acceptance and subsequent T02B implementation authorization, and the [frozen M3 responsibility](implementation_plan_v1.md). The original schema-only state is superseded for this bounded T02B implementation, not later work. This record does not amend frozen product contracts.
 
 ## Implemented T02A boundary
 
@@ -49,13 +49,13 @@ Focused correction pass: the active unanswered question now takes precedence ove
 
 Correction verification: focused semantic/journey tests 30/30 PASS; full offline suite 222/222 PASS; strict typecheck PASS. Domain/application/API schemas, StudentProfile, eligibility logic, renderer and proposed T02B schema remain unchanged in this correction pass. Main remains at `02c5a028e5f1eef79d826f8ff23dea9ea5ffde15`; no merge is authorized.
 
-## T02B proposed shared schema — documentation only
+## T02B implemented shared schema
 
-No sidecar types, fields, producers or transport have been added to domain/application/API output schemas. The design below is NOT_IMPLEMENTED. It must be owner-reviewed and separately authorized before T02B execution.
+The approved sidecar is now implemented in [domain explanation types](../../src/domain/explanation.ts) and [the trusted evaluator](../../src/domain/rules.ts). Existing EligibilityResult, GuidanceResult, StudentProfile and JSON API response fields remain unchanged. New opt-in envelope functions carry structured explanation data; no final Level-2 copy, claim-level provenance or new UI is implemented.
 
-Prefer a separate evaluation envelope `{ result: GuidanceResult, explanation: ExplanationSidecarV1 }` for a new opt-in entry point. Existing consumers keep receiving exactly their current result; existing evaluateEligibility/createGuidance/API signatures remain available. A future shared internal evaluator would produce result and sidecar once, with legacy wrappers returning result only. No second evaluation or presentation recomputation. Final API exposure is a separate explicit decision; the current UI integration carries presentation context only.
+The envelope is `ExplainedEvaluation<T> = { result: T, explanation: ExplanationSidecarV1 }`. Entry points are evaluateEligibilityWithExplanation, buildDeterministicCandidatesWithExplanation and createGuidanceWithExplanation. Legacy wrappers return `.result` only. Both routes share one evaluation; sidecar allocation also occurs internally for legacy calls, but exposure is opt-in. Recommendation and guidance orchestration transport the sidecar without interpreting it. JSON API exposure is unchanged. The journey evaluation carries `explanation` alongside its associated context/result, or null when no personal evaluation exists. The semantic foundation retains that envelope internally for later authorized mapping; the renderer still consumes only its existing result.
 
-Conceptual schema (not executable types):
+Implemented field structure (TypeScript types are linked above):
 
 ```text
 ExplanationSidecarV1
@@ -64,14 +64,14 @@ ExplanationSidecarV1
   aggregate_blockers: [{ field, origin: AGGREGATION }]
   cutoff_trace:
     NOT_REQUESTED { calculation_id: null, operands: [], result: null }
-    UNAVAILABLE { calculation_id, operands: Operand[], result: null }
-    AVAILABLE { calculation_id, operands: [maths, physics, chemistry], result: number }
+    UNAVAILABLE { calculation_id: TNEA_ACADEMIC_CUTOFF, operands: Operand[], result: null }
+    AVAILABLE { calculation_id: TNEA_ACADEMIC_CUTOFF, operands: [maths, physics, chemistry], result: number }
 Operand { subject, value: number|null, input_field: string|null }
 ```
 
-The union variants include an availability discriminator named `status`. AVAILABLE means complete operands and an already-produced cutoff; it does not mean complete eligibility. UNAVAILABLE permits an empty operand list when no applicable calculation was evaluated, or selected partial operands where existing trusted logic knows them. NOT_REQUESTED differs from requested-but-unavailable. No domain unknown-input distinction is fabricated: null values cannot identify explicit student unknown without T02A context.
+The union variants include an availability discriminator named `status`. AVAILABLE requires numeric operand values and an already-produced cutoff; it does not mean complete eligibility. UNAVAILABLE permits an empty operand list for non-academic scope, or selected partial operands where existing trusted logic knows them. NOT_REQUESTED differs from requested-but-unavailable. No domain unknown-input distinction is fabricated: null values cannot identify explicit student unknown without T02A context. Unknown improvement selection produces null operands/origins; a selected but missing original mark preserves its known origin with null value. Existing direct rule consumers may omit origin metadata, in which case origins remain null rather than being reconstructed.
 
-| Field | Meaning and source of truth | Proposed producer -> consumer | Required/null behavior | Visibility and compatibility |
+| Field | Meaning and source of truth | Producer -> consumer | Required/null behavior | Visibility and compatibility |
 | --- | --- | --- | --- | --- |
 | envelope.result | Existing authoritative GuidanceResult | Same guidance evaluation -> current/new consumer | Required, unchanged fields | Existing semantics; no change to legacy response shape. |
 | envelope.explanation | Companion detail for that same evaluation | Opt-in shared evaluation -> presentation adapter | Required only in new envelope; absent for legacy calls | Internal; no timestamp/token needed because envelope associates the pair. |
@@ -91,17 +91,19 @@ The union variants include an availability discriminator named `status`. AVAILAB
 | operands[].input_field | Origin of selected operand | Existing normal/original selection branch -> adapter | Required field; null if trusted logic did not establish an origin | Internal field identifier; localized origin wording only. Do not duplicate improvement conditions. |
 | cutoff_trace.result | Already-produced cutoff | Existing cutoffEvaluation.cutoff -> adapter | Required field; number only AVAILABLE; null otherwise | Display permitted; must equal unchanged result.eligibility.cutoff. |
 
-Proposed capture points: preserve per-check blockers before flattening in evaluateEligibility; record existing aggregate additions where made; attach selected operand origins within the existing effectiveMarks selection branch; capture ELG009's existing cutoff when computed. Unavailable trace states must not create values. Guidance orchestration transports these details without interpretation. This exposes known explanation information only; no rule, aggregation, formula, source or StudentProfile changes are authorized now.
+Actual capture points: per-check blocker lists are copied from RuleEvaluation before flattening; community and requested entitlement aggregate additions are recorded where the existing Set additions occur. effectiveMarks records academic origins inside its existing normal/original selection branches, with no second improvement predicate. ELG009 attaches selected operands and its already-computed cutoff at the existing calculation point. The formula, result aggregation and legacy blocker Set/order are unchanged. No source metadata is corrected. Internal RuleEvaluation gains cutoffTrace; no new admission rule or StudentProfile field is added.
 
-Backward compatibility assessment: additive envelope is feasible without adding fields to legacy result consumers. Future implementation must prove deep equality of every pre-existing output field, legacy API behavior, unchanged global blocker ordering and one evaluation per request. Sidecar allocation/validation itself remains future work. Exact transport and validation signatures require schema review before implementation.
+Schema refinements, without semantic deviation: reusable ExplainedEvaluation<T> envelopes at domain/recommendation/application boundaries; a named TNEA_ACADEMIC_CUTOFF identity; AVAILABLE operands typed with numeric values; input_field restricted to existing StudentProfile keys or null. Internal academic_origins is optional for backward compatibility with direct exported rule callers. No parallel eligibility evaluation is introduced. Existing source/page disagreement is not reconciled here.
+
+Backward compatibility evidence: an independent read-only audit loaded the exact pre-T02B evaluator from accepted commit `0b5490091015eac42832ea09e19ebe7ea82fdfc4` and compared 14 profiles across all 8 capability-request combinations: 112/112 exact legacy result matches (outcomes, cutoff, check/blocker order, explanations and source fields). Focused spies assert each of the 32 executors runs once per guidance call, including the negative early-return path. Existing API/result fixtures remain unchanged.
 
 ## Remaining gap status
 
 | Gap | Current state |
 | --- | --- |
-| 01 Context ambiguity | IMPLEMENTED_FOR_BOUNDED_JOURNEY; focused validation required; owner review pending. |
-| 02 Blocker association | SCHEMA_PROPOSED_ONLY; no output extension implemented. |
-| 03 Calculation trace | SCHEMA_PROPOSED_ONLY; no trace or formula implementation added. |
+| 01 Context ambiguity | PASS_OWNER_REVIEW for T02A correction; regressions retained. |
+| 02 Blocker association | IMPLEMENTED_AND_TESTED; check-owned and aggregate blockers separated; T02B owner review pending. |
+| 03 Calculation trace | IMPLEMENTED_AND_TESTED; selected operands/origins and existing cutoff transported; T02B owner review pending. |
 | 04 Claim-level provenance | NOT_IMPLEMENTED; T02C remains separate. |
 | 05 Improvement-source conflict | UNRESOLVED; no external reconciliation or reference correction performed. |
 | 06 Semantic/language mappings | FOUNDATION_IMPLEMENTED; candidate copy PENDING_HUMAN_REVIEW; finer explanations depend on later T02B. Not fully closed. |
@@ -113,6 +115,8 @@ All seven must close before M3 acceptance under owner direction. T02A technical 
 
 Focused tests: [personal guidance foundation](../../tests/student-semantics/personal-guidance.test.ts), existing semantic tests and journey tests. Cover null/unknown/false, supported/unsupported contexts, snapshot association, reason-sensitive/fallback/negative categories, bilingual key resolution, no technical-message leakage, result equivalence and retained-state/retry. Existing journey integration verifies current rendering remains operational. Run full offline suite and strict typecheck; no browser redesign, live calls or student session.
 
-Owner next reviews this branch, all bilingual candidate messages and the proposed schema. No merge or T02B execution until separately authorized. Frozen docs, data and accepted M2 baseline remain unchanged.
+Owner next reviews T02B implementation and verification evidence on this branch. No merge or T02C/T02D/T03 execution is authorized. Existing candidate language-review limits remain. Frozen docs, data and accepted M2 baseline remain unchanged.
 
 Executed verification: focused semantic/journey tests 29/29 PASS; full offline suite 221/221 PASS; strict typecheck PASS. The initial sandboxed focused run passed 28 tests but its existing HTTP integration test could not connect to loopback (EACCES); the complete focused suite passed when rerun with local-network permission. Full-suite provider tests use offline mocks; no Gemini/model execution occurred. Documentation links and whitespace are checked before commit. No browser redesign or human/student review was performed.
+
+The 29/221 counts above are original T02A history; the correction counts are recorded earlier. T02B focused verification: 46/46 PASS including new [sidecar tests](../../tests/domain/explanation.test.ts), T02A regressions, existing domain rules and journey integration. Full offline suite 232/232 PASS; strict typecheck PASS. Final documentation/whitespace checks are recorded with the T02B commit report. No new technical identifiers are rendered; current reference rendering is also tested for absence of sidecar field names.
