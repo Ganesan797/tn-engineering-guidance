@@ -4,7 +4,7 @@ import test from "node:test";
 import { createPilotRuntime } from "../../src/application/pilot-runtime.ts";
 import { createGuidanceWithExplanation } from "../../src/application/guidance.ts";
 import { demoScenario } from "../../src/demo/scenarios.ts";
-import { EMPTY_JOURNEY, evaluateJourneyGuidance, journeyGuidanceResult } from "../../src/m2/journey.ts";
+import { EMPTY_JOURNEY, evaluateJourneyGuidance, journeyGuidanceResult, nextJourneyQuestion, retryUnknown } from "../../src/m2/journey.ts";
 import { parsePresentationSources } from "../../src/student-semantics/provenance.ts";
 import { GENERAL_GUIDANCE_MESSAGES, type GeneralGuidanceOptions } from "../../src/student-semantics/things-worth-checking.ts";
 import { loadQuestionCollection } from "../../src/ui/explore-questions.ts";
@@ -48,14 +48,20 @@ test("165.5 plus uncertainty has separate cutoff, eligibility, explanations and 
 test("unknown, unanswered and unsupported contexts have supported distinct actions", () => {
   const unknown = render(evaluateJourneyGuidance({ ...state, physics: "unknown" }, runtime));
   assert.match(unknown, /name="retry" value="1"/);
-  assert.match(unknown, /இந்தப் பதில் உங்களுக்கு இன்னும் தெரியவில்லை/);
+  assert.match(unknown, /இந்தப் பதில் தெரியாது என்று குறிப்பிட்டுள்ளீர்கள்/);
+  assert.match(unknown, /விவரம் தெரிந்தால் இப்போது பதிவு செய்ய/);
+  assert.match(unknown, /Provide this detail now/);
+  assert.equal(nextJourneyQuestion(retryUnknown({ ...state, physics: "unknown" })), "physics");
   const unanswered = render(evaluateJourneyGuidance({ ...state, improvement: null, physics: "unknown" }, runtime));
   assert.match(unanswered, /name="navigate" value="check"/);
   assert.doesNotMatch(unanswered, /name="retry"/);
+  assert.equal(nextJourneyQuestion({ ...state, improvement: null, physics: "unknown" }), "improvement");
   const unsupported = render(evaluateJourneyGuidance({ ...state, year: "other" }, runtime));
   assert.match(unsupported, /நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழிக்கான தகுதியை/);
   assert.match(unsupported, /href="https:\/\/www.tneaonline.org"/);
   assert.doesNotMatch(unsupported, /165.5|டிப்ளமோ/);
+  assert.match(unsupported, /கட்-ஆஃப் இப்போது கிடைக்கவில்லை/);
+  assert.doesNotMatch(unsupported, /தெரியாத மதிப்பெண்/);
 });
 
 test("real failed checks remain negative with neutral official-check action", () => {
@@ -93,15 +99,17 @@ test("incomplete and originless traces stay explicit without fabricated numbers"
 });
 
 test("missing and scoped provenance never becomes exact verified evidence", () => {
-  assert.match(renderM3PersonalResult(evaluated), /The source for this information is unavailable/);
+  assert.match(renderM3PersonalResult(evaluated), /No source link is available here for this information/);
   const html = render();
-  assert.match(html, /not separate evidence for every explanation sentence/);
-  assert.match(html, /No single paragraph confirms full eligibility/);
-  assert.match(html, /has not been freshly verified/);
+  assert.match(html, /does not provide separate evidence for every explanation below/);
+  assert.match(html, /One part of it alone does not confirm your full eligibility/);
+  assert.match(html, /has not been checked again here/);
+  assert.match(html, /காட்டப்படும் பக்க எண் முன்பு பதிவானது/);
+  assert.match(html, /இந்த இணைப்பு இந்தத் தகுதி நிபந்தனையுடன் தொடர்புடையது/);
   const result = structuredClone(evaluated.result!);
   result.eligibility.checks = result.eligibility.checks.map(check => check.rule_id === "ELG032" ? { ...check, source_page: 2 } : check);
   const stale = render({ ...evaluated, result });
-  assert.match(stale, /The precise page location is still unresolved/);
+  assert.match(stale, /The exact page number is not confirmed/);
   assert.doesNotMatch(stale, /PDF page position: 4/);
 });
 
@@ -154,15 +162,18 @@ test("unasked blockers and unknown answers are named before the explanation disc
   assert.match(primary, /name="edit" value="maths"/);
   const unknown = render(evaluateJourneyGuidance({ ...EMPTY_JOURNEY, year: "unknown" }, runtime));
   assert.match(unknown, /சேர்க்கை ஆண்டு<\/strong>/);
-  assert.match(unknown, /தெரிந்ததும் இங்கிருந்து தொடரலாம்/);
+  assert.match(unknown, /விவரம் தெரிந்ததும் இங்கே சேர்க்கலாம்/);
   assert.doesNotMatch(unknown, /id=Q077/);
 });
 
 test("calculation is trace-backed and minimum-mark mechanics are not presented as threshold approval", () => {
   const html = render();
-  assert.match(html, /86 \+ 78 ÷ 2 \+ 81 ÷ 2 = 165.5 \/ 200/);
+  assert.match(html, /86 \+ \(78 ÷ 2\) \+ \(81 ÷ 2\) = 165.5 \/ 200/);
+  assert.match(html, /கணிதம் \+ \(இயற்பியல் ÷ 2\) \+ \(வேதியியல் ÷ 2\)/);
+  assert.match(html, /Mathematics \+ \(Physics ÷ 2\) \+ \(Chemistry ÷ 2\)/);
   assert.match(html, /It does not by itself confirm the minimum-mark requirement/);
-  assert.match(html, /மதிப்பெண்களை வட்டமிடாமல் பயன்படுத்துதல்/);
+  assert.match(html, /மதிப்பெண்களை முழு எண்ணாக மாற்றாமல் பயன்படுத்துதல்/);
+  assert.doesNotMatch(visible(html), /வட்டமிடாமல்|Cross-board mark normalization|Recorded source locator/);
   assert.match(render(evaluateJourneyGuidance({ ...state, improvement: true, improvement_year: 2006 }, runtime)), /\.pdf#page=4/);
   assert.doesNotMatch(html, /\.pdf#page=9/); // Printed page is not silently treated as PDF position.
 });

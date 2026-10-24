@@ -33,6 +33,7 @@ test("home offers awareness and three intents without a profile form or backend 
     }
     assert.ok(html.includes(pack.version));
     assert.ok(html.includes(pack.items[0].sources[0].name));
+    assert.doesNotMatch(html, /choice-list builder is not yet available|தேர்வுப் பட்டியல் உருவாக்கும் வசதி இன்னும் இல்லை/);
   }
 });
 
@@ -176,7 +177,7 @@ test("one recommended starting card remains a complete anchor and shortcuts stay
   const tamil = renderStudentEntryPage({ route: "home", language: "ta" }, pack);
   assert.match(tamil, /class="choice-card recommended" href="\/journey"/);
   assert.ok(tamil.indexOf('href="/journey"') < tamil.indexOf('href="/personal?lang=ta"'));
-  assert.match(tamil, /தேர்வுப் பட்டியல் உருவாக்கும் வசதி இன்னும் இல்லை/);
+  assert.doesNotMatch(tamil, /தேர்வுப் பட்டியல் உருவாக்கும் வசதி இன்னும் இல்லை/);
   assert.match(home, /:focus-visible/);
   assert.doesNotMatch(home, /Development review only|human review preview|Tamil wording is pending/);
   const review = renderStudentEntryPage({ route: "home", language: "en" }, pack, undefined, { review: true });

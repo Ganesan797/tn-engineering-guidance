@@ -33,7 +33,7 @@ export const PERSONAL_GUIDANCE_MESSAGES = {
   basis: { en: "Let us look at the details you entered.", ta: "நீங்கள் கொடுத்த விவரங்களை வைத்து பார்க்கலாம்." },
   known: { en: "A checked result is available.", ta: "சரிபார்ப்பின் முடிவு கிடைத்துள்ளது." },
   missing: { en: "You have not answered this question yet.", ta: "இந்தக் கேள்விக்கு இன்னும் பதில் கொடுக்கவில்லை." },
-  unknown: { en: "You do not know this answer yet, so it has not been guessed.", ta: "இந்தப் பதில் உங்களுக்கு இன்னும் தெரியவில்லை. அதனால் அதை ஊகித்துப் பயன்படுத்தவில்லை." },
+  unknown: { en: "You marked this answer as unknown. You can add it when you find out.", ta: "இந்தப் பதில் தெரியாது என்று குறிப்பிட்டுள்ளீர்கள். விவரம் தெரிந்ததும் சேர்க்கலாம்." },
   unsupported: { en: "Eligibility for the year or study path you selected cannot be assessed here.", ta: "நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழிக்கான தகுதியை இங்கு மதிப்பிட முடியாது." },
   unresolved: { en: "We cannot yet confirm whether this condition is met.", ta: "இந்த நிபந்தனை பொருந்துகிறதா என்று இன்னும் உறுதியாகச் சொல்ல முடியவில்லை." },
   negative: { en: "Based on your answers, one of the checked conditions is not met.", ta: "உங்கள் பதில்களின்படி, சரிபார்த்த நிபந்தனைகளில் ஒன்று நிறைவேறவில்லை." },
@@ -43,7 +43,7 @@ export const PERSONAL_GUIDANCE_MESSAGES = {
   // HUMAN_REVIEW_PENDING: owner-supplied Tamil candidate; not language-release approval.
   normalization: { en: "This check cannot normalize marks across school boards using the available evidence.", ta: "கிடைத்துள்ள ஆதாரங்களைக் கொண்டு, வெவ்வேறு பள்ளி வாரியங்களின் மதிப்பெண்களை ஒரே அளவில் மாற்றிக் கணக்கிட இந்தச் சரிபார்ப்பால் முடியாது." },
   provide: { en: "If you know the answer, you can answer this question.", ta: "பதில் தெரிந்தால் இந்தக் கேள்விக்குப் பதில் கொடுக்கலாம்." },
-  retry: { en: "You can continue when you know the answer. Until then, you can explore other guidance without guessing.", ta: "பதில் தெரிந்ததும் மீண்டும் தொடரலாம். அதுவரை ஊகிக்காமல் மற்ற வழிகாட்டலைப் பார்க்கலாம்." },
+  retry: { en: "You can add this detail when you know it. Until then, you can explore other guidance.", ta: "இந்த விவரம் தெரிந்ததும் சேர்க்கலாம். அதுவரை மற்ற வழிகாட்டலைப் பார்க்கலாம்." },
   official: { en: "Check the official information for your year and study path.", ta: "உங்கள் ஆண்டு மற்றும் படிப்பு வழிக்கான அதிகாரப்பூர்வ தகவலைச் சரிபாருங்கள்." },
   verify: { en: "Check this condition against the official guidance.", ta: "இந்த நிபந்தனையை அதிகாரப்பூர்வ வழிகாட்டலுடன் சரிபாருங்கள்." },
   prepare: { en: "Next, you can see how to prepare for applying.", ta: "விண்ணப்பத்திற்கு எப்படித் தயாராகலாம் என்று அடுத்து பார்க்கலாம்." },

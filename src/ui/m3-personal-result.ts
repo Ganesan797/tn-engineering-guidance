@@ -14,7 +14,7 @@ export const M3_COPY = {
   review: ["மொழி மதிப்பாய்வுக்கான வரைவு — இங்குள்ள புதிய தமிழ் மற்றும் ஆங்கில வாசகங்கள் இன்னும் ஒப்புதல் பெறவில்லை.", "Language review draft — the new Tamil and English wording here has not yet been approved."],
   personal: ["உங்கள் பதில்கள் சொல்வது", "What your answers tell us"],
   cutoff: ["கணக்கிட்ட கட்-ஆஃப்", "Calculated cutoff"],
-  noCutoff: ["கட்-ஆஃப் எவ்வளவு என்று இப்போது சொல்ல முடியவில்லை. தெரியாத மதிப்பெண்ணை ஊகித்துச் சேர்க்கவில்லை.", "We cannot give a cutoff yet. Unknown marks have not been guessed."],
+  noCutoff: ["கட்-ஆஃப் இப்போது கிடைக்கவில்லை. ஏன் என்பதை கீழே பார்க்கலாம்.", "A cutoff is not available yet. See below for why."],
   eligibility: ["சேர்க்கைத் தகுதி பற்றி என்ன தெரிகிறது?", "What do we know about eligibility?"],
   limit: ["இந்த முடிவு நீங்கள் கொடுத்த பதில்களைச் சார்ந்தது. உங்கள் சான்றிதழ்களை நாங்கள் சரிபார்க்கவில்லை. இதை வைத்து சேர்க்கை கிடைக்கும் என்று உறுதியாகச் சொல்ல முடியாது.", "This result depends on your answers. We have not verified your certificates. It cannot confirm that you will get admission."],
   next: ["அடுத்து என்ன செய்யலாம்?", "What can you do next?"],
@@ -33,45 +33,45 @@ export const M3_COPY = {
   normal: ["நீங்கள் கொடுத்த வழக்கமான மதிப்பெண்", "The normal mark you entered"],
   original: ["மேம்பாட்டுத் தேர்வுக்கு முன் பெற்றதாக நீங்கள் கொடுத்த அசல் மதிப்பெண்", "The original mark you entered from before the improvement exam"],
   originUnknown: ["எந்த மதிப்பெண் பதிவிலிருந்து இது வந்தது என்பது தெரியவில்லை", "Which mark entry this came from is unknown"],
-  noEvidence: ["இந்தத் தகவலுக்கான மூலம் இங்கு கிடைக்கவில்லை. அதற்குப் பதிலாக வேறு மூலத்தைக் காட்டவில்லை.", "The source for this information is unavailable here. No different source has been substituted."],
-  checkScope: ["இந்த மூலம் இந்த நிபந்தனைக்கானது. இங்குள்ள ஒவ்வொரு விளக்க வாக்கியத்துக்கும் தனித்தனி ஆதாரம் என்று கருத வேண்டாம்.", "This source covers this check. It is not separate evidence for every explanation sentence."],
-  documentScope: ["இந்த ஆவணம் ஒட்டுமொத்த சரிபார்ப்புடன் தொடர்புடையது. இதில் ஒரு பத்தியை மட்டும் வைத்து முழுத் தகுதியை உறுதிப்படுத்த முடியாது.", "This document relates to the overall check. No single paragraph confirms full eligibility."],
-  contentScope: ["இந்த மூலம் பொதுவான பதில் முழுவதற்குமானது. ஒவ்வொரு வாக்கியத்துக்கும் தனித்தனி ஆதாரம் அல்ல.", "This source covers the general answer as a whole. It is not separate evidence for each sentence."],
-  recorded: ["இது ஏற்கெனவே பதிவான பக்க விவரம். அந்தப் பக்கத்தை இங்கு புதிதாகச் சரிபார்க்கவில்லை.", "This is previously recorded page information. The page has not been freshly verified here."],
-  verified: ["2026 மேம்பாட்டு மதிப்பெண்கள் பற்றிய பகுதியின் இடம் மட்டும் சரிபார்க்கப்பட்டது. பிற விதிகளோ உங்கள் சான்றிதழ்களோ சரிபார்க்கப்பட்டதாக இது பொருளல்ல.", "Only the location of the 2026 improvement-marks passage was verified. This does not verify other rules or your certificates."],
-  unresolved: ["சரியான பக்க இடம் இன்னும் உறுதியாகத் தெரியவில்லை. அதனால் ஆவண இணைப்பை மட்டும் கொடுத்துள்ளோம்.", "The precise page location is still unresolved, so only the document link is provided."],
+  noEvidence: ["இந்தத் தகவலுக்கு இங்கே மூல இணைப்பு இல்லை. வேறு இணைப்பை இதற்கான ஆதாரமாகக் காட்டவில்லை.", "No source link is available here for this information. Another link has not been presented as its evidence."],
+  checkScope: ["இந்த இணைப்பு இந்தத் தகுதி நிபந்தனையுடன் தொடர்புடையது. கீழுள்ள ஒவ்வொரு விளக்கத்திற்கும் தனி ஆதாரம் கிடைத்ததாக இது பொருளல்ல.", "This link relates to this eligibility condition. It does not provide separate evidence for every explanation below."],
+  documentScope: ["இந்த ஆவணம் முழுச் சரிபார்ப்புடன் தொடர்புடையது. இதிலுள்ள ஒரு பகுதி மட்டும் உங்கள் முழுத் தகுதியை உறுதிப்படுத்தாது.", "This document relates to the overall check. One part of it alone does not confirm your full eligibility."],
+  contentScope: ["இந்த இணைப்பு பொதுவான பதிலுடன் தொடர்புடையது. ஒவ்வொரு வாக்கியத்திற்கும் தனி ஆதாரம் கிடைத்ததாக இது பொருளல்ல.", "This link relates to the general answer. It does not provide separate evidence for every sentence."],
+  recorded: ["காட்டப்படும் பக்க எண் முன்பு பதிவானது. அந்தப் பக்கத்தை இங்கே மீண்டும் சரிபார்க்கவில்லை.", "The page number shown was recorded earlier. That page has not been checked again here."],
+  verified: ["2026 மேம்பாட்டு மதிப்பெண்கள் பற்றிய பகுதி எங்கே உள்ளது என்பது மட்டும் சரிபார்க்கப்பட்டது. மற்ற விதிகளோ உங்கள் சான்றிதழ்களோ இதனால் சரிபார்க்கப்படவில்லை.", "Only where the 2026 improvement-marks passage appears was checked. This does not verify other rules or your certificates."],
+  unresolved: ["சரியான பக்க எண் உறுதியாகத் தெரியவில்லை. ஆவணத்தின் இணைப்பை மட்டும் கொடுத்துள்ளோம்.", "The exact page number is not confirmed. Only the document link is provided."],
   year: ["மூலத்தின் ஆண்டு", "Source year"],
   page: ["அச்சுப் பக்கம்", "Printed page"],
   pdf: ["PDF பக்க வரிசை", "PDF page position"],
-  location: ["மூலத்தில் பதிவான இடக்குறிப்பு", "Recorded source locator"],
+  location: ["ஆவணத்தில் உள்ள இடம்", "Location in the document"],
   source: ["அதிகாரப்பூர்வ மூலம்", "Official source"],
   reference: ["பதிலுடன் இணைக்கப்பட்ட மூலம்", "Reference attached to the answer"],
   prepare: ["தயாரிப்பு வழிகாட்டலைப் பார்க்க", "View preparation guidance"],
-  retry: ["பதில் தெரிந்தால் இப்போது சொல்லலாம்", "If you know the answer, you can give it now"],
+  retry: ["விவரம் தெரிந்தால் இப்போது பதிவு செய்ய", "Provide this detail now"],
   answer: ["பதில் கொடுக்க வேண்டிய கேள்விக்குத் திரும்பலாம்", "Return to the question awaiting your answer"],
   official: ["அதிகாரப்பூர்வ வழிகாட்டலைப் பார்க்க", "View official guidance"],
   newCheck: ["புதிய சரிபார்ப்பைத் தொடங்க", "Start a new check"],
   outstanding: ["இன்னும் சரிபார்க்க வேண்டியவை", "What still needs checking"],
   notCollected: ["இந்த விவரங்கள் இன்னும் உறுதியாகத் தெரியவில்லை. அவை உங்கள் சேர்க்கைத் தகுதியைப் பாதிக்கலாம். தொடர்புள்ள விளக்கத்தைப் பார்த்து, அதிகாரப்பூர்வ வழிகாட்டலுடன் சரிபார்க்கலாம்.", "These details are still unconfirmed and may affect your eligibility. You can read the related explanations and check the official guidance."],
-  paused: ["இப்போதைக்குப் பதில் தெரியாவிட்டாலும் பரவாயில்லை. தெரிந்ததும் இங்கிருந்து தொடரலாம்.", "It is okay not to know the answer now. You can continue from here when you know it."],
+  paused: ["இந்தப் பதில் தெரியாது என்று குறிப்பிட்டுள்ளீர்கள். விவரம் தெரிந்ததும் இங்கே சேர்க்கலாம்.", "You marked this answer as unknown. You can add the detail here when you find out."],
   read: ["இதில் என்ன சரிபார்க்க வேண்டும்? (புதிய தாவல்)", "What should I check? (new tab)"],
-  formula: ["கணிதம் + இயற்பியல் ÷ 2 + வேதியியல் ÷ 2", "Mathematics + Physics ÷ 2 + Chemistry ÷ 2"],
+  formula: ["கணிதம் + (இயற்பியல் ÷ 2) + (வேதியியல் ÷ 2)", "Mathematics + (Physics ÷ 2) + (Chemistry ÷ 2)"],
 } as const satisfies Record<string, Pair>;
 
 // Labels describe existing identities, never predicates or new requirements.
 const CHECK_LABELS: Readonly<Record<string, Pair>> = {
   ELG001: ["படித்த கல்விப் பிரிவு", "Qualifying study type"],
   ELG002: ["தமிழ்நாட்டில் படித்த விவரங்கள்", "Tamil Nadu study history"],
-  ELG003: ["தமிழ்நாட்டைப் பூர்வீகமாகக் கொண்டிருத்தல் மற்றும் படித்த விவரங்கள்", "Tamil Nadu nativity and study history"],
+  ELG003: ["தமிழ்நாட்டைப் பூர்வீகமாகக் கொண்டவரா, எங்கு படித்தீர்கள்?", "Are you from Tamil Nadu, and where did you study?"],
   ELG007: ["பொதுக் கல்விப் பிரிவு மதிப்பெண்கள்", "Academic-stream marks"],
   ELG009: M3_COPY.cutoff,
-  ELG010: ["பள்ளி வாரியங்களுக்கு இடையிலான மதிப்பெண் மாற்றுக் கணக்கீடு", "Cross-board mark normalization"],
+  ELG010: ["வெவ்வேறு பள்ளி வாரிய மதிப்பெண்களை ஒரே அளவில் கணக்கிட முடியுமா?", "Can marks from different school boards be put on one scale?"],
   ELG016: ["குறைந்தபட்ச கல்வி மதிப்பெண்கள்", "Minimum academic marks"],
   ELG017: ["குறைந்தபட்ச கல்வி மதிப்பெண்கள்", "Minimum academic marks"],
   ELG018: ["குறைந்தபட்ச கல்வி மதிப்பெண்கள்", "Minimum academic marks"],
   ELG019: ["குறைந்தபட்ச கல்வி மதிப்பெண்கள்", "Minimum academic marks"],
-  ELG030: ["கிரேடாகக் குறிப்பிடப்பட்ட மதிப்பெண்கள்", "Marks shown as grades"],
-  ELG031: ["மதிப்பெண்களை வட்டமிடாமல் பயன்படுத்துதல்", "Using marks without rounding"],
+  ELG030: ["எண்ணுக்குப் பதில் கிரேடாக உள்ள மதிப்பெண்கள்", "Marks given as grades instead of numbers"],
+  ELG031: ["மதிப்பெண்களை முழு எண்ணாக மாற்றாமல் பயன்படுத்துதல்", "Using marks without rounding to whole numbers"],
   ELG032: ["மேம்பாட்டுத் தேர்வு மதிப்பெண்கள்", "Improvement marks"],
 };
 const FIELD_LABELS: Readonly<Record<string, Pair>> = {
@@ -100,7 +100,7 @@ const UNCOLLECTED: Readonly<Record<string, { id: string; label: Pair }>> = {
 const CHECK_EXPLANATIONS: Readonly<Record<string, { explanation: string; copy: Pair }>> = {
   ELG007_PREDICATE_SATISFIED: { explanation: "Academic stream and effective mark predicates pass.", copy: ["பொதுக் கல்விப் பிரிவுக்கான மூன்று மதிப்பெண்களும் கணக்கிற்குக் கிடைத்துள்ளன. இது முழுத் தகுதி உறுதிப்படுத்தல் அல்ல.", "The three academic marks are available for the calculation. This does not confirm full eligibility."] },
   ELG009_PREDICATE_SATISFIED: { explanation: "Academic merit cutoff was calculated from effective marks.", copy: ["கணக்கில் பயன்படுத்தப்பட்ட மதிப்பெண்களிலிருந்து கட்-ஆஃப் கிடைத்துள்ளது. கணக்கை கீழே பார்க்கலாம்.", "The cutoff was calculated from the effective marks. See the calculation below."] },
-  ELG031_PREDICATE_SATISFIED: { explanation: "Minimum eligibility uses the unrounded raw average and no normalized marks.", copy: ["இந்தச் சோதனை மதிப்பெண்களை வட்டமிடாமல் பயன்படுத்துவது பற்றியது. உங்கள் சமூகப் பிரிவுக்கான குறைந்தபட்ச மதிப்பெண் தகுதி உறுதியானது என்று இதனால் பொருளல்ல.", "This check concerns using marks without rounding. It does not by itself confirm the minimum-mark requirement for your community category."] },
+  ELG031_PREDICATE_SATISFIED: { explanation: "Minimum eligibility uses the unrounded raw average and no normalized marks.", copy: ["இந்தச் சோதனையில் மதிப்பெண்கள் முழு எண்ணாக மாற்றப்படாமல் பயன்படுத்தப்படுகின்றன. உங்கள் சமூகப் பிரிவுக்கான குறைந்தபட்ச மதிப்பெண் தகுதி இதனால் மட்டும் உறுதியாகாது.", "This check uses marks without rounding them to whole numbers. It does not by itself confirm the minimum-mark requirement for your community category."] },
 };
 const NORMAL_ORIGINS = new Set(["maths_mark", "physics_mark", "chemistry_mark"]);
 const ORIGINAL_ORIGINS = new Set(["original_maths_mark", "original_physics_mark", "original_chemistry_mark"]);
@@ -156,10 +156,10 @@ export function renderM3PersonalResult(evaluation: JourneyGuidanceEvaluation, op
     }).join("");
     const trace = sidecar?.cutoff_trace;
     const traceHtml = !trace ? p(M3_COPY.partial) : trace.status === "NOT_REQUESTED" ? p(M3_COPY.notRequested)
-      : `${trace.status === "UNAVAILABLE" ? p(M3_COPY.partial) : ""}<ul>${trace.operands.map(operand => {
+       : `${trace.status === "UNAVAILABLE" ? p(M3_COPY.partial) : ""}<ul>${trace.operands.map(operand => {
         const origin = operand.input_field !== null && NORMAL_ORIGINS.has(operand.input_field) ? M3_COPY.normal : operand.input_field !== null && ORIGINAL_ORIGINS.has(operand.input_field) ? M3_COPY.original : M3_COPY.originUnknown;
         return `<li>${escape(t(SUBJECTS[operand.subject]))}: <strong>${operand.value ?? escape(t(M3_COPY.unknown))}</strong><br>${escape(t(origin))}</li>`;
-      }).join("")}</ul>${trace.status === "AVAILABLE" ? `<p>${escape(t(M3_COPY.formula))}</p><p class="formula"><strong>${trace.operands.find(operand => operand.subject === "maths")!.value} + ${trace.operands.find(operand => operand.subject === "physics")!.value} ÷ 2 + ${trace.operands.find(operand => operand.subject === "chemistry")!.value} ÷ 2 = ${trace.result} / 200</strong></p>` : ""}`;
+       }).join("")}</ul>${trace.status === "AVAILABLE" ? `<p>${escape(t(M3_COPY.formula))}</p><p class="formula"><strong>${trace.operands.find(operand => operand.subject === "maths")!.value} + (${trace.operands.find(operand => operand.subject === "physics")!.value} ÷ 2) + (${trace.operands.find(operand => operand.subject === "chemistry")!.value} ÷ 2) = ${trace.result} / 200</strong></p>` : ""}`;
     const general = studentThingsWorthChecking(scoped, language);
     const explore = `<ul><li><a href="/journey/questions?id=Q071&amp;lang=${language}" target="_blank" rel="noopener">${language === "ta" ? "விண்ணப்பிக்கும் முன் என்ன விவரங்களைத் தெரிந்துகொள்ள வேண்டும்?" : "What should I know before applying?"}</a></li><li><a href="/journey/questions?id=Q086&amp;lang=${language}" target="_blank" rel="noopener">${language === "ta" ? "கட்-ஆஃப்புக்கும் தரவரிசைக்கும் என்ன வேறுபாடு?" : "How are cutoff and rank different?"}</a></li><li><a href="/journey/questions?id=Q082&amp;lang=${language}" target="_blank" rel="noopener">${language === "ta" ? "எந்த ஆவணங்களைத் தயார்செய்ய வேண்டும்?" : "Which documents should I prepare?"}</a></li></ul>`;
     const generalHtml = general.items.map((item, index) => `<article><h3>${escape(item.title)}</h3><p>${escape(item.body)}</p><p>${escape(item.why_it_may_be_useful)}</p><p>${escape(item.next_direction)}</p><p>${escape(item.limit)}</p>${sourceLink(item.official_url, t(M3_COPY.official))}<details><summary>${escape(t(M3_COPY.evidence))}</summary>${evidence(model.things_worth_checking.items[index]?.evidence)}</details></article>`).join("");

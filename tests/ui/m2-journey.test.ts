@@ -234,6 +234,24 @@ test("personal-check copy explains the benefit before scope and provides matchin
   assert.equal(journeyGuidanceResult(state, runtime())?.eligibility.cutoff, 165.5);
 });
 
+test("candidate question help explains stream, improvement and 100/50/50 cutoff weighting", () => {
+  for (const [answers, help] of [
+    [["2026"], CHECK_COPY.streamWhy],
+    [["2026", "academic"], CHECK_COPY.improvementWhy],
+    [["2026", "academic", "no"], CHECK_COPY.mathsWhy],
+    [["2026", "academic", "no", "86"], CHECK_COPY.physicsWhy],
+    [["2026", "academic", "no", "86", "78"], CHECK_COPY.chemistryWhy],
+  ] as const) {
+    const state = answers.reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+    const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
+    assert.ok(html.includes(help[0]));
+    assert.ok(html.includes(help[1]));
+  }
+  assert.match(CHECK_COPY.mathsWhy[1], /full mathematics mark/);
+  assert.match(CHECK_COPY.physicsWhy[1], /Half the physics mark/);
+  assert.match(CHECK_COPY.chemistryWhy[1], /Half the chemistry mark/);
+});
+
 test("progressive answers survive the form round trip and the engine supplies the cutoff", () => {
   let state = EMPTY_JOURNEY;
   for (const answer of ["2026", "academic", "no", "86", "78", "81"]) {
@@ -262,7 +280,7 @@ test("unknown is null for the engine, never false or zero, and known answers rem
   assert.equal(result?.eligibility.cutoff, null);
   assert.equal(result?.eligibility.outcome, "NEEDS_REVIEW");
   assert.ok(result?.eligibility.blocking_missing_fields.includes("improvement_marks_used"));
-  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state), /இந்தப் பதில் உங்களுக்கு இன்னும் தெரியவில்லை/);
+  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state), /இந்தப் பதில் தெரியாது என்று குறிப்பிட்டுள்ளீர்கள்/);
   const resumed = retryUnknown(parseJourneyState(JSON.stringify(state)));
   assert.equal(resumed.year, 2026);
   assert.equal(resumed.stream, "academic");
