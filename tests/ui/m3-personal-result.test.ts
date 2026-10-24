@@ -43,12 +43,16 @@ test("165.5 plus uncertainty has separate cutoff, eligibility, explanations and 
   assert.match(html, /English — wording for review/);
   assert.match(html, /Based on your answers, this condition is met/);
   assert.equal(evaluated.result?.eligibility.outcome, "NEEDS_REVIEW");
+  assert.match(html, /<details><summary>எந்த விவரங்கள் என்று பார்க்க<\/summary>/);
+  assert.ok(html.indexOf("மீதமுள்ள சேர்க்கைத் தகுதி நிபந்தனைகளை") < html.indexOf("ஏன் இந்த முடிவு?"));
+  assert.match(html, /Check the remaining eligibility conditions in the official guidance/);
 });
 
 test("unknown, unanswered and unsupported contexts have supported distinct actions", () => {
   const unknown = render(evaluateJourneyGuidance({ ...state, physics: "unknown" }, runtime));
   assert.match(unknown, /name="retry" value="1"/);
   assert.match(unknown, /இந்தப் பதில் தெரியாது என்று குறிப்பிட்டுள்ளீர்கள்/);
+  assert.match(unknown, /சில விவரங்களை இந்தக் கேள்விகளில் கேட்கவில்லை/);
   assert.match(unknown, /விவரம் தெரிந்தால் இப்போது பதிவு செய்ய/);
   assert.match(unknown, /Provide this detail now/);
   assert.equal(nextJourneyQuestion(retryUnknown({ ...state, physics: "unknown" })), "physics");
@@ -157,7 +161,7 @@ test("unasked blockers and unknown answers are named before the explanation disc
   const html = render();
   const primary = html.slice(0, html.indexOf(`<summary>${M3_COPY.why[0]}</summary>`));
   for (const label of ["பூர்வீகம் தொடர்பான சேர்க்கை வழி", "இடஒதுக்கீட்டுக்கான சமூகப் பிரிவு", "மதிப்பெண்கள் கிரேடாகக் கொடுக்கப்பட்டுள்ளனவா"]) assert.ok(primary.includes(label));
-  assert.match(primary, /இந்த விவரங்கள் இன்னும் உறுதியாகத் தெரியவில்லை/);
+  assert.match(primary, /சில விவரங்களை இந்தக் கேள்விகளில் கேட்கவில்லை/);
   assert.match(primary, /id=Q077/);
   assert.match(primary, /name="edit" value="maths"/);
   const unknown = render(evaluateJourneyGuidance({ ...EMPTY_JOURNEY, year: "unknown" }, runtime));

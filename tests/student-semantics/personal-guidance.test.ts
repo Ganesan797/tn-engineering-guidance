@@ -53,6 +53,9 @@ test("same NEEDS_REVIEW is explained differently by context without changing tru
   assert.equal(mapped.evaluation.result?.eligibility.outcome, "NEEDS_REVIEW");
   assert.equal(mapped.primary.category, "UNRESOLVED_CHECK");
   assert.equal(mapped.primary_action.kind, "VERIFY_CONDITION");
+  assert.equal(mapped.primary_action.message, "verify_remaining");
+  assert.equal(resolvePersonalGuidanceMessage(mapped.primary_action.message, "ta"), "மீதமுள்ள சேர்க்கைத் தகுதி நிபந்தனைகளை அதிகாரப்பூர்வ வழிகாட்டலில் சரிபார்க்கலாம்.");
+  assert.equal(resolvePersonalGuidanceMessage(mapped.primary_action.message, "en"), "Check the remaining eligibility conditions in the official guidance.");
   assert.equal(mapped.cutoff_eligibility_limit, "cutoff_unresolved");
   assert.equal(mapped.human_review, "PENDING");
 });

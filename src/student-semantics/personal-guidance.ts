@@ -46,6 +46,7 @@ export const PERSONAL_GUIDANCE_MESSAGES = {
   retry: { en: "You can add this detail when you know it. Until then, you can explore other guidance.", ta: "இந்த விவரம் தெரிந்ததும் சேர்க்கலாம். அதுவரை மற்ற வழிகாட்டலைப் பார்க்கலாம்." },
   official: { en: "Check the official information for your year and study path.", ta: "உங்கள் ஆண்டு மற்றும் படிப்பு வழிக்கான அதிகாரப்பூர்வ தகவலைச் சரிபாருங்கள்." },
   verify: { en: "Check this condition against the official guidance.", ta: "இந்த நிபந்தனையை அதிகாரப்பூர்வ வழிகாட்டலுடன் சரிபாருங்கள்." },
+  verify_remaining: { en: "Check the remaining eligibility conditions in the official guidance.", ta: "மீதமுள்ள சேர்க்கைத் தகுதி நிபந்தனைகளை அதிகாரப்பூர்வ வழிகாட்டலில் சரிபார்க்கலாம்." },
   prepare: { en: "Next, you can see how to prepare for applying.", ta: "விண்ணப்பத்திற்கு எப்படித் தயாராகலாம் என்று அடுத்து பார்க்கலாம்." },
 } as const satisfies Record<string, Record<StudentLanguage, string>>;
 export type PersonalGuidanceMessageKey = keyof typeof PERSONAL_GUIDANCE_MESSAGES;
@@ -113,7 +114,7 @@ export function toPersonalGuidanceFoundation(evaluation: JourneyGuidanceEvaluati
     : fieldIssue?.category === "UNKNOWN_INFORMATION" ? { kind: "RETRY_WHEN_KNOWN", message: "retry", field: fieldIssue.trace.field }
     : fieldIssue?.category === "MISSING_INFORMATION" ? { kind: "PROVIDE_EXISTING_INPUT", message: "provide", field: fieldIssue.trace.field }
     : result?.eligibility.outcome === "ELIGIBLE" ? { kind: "CONTINUE_PREPARATION", message: "prepare" }
-    : { kind: "VERIFY_CONDITION", message: "verify" };
+    : { kind: "VERIFY_CONDITION", message: "verify_remaining" };
   return {
     evaluation, basis: "basis", primary, cutoff: result?.eligibility.cutoff ?? null,
     cutoff_eligibility_limit: result?.eligibility.cutoff !== null && result?.eligibility.cutoff !== undefined && result.eligibility.outcome === "NEEDS_REVIEW" ? "cutoff_unresolved" : null,

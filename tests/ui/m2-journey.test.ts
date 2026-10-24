@@ -234,6 +234,16 @@ test("personal-check copy explains the benefit before scope and provides matchin
   assert.equal(journeyGuidanceResult(state, runtime())?.eligibility.cutoff, 165.5);
 });
 
+test("later questions show the answer first and keep extra explanation optional", () => {
+  const state = answerJourneyQuestion(EMPTY_JOURNEY, "2026");
+  const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
+  assert.doesNotMatch(html, new RegExp(CHECK_COPY.benefit[0]));
+  assert.ok(html.indexOf("<fieldset") < html.indexOf('id="answer-help"'));
+  assert.match(html, /<details><summary>மேலும் விளக்கம்<\/summary>/);
+  assert.match(html, /மதிப்பெண் சான்றிதழைப் பாருங்கள்/);
+  assert.match(html, /More explanation|English — wording for review/);
+});
+
 test("candidate question help explains stream, improvement and 100/50/50 cutoff weighting", () => {
   for (const [answers, help] of [
     [["2026"], CHECK_COPY.streamWhy],

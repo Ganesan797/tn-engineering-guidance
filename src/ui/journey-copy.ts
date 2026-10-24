@@ -14,6 +14,7 @@ export const CHECK_COPY = {
   physicsWhy: ["கட்-ஆஃப் கணக்கில் இயற்பியல் மதிப்பெண்ணில் பாதி சேரும். 100-க்கு உங்கள் மதிப்பெண்ணைக் கொடுக்கலாம்.", "Half the physics mark counts toward the cutoff. Enter your mark out of 100."],
   chemistryWhy: ["கட்-ஆஃப் கணக்கில் வேதியியல் மதிப்பெண்ணில் பாதி சேரும். 100-க்கு உங்கள் மதிப்பெண்ணைக் கொடுக்கலாம்.", "Half the chemistry mark counts toward the cutoff. Enter your mark out of 100."],
   originalHelp: ["இந்தக் கணக்கிற்கு மேம்பாட்டுத் தேர்வுக்கு முன் பெற்ற அசல் மதிப்பெண் தேவை. 2006 முதல் பெற்ற மேம்பாட்டு மதிப்பெண் பயன்படுத்தப்படாது. உங்கள் மதிப்பெண் சான்றில் பார்த்துக் கொடுக்கலாம்.", "This calculation needs your original mark from before the improvement exam. Improvement marks obtained from 2006 onward are not used. You can check your marks certificate before answering."],
+  moreHelp: ["மேலும் விளக்கம்", "More explanation"],
   continue: ["அடுத்து பார்க்கலாம்", "Continue"],
   previous: ["முந்தைய பதிலை மாற்ற", "Change the previous answer"],
   previousHelp: ["முந்தைய பதிலை மாற்றலாம். அங்கிருந்து வரும் கேள்விகளுக்கு மீண்டும் பதில் கொடுக்க வேண்டும்.", "You can change the previous answer. You will need to answer again from that question onward."],
