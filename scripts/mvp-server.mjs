@@ -1,3 +1,4 @@
+import { CHECK_COPY } from "../src/ui/journey-copy.ts";
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 
@@ -97,12 +98,12 @@ const server = createServer(async (request, response) => {
       send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, next, undefined, presentation));
     } catch {
       const field = validatedState ? nextJourneyQuestion(validatedState) : null;
-      const instruction = field === "improvement_year" ? "1900 முதல் 2026 வரை உள்ள முழு ஆண்டை அளிக்கவும்."
-        : ["maths", "physics", "chemistry"].includes(field) ? "0 முதல் 100 வரை உள்ள முழு மதிப்பெண்ணை அளிக்கவும்."
-        : "ஒரு விருப்பத்தைத் தேர்ந்தெடுக்கவும்.";
+      const instruction = field === "improvement_year" ? CHECK_COPY.yearError[0]
+        : ["maths", "physics", "chemistry"].includes(field) ? CHECK_COPY.markError[0]
+        : CHECK_COPY.choiceError[0];
       send(response, 400, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, validatedState ?? EMPTY_JOURNEY,
-        validatedState ? `${instruction} தெரியாவிட்டால் ‘எனக்குத் தெரியாது’ என்பதைத் தேர்ந்தெடுக்கலாம். முந்தைய பதில்கள் பாதுகாக்கப்பட்டுள்ளன.`
-          : "பதில்களை மீட்டெடுக்க முடியவில்லை. மீண்டும் தொடங்குங்கள்.", presentation));
+        validatedState ? `${instruction} ${CHECK_COPY.errorHelp[0]}`
+          : CHECK_COPY.lostAnswers[0], presentation));
     }
     return;
   }

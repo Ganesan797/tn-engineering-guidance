@@ -1,3 +1,4 @@
+import { CHECK_COPY, CHECK_QUESTIONS_EN } from "./journey-copy.ts";
 import type { GuidanceDependencies } from "../application/guidance.ts";
 import type { AwarenessPack } from "../student-semantics/awareness.ts";
 import { renderM3PersonalResult, type M3PresentationOptions } from "./m3-personal-result.ts";
@@ -41,14 +42,14 @@ export function reviewedAwarenessTamilQuestion(markdown: string, unit: "A01" | "
   return line.slice(`- **${question}:** `.length).trim();
 }
 
-const QUESTIONS: Readonly<Record<JourneyField, { title: string; why: string; choices?: readonly [string, string][] }>> = {
-  year: { title: "எந்த ஆண்டு சேர்க்கையைப் பற்றி கேட்கிறீர்கள்?", why: "இங்கு உறுதிசெய்யப்பட்ட விதிகள் TNEA 2026-க்கானவை.", choices: [["2026", "2026"], ["other", "வேறு ஆண்டு"]] },
-  stream: { title: "நீங்கள் 12 ஆம் வகுப்பு பொதுக் கல்விப் பிரிவில் (HSC academic) படித்தீர்களா?", why: "இந்தப் பாதை அந்தப் பிரிவுக்கான விதியை மட்டுமே பயன்படுத்துகிறது.", choices: [["academic", "ஆம்"], ["other", "இல்லை / வேறு வழி"]] },
-  improvement: { title: "மேம்பாட்டுத் தேர்வில் பெற்ற மதிப்பெண்களைப் பயன்படுத்துகிறீர்களா?", why: "எந்த மதிப்பெண்களை விதி பயன்படுத்த வேண்டும் என்பதை அறிய இது தேவை.", choices: [["yes", "ஆம்"], ["no", "இல்லை"]] },
-  improvement_year: { title: "மேம்பாட்டுத் தேர்வு மதிப்பெண்கள் எந்த ஆண்டில் பெறப்பட்டன?", why: "2006 முதல் பெற்ற மேம்பாட்டு மதிப்பெண்களுக்கு தனி விதி உள்ளது." },
-  maths: { title: "கணித மதிப்பெண் எவ்வளவு (100-க்கு)?", why: "கட்-ஆஃப் கணக்கில் கணிதம் பயன்படுகிறது." },
-  physics: { title: "இயற்பியல் மதிப்பெண் எவ்வளவு (100-க்கு)?", why: "கட்-ஆஃப் கணக்கில் இயற்பியல் பயன்படுகிறது." },
-  chemistry: { title: "வேதியியல் மதிப்பெண் எவ்வளவு (100-க்கு)?", why: "கட்-ஆஃப் கணக்கில் வேதியியல் பயன்படுகிறது." },
+const QUESTIONS: Readonly<Record<JourneyField, { title: string; why: readonly [string, string]; choices?: readonly [string, string][] }>> = {
+  year: { title: "எந்த ஆண்டு சேர்க்கையைப் பற்றி கேட்கிறீர்கள்?", why: CHECK_COPY.yearWhy, choices: [["2026", "2026"], ["other", "வேறு ஆண்டு"]] },
+  stream: { title: "நீங்கள் 12 ஆம் வகுப்பு பொதுக் கல்விப் பிரிவில் (HSC academic) படித்தீர்களா?", why: CHECK_COPY.streamWhy, choices: [["academic", "ஆம்"], ["other", "இல்லை / வேறு வழி"]] },
+  improvement: { title: "மேம்பாட்டுத் தேர்வில் பெற்ற மதிப்பெண்களைப் பயன்படுத்துகிறீர்களா?", why: CHECK_COPY.improvementWhy, choices: [["yes", "ஆம்"], ["no", "இல்லை"]] },
+  improvement_year: { title: "மேம்பாட்டுத் தேர்வு மதிப்பெண்கள் எந்த ஆண்டில் பெறப்பட்டன?", why: CHECK_COPY.improvementYearWhy },
+  maths: { title: "கணித மதிப்பெண் எவ்வளவு (100-க்கு)?", why: CHECK_COPY.mathsWhy },
+  physics: { title: "இயற்பியல் மதிப்பெண் எவ்வளவு (100-க்கு)?", why: CHECK_COPY.physicsWhy },
+  chemistry: { title: "வேதியியல் மதிப்பெண் எவ்வளவு (100-க்கு)?", why: CHECK_COPY.chemistryWhy },
 };
 
 function link(href: string, label: string, primary = false): string {
@@ -128,7 +129,7 @@ export function renderM2Journey(
       const previous = answered.at(-1);
       const help = question === "stream" ? `<p class="notice">படித்த பிரிவு தெரியாவிட்டால் ஊகிக்க வேண்டாம். உங்கள் மதிப்பெண் சான்றிதழைப் பாருங்கள் அல்லது பள்ளியில் கேளுங்கள். <a href="/journey/questions?id=Q081" target="_blank" rel="noopener">வேறு கல்விப் பிரிவுகள் பற்றித் தெரிந்துகொள்ள (புதிய தாவல்)</a></p>`
         : question === "improvement" ? `<p class="notice">முதலில் பெற்ற மதிப்பெண்களை உயர்த்துவதற்காக மீண்டும் எழுதிய மேம்பாட்டுத் தேர்வைப் பற்றிக் கேட்கிறோம். சந்தேகம் இருந்தால் ‘எனக்குத் தெரியாது’ என்பதைத் தேர்ந்தெடுக்கலாம். <a href="/journey/questions?id=Q080" target="_blank" rel="noopener">மேம்பாட்டுத் தேர்வு விளக்கம் (புதிய தாவல்)</a></p>` : "";
-      body = `<h1>விருப்பத் தனிப்பட்ட சரிபார்ப்பு</h1><p>ஒரே நேரத்தில் தேவையான ஒரு கேள்வி மட்டும். தெரியாததைத் தெரியாது என்றே வைத்துக்கொள்ளலாம்.</p>${question === "year" ? '<p class="notice">இந்தச் சிறிய சரிபார்ப்பு ஆண்டு, கல்விப் பிரிவு, மேம்பாட்டுத் தேர்வு மற்றும் மதிப்பெண்களை மட்டும் கேட்கும். பூர்வீகம், சமூகப் பிரிவு போன்ற மற்ற தகுதி விவரங்களை இங்கு உறுதிப்படுத்த முடியாது.</p>' : ""}<p class="notice">கேள்வி ${answered.length + 1} · ${state.year === 2026 ? "சேர்க்கை ஆண்டு: 2026" : "முதலில் சேர்க்கை ஆண்டைத் தேர்ந்தெடுக்கலாம்"}</p><form class="card" action="/journey" method="post" novalidate><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><p id="answer-help">${originalMarks ? "2006-க்குப் பிறகு பெற்ற மேம்பாட்டு மதிப்பெண் பயன்படுத்தப்படாது; சான்றிலுள்ள அசல் மதிப்பெண்ணை அளிக்கவும்." : spec.why}</p>${options}${help}${error ? `<p role="alert" id="answer-error">${escape(error)}</p>` : ""}<div class="actions"><button class="primary" type="submit">தொடர்க</button><button type="submit" name="unknown" value="1" formnovalidate>எனக்குத் தெரியாது</button>${previous ? `<button type="submit" name="edit" value="${previous}" formnovalidate>முந்தைய கேள்வி</button>` : ""}</div>${previous ? '<p class="notice">முந்தைய கேள்விக்குத் திரும்பினால், அங்கிருந்து பதில்களை மீண்டும் கேட்போம்.</p>' : ""}</form>${renderJourneyAnswers(state)}${journeyNav("route", "வழி விளக்கத்திற்குத் திரும்ப", state)}`;
+      body = `<h1>${CHECK_COPY.title[0]}</h1><p>${CHECK_COPY.benefit[0]}</p>${question === "year" ? `<p class="notice">${CHECK_COPY.scope[0]}</p>` : ""}<p class="notice">கேள்வி ${answered.length + 1} · ${state.year === 2026 ? "சேர்க்கை ஆண்டு: 2026" : "முதலில் சேர்க்கை ஆண்டைத் தேர்ந்தெடுக்கலாம்"}</p><form class="card" action="/journey" method="post" novalidate><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><p id="answer-help">${originalMarks ? CHECK_COPY.originalHelp[0] : spec.why[0]}</p>${options}${help}${error ? `<p role="alert" id="answer-error">${escape(error)}</p>` : ""}<div class="actions"><button class="primary" type="submit">${CHECK_COPY.continue[0]}</button><button type="submit" name="unknown" value="1" formnovalidate>எனக்குத் தெரியாது</button>${previous ? `<button type="submit" name="edit" value="${previous}" formnovalidate>${CHECK_COPY.previous[0]}</button>` : ""}</div>${previous ? `<p class="notice">${CHECK_COPY.previousHelp[0]}</p>` : ""}</form><details><summary lang="en">English — wording for review</summary><div lang="en"><p>${CHECK_COPY.benefit[1]}</p>${question === "year" ? `<p>${CHECK_COPY.scope[1]}</p>` : ""}<p>${CHECK_QUESTIONS_EN[question]}</p><p>${originalMarks ? CHECK_COPY.originalHelp[1] : spec.why[1]}</p>${error ? `<p>${error === CHECK_COPY.lostAnswers[0] ? CHECK_COPY.lostAnswers[1] : `${question === "improvement_year" ? CHECK_COPY.yearError[1] : ["maths", "physics", "chemistry"].includes(question) ? CHECK_COPY.markError[1] : CHECK_COPY.choiceError[1]} ${CHECK_COPY.errorHelp[1]}`}</p>` : ""}</div></details>${renderJourneyAnswers(state)}${journeyNav("route", "வழி விளக்கத்திற்குத் திரும்ப", state)}`;
     } else {
       const evaluation = evaluateJourneyGuidance(state, dependencies);
       body = renderM3PersonalResult(evaluation, presentation);

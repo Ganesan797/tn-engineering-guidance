@@ -36,7 +36,7 @@ const generalGuidance: GeneralGuidanceOptions = {
 test("165.5 plus uncertainty has separate cutoff, eligibility, explanations and evidence", () => {
   const html = render();
   assert.match(html, /165.5 \/ 200/);
-  assert.match(html, /முழுத் தகுதி இன்னும் உறுதிப்படுத்தப்படவில்லை/);
+  assert.match(html, /முழுத் தகுதியை உறுதிப்படுத்த இன்னும் சில விவரங்களைச் சரிபார்க்க வேண்டும்/);
   for (const key of ["personal", "eligibility", "why", "evidence", "limit"] as const) assert.ok(html.includes(M3_COPY[key][0]));
   assert.ok(html.indexOf(M3_COPY.personal[0]) < html.indexOf(GENERAL_GUIDANCE_MESSAGES.heading.ta));
   assert.match(html, /data-language-review="pending"/);
@@ -48,12 +48,12 @@ test("165.5 plus uncertainty has separate cutoff, eligibility, explanations and 
 test("unknown, unanswered and unsupported contexts have supported distinct actions", () => {
   const unknown = render(evaluateJourneyGuidance({ ...state, physics: "unknown" }, runtime));
   assert.match(unknown, /name="retry" value="1"/);
-  assert.match(unknown, /இந்தப் பதில் இன்னும் தெரியவில்லை/);
+  assert.match(unknown, /இந்தப் பதில் உங்களுக்கு இன்னும் தெரியவில்லை/);
   const unanswered = render(evaluateJourneyGuidance({ ...state, improvement: null, physics: "unknown" }, runtime));
   assert.match(unanswered, /name="navigate" value="check"/);
   assert.doesNotMatch(unanswered, /name="retry"/);
   const unsupported = render(evaluateJourneyGuidance({ ...state, year: "other" }, runtime));
-  assert.match(unsupported, /நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழியை/);
+  assert.match(unsupported, /நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழிக்கான தகுதியை/);
   assert.match(unsupported, /href="https:\/\/www.tneaonline.org"/);
   assert.doesNotMatch(unsupported, /165.5|டிப்ளமோ/);
 });
@@ -62,7 +62,7 @@ test("real failed checks remain negative with neutral official-check action", ()
   const actual = createGuidanceWithExplanation(demoScenario("ineligible"), runtime);
   const html = render({ ...evaluated, ...actual });
   assert.equal(actual.result.eligibility.outcome, "INELIGIBLE");
-  assert.match(html, /a checked condition is not met/);
+  assert.match(html, /one of the checked conditions is not met/);
   assert.match(html, /Check this condition against the official guidance/);
   assert.match(html, /இந்த நிபந்தனையை அதிகாரப்பூர்வ வழிகாட்டலுடன்/);
 });
@@ -71,7 +71,7 @@ test("improvement operands and original origins come from the trusted sidecar", 
   const evaluation = evaluateJourneyGuidance({ ...state, improvement: true, improvement_year: 2006 }, runtime);
   const html = render(evaluation);
   assert.match(html, /165.5 \/ 200/);
-  assert.match(html, /From the original mark entry before improvement/);
+  assert.match(html, /The original mark you entered from before the improvement exam/);
   assert.match(html, /Mathematics: <strong>86/);
   assert.match(html, /Physics: <strong>78/);
   assert.match(html, /Printed page: 3 · PDF page position: 4/);
@@ -86,22 +86,22 @@ test("incomplete and originless traces stay explicit without fabricated numbers"
   assert.equal(trace.status, "AVAILABLE");
   if (trace.status !== "AVAILABLE") return;
   const unknownOrigin = render({ ...evaluated, explanation: { ...evaluated.explanation!, cutoff_trace: { ...trace, operands: [ { ...trace.operands[0], input_field: null }, trace.operands[1], trace.operands[2] ] } } });
-  assert.match(unknownOrigin, /The mark-entry origin is unknown/);
+  assert.match(unknownOrigin, /Which mark entry this came from is unknown/);
   // Display copies the already-produced result, rather than recalculating operands.
   const sentinel = render({ ...evaluated, explanation: { ...evaluated.explanation!, cutoff_trace: { ...trace, result: 123.25 } } });
   assert.match(sentinel, /123.25 \/ 200/);
 });
 
 test("missing and scoped provenance never becomes exact verified evidence", () => {
-  assert.match(renderM3PersonalResult(evaluated), /A source for this claim is unavailable/);
+  assert.match(renderM3PersonalResult(evaluated), /The source for this information is unavailable/);
   const html = render();
   assert.match(html, /not separate evidence for every explanation sentence/);
-  assert.match(html, /no single paragraph confirms full eligibility/);
+  assert.match(html, /No single paragraph confirms full eligibility/);
   assert.match(html, /has not been freshly verified/);
   const result = structuredClone(evaluated.result!);
   result.eligibility.checks = result.eligibility.checks.map(check => check.rule_id === "ELG032" ? { ...check, source_page: 2 } : check);
   const stale = render({ ...evaluated, result });
-  assert.match(stale, /The precise page location is unresolved/);
+  assert.match(stale, /The precise page location is still unresolved/);
   assert.doesNotMatch(stale, /PDF page position: 4/);
 });
 
@@ -149,12 +149,12 @@ test("unasked blockers and unknown answers are named before the explanation disc
   const html = render();
   const primary = html.slice(0, html.indexOf(`<summary>${M3_COPY.why[0]}</summary>`));
   for (const label of ["பூர்வீகம் தொடர்பான சேர்க்கை வழி", "இடஒதுக்கீட்டுக்கான சமூகப் பிரிவு", "மதிப்பெண்கள் கிரேடாகக் கொடுக்கப்பட்டுள்ளனவா"]) assert.ok(primary.includes(label));
-  assert.match(primary, /இந்த விவரங்களைச் சிறிய சரிபார்ப்பு கேட்கவில்லை/);
+  assert.match(primary, /இந்த விவரங்கள் இன்னும் உறுதியாகத் தெரியவில்லை/);
   assert.match(primary, /id=Q077/);
   assert.match(primary, /name="edit" value="maths"/);
   const unknown = render(evaluateJourneyGuidance({ ...EMPTY_JOURNEY, year: "unknown" }, runtime));
   assert.match(unknown, /சேர்க்கை ஆண்டு<\/strong>/);
-  assert.match(unknown, /சரிபார்ப்பு இங்கே நிறுத்தப்பட்டுள்ளது/);
+  assert.match(unknown, /தெரிந்ததும் இங்கிருந்து தொடரலாம்/);
   assert.doesNotMatch(unknown, /id=Q077/);
 });
 
@@ -165,4 +165,26 @@ test("calculation is trace-backed and minimum-mark mechanics are not presented a
   assert.match(html, /மதிப்பெண்களை வட்டமிடாமல் பயன்படுத்துதல்/);
   assert.match(render(evaluateJourneyGuidance({ ...state, improvement: true, improvement_year: 2006 }, runtime)), /\.pdf#page=4/);
   assert.doesNotMatch(html, /\.pdf#page=9/); // Printed page is not silently treated as PDF position.
+});
+
+test("candidate result copy leads with the score, then uncertainty, its importance and an action", () => {
+  const html = render();
+  for (const [lang, index] of [["ta", 0], ["en", 1]] as const) {
+    const part = html.split(`<div lang="${lang}">`)[1];
+    const positions = ["165.5 / 200", M3_COPY.eligibility[index], M3_COPY.notCollected[index], M3_COPY.limit[index], M3_COPY.next[index]].map(text => part.indexOf(text));
+    assert.ok(positions.every(position => position >= 0));
+    assert.deepEqual(positions, [...positions].sort((a, b) => a - b));
+    assert.match(part, /class="action primary"/);
+    assert.ok(part.includes(`<details><summary>${M3_COPY.why[index]}</summary>`));
+    assert.ok(part.includes(`<details><summary>${M3_COPY.evidence[index]}</summary>`));
+  }
+  assert.doesNotMatch(visible(html), /short check did not ask|சிறிய சரிபார்ப்பு கேட்கவில்லை/);
+});
+
+test("friendly empty-state copy is preserved verbatim in both languages", () => {
+  assert.equal(GENERAL_GUIDANCE_MESSAGES.empty.ta, "இங்கே காட்டுவதற்கு மதிப்பாய்வு செய்யப்பட்ட கூடுதல் வழிகாட்டல் இப்போது இல்லை. அதனால் வாய்ப்புகள் இல்லை என்று நினைக்க வேண்டாம். கீழே உள்ள தயாரிப்பு வழிகாட்டலைத் தொடர்ந்து பார்க்கலாம்.");
+  assert.equal(GENERAL_GUIDANCE_MESSAGES.empty.en, "We do not have any reviewed additional guidance to show you here yet. This does not mean that no options exist. You can continue with the preparation guidance below.");
+  const html = render();
+  assert.ok(html.includes(GENERAL_GUIDANCE_MESSAGES.empty.ta));
+  assert.ok(html.includes(GENERAL_GUIDANCE_MESSAGES.empty.en));
 });

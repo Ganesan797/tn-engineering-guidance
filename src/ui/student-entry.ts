@@ -1,3 +1,4 @@
+import { CHECK_COPY } from "./journey-copy.ts";
 import {
   MissingStudentPresentationError, resolveStudentMessage,
   type StudentLanguage, type StudentSemanticMessage,
@@ -74,7 +75,7 @@ export function renderStudentEntryPage(
       return shell(`<h1>${message(`entry.group.${section.key}`)}</h1><p>${message("entry.beginner.prompt")}</p>${groupNav}${modules}${steps}${nextActions}${section.key === "next" ? '<p><a href="/journey?step=check">தமிழில் தனிப்பட்ட சரிபார்ப்பைத் தொடங்க</a></p>' : ""}<details><summary>${message("entry.next")}</summary>${directions}</details>`);
     }
     if (route === "personal") {
-      return shell(`<h1>${message("entry.personal")}</h1><p>${language === "ta" ? "முதலில் ஆண்டு, படித்த பிரிவு மற்றும் மதிப்பெண்களை ஒவ்வொன்றாகக் கேட்போம். கட்-ஆஃப்பையும், இன்னும் உறுதிப்படுத்த வேண்டிய விவரங்களையும் பார்க்கலாம். இது முழுத் தகுதி உறுதிப்படுத்தல் அல்ல." : "The short Tamil check asks about your year, study stream and marks one at a time. It shows your cutoff and details still needing verification. It does not confirm full eligibility."}</p><a class="choice-card" href="/journey?step=check"><strong>தமிழில் படிப்படியான தனிப்பட்ட சரிபார்ப்பு →</strong></a><details class="card"><summary>${message("entry.personal.open")}</summary><p>${message("entry.personal.limit")}</p><a href="/personal/reference?lang=${language}">${message("entry.personal.open")}</a></details>${directions}`);
+      return shell(`<h1>${message("entry.personal")}</h1><p>${CHECK_COPY.personalIntro[language === "ta" ? 0 : 1]}</p><a class="choice-card" href="/journey?step=check"><strong>${CHECK_COPY.start[language === "ta" ? 0 : 1]}</strong></a><details class="card"><summary>${message("entry.personal.open")}</summary><p>${message("entry.personal.limit")}</p><a href="/personal/reference?lang=${language}">${message("entry.personal.open")}</a></details>${directions}`);
     }
     return shell(`<h1>${message("entry.counselling")}</h1><p>${message("entry.counselling.intro")}</p><nav class="group-nav">${["admission", "choices", "support", "next"].map((key) => `<a href="${sectionHref(key)}">${message(`entry.group.${key}` as StudentSemanticMessage["key"])}</a>`).join("")}</nav>${directions}`);
   } catch (error) {

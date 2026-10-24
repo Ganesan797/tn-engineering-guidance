@@ -4,7 +4,7 @@ import type { ClaimEvidence, PresentationSourceRegistry } from "../student-seman
 import { ANSWER_LABELS, renderJourneyAnswers } from "./journey-answers.ts";
 
 type Language = "ta" | "en";
-type Pair = readonly [string, string]; // Tamil first. All new copy HUMAN_REVIEW_PENDING.
+type Pair = readonly [string, string]; // Tamil first. Changed copy: CANDIDATE_PENDING_OWNER_REVIEW.
 export interface M3PresentationOptions {
   readonly sources?: PresentationSourceRegistry;
   readonly generalGuidance?: GeneralGuidanceOptions;
@@ -12,34 +12,34 @@ export interface M3PresentationOptions {
 export const M3_COPY = {
   title: ["உங்கள் அடுத்த தெளிவான படி", "Your next step"],
   review: ["மொழி மதிப்பாய்வுக்கான வரைவு — இங்குள்ள புதிய தமிழ் மற்றும் ஆங்கில வாசகங்கள் இன்னும் ஒப்புதல் பெறவில்லை.", "Language review draft — the new Tamil and English wording here has not yet been approved."],
-  personal: ["உங்கள் பதில்களுக்கான முடிவுகள்", "Results based on your answers"],
-  cutoff: ["கணக்கிடப்பட்ட கட்-ஆஃப்", "Calculated cutoff"],
-  noCutoff: ["கட்-ஆஃப் இப்போது கிடைக்கவில்லை. தெரியாத மதிப்பெண்ணை ஊகிக்கவில்லை.", "A cutoff is not available now. Unknown marks have not been guessed."],
-  eligibility: ["மற்ற தகுதி நிபந்தனைகள்", "Broader eligibility"],
-  limit: ["இது நீங்கள் அளித்த பதில்களின் அடிப்படையிலான சரிபார்ப்பு மட்டுமே. சான்றிதழ்கள் சரிபார்க்கப்பட்டதாகவோ சேர்க்கை உறுதியாகவோ இதைக் கருத வேண்டாம்.", "This check uses only your answers. It does not mean that certificates have been verified or admission confirmed."],
-  next: ["அடுத்து செய்யக்கூடியது", "What you can do next"],
+  personal: ["உங்கள் பதில்கள் சொல்வது", "What your answers tell us"],
+  cutoff: ["கணக்கிட்ட கட்-ஆஃப்", "Calculated cutoff"],
+  noCutoff: ["கட்-ஆஃப் எவ்வளவு என்று இப்போது சொல்ல முடியவில்லை. தெரியாத மதிப்பெண்ணை ஊகித்துச் சேர்க்கவில்லை.", "We cannot give a cutoff yet. Unknown marks have not been guessed."],
+  eligibility: ["சேர்க்கைத் தகுதி பற்றி என்ன தெரிகிறது?", "What do we know about eligibility?"],
+  limit: ["இந்த முடிவு நீங்கள் கொடுத்த பதில்களைச் சார்ந்தது. உங்கள் சான்றிதழ்களை நாங்கள் சரிபார்க்கவில்லை. இதை வைத்து சேர்க்கை கிடைக்கும் என்று உறுதியாகச் சொல்ல முடியாது.", "This result depends on your answers. We have not verified your certificates. It cannot confirm that you will get admission."],
+  next: ["அடுத்து என்ன செய்யலாம்?", "What can you do next?"],
   why: ["ஏன் இந்த முடிவு?", "Why this result?"],
-  evidence: ["மூலங்கள் மற்றும் வரம்புகள்", "Sources and limits"],
-  noChecks: ["தேர்ந்தெடுத்த ஆண்டுக்கும் படிப்பு வழிக்கும் இங்கு தனிப்பட்ட சரிபார்ப்பு செய்யப்படவில்லை.", "No personal checks were performed here for the selected year and study path."],
+  evidence: ["இந்தத் தகவல் எங்கிருந்து வந்தது?", "Where does this information come from?"],
+  noChecks: ["நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழிக்கான தகுதியை இங்கு சரிபார்க்கவில்லை.", "Eligibility for your selected year or study path has not been checked here."],
   check: ["தகுதி நிபந்தனை", "Eligibility condition"],
-  met: ["உங்கள் பதில்களின்படி இந்த நிபந்தனை நிறைவேறுகிறது.", "Based on your answers, this condition is met."],
-  blocked: ["இந்தச் சரிபார்ப்பில் இன்னும் தீராத விவரங்கள்", "Details unresolved in this check"],
-  global: ["ஒட்டுமொத்த சரிபார்ப்பில் இன்னும் தீராத விவரங்கள்", "Details unresolved in the overall check"],
-  detail: ["கூடுதல் விவரம் — இங்கு இன்னும் தெளிவுபடுத்த முடியவில்லை", "Additional detail — cannot yet be clarified here"],
+  met: ["நீங்கள் கொடுத்த பதில்களின்படி இந்த நிபந்தனை நிறைவேறுகிறது.", "Based on your answers, this condition is met."],
+  blocked: ["இதை உறுதிப்படுத்த இன்னும் தெளிவாக வேண்டியவை", "What still needs to be clarified for this check"],
+  global: ["முழுத் தகுதியைப் புரிந்துகொள்ள இன்னும் தெளிவாக வேண்டியவை", "What still needs to be clarified for overall eligibility"],
+  detail: ["இன்னும் தெளிவாகாத ஒரு விவரம்", "A detail that is still unclear"],
   trace: ["கணக்கில் பயன்படுத்தப்பட்ட மதிப்பெண்கள்", "Marks used in the calculation"],
-  partial: ["கணக்கீடு முழுமையாகக் கிடைக்கவில்லை. கிடைத்த விவரங்கள் மட்டும் கீழே உள்ளன; இங்கே மீண்டும் கணக்கிடவில்லை.", "The calculation is incomplete. Only available details appear below; no calculation is repeated here."],
+  partial: ["கணக்கீடு முழுமையாகக் கிடைக்கவில்லை. கிடைத்த மதிப்பெண் விவரங்களை மட்டும் கீழே பார்க்கலாம். இங்கு புதிதாகக் கணக்கிடவில்லை.", "The calculation is incomplete. You can see only the available mark details below. No new calculation is made here."],
   notRequested: ["இந்தச் சரிபார்ப்பில் கட்-ஆஃப் கணக்கீடு கோரப்படவில்லை.", "A cutoff calculation was not requested in this check."],
   unknown: ["தெரியவில்லை", "Unknown"],
-  normal: ["வழக்கமான மதிப்பெண் பதிவிலிருந்து", "From the normal mark entry"],
-  original: ["மேம்பாட்டுத் தேர்வுக்கு முன் பெற்ற அசல் மதிப்பெண் பதிவிலிருந்து", "From the original mark entry before improvement"],
-  originUnknown: ["எந்த மதிப்பெண் பதிவு பயன்படுத்தப்பட்டது என்பது தெரியவில்லை", "The mark-entry origin is unknown"],
-  noEvidence: ["இந்தக் கூற்றுக்கான மூலம் இங்கு கிடைக்கவில்லை. வேறு மூலத்தை இதற்கான ஆதாரமாகக் காட்டவில்லை.", "A source for this claim is unavailable here. No other source has been substituted."],
-  checkScope: ["இந்த நிபந்தனைக்கான மூலம்; இங்குள்ள ஒவ்வொரு விளக்க வாக்கியத்துக்கும் தனித்தனி ஆதாரம் அல்ல.", "Source for this check, not separate evidence for every explanation sentence."],
-  documentScope: ["ஒட்டுமொத்த சரிபார்ப்புடன் தொடர்புடைய ஆவணம் மட்டும்; ஒரு குறிப்பிட்ட பத்தி முழுத் தகுதியையும் உறுதிப்படுத்தாது.", "Document related to the overall check only; no single paragraph confirms full eligibility."],
-  contentScope: ["இந்தப் பொதுவான பதில் முழுவதற்குமான மூலம்; ஒவ்வொரு வாக்கியத்துக்கும் தனித்தனி ஆதாரம் அல்ல.", "Evidence for the general answer as a whole, not separate evidence for each sentence."],
-  recorded: ["பக்க விவரம் பதிவிலிருந்து எடுத்தது; இந்தப் பக்கத்தை இங்கு புதிதாகச் சரிபார்க்கவில்லை.", "Page information comes from recorded metadata; the page has not been freshly verified here."],
+  normal: ["நீங்கள் கொடுத்த வழக்கமான மதிப்பெண்", "The normal mark you entered"],
+  original: ["மேம்பாட்டுத் தேர்வுக்கு முன் பெற்றதாக நீங்கள் கொடுத்த அசல் மதிப்பெண்", "The original mark you entered from before the improvement exam"],
+  originUnknown: ["எந்த மதிப்பெண் பதிவிலிருந்து இது வந்தது என்பது தெரியவில்லை", "Which mark entry this came from is unknown"],
+  noEvidence: ["இந்தத் தகவலுக்கான மூலம் இங்கு கிடைக்கவில்லை. அதற்குப் பதிலாக வேறு மூலத்தைக் காட்டவில்லை.", "The source for this information is unavailable here. No different source has been substituted."],
+  checkScope: ["இந்த மூலம் இந்த நிபந்தனைக்கானது. இங்குள்ள ஒவ்வொரு விளக்க வாக்கியத்துக்கும் தனித்தனி ஆதாரம் என்று கருத வேண்டாம்.", "This source covers this check. It is not separate evidence for every explanation sentence."],
+  documentScope: ["இந்த ஆவணம் ஒட்டுமொத்த சரிபார்ப்புடன் தொடர்புடையது. இதில் ஒரு பத்தியை மட்டும் வைத்து முழுத் தகுதியை உறுதிப்படுத்த முடியாது.", "This document relates to the overall check. No single paragraph confirms full eligibility."],
+  contentScope: ["இந்த மூலம் பொதுவான பதில் முழுவதற்குமானது. ஒவ்வொரு வாக்கியத்துக்கும் தனித்தனி ஆதாரம் அல்ல.", "This source covers the general answer as a whole. It is not separate evidence for each sentence."],
+  recorded: ["இது ஏற்கெனவே பதிவான பக்க விவரம். அந்தப் பக்கத்தை இங்கு புதிதாகச் சரிபார்க்கவில்லை.", "This is previously recorded page information. The page has not been freshly verified here."],
   verified: ["2026 மேம்பாட்டு மதிப்பெண்கள் பற்றிய பகுதியின் இடம் மட்டும் சரிபார்க்கப்பட்டது. பிற விதிகளோ உங்கள் சான்றிதழ்களோ சரிபார்க்கப்பட்டதாக இது பொருளல்ல.", "Only the location of the 2026 improvement-marks passage was verified. This does not verify other rules or your certificates."],
-  unresolved: ["துல்லியமான பக்க இடம் உறுதியாகத் தெரியவில்லை; ஆவண இணைப்பு மட்டும் கொடுக்கப்பட்டுள்ளது.", "The precise page location is unresolved; only a document link is provided."],
+  unresolved: ["சரியான பக்க இடம் இன்னும் உறுதியாகத் தெரியவில்லை. அதனால் ஆவண இணைப்பை மட்டும் கொடுத்துள்ளோம்.", "The precise page location is still unresolved, so only the document link is provided."],
   year: ["மூலத்தின் ஆண்டு", "Source year"],
   page: ["அச்சுப் பக்கம்", "Printed page"],
   pdf: ["PDF பக்க வரிசை", "PDF page position"],
@@ -47,13 +47,13 @@ export const M3_COPY = {
   source: ["அதிகாரப்பூர்வ மூலம்", "Official source"],
   reference: ["பதிலுடன் இணைக்கப்பட்ட மூலம்", "Reference attached to the answer"],
   prepare: ["தயாரிப்பு வழிகாட்டலைப் பார்க்க", "View preparation guidance"],
-  retry: ["தெரியாத பதிலை இப்போது அளிக்க", "Answer the unknown question now"],
-  answer: ["தற்போதுள்ள கேள்விக்குத் திரும்ப", "Return to the existing question"],
+  retry: ["பதில் தெரிந்தால் இப்போது சொல்லலாம்", "If you know the answer, you can give it now"],
+  answer: ["பதில் கொடுக்க வேண்டிய கேள்விக்குத் திரும்பலாம்", "Return to the question awaiting your answer"],
   official: ["அதிகாரப்பூர்வ வழிகாட்டலைப் பார்க்க", "View official guidance"],
   newCheck: ["புதிய சரிபார்ப்பைத் தொடங்க", "Start a new check"],
   outstanding: ["இன்னும் சரிபார்க்க வேண்டியவை", "What still needs checking"],
-  notCollected: ["இந்த விவரங்களைச் சிறிய சரிபார்ப்பு கேட்கவில்லை. தொடர்புள்ள விளக்கத்தைப் படித்து, அதிகாரப்பூர்வ வழிகாட்டலுடன் சரிபாருங்கள்.", "The short check did not ask for these details. Read the related explanations and verify them against official guidance."],
-  paused: ["தெரியாத பதிலால் சரிபார்ப்பு இங்கே நிறுத்தப்பட்டுள்ளது. பதில் தெரிந்ததும் தொடரலாம்.", "The check is paused at an unknown answer. You can continue when you know it."],
+  notCollected: ["இந்த விவரங்கள் இன்னும் உறுதியாகத் தெரியவில்லை. அவை உங்கள் சேர்க்கைத் தகுதியைப் பாதிக்கலாம். தொடர்புள்ள விளக்கத்தைப் பார்த்து, அதிகாரப்பூர்வ வழிகாட்டலுடன் சரிபார்க்கலாம்.", "These details are still unconfirmed and may affect your eligibility. You can read the related explanations and check the official guidance."],
+  paused: ["இப்போதைக்குப் பதில் தெரியாவிட்டாலும் பரவாயில்லை. தெரிந்ததும் இங்கிருந்து தொடரலாம்.", "It is okay not to know the answer now. You can continue from here when you know it."],
   read: ["இதில் என்ன சரிபார்க்க வேண்டும்? (புதிய தாவல்)", "What should I check? (new tab)"],
   formula: ["கணிதம் + இயற்பியல் ÷ 2 + வேதியியல் ÷ 2", "Mathematics + Physics ÷ 2 + Chemistry ÷ 2"],
 } as const satisfies Record<string, Pair>;
@@ -138,7 +138,7 @@ export function renderM3PersonalResult(evaluation: JourneyGuidanceEvaluation, op
     const blockers = [...new Set(result?.eligibility.blocking_missing_fields ?? [])];
     const fieldIssue = model.issues.find(issue => issue.trace.field !== undefined);
     const namedField = fieldIssue?.trace.field;
-    const outstanding = `${namedField ? `<li><strong>${escape(t(ANSWER_LABELS[namedField]))}</strong><p>${message(fieldIssue!.message)}</p>${fieldIssue!.category === "UNKNOWN_INFORMATION" ? p(M3_COPY.paused) : ""}</li>` : ""}${blockers.map(field => `<li><strong>${escape(t(FIELD_LABELS[field] ?? M3_COPY.detail))}</strong>${UNCOLLECTED[field] ? `<p><a href="/journey/questions?id=${UNCOLLECTED[field].id}&amp;lang=${language}" target="_blank" rel="noopener">${escape(t(UNCOLLECTED[field].label))} (${escape(language === "ta" ? "புதிய தாவல்" : "new tab")})</a></p>` : `<p>${language === "ta" ? "இந்த விவரம் இன்னும் தீரவில்லை. உங்கள் பதில்களைச் சரிபார்த்து, தேவைப்பட்டால் கீழே திருத்துங்கள்." : "This detail is unresolved. Review your answers and edit them below if needed."}</p>`}</li>`).join("")}${model.checks.filter(check => check.category !== "KNOWN_RESULT" && !(sidecar?.check_blockers.find(entry => entry.rule_id === check.trace.rule_id)?.blocking_fields.length)).map(check => `<li><strong>${escape(title(check.trace.rule_id!))}</strong><p>${message(check.message)}</p></li>`).join("")}`;
+    const outstanding = `${namedField ? `<li><strong>${escape(t(ANSWER_LABELS[namedField]))}</strong><p>${message(fieldIssue!.message)}</p>${fieldIssue!.category === "UNKNOWN_INFORMATION" ? p(M3_COPY.paused) : ""}</li>` : ""}${blockers.map(field => `<li><strong>${escape(t(FIELD_LABELS[field] ?? M3_COPY.detail))}</strong>${UNCOLLECTED[field] ? `<p><a href="/journey/questions?id=${UNCOLLECTED[field].id}&amp;lang=${language}" target="_blank" rel="noopener">${escape(t(UNCOLLECTED[field].label))} (${escape(language === "ta" ? "புதிய தாவல்" : "new tab")})</a></p>` : `<p>${language === "ta" ? "இந்த விவரம் இன்னும் தெளிவாகவில்லை. நீங்கள் கொடுத்த பதிலை கீழே பார்த்து, தேவைப்பட்டால் மாற்றலாம்." : "This detail is still unclear. You can look at your answer below and change it if needed."}</p>`}</li>`).join("")}${model.checks.filter(check => check.category !== "KNOWN_RESULT" && !(sidecar?.check_blockers.find(entry => entry.rule_id === check.trace.rule_id)?.blocking_fields.length)).map(check => `<li><strong>${escape(title(check.trace.rule_id!))}</strong><p>${message(check.message)}</p></li>`).join("")}`;
     const overall = result?.eligibility.outcome === "ELIGIBLE" ? "eligible" : result?.eligibility.outcome === "INELIGIBLE" ? "negative" : "unresolved";
     const official = options.sources?.get(evaluation.context.scope.kind === "UNSUPPORTED" ? "SRC001" : "SRC002");
     const action = model.primary_action.kind === "RETRY_WHEN_KNOWN" ? form("retry", "1", M3_COPY.retry, true)
@@ -163,7 +163,7 @@ export function renderM3PersonalResult(evaluation: JourneyGuidanceEvaluation, op
     const general = studentThingsWorthChecking(scoped, language);
     const explore = `<ul><li><a href="/journey/questions?id=Q071&amp;lang=${language}" target="_blank" rel="noopener">${language === "ta" ? "விண்ணப்பிக்கும் முன் என்ன விவரங்களைத் தெரிந்துகொள்ள வேண்டும்?" : "What should I know before applying?"}</a></li><li><a href="/journey/questions?id=Q086&amp;lang=${language}" target="_blank" rel="noopener">${language === "ta" ? "கட்-ஆஃப்புக்கும் தரவரிசைக்கும் என்ன வேறுபாடு?" : "How are cutoff and rank different?"}</a></li><li><a href="/journey/questions?id=Q082&amp;lang=${language}" target="_blank" rel="noopener">${language === "ta" ? "எந்த ஆவணங்களைத் தயார்செய்ய வேண்டும்?" : "Which documents should I prepare?"}</a></li></ul>`;
     const generalHtml = general.items.map((item, index) => `<article><h3>${escape(item.title)}</h3><p>${escape(item.body)}</p><p>${escape(item.why_it_may_be_useful)}</p><p>${escape(item.next_direction)}</p><p>${escape(item.limit)}</p>${sourceLink(item.official_url, t(M3_COPY.official))}<details><summary>${escape(t(M3_COPY.evidence))}</summary>${evidence(model.things_worth_checking.items[index]?.evidence)}</details></article>`).join("");
-    return `<div lang="${language}"><section class="card" aria-label="${escape(t(M3_COPY.personal))}"><h2>${escape(t(M3_COPY.personal))}</h2><h3>${escape(t(M3_COPY.cutoff))}</h3>${model.cutoff !== null ? `<p class="cutoff-score"><strong>${model.cutoff} / 200</strong></p>` : p(M3_COPY.noCutoff)}<h3>${escape(t(M3_COPY.eligibility))}</h3>${model.cutoff_eligibility_limit ? "" : `<p>${message(result ? overall : model.primary.message)}</p>`}${model.primary.message !== overall && result ? `<p>${message(model.primary.message)}</p>` : ""}${model.cutoff_eligibility_limit ? `<p>${message(model.cutoff_eligibility_limit)}</p>` : ""}${p(M3_COPY.limit)}${outstanding ? `<section class="outstanding"><h3>${escape(t(M3_COPY.outstanding))}</h3>${blockers.some(field => UNCOLLECTED[field]) ? p(M3_COPY.notCollected) : ""}<ul>${outstanding}</ul></section>` : ""}<h3>${escape(t(M3_COPY.next))}</h3><p>${message(model.primary_action.message)}</p><div class="actions">${action}</div>${renderJourneyAnswers(evaluation.context.answers, language)}
+    return `<div lang="${language}"><section class="card" aria-label="${escape(t(M3_COPY.personal))}"><h2>${escape(t(M3_COPY.personal))}</h2><h3>${escape(t(M3_COPY.cutoff))}</h3>${model.cutoff !== null ? `<p class="cutoff-score"><strong>${model.cutoff} / 200</strong></p>` : p(M3_COPY.noCutoff)}<h3>${escape(t(M3_COPY.eligibility))}</h3>${model.cutoff_eligibility_limit ? "" : `<p>${message(result ? overall : model.primary.message)}</p>`}${model.primary.message !== overall && result ? `<p>${message(model.primary.message)}</p>` : ""}${model.cutoff_eligibility_limit ? `<p>${message(model.cutoff_eligibility_limit)}</p>` : ""}${outstanding ? `<section class="outstanding"><h3>${escape(t(M3_COPY.outstanding))}</h3>${blockers.some(field => UNCOLLECTED[field]) ? p(M3_COPY.notCollected) : ""}<ul>${outstanding}</ul></section>` : ""}${p(M3_COPY.limit)}<h3>${escape(t(M3_COPY.next))}</h3><p>${message(model.primary_action.message)}</p><div class="actions">${action}</div>${renderJourneyAnswers(evaluation.context.answers, language)}
       <details><summary>${escape(t(M3_COPY.why))}</summary>${checks ? `<ul>${checks}</ul>` : p(M3_COPY.noChecks)}${sidecar?.aggregate_blockers.length ? `<h3>${escape(t(M3_COPY.global))}</h3>${fields(sidecar.aggregate_blockers.map(entry => entry.field))}` : ""}<h3>${escape(t(M3_COPY.trace))}</h3>${traceHtml}</details>
       <details><summary>${escape(t(M3_COPY.evidence))}</summary>${result?.eligibility.checks.map(check => `<details><summary>${escape(title(check.rule_id))}</summary>${evidence(model.evidence.find(claim => claim.trace.rule_id === check.rule_id))}</details>`).join("") || p(M3_COPY.noEvidence)}${model.evidence.filter(claim => claim.precision === "DOCUMENT_LEVEL").map(claim => evidence(claim)).join("")}</details></section>
       <section class="card general-guidance" aria-label="${escape(general.heading)}"><h2>${escape(general.heading)}</h2><p>${escape(general.scope)}</p>${general.empty_state ? `<p>${escape(general.empty_state)}</p><p>${language === "ta" ? "விருப்பப்பட்டால் இந்தப் பொதுவான கேள்விகளை ஆராயலாம் (புதிய தாவல்கள்):" : "You can explore these general questions (new tabs):"}</p>${explore}` : generalHtml}<div class="actions">${prepare()}</div></section><p><a href="/journey?step=check">${escape(t(M3_COPY.newCheck))}</a></p></div>`;

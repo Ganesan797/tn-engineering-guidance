@@ -10,6 +10,7 @@ import { renderStudentEntryPage } from "../../src/ui/student-entry.ts";
 import { renderM2Journey, reviewedAwarenessTamilQuestion, reviewedTamilUnit } from "../../src/ui/m2-journey.ts";
 import { loadQuestionCollection, renderQuestionCollection } from "../../src/ui/explore-questions.ts";
 import { contentMarkup } from "../../src/ui/student-entry.ts";
+import { CHECK_COPY, CHECK_COPY_REVIEW, CHECK_QUESTIONS_EN } from "../../src/ui/journey-copy.ts";
 
 const load = (path: string) => readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
 const pack = applyApprovedTamilStudentCopy(parseAwarenessPack(
@@ -141,7 +142,7 @@ test("lateral entry is informational and cutoff explanation preserves the result
   const result = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
   assert.match(result, /id=Q002" target="_blank"/);
   assert.match(result, /165.5 \/ 200/);
-  assert.match(result, /முழுத் தகுதி இன்னும் உறுதிப்படுத்தப்படவில்லை/);
+  assert.match(result, /முழுத் தகுதியை உறுதிப்படுத்த இன்னும் சில விவரங்களைச் சரிபார்க்க வேண்டும்/);
   assert.doesNotMatch(result, /NEEDS_REVIEW/);
   assert.match(renderM2Journey("route", pack, reviewed, awarenessReviewed, runtime()), /id=Q060/);
   for (const page of ["awareness", "study", "compare", "route", "prepare"] as const) {
@@ -215,6 +216,24 @@ test("informed student can enter the optional check directly", () => {
   assert.doesNotMatch(check, /data-content-id="AW-01"/);
 });
 
+test("personal-check copy explains the benefit before scope and provides matching English review text", () => {
+  const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime());
+  assert.ok(html.indexOf(CHECK_COPY.benefit[0]) < html.indexOf(CHECK_COPY.scope[0]));
+  assert.ok(html.includes(CHECK_COPY.scope[1]));
+  assert.equal(CHECK_COPY_REVIEW, "CANDIDATE_PENDING_OWNER_REVIEW");
+  let state = EMPTY_JOURNEY;
+  for (const answer of ["2026", "academic", "yes", "2006", "86", "78", "81"]) {
+    const field = nextJourneyQuestion(state)!;
+    const page = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
+    assert.ok(page.includes(CHECK_QUESTIONS_EN[field]));
+    assert.match(page, /name="unknown" value="1"/);
+    assert.match(page, /action="\/journey" method="post"/);
+    state = answerJourneyQuestion(state, answer);
+  }
+  assert.equal(nextJourneyQuestion(state), null);
+  assert.equal(journeyGuidanceResult(state, runtime())?.eligibility.cutoff, 165.5);
+});
+
 test("progressive answers survive the form round trip and the engine supplies the cutoff", () => {
   let state = EMPTY_JOURNEY;
   for (const answer of ["2026", "academic", "no", "86", "78", "81"]) {
@@ -229,7 +248,7 @@ test("progressive answers survive the form round trip and the engine supplies th
   assert.equal(result?.eligibility.outcome, "NEEDS_REVIEW");
   const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
   assert.match(html, /165.5 \/ 200/);
-  assert.match(html, /முழுத் தகுதி இன்னும் உறுதிப்படுத்தப்படவில்லை/);
+  assert.match(html, /முழுத் தகுதியை உறுதிப்படுத்த இன்னும் சில விவரங்களைச் சரிபார்க்க வேண்டும்/);
   assert.doesNotMatch(html, /NEEDS_REVIEW/);
   assert.doesNotMatch(html, /இடம் உறுதி/);
 });
@@ -243,7 +262,7 @@ test("unknown is null for the engine, never false or zero, and known answers rem
   assert.equal(result?.eligibility.cutoff, null);
   assert.equal(result?.eligibility.outcome, "NEEDS_REVIEW");
   assert.ok(result?.eligibility.blocking_missing_fields.includes("improvement_marks_used"));
-  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state), /இந்தப் பதில் இன்னும் தெரியவில்லை/);
+  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state), /இந்தப் பதில் உங்களுக்கு இன்னும் தெரியவில்லை/);
   const resumed = retryUnknown(parseJourneyState(JSON.stringify(state)));
   assert.equal(resumed.year, 2026);
   assert.equal(resumed.stream, "academic");
@@ -257,7 +276,7 @@ test("unknown is null for the engine, never false or zero, and known answers rem
 test("year and route guards reject unsupported personal calculations", () => {
   const otherYear = answerJourneyQuestion(EMPTY_JOURNEY, "other");
   assert.equal(journeyGuidanceResult(otherYear, runtime()), null);
-  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), otherYear), /நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழியை/);
+  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), otherYear), /நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழிக்கான தகுதியை/);
   const otherStream = answerJourneyQuestion(answerJourneyQuestion(EMPTY_JOURNEY, "2026"), "other");
   assert.equal(journeyGuidanceResult(otherStream, runtime()), null);
   assert.throws(() => answerJourneyQuestion(EMPTY_JOURNEY, "2027"));
@@ -368,7 +387,7 @@ test("local server serves the Tamil journey and advances a posted answer", async
       assert.equal(response.status, 400);
       const html = await response.text();
       assert.match(html, /role="alert"/);
-      assert.match(html, /முந்தைய பதில்கள் பாதுகாக்கப்பட்டுள்ளன/);
+      assert.match(html, /முன்பு கொடுத்த பதில்கள் அப்படியே உள்ளன/);
       const saved = html.match(/name="state" value="([^"]+)"/)![1].replaceAll("&quot;", '"');
       assert.deepEqual(parseJourneyState(saved), partial);
       assert.match(html, /இயற்பியல் மதிப்பெண் எவ்வளவு/);

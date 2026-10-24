@@ -28,25 +28,25 @@ export interface JourneyGuidanceEvaluation {
   readonly explanation: ExplanationSidecarV1 | null;
 }
 
-// Candidate copy only. Every bilingual pair requires owner/human review before UI release.
+// CANDIDATE_PENDING_OWNER_REVIEW: candidate copy only. Every bilingual pair requires owner/human review before UI release.
 export const PERSONAL_GUIDANCE_MESSAGES = {
-  basis: { en: "Based on the information you entered.", ta: "நீங்கள் அளித்த தகவல்களின் அடிப்படையில்." },
+  basis: { en: "Let us look at the details you entered.", ta: "நீங்கள் கொடுத்த விவரங்களை வைத்து பார்க்கலாம்." },
   known: { en: "A checked result is available.", ta: "சரிபார்ப்பின் முடிவு கிடைத்துள்ளது." },
-  missing: { en: "A required answer has not been supplied yet.", ta: "தேவையான ஒரு பதில் இன்னும் அளிக்கப்படவில்லை." },
-  unknown: { en: "This answer is not known yet. It has not been guessed.", ta: "இந்தப் பதில் இன்னும் தெரியவில்லை. அதை ஊகிக்கவில்லை." },
-  unsupported: { en: "This check does not assess the year or study path you selected.", ta: "நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழியை இந்தச் சரிபார்ப்பு மதிப்பிடாது." },
-  unresolved: { en: "A checked condition cannot yet be confirmed here.", ta: "சரிபார்க்கப்பட்ட ஒரு நிபந்தனையை இங்கு இன்னும் உறுதிப்படுத்த முடியவில்லை." },
-  negative: { en: "Based on your answers, a checked condition is not met.", ta: "உங்கள் பதில்களின் அடிப்படையில், சரிபார்க்கப்பட்ட ஒரு நிபந்தனை நிறைவேறவில்லை." },
+  missing: { en: "You have not answered this question yet.", ta: "இந்தக் கேள்விக்கு இன்னும் பதில் கொடுக்கவில்லை." },
+  unknown: { en: "You do not know this answer yet, so it has not been guessed.", ta: "இந்தப் பதில் உங்களுக்கு இன்னும் தெரியவில்லை. அதனால் அதை ஊகித்துப் பயன்படுத்தவில்லை." },
+  unsupported: { en: "Eligibility for the year or study path you selected cannot be assessed here.", ta: "நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழிக்கான தகுதியை இங்கு மதிப்பிட முடியாது." },
+  unresolved: { en: "We cannot yet confirm whether this condition is met.", ta: "இந்த நிபந்தனை பொருந்துகிறதா என்று இன்னும் உறுதியாகச் சொல்ல முடியவில்லை." },
+  negative: { en: "Based on your answers, one of the checked conditions is not met.", ta: "உங்கள் பதில்களின்படி, சரிபார்த்த நிபந்தனைகளில் ஒன்று நிறைவேறவில்லை." },
   eligible: { en: "Based on your answers, the checked eligibility conditions are met. This does not guarantee admission.", ta: "உங்கள் பதில்களின் அடிப்படையில், சரிபார்க்கப்பட்ட தகுதி நிபந்தனைகள் நிறைவேறுகின்றன. இது சேர்க்கைக்கு உத்தரவாதம் அல்ல." },
-  cutoff_unresolved: { en: "Your cutoff is available, but full eligibility is not confirmed. The cutoff alone does not confirm admission.", ta: "உங்கள் கட்-ஆஃப் கிடைத்துள்ளது; முழுத் தகுதி இன்னும் உறுதிப்படுத்தப்படவில்லை. கட்-ஆஃப் மட்டும் சேர்க்கையை உறுதிப்படுத்தாது." },
-  original_marks: { en: "The check reports that the required original marks are unavailable.", ta: "தேவையான அசல் மதிப்பெண்கள் கிடைக்கவில்லை என்று சரிபார்ப்பு தெரிவிக்கிறது." },
+  cutoff_unresolved: { en: "Your cutoff is available. Some details still need checking before full eligibility can be confirmed. The cutoff alone does not confirm admission.", ta: "உங்கள் கட்-ஆஃப் கிடைத்துள்ளது. முழுத் தகுதியை உறுதிப்படுத்த இன்னும் சில விவரங்களைச் சரிபார்க்க வேண்டும். கட்-ஆஃப் மட்டும் சேர்க்கையை உறுதிப்படுத்தாது." },
+  original_marks: { en: "The original marks needed for the calculation are unavailable.", ta: "கணக்கிற்குத் தேவையான அசல் மதிப்பெண்கள் கிடைக்கவில்லை." },
   // HUMAN_REVIEW_PENDING: owner-supplied Tamil candidate; not language-release approval.
   normalization: { en: "This check cannot normalize marks across school boards using the available evidence.", ta: "கிடைத்துள்ள ஆதாரங்களைக் கொண்டு, வெவ்வேறு பள்ளி வாரியங்களின் மதிப்பெண்களை ஒரே அளவில் மாற்றிக் கணக்கிட இந்தச் சரிபார்ப்பால் முடியாது." },
-  provide: { en: "Answer the existing question when you can.", ta: "முடியும்போது தற்போதுள்ள கேள்விக்குப் பதில் அளிக்கலாம்." },
-  retry: { en: "Retry when you know the answer, or continue learning without guessing.", ta: "பதில் தெரிந்ததும் மீண்டும் முயலலாம்; அல்லது ஊகிக்காமல் தகவல்களைத் தொடர்ந்து அறியலாம்." },
+  provide: { en: "If you know the answer, you can answer this question.", ta: "பதில் தெரிந்தால் இந்தக் கேள்விக்குப் பதில் கொடுக்கலாம்." },
+  retry: { en: "You can continue when you know the answer. Until then, you can explore other guidance without guessing.", ta: "பதில் தெரிந்ததும் மீண்டும் தொடரலாம். அதுவரை ஊகிக்காமல் மற்ற வழிகாட்டலைப் பார்க்கலாம்." },
   official: { en: "Check the official information for your year and study path.", ta: "உங்கள் ஆண்டு மற்றும் படிப்பு வழிக்கான அதிகாரப்பூர்வ தகவலைச் சரிபாருங்கள்." },
   verify: { en: "Check this condition against the official guidance.", ta: "இந்த நிபந்தனையை அதிகாரப்பூர்வ வழிகாட்டலுடன் சரிபாருங்கள்." },
-  prepare: { en: "Continue with the existing preparation guidance.", ta: "தற்போதுள்ள தயாரிப்பு வழிகாட்டலைத் தொடரலாம்." },
+  prepare: { en: "Next, you can see how to prepare for applying.", ta: "விண்ணப்பத்திற்கு எப்படித் தயாராகலாம் என்று அடுத்து பார்க்கலாம்." },
 } as const satisfies Record<string, Record<StudentLanguage, string>>;
 export type PersonalGuidanceMessageKey = keyof typeof PERSONAL_GUIDANCE_MESSAGES;
 
