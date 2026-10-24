@@ -12,7 +12,7 @@ import { entryStateFromUrl } from "../src/student-entry/routing.ts";
 import { renderStudentEntryPage, renderReferenceGuidancePage } from "../src/ui/student-entry.ts";
 import { blankReferenceRequest } from "../src/ui/reference-request.ts";
 import { parseAwarenessPack, applyApprovedTamilStudentCopy } from "../src/student-semantics/awareness.ts";
-import { answerJourneyQuestion, EMPTY_JOURNEY, parseJourneyState, retryUnknown } from "../src/m2/journey.ts";
+import { answerJourneyQuestion, editJourneyAnswer, EMPTY_JOURNEY, nextJourneyQuestion, parseJourneyState, retryUnknown } from "../src/m2/journey.ts";
 import { parsePresentationSources } from "../src/student-semantics/provenance.ts";
 import { renderM2Journey } from "../src/ui/m2-journey.ts";
 import { loadQuestionCollection, renderQuestionCollection } from "../src/ui/explore-questions.ts";
@@ -74,6 +74,7 @@ const server = createServer(async (request, response) => {
     return;
   }
   if (request.method === "POST" && url.pathname === "/journey") {
+    let validatedState = null;
     try {
       const chunks = [];
       let total = 0;
@@ -84,17 +85,24 @@ const server = createServer(async (request, response) => {
       }
       const values = new URLSearchParams(Buffer.concat(chunks).toString("utf8"));
       const state = parseJourneyState(values.get("state") ?? "");
+      validatedState = state;
       const navigate = values.get("navigate");
       if (navigate === "awareness" || navigate === "study" || navigate === "compare" || navigate === "route" || navigate === "prepare" || navigate === "check") {
         send(response, 200, renderM2Journey(navigate, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, state, undefined, presentation));
         return;
       }
-      const next = values.get("retry") === "1" ? retryUnknown(state)
+      const next = values.has("edit") ? editJourneyAnswer(state, values.get("edit"))
+        : values.get("retry") === "1" ? retryUnknown(state)
         : answerJourneyQuestion(state, values.get("unknown") === "1" ? "unknown" : values.get("answer") ?? "");
       send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, next, undefined, presentation));
     } catch {
-      send(response, 400, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY,
-        "பதில் ஏற்கப்படவில்லை. விவரத்தைச் சரிபார்த்து மீண்டும் தொடங்குங்கள்."));
+      const field = validatedState ? nextJourneyQuestion(validatedState) : null;
+      const instruction = field === "improvement_year" ? "1900 முதல் 2026 வரை உள்ள முழு ஆண்டை அளிக்கவும்."
+        : ["maths", "physics", "chemistry"].includes(field) ? "0 முதல் 100 வரை உள்ள முழு மதிப்பெண்ணை அளிக்கவும்."
+        : "ஒரு விருப்பத்தைத் தேர்ந்தெடுக்கவும்.";
+      send(response, 400, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, validatedState ?? EMPTY_JOURNEY,
+        validatedState ? `${instruction} தெரியாவிட்டால் ‘எனக்குத் தெரியாது’ என்பதைத் தேர்ந்தெடுக்கலாம். முந்தைய பதில்கள் பாதுகாக்கப்பட்டுள்ளன.`
+          : "பதில்களை மீட்டெடுக்க முடியவில்லை. மீண்டும் தொடங்குங்கள்.", presentation));
     }
     return;
   }

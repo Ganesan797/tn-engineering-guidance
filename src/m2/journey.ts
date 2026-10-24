@@ -84,6 +84,15 @@ export function retryUnknown(state: JourneyState): JourneyState {
   return field ? { ...state, [field]: null } : state;
 }
 
+// Editing an earlier answer invalidates later answers, including marks whose
+// meaning can change when improvement-exam answers change. Never reuse stale data.
+export function editJourneyAnswer(state: JourneyState, field: string): JourneyState {
+  const index = JOURNEY_FIELDS.indexOf(field as JourneyField);
+  if (index < 0 || state[field as JourneyField] === null) throw new Error("No recorded answer to edit");
+  if (field === "improvement_year" && state.improvement !== true) throw new Error("Inactive question");
+  return Object.fromEntries(JOURNEY_FIELDS.map((key, position) => [key, position < index ? state[key] : null])) as unknown as JourneyState;
+}
+
 export function journeyGuidanceResult(
   state: JourneyState,
   dependencies: GuidanceDependencies,

@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { createPilotRuntime } from "../../src/application/pilot-runtime.ts";
-import { answerJourneyQuestion, EMPTY_JOURNEY, journeyGuidanceResult, nextJourneyQuestion, parseJourneyState, retryUnknown } from "../../src/m2/journey.ts";
+import { answerJourneyQuestion, editJourneyAnswer, EMPTY_JOURNEY, journeyGuidanceResult, nextJourneyQuestion, parseJourneyState, retryUnknown } from "../../src/m2/journey.ts";
 import { applyApprovedTamilStudentCopy, parseAwarenessPack } from "../../src/student-semantics/awareness.ts";
 import { renderStudentEntryPage } from "../../src/ui/student-entry.ts";
 import { renderM2Journey, reviewedAwarenessTamilQuestion, reviewedTamilUnit } from "../../src/ui/m2-journey.ts";
@@ -201,7 +201,8 @@ test("zero-knowledge Tamil path offers engineering and branch awareness before T
   for (const paragraph of routeParagraphs) assert.ok(route.includes(contentMarkup(paragraph)));
   assert.match(route, /data-content-id="AW-03"/);
   assert.match(route, /data-content-id="AW-05"/);
-  assert.match(route, /B01, B04/);
+  assert.match(route, /விண்ணப்பம் மற்றும் கலந்தாய்வு — மேலும் விளக்கம்/);
+  assert.doesNotMatch(route.replace(/<[^>]*>/g, ""), /B01|B04|B01–B08/);
   assert.match(route, /\/journey\?step=prepare/);
   assert.match(renderM2Journey("prepare", pack, reviewed, awarenessReviewed, runtime()), /data-content-id="B05"/);
   assert.match(reviewedTamilUnit(reviewed, "B01"), /TNEA/);
@@ -351,7 +352,7 @@ test("local server serves the Tamil journey and advances a posted answer", async
           const resumed = await fetch(`${base}/journey`, { method: "POST", body: new URLSearchParams({ state: prepareState.replaceAll("&quot;", '"'), navigate: "check" }) });
           const resumedHtml = await resumed.text();
           assert.match(resumedHtml, /இயற்பியல் மதிப்பெண்/);
-          assert.match(resumedHtml, /கணித மதிப்பெண் சேர்க்கப்பட்டது/);
+          assert.match(resumedHtml, /கணிதம்:<\/strong> 86 \/ 100/);
           const awarenessReturn = await fetch(`${base}/journey`, { method: "POST", body: new URLSearchParams({ state: saved, navigate: "awareness" }) });
           const awarenessReturnHtml = await awarenessReturn.text();
           assert.match(awarenessReturnHtml, /data-content-id="A01"/);
@@ -361,7 +362,41 @@ test("local server serves the Tamil journey and advances a posted answer", async
     }
     const invalid = await fetch(`${base}/journey`, { method: "POST", body: "state=%7B%7D&answer=2026" });
     assert.equal(invalid.status, 400);
+    const partial = ["2026", "academic", "no", "80"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+    for (const answer of ["", "101", "-1", "abc"]) {
+      const response = await fetch(`${base}/journey`, { method: "POST", body: new URLSearchParams({ state: JSON.stringify(partial), answer }) });
+      assert.equal(response.status, 400);
+      const html = await response.text();
+      assert.match(html, /role="alert"/);
+      assert.match(html, /முந்தைய பதில்கள் பாதுகாக்கப்பட்டுள்ளன/);
+      const saved = html.match(/name="state" value="([^"]+)"/)![1].replaceAll("&quot;", '"');
+      assert.deepEqual(parseJourneyState(saved), partial);
+      assert.match(html, /இயற்பியல் மதிப்பெண் எவ்வளவு/);
+    }
+    const changed = await fetch(`${base}/journey`, { method: "POST", body: new URLSearchParams({ state: JSON.stringify(partial), edit: "maths" }) });
+    assert.equal(changed.status, 200);
+    const changedHtml = await changed.text();
+    assert.match(changedHtml, /கணித மதிப்பெண் எவ்வளவு/);
+    const changedState = parseJourneyState(changedHtml.match(/name="state" value="([^"]+)"/)![1].replaceAll("&quot;", '"'));
+    assert.equal(changedState.maths, null);
+    assert.equal(changedState.year, 2026);
   } finally {
     server.kill();
   }
+});
+
+test("editing preserves earlier answers and invalidates all dependent answers", () => {
+  const complete = ["2026", "academic", "yes", "2026", "80", "70", "60"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+  const edited = editJourneyAnswer(complete, "improvement");
+  assert.equal(nextJourneyQuestion(edited), "improvement");
+  assert.equal(edited.year, 2026);
+  assert.equal(edited.stream, "academic");
+  for (const field of ["improvement", "improvement_year", "maths", "physics", "chemistry"] as const) assert.equal(edited[field], null);
+  const changed = ["no", "90", "70", "60"].reduce(answerJourneyQuestion, edited);
+  assert.equal(journeyGuidanceResult(changed, runtime())?.eligibility.cutoff, 155);
+  assert.deepEqual(editJourneyAnswer(complete, "year"), EMPTY_JOURNEY);
+  assert.throws(() => editJourneyAnswer(complete, "community"));
+  assert.throws(() => editJourneyAnswer(EMPTY_JOURNEY, "maths"));
+  const unknown = ["2026", "academic", "no", "80", "unknown"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+  assert.equal(editJourneyAnswer(unknown, "physics").maths, 80);
 });

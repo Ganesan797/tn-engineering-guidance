@@ -144,3 +144,25 @@ test("rendering preserves existing results, sidecar and navigation context", () 
     assert.deepEqual(evaluation.result, journeyGuidanceResult(current, runtime));
   }
 });
+
+test("unasked blockers and unknown answers are named before the explanation disclosure", () => {
+  const html = render();
+  const primary = html.slice(0, html.indexOf(`<summary>${M3_COPY.why[0]}</summary>`));
+  for (const label of ["பூர்வீகம் தொடர்பான சேர்க்கை வழி", "இடஒதுக்கீட்டுக்கான சமூகப் பிரிவு", "மதிப்பெண்கள் கிரேடாகக் கொடுக்கப்பட்டுள்ளனவா"]) assert.ok(primary.includes(label));
+  assert.match(primary, /இந்த விவரங்களைச் சிறிய சரிபார்ப்பு கேட்கவில்லை/);
+  assert.match(primary, /id=Q077/);
+  assert.match(primary, /name="edit" value="maths"/);
+  const unknown = render(evaluateJourneyGuidance({ ...EMPTY_JOURNEY, year: "unknown" }, runtime));
+  assert.match(unknown, /சேர்க்கை ஆண்டு<\/strong>/);
+  assert.match(unknown, /சரிபார்ப்பு இங்கே நிறுத்தப்பட்டுள்ளது/);
+  assert.doesNotMatch(unknown, /id=Q077/);
+});
+
+test("calculation is trace-backed and minimum-mark mechanics are not presented as threshold approval", () => {
+  const html = render();
+  assert.match(html, /86 \+ 78 ÷ 2 \+ 81 ÷ 2 = 165.5 \/ 200/);
+  assert.match(html, /It does not by itself confirm the minimum-mark requirement/);
+  assert.match(html, /மதிப்பெண்களை வட்டமிடாமல் பயன்படுத்துதல்/);
+  assert.match(render(evaluateJourneyGuidance({ ...state, improvement: true, improvement_year: 2006 }, runtime)), /\.pdf#page=4/);
+  assert.doesNotMatch(html, /\.pdf#page=9/); // Printed page is not silently treated as PDF position.
+});

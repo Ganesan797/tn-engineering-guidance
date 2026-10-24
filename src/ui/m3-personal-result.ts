@@ -1,6 +1,7 @@
 import { journeyGeneralGuidanceOptions, resolvePersonalGuidanceMessage, toPersonalGuidanceFoundation, type JourneyGuidanceEvaluation } from "../student-semantics/personal-guidance.ts";
 import { studentThingsWorthChecking, type GeneralGuidanceOptions } from "../student-semantics/things-worth-checking.ts";
 import type { ClaimEvidence, PresentationSourceRegistry } from "../student-semantics/provenance.ts";
+import { ANSWER_LABELS, renderJourneyAnswers } from "./journey-answers.ts";
 
 type Language = "ta" | "en";
 type Pair = readonly [string, string]; // Tamil first. All new copy HUMAN_REVIEW_PENDING.
@@ -11,7 +12,7 @@ export interface M3PresentationOptions {
 export const M3_COPY = {
   title: ["உங்கள் அடுத்த தெளிவான படி", "Your next step"],
   review: ["மொழி மதிப்பாய்வுக்கான வரைவு — இங்குள்ள புதிய தமிழ் மற்றும் ஆங்கில வாசகங்கள் இன்னும் ஒப்புதல் பெறவில்லை.", "Language review draft — the new Tamil and English wording here has not yet been approved."],
-  personal: ["நீங்கள் அளித்த தகவல்களுக்கான முடிவுகள்", "Results based on your answers"],
+  personal: ["உங்கள் பதில்களுக்கான முடிவுகள்", "Results based on your answers"],
   cutoff: ["கணக்கிடப்பட்ட கட்-ஆஃப்", "Calculated cutoff"],
   noCutoff: ["கட்-ஆஃப் இப்போது கிடைக்கவில்லை. தெரியாத மதிப்பெண்ணை ஊகிக்கவில்லை.", "A cutoff is not available now. Unknown marks have not been guessed."],
   eligibility: ["மற்ற தகுதி நிபந்தனைகள்", "Broader eligibility"],
@@ -50,6 +51,11 @@ export const M3_COPY = {
   answer: ["தற்போதுள்ள கேள்விக்குத் திரும்ப", "Return to the existing question"],
   official: ["அதிகாரப்பூர்வ வழிகாட்டலைப் பார்க்க", "View official guidance"],
   newCheck: ["புதிய சரிபார்ப்பைத் தொடங்க", "Start a new check"],
+  outstanding: ["இன்னும் சரிபார்க்க வேண்டியவை", "What still needs checking"],
+  notCollected: ["இந்த விவரங்களைச் சிறிய சரிபார்ப்பு கேட்கவில்லை. தொடர்புள்ள விளக்கத்தைப் படித்து, அதிகாரப்பூர்வ வழிகாட்டலுடன் சரிபாருங்கள்.", "The short check did not ask for these details. Read the related explanations and verify them against official guidance."],
+  paused: ["தெரியாத பதிலால் சரிபார்ப்பு இங்கே நிறுத்தப்பட்டுள்ளது. பதில் தெரிந்ததும் தொடரலாம்.", "The check is paused at an unknown answer. You can continue when you know it."],
+  read: ["இதில் என்ன சரிபார்க்க வேண்டும்? (புதிய தாவல்)", "What should I check? (new tab)"],
+  formula: ["கணிதம் + இயற்பியல் ÷ 2 + வேதியியல் ÷ 2", "Mathematics + Physics ÷ 2 + Chemistry ÷ 2"],
 } as const satisfies Record<string, Pair>;
 
 // Labels describe existing identities, never predicates or new requirements.
@@ -65,7 +71,7 @@ const CHECK_LABELS: Readonly<Record<string, Pair>> = {
   ELG018: ["குறைந்தபட்ச கல்வி மதிப்பெண்கள்", "Minimum academic marks"],
   ELG019: ["குறைந்தபட்ச கல்வி மதிப்பெண்கள்", "Minimum academic marks"],
   ELG030: ["கிரேடாகக் குறிப்பிடப்பட்ட மதிப்பெண்கள்", "Marks shown as grades"],
-  ELG031: ["குறைந்தபட்ச மதிப்பெண் ஒப்பீடு", "Minimum-mark comparison"],
+  ELG031: ["மதிப்பெண்களை வட்டமிடாமல் பயன்படுத்துதல்", "Using marks without rounding"],
   ELG032: ["மேம்பாட்டுத் தேர்வு மதிப்பெண்கள்", "Improvement marks"],
 };
 const FIELD_LABELS: Readonly<Record<string, Pair>> = {
@@ -84,6 +90,18 @@ const FIELD_LABELS: Readonly<Record<string, Pair>> = {
   govt_school_7_5_entitlement: ["அரசுப் பள்ளி ஒதுக்கீட்டுத் தகுதி", "Government-school reservation entitlement"],
 };
 const SUBJECTS: Readonly<Record<string, Pair>> = { maths: ["கணிதம்", "Mathematics"], physics: ["இயற்பியல்", "Physics"], chemistry: ["வேதியியல்", "Chemistry"] };
+// These fields are not collected by the bounded journey. Links explain existing
+// topics; they do not assert an entitlement or add an eligibility predicate.
+const UNCOLLECTED: Readonly<Record<string, { id: string; label: Pair }>> = {
+  nativity_exception_type: { id: "Q077", label: ["பூர்வீகம் பற்றிய விளக்கம்", "About nativity"] },
+  community: { id: "Q074", label: ["குறைந்தபட்ச மதிப்பெண்கள் பற்றிய விளக்கம்", "About minimum marks"] },
+  grade_certificate_used: { id: "Q083", label: ["தகுதி நிலை தெளிவில்லையெனில் உதவி பெறுவது", "Getting help with an unclear case"] },
+};
+const CHECK_EXPLANATIONS: Readonly<Record<string, { explanation: string; copy: Pair }>> = {
+  ELG007_PREDICATE_SATISFIED: { explanation: "Academic stream and effective mark predicates pass.", copy: ["பொதுக் கல்விப் பிரிவுக்கான மூன்று மதிப்பெண்களும் கணக்கிற்குக் கிடைத்துள்ளன. இது முழுத் தகுதி உறுதிப்படுத்தல் அல்ல.", "The three academic marks are available for the calculation. This does not confirm full eligibility."] },
+  ELG009_PREDICATE_SATISFIED: { explanation: "Academic merit cutoff was calculated from effective marks.", copy: ["கணக்கில் பயன்படுத்தப்பட்ட மதிப்பெண்களிலிருந்து கட்-ஆஃப் கிடைத்துள்ளது. கணக்கை கீழே பார்க்கலாம்.", "The cutoff was calculated from the effective marks. See the calculation below."] },
+  ELG031_PREDICATE_SATISFIED: { explanation: "Minimum eligibility uses the unrounded raw average and no normalized marks.", copy: ["இந்தச் சோதனை மதிப்பெண்களை வட்டமிடாமல் பயன்படுத்துவது பற்றியது. உங்கள் சமூகப் பிரிவுக்கான குறைந்தபட்ச மதிப்பெண் தகுதி உறுதியானது என்று இதனால் பொருளல்ல.", "This check concerns using marks without rounding. It does not by itself confirm the minimum-mark requirement for your community category."] },
+};
 const NORMAL_ORIGINS = new Set(["maths_mark", "physics_mark", "chemistry_mark"]);
 const ORIGINAL_ORIGINS = new Set(["original_maths_mark", "original_physics_mark", "original_chemistry_mark"]);
 const escape = (s: string) => s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
@@ -110,12 +128,17 @@ export function renderM3PersonalResult(evaluation: JourneyGuidanceEvaluation, op
         const precision = claim.precision === "CHECK_LEVEL" ? M3_COPY.checkScope : claim.precision === "DOCUMENT_LEVEL" ? M3_COPY.documentScope : M3_COPY.contentScope;
         // Localized limits retain precision and location status; raw English metadata is never dumped.
         const locationLimit = ref.location_status === "VERIFIED" ? M3_COPY.verified : ref.location_status === "RECORDED" ? M3_COPY.recorded : M3_COPY.unresolved;
-        return `<div class="evidence-reference"><p>${sourceLink(ref.source_link, label)}</p><p>${escape(t(M3_COPY.year))}: ${ref.source_year ?? escape(t(M3_COPY.unknown))}${ref.printed_page !== null ? ` · ${escape(t(M3_COPY.page))}: ${ref.printed_page}` : ""}${ref.pdf_position !== null ? ` · ${escape(t(M3_COPY.pdf))}: ${ref.pdf_position}` : ""}</p>${claim.precision === "APPROVED_CONTENT_LEVEL" && ref.location && safe(ref.location) ? `<p>${escape(t(M3_COPY.location))}: ${escape(ref.location)}</p>` : ""}${p(precision)}${p(locationLimit)}</div>`;
+        const sourceUrl = ref.location_status === "VERIFIED" && ref.pdf_position !== null ? `${ref.source_link.split("#")[0]}#page=${ref.pdf_position}` : ref.source_link;
+        return `<div class="evidence-reference"><p>${sourceLink(sourceUrl, label)}</p><p>${escape(t(M3_COPY.year))}: ${ref.source_year ?? escape(t(M3_COPY.unknown))}${ref.printed_page !== null ? ` · ${escape(t(M3_COPY.page))}: ${ref.printed_page}` : ""}${ref.pdf_position !== null ? ` · ${escape(t(M3_COPY.pdf))}: ${ref.pdf_position}` : ""}</p>${ref.location && safe(ref.location) && (claim.precision === "APPROVED_CONTENT_LEVEL" || ref.location_status === "VERIFIED") ? `<p>${escape(t(M3_COPY.location))}: ${escape(ref.location)}</p>` : ""}${p(precision)}${p(locationLimit)}</div>`;
       }).join("");
     };
     const fields = (values: readonly string[]) => `<ul>${[...new Set(values.map(field => t(FIELD_LABELS[field] ?? M3_COPY.detail)))].map(label => `<li>${escape(label)}</li>`).join("")}</ul>`;
     const result = evaluation.result;
     const sidecar = evaluation.explanation;
+    const blockers = [...new Set(result?.eligibility.blocking_missing_fields ?? [])];
+    const fieldIssue = model.issues.find(issue => issue.trace.field !== undefined);
+    const namedField = fieldIssue?.trace.field;
+    const outstanding = `${namedField ? `<li><strong>${escape(t(ANSWER_LABELS[namedField]))}</strong><p>${message(fieldIssue!.message)}</p>${fieldIssue!.category === "UNKNOWN_INFORMATION" ? p(M3_COPY.paused) : ""}</li>` : ""}${blockers.map(field => `<li><strong>${escape(t(FIELD_LABELS[field] ?? M3_COPY.detail))}</strong>${UNCOLLECTED[field] ? `<p><a href="/journey/questions?id=${UNCOLLECTED[field].id}&amp;lang=${language}" target="_blank" rel="noopener">${escape(t(UNCOLLECTED[field].label))} (${escape(language === "ta" ? "புதிய தாவல்" : "new tab")})</a></p>` : `<p>${language === "ta" ? "இந்த விவரம் இன்னும் தீரவில்லை. உங்கள் பதில்களைச் சரிபார்த்து, தேவைப்பட்டால் கீழே திருத்துங்கள்." : "This detail is unresolved. Review your answers and edit them below if needed."}</p>`}</li>`).join("")}${model.checks.filter(check => check.category !== "KNOWN_RESULT" && !(sidecar?.check_blockers.find(entry => entry.rule_id === check.trace.rule_id)?.blocking_fields.length)).map(check => `<li><strong>${escape(title(check.trace.rule_id!))}</strong><p>${message(check.message)}</p></li>`).join("")}`;
     const overall = result?.eligibility.outcome === "ELIGIBLE" ? "eligible" : result?.eligibility.outcome === "INELIGIBLE" ? "negative" : "unresolved";
     const official = options.sources?.get(evaluation.context.scope.kind === "UNSUPPORTED" ? "SRC001" : "SRC002");
     const action = model.primary_action.kind === "RETRY_WHEN_KNOWN" ? form("retry", "1", M3_COPY.retry, true)
@@ -125,20 +148,25 @@ export function renderM3PersonalResult(evaluation: JourneyGuidanceEvaluation, op
     const checks = model.checks.map((check, index) => {
       const id = check.trace.rule_id!;
       const blockers = sidecar?.check_blockers.find(entry => entry.check_index === index && entry.rule_id === id)?.blocking_fields ?? [];
-      return `<li><strong>${escape(title(id))}</strong>${check.category === "KNOWN_RESULT" ? p(M3_COPY.met) : `<p>${message(check.message)}</p>`}${blockers.length ? p(M3_COPY.blocked) + fields(blockers) : ""}</li>`;
+      const actual = result?.eligibility.checks[index];
+      const knownExplanation = CHECK_EXPLANATIONS[check.trace.reason_code ?? ""];
+      const explanation = knownExplanation && actual?.outcome === "ELIGIBLE" && actual.explanation === knownExplanation.explanation ? p(knownExplanation.copy)
+        : check.category === "KNOWN_RESULT" ? p(M3_COPY.met) : `<p>${message(check.message)}</p>`;
+      return `<li><strong>${escape(title(id))}</strong>${explanation}${blockers.length ? p(M3_COPY.blocked) + fields(blockers) : ""}</li>`;
     }).join("");
     const trace = sidecar?.cutoff_trace;
     const traceHtml = !trace ? p(M3_COPY.partial) : trace.status === "NOT_REQUESTED" ? p(M3_COPY.notRequested)
       : `${trace.status === "UNAVAILABLE" ? p(M3_COPY.partial) : ""}<ul>${trace.operands.map(operand => {
         const origin = operand.input_field !== null && NORMAL_ORIGINS.has(operand.input_field) ? M3_COPY.normal : operand.input_field !== null && ORIGINAL_ORIGINS.has(operand.input_field) ? M3_COPY.original : M3_COPY.originUnknown;
         return `<li>${escape(t(SUBJECTS[operand.subject]))}: <strong>${operand.value ?? escape(t(M3_COPY.unknown))}</strong><br>${escape(t(origin))}</li>`;
-      }).join("")}</ul>${trace.status === "AVAILABLE" ? `<p>${escape(t(M3_COPY.cutoff))}: <strong>${trace.result} / 200</strong></p>` : ""}`;
+      }).join("")}</ul>${trace.status === "AVAILABLE" ? `<p>${escape(t(M3_COPY.formula))}</p><p class="formula"><strong>${trace.operands.find(operand => operand.subject === "maths")!.value} + ${trace.operands.find(operand => operand.subject === "physics")!.value} ÷ 2 + ${trace.operands.find(operand => operand.subject === "chemistry")!.value} ÷ 2 = ${trace.result} / 200</strong></p>` : ""}`;
     const general = studentThingsWorthChecking(scoped, language);
+    const explore = `<ul><li><a href="/journey/questions?id=Q071&amp;lang=${language}" target="_blank" rel="noopener">${language === "ta" ? "விண்ணப்பிக்கும் முன் என்ன விவரங்களைத் தெரிந்துகொள்ள வேண்டும்?" : "What should I know before applying?"}</a></li><li><a href="/journey/questions?id=Q086&amp;lang=${language}" target="_blank" rel="noopener">${language === "ta" ? "கட்-ஆஃப்புக்கும் தரவரிசைக்கும் என்ன வேறுபாடு?" : "How are cutoff and rank different?"}</a></li><li><a href="/journey/questions?id=Q082&amp;lang=${language}" target="_blank" rel="noopener">${language === "ta" ? "எந்த ஆவணங்களைத் தயார்செய்ய வேண்டும்?" : "Which documents should I prepare?"}</a></li></ul>`;
     const generalHtml = general.items.map((item, index) => `<article><h3>${escape(item.title)}</h3><p>${escape(item.body)}</p><p>${escape(item.why_it_may_be_useful)}</p><p>${escape(item.next_direction)}</p><p>${escape(item.limit)}</p>${sourceLink(item.official_url, t(M3_COPY.official))}<details><summary>${escape(t(M3_COPY.evidence))}</summary>${evidence(model.things_worth_checking.items[index]?.evidence)}</details></article>`).join("");
-    return `<div lang="${language}"><section class="card" aria-label="${escape(t(M3_COPY.personal))}"><h2>${escape(t(M3_COPY.personal))}</h2><p>${message("basis")}</p><h3>${escape(t(M3_COPY.cutoff))}</h3>${model.cutoff !== null ? `<p class="cutoff-score"><strong>${model.cutoff} / 200</strong></p>` : p(M3_COPY.noCutoff)}<h3>${escape(t(M3_COPY.eligibility))}</h3><p>${message(result ? overall : model.primary.message)}</p>${model.primary.message !== overall && result ? `<p>${message(model.primary.message)}</p>` : ""}${model.cutoff_eligibility_limit ? `<p>${message(model.cutoff_eligibility_limit)}</p>` : ""}${p(M3_COPY.limit)}<h3>${escape(t(M3_COPY.next))}</h3><p>${message(model.primary_action.message)}</p><div class="actions">${action}</div>
+    return `<div lang="${language}"><section class="card" aria-label="${escape(t(M3_COPY.personal))}"><h2>${escape(t(M3_COPY.personal))}</h2><h3>${escape(t(M3_COPY.cutoff))}</h3>${model.cutoff !== null ? `<p class="cutoff-score"><strong>${model.cutoff} / 200</strong></p>` : p(M3_COPY.noCutoff)}<h3>${escape(t(M3_COPY.eligibility))}</h3>${model.cutoff_eligibility_limit ? "" : `<p>${message(result ? overall : model.primary.message)}</p>`}${model.primary.message !== overall && result ? `<p>${message(model.primary.message)}</p>` : ""}${model.cutoff_eligibility_limit ? `<p>${message(model.cutoff_eligibility_limit)}</p>` : ""}${p(M3_COPY.limit)}${outstanding ? `<section class="outstanding"><h3>${escape(t(M3_COPY.outstanding))}</h3>${blockers.some(field => UNCOLLECTED[field]) ? p(M3_COPY.notCollected) : ""}<ul>${outstanding}</ul></section>` : ""}<h3>${escape(t(M3_COPY.next))}</h3><p>${message(model.primary_action.message)}</p><div class="actions">${action}</div>${renderJourneyAnswers(evaluation.context.answers, language)}
       <details><summary>${escape(t(M3_COPY.why))}</summary>${checks ? `<ul>${checks}</ul>` : p(M3_COPY.noChecks)}${sidecar?.aggregate_blockers.length ? `<h3>${escape(t(M3_COPY.global))}</h3>${fields(sidecar.aggregate_blockers.map(entry => entry.field))}` : ""}<h3>${escape(t(M3_COPY.trace))}</h3>${traceHtml}</details>
       <details><summary>${escape(t(M3_COPY.evidence))}</summary>${result?.eligibility.checks.map(check => `<details><summary>${escape(title(check.rule_id))}</summary>${evidence(model.evidence.find(claim => claim.trace.rule_id === check.rule_id))}</details>`).join("") || p(M3_COPY.noEvidence)}${model.evidence.filter(claim => claim.precision === "DOCUMENT_LEVEL").map(claim => evidence(claim)).join("")}</details></section>
-      <section class="card general-guidance" aria-label="${escape(general.heading)}"><h2>${escape(general.heading)}</h2><p>${escape(general.scope)}</p>${general.empty_state ? `<p>${escape(general.empty_state)}</p>` : generalHtml}<div class="actions">${prepare()}</div></section><p><a href="/journey?step=check">${escape(t(M3_COPY.newCheck))}</a></p></div>`;
+      <section class="card general-guidance" aria-label="${escape(general.heading)}"><h2>${escape(general.heading)}</h2><p>${escape(general.scope)}</p>${general.empty_state ? `<p>${escape(general.empty_state)}</p><p>${language === "ta" ? "விருப்பப்பட்டால் இந்தப் பொதுவான கேள்விகளை ஆராயலாம் (புதிய தாவல்கள்):" : "You can explore these general questions (new tabs):"}</p>${explore}` : generalHtml}<div class="actions">${prepare()}</div></section><p><a href="/journey?step=check">${escape(t(M3_COPY.newCheck))}</a></p></div>`;
   };
-  return `<div class="m3-result" data-language-review="pending"><h1>${escape(M3_COPY.title[0])}</h1><p class="review">${escape(M3_COPY.review[0])}<br><span lang="en">${escape(M3_COPY.review[1])}</span></p>${render("ta")}<details class="card"><summary lang="en">English — wording for review</summary>${render("en")}</details></div>`;
+  return `<div class="m3-result" data-language-review="pending"><h1>${escape(M3_COPY.title[0])}</h1>${render("ta")}<details class="card"><summary lang="en">English — wording for review</summary>${render("en")}</details><details><summary>இந்தச் சோதனைப் பதிப்பைப் பற்றி</summary><p class="notice">${escape(M3_COPY.review[0])}<br><span lang="en">${escape(M3_COPY.review[1])}</span></p></details></div>`;
 }

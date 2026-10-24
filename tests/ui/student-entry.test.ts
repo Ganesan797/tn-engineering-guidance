@@ -170,9 +170,13 @@ test("five sections progressively disclose frozen content and preserve caveats a
   assert.match(primary, /online application/);
 });
 
-test("interactive cards are complete anchors and governance notices require review mode", () => {
+test("one recommended starting card remains a complete anchor and shortcuts stay secondary", () => {
   const home = renderStudentEntryPage({ route: "home", language: "en" }, pack);
-  assert.equal([...home.matchAll(/<a class="choice-card"/g)].length, 3);
+  assert.equal([...home.matchAll(/<a class="choice-card recommended"/g)].length, 1);
+  const tamil = renderStudentEntryPage({ route: "home", language: "ta" }, pack);
+  assert.match(tamil, /class="choice-card recommended" href="\/journey"/);
+  assert.ok(tamil.indexOf('href="/journey"') < tamil.indexOf('href="/personal?lang=ta"'));
+  assert.match(tamil, /தேர்வுப் பட்டியல் உருவாக்கும் வசதி இன்னும் இல்லை/);
   assert.match(home, /:focus-visible/);
   assert.doesNotMatch(home, /Development review only|human review preview|Tamil wording is pending/);
   const review = renderStudentEntryPage({ route: "home", language: "en" }, pack, undefined, { review: true });
