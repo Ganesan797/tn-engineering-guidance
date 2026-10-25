@@ -1,5 +1,7 @@
-import { createGuidance, type GuidanceDependencies, type GuidanceResult } from "../application/guidance.ts";
+import { createGuidanceWithExplanation, type GuidanceDependencies, type GuidanceResult } from "../application/guidance.ts";
+import type { ExplainedEvaluation } from "../domain/explanation.ts";
 import { blankReferenceRequest } from "../ui/reference-request.ts";
+import type { JourneyAssessmentScope, JourneyGuidanceEvaluation, JourneyInputState } from "../student-semantics/personal-guidance.ts";
 
 export const JOURNEY_FIELDS = [
   "year", "stream", "improvement", "improvement_year",
@@ -82,11 +84,27 @@ export function retryUnknown(state: JourneyState): JourneyState {
   return field ? { ...state, [field]: null } : state;
 }
 
+// Editing an earlier answer invalidates later answers, including marks whose
+// meaning can change when improvement-exam answers change. Never reuse stale data.
+export function editJourneyAnswer(state: JourneyState, field: string): JourneyState {
+  const index = JOURNEY_FIELDS.indexOf(field as JourneyField);
+  if (index < 0 || state[field as JourneyField] === null) throw new Error("No recorded answer to edit");
+  if (field === "improvement_year" && state.improvement !== true) throw new Error("Inactive question");
+  return Object.fromEntries(JOURNEY_FIELDS.map((key, position) => [key, position < index ? state[key] : null])) as unknown as JourneyState;
+}
+
 export function journeyGuidanceResult(
   state: JourneyState,
   dependencies: GuidanceDependencies,
 ): GuidanceResult | null {
-  if (state.year !== 2026 || state.stream !== "academic") return null;
+  return explainedJourneyResult(state, dependencies)?.result ?? null;
+}
+
+function explainedJourneyResult(
+  state: JourneyState,
+  dependencies: GuidanceDependencies,
+): ExplainedEvaluation<GuidanceResult> | null {
+  if (journeyAssessmentScope(state).kind !== "SUPPORTED") return null;
   const snapshot = dependencies.snapshots.snapshots()[0];
   const blank = blankReferenceRequest({ snapshot_id: snapshot.snapshot_id, snapshot_stage: snapshot.stage });
   const improvedAfter2005 = state.improvement === true && typeof state.improvement_year === "number" && state.improvement_year >= 2006;
@@ -100,5 +118,32 @@ export function journeyGuidanceResult(
       ? { original_maths_mark: entered[0], original_physics_mark: entered[1], original_chemistry_mark: entered[2] }
       : { maths_mark: entered[0], physics_mark: entered[1], chemistry_mark: entered[2] }),
   };
-  return createGuidance({ ...blank, profile }, dependencies);
+  return createGuidanceWithExplanation({ ...blank, profile }, dependencies);
+}
+
+// The existing supported-path guard lives here once. This describes scope, not eligibility.
+function journeyAssessmentScope(state: JourneyState): JourneyAssessmentScope {
+  const field = state.year !== 2026 ? "year" : state.stream !== "academic" ? "stream" : null;
+  if (field === null) return { kind: "SUPPORTED" };
+  const answer = state[field];
+  return { kind: answer === null ? "UNANSWERED" : answer === "unknown" ? "UNKNOWN" : "UNSUPPORTED", field };
+}
+
+export function evaluateJourneyGuidance(state: JourneyState, dependencies: GuidanceDependencies): JourneyGuidanceEvaluation {
+  // Snapshot and validate before evaluation so context and result describe the same answers.
+  const answers = Object.freeze(parseJourneyState(JSON.stringify(state)));
+  const inputs = Object.freeze(Object.fromEntries(JOURNEY_FIELDS.map((field) => [
+    field, answers[field] === null ? "UNANSWERED" : answers[field] === "unknown" ? "UNKNOWN" : "SUPPLIED",
+  ])) as Record<JourneyField, JourneyInputState>);
+  const next_question = nextJourneyQuestion(answers);
+  // Ask the existing active question first. Only expose a retry target if the
+  // unchanged retry/navigation transition actually resumes an unknown answer.
+  const retryCandidate = next_question === null ? nextJourneyQuestion(retryUnknown(answers)) : null;
+  const retry_question = retryCandidate !== null && answers[retryCandidate] === "unknown" ? retryCandidate : null;
+  const evaluation = explainedJourneyResult(answers, dependencies);
+  return Object.freeze({
+    context: Object.freeze({ answers, inputs, scope: Object.freeze(journeyAssessmentScope(answers)), next_question, retry_question }),
+    result: evaluation?.result ?? null,
+    explanation: evaluation?.explanation ?? null,
+  });
 }

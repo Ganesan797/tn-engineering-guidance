@@ -1,3 +1,4 @@
+import { CHECK_COPY } from "./journey-copy.ts";
 import {
   MissingStudentPresentationError, resolveStudentMessage,
   type StudentLanguage, type StudentSemanticMessage,
@@ -51,7 +52,7 @@ export function renderStudentEntryPage(
     const paragraphs = text.body.split(/\n\n+/);
     // Intro and final caveats are always visible. Lists/formula detail is optional.
     // The process sequence itself stays visible so its essential meaning is not hidden.
-    const canCollapse = paragraphs.length > 2 && item.id !== "AW-05";
+    const canCollapse = paragraphs.length > 2 && item.id !== "AW-05" && item.id !== "AW-04";
     const body = canCollapse
       ? `${contentMarkup(paragraphs[0])}${contentMarkup(paragraphs.at(-1)!)}<details class="learn-more"><summary>${message("entry.more")}</summary>${contentMarkup(paragraphs.slice(1, -1).join("\n\n"))}</details>`
       : contentMarkup(text.body);
@@ -61,19 +62,20 @@ export function renderStudentEntryPage(
     const first = pack.items[0];
     const awareness = `<section class="awareness" data-content-id="${first.id}"><h2>${escape(first.presentations[language].title)}</h2>${contentMarkup(first.presentations[language].body)}${evidence(first)}</section>`;
     if (route === "home") {
-      return shell(`<h1>${message("entry.site")}</h1><p>${message("entry.purpose")}</p><section aria-labelledby="entry-choice"><h2 id="entry-choice">${message("entry.choose")}</h2>${(["beginner", "personal", "counselling"] as const).map((target) => `<a class="choice-card" href="${entryHref(target, language)}"><strong>${message(`entry.${target}`)}</strong><p>${message(`entry.${target}.description`)}</p><span class="action">${message("entry.action")} →</span></a>`).join("")}<p>${link("beginner", "entry.unsure")}</p><p><a href="/journey">தமிழில் புதிய படிப்படியான வழிகாட்டல்</a></p></section>${awareness}`);
+      const ta = language === "ta";
+      return shell(`<h1>${message("entry.site")}</h1><p>${message("entry.purpose")}</p><section aria-labelledby="entry-choice"><h2 id="entry-choice">${ta ? "முதல் முறையா? இங்கே தொடங்குங்கள்" : "First time? Start here"}</h2><p>${ta ? "எங்கிருந்து தொடங்குவது என்று தெரியாவிட்டாலும் பரவாயில்லை. மதிப்பெண்களோ தனிப்பட்ட விவரங்களோ தேவையில்லை." : "It is okay if you do not know where to begin. No marks or personal details are needed."}</p><a class="choice-card recommended" href="${ta ? "/journey" : entryHref("beginner", language)}"><strong>${message("entry.beginner")}</strong><p>${ta ? "படிப்பு → சேர்க்கை வழி → தயாரிப்பு. ஒவ்வொன்றாகப் புரிந்துகொள்ளலாம்." : "Understand the course, the admission pathway, and how to prepare, one step at a time."}</p><span class="action">${message("entry.action")} →</span></a></section><nav aria-label="${ta ? "நேரடி உதவி" : "Direct help"}"><h2>${ta ? "குறிப்பிட்ட உதவி வேண்டுமா?" : "Looking for specific help?"}</h2><p>${link("personal", "entry.personal")}</p><p>${link("counselling", "entry.counselling")}</p></nav>${awareness}<details><summary>${ta ? "அறிமுகப் பகுதிகளைத் தனியாகப் படிக்க" : "Read the introduction by topic"}</summary><p>${link("beginner", "entry.beginner")}</p></details>`);
     }
     const directions = `<nav aria-label="${message("entry.next")}"><h2>${message("entry.next")}</h2><ul>${route !== "beginner" ? `<li>${link("beginner", "entry.beginner")}</li>` : ""}${route !== "personal" ? `<li>${link("personal", "entry.personal")}</li>` : ""}<li>${link("home", "entry.return")}</li></ul></nav>`;
     if (route === "beginner") {
       const index = AWARENESS_GROUPS.indexOf(section);
-      const groupNav = `<nav class="group-nav" aria-label="${message("entry.next")}">${AWARENESS_GROUPS.map((group) => `<a href="${sectionHref(group.key)}"${group.key === section.key ? ' aria-current="page"' : ""}>${message(`entry.group.${group.key}`)}</a>`).join("")}</nav>`;
+      const groupNav = `<p class="notice">${language === "ta" ? "அறிமுகப் பகுதி" : "Introduction section"} ${index + 1} / ${AWARENESS_GROUPS.length}</p><details><summary>${language === "ta" ? "பொருளடக்கம் — வேறு பகுதியைப் பார்க்க" : "Contents — jump to another section"}</summary><nav class="group-nav" aria-label="${message("entry.next")}">${AWARENESS_GROUPS.map((group) => `<a href="${sectionHref(group.key)}"${group.key === section.key ? ' aria-current="page"' : ""}>${message(`entry.group.${group.key}`)}</a>`).join("")}</nav></details>`;
       const modules = section.ids.map((id) => module(pack.items.find((item) => item.id === id)!)).join("");
       const steps = `<nav class="steps">${index > 0 ? `<a href="${sectionHref(AWARENESS_GROUPS[index - 1].key)}">← ${message("entry.previous")}</a>` : ""}${index < 4 ? `<a href="${sectionHref(AWARENESS_GROUPS[index + 1].key)}">${message("entry.continue")} →</a>` : ""}</nav>`;
       const nextActions = section.key === "next" ? `<nav><a href="${sectionHref("engineering")}">${message("entry.group.engineering")}</a><p>${link("personal", "entry.personal")}</p><p>${link("counselling", "entry.counselling")}</p><a href="${escape(pack.items.find((item) => item.id === "AW-10")!.sources.find((source) => source.source_id === "SRC002")!.url)}">${message("entry.official")}</a></nav>` : "";
-      return shell(`<h1>${message(`entry.group.${section.key}`)}</h1><p>${message("entry.beginner.prompt")}</p>${groupNav}${modules}${steps}${nextActions}<p><a href="/journey?step=route">தமிழில் படிப்படியான TNEA வழிகாட்டல்</a></p>${directions}`);
+      return shell(`<h1>${message(`entry.group.${section.key}`)}</h1><p>${message("entry.beginner.prompt")}</p>${groupNav}${modules}${steps}${nextActions}${section.key === "next" ? `<p><a href="/journey?step=check${language === "en" ? "&amp;lang=en" : ""}">${language === "ta" ? "தனிப்பட்ட சரிபார்ப்பைத் தொடங்க" : "Start the personal check"}</a></p>` : ""}<details><summary>${message("entry.next")}</summary>${directions}</details>`);
     }
     if (route === "personal") {
-      return shell(`<h1>${message("entry.personal")}</h1><p>${message("entry.personal.intro")}</p><section class="card"><p><a href="/journey?step=check">தமிழில் படிப்படியான தனிப்பட்ட சரிபார்ப்பு</a></p><p>${message("entry.personal.limit")}</p><a href="/personal/reference?lang=${language}">${message("entry.personal.open")}</a></section>${directions}`);
+      return shell(`<h1>${message("entry.personal")}</h1><p>${CHECK_COPY.personalIntro[language === "ta" ? 0 : 1]}</p><a class="choice-card" href="/journey?step=check${language === "en" ? "&amp;lang=en" : ""}"><strong>${CHECK_COPY.start[language === "ta" ? 0 : 1]}</strong></a>${language === "ta" ? `<details class="card"><summary>${message("entry.personal.open")}</summary><p>${message("entry.personal.limit")}</p><a href="/personal/reference?lang=ta">${message("entry.personal.open")}</a></details>` : ""}${directions}`);
     }
     return shell(`<h1>${message("entry.counselling")}</h1><p>${message("entry.counselling.intro")}</p><nav class="group-nav">${["admission", "choices", "support", "next"].map((key) => `<a href="${sectionHref(key)}">${message(`entry.group.${key}` as StudentSemanticMessage["key"])}</a>`).join("")}</nav>${directions}`);
   } catch (error) {

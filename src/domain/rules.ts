@@ -2,6 +2,7 @@ import { ADMISSION_YEAR } from "./constants.ts";
 import { aggregateEligibilityOutcome, assertEligibilityResult } from "./eligibility.ts";
 import { VOCATIONAL_SUBJECT_GROUP_CODES } from "./enums.ts";
 import type { EligibilityOutcome } from "./enums.ts";
+import type { CutoffOperand, CutoffTrace, ExplainedEvaluation, ExplanationSidecarV1 } from "./explanation.ts";
 import type {
   EligibilityCheck,
   EligibilityResult,
@@ -24,12 +25,14 @@ export interface EligibilityEvaluationRequest {
 interface EffectiveMarks {
   readonly academic: readonly [number | null, number | null, number | null];
   readonly vocational: readonly [number | null, number | null, number | null];
+  readonly academic_origins?: readonly [keyof StudentProfile | null, keyof StudentProfile | null, keyof StudentProfile | null];
 }
 
 interface RuleEvaluation {
   readonly check: EligibilityCheck;
   readonly blockingMissingFields: readonly string[];
   readonly cutoff?: number;
+  readonly cutoffTrace?: CutoffTrace;
 }
 
 type RuleExecutor = (
@@ -62,6 +65,8 @@ const RULE_PAGES: Readonly<Record<RuleId, number>> = Object.fromEntries(
     const number = Number(ruleId.slice(3));
     if (number <= 6) return [ruleId, 1];
     if (number === 9 || number === 10) return [ruleId, 9];
+    // Official 2026 brochure: printed p.3, PDF position 4 (verified in M3-T02C).
+    if (number === 32) return [ruleId, 3];
     return [ruleId, 2];
   }),
 ) as Readonly<Record<RuleId, number>>;
@@ -137,6 +142,7 @@ function effectiveMarks(profile: StudentProfile): EffectiveMarks {
     return {
       academic: [null, null, null],
       vocational: [null, null, null],
+      academic_origins: [null, null, null],
     };
   }
 
@@ -147,6 +153,7 @@ function effectiveMarks(profile: StudentProfile): EffectiveMarks {
     return {
       academic: [null, null, null],
       vocational: [null, null, null],
+      academic_origins: [null, null, null],
     };
   }
 
@@ -157,6 +164,7 @@ function effectiveMarks(profile: StudentProfile): EffectiveMarks {
 
   return useOriginal
     ? {
+        academic_origins: ["original_maths_mark", "original_physics_mark", "original_chemistry_mark"],
         academic: [
           profile.original_maths_mark,
           profile.original_physics_mark,
@@ -169,6 +177,7 @@ function effectiveMarks(profile: StudentProfile): EffectiveMarks {
         ],
       }
     : {
+        academic_origins: ["maths_mark", "physics_mark", "chemistry_mark"],
         academic: [
           profile.maths_mark,
           profile.physics_mark,
@@ -456,21 +465,41 @@ export const RULE_EXECUTORS: Readonly<Record<RuleId, RuleExecutor>> = {
       "effective_physics_mark",
       "effective_chemistry_mark",
     ];
-    if (!isAcademic(profile) || hasNull(marks.academic)) {
+    const academic = isAcademic(profile);
+    const operands: readonly [CutoffOperand, CutoffOperand, CutoffOperand] = [
+      { subject: "maths", value: marks.academic[0], input_field: marks.academic_origins?.[0] ?? null },
+      { subject: "physics", value: marks.academic[1], input_field: marks.academic_origins?.[1] ?? null },
+      { subject: "chemistry", value: marks.academic[2], input_field: marks.academic_origins?.[2] ?? null },
+    ];
+    if (!academic || hasNull(marks.academic)) {
       const missing = hasNull(marks.academic)
         ? missingNames(names, marks.academic)
         : ["qualifying_stream"];
-      return needsReview(
-        "ELG009",
-        "Academic merit cutoff cannot be calculated from the required effective marks.",
-        missing,
-      );
+      return {
+        ...needsReview(
+          "ELG009",
+          "Academic merit cutoff cannot be calculated from the required effective marks.",
+          missing,
+        ),
+        cutoffTrace: { status: "UNAVAILABLE", calculation_id: "TNEA_ACADEMIC_CUTOFF", operands: academic ? operands : [], result: null },
+      };
     }
     const cutoff =
       (marks.academic[0] as number) +
       (marks.academic[1] as number) / 2 +
       (marks.academic[2] as number) / 2;
-    return eligible("ELG009", "Academic merit cutoff was calculated from effective marks.", cutoff);
+    return {
+      ...eligible("ELG009", "Academic merit cutoff was calculated from effective marks.", cutoff),
+      cutoffTrace: {
+        status: "AVAILABLE", calculation_id: "TNEA_ACADEMIC_CUTOFF",
+        operands: [
+          { ...operands[0], value: marks.academic[0] as number },
+          { ...operands[1], value: marks.academic[1] as number },
+          { ...operands[2], value: marks.academic[2] as number },
+        ],
+        result: cutoff,
+      },
+    };
   },
 
   ELG010: (_profile, request) =>
@@ -744,6 +773,13 @@ export function evaluateEligibility(
   profile: StudentProfile,
   request: EligibilityEvaluationRequest,
 ): EligibilityResult {
+  return evaluateEligibilityWithExplanation(profile, request).result;
+}
+
+export function evaluateEligibilityWithExplanation(
+  profile: StudentProfile,
+  request: EligibilityEvaluationRequest,
+): ExplainedEvaluation<EligibilityResult> {
   const marks = effectiveMarks(profile);
   const evaluations = RULE_IDS.map((ruleId) =>
     RULE_EXECUTORS[ruleId](profile, request, marks),
@@ -753,13 +789,16 @@ export function evaluateEligibility(
   const blockingMissingFieldSet = new Set(
     evaluations.flatMap(({ blockingMissingFields }) => blockingMissingFields),
   );
+  const aggregate_blockers: { field: string; origin: "AGGREGATION" }[] = [];
 
   if ((isAcademic(profile) || isVocational(profile)) && profile.community === null) {
     blockingMissingFieldSet.add("community");
+    aggregate_blockers.push({ field: "community", origin: "AGGREGATION" });
   }
 
   if (request.govt_school_7_5_entitlement_requested) {
     blockingMissingFieldSet.add("govt_school_7_5_entitlement");
+    aggregate_blockers.push({ field: "govt_school_7_5_entitlement", origin: "AGGREGATION" });
   }
 
   const blockingMissingFields = Array.from(blockingMissingFieldSet);
@@ -776,5 +815,14 @@ export function evaluateEligibility(
   };
 
   assertEligibilityResult(resultValue);
-  return resultValue;
+  const explanation: ExplanationSidecarV1 = {
+    version: 1,
+    check_blockers: evaluations.map(({ check, blockingMissingFields }, check_index) => ({
+      check_index, rule_id: check.rule_id, blocking_fields: [...blockingMissingFields],
+    })),
+    aggregate_blockers,
+    cutoff_trace: evaluations.find(({ cutoffTrace }) => cutoffTrace !== undefined)?.cutoffTrace
+      ?? { status: "NOT_REQUESTED", calculation_id: null, operands: [], result: null },
+  };
+  return { result: resultValue, explanation };
 }

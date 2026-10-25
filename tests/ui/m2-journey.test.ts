@@ -4,12 +4,13 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { createPilotRuntime } from "../../src/application/pilot-runtime.ts";
-import { answerJourneyQuestion, EMPTY_JOURNEY, journeyGuidanceResult, nextJourneyQuestion, parseJourneyState, retryUnknown } from "../../src/m2/journey.ts";
+import { answerJourneyQuestion, editJourneyAnswer, EMPTY_JOURNEY, journeyGuidanceResult, nextJourneyQuestion, parseJourneyState, retryUnknown } from "../../src/m2/journey.ts";
 import { applyApprovedTamilStudentCopy, parseAwarenessPack } from "../../src/student-semantics/awareness.ts";
 import { renderStudentEntryPage } from "../../src/ui/student-entry.ts";
 import { renderM2Journey, reviewedAwarenessTamilQuestion, reviewedTamilUnit } from "../../src/ui/m2-journey.ts";
 import { loadQuestionCollection, renderQuestionCollection } from "../../src/ui/explore-questions.ts";
 import { contentMarkup } from "../../src/ui/student-entry.ts";
+import { CHECK_COPY, CHECK_COPY_REVIEW, CHECK_QUESTIONS_EN } from "../../src/ui/journey-copy.ts";
 
 const load = (path: string) => readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
 const pack = applyApprovedTamilStudentCopy(parseAwarenessPack(
@@ -141,7 +142,8 @@ test("lateral entry is informational and cutoff explanation preserves the result
   const result = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
   assert.match(result, /id=Q002" target="_blank"/);
   assert.match(result, /165.5 \/ 200/);
-  assert.match(result, /NEEDS_REVIEW/);
+  assert.match(result, /முழுத் தகுதியை உறுதிப்படுத்த இன்னும் சில விவரங்களைச் சரிபார்க்க வேண்டும்/);
+  assert.doesNotMatch(result, /NEEDS_REVIEW/);
   assert.match(renderM2Journey("route", pack, reviewed, awarenessReviewed, runtime()), /id=Q060/);
   for (const page of ["awareness", "study", "compare", "route", "prepare"] as const) {
     const withInputs = renderM2Journey(page, pack, reviewed, awarenessReviewed, runtime(), state);
@@ -200,7 +202,8 @@ test("zero-knowledge Tamil path offers engineering and branch awareness before T
   for (const paragraph of routeParagraphs) assert.ok(route.includes(contentMarkup(paragraph)));
   assert.match(route, /data-content-id="AW-03"/);
   assert.match(route, /data-content-id="AW-05"/);
-  assert.match(route, /B01, B04/);
+  assert.match(route, /விண்ணப்பம் மற்றும் கலந்தாய்வு — மேலும் விளக்கம்/);
+  assert.doesNotMatch(route.replace(/<[^>]*>/g, ""), /B01|B04|B01–B08/);
   assert.match(route, /\/journey\?step=prepare/);
   assert.match(renderM2Journey("prepare", pack, reviewed, awarenessReviewed, runtime()), /data-content-id="B05"/);
   assert.match(reviewedTamilUnit(reviewed, "B01"), /TNEA/);
@@ -211,6 +214,83 @@ test("informed student can enter the optional check directly", () => {
   const check = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime());
   assert.match(check, /எந்த ஆண்டு/);
   assert.doesNotMatch(check, /data-content-id="AW-01"/);
+});
+
+test("personal-check copy explains the benefit before scope and provides matching English review text", () => {
+  const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime());
+  assert.ok(html.indexOf(CHECK_COPY.benefit[0]) < html.indexOf(CHECK_COPY.scope[0]));
+  assert.ok(html.includes(CHECK_COPY.scope[1]));
+  assert.equal(CHECK_COPY_REVIEW, "CANDIDATE_PENDING_OWNER_REVIEW");
+  let state = EMPTY_JOURNEY;
+  for (const answer of ["2026", "academic", "yes", "2006", "86", "78", "81"]) {
+    const field = nextJourneyQuestion(state)!;
+    const page = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
+    assert.ok(page.includes(CHECK_QUESTIONS_EN[field]));
+    assert.match(page, /name="unknown" value="1"/);
+    assert.match(page, /action="\/journey" method="post"/);
+    state = answerJourneyQuestion(state, answer);
+  }
+  assert.equal(nextJourneyQuestion(state), null);
+  assert.equal(journeyGuidanceResult(state, runtime())?.eligibility.cutoff, 165.5);
+});
+
+test("one journey evaluation renders equivalent Tamil and English personal results", () => {
+  const state = ["2026", "academic", "no", "86", "78", "81"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+  const engine = runtime();
+  const before = JSON.stringify(journeyGuidanceResult(state, engine));
+  const ta = renderM2Journey("check", pack, reviewed, awarenessReviewed, engine, state);
+  const en = renderM2Journey("check", pack, reviewed, awarenessReviewed, engine, state, undefined, {}, "en");
+  assert.match(ta, /<html lang="ta"/);
+  assert.match(en, /<html lang="en"/);
+  assert.match(ta, /165.5 \/ 200/);
+  assert.match(en, /165.5 \/ 200/);
+  assert.match(en, /Your cutoff is available/);
+  assert.match(en, /What still needs checking/);
+  assert.match(en, /Things worth checking/);
+  assert.match(en, /Where does this information come from\?/);
+  assert.match(en, /name="navigate" value="check" lang="ta"/);
+  assert.equal(JSON.stringify(journeyGuidanceResult(state, engine)), before);
+});
+
+test("English next directions reuse canonical route and preparation content", () => {
+  for (const page of ["awareness", "study", "compare", "route", "prepare"] as const) {
+    const html = renderM2Journey(page, pack, reviewed, awarenessReviewed, runtime(), EMPTY_JOURNEY, undefined, {}, "en");
+    assert.match(html, /<html lang="en"/);
+    assert.match(html, new RegExp(`name="navigate" value="${page}" lang="ta"`));
+    assert.doesNotMatch(html.replace(/<[^>]+>/g, " "), /ELG\d+|SRC\d+|NEEDS_REVIEW/);
+  }
+  const prepare = renderM2Journey("prepare", pack, reviewed, awarenessReviewed, runtime(), EMPTY_JOURNEY, undefined, {}, "en");
+  assert.match(prepare, /2026 application preparation/);
+  assert.match(prepare, /Do not upload documents here/);
+  assert.match(prepare, /name="navigate" value="check"|href="\/journey\?step=check&amp;lang=en"/);
+});
+
+test("later questions show the answer first and keep extra explanation optional", () => {
+  const state = answerJourneyQuestion(EMPTY_JOURNEY, "2026");
+  const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
+  assert.doesNotMatch(html, new RegExp(CHECK_COPY.benefit[0]));
+  assert.ok(html.indexOf("<fieldset") < html.indexOf('id="answer-help"'));
+  assert.match(html, /<details><summary>மேலும் விளக்கம்<\/summary>/);
+  assert.match(html, /மதிப்பெண் சான்றிதழைப் பாருங்கள்/);
+  assert.match(html, /More explanation|English — wording for review/);
+});
+
+test("candidate question help explains stream, improvement and 100/50/50 cutoff weighting", () => {
+  for (const [answers, help] of [
+    [["2026"], CHECK_COPY.streamWhy],
+    [["2026", "academic"], CHECK_COPY.improvementWhy],
+    [["2026", "academic", "no"], CHECK_COPY.mathsWhy],
+    [["2026", "academic", "no", "86"], CHECK_COPY.physicsWhy],
+    [["2026", "academic", "no", "86", "78"], CHECK_COPY.chemistryWhy],
+  ] as const) {
+    const state = answers.reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+    const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
+    assert.ok(html.includes(help[0]));
+    assert.ok(html.includes(help[1]));
+  }
+  assert.match(CHECK_COPY.mathsWhy[1], /full mathematics mark/);
+  assert.match(CHECK_COPY.physicsWhy[1], /Half the physics mark/);
+  assert.match(CHECK_COPY.chemistryWhy[1], /Half the chemistry mark/);
 });
 
 test("progressive answers survive the form round trip and the engine supplies the cutoff", () => {
@@ -227,7 +307,8 @@ test("progressive answers survive the form round trip and the engine supplies th
   assert.equal(result?.eligibility.outcome, "NEEDS_REVIEW");
   const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
   assert.match(html, /165.5 \/ 200/);
-  assert.match(html, /NEEDS_REVIEW/);
+  assert.match(html, /முழுத் தகுதியை உறுதிப்படுத்த இன்னும் சில விவரங்களைச் சரிபார்க்க வேண்டும்/);
+  assert.doesNotMatch(html, /NEEDS_REVIEW/);
   assert.doesNotMatch(html, /இடம் உறுதி/);
 });
 
@@ -240,7 +321,7 @@ test("unknown is null for the engine, never false or zero, and known answers rem
   assert.equal(result?.eligibility.cutoff, null);
   assert.equal(result?.eligibility.outcome, "NEEDS_REVIEW");
   assert.ok(result?.eligibility.blocking_missing_fields.includes("improvement_marks_used"));
-  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state), /தகவல் இன்னும் தெரியவில்லை/);
+  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state), /இந்தப் பதில் தெரியாது என்று குறிப்பிட்டுள்ளீர்கள்/);
   const resumed = retryUnknown(parseJourneyState(JSON.stringify(state)));
   assert.equal(resumed.year, 2026);
   assert.equal(resumed.stream, "academic");
@@ -254,7 +335,7 @@ test("unknown is null for the engine, never false or zero, and known answers rem
 test("year and route guards reject unsupported personal calculations", () => {
   const otherYear = answerJourneyQuestion(EMPTY_JOURNEY, "other");
   assert.equal(journeyGuidanceResult(otherYear, runtime()), null);
-  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), otherYear), /2026 விதியை அடுத்த ஆண்டுக்கு/);
+  assert.match(renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), otherYear), /நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழிக்கான தகுதியை/);
   const otherStream = answerJourneyQuestion(answerJourneyQuestion(EMPTY_JOURNEY, "2026"), "other");
   assert.equal(journeyGuidanceResult(otherStream, runtime()), null);
   assert.throws(() => answerJourneyQuestion(EMPTY_JOURNEY, "2027"));
@@ -349,7 +430,7 @@ test("local server serves the Tamil journey and advances a posted answer", async
           const resumed = await fetch(`${base}/journey`, { method: "POST", body: new URLSearchParams({ state: prepareState.replaceAll("&quot;", '"'), navigate: "check" }) });
           const resumedHtml = await resumed.text();
           assert.match(resumedHtml, /இயற்பியல் மதிப்பெண்/);
-          assert.match(resumedHtml, /கணித மதிப்பெண் சேர்க்கப்பட்டது/);
+          assert.match(resumedHtml, /கணிதம்:<\/strong> 86 \/ 100/);
           const awarenessReturn = await fetch(`${base}/journey`, { method: "POST", body: new URLSearchParams({ state: saved, navigate: "awareness" }) });
           const awarenessReturnHtml = await awarenessReturn.text();
           assert.match(awarenessReturnHtml, /data-content-id="A01"/);
@@ -359,7 +440,72 @@ test("local server serves the Tamil journey and advances a posted answer", async
     }
     const invalid = await fetch(`${base}/journey`, { method: "POST", body: "state=%7B%7D&answer=2026" });
     assert.equal(invalid.status, 400);
+    const partial = ["2026", "academic", "no", "80"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+    for (const answer of ["", "101", "-1", "abc"]) {
+      const response = await fetch(`${base}/journey`, { method: "POST", body: new URLSearchParams({ state: JSON.stringify(partial), answer }) });
+      assert.equal(response.status, 400);
+      const html = await response.text();
+      assert.match(html, /role="alert"/);
+      assert.match(html, /முன்பு கொடுத்த பதில்கள் அப்படியே உள்ளன/);
+      const saved = html.match(/name="state" value="([^"]+)"/)![1].replaceAll("&quot;", '"');
+      assert.deepEqual(parseJourneyState(saved), partial);
+      assert.match(html, /இயற்பியல் மதிப்பெண் எவ்வளவு/);
+    }
+    const changed = await fetch(`${base}/journey`, { method: "POST", body: new URLSearchParams({ state: JSON.stringify(partial), edit: "maths" }) });
+    assert.equal(changed.status, 200);
+    const changedHtml = await changed.text();
+    assert.match(changedHtml, /கணித மதிப்பெண் எவ்வளவு/);
+    const changedState = parseJourneyState(changedHtml.match(/name="state" value="([^"]+)"/)![1].replaceAll("&quot;", '"'));
+    assert.equal(changedState.maths, null);
+    assert.equal(changedState.year, 2026);
+    const complete = ["2026", "academic", "no", "86", "78", "81"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+    const switchPage = async (state: typeof EMPTY_JOURNEY, lang: "ta" | "en") => {
+      const response = await fetch(`${base}/journey${lang === "en" ? "?lang=en" : ""}`, {
+        method: "POST", body: new URLSearchParams({ state: JSON.stringify(state), navigate: "check" }),
+      });
+      assert.equal(response.status, 200);
+      const html = await response.text();
+      const encoded = html.match(/name="state" value="([^"]+)"/)?.[1];
+      assert.ok(encoded);
+      assert.deepEqual(parseJourneyState(encoded.replaceAll("&quot;", '"')), state);
+      return html;
+    };
+    const english = await switchPage(complete, "en");
+    assert.match(english, /<html lang="en"/);
+    assert.match(english, /165.5 \/ 200/);
+    assert.match(english, /Things worth checking/);
+    assert.match(english, /action="\/journey\?lang=en"/);
+    assert.match(await switchPage(complete, "ta"), /165.5 \/ 200/);
+    const halfway = ["2026", "academic", "no", "86"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+    assert.match(await switchPage(halfway, "en"), /What was your Physics mark/);
+    const unknown = answerJourneyQuestion(halfway, "unknown");
+    const unknownEnglish = await switchPage(unknown, "en");
+    assert.match(unknownEnglish, /Provide this detail now/);
+    const retry = await fetch(`${base}/journey?lang=en`, { method: "POST", body: new URLSearchParams({ state: JSON.stringify(unknown), retry: "1" }) });
+    assert.match(await retry.text(), /What was your Physics mark/);
+    const invalidEnglish = await fetch(`${base}/journey?lang=en`, { method: "POST", body: new URLSearchParams({ state: JSON.stringify(halfway), answer: "101" }) });
+    assert.equal(invalidEnglish.status, 400);
+    assert.match(await invalidEnglish.text(), /You can enter a whole-number mark/);
+    const unsupported = await switchPage(answerJourneyQuestion(EMPTY_JOURNEY, "other"), "en");
+    assert.match(unsupported, /cannot be assessed here/);
+    assert.doesNotMatch(unsupported, /165.5 \/ 200/);
   } finally {
     server.kill();
   }
+});
+
+test("editing preserves earlier answers and invalidates all dependent answers", () => {
+  const complete = ["2026", "academic", "yes", "2026", "80", "70", "60"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+  const edited = editJourneyAnswer(complete, "improvement");
+  assert.equal(nextJourneyQuestion(edited), "improvement");
+  assert.equal(edited.year, 2026);
+  assert.equal(edited.stream, "academic");
+  for (const field of ["improvement", "improvement_year", "maths", "physics", "chemistry"] as const) assert.equal(edited[field], null);
+  const changed = ["no", "90", "70", "60"].reduce(answerJourneyQuestion, edited);
+  assert.equal(journeyGuidanceResult(changed, runtime())?.eligibility.cutoff, 155);
+  assert.deepEqual(editJourneyAnswer(complete, "year"), EMPTY_JOURNEY);
+  assert.throws(() => editJourneyAnswer(complete, "community"));
+  assert.throws(() => editJourneyAnswer(EMPTY_JOURNEY, "maths"));
+  const unknown = ["2026", "academic", "no", "80", "unknown"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+  assert.equal(editJourneyAnswer(unknown, "physics").maths, 80);
 });

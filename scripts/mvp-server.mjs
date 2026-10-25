@@ -1,3 +1,4 @@
+import { CHECK_COPY } from "../src/ui/journey-copy.ts";
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 
@@ -12,7 +13,8 @@ import { entryStateFromUrl } from "../src/student-entry/routing.ts";
 import { renderStudentEntryPage, renderReferenceGuidancePage } from "../src/ui/student-entry.ts";
 import { blankReferenceRequest } from "../src/ui/reference-request.ts";
 import { parseAwarenessPack, applyApprovedTamilStudentCopy } from "../src/student-semantics/awareness.ts";
-import { answerJourneyQuestion, EMPTY_JOURNEY, parseJourneyState, retryUnknown } from "../src/m2/journey.ts";
+import { answerJourneyQuestion, editJourneyAnswer, EMPTY_JOURNEY, nextJourneyQuestion, parseJourneyState, retryUnknown } from "../src/m2/journey.ts";
+import { parsePresentationSources } from "../src/student-semantics/provenance.ts";
 import { renderM2Journey } from "../src/ui/m2-journey.ts";
 import { loadQuestionCollection, renderQuestionCollection } from "../src/ui/explore-questions.ts";
 
@@ -22,6 +24,8 @@ const awareness = applyApprovedTamilStudentCopy(parseAwarenessPack(
   readFileSync(new URL("docs/content/m1/m1_awareness_content_pack_v1.md", root), "utf8"),
   readFileSync(new URL("data/sources.csv", root), "utf8"),
 ), readFileSync(new URL("docs/content/m1/m1_tamil_student_copy_v1.md", root), "utf8"));
+const presentation = { sources: parsePresentationSources(readFileSync(new URL("data/sources.csv", root), "utf8")) };
+// General guidance remains empty until a reviewed selection is explicitly configured.
 const runtime = createPilotRuntime({
   sources_csv: readFileSync(new URL("data/sources.csv", root), "utf8"),
   colleges_csv: readFileSync(new URL("data/colleges.csv", root), "utf8"),
@@ -67,10 +71,11 @@ const server = createServer(async (request, response) => {
   if (request.method === "GET" && url.pathname === "/journey") {
     const step = url.searchParams.get("step");
     const page = step === "study" || step === "compare" || step === "route" || step === "prepare" || step === "check" ? step : "awareness";
-    send(response, 200, renderM2Journey(page, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY));
+    send(response, 200, renderM2Journey(page, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY, undefined, presentation, language));
     return;
   }
   if (request.method === "POST" && url.pathname === "/journey") {
+    let validatedState = null;
     try {
       const chunks = [];
       let total = 0;
@@ -81,17 +86,25 @@ const server = createServer(async (request, response) => {
       }
       const values = new URLSearchParams(Buffer.concat(chunks).toString("utf8"));
       const state = parseJourneyState(values.get("state") ?? "");
+      validatedState = state;
       const navigate = values.get("navigate");
       if (navigate === "awareness" || navigate === "study" || navigate === "compare" || navigate === "route" || navigate === "prepare" || navigate === "check") {
-        send(response, 200, renderM2Journey(navigate, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, state));
+        send(response, 200, renderM2Journey(navigate, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, state, undefined, presentation, language));
         return;
       }
-      const next = values.get("retry") === "1" ? retryUnknown(state)
+      const next = values.has("edit") ? editJourneyAnswer(state, values.get("edit"))
+        : values.get("retry") === "1" ? retryUnknown(state)
         : answerJourneyQuestion(state, values.get("unknown") === "1" ? "unknown" : values.get("answer") ?? "");
-      send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, next));
+      send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, next, undefined, presentation, language));
     } catch {
-      send(response, 400, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY,
-        "பதில் ஏற்கப்படவில்லை. விவரத்தைச் சரிபார்த்து மீண்டும் தொடங்குங்கள்."));
+      const field = validatedState ? nextJourneyQuestion(validatedState) : null;
+      const copyIndex = language === "en" ? 1 : 0;
+      const instruction = field === "improvement_year" ? CHECK_COPY.yearError[copyIndex]
+        : ["maths", "physics", "chemistry"].includes(field) ? CHECK_COPY.markError[copyIndex]
+        : CHECK_COPY.choiceError[copyIndex];
+      send(response, 400, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, validatedState ?? EMPTY_JOURNEY,
+        validatedState ? `${instruction} ${CHECK_COPY.errorHelp[copyIndex]}`
+          : CHECK_COPY.lostAnswers[copyIndex], presentation, language));
     }
     return;
   }
