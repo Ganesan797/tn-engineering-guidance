@@ -16,7 +16,7 @@ export function answeredJourneyFields(state: JourneyState): JourneyField[] {
   return JOURNEY_FIELDS.filter(field => state[field] !== null && (field !== "improvement_year" || state.improvement === true));
 }
 
-export function renderJourneyAnswers(state: JourneyState, language: "ta" | "en" = "ta"): string {
+export function renderJourneyAnswers(state: JourneyState, language: "ta" | "en" = "ta", action = "/journey"): string {
   const fields = answeredJourneyFields(state);
   if (!fields.length) return "";
   const ta = language === "ta";
@@ -29,5 +29,5 @@ export function renderJourneyAnswers(state: JourneyState, language: "ta" | "en" 
     if (typeof answer === "boolean") return answer ? (ta ? "ஆம்" : "Yes") : (ta ? "இல்லை" : "No");
     return String(answer) + (["maths", "physics", "chemistry"].includes(field) ? " / 100" : "");
   };
-  return `<details class="answer-review"><summary>${ta ? "நீங்கள் கொடுத்த பதில்களைப் பார்க்கலாம் / மாற்றலாம்" : "Look at / change your answers"}</summary><p class="notice">${ta ? "பதிலில் மாற்றம் வேண்டுமா? மாற்றலாம். அந்தக் கேள்வியிலிருந்து மீண்டும் பதில் கொடுக்க வேண்டும். அதற்கு முன் கொடுத்த பதில்கள் அப்படியே இருக்கும்." : "Want to change an answer? You can. You will answer again from that question onward. Answers before it will stay the same."}</p><form action="/journey" method="post"><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><ul>${fields.map(field => `<li><strong>${escape(label(field))}:</strong> ${escape(value(field))} <button type="submit" name="edit" value="${field}" aria-label="${escape(label(field))} — ${ta ? "திருத்த" : "Edit"}">${ta ? "திருத்த" : "Edit"}</button></li>`).join("")}</ul></form></details>`;
+  return `<details class="answer-review"><summary>${ta ? "நீங்கள் கொடுத்த பதில்களைப் பார்க்கலாம் / மாற்றலாம்" : "Look at / change your answers"}</summary><p class="notice">${ta ? "பதிலில் மாற்றம் வேண்டுமா? மாற்றலாம். அந்தக் கேள்வியிலிருந்து மீண்டும் பதில் கொடுக்க வேண்டும். அதற்கு முன் கொடுத்த பதில்கள் அப்படியே இருக்கும்." : "Want to change an answer? You can. You will answer again from that question onward. Answers before it will stay the same."}</p><form action="${escape(action)}" method="post"><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><ul>${fields.map(field => `<li><strong>${escape(label(field))}:</strong> ${escape(value(field))} <button type="submit" name="edit" value="${field}" aria-label="${escape(label(field))} — ${ta ? "திருத்த" : "Edit"}">${ta ? "திருத்த" : "Edit"}</button></li>`).join("")}</ul></form></details>`;
 }

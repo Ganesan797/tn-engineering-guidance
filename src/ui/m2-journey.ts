@@ -1,4 +1,4 @@
-import { CHECK_COPY, CHECK_QUESTIONS_EN } from "./journey-copy.ts";
+import { CHECK_COPY, CHECK_QUESTIONS_EN, CHECK_TITLES_EN } from "./journey-copy.ts";
 import type { GuidanceDependencies } from "../application/guidance.ts";
 import type { AwarenessPack } from "../student-semantics/awareness.ts";
 import { renderM3PersonalResult, type M3PresentationOptions } from "./m3-personal-result.ts";
@@ -30,6 +30,16 @@ export function reviewedTamilUnit(markdown: string, id: "B01" | "B04" | "B05"): 
   return tamil.replace(/\s*\(Q\d{3}(?:\/Q\d{3})*\)/g, "");
 }
 
+function reviewedEnglishUnit(markdown: string, id: "B01" | "B04" | "B05"): string {
+  const normalized = markdown.replaceAll("\r\n", "\n");
+  const heading = new RegExp(`^## ${id} —[^\n]*\n`, "m").exec(normalized);
+  if (!heading) throw new Error(`Reviewed unit ${id} is missing`);
+  const section = normalized.slice(heading.index + heading[0].length).split(/^## B\d{2} —/m)[0];
+  const english = section.split("### English answer\n")[1]?.split("\n**Tamil draft**")[0]?.trim();
+  if (!english) throw new Error(`Reviewed English unit ${id} is missing`);
+  return english.replace(/\s*\(Q\d{3}(?:\/Q\d{3})*\)/g, "");
+}
+
 // Keep the reviewed A01–A07 Tamil draft as the single source of branch examples.
 export function reviewedAwarenessTamilQuestion(markdown: string, unit: "A01" | "A04" | "A05" | "A06", question: string): string {
   const normalized = markdown.replaceAll("\r\n", "\n");
@@ -56,9 +66,11 @@ function link(href: string, label: string, primary = false): string {
   return `<a class="action${primary ? " primary" : ""}" href="${href}">${label}</a>`;
 }
 
-function journeyNav(page: "awareness" | "study" | "compare" | "route" | "prepare" | "check", label: string, state: JourneyState, primary = false): string {
-  if (Object.values(state).every((value) => value === null)) return link(`/journey?step=${page}`, label, primary);
-  return `<form action="/journey" method="post"><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><button class="${primary ? "primary" : ""}" name="navigate" value="${page}" type="submit">${label}</button></form>`;
+function makeJourneyNav(language: "ta" | "en") {
+  return (page: "awareness" | "study" | "compare" | "route" | "prepare" | "check", label: string, state: JourneyState, primary = false): string => {
+    if (Object.values(state).every((value) => value === null)) return link(`/journey?step=${page}${language === "en" ? "&amp;lang=en" : ""}`, label, primary);
+    return `<form action="/journey${language === "en" ? "?lang=en" : ""}" method="post"><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><button class="${primary ? "primary" : ""}" name="navigate" value="${page}" type="submit">${label}</button></form>`;
+  };
 }
 
 export function renderM2Journey(
@@ -70,7 +82,12 @@ export function renderM2Journey(
   state: JourneyState = EMPTY_JOURNEY,
   error?: string,
   presentation: M3PresentationOptions = {},
+  language: "ta" | "en" = "ta",
 ): string {
+  const en = language === "en";
+  const t = (pair: readonly [string, string]) => pair[en ? 1 : 0];
+  const journeyNav = makeJourneyNav(language);
+  const actionUrl = `/journey${en ? "?lang=en" : ""}`;
   const item = (id: string) => {
     const found = pack.items.find((candidate) => candidate.id === id);
     if (!found) throw new Error(`Approved awareness unit ${id} is missing`);
@@ -78,14 +95,14 @@ export function renderM2Journey(
   };
   const approved = (id: string) => {
     const found = item(id);
-    return `<section class="card" data-content-id="${id}"><h2>${escape(found.presentations.ta.title)}</h2>${contentMarkup(found.presentations.ta.body)}</section>`;
+    return `<section class="card" data-content-id="${id}"><h2>${escape(found.presentations[language].title)}</h2>${contentMarkup(found.presentations[language].body)}</section>`;
   };
   const approvedWithActions = (id: "AW-01" | "AW-03", afterParagraph: number, actions: string) => {
     const found = item(id);
-    const paragraphs = found.presentations.ta.body.split(/\n\n+/);
-    if (paragraphs.length <= afterParagraph) throw new Error(`Approved awareness unit ${id} has changed structure`);
-    return `<section class="card" data-content-id="${id}"><h2>${escape(found.presentations.ta.title)}</h2>${paragraphs.map((paragraph, index) =>
-      contentMarkup(paragraph) + (index === afterParagraph - 1 ? actions : "")).join("")}</section>`;
+    const paragraphs = found.presentations[language].body.split(/\n\n+/);
+    if (paragraphs.length <= afterParagraph && !en) throw new Error(`Approved awareness unit ${id} has changed structure`);
+    return `<section class="card" data-content-id="${id}"><h2>${escape(found.presentations[language].title)}</h2>${paragraphs.map((paragraph, index) =>
+      contentMarkup(paragraph) + (index === Math.min(afterParagraph - 1, paragraphs.length - 1) ? actions : "")).join("")}</section>`;
   };
   const official = item("AW-03").sources.find((source) => source.source_id === "SRC002");
   if (!official) throw new Error("TNEA source is missing");
@@ -94,7 +111,26 @@ export function renderM2Journey(
   const draftNotice = `<p class="notice">பாட எடுத்துக்காட்டுகள் குறிப்பிட்ட பாடத்திட்டத்துக்கானவை; எல்லா கல்லூரிகளுக்கும் ஒரே மாதிரி அல்ல.</p>`;
   const fieldEvidence = `<details><summary>பாட எடுத்துக்காட்டுகளின் மூலம் மற்றும் வரம்பு</summary><p>எடுத்துக்காட்டுகள் Anna University-யின் 2026–27 தொகுப்புக்கான R2025 Revised 1 இணைப்புக் கல்லூரி பாடத்திட்டங்களிலிருந்து; தன்னாட்சிக் கல்லூரி அல்லது வேறு regulation மாறலாம். நீங்கள் பார்க்கும் கல்லூரியின் சரியான பாடத்திட்டத்தைச் சரிபார்க்கவும். <a href="https://cac.annauniv.edu/aidetails/revision_ai_ug_cands_2025ft.html">அதிகாரப்பூர்வ பாடத்திட்டப் பட்டியல்</a>.</p></details>`;
   let body = "";
-  if (page === "awareness") {
+  if (en && page === "awareness") {
+    const actions = `<nav class="actions">${journeyNav("study", "What might I study?", state, true)}${journeyNav("route", "Understand the TNEA route", state)}${journeyNav("check", "Check my details", state)}</nav>`;
+    body = `<h1>Start with engineering</h1><p>You do not need marks or a college choice to begin.</p>${approvedWithActions("AW-01", 1, actions)}${approved("AW-02")}`;
+  } else if (en && page === "study") {
+    body = `<h1>What might I study?</h1><p>Explore fields before choosing a college.</p>${approved("AW-02")}${approved("AW-07")}<nav class="actions">${journeyNav("compare", "Think about different fields", state, true)}${journeyNav("route", "Understand the TNEA route", state)}</nav>`;
+  } else if (en && page === "compare") {
+    body = `<h1>Think about different fields</h1>${approved("AW-07")}<nav class="actions">${journeyNav("route", "Understand the TNEA route", state, true)}${journeyNav("study", "Explore fields", state)}</nav>`;
+  } else if (en && page === "route") {
+    const actions = `<nav class="actions">${journeyNav("prepare", "What should I prepare?", state, true)}${journeyNav("study", "Explore engineering fields", state)}${journeyNav("check", "Check my details", state)}</nav>`;
+    body = `<h1>The first-year TNEA route</h1>${approvedWithActions("AW-03", 3, actions)}${approved("AW-05")}<details class="card"><summary>More about applying and counselling</summary>${contentMarkup(reviewedEnglishUnit(reviewedBatch, "B01"))}${contentMarkup(reviewedEnglishUnit(reviewedBatch, "B04"))}</details>`;
+  } else if (en && page === "prepare") {
+    const preparation = reviewedEnglishUnit(reviewedBatch, "B05");
+    const blocks = preparation.split(/\n\n+/);
+    const list = blocks.find(block => block.startsWith("- "));
+    const entries = list?.split("\n") ?? [];
+    const preparationHtml = list && entries.length === 3 ? blocks.map(block => block === list
+      ? `<h3>Basic preparation</h3>${contentMarkup(entries[0])}<details><summary>Only if relevant to a claim you make</summary>${contentMarkup(entries.slice(1).join("\n"))}</details>`
+      : contentMarkup(block)).join("") : contentMarkup(preparation);
+    body = `<h1>Prepare before applying</h1><p>Do not upload documents here. Check the official notice for your admission year.</p><section class="card" data-content-id="B05"><h2>2026 application preparation</h2>${preparationHtml}<p>TFC is a TNEA Facilitation Centre. <a href="/journey/questions?id=Q083&amp;lang=en" target="_blank" rel="noopener">What can I ask if my situation is unclear? (new tab)</a></p></section><nav class="actions">${journeyNav("check", "Check my details if I wish", state, true)}${journeyNav("route", "Return to the TNEA route", state)}</nav>`;
+  } else if (page === "awareness") {
     const actions = `<nav class="actions">${journeyNav("study", "அடுத்து: என்ன படிப்பேன்?", state, true)}<details><summary>வேறு பகுதியை நேரடியாகப் பார்க்க</summary>${journeyNav("compare", "துறைகள் எப்படி வேறுபடுகின்றன?", state)}${journeyNav("route", "TNEA சேர்க்கை வழியைப் புரிந்துகொள்ள", state)}${journeyNav("check", "என் நிலையை நேரடியாகச் சரிபார்க்க", state)}</details></nav>`;
     body = `<h1>பொறியியல் பற்றி இங்கே தொடங்கலாம்</h1><p>மதிப்பெண்களோ கல்லூரித் தேர்வோ இப்போது தேவையில்லை.</p>${approvedWithActions("AW-01", 1, actions)}<section class="card" data-content-id="A01"><h2>பொறியியல் படிப்பும் பணியும்</h2>${a("A01", "Q026")}${a("A01", "Q028")}</section><section class="card" data-content-id="A04"><h2>பல துறைகள் உள்ளன</h2>${a("A04", "Q036")}</section>${draftNotice}`;
   } else if (page === "study") {
@@ -119,29 +155,35 @@ export function renderM2Journey(
     if (question !== null) {
       const spec = QUESTIONS[question];
       const originalMarks = state.improvement === true && typeof state.improvement_year === "number" && state.improvement_year >= 2006;
+      const baseTitle = en ? CHECK_TITLES_EN[question] : spec.title;
       const title = originalMarks && ["maths", "physics", "chemistry"].includes(question)
-        ? `மேம்பாட்டுத் தேர்வுக்கு முன் பெற்ற அசல் ${spec.title}` : spec.title;
+        ? en ? `Before the improvement exam: ${baseTitle}` : `மேம்பாட்டுத் தேர்வுக்கு முன் பெற்ற அசல் ${baseTitle}` : baseTitle;
       const markInput = `<label for="answer">${title}</label><input id="answer" name="answer" type="number" inputmode="numeric" aria-describedby="${error ? "answer-error" : "answer-help"}" min="${question === "improvement_year" ? "1900" : "0"}" max="${question === "improvement_year" ? "2026" : "100"}" required>`;
+      const choice = (value: string, tamil: string) => !en ? tamil : value === "2026" ? "2026"
+        : value === "academic" || value === "yes" ? "Yes" : value === "no" ? "No"
+        : question === "year" ? "Another year" : "No / another path";
       const options = spec.choices
-        ? `<fieldset aria-describedby="${error ? "answer-error" : "answer-help"}"><legend>${title}</legend>${spec.choices.map(([value, label]) => `<label><input type="radio" name="answer" value="${value}" required>${label}</label>`).join("")}</fieldset>`
+        ? `<fieldset aria-describedby="${error ? "answer-error" : "answer-help"}"><legend>${title}</legend>${spec.choices.map(([value, label]) => `<label><input type="radio" name="answer" value="${value}" required>${choice(value, label)}</label>`).join("")}</fieldset>`
         : markInput;
       const answered = answeredJourneyFields(state);
       const previous = answered.at(-1);
-      const help = question === "stream" ? `<p class="notice">படித்த பிரிவு தெரியாவிட்டால் ஊகிக்க வேண்டாம். உங்கள் மதிப்பெண் சான்றிதழைப் பாருங்கள் அல்லது பள்ளியில் கேளுங்கள். <a href="/journey/questions?id=Q081" target="_blank" rel="noopener">வேறு கல்விப் பிரிவுகள் பற்றித் தெரிந்துகொள்ள (புதிய தாவல்)</a></p>`
-        : question === "improvement" ? `<p class="notice">முதலில் பெற்ற மதிப்பெண்களை உயர்த்துவதற்காக மீண்டும் எழுதிய மேம்பாட்டுத் தேர்வைப் பற்றிக் கேட்கிறோம். சந்தேகம் இருந்தால் ‘எனக்குத் தெரியாது’ என்பதைத் தேர்ந்தெடுக்கலாம். <a href="/journey/questions?id=Q080" target="_blank" rel="noopener">மேம்பாட்டுத் தேர்வு விளக்கம் (புதிய தாவல்)</a></p>` : "";
-      body = `<h1>${CHECK_COPY.title[0]}</h1>${question === "year" ? `<p>${CHECK_COPY.benefit[0]}</p><p class="notice">${CHECK_COPY.scope[0]}</p>` : ""}<p class="notice">கேள்வி ${answered.length + 1} · ${state.year === 2026 ? "சேர்க்கை ஆண்டு: 2026" : "முதலில் சேர்க்கை ஆண்டைத் தேர்ந்தெடுக்கலாம்"}</p><form class="card" action="/journey" method="post" novalidate><input type="hidden" name="state" value="${escape(JSON.stringify(state))}">${options}<p id="answer-help">${originalMarks ? CHECK_COPY.originalHelp[0] : spec.why[0]}</p>${help ? `<details><summary>${CHECK_COPY.moreHelp[0]}</summary>${help}</details>` : ""}${error ? `<p role="alert" id="answer-error">${escape(error)}</p>` : ""}<div class="actions"><button class="primary" type="submit">${CHECK_COPY.continue[0]}</button><button type="submit" name="unknown" value="1" formnovalidate>எனக்குத் தெரியாது</button>${previous ? `<button type="submit" name="edit" value="${previous}" formnovalidate>${CHECK_COPY.previous[0]}</button>` : ""}</div>${previous ? `<p class="notice">${CHECK_COPY.previousHelp[0]}</p>` : ""}</form><details><summary lang="en">English — wording for review</summary><div lang="en">${question === "year" ? `<p>${CHECK_COPY.benefit[1]}</p><p>${CHECK_COPY.scope[1]}</p>` : ""}<p>${CHECK_QUESTIONS_EN[question]}</p><p>${originalMarks ? CHECK_COPY.originalHelp[1] : spec.why[1]}</p>${error ? `<p>${error === CHECK_COPY.lostAnswers[0] ? CHECK_COPY.lostAnswers[1] : `${question === "improvement_year" ? CHECK_COPY.yearError[1] : ["maths", "physics", "chemistry"].includes(question) ? CHECK_COPY.markError[1] : CHECK_COPY.choiceError[1]} ${CHECK_COPY.errorHelp[1]}`}</p>` : ""}</div></details>${renderJourneyAnswers(state)}${journeyNav("route", "வழி விளக்கத்திற்குத் திரும்ப", state)}`;
+      const help = question === "stream" ? `<p class="notice">${t(CHECK_COPY.streamHelp)} <a href="/journey/questions?id=Q081&amp;lang=${language}" target="_blank" rel="noopener">${t(CHECK_COPY.moreStreams)}</a></p>`
+        : question === "improvement" ? `<p class="notice">${t(CHECK_COPY.improvementHelp)} <a href="/journey/questions?id=Q080&amp;lang=${language}" target="_blank" rel="noopener">${t(CHECK_COPY.moreImprovement)}</a></p>` : "";
+      const reviewText = en ? "" : `<details><summary lang="en">English — wording for review</summary><div lang="en">${question === "year" ? `<p>${CHECK_COPY.benefit[1]}</p><p>${CHECK_COPY.scope[1]}</p>` : ""}<p>${CHECK_QUESTIONS_EN[question]}</p><p>${originalMarks ? CHECK_COPY.originalHelp[1] : spec.why[1]}</p>${error ? `<p>${error === CHECK_COPY.lostAnswers[0] ? CHECK_COPY.lostAnswers[1] : `${question === "improvement_year" ? CHECK_COPY.yearError[1] : ["maths", "physics", "chemistry"].includes(question) ? CHECK_COPY.markError[1] : CHECK_COPY.choiceError[1]} ${CHECK_COPY.errorHelp[1]}`}</p>` : ""}</div></details>`;
+      body = `<h1>${t(CHECK_COPY.title)}</h1>${question === "year" ? `<p>${t(CHECK_COPY.benefit)}</p><p class="notice">${t(CHECK_COPY.scope)}</p>` : ""}<p class="notice">${t(CHECK_COPY.questionNumber)} ${answered.length + 1} · ${state.year === 2026 ? `${t(CHECK_COPY.yearContext)}: 2026` : t(CHECK_COPY.yearPrompt)}</p><form class="card" action="${actionUrl}" method="post" novalidate><input type="hidden" name="state" value="${escape(JSON.stringify(state))}">${options}<p id="answer-help">${originalMarks ? t(CHECK_COPY.originalHelp) : t(spec.why)}</p>${help ? `<details><summary>${t(CHECK_COPY.moreHelp)}</summary>${help}</details>` : ""}${error ? `<p role="alert" id="answer-error">${escape(error)}</p>` : ""}<div class="actions"><button class="primary" type="submit">${t(CHECK_COPY.continue)}</button><button type="submit" name="unknown" value="1" formnovalidate>${t(CHECK_COPY.unknownChoice)}</button>${previous ? `<button type="submit" name="edit" value="${previous}" formnovalidate>${t(CHECK_COPY.previous)}</button>` : ""}</div>${previous ? `<p class="notice">${t(CHECK_COPY.previousHelp)}</p>` : ""}</form>${reviewText}${renderJourneyAnswers(state, language, actionUrl)}${journeyNav("route", t(CHECK_COPY.routeBack), state)}`;
     } else {
       const evaluation = evaluateJourneyGuidance(state, dependencies);
-      body = renderM3PersonalResult(evaluation, presentation);
+      body = renderM3PersonalResult(evaluation, presentation, language);
     }
   }
   const preserveCheck = page === "check" || Object.values(state).some((value) => value !== null);
-  if (page === "route") body += `<p><a href="/journey/questions?id=Q060"${preserveCheck ? ' target="_blank" rel="noopener"' : ""}>டிப்ளமோ முடித்தவரா? நேரடி இரண்டாம் ஆண்டு வழியைப் பார்க்க${preserveCheck ? " (புதிய தாவல்)" : ""}</a>. முதல் ஆண்டு தனிப்பட்ட சரிபார்ப்பு இந்த வழியை மதிப்பிடாது.</p>`;
-  if (page === "check" && nextJourneyQuestion(state) === null) body += `<p><a href="/journey/questions?id=Q002" target="_blank" rel="noopener">கட்-ஆஃப், சதவீதம், தரவரிசை — விளக்கம் (புதிய தாவல்)</a></p>`;
-  body += `<p><a href="/journey/questions"${preserveCheck ? ' target="_blank" rel="noopener"' : ""}>கேள்விகளை ஆராயலாம் — விருப்பத் தொகுப்பு${preserveCheck ? " (புதிய தாவல்)" : ""}</a></p>`;
+  if (page === "route") body += `<p><a href="/journey/questions?id=Q060${en ? "&amp;lang=en" : ""}"${preserveCheck ? ' target="_blank" rel="noopener"' : ""}>${en ? "Completed a diploma? Read about direct second-year entry" : "டிப்ளமோ முடித்தவரா? நேரடி இரண்டாம் ஆண்டு வழியைப் பார்க்க"}${preserveCheck ? ` (${t(CHECK_COPY.newTab)})` : ""}</a>. ${en ? "The first-year personal check does not assess this route." : "முதல் ஆண்டு தனிப்பட்ட சரிபார்ப்பு இந்த வழியை மதிப்பிடாது."}</p>`;
+  if (page === "check" && nextJourneyQuestion(state) === null) body += `<p><a href="/journey/questions?id=Q002${en ? "&amp;lang=en" : ""}" target="_blank" rel="noopener">${en ? "Cutoff, percentage and rank — explanation (new tab)" : "கட்-ஆஃப், சதவீதம், தரவரிசை — விளக்கம் (புதிய தாவல்)"}</a></p>`;
+  body += `<p><a href="/journey/questions${en ? "?lang=en" : ""}"${preserveCheck ? ' target="_blank" rel="noopener"' : ""}>${t(CHECK_COPY.questionsExplore)}${preserveCheck ? ` (${t(CHECK_COPY.newTab)})` : ""}</a></p>`;
   const sources = page === "awareness" || page === "study" || page === "compare" ? item("AW-01").sources : [official];
-  const reviewState = "சோதனைப் பதிப்பு: புதிய தமிழ் வாசகங்களின் மனித மதிப்பாய்வு இன்னும் முடிவடையவில்லை.";
-  const source = `<p class="notice">மூலம்: ${sources.map((entry) => `<a href="${escape(entry.url)}">${escape(entry.name)}</a>`).join(" · ")}. ${reviewState} 2026 தகவலை வேறு ஆண்டுக்கான அறிவிப்பாகவோ சேர்க்கை உறுதியாகவோ கருதாதீர்கள்.</p>`;
-  const position = ({ awareness: "1. படிப்பை அறிதல்", study: "1. படிப்பை அறிதல்", compare: "1. படிப்பை அறிதல்", route: "2. சேர்க்கை வழியைப் புரிதல்", prepare: "3. தயாராகுதல்", check: "விருப்பப் பகுதி: உங்கள் விவரங்களைச் சரிபார்த்தல்" })[page];
-  return `<!doctype html><html lang="ta"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TN Engineering Guidance — வழிகாட்டல்</title><style>${STYLE}.answer-review li{margin:1rem 0}.answer-review button{font-size:.9rem;padding:.4rem .6rem}.actions details{flex-basis:100%}#answer-error{border-left:4px solid #a32020;padding:.7rem;background:#fff0f0}a{overflow-wrap:anywhere}.position{font-size:.85rem;color:#46536a}</style></head><body><main><p class="position" aria-label="இப்போது இருக்கும் பகுதி">${position}</p>${body}${source}<p>${link("/", "முதற்பக்கத்திற்குத் திரும்ப")}</p></main></body></html>`;
+  const source = `<p class="notice">${t(CHECK_COPY.source)}: ${sources.map((entry) => `<a href="${escape(entry.url)}">${escape(entry.name)}</a>`).join(" · ")}. ${t(CHECK_COPY.reviewNote)} ${t(CHECK_COPY.sourceLimit)}</p>`;
+  const position = en ? ({ awareness: "1. Understand engineering", study: "1. Understand engineering", compare: "1. Understand engineering", route: "2. Understand admission", prepare: "3. Prepare", check: CHECK_COPY.position[1] })[page]
+    : ({ awareness: "1. படிப்பை அறிதல்", study: "1. படிப்பை அறிதல்", compare: "1. படிப்பை அறிதல்", route: "2. சேர்க்கை வழியைப் புரிதல்", prepare: "3. தயாராகுதல்", check: CHECK_COPY.position[0] })[page];
+  const switcher = `<nav class="languages" aria-label="${en ? "Language" : "மொழி"}">${(["ta", "en"] as const).map(target => target === language ? `<span lang="${target}" aria-current="page">${target === "ta" ? "தமிழ்" : "English"}</span>` : `<form action="/journey${target === "en" ? "?lang=en" : ""}" method="post"><input type="hidden" name="state" value="${escape(JSON.stringify(state))}"><button type="submit" name="navigate" value="${page}" lang="${target}">${target === "ta" ? "தமிழ்" : "English"}</button></form>`).join(" ")}</nav>`;
+  return `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TN Engineering Guidance — ${en ? "Guidance" : "வழிகாட்டல்"}</title><style>${STYLE}.answer-review li{margin:1rem 0}.answer-review button{font-size:.9rem;padding:.4rem .6rem}.actions details{flex-basis:100%}#answer-error{border-left:4px solid #a32020;padding:.7rem;background:#fff0f0}a{overflow-wrap:anywhere}.position{font-size:.85rem;color:#46536a}.languages{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}.languages form{margin:0}.languages button{padding:.35rem .7rem}</style></head><body><main>${switcher}<p class="position" aria-label="${en ? "Current section" : "இப்போது இருக்கும் பகுதி"}">${position}</p>${body}${source}<p>${link(en ? "/?lang=en" : "/", en ? "Return to the start" : "முதற்பக்கத்திற்குத் திரும்ப")}</p></main></body></html>`;
 }

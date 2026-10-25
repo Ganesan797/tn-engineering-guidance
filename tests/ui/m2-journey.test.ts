@@ -234,6 +234,37 @@ test("personal-check copy explains the benefit before scope and provides matchin
   assert.equal(journeyGuidanceResult(state, runtime())?.eligibility.cutoff, 165.5);
 });
 
+test("one journey evaluation renders equivalent Tamil and English personal results", () => {
+  const state = ["2026", "academic", "no", "86", "78", "81"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+  const engine = runtime();
+  const before = JSON.stringify(journeyGuidanceResult(state, engine));
+  const ta = renderM2Journey("check", pack, reviewed, awarenessReviewed, engine, state);
+  const en = renderM2Journey("check", pack, reviewed, awarenessReviewed, engine, state, undefined, {}, "en");
+  assert.match(ta, /<html lang="ta"/);
+  assert.match(en, /<html lang="en"/);
+  assert.match(ta, /165.5 \/ 200/);
+  assert.match(en, /165.5 \/ 200/);
+  assert.match(en, /Your cutoff is available/);
+  assert.match(en, /What still needs checking/);
+  assert.match(en, /Things worth checking/);
+  assert.match(en, /Where does this information come from\?/);
+  assert.match(en, /name="navigate" value="check" lang="ta"/);
+  assert.equal(JSON.stringify(journeyGuidanceResult(state, engine)), before);
+});
+
+test("English next directions reuse canonical route and preparation content", () => {
+  for (const page of ["awareness", "study", "compare", "route", "prepare"] as const) {
+    const html = renderM2Journey(page, pack, reviewed, awarenessReviewed, runtime(), EMPTY_JOURNEY, undefined, {}, "en");
+    assert.match(html, /<html lang="en"/);
+    assert.match(html, new RegExp(`name="navigate" value="${page}" lang="ta"`));
+    assert.doesNotMatch(html.replace(/<[^>]+>/g, " "), /ELG\d+|SRC\d+|NEEDS_REVIEW/);
+  }
+  const prepare = renderM2Journey("prepare", pack, reviewed, awarenessReviewed, runtime(), EMPTY_JOURNEY, undefined, {}, "en");
+  assert.match(prepare, /2026 application preparation/);
+  assert.match(prepare, /Do not upload documents here/);
+  assert.match(prepare, /name="navigate" value="check"|href="\/journey\?step=check&amp;lang=en"/);
+});
+
 test("later questions show the answer first and keep extra explanation optional", () => {
   const state = answerJourneyQuestion(EMPTY_JOURNEY, "2026");
   const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
@@ -427,6 +458,37 @@ test("local server serves the Tamil journey and advances a posted answer", async
     const changedState = parseJourneyState(changedHtml.match(/name="state" value="([^"]+)"/)![1].replaceAll("&quot;", '"'));
     assert.equal(changedState.maths, null);
     assert.equal(changedState.year, 2026);
+    const complete = ["2026", "academic", "no", "86", "78", "81"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+    const switchPage = async (state: typeof EMPTY_JOURNEY, lang: "ta" | "en") => {
+      const response = await fetch(`${base}/journey${lang === "en" ? "?lang=en" : ""}`, {
+        method: "POST", body: new URLSearchParams({ state: JSON.stringify(state), navigate: "check" }),
+      });
+      assert.equal(response.status, 200);
+      const html = await response.text();
+      const encoded = html.match(/name="state" value="([^"]+)"/)?.[1];
+      assert.ok(encoded);
+      assert.deepEqual(parseJourneyState(encoded.replaceAll("&quot;", '"')), state);
+      return html;
+    };
+    const english = await switchPage(complete, "en");
+    assert.match(english, /<html lang="en"/);
+    assert.match(english, /165.5 \/ 200/);
+    assert.match(english, /Things worth checking/);
+    assert.match(english, /action="\/journey\?lang=en"/);
+    assert.match(await switchPage(complete, "ta"), /165.5 \/ 200/);
+    const halfway = ["2026", "academic", "no", "86"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
+    assert.match(await switchPage(halfway, "en"), /What was your Physics mark/);
+    const unknown = answerJourneyQuestion(halfway, "unknown");
+    const unknownEnglish = await switchPage(unknown, "en");
+    assert.match(unknownEnglish, /Provide this detail now/);
+    const retry = await fetch(`${base}/journey?lang=en`, { method: "POST", body: new URLSearchParams({ state: JSON.stringify(unknown), retry: "1" }) });
+    assert.match(await retry.text(), /What was your Physics mark/);
+    const invalidEnglish = await fetch(`${base}/journey?lang=en`, { method: "POST", body: new URLSearchParams({ state: JSON.stringify(halfway), answer: "101" }) });
+    assert.equal(invalidEnglish.status, 400);
+    assert.match(await invalidEnglish.text(), /You can enter a whole-number mark/);
+    const unsupported = await switchPage(answerJourneyQuestion(EMPTY_JOURNEY, "other"), "en");
+    assert.match(unsupported, /cannot be assessed here/);
+    assert.doesNotMatch(unsupported, /165.5 \/ 200/);
   } finally {
     server.kill();
   }

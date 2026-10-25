@@ -71,7 +71,7 @@ const server = createServer(async (request, response) => {
   if (request.method === "GET" && url.pathname === "/journey") {
     const step = url.searchParams.get("step");
     const page = step === "study" || step === "compare" || step === "route" || step === "prepare" || step === "check" ? step : "awareness";
-    send(response, 200, renderM2Journey(page, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY, undefined, presentation));
+    send(response, 200, renderM2Journey(page, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY, undefined, presentation, language));
     return;
   }
   if (request.method === "POST" && url.pathname === "/journey") {
@@ -89,21 +89,22 @@ const server = createServer(async (request, response) => {
       validatedState = state;
       const navigate = values.get("navigate");
       if (navigate === "awareness" || navigate === "study" || navigate === "compare" || navigate === "route" || navigate === "prepare" || navigate === "check") {
-        send(response, 200, renderM2Journey(navigate, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, state, undefined, presentation));
+        send(response, 200, renderM2Journey(navigate, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, state, undefined, presentation, language));
         return;
       }
       const next = values.has("edit") ? editJourneyAnswer(state, values.get("edit"))
         : values.get("retry") === "1" ? retryUnknown(state)
         : answerJourneyQuestion(state, values.get("unknown") === "1" ? "unknown" : values.get("answer") ?? "");
-      send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, next, undefined, presentation));
+      send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, next, undefined, presentation, language));
     } catch {
       const field = validatedState ? nextJourneyQuestion(validatedState) : null;
-      const instruction = field === "improvement_year" ? CHECK_COPY.yearError[0]
-        : ["maths", "physics", "chemistry"].includes(field) ? CHECK_COPY.markError[0]
-        : CHECK_COPY.choiceError[0];
+      const copyIndex = language === "en" ? 1 : 0;
+      const instruction = field === "improvement_year" ? CHECK_COPY.yearError[copyIndex]
+        : ["maths", "physics", "chemistry"].includes(field) ? CHECK_COPY.markError[copyIndex]
+        : CHECK_COPY.choiceError[copyIndex];
       send(response, 400, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, validatedState ?? EMPTY_JOURNEY,
-        validatedState ? `${instruction} ${CHECK_COPY.errorHelp[0]}`
-          : CHECK_COPY.lostAnswers[0], presentation));
+        validatedState ? `${instruction} ${CHECK_COPY.errorHelp[copyIndex]}`
+          : CHECK_COPY.lostAnswers[copyIndex], presentation, language));
     }
     return;
   }

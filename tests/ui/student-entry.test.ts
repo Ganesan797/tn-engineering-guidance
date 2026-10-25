@@ -49,8 +49,8 @@ test("beginner and unknown routing have no academic input or domain dependencies
 
 test("direct routes expose available actions and the reference language limitation", () => {
   const personal = renderStudentEntryPage({ route: "personal", language: "en" }, pack);
-  assert.match(personal, /form and its results are currently in English/);
-  assert.match(personal, /href="\/personal\/reference\?lang=en"/);
+  assert.match(personal, /href="\/journey\?step=check&amp;lang=en"/);
+  assert.doesNotMatch(personal, /href="\/personal\/reference\?lang=en"/);
   const counselling = renderStudentEntryPage({ route: "counselling", language: "en" }, pack);
   assert.match(counselling, /choice-preparation experience is not ready yet/);
   assert.match(counselling, /href="\/personal\?lang=en"/);

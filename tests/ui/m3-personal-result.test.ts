@@ -48,6 +48,24 @@ test("165.5 plus uncertainty has separate cutoff, eligibility, explanations and 
   assert.match(html, /Check the remaining eligibility conditions in the official guidance/);
 });
 
+test("selected-language result keeps the same score, official action and evidence scope", () => {
+  const main = (language: "ta" | "en") => renderM3PersonalResult(evaluated, { sources }, language)
+    .split('<details class="card"><summary lang=')[0];
+  const ta = main("ta");
+  const en = main("en");
+  assert.match(ta, /165.5 \/ 200/);
+  assert.match(en, /165.5 \/ 200/);
+  assert.match(en, /What still needs checking/);
+  assert.match(en, /Check the remaining eligibility conditions in the official guidance/);
+  assert.match(ta, /மீதமுள்ள சேர்க்கைத் தகுதி நிபந்தனைகளை/);
+  assert.match(en, /Source year: 2026/);
+  assert.match(ta, /மூலத்தின் ஆண்டு: 2026/);
+  const officialAction = /class="action primary" href="([^"]+)"/;
+  assert.equal(ta.match(officialAction)?.[1], en.match(officialAction)?.[1]);
+  const sourceUrls = (html: string) => [...new Set([...html.matchAll(/href="(https:[^"]+)"/g)].map(match => match[1]))].sort();
+  assert.deepEqual(sourceUrls(ta), sourceUrls(en));
+});
+
 test("unknown, unanswered and unsupported contexts have supported distinct actions", () => {
   const unknown = render(evaluateJourneyGuidance({ ...state, physics: "unknown" }, runtime));
   assert.match(unknown, /name="retry" value="1"/);
