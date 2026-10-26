@@ -1,14 +1,24 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** M2 — Progressive Student Input (bounded implementation accepted: PASS_OWNER_REPORTED; real-student validation outstanding)
+**Current milestone:** M3 — Personal Guidance Presentation accepted for bounded scope; M4 — Explore / Think-Further is next for separate planning and authorization.
 
-**Current task:** T06 / M3 bounded gap assessment and proposal for Personal Guidance Presentation, planning only. Ganesan accepted bounded M2 at a67fc4c9ed24f7061631782cd63c839cf098cfe8 on 2026-10-11. M2_ACCEPTANCE = PASS_OWNER_REPORTED; T04_STATUS = NOT_RUN; STUDENT_VALIDATED = NO; M3_IMPLEMENTATION_AUTHORIZED = NOT_AUTHORIZED.
+**Current task:** Record M3 closure and M4 readiness. The next proposed task is a bounded M4 planning/contract review, subject to separate owner authorization; M4 implementation is not authorized.
 
-**Last reviewed:** 2026-10-11
+**Last reviewed:** 2026-10-26
+
+## Current M3 closure and M4 readiness — 2026-10-26
+
+Ganesan accepts bounded M3 Personal Guidance Presentation at `f545e01c0091f4722a427d0bfb1772a60615bbfe`: `M3_BOUNDED_ACCEPTANCE = PASS`. M3-T01 contract work is complete; M3-T02A–D foundations and M3-T03/T03E/T03F student presentation are technically integrated. Owner-reviewed Tamil/English presentation, uncertainty, evidence limits, next actions, edge cases, regression and typecheck are PASS for this scope. Deterministic admission authority, cutoff/eligibility meaning, UNKNOWN/NEEDS_REVIEW and source limitations are preserved. This is owner acceptance, not independent admission-claim verification or real-student usability evidence.
+
+`M3_ACCEPTED_BASELINE = f545e01c0091f4722a427d0bfb1772a60615bbfe`; `T04_STATUS = NOT_RUN`; `STUDENT_VALIDATED = NO`; `PILOT_READINESS = NOT_APPROVED`; `M4_IMPLEMENTATION_AUTHORIZED = NO`; `CON_IMPLEMENTATION_AUTHORIZED = NO`; `GEMINI_STATUS = PAUSED`; `LIVE_LLM_GATE = PARTIAL`; `Q021_STATUS = PARTIAL`.
+
+The frozen M4 student outcome is to help students explore branches and options they may not know to ask about. M2/M3 provide bilingual orientation, reviewed question content, distinct personal/general guidance and evidence-aware presentation; they do not complete M4. Remaining work includes a reviewed interest-input contract, exploration taxonomy and matching semantics, evidence-backed branch awareness, related-option discovery and safe Think-Further prompts. M4 depends on accepted M0/M1/M3, M2 only when personalized, and D0 plus relevant D2/D3 evidence for claims included. The next proposed bounded task is M4-T01 planning/contract review; implementation needs a later explicit owner decision. CON-01 stays separate. The amended private-hosting and first 2–3 remote-student observation sequence remains unchanged.
+
+The October 11 M2/T06 entries below are dated history. Their M3-pending and next-T06 wording is superseded only by the current M3 acceptance above.
 
 **Historical October 10 conversational copy candidate (integrated October 11):** Ganesan [approved A01–A05 and passed A06–B08 for conversational wording](docs/planning/t03_conversational_copy_sync_decision_2026-10-10.md). The [exact owner-supplied bilingual source](docs/planning/t03_bilingual_conversational_copy_refined_2026-10-10.md) governs the 70 question-page copy fields on a separate, unmerged review branch. This editorial decision preserves the earlier T03 factual/Tamil review attribution and all source limitations; it is not new external verification or independent volunteer approval. Q021 remains PARTIAL; T04 is NOT RUN and M2 acceptance is PENDING. Those candidate-time unmerged descriptions are superseded: copy-sync, compare-copy and layout now form the verified a67fc4c baseline.
 
-**Current integrated implementation and roadmap amendment (2026-10-11):** [Dated owner decision](docs/planning/roadmap_validation_gate_amendment_2026-10-11.md) records M2_IMPLEMENTATION_BASELINE = a67fc4c9ed24f7061631782cd63c839cf098cfe8; M2_IMPLEMENTATION = COMPLETE_FOR_BOUNDED_SCOPE; M2_ACCEPTANCE = PASS_OWNER_REPORTED. Main/origin/main equality and clean tree were verified after the three exact authorized revisions were integrated. Prior integration checks: focused 12/12 PASS, full offline 211/211 PASS, strict typecheck PASS, 55 documentation links/whitespace PASS, mobile 360×800 and 390×800 PASS. Q049 four-way comparison, compare conversational wording, action placement and limitations are preserved. These are prior baseline checks, not application tests rerun in this documentation task. Owner reviews retain original revision/scope; no student or independent volunteer evidence is claimed.
+**October 11 integrated implementation and roadmap amendment (historical):** [Dated owner decision](docs/planning/roadmap_validation_gate_amendment_2026-10-11.md) records M2_IMPLEMENTATION_BASELINE = a67fc4c9ed24f7061631782cd63c839cf098cfe8; M2_IMPLEMENTATION = COMPLETE_FOR_BOUNDED_SCOPE; M2_ACCEPTANCE = PASS_OWNER_REPORTED. Main/origin/main equality and clean tree were verified after the three exact authorized revisions were integrated. Prior integration checks: focused 12/12 PASS, full offline 211/211 PASS, strict typecheck PASS, 55 documentation links/whitespace PASS, mobile 360×800 and 390×800 PASS. Q049 four-way comparison, compare conversational wording, action placement and limitations are preserved. These are prior baseline checks, not application tests rerun in this documentation task. Owner reviews retain original revision/scope; no student or independent volunteer evidence is claimed.
 
 T04 = NOT_RUN; STUDENT_VALIDATED = NO; T04_PLACEMENT = MANDATORY_LATER_VALIDATION_BEFORE_PILOT_READINESS; INITIAL_T04_COHORT = 2_TO_3_REMOTE_STUDENTS_EXPLORATORY. Observation follows clean integrated UI, separately authorized conversational/LLM readiness, hosting readiness and owner mobile verification. Preserve M7’s 3–5-student preparation intent; decide additional participants after the first cohort. Ganesan must set a target window/checkpoint with dependency authorization; do not defer indefinitely.
 
@@ -46,7 +56,7 @@ CONVERSATIONAL_GUIDANCE = CONTRACT_NOT_YET_AUTHORIZED_FOR_IMPLEMENTATION; GEMINI
 
 `T03_TAMIL_EQUIVALENCE_REVIEW = PASS_OWNER_REPORTED`
 
-**Next priority:** T06 / M3 bounded gap assessment and proposal for Personal Guidance Presentation. M2-C3/T05 COMPLETE by the October 11 owner decision; this documentation task does not execute T06 or authorize M3 implementation.
+**Historical next priority (2026-10-11):** T06 / M3 bounded gap assessment and proposal for Personal Guidance Presentation. M2-C3/T05 COMPLETE by the October 11 owner decision; this documentation task does not execute T06 or authorize M3 implementation.
 
 **A01–A07 research revision (2026-10-02):** The updated [question-level review and paper walkthrough](docs/content/awareness/student_pov_awareness_coverage_review_v1.md) records **31 ANSWERED, 0 PARTIAL, 0 DEFERRED**, improved from **7/15/9**. `ANSWERED` measures direct response completeness only. The [evidence note](docs/content/awareness/student_pov_awareness_evidence_v2.md) scopes curriculum, post-Class-12, historical-cutoff and occupation claims. Final factual approval, volunteer Tamil approval and actual student validation remain pending. The revised paper walkthrough passes the awareness portion of the 5–10-minute progression goal; it does not validate the full seven-stage journey.
 
@@ -130,7 +140,7 @@ CONVERSATIONAL_GUIDANCE = CONTRACT_NOT_YET_AUTHORIZED_FOR_IMPLEMENTATION; GEMINI
 
 `DETERMINISTIC_ADMISSION_AUTHORITY = PRESERVED`
 
-`NEXT_ACTIVITY = T06_M3_BOUNDED_GAP_ASSESSMENT_PROPOSAL_ONLY`
+`HISTORICAL_NEXT_ACTIVITY_2026_10_11 = T06_M3_BOUNDED_GAP_ASSESSMENT_PROPOSAL_ONLY`
 
 `M2_STATUS = BOUNDED_IMPLEMENTATION_ACCEPTED_OWNER_REPORTED`
 
@@ -428,7 +438,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Follow [T06 in the current execution plan](docs/planning/current_execution_plan.md) for the next bounded M3 planning proposal; M2-C3/T05 is complete by the explicit October 11 owner decision. The [October 11 amendment](docs/planning/roadmap_validation_gate_amendment_2026-10-11.md) removes actual T04 as its hard prerequisite. Preserve the [existing procedure and privacy-conscious template](docs/planning/m2_one_journey_validation_plan_2026-10-03.md) for mandatory later observations before pilot readiness.
+Propose M4-T01 bounded planning/contract review for separate owner authorization; M4 implementation remains unauthorized. Preserve the [existing procedure and privacy-conscious template](docs/planning/m2_one_journey_validation_plan_2026-10-03.md) for mandatory later observations before pilot readiness.
 
 Historical test counts below and above refer to their named milestones. The bounded M2 implementation was checked with focused local tests, the existing offline suite and strict typecheck; its test outcome is recorded in the implementation note above. No live model request was made.
 
@@ -512,4 +522,4 @@ Historical test counts below and above refer to their named milestones. The boun
 
 ## Next review point
 
-T03’s historical owner reviews retain their scope. M2-C3/T05 is complete; T06 bounded M3 planning is next; T04 stays mandatory later before pilot readiness under the October 11 amendment. Live LLM and conversational work remain separate and authorization-controlled.
+M3 bounded acceptance is PASS at `f545e01c0091f4722a427d0bfb1772a60615bbfe`. M4-T01 planning/contract review is the next proposed authorization decision. T04 remains mandatory later before pilot readiness under the October 11 amendment. Live LLM and conversational work remain separate and authorization-controlled.

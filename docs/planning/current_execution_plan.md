@@ -1,8 +1,12 @@
 # Current execution plan
 
-**Updated:** 2026-10-11. **Owner:** Ganesan. **Current task map:** T01–T06 and amended closure/integration tasks below. [Project Status](../../PROJECT_STATUS.md) summarizes state; [documentation guide](../README.md) provides navigation. Keep task status and next actions here rather than maintaining competing task lists. This map records direction and authorization boundaries; it does not authorize every listed task. Pre-T04 fetch verified clean local and remote `main` at `27d9c0db675e9a302efb1efb37976aaa02faa994`, a documentation-only descendant of the reviewed implementation `4d77c34a41ae16a5b9a21ebc5e89dc81075bec40`.
+**Updated:** 2026-10-26. **Owner:** Ganesan. **Current task map:** M3 bounded closure and proposed M4 planning, followed by the preserved integration, private-hosting and observation sequence below. [Project Status](../../PROJECT_STATUS.md) summarizes state; [documentation guide](../README.md) provides navigation. This map records direction and authorization boundaries; it does not authorize M4 or CON implementation.
 
-**Current decision:** [October 11 owner amendment](roadmap_validation_gate_amendment_2026-10-11.md) supersedes the historical T04→T05 dependency. Stable implementation baseline: a67fc4c9ed24f7061631782cd63c839cf098cfe8. Ganesan’s later explicit October 11 acceptance is PASS_OWNER_REPORTED for bounded M2 only; M2-C3/T05 COMPLETE. T04 NOT_RUN; STUDENT_VALIDATED NO; M3 implementation NOT_AUTHORIZED. Documentation descendants are not a different accepted implementation. Earlier baseline descriptions below are historical.
+**Current decision:** Ganesan accepts bounded M3 Personal Guidance Presentation at `f545e01c0091f4722a427d0bfb1772a60615bbfe`. M3 technical integration and owner-reviewed Tamil/English presentation are PASS. T04_STATUS = NOT_RUN; STUDENT_VALIDATED = NO; PILOT_READINESS = NOT_APPROVED. M4 and CON implementation are not authorized; Gemini stays PAUSED and the Live LLM Gate remains PARTIAL. The October 11 M2/T06 entries below are dated history superseded for M3 status by this decision.
+
+**M3 closure:** M3-T01 contract complete; M3-T02A–D technically implemented; M3-T03/T03E/T03F implemented and integrated. `M3_BOUNDED_ACCEPTANCE = PASS`; `M3_ACCEPTED_BASELINE = f545e01c0091f4722a427d0bfb1772a60615bbfe`. Owner review passes Tamil/English alignment, uncertainty, evidence limits, next actions and edge cases. Deterministic admission authority and existing source/UNKNOWN/NEEDS_REVIEW boundaries remain intact. Acceptance does not claim independent factual verification, real-student validation, pilot readiness or LLM readiness.
+
+**M4 readiness:** Frozen outcome: students can explore branches and options they may not know to ask about. M2/M3 already supply bilingual orientation, reviewed question content, distinct personal/general guidance and evidence-aware presentation; optional Q&A does not complete M4. Remaining work: reviewed interest-input contract, exploration taxonomy and matching semantics before implementation; then evidence-backed branch awareness, related-option discovery and safe Think-Further prompts. Dependencies: accepted M0/M1/M3, M2 only if personalized, and D0 plus relevant D2/D3 evidence for displayed claims. Proposed next task: separately authorize M4-T01 bounded planning/contract review only. CON-01 remains a separate, unauthorized workstream. The amended later private-hosting and first 2–3 remote-student observation sequence is unchanged.
 
 ## Authority and verified baseline
 
@@ -26,7 +30,7 @@ The working tree was clean. T01 adds documentation on this review branch; the SH
 - **Question coverage:** recorded implementation completeness is 69 DIRECT and Q021 PARTIAL in each language. All 70 Tamil question/answer pairs have Ganesan’s owner-reported human equivalence PASS (not independent volunteer approval); the other 98 corpus questions are not represented as answered. Reachability and answer completeness do not establish factual release approval.
 - **Human gates:** Ganesan’s factual-scope and human Tamil-equivalence reviews are PASS_OWNER_REPORTED on 2026-10-04 for J01–J20 and all 70 items at `e052f1d6453af03e5c389dbcb739ce41836d5c92`; the Tamil outcome is not independent volunteer approval. That wording attribution is historical; later revisions retain separate dated decisions. Ganesan separately reports placement/wording PASS with no FIX items on 2026-10-09 for the [October 5 revised question-page copy](t04_wording_reconciliation_2026-10-05.md) at `4d77c34a41ae16a5b9a21ebc5e89dc81075bec40`; this does not rewrite the historical T03 decisions or supply fresh external-source verification. Existing source limits and Q021 PARTIAL remain. T03 COMPLETE for its recorded baseline; T04 actual student validation NOT RUN; bounded M2 acceptance PASS_OWNER_REPORTED at a67fc4c on October 11.
 - **Live LLM:** Gate PARTIAL; Gemini execution PAUSED. Preserve the [accepted experiment learning](../experiments/live_llm_integration_gate_results_v2.md): G02 PASS with minor finding; G03 guidance-quality failure despite grounding/routing PASS and bounded HTTP 503 recovery; G04 PASS; G05 OUTPUT_VALIDATION_ERROR. G01 retains its recorded evidence/acceptance limits; remaining frozen scenarios are unexecuted. These results do not authorize production use.
-- **Not authorized:** conversational implementation, production RAG, new live calls, deployment or later milestone implementation. **Production model and visible question limit are undecided.** The current 70 prepared answers are the bounded implemented collection, not a permanent product question limit; the experimental Gemini model is not a production-model decision.
+- **Not authorized:** M4/CON implementation, production RAG, new live calls or deployment. **Production model and visible question limit are undecided.** The current 70 prepared answers are the bounded implemented collection, not a permanent product question limit; the experimental Gemini model is not a production-model decision.
 
 ## Agreed product direction
 
@@ -91,17 +95,17 @@ Future model economics should measure **cost per successfully guided student jou
 - **Authorization:** Acceptance is reserved to an explicit owner decision. Neither this plan, a merge nor test success accepts M2.
 - **Completion evidence:** Recorded gate outcomes, reviewed commit/scope, disposition of blockers and explicit M2 acceptance or deferral. The separate Live LLM Gate remains distinct.
 - **Status:** COMPLETE; M2_ACCEPTANCE = PASS_OWNER_REPORTED by Ganesan, 2026-10-11, at a67fc4c9ed24f7061631782cd63c839cf098cfe8. T05 is the same acceptance decision as M2-C3. Scope is bounded implementation only; T04 NOT_RUN and STUDENT_VALIDATED NO.
-- **Next:** T06 bounded M3 gap assessment/proposal, planning only. Mandatory later T04 remains; M3 implementation is not automatically authorized.
+- **Historical next (2026-10-11):** T06 bounded M3 gap assessment/proposal, planning only. This was superseded by the M3 acceptance recorded above; mandatory later T04 remains.
 
-### T06 — Assess gaps and propose separately authorized M3 work
+### T06 — Historical M3 gap-assessment task
 
 - **Purpose / deliverable:** After M2 acceptance, a bounded gap assessment and proposal for Personal Guidance Presentation, with reused capabilities, missing evidence, scope and validation criteria.
 - **Owner:** Codex prepares only when tasked; Ganesan reviews and separately authorizes any implementation.
 - **Dependencies:** T05 explicit acceptance and the frozen M3 dependencies, including applicable rule/support evidence.
-- **Authorization:** Future planning item; M3 implementation NOT_AUTHORIZED. T01 records the sequence only.
+- **Authorization at the time:** Planning only; M3 implementation then required a separate owner decision.
 - **Completion evidence:** Proposal traceable to M3's simple guidance / explain why / evidence hierarchy, Verified Personal Results versus Things Worth Checking, uncertainty and next-action requirements; explicit owner disposition before implementation.
-- **Status:** NOT_STARTED; M2 acceptance dependency satisfied. Immediate next planning activity; no M3 implementation authorization.
-- **Next:** Prepare the bounded Personal Guidance Presentation gap assessment/proposal when separately tasked; preserve M3 scope and require an explicit implementation decision.
+- **Status:** Historical October 11 snapshot, superseded by accepted M3 at `f545e01c0091f4722a427d0bfb1772a60615bbfe`.
+- **Next:** See current M4 readiness and proposed M4-T01 planning above.
 
 ## Amended closure and later execution sequence — 2026-10-11
 
@@ -111,9 +115,9 @@ The [dated amendment](roadmap_validation_gate_amendment_2026-10-11.md) supplies 
 | --- | --- | --- | --- | --- | --- | --- |
 | M2-C1 | Select stable integrated baseline | Codex; Ganesan scope owner | Three authorized revisions | COMPLETE; integration authorized | Full SHA, ancestry, matching main/remote and clean tree | Retain implementation SHA separately from documentation descendants |
 | M2-C2 | Assemble technical and owner evidence | Codex | M2-C1 and applicable reviews | COMPLETE; documentation authorized | 12/12, 211/211, typecheck, 55 links/whitespace, mobile; original owner attribution and limits | Present evidence to Ganesan |
-| M2-C3 / T05 | Explicit bounded M2 acceptance | Ganesan | M2-C1/C2; applicable frozen completion reviews | COMPLETE; PASS_OWNER_REPORTED, 2026-10-11 | Dated decision at a67fc4c full SHA; limitations and later T04 acknowledged | T06 planning; no later implementation authorization |
-| M3 | Personal Guidance Presentation | Ganesan; authorized implementer | Accepted M0–M2; frozen evidence | NOT_AUTOMATICALLY_AUTHORIZED | Scoped delivery and technical/mission/owner/scenario gates | T06 proposal next; M3 implementation NOT_AUTHORIZED |
-| M4 | Explore / Think-Further | Ganesan; authorized implementer | Frozen M0/M1/M3; M2 if personal; governed taxonomy | NOT_AUTOMATICALLY_AUTHORIZED | Reviewed scope, matching and source evidence; completion gates | Separately propose/authorize scope |
+| M2-C3 / T05 | Explicit bounded M2 acceptance | Ganesan | M2-C1/C2; applicable frozen completion reviews | COMPLETE; PASS_OWNER_REPORTED, 2026-10-11 | Dated decision at a67fc4c full SHA; limitations and later T04 acknowledged | Historical successor T06; M3 now accepted |
+| M3 | Personal Guidance Presentation | Ganesan; authorized implementer | Accepted M0–M2; frozen evidence | BOUNDED_ACCEPTANCE = PASS at `f545e01c0091f4722a427d0bfb1772a60615bbfe` | T01 contract; T02A–D and T03/T03E/T03F integrated; technical and owner bilingual review PASS | Preserve source/domain boundaries; student validation remains later |
+| M4 | Explore / Think-Further | Ganesan; authorized implementer | Accepted M0/M1/M3; M2 if personal; D0 and relevant D2/D3 | IMPLEMENTATION_NOT_AUTHORIZED | Reviewed interest-input contract, taxonomy, matching semantics and source evidence required before implementation | Separately authorize M4-T01 planning/contract review only |
 | M5 | Decision Support Adaptation | Ganesan; authorized implementer | Frozen M0–M3 and relevant M4 | NOT_AUTOMATICALLY_AUTHORIZED | Student-controlled choices and evidence; no prediction | Separately propose/authorize scope |
 | CON-01 | Conversational Guidance V1 contract | Drafter to be tasked; Ganesan reviews | Frozen journey, authority and M2 learning | NOT_STARTED; preparation separately tasked; implementation not authorized | Intent/authority routing, canonical reuse, deterministic authority, unknown/refusal/escalation, provenance, compact context, entity fidelity, Tamil and scoped Tanglish/English | Separately authorize contract preparation |
 | CON-02 | Explicit prototype implementation decision | Ganesan | Reviewed CON-01 | NOT_GRANTED | Dated scope, limits and required checks | Accept/defer bounded implementation |
@@ -130,7 +134,7 @@ The [dated amendment](roadmap_validation_gate_amendment_2026-10-11.md) supplies 
 
 M2_IMPLEMENTATION_BASELINE = a67fc4c9ed24f7061631782cd63c839cf098cfe8; M2_IMPLEMENTATION = COMPLETE_FOR_BOUNDED_SCOPE; M2_ACCEPTANCE = PASS_OWNER_REPORTED; T04 = NOT_RUN; STUDENT_VALIDATED = NO; T04_PLACEMENT = MANDATORY_LATER_VALIDATION_BEFORE_PILOT_READINESS; INITIAL_T04_COHORT = 2_TO_3_REMOTE_STUDENTS_EXPLORATORY.
 
-CONVERSATIONAL_GUIDANCE = CONTRACT_NOT_YET_AUTHORIZED_FOR_IMPLEMENTATION; GEMINI = PAUSED; LIVE_LLM_GATE = PARTIAL; PRODUCTION_MODEL = UNDECIDED; M3_TO_M7 = NOT_AUTOMATICALLY_AUTHORIZED; Q021 = PARTIAL. Ganesan must set the target window/checkpoint with dependency authorization; delays require an owner decision rather than indefinite deferral.
+M3_BOUNDED_ACCEPTANCE = PASS; M3_ACCEPTED_BASELINE = f545e01c0091f4722a427d0bfb1772a60615bbfe; M4_IMPLEMENTATION_AUTHORIZED = NO; CON_IMPLEMENTATION_AUTHORIZED = NO; PILOT_READINESS = NOT_APPROVED. CONVERSATIONAL_GUIDANCE = CONTRACT_NOT_YET_AUTHORIZED_FOR_IMPLEMENTATION; GEMINI = PAUSED; LIVE_LLM_GATE = PARTIAL; PRODUCTION_MODEL = UNDECIDED; M4_TO_M7 = NOT_AUTOMATICALLY_AUTHORIZED; Q021 = PARTIAL. Ganesan must set the T04 target window/checkpoint with dependency authorization; delays require an owner decision rather than indefinite deferral.
 
 ## Frozen M3–M7 roadmap remains intact
 
@@ -183,4 +187,4 @@ Do not rewrite frozen documents, original content or experiment history to erase
 
 **Executed in the October 11 documentation task:** Fresh origin/main verification at a67fc4c; three-file documentation-only scope check; 71 local links checked; status/task/gate consistency and whitespace checks. No application tests, typecheck, browser walkthrough, live call or human session rerun. Prior integration results remain attributed to the implementation baseline.
 
-**NEXT_SINGLE_ACTION:** T06 / M3 bounded gap assessment and proposal for Personal Guidance Presentation, planning only; M3_IMPLEMENTATION_AUTHORIZED = NOT_AUTHORIZED.
+**NEXT_SINGLE_ACTION:** Ganesan decides whether to authorize M4-T01 bounded planning/contract review only; M4_IMPLEMENTATION_AUTHORIZED = NO.
