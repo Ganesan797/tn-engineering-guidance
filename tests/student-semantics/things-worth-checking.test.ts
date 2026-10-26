@@ -96,7 +96,7 @@ test("empty state is honest, bilingual and explicitly remains candidate wording"
   assert.deepEqual(section.items, []);
   assert.equal(section.empty_state, "empty");
   assert.equal(section.new_wording_review, "HUMAN_REVIEW_PENDING");
-  assert.match(studentThingsWorthChecking(undefined, "en").empty_state!, /does not mean that no options exist/);
+  assert.match(studentThingsWorthChecking(undefined, "en").empty_state!, /does not mean there are no options/);
   assert.equal(studentThingsWorthChecking(undefined).empty_state, GENERAL_GUIDANCE_MESSAGES.empty.ta);
   assert.match(studentThingsWorthChecking(options, "en").scope, /do not confirm your eligibility, entitlement or admission/);
 });

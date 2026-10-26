@@ -1,5 +1,11 @@
 // Presentation copy only. Tamil first; all pairs CANDIDATE_PENDING_OWNER_REVIEW.
 export const CHECK_COPY_REVIEW = "CANDIDATE_PENDING_OWNER_REVIEW";
+export const PREPARATION_COPY = {
+  first: ["முதலில் சேர்க்கை ஆண்டும் முதல் ஆண்டு அல்லது டிப்ளமோ வழியும் எது என்று பாருங்கள்.", "First, check your admission year and whether you are looking at the first-year or diploma route."],
+  second: ["பள்ளி வாரியம் அல்லது தகுதிப் படிப்பு, முடிவுகள், பள்ளிப் படிப்பு விவரங்கள் உங்களுக்குத் தெரிகிறதா?", "Do you know your school board or qualifying course, results, and school-study history?"],
+  conditional: ["இடஒதுக்கீடு அல்லது சலுகை கேட்கப் போகிறீர்களா? அதற்குத் தேவையான சான்றிதழ் அல்லது ஆவணம் எது என்று பார்த்து, முன்கூட்டியே தயாராக வைத்துக்கொள்ளுங்கள்.", "Planning to claim a reservation or concession? Check which certificate or document that claim needs, and prepare it ahead of time."],
+  diploma: ["டிப்ளமோ முடித்திருந்தால், நேரடி இரண்டாம் ஆண்டு வழியைத் தனியாகப் பாருங்கள். இங்குள்ள தனிப்பட்ட சரிபார்ப்பு 2026 முதல் ஆண்டு பொதுக் கல்விப் பிரிவு கட்-ஆஃப்புக்கானது; டிப்ளமோ மட்டும் வைத்து உங்கள் முதல் ஆண்டு தகுதியைப் பற்றி முடிவு செய்யவில்லை.", "If you completed a diploma, explore the direct second-year route separately. This personal check covers the 2026 first-year academic-stream cutoff; it does not decide your first-year eligibility from the diploma alone."],
+} as const;
 export const CHECK_COPY = {
   title: ["உங்கள் கட்-ஆஃப்பைப் பார்க்கலாம்", "Let us look at your cutoff"],
   benefit: ["கட்-ஆஃப்பையும் அடுத்து தெரிந்துகொள்ள வேண்டியதையும் பார்க்கலாம். ஒவ்வொரு கேள்வியாகப் போகலாம். தெரியாவிட்டாலும் பரவாயில்லை.", "You can see your cutoff and what to find out next. Let us go one question at a time. It is okay not to know an answer."],

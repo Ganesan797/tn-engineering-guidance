@@ -10,7 +10,7 @@ import { renderStudentEntryPage } from "../../src/ui/student-entry.ts";
 import { renderM2Journey, reviewedAwarenessTamilQuestion, reviewedTamilUnit } from "../../src/ui/m2-journey.ts";
 import { loadQuestionCollection, renderQuestionCollection } from "../../src/ui/explore-questions.ts";
 import { contentMarkup } from "../../src/ui/student-entry.ts";
-import { CHECK_COPY, CHECK_COPY_REVIEW, CHECK_QUESTIONS_EN } from "../../src/ui/journey-copy.ts";
+import { CHECK_COPY, CHECK_COPY_REVIEW, CHECK_QUESTIONS_EN, PREPARATION_COPY } from "../../src/ui/journey-copy.ts";
 
 const load = (path: string) => readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
 const pack = applyApprovedTamilStudentCopy(parseAwarenessPack(
@@ -72,7 +72,9 @@ test("all 70 question-specific answers have separate localized copy, limits and 
       assert.match(page.html, new RegExp(`<html lang="${lang}"`));
       assert.ok(page.html.includes(contentMarkup(copy.answer)));
       assert.ok(page.html.includes(contentMarkup(copy.next)));
-      assert.ok(page.html.includes(contentMarkup(copy.limit)));
+      // B03 keeps the canonical limit internally and removes only its technical route sentence on screen.
+      if (a.unit === "B03") assert.match(page.html, /2026–27/);
+      else assert.ok(page.html.includes(contentMarkup(copy.limit)));
       assert.ok(page.html.includes(`id=${a.nextId}`));
       if (lang === "ta") {
         assert.match(copy.question, /[\u0B80-\u0BFF]/);
@@ -135,9 +137,16 @@ test("language switch retains question or topic and missing Tamil never falls ba
 test("lateral entry is informational and cutoff explanation preserves the result tab", () => {
   const lateral = renderQuestionCollection(collection, "Q060").html;
   assert.match(lateral, /data-guidance-unit="B03"/);
-  assert.match(lateral, /தகுதியை மதிப்பிடாது/);
+  assert.match(lateral, /இந்தச் சரிபார்ப்பு முதல் ஆண்டு பொறியியல் சேர்க்கைக்கானது/);
+  assert.match(lateral, /டிப்ளமோ முடித்து நேரடியாக இரண்டாம் ஆண்டில் சேர விரும்பினால்/);
+  assert.doesNotMatch(lateral, /தகுதியை மதிப்பிடாது/);
+  const lateralEnglish = renderQuestionCollection(collection, "Q060", null, "en").html;
+  assert.match(lateralEnglish, /This check is for first-year engineering admission/);
+  assert.match(lateralEnglish, /separate lateral-entry admission guidance/);
+  assert.doesNotMatch(lateralEnglish, /does not assess/);
   assert.doesNotMatch(lateral, /href="\/journey\?step=check"/);
   assert.match(lateral, /href="https:\/\/www.tnlea.com\//);
+  assert.match(lateralEnglish, /href="https:\/\/www.tnlea.com\//);
   const state = ["2026", "academic", "no", "86", "78", "81"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
   const result = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
   assert.match(result, /id=Q002" target="_blank"/);
@@ -149,6 +158,33 @@ test("lateral entry is informational and cutoff explanation preserves the result
     const withInputs = renderM2Journey(page, pack, reviewed, awarenessReviewed, runtime(), state);
     assert.match(withInputs, /href="\/journey\/questions" target="_blank"/);
     if (page === "route") assert.match(withInputs, /id=Q060" target="_blank"/);
+  }
+});
+
+test("diploma route and preparation copy keep first-year scope and conditional documents", () => {
+  for (const [language, index] of [["ta", 0], ["en", 1]] as const) {
+    const route = renderM2Journey("route", pack, reviewed, awarenessReviewed, runtime(), EMPTY_JOURNEY, undefined, {}, language);
+    const prepare = renderM2Journey("prepare", pack, reviewed, awarenessReviewed, runtime(), EMPTY_JOURNEY, undefined, {}, language);
+    assert.ok(route.includes(PREPARATION_COPY.diploma[index]));
+    assert.match(route, /id=Q060/);
+    for (const key of ["first", "second", "conditional"] as const) assert.ok(prepare.includes(PREPARATION_COPY[key][index]));
+    assert.match(prepare, /2026/);
+    assert.match(prepare, /<details><summary>/);
+    assert.doesNotMatch(prepare, /கோரும் எல்லா சான்றிதழ்களும் இப்போதே தேவை|every certificate is needed now/);
+  }
+});
+
+test("prepared question titles hide internal IDs while preserving canonical links", () => {
+  const answer = collection.answers.get("Q071")!;
+  assert.equal(answer.id, "Q071");
+  for (const language of ["ta", "en"] as const) {
+    const page = renderQuestionCollection(collection, "Q071", null, language).html;
+    assert.ok(page.includes(`<h1>${answer[language]!.question}</h1>`));
+    assert.doesNotMatch(page.replace(/<[^>]*>/g, " "), /\bQ071\b/);
+    assert.match(page, /id=Q083/);
+    const topic = renderQuestionCollection(collection, null, null, language, "B05").html;
+    assert.match(topic, /id=Q071/);
+    assert.doesNotMatch(topic.replace(/<[^>]*>/g, " "), /\bQ071\b/);
   }
 });
 
