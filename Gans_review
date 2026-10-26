@@ -1,3 +1,96 @@
+
+Review 26/October:
+
+just instructions  as notes or prompts or docs?
+
+Use a combination of one handoff document and one kickoff prompt.
+
+### 1. Create CODEX_HANDOFF.md
+
+Put this in the repository root and transfer/commit it to your personal machine.
+
+# Codex Project Handoff
+
+## Mission
+Build a Tamil-first, source-backed engineering guidance product that provides awareness, deterministic personal guidance, exploration and decision support.
+
+## Current State
+- M0 and M1 accepted.
+- Bounded M2 implementation accepted.
+- Real-student validation not completed.
+- M3–M7 remain to be implemented.
+- Deterministic engine is authoritative.
+- Production RAG/LLM is not yet approved.
+
+## Main Concern
+The repository has detailed documents, but current state, historical records,
+authorization and future execution are fragmented. Codex can become focused on
+one narrow task and lose the complete product roadmap.
+
+## Required Action
+Create an execution-control layer under `docs/execution/`:
+
+- `CURRENT_STATE.md`
+- `PRODUCT_ROADMAP.md`
+- `TASK_QUEUE.md`
+- `TRACEABILITY.md`
+- `tasks/` with implementation-sized task specifications
+
+Do not rewrite or delete historical records.
+
+## Technical Principles
+- Preserve the deterministic rules engine.
+- UI and AI must never recalculate or override admission results.
+- Structured numerical data must remain separate from RAG.
+- Unknown must never become false or zero.
+- Every factual claim requires provenance.
+- Tamil and English must use the same semantic result.
+- AI may explain and orchestrate, but not decide admission-critical outcomes.
+
+## Planned Workstreams
+1. M3 Personal Guidance Presentation
+2. Data and evidence expansion
+3. M4 Explore / Think-Further
+4. M5 Decision Support
+5. Controlled conversational RAG
+6. Privacy, hosting and reach
+7. Automated and real-student validation
+
+## First Deliverable
+Audit existing documents, identify conflicting current-state statements, and
+produce the execution roadmap and task queue. Do not modify application code
+during this first task.
+
+### 2. Keep AGENTS.md limited to permanent rules
+
+Use it for durable instructions such as:
+
+- Read CODEX_HANDOFF.md before planning work.
+- Preserve deterministic admission authority.
+- Do not infer authorization from historical plans.
+- Use docs/execution/CURRENT_STATE.md for operational status.
+- Every implementation task must update TASK_QUEUE.md.
+- Do not delete historical evidence documents.
+
+Avoid putting changing milestone status in AGENTS.md; it will become stale.
+
+### 3. Send this kickoff prompt to Codex
+
+Read AGENTS.md, CODEX_HANDOFF.md, PROJECT_STATUS.md, the frozen product
+mission, and current_execution_plan.md.
+
+First, audit the documentation for contradictions and fragmented execution
+instructions. Then create the docs/execution control layer described in
+CODEX_HANDOFF.md.
+
+Do not change application code yet. Preserve existing historical documents.
+Produce a complete M3–M7 task dependency map, including data, AI, platform,
+Tamil review and student-validation workstreams. Each task must have scope,
+dependencies, deliverables, tests, definition of done and human-review gates.
+
+This is more reliable than pasting the entire conversation. The handoff document carries the findings, AGENTS.md carries permanent rules, and the prompt starts the specific Codex task
+
+
 review October 22:
 
 
