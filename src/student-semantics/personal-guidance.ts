@@ -37,7 +37,7 @@ export const PERSONAL_GUIDANCE_MESSAGES = {
   unsupported: { en: "Eligibility for the year or study path you selected cannot be assessed here.", ta: "நீங்கள் தேர்ந்தெடுத்த ஆண்டு அல்லது படிப்பு வழிக்கான தகுதியை இங்கு மதிப்பிட முடியாது." },
   unresolved: { en: "We cannot yet confirm whether this condition is met.", ta: "இந்த நிபந்தனை பொருந்துகிறதா என்று இன்னும் உறுதியாகச் சொல்ல முடியவில்லை." },
   negative: { en: "Based on your answers, one of the checked conditions is not met.", ta: "உங்கள் பதில்களின்படி, சரிபார்த்த நிபந்தனைகளில் ஒன்று நிறைவேறவில்லை." },
-  eligible: { en: "Based on your answers, the checked eligibility conditions are met. This does not guarantee admission.", ta: "உங்கள் பதில்களின் அடிப்படையில், சரிபார்க்கப்பட்ட தகுதி நிபந்தனைகள் நிறைவேறுகின்றன. இது சேர்க்கைக்கு உத்தரவாதம் அல்ல." },
+  eligible: { en: "Based on your answers, the eligibility conditions checked here are met. Other eligibility details and documents still need to be checked.", ta: "நீங்கள் கொடுத்த பதில்களின்படி, இங்கு பார்த்த தகுதி நிபந்தனைகள் பொருந்துகின்றன. மற்ற தகுதி விவரங்களும் சான்றுகளும் இன்னும் சரிபார்க்கப்பட வேண்டும்." },
   cutoff_unresolved: { en: "Your cutoff is available. Some details still need checking before full eligibility can be confirmed. The cutoff alone does not confirm admission.", ta: "உங்கள் கட்-ஆஃப் கிடைத்துள்ளது. முழுத் தகுதியை உறுதிப்படுத்த இன்னும் சில விவரங்களைச் சரிபார்க்க வேண்டும். கட்-ஆஃப் மட்டும் சேர்க்கையை உறுதிப்படுத்தாது." },
   original_marks: { en: "The original marks needed for the calculation are unavailable.", ta: "கணக்கிற்குத் தேவையான அசல் மதிப்பெண்கள் கிடைக்கவில்லை." },
   // HUMAN_REVIEW_PENDING: owner-supplied Tamil candidate; not language-release approval.

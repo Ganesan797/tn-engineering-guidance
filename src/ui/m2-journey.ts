@@ -1,4 +1,4 @@
-import { CHECK_COPY, CHECK_QUESTIONS_EN, CHECK_TITLES_EN } from "./journey-copy.ts";
+import { CHECK_COPY, CHECK_QUESTIONS_EN, CHECK_TITLES_EN, PREPARATION_COPY } from "./journey-copy.ts";
 import type { GuidanceDependencies } from "../application/guidance.ts";
 import type { AwarenessPack } from "../student-semantics/awareness.ts";
 import { renderM3PersonalResult, type M3PresentationOptions } from "./m3-personal-result.ts";
@@ -126,8 +126,9 @@ export function renderM2Journey(
     const blocks = preparation.split(/\n\n+/);
     const list = blocks.find(block => block.startsWith("- "));
     const entries = list?.split("\n") ?? [];
-    const preparationHtml = list && entries.length === 3 ? blocks.map(block => block === list
-      ? `<h3>Basic preparation</h3>${contentMarkup(entries[0])}<details><summary>Only if relevant to a claim you make</summary>${contentMarkup(entries.slice(1).join("\n"))}</details>`
+    const preparationHtml = list && entries.length === 3 ? blocks.map((block, index) => index === 0
+      ? `<p>${t(PREPARATION_COPY.first)}</p><p>${t(PREPARATION_COPY.second)}</p>` : block === list
+      ? `<h3>Basic preparation</h3>${contentMarkup(entries[0])}<p>${t(PREPARATION_COPY.conditional)}</p><details><summary>Only if relevant to a claim you make</summary>${contentMarkup(entries.slice(1).join("\n"))}</details>`
       : contentMarkup(block)).join("") : contentMarkup(preparation);
     body = `<h1>Prepare before applying</h1><p>Do not upload documents here. Check the official notice for your admission year.</p><section class="card" data-content-id="B05"><h2>2026 application preparation</h2>${preparationHtml}<p>TFC is a TNEA Facilitation Centre. <a href="/journey/questions?id=Q083&amp;lang=en" target="_blank" rel="noopener">What can I ask if my situation is unclear? (new tab)</a></p></section><nav class="actions">${journeyNav("check", "Check my details if I wish", state, true)}${journeyNav("route", "Return to the TNEA route", state)}</nav>`;
   } else if (page === "awareness") {
@@ -146,8 +147,9 @@ export function renderM2Journey(
     const list = blocks.find(block => block.startsWith("- "));
     const entries = list?.split("\n") ?? [];
     // Re-layout the existing three reviewed list items without changing their claims.
-    const preparationHtml = list && entries.length === 3 ? blocks.map(block => block === list
-      ? `<h3>அடிப்படை தயாரிப்பு</h3>${contentMarkup(entries[0])}<details><summary>கோரும் பிரிவு / சலுகைக்குப் பொருந்தினால் மட்டும்</summary>${contentMarkup(entries.slice(1).join("\n"))}</details>`
+    const preparationHtml = list && entries.length === 3 ? blocks.map((block, index) => index === 0
+      ? `<p>${t(PREPARATION_COPY.first)}</p><p>${t(PREPARATION_COPY.second)}</p>` : block === list
+      ? `<h3>அடிப்படை தயாரிப்பு</h3>${contentMarkup(entries[0])}<p>${t(PREPARATION_COPY.conditional)}</p><details><summary>கோரும் பிரிவு / சலுகைக்குப் பொருந்தினால் மட்டும்</summary>${contentMarkup(entries.slice(1).join("\n"))}</details>`
       : contentMarkup(block)).join("") : contentMarkup(preparation);
     body = `<h1>விண்ணப்பத்திற்கு முன் தயாராகலாம்</h1><p>ஆவணங்களை இங்கே பதிவேற்ற வேண்டாம். உங்கள் சேர்க்கை ஆண்டுக்கான அதிகாரப்பூர்வ அறிவிப்பைப் பாருங்கள்.</p><section class="card" data-content-id="B05"><h2>2026 விண்ணப்பத் தயாரிப்பு</h2>${preparationHtml}<p>TFC என்பது TNEA உதவி மையம். <a href="/journey/questions?id=Q083" target="_blank" rel="noopener">உங்கள் நிலை தெளிவில்லையெனில் என்ன கேட்கலாம்? (புதிய தாவல்)</a></p></section><nav class="actions">${journeyNav("check", "விருப்பப்பட்டால் என் நிலையைச் சரிபார்க்க", state, true)}${journeyNav("route", "TNEA வழிக்குத் திரும்ப", state)}</nav>`;
   } else {
@@ -177,7 +179,7 @@ export function renderM2Journey(
     }
   }
   const preserveCheck = page === "check" || Object.values(state).some((value) => value !== null);
-  if (page === "route") body += `<p><a href="/journey/questions?id=Q060${en ? "&amp;lang=en" : ""}"${preserveCheck ? ' target="_blank" rel="noopener"' : ""}>${en ? "Completed a diploma? Read about direct second-year entry" : "டிப்ளமோ முடித்தவரா? நேரடி இரண்டாம் ஆண்டு வழியைப் பார்க்க"}${preserveCheck ? ` (${t(CHECK_COPY.newTab)})` : ""}</a>. ${en ? "The first-year personal check does not assess this route." : "முதல் ஆண்டு தனிப்பட்ட சரிபார்ப்பு இந்த வழியை மதிப்பிடாது."}</p>`;
+  if (page === "route") body += `<p><a href="/journey/questions?id=Q060${en ? "&amp;lang=en" : ""}"${preserveCheck ? ' target="_blank" rel="noopener"' : ""}>${en ? "Completed a diploma? Read about direct second-year entry" : "டிப்ளமோ முடித்தவரா? நேரடி இரண்டாம் ஆண்டு வழியைப் பார்க்க"}${preserveCheck ? ` (${t(CHECK_COPY.newTab)})` : ""}</a>.</p><p>${t(PREPARATION_COPY.diploma)}</p>`;
   if (page === "check" && nextJourneyQuestion(state) === null) body += `<p><a href="/journey/questions?id=Q002${en ? "&amp;lang=en" : ""}" target="_blank" rel="noopener">${en ? "Cutoff, percentage and rank — explanation (new tab)" : "கட்-ஆஃப், சதவீதம், தரவரிசை — விளக்கம் (புதிய தாவல்)"}</a></p>`;
   body += `<p><a href="/journey/questions${en ? "?lang=en" : ""}"${preserveCheck ? ' target="_blank" rel="noopener"' : ""}>${t(CHECK_COPY.questionsExplore)}${preserveCheck ? ` (${t(CHECK_COPY.newTab)})` : ""}</a></p>`;
   const sources = page === "awareness" || page === "study" || page === "compare" ? item("AW-01").sources : [official];

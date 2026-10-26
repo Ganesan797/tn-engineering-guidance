@@ -37,6 +37,14 @@ test("home offers awareness and three intents without a profile form or backend 
   }
 });
 
+test("first-time entry opens the same guided journey in each language", () => {
+  const tamil = renderStudentEntryPage({ route: "home", language: "ta" }, pack);
+  const english = renderStudentEntryPage({ route: "home", language: "en" }, pack);
+  assert.match(tamil, /class="choice-card recommended" href="\/journey"/);
+  assert.match(english, /class="choice-card recommended" href="\/journey\?lang=en"/);
+  assert.doesNotMatch(english, /class="choice-card recommended" href="\/beginner/);
+});
+
 test("beginner and unknown routing have no academic input or domain dependencies", () => {
   assert.equal(routeForIntent(null), "beginner");
   const html = renderStudentEntryPage({ route: routeForIntent(null), language: "en" }, pack);

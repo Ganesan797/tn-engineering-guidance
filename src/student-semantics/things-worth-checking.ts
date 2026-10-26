@@ -9,7 +9,7 @@ export const GENERAL_GUIDANCE_MESSAGES = {
   heading: { en: "Things worth checking", ta: "மேலும் அறிந்து சரிபார்க்க வேண்டியவை" },
   scope: { en: "General guidance only. These items do not confirm your eligibility, entitlement or admission.", ta: "இவை பொதுவான வழிகாட்டல்கள் மட்டுமே. உங்கள் தகுதி, சலுகை பெறும் உரிமை அல்லது சேர்க்கையை இவை உறுதிப்படுத்தாது." },
   usefulness: { en: "This general explanation may help you understand what to check next.", ta: "அடுத்து எதைச் சரிபார்க்கலாம் என்பதைப் புரிந்துகொள்ள இந்தப் பொதுவான விளக்கம் உதவலாம்." },
-  empty: { en: "We do not have any reviewed additional guidance to show you here yet. This does not mean that no options exist. You can continue with the preparation guidance below.", ta: "இங்கே காட்டுவதற்கு மதிப்பாய்வு செய்யப்பட்ட கூடுதல் வழிகாட்டல் இப்போது இல்லை. அதனால் வாய்ப்புகள் இல்லை என்று நினைக்க வேண்டாம். கீழே உள்ள தயாரிப்பு வழிகாட்டலைத் தொடர்ந்து பார்க்கலாம்." },
+  empty: { en: "There is no additional guidance to show here right now. This does not mean there are no options. You can continue with the preparation guidance below.", ta: "இங்கே கூடுதல் வழிகாட்டல் இப்போது காட்டப்படவில்லை. அதனால் வாய்ப்புகள் இல்லை என்று நினைக்க வேண்டாம். கீழே உள்ள தயாரிப்பு வழிகாட்டலைத் தொடர்ந்து பார்க்கலாம்." },
 } as const;
 export type GeneralGuidanceMessageKey = keyof typeof GENERAL_GUIDANCE_MESSAGES;
 export type ContentReviewStatus = "PASS_OWNER_REPORTED" | "PENDING" | "FIX_REQUIRED";

@@ -86,6 +86,33 @@ test("unknown, unanswered and unsupported contexts have supported distinct actio
   assert.doesNotMatch(unsupported, /தெரியாத மதிப்பெண்/);
 });
 
+test("unavailable cutoffs use a neutral heading and never show a calculated score", () => {
+  for (const value of [
+    evaluateJourneyGuidance({ ...state, physics: "unknown" }, runtime),
+    evaluateJourneyGuidance({ ...state, year: "other" }, runtime),
+  ]) {
+    assert.equal(value.result?.eligibility.cutoff ?? null, null);
+    const html = render(value);
+    assert.match(html, /<h3>உங்கள் கட்-ஆஃப் நிலை<\/h3>/);
+    assert.match(html, /<h3>Your cutoff status<\/h3>/);
+    assert.doesNotMatch(html, /கணக்கிட்ட கட்-ஆஃப்|Calculated cutoff|165\.5 \/ 200/);
+  }
+});
+
+test("positive wording is bounded to an emitted eligible result", () => {
+  const positive = createGuidanceWithExplanation(demoScenario("eligible"), runtime);
+  assert.equal(positive.result.eligibility.outcome, "ELIGIBLE");
+  const eligible = render({ ...evaluated, ...positive });
+  assert.match(eligible, /இங்கு பார்த்த தகுதி நிபந்தனைகள் பொருந்துகின்றன/);
+  assert.match(eligible, /மற்ற தகுதி விவரங்களும் சான்றுகளும் இன்னும் சரிபார்க்கப்பட வேண்டும்/);
+  assert.match(eligible, /Other eligibility details and documents still need to be checked/);
+  for (const value of [evaluated, evaluateJourneyGuidance({ ...state, year: "other" }, runtime),
+    { ...evaluated, ...createGuidanceWithExplanation(demoScenario("ineligible"), runtime) }]) {
+    assert.notEqual(value.result?.eligibility.outcome, "ELIGIBLE");
+    assert.doesNotMatch(render(value), /இங்கு பார்த்த தகுதி நிபந்தனைகள் பொருந்துகின்றன/);
+  }
+});
+
 test("real failed checks remain negative with neutral official-check action", () => {
   const actual = createGuidanceWithExplanation(demoScenario("ineligible"), runtime);
   const html = render({ ...evaluated, ...actual });
@@ -121,17 +148,19 @@ test("incomplete and originless traces stay explicit without fabricated numbers"
 });
 
 test("missing and scoped provenance never becomes exact verified evidence", () => {
-  assert.match(renderM3PersonalResult(evaluated), /No source link is available here for this information/);
+  assert.match(renderM3PersonalResult(evaluated), /There is no direct source link here for this information/);
   const html = render();
-  assert.match(html, /does not provide separate evidence for every explanation below/);
-  assert.match(html, /One part of it alone does not confirm your full eligibility/);
+  assert.match(html, /It is not separate evidence for every explanation/);
+  assert.match(html, /One part alone does not confirm your full eligibility/);
   assert.match(html, /has not been checked again here/);
-  assert.match(html, /காட்டப்படும் பக்க எண் முன்பு பதிவானது/);
-  assert.match(html, /இந்த இணைப்பு இந்தத் தகுதி நிபந்தனையுடன் தொடர்புடையது/);
+  assert.match(html, /பக்க எண் முன்பே பதிவு செய்யப்பட்டது/);
+  assert.match(html, /இந்த மூலம் இந்த நிபந்தனையுடன் தொடர்புடையது/);
+  assert.match(html, /Source year: 2026|மூலத்தின் ஆண்டு: 2026/);
+  assert.match(render(evaluateJourneyGuidance({ ...state, improvement: true, improvement_year: 2006 }, runtime)), /Other rules and your certificates were not verified/);
   const result = structuredClone(evaluated.result!);
   result.eligibility.checks = result.eligibility.checks.map(check => check.rule_id === "ELG032" ? { ...check, source_page: 2 } : check);
   const stale = render({ ...evaluated, result });
-  assert.match(stale, /The exact page number is not confirmed/);
+  assert.match(stale, /The exact page is unconfirmed/);
   assert.doesNotMatch(stale, /PDF page position: 4/);
 });
 
@@ -150,6 +179,7 @@ test("empty section retains preparation action and rejects pending content", () 
   const html = render();
   const general = html.slice(html.indexOf('class="card general-guidance"'));
   assert.ok(general.includes(GENERAL_GUIDANCE_MESSAGES.empty.ta));
+  assert.doesNotMatch(general.split("</section>")[0], /மதிப்பாய்வு செய்யப்பட்ட|reviewed additional guidance|PASS_OWNER_REPORTED/);
   assert.match(general, /name="navigate" value="prepare"/);
   const pending = { ...generalGuidance, selections: generalGuidance.selections.map(selection => ({ ...selection, review: { ...selection.review, status: "PENDING" as const } })) };
   assert.ok(renderM3PersonalResult(evaluated, { sources, generalGuidance: pending }).includes(GENERAL_GUIDANCE_MESSAGES.empty.ta));
@@ -193,7 +223,7 @@ test("calculation is trace-backed and minimum-mark mechanics are not presented a
   assert.match(html, /86 \+ \(78 ÷ 2\) \+ \(81 ÷ 2\) = 165.5 \/ 200/);
   assert.match(html, /கணிதம் \+ \(இயற்பியல் ÷ 2\) \+ \(வேதியியல் ÷ 2\)/);
   assert.match(html, /Mathematics \+ \(Physics ÷ 2\) \+ \(Chemistry ÷ 2\)/);
-  assert.match(html, /It does not by itself confirm the minimum-mark requirement/);
+  assert.match(html, /This alone does not confirm the minimum-mark requirement/);
   assert.match(html, /மதிப்பெண்களை முழு எண்ணாக மாற்றாமல் பயன்படுத்துதல்/);
   assert.doesNotMatch(visible(html), /வட்டமிடாமல்|Cross-board mark normalization|Recorded source locator/);
   assert.match(render(evaluateJourneyGuidance({ ...state, improvement: true, improvement_year: 2006 }, runtime)), /\.pdf#page=4/);
@@ -215,8 +245,8 @@ test("candidate result copy leads with the score, then uncertainty, its importan
 });
 
 test("friendly empty-state copy is preserved verbatim in both languages", () => {
-  assert.equal(GENERAL_GUIDANCE_MESSAGES.empty.ta, "இங்கே காட்டுவதற்கு மதிப்பாய்வு செய்யப்பட்ட கூடுதல் வழிகாட்டல் இப்போது இல்லை. அதனால் வாய்ப்புகள் இல்லை என்று நினைக்க வேண்டாம். கீழே உள்ள தயாரிப்பு வழிகாட்டலைத் தொடர்ந்து பார்க்கலாம்.");
-  assert.equal(GENERAL_GUIDANCE_MESSAGES.empty.en, "We do not have any reviewed additional guidance to show you here yet. This does not mean that no options exist. You can continue with the preparation guidance below.");
+  assert.equal(GENERAL_GUIDANCE_MESSAGES.empty.ta, "இங்கே கூடுதல் வழிகாட்டல் இப்போது காட்டப்படவில்லை. அதனால் வாய்ப்புகள் இல்லை என்று நினைக்க வேண்டாம். கீழே உள்ள தயாரிப்பு வழிகாட்டலைத் தொடர்ந்து பார்க்கலாம்.");
+  assert.equal(GENERAL_GUIDANCE_MESSAGES.empty.en, "There is no additional guidance to show here right now. This does not mean there are no options. You can continue with the preparation guidance below.");
   const html = render();
   assert.ok(html.includes(GENERAL_GUIDANCE_MESSAGES.empty.ta));
   assert.ok(html.includes(GENERAL_GUIDANCE_MESSAGES.empty.en));

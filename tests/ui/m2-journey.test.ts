@@ -10,7 +10,7 @@ import { renderStudentEntryPage } from "../../src/ui/student-entry.ts";
 import { renderM2Journey, reviewedAwarenessTamilQuestion, reviewedTamilUnit } from "../../src/ui/m2-journey.ts";
 import { loadQuestionCollection, renderQuestionCollection } from "../../src/ui/explore-questions.ts";
 import { contentMarkup } from "../../src/ui/student-entry.ts";
-import { CHECK_COPY, CHECK_COPY_REVIEW, CHECK_QUESTIONS_EN } from "../../src/ui/journey-copy.ts";
+import { CHECK_COPY, CHECK_COPY_REVIEW, CHECK_QUESTIONS_EN, PREPARATION_COPY } from "../../src/ui/journey-copy.ts";
 
 const load = (path: string) => readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
 const pack = applyApprovedTamilStudentCopy(parseAwarenessPack(
@@ -149,6 +149,33 @@ test("lateral entry is informational and cutoff explanation preserves the result
     const withInputs = renderM2Journey(page, pack, reviewed, awarenessReviewed, runtime(), state);
     assert.match(withInputs, /href="\/journey\/questions" target="_blank"/);
     if (page === "route") assert.match(withInputs, /id=Q060" target="_blank"/);
+  }
+});
+
+test("diploma route and preparation copy keep first-year scope and conditional documents", () => {
+  for (const [language, index] of [["ta", 0], ["en", 1]] as const) {
+    const route = renderM2Journey("route", pack, reviewed, awarenessReviewed, runtime(), EMPTY_JOURNEY, undefined, {}, language);
+    const prepare = renderM2Journey("prepare", pack, reviewed, awarenessReviewed, runtime(), EMPTY_JOURNEY, undefined, {}, language);
+    assert.ok(route.includes(PREPARATION_COPY.diploma[index]));
+    assert.match(route, /id=Q060/);
+    for (const key of ["first", "second", "conditional"] as const) assert.ok(prepare.includes(PREPARATION_COPY[key][index]));
+    assert.match(prepare, /2026/);
+    assert.match(prepare, /<details><summary>/);
+    assert.doesNotMatch(prepare, /கோரும் எல்லா சான்றிதழ்களும் இப்போதே தேவை|every certificate is needed now/);
+  }
+});
+
+test("prepared question titles hide internal IDs while preserving canonical links", () => {
+  const answer = collection.answers.get("Q071")!;
+  assert.equal(answer.id, "Q071");
+  for (const language of ["ta", "en"] as const) {
+    const page = renderQuestionCollection(collection, "Q071", null, language).html;
+    assert.ok(page.includes(`<h1>${answer[language]!.question}</h1>`));
+    assert.doesNotMatch(page.replace(/<[^>]*>/g, " "), /\bQ071\b/);
+    assert.match(page, /id=Q083/);
+    const topic = renderQuestionCollection(collection, null, null, language, "B05").html;
+    assert.match(topic, /id=Q071/);
+    assert.doesNotMatch(topic.replace(/<[^>]*>/g, " "), /\bQ071\b/);
   }
 });
 
