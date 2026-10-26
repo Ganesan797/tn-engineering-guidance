@@ -1,3 +1,141 @@
+Plan:
+Yes—the main difficulty is no longer the dataset. The real engineering challenge is aligning three systems:
+
+Trusted admission logic and controls
+Conversational LLM experience
+Hosted mobile-web delivery
+
+They should share one architecture rather than becoming separate implementations.
+
+## Target technical flow
+
+Mobile web chat
+      ↓
+Session and journey state
+      ↓
+Conversation orchestrator
+      ↓
+Intent/capability router
+   ┌──────────────┬─────────────────┐
+   ↓              ↓                 ↓
+Canonical      Controlled RAG   Deterministic engine
+content        explanations     and structured data
+   └──────────────┴─────────────────┘
+                    ↓
+          Semantic guidance model
+                    ↓
+        Safety/output validation
+                    ↓
+ Tamil/English response + evidence + next action
+
+The LLM controls conversation, but not admission results.
+
+## Recommended Codex workstreams
+
+### 1. Shared guidance contract
+
+Complete M3 as a channel-independent semantic model:
+
+Simple guidance
+Explanation
+Evidence
+Uncertainty
+Next action
+Things worth checking
+
+Both the existing web journey and future chat must consume this same model.
+
+### 2. Conversational foundation
+
+Create Codex tasks for:
+
+Conversation state model
+Supported intents and capability routing
+Progressive-question selection
+Context retention and correction
+Unknown/refusal/escalation handling
+Tamil/English language behavior
+Structured LLM response schema
+
+Initially test the conversation with deterministic/mock responses.
+
+### 3. LLM gateway
+
+All model calls should pass through one controlled service providing:
+
+Model configuration
+Prompt versioning
+Request timeout and retry limits
+Token and cost limits
+Structured-output validation
+Logging with personal-data redaction
+Feature flag and kill switch
+Model-independent application interface
+
+The application should not call Gemini/OpenAI directly from UI or business logic.
+### 4. Controlled RAG
+
+Build:
+
+Approved-source manifest
+Source extraction and chunking
+Claim-level provenance
+Admission-year filtering
+Evidence-quality checks
+Missing/conflicting evidence handling
+Prompt-injection protection
+Citation validation
+
+Use structured queries for colleges, programmes, marks and seat data; use RAG for explanations.
+
+### 5. Mobile conversational web
+
+Develop:
+
+Chat-style progressive interface
+Tamil-first entry
+Clear correction/retry actions
+Expandable “Why?” and “Official source”
+Session resume without permanent profile storage
+Accessible mobile layout
+Graceful operation when the LLM is unavailable
+
+### 6. Hosting and operational controls
+
+Before public access:
+
+Production server/container
+HTTPS
+Secrets management
+Private staging access
+Rate limiting
+Health checks and monitoring
+Redacted logs
+Session expiration
+Deployment revision display
+Rollback procedure
+Cost alerts
+Endpoint shutdown/expiry mechanism
+
+### 7. Evaluation gate
+
+Test complete journeys, not isolated answers:
+
+Zero-knowledge Tamil student
+Direct cutoff request
+Unknown or incomplete information
+Incorrect information corrected later
+Unsupported year or route
+Conflicting evidence
+LLM timeout or invalid response
+Prompt-injection attempt
+Deterministic result versus LLM disagreement
+
+The private hosted pilot should begin only after these controls pass.
+
+The critical alignment decision is: M3 must become the shared output contract for web, LLM and deterministic services. That prevents the hosted chat experience from becoming a second, disconnected product
+
+
 
 Review 26/October:
 
