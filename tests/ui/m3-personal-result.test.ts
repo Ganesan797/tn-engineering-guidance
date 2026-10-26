@@ -148,12 +148,14 @@ test("incomplete and originless traces stay explicit without fabricated numbers"
 });
 
 test("missing and scoped provenance never becomes exact verified evidence", () => {
-  assert.match(renderM3PersonalResult(evaluated), /There is no direct source link here for this information/);
+  const missing = renderM3PersonalResult(evaluated);
+  assert.match(missing, /A direct source link is not available here/);
+  assert.match(missing, /இதற்கான நேரடி ஆதார இணைப்பு இங்கே இல்லை/);
   const html = render();
   assert.match(html, /It is not separate evidence for every explanation/);
   assert.match(html, /One part alone does not confirm your full eligibility/);
-  assert.match(html, /has not been checked again here/);
-  assert.match(html, /பக்க எண் முன்பே பதிவு செய்யப்பட்டது/);
+  assert.match(html, /This page reference is shown from previously recorded information/);
+  assert.match(html, /இந்தப் பக்க விவரம் முன்பு பதிவு செய்யப்பட்ட தகவலின் அடிப்படையில் காட்டப்படுகிறது/);
   assert.match(html, /இந்த மூலம் இந்த நிபந்தனையுடன் தொடர்புடையது/);
   assert.match(html, /Source year: 2026|மூலத்தின் ஆண்டு: 2026/);
   assert.match(render(evaluateJourneyGuidance({ ...state, improvement: true, improvement_year: 2006 }, runtime)), /Other rules and your certificates were not verified/);
