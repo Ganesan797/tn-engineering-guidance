@@ -2,11 +2,13 @@
 
 **Current milestone:** M3 — Personal Guidance Presentation accepted for bounded scope; M4 — Explore / Think-Further is next for separate planning and authorization.
 
-**Current task:** Prepare a bounded M4 feature contract for marks-free college/branch discovery using the existing governed pilot; do not implement until owner approval. M4 and M5 implementation remain unauthorized.
+**Current task:** Prepare a separately tasked M4 data-governance feasibility census using existing official sources and the branch catalogue. Research extraction/counting does not authorize production data changes, profile mappings, thresholds or implementation.
 
 **Last reviewed:** 2026-10-27
 
 ## Current college-discovery direction — 2026-10-27
+
+Ganesan approves the [M4 college discovery contract](docs/planning/m4_college_discovery_contract_v1.md) **for planning only**, 2026-10-27, at reviewed revision `7603cfea6b09412d10114f771e5592106f55e5c1`. The booklet field model is accepted with its recorded limits; statewide field completeness remains NOT_ESTABLISHED. Coverage thresholds and draft student-facing profile content remain NOT_APPROVED; identity, evidence and scope holds remain. Data ingestion and M4/M5 implementation are NOT_AUTHORIZED; Gemini stays PAUSED.
 
 The owner-approved [current execution-plan clarification](docs/planning/current_execution_plan.md#current-owner-direction--college-discovery-and-decision-support-2026-10-27) records M4 as marks-free branch and college discovery: source-backed offerings, location/type where verified, neutral comparisons and what to investigate next. M5 owns future approved historical comparison, explainable student-selected filtering and shortlist/manual choice building. Calculated cutoff, historical evidence and current allotment remain distinct; no admission prediction, ranking, guaranteed outcome or automatic preference ordering is authorized. Historical features still require separate D5 methodology/evidence approval.
 
@@ -20,7 +22,7 @@ Ganesan accepts bounded M3 Personal Guidance Presentation at `f545e01c0091f4722a
 
 `M3_ACCEPTED_BASELINE = f545e01c0091f4722a427d0bfb1772a60615bbfe`; `T04_STATUS = NOT_RUN`; `STUDENT_VALIDATED = NO`; `PILOT_READINESS = NOT_APPROVED`; `M4_IMPLEMENTATION_AUTHORIZED = NO`; `CON_IMPLEMENTATION_AUTHORIZED = NO`; `GEMINI_STATUS = PAUSED`; `LIVE_LLM_GATE = PARTIAL`; `Q021_STATUS = PARTIAL`.
 
-The frozen M4 student outcome is to help students explore branches and options they may not know to ask about. M2/M3 provide bilingual orientation, reviewed question content, distinct personal/general guidance and evidence-aware presentation; they do not complete M4. Remaining work includes a reviewed interest-input contract, exploration taxonomy and matching semantics, evidence-backed branch awareness, related-option discovery and safe Think-Further prompts. M4 depends on accepted M0/M1/M3, M2 only when personalized, and D0 plus relevant D2/D3 evidence for claims included. The October 27 direction above specifies the next bounded pilot feature contract; implementation needs a later explicit owner decision. CON-01 stays separate. The amended private-hosting and first 2–3 remote-student observation sequence remains unchanged.
+The frozen M4 student outcome is to help students explore branches and options they may not know to ask about. M2/M3 provide bilingual orientation, reviewed question content, distinct personal/general guidance and evidence-aware presentation; they do not complete M4. Remaining work includes a reviewed interest-input contract, exploration taxonomy and matching semantics, evidence-backed branch awareness, related-option discovery and safe Think-Further prompts. M4 depends on accepted M0/M1/M3, M2 only when personalized, and D0 plus relevant D2/D3 evidence for claims included. The October 27 contract is approved for planning only; the next separately tasked work is the data-governance feasibility census, and implementation needs a later explicit owner decision. CON-01 stays separate. The amended private-hosting and first 2–3 remote-student observation sequence remains unchanged.
 
 The October 11 M2/T06 entries below are dated history. Their M3-pending and next-T06 wording is superseded only by the current M3 acceptance above.
 
@@ -446,7 +448,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Prepare a bounded M4 feature contract for the existing governed pilot dataset; do not implement until owner approval. M4 and M5 implementation remain unauthorized. Preserve the [existing procedure and privacy-conscious template](docs/planning/m2_one_journey_validation_plan_2026-10-03.md) for mandatory later observations before pilot readiness.
+Prepare a separately tasked M4 data-governance feasibility census using official sources and the branch catalogue. Research may extract/count records without changing production datasets or approving mappings, thresholds or implementation. Preserve the [existing procedure and privacy-conscious template](docs/planning/m2_one_journey_validation_plan_2026-10-03.md) for mandatory later observations before pilot readiness.
 
 Historical test counts below and above refer to their named milestones. The bounded M2 implementation was checked with focused local tests, the existing offline suite and strict typecheck; its test outcome is recorded in the implementation note above. No live model request was made.
 
@@ -530,4 +532,4 @@ Historical test counts below and above refer to their named milestones. The boun
 
 ## Next review point
 
-M3 bounded acceptance is PASS at `f545e01c0091f4722a427d0bfb1772a60615bbfe`. Next, prepare the bounded pilot M4 feature contract for owner review; implementation requires separate approval. T04 remains mandatory later before pilot readiness under the October 11 amendment. Live LLM and conversational work remain separate and authorization-controlled.
+M3 bounded acceptance is PASS at `f545e01c0091f4722a427d0bfb1772a60615bbfe`; the M4 discovery contract is approved for planning only. Next, prepare the separately tasked data-governance feasibility census. T04 remains mandatory later before pilot readiness under the October 11 amendment. Live LLM and conversational work remain separate and authorization-controlled.

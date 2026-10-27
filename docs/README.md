@@ -19,7 +19,7 @@ The [M2 question-to-domain map](planning/m2_one_journey_question_domain_map_v1.m
 
 ## Folder guide
 
-- [M4 college discovery contract](planning/m4_college_discovery_contract_v1.md) — planning draft for owner review; implementation and data ingestion are not authorized.
+- [M4 college discovery contract](planning/m4_college_discovery_contract_v1.md) — owner approved for planning only; implementation and data ingestion are not authorized.
 - [product/](product/) — frozen mission, student journey, input/output contract and product responsibility/review documents.
 - [planning/](planning/) — implementation plan and technical gap mapping. The [release roadmap](../PLAN_V1.md) remains at repository root.
 - [architecture/](architecture/) — domain/data contracts, schema, data model and AI/RAG architecture addendum.
