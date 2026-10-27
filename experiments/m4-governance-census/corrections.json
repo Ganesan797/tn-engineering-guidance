@@ -1,0 +1,178 @@
+[
+ {
+  "page": 25,
+  "row": 3,
+  "college": "1140",
+  "raw": "- AD",
+  "corrected": "AD",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 25,
+  "row": 4,
+  "college": "1140",
+  "raw": "- CB",
+  "corrected": "CB",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 25,
+  "row": 5,
+  "college": "1140",
+  "raw": "- CS",
+  "corrected": "CS",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 25,
+  "row": 6,
+  "college": "1140",
+  "raw": "- EC",
+  "corrected": "EC",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 25,
+  "row": 7,
+  "college": "1140",
+  "raw": "- IT",
+  "corrected": "IT",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 25,
+  "row": 8,
+  "college": "1140",
+  "raw": "- ME",
+  "corrected": "ME",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 105,
+  "row": 8,
+  "college": "2342",
+  "raw": "- AD",
+  "corrected": "AD",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 105,
+  "row": 9,
+  "college": "2342",
+  "raw": "- CE",
+  "corrected": "CE",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 105,
+  "row": 10,
+  "college": "2342",
+  "raw": "- CS",
+  "corrected": "CS",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 105,
+  "row": 11,
+  "college": "2342",
+  "raw": "- EC",
+  "corrected": "EC",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 106,
+  "row": 2,
+  "college": "2342",
+  "raw": "- EE",
+  "corrected": "EE",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 106,
+  "row": 3,
+  "college": "2342",
+  "raw": "- IT",
+  "corrected": "IT",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 106,
+  "row": 4,
+  "college": "2342",
+  "raw": "- ME",
+  "corrected": "ME",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 106,
+  "row": 5,
+  "college": "2342",
+  "raw": "- SC",
+  "corrected": "SC",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 124,
+  "row": 7,
+  "college": "2612",
+  "raw": "- AD",
+  "corrected": "AD",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 124,
+  "row": 8,
+  "college": "2612",
+  "raw": "- BM",
+  "corrected": "BM",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 124,
+  "row": 9,
+  "college": "2612",
+  "raw": "- CE",
+  "corrected": "CE",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 124,
+  "row": 10,
+  "college": "2612",
+  "raw": "- CS",
+  "corrected": "CS",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 124,
+  "row": 11,
+  "college": "2612",
+  "raw": "- EC",
+  "corrected": "EC",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 124,
+  "row": 12,
+  "college": "2612",
+  "raw": "- EE",
+  "corrected": "EE",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 124,
+  "row": 13,
+  "college": "2612",
+  "raw": "- IT",
+  "corrected": "IT",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ },
+ {
+  "page": 125,
+  "row": 2,
+  "college": "2612",
+  "raw": "- ME",
+  "corrected": "ME",
+  "reason": "adjacent college-name hyphen crossed table boundary; source page visually checked"
+ }
+]

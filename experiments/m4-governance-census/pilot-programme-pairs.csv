@@ -1,0 +1,42 @@
+﻿college_code,college_name_printed,programme_code,programme_name_printed,college_name_raw,programme_name_raw,source_year,stream,stage,printed_page,pdf_page,source_row,proposed_profile,family,catalogue_disposition,source_pair_status,review_status
+1,University Departments of Anna University Chennai - CEG Campus Sardar Patel Road Guindy Chennai 600 025,CS,COMPUTER SCIENCE AND ENGINEERING,"University Departments of Anna University Chennai - CEG
+Campus Sardar Patel Road Guindy Chennai 600 025","COMPUTER SCIENCE AND
+ENGINEERING",2026,GENERAL_ACADEMIC,BEFORE_SPECIAL_RESERVATION_COUNSELLING,1,1,5,CS,C,PROPOSED,LISTED_IN_2026_GENERAL_ACADEMIC_PRE_SPECIAL_RESERVATION,HUMAN_APPROVAL_PENDING
+1,University Departments of Anna University Chennai - CEG Campus Sardar Patel Road Guindy Chennai 600 025,BY,BIO MEDICAL ENGINEERING (SS),"University Departments of Anna University Chennai - CEG
+Campus Sardar Patel Road Guindy Chennai 600 025","BIO MEDICAL ENGINEERING
+(SS)",2026,GENERAL_ACADEMIC,BEFORE_SPECIAL_RESERVATION_COUNSELLING,1,1,2,BM,E,V,LISTED_IN_2026_GENERAL_ACADEMIC_PRE_SPECIAL_RESERVATION,HUMAN_APPROVAL_PENDING
+1,University Departments of Anna University Chennai - CEG Campus Sardar Patel Road Guindy Chennai 600 025,XC,CIVIL ENGINEERING (TAMIL MEDIUM),"University Departments of Anna University Chennai - CEG
+Campus Sardar Patel Road Guindy Chennai 600 025","CIVIL ENGINEERING (TAMIL
+MEDIUM)",2026,GENERAL_ACADEMIC,BEFORE_SPECIAL_RESERVATION_COUNSELLING,2,2,8,CE,B,V,LISTED_IN_2026_GENERAL_ACADEMIC_PRE_SPECIAL_RESERVATION,HUMAN_APPROVAL_PENDING
+4,University Departments of Anna University Chennai - MIT Campus Chrompet Tambaram Taluk Chengalpattu District 600 044,AE,AERONAUTICAL ENGINEERING,"University Departments of Anna University Chennai - MIT
+Campus Chrompet Tambaram Taluk Chengalpattu
+District 600 044",AERONAUTICAL ENGINEERING,2026,GENERAL_ACADEMIC,BEFORE_SPECIAL_RESERVATION_COUNSELLING,3,3,12,AE,S,N9,LISTED_IN_2026_GENERAL_ACADEMIC_PRE_SPECIAL_RESERVATION,HUMAN_APPROVAL_PENDING
+4,University Departments of Anna University Chennai - MIT Campus Chrompet Tambaram Taluk Chengalpattu District 600 044,CS,COMPUTER SCIENCE AND ENGINEERING,"University Departments of Anna University Chennai - MIT
+Campus Chrompet Tambaram Taluk Chengalpattu
+District 600 044","COMPUTER SCIENCE AND
+ENGINEERING",2026,GENERAL_ACADEMIC,BEFORE_SPECIAL_RESERVATION_COUNSELLING,4,4,5,CS,C,PROPOSED,LISTED_IN_2026_GENERAL_ACADEMIC_PRE_SPECIAL_RESERVATION,HUMAN_APPROVAL_PENDING
+1303,"Anand Institute of Higher Technology(Autonomous), Kalasalingam Nagar, Old Mahabalipuram Road, Kazhipattur Village, Chengalpattu Taluk, Kancheepuram District-603103.",AD,ARTIFICIAL INTELLIGENCE AND DATA SCIENCE,"Anand Institute of Higher Technology(Autonomous),
+Kalasalingam Nagar, Old Mahabalipuram Road,
+Kazhipattur Village, Chengalpattu Taluk, Kancheepuram
+District-603103.","ARTIFICIAL INTELLIGENCE AND
+DATA SCIENCE",2026,GENERAL_ACADEMIC,BEFORE_SPECIAL_RESERVATION_COUNSELLING,46,46,10,AD,C,PROPOSED,LISTED_IN_2026_GENERAL_ACADEMIC_PRE_SPECIAL_RESERVATION,HUMAN_APPROVAL_PENDING
+1303,"Anand Institute of Higher Technology(Autonomous), Kalasalingam Nagar, Old Mahabalipuram Road, Kazhipattur Village, Chengalpattu Taluk, Kancheepuram District-603103.",CS,COMPUTER SCIENCE AND ENGINEERING,"Anand Institute of Higher Technology(Autonomous),
+Kalasalingam Nagar, Old Mahabalipuram Road,
+Kazhipattur Village, Chengalpattu Taluk, Kancheepuram
+District-603103.","COMPUTER SCIENCE AND
+ENGINEERING",2026,GENERAL_ACADEMIC,BEFORE_SPECIAL_RESERVATION_COUNSELLING,47,47,4,CS,C,PROPOSED,LISTED_IN_2026_GENERAL_ACADEMIC_PRE_SPECIAL_RESERVATION,HUMAN_APPROVAL_PENDING
+1304,"Easwari Engineering College (Autonomous), Bharathi Salai, Ramapuram, Chennai-600089.",EC,ELECTRONICS AND COMMUNICATION ENGINEERING,"Easwari Engineering College (Autonomous), Bharathi Salai,
+Ramapuram, Chennai-600089.","ELECTRONICS AND
+COMMUNICATION
+ENGINEERING",2026,GENERAL_ACADEMIC,BEFORE_SPECIAL_RESERVATION_COUNSELLING,48,48,11,EC,E,PROPOSED,LISTED_IN_2026_GENERAL_ACADEMIC_PRE_SPECIAL_RESERVATION,HUMAN_APPROVAL_PENDING
+1304,"Easwari Engineering College (Autonomous), Bharathi Salai, Ramapuram, Chennai-600089.",BM,BIO MEDICAL ENGINEERING,"Easwari Engineering College (Autonomous), Bharathi Salai,
+Ramapuram, Chennai-600089.",BIO MEDICAL ENGINEERING,2026,GENERAL_ACADEMIC,BEFORE_SPECIAL_RESERVATION_COUNSELLING,48,48,5,BM,E,PROPOSED,LISTED_IN_2026_GENERAL_ACADEMIC_PRE_SPECIAL_RESERVATION,HUMAN_APPROVAL_PENDING
+2603,Government College of Engineering (Autonomous) Bargur Krishnagiri District 635104,EE,ELECTRICAL AND ELECTRONICS ENGINEERING,"Government College of Engineering (Autonomous) Bargur
+Krishnagiri District 635104","ELECTRICAL AND ELECTRONICS
+ENGINEERING",2026,GENERAL_ACADEMIC,BEFORE_SPECIAL_RESERVATION_COUNSELLING,118,118,4,EE,E,PROPOSED,LISTED_IN_2026_GENERAL_ACADEMIC_PRE_SPECIAL_RESERVATION,HUMAN_APPROVAL_PENDING
+3018,University College of Engineering Thirukkuvalai Nagappattinam District 610204,CE,CIVIL ENGINEERING,"University College of Engineering Thirukkuvalai
+Nagappattinam District 610204",CIVIL ENGINEERING,2026,GENERAL_ACADEMIC,BEFORE_SPECIAL_RESERVATION_COUNSELLING,210,210,7,CE,B,PROPOSED,LISTED_IN_2026_GENERAL_ACADEMIC_PRE_SPECIAL_RESERVATION,HUMAN_APPROVAL_PENDING
+4967,"S. Veerasamy Chettiar College of Engineering and Technology, S.V.Nagar, Puliangudi (Post), Sivagiri (Taluk), Tirunelveli District-627855.",AD,ARTIFICIAL INTELLIGENCE AND DATA SCIENCE,"S. Veerasamy Chettiar College of Engineering and
+Technology, S.V.Nagar, Puliangudi (Post), Sivagiri (Taluk),
+Tirunelveli District-627855.","ARTIFICIAL INTELLIGENCE AND
+DATA SCIENCE",2026,GENERAL_ACADEMIC,BEFORE_SPECIAL_RESERVATION_COUNSELLING,278,278,3,AD,C,PROPOSED,LISTED_IN_2026_GENERAL_ACADEMIC_PRE_SPECIAL_RESERVATION,HUMAN_APPROVAL_PENDING

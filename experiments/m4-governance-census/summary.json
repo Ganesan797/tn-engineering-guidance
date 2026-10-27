@@ -1,0 +1,65 @@
+{
+  "raw_rows_including_headers": 3673,
+  "header_rows": 319,
+  "data_rows": 3354,
+  "unique_pairs": 3354,
+  "duplicate_keys": 0,
+  "colleges": 414,
+  "codes": 116,
+  "catalogue_codes": 116,
+  "profiles": 84,
+  "families": {
+    "C": 23,
+    "E": 12,
+    "M": 18,
+    "B": 4,
+    "T": 21,
+    "S": 6
+  },
+  "catalogue_present": 116,
+  "catalogue_absent": [],
+  "extra_codes": [],
+  "anomaly_types": {},
+  "pilot_missing": [],
+  "profile_multi": 51,
+  "profile_single": 33,
+  "profile_none": 0,
+  "family_coverage": {
+    "B": {
+      "total": 4,
+      "multi": 2,
+      "single": 2,
+      "none": 0
+    },
+    "C": {
+      "total": 23,
+      "multi": 15,
+      "single": 8,
+      "none": 0
+    },
+    "E": {
+      "total": 12,
+      "multi": 11,
+      "single": 1,
+      "none": 0
+    },
+    "M": {
+      "total": 18,
+      "multi": 11,
+      "single": 7,
+      "none": 0
+    },
+    "S": {
+      "total": 6,
+      "multi": 3,
+      "single": 3,
+      "none": 0
+    },
+    "T": {
+      "total": 21,
+      "multi": 9,
+      "single": 12,
+      "none": 0
+    }
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "minimum": {
+    "proposed_college_ids": [
+      "1",
+      "4",
+      "1026",
+      "1303",
+      "1304",
+      "1434",
+      "2005",
+      "2006",
+      "2007",
+      "2603",
+      "2708",
+      "3018",
+      "3860",
+      "4967",
+      "4996"
+    ],
+    "colleges_in_matrix": 15,
+    "not_in_matrix": [],
+    "pair_count": 169,
+    "potential_profile_count": 38,
+    "multiple_college_profiles": 20,
+    "single_college_profiles": 18,
+    "families": {
+      "E": 7,
+      "B": 2,
+      "C": 9,
+      "M": 9,
+      "T": 9,
+      "S": 2
+    },
+    "combined_hold_profiles": 8,
+    "booklet_sample_count": 11,
+    "districts": {
+      "CHENNAI": 2,
+      "KANCHIPURAM": 1,
+      "VILUPPURAM": 1,
+      "KRISHNAGIRI": 1,
+      "COIMBATORE": 1,
+      "NAGAPATTINAM": 1,
+      "CUDDALORE": 1,
+      "VIRUDHUNAGAR": 1
+    },
+    "pairs_by_district": {
+      "CHENNAI": 33,
+      "KANCHIPURAM": 5,
+      "VILUPPURAM": 10,
+      "KRISHNAGIRI": 5,
+      "COIMBATORE": 17,
+      "NAGAPATTINAM": 9,
+      "CUDDALORE": 5,
+      "VIRUDHUNAGAR": 7
+    },
+    "unknown_district_count": 6,
+    "district_conflicts": [
+      "1303",
+      "4967"
+    ],
+    "autonomy": {
+      "No": 7,
+      "Yes": 4
+    },
+    "minority": {
+      "No": 9,
+      "Yes": 2
+    },
+    "management": "NOT_RECONCILED"
+  },
+  "preferred": {
+    "proposed_college_ids": [
+      "1",
+      "2",
+      "4",
+      "5",
+      "1026",
+      "1113",
+      "1123",
+      "1303",
+      "1304",
+      "1322",
+      "1434",
+      "2005",
+      "2006",
+      "2007",
+      "2361",
+      "2603",
+      "2614",
+      "2708",
+      "2726",
+      "3011",
+      "3018",
+      "3860",
+      "4967",
+      "4996",
+      "5008"
+    ],
+    "colleges_in_matrix": 25,
+    "not_in_matrix": [],
+    "pair_count": 301,
+    "potential_profile_count": 73,
+    "multiple_college_profiles": 32,
+    "single_college_profiles": 41,
+    "families": {
+      "E": 11,
+      "B": 4,
+      "C": 21,
+      "M": 16,
+      "T": 17,
+      "S": 4
+    },
+    "combined_hold_profiles": 26,
+    "booklet_sample_count": 11,
+    "districts": {
+      "CHENNAI": 2,
+      "KANCHIPURAM": 1,
+      "VILUPPURAM": 1,
+      "KRISHNAGIRI": 1,
+      "COIMBATORE": 1,
+      "NAGAPATTINAM": 1,
+      "CUDDALORE": 1,
+      "VIRUDHUNAGAR": 1
+    },
+    "pairs_by_district": {
+      "CHENNAI": 33,
+      "KANCHIPURAM": 5,
+      "VILUPPURAM": 10,
+      "KRISHNAGIRI": 5,
+      "COIMBATORE": 17,
+      "NAGAPATTINAM": 9,
+      "CUDDALORE": 5,
+      "VIRUDHUNAGAR": 7
+    },
+    "unknown_district_count": 16,
+    "district_conflicts": [
+      "1303",
+      "4967"
+    ],
+    "autonomy": {
+      "No": 7,
+      "Yes": 4
+    },
+    "minority": {
+      "No": 9,
+      "Yes": 2
+    },
+    "management": "NOT_RECONCILED"
+  }
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "college_code": "1133",
+    "programme_code_if_relevant": null,
+    "field": "published_college_name",
+    "source_a": "2026 General Academic seat matrix before special-reservation counselling",
+    "value_a": "Annai Veilankannis College of Engineering, 33 Gandhi Road, Nedungundram, Chennai-600048.",
+    "scope_a": "2026 General Academic; before special-reservation counselling",
+    "reference_a": "printed/PDF page 23",
+    "source_b": "2026 Information About Colleges",
+    "value_b": "Nellai Nadar College of Engineering and Technology, Gandhi Road, Nedungundram, Chennai 600127",
+    "scope_b": "2026 college booklet",
+    "reference_b": "printed page 29; PDF position 70",
+    "action": "NEEDS_RECONCILIATION"
+  },
+  {
+    "college_code": "1303",
+    "programme_code_if_relevant": null,
+    "field": "district",
+    "source_a": "2026 General Academic seat matrix before special-reservation counselling",
+    "value_a": "Kancheepuram District",
+    "scope_a": "2026 General Academic; before special-reservation counselling; address text",
+    "reference_a": "printed/PDF pages 46–47",
+    "source_b": "2026 Information About Colleges",
+    "value_b": "CHENGALPATTU",
+    "scope_b": "2026 college booklet; District field",
+    "reference_b": "printed page 59; PDF position 100",
+    "action": "NEEDS_RECONCILIATION"
+  },
+  {
+    "college_code": "4967",
+    "programme_code_if_relevant": null,
+    "field": "district",
+    "source_a": "2026 General Academic seat matrix before special-reservation counselling",
+    "value_a": "Tirunelveli District",
+    "scope_a": "2026 General Academic; before special-reservation counselling; address text",
+    "reference_a": "printed/PDF page 278",
+    "source_b": "2026 Information About Colleges",
+    "value_b": "TENKASI",
+    "scope_b": "2026 college booklet; District field",
+    "reference_b": "printed page 359; PDF position 400",
+    "action": "NEEDS_RECONCILIATION"
+  }
+]
