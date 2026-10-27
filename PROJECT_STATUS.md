@@ -2,9 +2,17 @@
 
 **Current milestone:** M3 — Personal Guidance Presentation accepted for bounded scope; M4 — Explore / Think-Further is next for separate planning and authorization.
 
-**Current task:** Record M3 closure and M4 readiness. The next proposed task is a bounded M4 planning/contract review, subject to separate owner authorization; M4 implementation is not authorized.
+**Current task:** Prepare a bounded M4 feature contract for marks-free college/branch discovery using the existing governed pilot; do not implement until owner approval. M4 and M5 implementation remain unauthorized.
 
-**Last reviewed:** 2026-10-26
+**Last reviewed:** 2026-10-27
+
+## Current college-discovery direction — 2026-10-27
+
+The owner-approved [current execution-plan clarification](docs/planning/current_execution_plan.md#current-owner-direction--college-discovery-and-decision-support-2026-10-27) records M4 as marks-free branch and college discovery: source-backed offerings, location/type where verified, neutral comparisons and what to investigate next. M5 owns future approved historical comparison, explainable student-selected filtering and shortlist/manual choice building. Calculated cutoff, historical evidence and current allotment remain distinct; no admission prediction, ranking, guaranteed outcome or automatic preference ordering is authorized. Historical features still require separate D5 methodology/evidence approval.
+
+Start M4-A with the governed five-college pilot; consider roughly 15–30 representative colleges only after accepting a useful flow. M5-A would add approved pilot historical comparison, then M5-B manual choice support after comparisons are understood. Statewide college ingestion is DEFERRED, not a release prerequisite; this does not reduce comprehensive educational branch-content coverage. Unsupported metadata belongs in Things Worth Checking, not invented structured facts. The existing branch-content research draft remains unapproved for student display.
+
+`M4_IMPLEMENTATION_AUTHORIZED = NO`; `M5_IMPLEMENTATION_AUTHORIZED = NO`. M3 acceptance and all validation/LLM states below are unchanged. M6 remains integration and M7 remains pilot readiness/human validation with the amended private-hosting and remote-observation sequence. This current direction supersedes earlier next-M4-task wording only; frozen mission, journey, roadmap and historical decisions remain unchanged.
 
 ## Current M3 closure and M4 readiness — 2026-10-26
 
@@ -12,7 +20,7 @@ Ganesan accepts bounded M3 Personal Guidance Presentation at `f545e01c0091f4722a
 
 `M3_ACCEPTED_BASELINE = f545e01c0091f4722a427d0bfb1772a60615bbfe`; `T04_STATUS = NOT_RUN`; `STUDENT_VALIDATED = NO`; `PILOT_READINESS = NOT_APPROVED`; `M4_IMPLEMENTATION_AUTHORIZED = NO`; `CON_IMPLEMENTATION_AUTHORIZED = NO`; `GEMINI_STATUS = PAUSED`; `LIVE_LLM_GATE = PARTIAL`; `Q021_STATUS = PARTIAL`.
 
-The frozen M4 student outcome is to help students explore branches and options they may not know to ask about. M2/M3 provide bilingual orientation, reviewed question content, distinct personal/general guidance and evidence-aware presentation; they do not complete M4. Remaining work includes a reviewed interest-input contract, exploration taxonomy and matching semantics, evidence-backed branch awareness, related-option discovery and safe Think-Further prompts. M4 depends on accepted M0/M1/M3, M2 only when personalized, and D0 plus relevant D2/D3 evidence for claims included. The next proposed bounded task is M4-T01 planning/contract review; implementation needs a later explicit owner decision. CON-01 stays separate. The amended private-hosting and first 2–3 remote-student observation sequence remains unchanged.
+The frozen M4 student outcome is to help students explore branches and options they may not know to ask about. M2/M3 provide bilingual orientation, reviewed question content, distinct personal/general guidance and evidence-aware presentation; they do not complete M4. Remaining work includes a reviewed interest-input contract, exploration taxonomy and matching semantics, evidence-backed branch awareness, related-option discovery and safe Think-Further prompts. M4 depends on accepted M0/M1/M3, M2 only when personalized, and D0 plus relevant D2/D3 evidence for claims included. The October 27 direction above specifies the next bounded pilot feature contract; implementation needs a later explicit owner decision. CON-01 stays separate. The amended private-hosting and first 2–3 remote-student observation sequence remains unchanged.
 
 The October 11 M2/T06 entries below are dated history. Their M3-pending and next-T06 wording is superseded only by the current M3 acceptance above.
 
@@ -438,7 +446,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Propose M4-T01 bounded planning/contract review for separate owner authorization; M4 implementation remains unauthorized. Preserve the [existing procedure and privacy-conscious template](docs/planning/m2_one_journey_validation_plan_2026-10-03.md) for mandatory later observations before pilot readiness.
+Prepare a bounded M4 feature contract for the existing governed pilot dataset; do not implement until owner approval. M4 and M5 implementation remain unauthorized. Preserve the [existing procedure and privacy-conscious template](docs/planning/m2_one_journey_validation_plan_2026-10-03.md) for mandatory later observations before pilot readiness.
 
 Historical test counts below and above refer to their named milestones. The bounded M2 implementation was checked with focused local tests, the existing offline suite and strict typecheck; its test outcome is recorded in the implementation note above. No live model request was made.
 
@@ -522,4 +530,4 @@ Historical test counts below and above refer to their named milestones. The boun
 
 ## Next review point
 
-M3 bounded acceptance is PASS at `f545e01c0091f4722a427d0bfb1772a60615bbfe`. M4-T01 planning/contract review is the next proposed authorization decision. T04 remains mandatory later before pilot readiness under the October 11 amendment. Live LLM and conversational work remain separate and authorization-controlled.
+M3 bounded acceptance is PASS at `f545e01c0091f4722a427d0bfb1772a60615bbfe`. Next, prepare the bounded pilot M4 feature contract for owner review; implementation requires separate approval. T04 remains mandatory later before pilot readiness under the October 11 amendment. Live LLM and conversational work remain separate and authorization-controlled.
