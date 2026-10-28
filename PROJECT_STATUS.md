@@ -2,13 +2,13 @@
 
 **Current milestone:** M3 accepted for bounded scope; M4-A1 internal synthetic-fixture view-model accepted.
 
-**Current task:** Preserve the accepted [internal M4-A1 discovery contract](docs/planning/m4_a1_internal_contract_2026-10-28.md) and prepare any next bounded work only after a separate owner decision. M4-A2, production ingestion and student UI are not authorized.
+**Current task:** Present the [six M4 profile candidates](docs/content/m4/m4_six_profile_owner_review_2026-10-28.md) for final owner factual and bilingual review. M4-A1 remains accepted for synthetic-only internal scope; M4-A2, production ingestion and student UI are not authorized.
 
 **Last reviewed:** 2026-10-28
 
 ## Current M4-B decision — 2026-10-28
 
-Ganesan accepted the bounded owner recommendation slate and authorized **M4-A1 only**, for an internal view-model and synthetic fixtures. L01–L09 are approved as scoped profile associations; the seven dated identity candidates are accepted separately from their attributes. BY/XC and AE/AO remain held, disputed districts remain UNKNOWN, and MIT autonomy/minority require further evidence. P01–P02 remain on hold for human review; P03–P06 require fixes and review. No profile is approved for student display. See the [decision record](docs/planning/m4_b_owner_decisions_2026-10-28.md) for the exact scope and remaining gates.
+Ganesan accepted the bounded owner recommendation slate and authorized **M4-A1 only**, for an internal view-model and synthetic fixtures. L01–L09 are approved as scoped profile associations; the seven dated identity candidates are accepted separately from their attributes. BY/XC and AE/AO remain held, disputed districts remain UNKNOWN, and MIT autonomy/minority require further evidence. P01–P02 remain on hold for human review; candidate fixes for P03–P06 are prepared for review. No profile is approved for student display. See the [decision record](docs/planning/m4_b_owner_decisions_2026-10-28.md) for the exact scope and remaining gates.
 
 `M4_A1_INTERNAL_FIXTURE_AUTHORIZED = YES`; `M4_PRODUCTION_INGESTION_AUTHORIZED = NO`; `M4_STUDENT_FLOWS_AUTHORIZED = NO`; `M5_IMPLEMENTATION_AUTHORIZED = NO`; `STUDENT_VALIDATED = NO`. The earlier dated M4 authorization statements below are historical snapshots superseded only for M4-A1.
 
@@ -456,7 +456,7 @@ No prestige/quality score, admission probability, historical prediction, hidden 
 
 ## Immediate next task
 
-Prepare a separately tasked M4 data-governance feasibility census using official sources and the branch catalogue. Research may extract/count records without changing production datasets or approving mappings, thresholds or implementation. Preserve the [existing procedure and privacy-conscious template](docs/planning/m2_one_journey_validation_plan_2026-10-03.md) for mandatory later observations before pilot readiness.
+Present the six source-scoped M4 profile candidates for owner factual and bilingual review; no content approval or subsequent implementation is automatic. Preserve the [existing procedure and privacy-conscious template](docs/planning/m2_one_journey_validation_plan_2026-10-03.md) for mandatory later observations before pilot readiness.
 
 Historical test counts below and above refer to their named milestones. The bounded M2 implementation was checked with focused local tests, the existing offline suite and strict typecheck; its test outcome is recorded in the implementation note above. No live model request was made.
 
@@ -540,4 +540,4 @@ Historical test counts below and above refer to their named milestones. The boun
 
 ## Next review point
 
-M3 bounded acceptance is PASS at `f545e01c0091f4722a427d0bfb1772a60615bbfe`; the M4 discovery contract is approved for planning only. Next, prepare the separately tasked data-governance feasibility census. T04 remains mandatory later before pilot readiness under the October 11 amendment. Live LLM and conversational work remain separate and authorization-controlled.
+M3 bounded acceptance is PASS at `f545e01c0091f4722a427d0bfb1772a60615bbfe`; M4-A1 is accepted for synthetic-only internal scope. Next, Ganesan reviews the six profile candidates. T04 remains mandatory later before pilot readiness under the October 11 amendment. Live LLM and conversational work remain separate and authorization-controlled.
