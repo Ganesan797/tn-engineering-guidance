@@ -1,12 +1,20 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** M3 — Personal Guidance Presentation accepted for bounded scope; M4 — Explore / Think-Further is next for separate planning and authorization.
+**Current milestone:** M3 accepted for bounded scope; M4-A1 internal fixture-only view-model is authorized.
 
-**Current task:** Prepare a separately tasked M4 data-governance feasibility census using existing official sources and the branch catalogue. Research extraction/counting does not authorize production data changes, profile mappings, thresholds or implementation.
+**Current task:** Review the implemented [internal M4-A1 discovery contract](docs/planning/m4_a1_internal_contract_2026-10-28.md) and its synthetic fixtures under the [2026-10-28 owner decisions](docs/planning/m4_b_owner_decisions_2026-10-28.md). Production ingestion, student display and later M4 slices require separate authorization.
 
-**Last reviewed:** 2026-10-27
+**Last reviewed:** 2026-10-28
 
-## Current college-discovery direction — 2026-10-27
+## Current M4-B decision — 2026-10-28
+
+Ganesan accepted the bounded owner recommendation slate and authorized **M4-A1 only**, for an internal view-model and synthetic fixtures. L01–L09 are approved as scoped profile associations; the seven dated identity candidates are accepted separately from their attributes. BY/XC and AE/AO remain held, disputed districts remain UNKNOWN, and MIT autonomy/minority require further evidence. P01–P02 remain on hold for human review; P03–P06 require fixes and review. No profile is approved for student display. See the [decision record](docs/planning/m4_b_owner_decisions_2026-10-28.md) for the exact scope and remaining gates.
+
+`M4_A1_INTERNAL_FIXTURE_AUTHORIZED = YES`; `M4_PRODUCTION_INGESTION_AUTHORIZED = NO`; `M4_STUDENT_FLOWS_AUTHORIZED = NO`; `M5_IMPLEMENTATION_AUTHORIZED = NO`; `STUDENT_VALIDATED = NO`. The earlier dated M4 authorization statements below are historical snapshots superseded only for M4-A1.
+
+M4-A1's internal contract and fixtures are implemented for review; five focused tests, the 280-test offline suite and strict typecheck passed after fixture-isolation review. M4-A1 owner acceptance and real-student validation are not claimed.
+
+## Historical college-discovery direction — 2026-10-27
 
 Ganesan approves the [M4 college discovery contract](docs/planning/m4_college_discovery_contract_v1.md) **for planning only**, 2026-10-27, at reviewed revision `7603cfea6b09412d10114f771e5592106f55e5c1`. The booklet field model is accepted with its recorded limits; statewide field completeness remains NOT_ESTABLISHED. Coverage thresholds and draft student-facing profile content remain NOT_APPROVED; identity, evidence and scope holds remain. Data ingestion and M4/M5 implementation are NOT_AUTHORIZED; Gemini stays PAUSED.
 
