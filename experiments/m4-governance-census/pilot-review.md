@@ -76,3 +76,133 @@ Full M4 completion still requires comprehensive verified in-scope educational br
 Observed elapsed time by phase: NOT_MEASURED; total: NOT_MEASURED. Tool wall-time snippets are not a reliable complete phase measurement. Owner factual, mapping, English and Tamil review time: NOT_RUN. Human workload is a qualitative estimate only: review seven college identities/attributes, 12 offerings, seven profile links and seven bilingual content candidates, plus the two district conflicts and variant/N9 decisions. Do not derive human time from tool elapsed time.
 
 Technically supported for **owner review**: seven college identity candidates with the two district fields unresolved; 12 stage-scoped source pairs; nine direct link candidates; six non-held profile content candidates requiring source-page and human-language review. AE remains held; no item is release-ready. No data ingestion, mapping or profile approval, student publication, M4/M5 implementation, Gemini or Live LLM action is authorized.
+
+## M4-B owner decision worksheet — 2026-10-28
+
+**Status: REVIEW PREPARATION ONLY.** This section updates the earlier pilot's claim-level evidence assessment; earlier pending page-check statements remain historical. No decision below has been made by the owner. Contract planning approval at `7603cfea6b09412d10114f771e5592106f55e5c1` does not approve a profile, mapping, threshold, data ingestion or implementation. T04 NOT_RUN; student validation NO; Gemini PAUSED.
+
+For each row select **APPROVE / FIX / HOLD**. APPROVE means the exact bounded proposal in that row only; it does not approve another row, student copy or implementation. FIX means specify the needed correction and re-review. HOLD preserves the unknown or existing hold. Evidence references use printed/PDF pages, both one-based, and the 2026 General Academic pre-special-reservation matrix unless otherwise stated. The matrix lists source-stage participation, not present vacancy, admission, programme quality or curriculum equivalence.
+
+### A. Nine direct-code links
+
+Approve only a proposed connection to the existing general educational profile; keep exact source code/name, source scope and student-content approval separate. Programme→profile relationships below are proposed, not established college-curriculum equivalence. See the earlier college-identity table for the booklet reference and address; all college identities remain individually subject to owner review.
+
+| Decision | Pair and existing profile | Matrix source page | Proposed decision; options |
+| --- | --- | --- | --- |
+| L01 | `1 / CS → CS` | 1 | APPROVE bounded link / FIX / HOLD. |
+| L02 | `4 / CS → CS` | 4 | APPROVE bounded link / FIX / HOLD. |
+| L03 | `1303 / AD → AD` | 46 | APPROVE bounded link with district UNKNOWN / FIX / HOLD. |
+| L04 | `1303 / CS → CS` | 47 | APPROVE bounded link with district UNKNOWN / FIX / HOLD. |
+| L05 | `1304 / EC → EC` | 48 | APPROVE bounded link / FIX / HOLD. |
+| L06 | `1304 / BM → BM` | 48 | APPROVE bounded link / FIX / HOLD. |
+| L07 | `2603 / EE → EE` | 118 | APPROVE bounded link / FIX / HOLD. |
+| L08 | `3018 / CE → CE` | 210 | APPROVE bounded link / FIX / HOLD. |
+| L09 | `4967 / AD → AD` | 278 | APPROVE bounded link with district UNKNOWN / FIX / HOLD. |
+
+Source: [official seat matrix](https://static.tneaonline.org/docs/GENERAL_ACADEMIC_SEAT_MATRIX_BEFORE_SPECIAL_RESERVATION_COUNSELLING_2026.pdf); [exact pair rows](pilot-programme-pairs.csv). A separate owner decision is needed for each college identity/attribute; L01–L09 do not decide them. All names and full printed source text are in the earlier identity table.
+
+### B. Variants, ambiguity and district fields
+
+| Decision | Evidence and limitation | Proposed choice; options |
+| --- | --- | --- |
+| V01 — `1 / BY → BM` | Matrix p1: BIO MEDICAL ENGINEERING (SS), 2026. Catalogue proposes BM with variant `V`; R57 is a non-autonomous affiliated curriculum, not proof of CEG SS curriculum equivalence. | HOLD pending evidence of acceptable educational-profile sharing; APPROVE scoped reference while retaining BY/SS / FIX / HOLD. |
+| V02 — `1 / XC → CE` | Matrix p2: CIVIL ENGINEERING (TAMIL MEDIUM), 2026. Catalogue proposes CE with variant `V`; R26 does not itself establish the CEG Tamil-medium programme curriculum. | HOLD pending evidence of acceptable profile sharing; APPROVE scoped reference while retaining XC/Tamil-medium / FIX / HOLD. |
+| H01 — `4 / AE → AE`, N9 | Matrix p3: AERONAUTICAL ENGINEERING. O43 is a 2025 non-autonomous affiliated curriculum; MIT is a university department. Aeronautical/aerospace distinctions remain unresolved. | HOLD N9 and do not merge AE/AO; APPROVE retention of this hold / FIX with evidence / HOLD. |
+| D01 — college 1303 district | Matrix pp46–47 says Kancheepuram in address; [2026 booklet](https://static.tneaonline.org/docs/Information_about_colleges_2026.pdf?t=1793121853360) printed p59/PDF100 says Chengalpattu. Same code/name provides an identity candidate; district history and applicability are unresolved. | APPROVE college identity separately and keep district UNKNOWN / FIX with applicable official evidence / HOLD. Do not infer identity failure. |
+| D02 — college 4967 district | Matrix p278 says Tirunelveli in address; booklet printed p359/PDF400 says Tenkasi. Identity and district are separate questions. | APPROVE college identity separately and keep district UNKNOWN / FIX with applicable official evidence / HOLD. |
+
+### C. Six scope-held source codes
+
+The following 2026 source-stage entries remain separate from the 84 proposed in-scope profiles. For each: **APPROVE = approve continued hold**, FIX = request a separately evidenced scope correction, HOLD = leave unresolved. None adds an entry to production or authorizes a new profile.
+
+| Decision | Exact source identity | Matrix source page | Proposed |
+| --- | --- | --- | --- |
+| S01 | BP — B.PLAN, college 3 | 3 | Retain scope hold: APPROVE / FIX / HOLD. |
+| S02 | DA — BACHELOR OF DESIGN, college 2377 | 115 | Retain scope hold: APPROVE / FIX / HOLD. |
+| S03 | CQ — COMMUNICATION AND INDUSTRIAL DESIGN, college 2361 | 112 | Retain scope hold: APPROVE / FIX / HOLD. |
+| S04 | IF — INTERIOR DESIGN, college 2361 | 113 | Retain scope hold: APPROVE / FIX / HOLD. |
+| S05 | ID — INTERIOR DESIGN (SS), college 5008 | 293 | Retain scope hold; preserve SS: APPROVE / FIX / HOLD. |
+| S06 | CJ — M.TECH. COMPUTER SCIENCE AND ENGINEERING (INTEGRATED 5 YEARS), college 1317 | 55 | Retain scope hold; preserve integrated duration: APPROVE / FIX / HOLD. |
+
+### D. Six non-held profiles: claim-level evidence and language decisions
+
+The **exact candidate Tamil/English text** is reproduced below directly from the existing catalogue, including all five sections per profile. It is not newly approved. Each profile is one decision: APPROVE its exact scope and reviewed wording / FIX specified copy or source limitations / HOLD. An APPROVE must name the reviewed wording and scope; current review is AI/Codex only, with owner factual and human Tamil/English review still required. Representative candidate corrections: BM's device-focused introduction may be narrow; CE English does not list Tamil's concrete examples; EC and EE use unfamiliar terms. No correction is silently applied.
+
+All six sources below are official Anna University **Regulations 2025, Revised 1 (2026), for non-autonomous affiliated institutions**, effective AY 2026–27. **They do not establish what is taught at a selected autonomous institution or university department**, nor a student's outcome. Pages are one-based and printed page numbers match PDF positions. Subject lists support examples in the cited curriculum; broad introductory summaries and translations remain human-review judgments. The practical-learning language asks students to inspect the named curriculum, not a promise of college facilities. Across the six named sources, skills/lab entries occur on pages 3–4 and project or internship-project entries occur on page 6 (EE page 7); verify the chosen institution separately. Source-page checks completed 2026-10-28; no career, placement, salary or admission claims added.
+
+| Decision | Existing profile and cited source | Claim-level check | Proposed owner choice |
+| --- | --- | --- | --- |
+| P01 | CS — [R31 CSE](https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/CSIE/BE%20CSE.pdf) | pp3–4: programming, data structures and algorithms; p6 project/internship project. Scope above. | APPROVE exact source-scoped copy / FIX / HOLD. |
+| P02 | AD — [R34 AI and Data Science](https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/CSIE/B.Tech.%20AI%20and%20DS.pdf) | pp3–4: programming, data structures and machine learning; p6 project/internship project. | APPROVE exact source-scoped copy / FIX / HOLD. |
+| P03 | BM — [R57 Biomedical](https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/ECE/B.E.%20Biomedical.pdf) | pp3–4: anatomy/physiology, electronic devices/circuits and biomedical instrumentation; p6 project/internship project. Intro may be narrow. | APPROVE exact copy / FIX breadth or language / HOLD. |
+| P04 | CE — [R26 Civil](https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Civil/B.E.%20Civil%20Engineering%20.pdf) | pp3–4: surveying, soil mechanics and structural analysis; p6 project/internship project. English intro omits Tamil's examples. | APPROVE exact copy / FIX parity / HOLD. |
+| P05 | EC — [R54 Electronics and Communication](https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/ECE/B.E%20ECE.pdf) | pp3–4: circuits, signals and analog/digital communication; p6 project/internship project. | APPROVE exact copy / FIX terminology / HOLD. |
+| P06 | EE — [R59 Electrical and Electronics](https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/EEE/B.E.%20EEE.pdf) | pp3–5: circuits, machines, power-system analysis, control and power electronics; p7 project/internship project. | APPROVE exact copy / FIX terminology / HOLD. |
+
+### E. Proposed first delivery scope and acceptance
+
+Propose 5–7 owner-reviewed college identities, 8–12 source-stage programme pairs and 4–6 reviewed non-held profiles across at least three existing families, with at least two colleges for one approved profile and three evidenced locations. The nine direct-link rows above are candidates, not already approved evidence for display. Use district UNKNOWN for 1303/4967 unless specifically resolved; exclude any pair or profile that does not pass its own review. BY/XC and AE may remain held. This is a **proposal**, not a newly approved coverage threshold or implementation authorization.
+
+Owner must decide cohort and each identity, source-stage offering, mapping, Tamil/English content and the scope/thresholds separately. Complete attributable human review for the exact reviewed wording. M4 completion still requires comprehensive verified in-scope branch coverage; every one of the 116 codes, 84 provisional profiles and six scope-held codes remains tracked. Later work must dispose of identity/evidence holds without silently dropping rare branches.
+
+Once separately authorized and implemented, acceptance requires:
+
+1. Marks-free Tamil-first and English-secondary branch-first and college-first journeys, including not sure/show all and language switching with state preserved.
+2. Each visible college/programme has approved identity, exact code/name, separately approved profile link, source year/stream/stage/page and explanation of why shown; variants are distinct.
+3. Unapproved or held profiles and mappings are pending/unlinked, not published as final guidance; unverified fields and disputed districts are UNKNOWN; both source values remain inspectable during governance.
+4. Two or three student-selected options compare neutral governed fields; management, autonomy and minority status are separate; Things Worth Checking are visibly separate from known facts, with safe empty states and next actions.
+5. No marks, cutoff/history matching, invented availability, eligibility, prediction, ranking, guarantee, inferred entitlement or hidden ordering; partial coverage is disclosed.
+6. Existing deterministic eligibility/cutoff and UNKNOWN/NEEDS_REVIEW behavior remain unchanged; source snapshot is not represented as current availability.
+7. Source/variant/hold/conflict, both flows, language switching, accessible keyboard and mobile 360/390 checks; focused tests, full offline suite and strict typecheck; owner factual, English, human Tamil and mission-alignment review. Real-student validation remains a separate later gate.
+
+### Exact candidate copy for P01–P06
+
+The following sections are copied verbatim from the existing research catalogue for owner review. Their source attribution and labels remain part of the candidate; none is approved by this worksheet.
+
+#### CS — COMPUTER SCIENCE AND ENGINEERING
+
+- **இது என்ன? / What is it?** கணினி அமைப்புகளும் மென்பொருளும் எப்படி வேலை செய்கின்றன என்பதைப் படிப்பதுதான் CSE (Computer Science and Engineering) பிரிவு. / CSE studies how computing systems and software work.
+- **என்ன படிப்பீர்கள்? / What will you study?** மேற்கோள் காட்டிய பாடத்திட்டத்தில் நிரலாக்கம், தரவுக் கட்டமைப்புகள், வழிமுறைகள் போன்ற பாடங்கள் உள்ளன. இது அந்தப் பாடத்திட்டத்திற்கான எடுத்துக்காட்டு; எல்லாக் கல்லூரிகளுக்கும் உறுதி அல்ல. / The cited curriculum includes subjects such as programming, data structures and algorithms. These are examples from that curriculum, not a promise for every college.
+- **செய்முறையும் பயன்பாடும் / Practical learning and applications:** செய்முறைப் பயிற்சி எப்படி இருக்கும் என்பதை மேற்கோள் காட்டிய பாடத்திட்டத்தில் உள்ள ஆய்வகம், திறன் பயிற்சி மற்றும் திட்டப் பாடங்களிலிருந்து பாருங்கள். குறிப்பிட்ட கல்லூரியின் வசதிகள் தனியாகச் சரிபார்க்கப்பட வேண்டும். / Use the cited curriculum's laboratory, skill and project entries to explore practical learning. Check the specific college's facilities separately.
+- **கவனிக்க வேண்டியது / Important considerations:** இந்த விளக்கம் குறிப்பிட்ட பல்கலைக்கழகப் பாடத்திட்டத்தைச் சார்ந்தது. உங்கள் கல்லூரியின் படிப்பு, சேர்க்கை விதிகள், இன்றைய இடநிலை ஆகியவற்றைத் தனியாகச் சரிபார்க்க வேண்டும். / This description is scoped to the cited university curriculum. Check the particular college's course, admission rules and current seat information separately.
+- **அடுத்து என்ன பார்க்கலாம்? / What to explore next?** இந்தப் பாடத்திட்டத்தின் பாடப் பட்டியலைத் தொடர்புள்ள மற்றொரு பிரிவுடன் ஒப்பிடுங்கள்; பிறகு விரும்பும் கல்லூரியின் அதிகாரப்பூர்வ விவரத்தைப் பாருங்கள். / Compare this curriculum's course list with a related branch, then check the chosen college's official information.
+
+#### AD — ARTIFICIAL INTELLIGENCE AND DATA SCIENCE
+
+- **இது என்ன? / What is it?** செயற்கை நுண்ணறிவும் தரவு அறிவியலும் கணினிப் படிப்பின் அடிப்படைகளுடன் இணைகின்றன. / AI and Data Science combines computing foundations with AI and data work.
+- **என்ன படிப்பீர்கள்? / What will you study?** மேற்கோள் காட்டிய பாடத்திட்டத்தில் நிரலாக்கம், தரவுக் கட்டமைப்புகள், இயந்திரக் கற்றல் போன்ற பாடங்கள் உள்ளன. இது அந்தப் பாடத்திட்டத்திற்கான எடுத்துக்காட்டு; எல்லாக் கல்லூரிகளுக்கும் உறுதி அல்ல. / The cited curriculum includes subjects such as programming, data structures and machine learning. These are examples from that curriculum, not a promise for every college.
+- **செய்முறையும் பயன்பாடும் / Practical learning and applications:** செய்முறைப் பயிற்சி எப்படி இருக்கும் என்பதை மேற்கோள் காட்டிய பாடத்திட்டத்தில் உள்ள ஆய்வகம், திறன் பயிற்சி மற்றும் திட்டப் பாடங்களிலிருந்து பாருங்கள். குறிப்பிட்ட கல்லூரியின் வசதிகள் தனியாகச் சரிபார்க்கப்பட வேண்டும். / Use the cited curriculum's laboratory, skill and project entries to explore practical learning. Check the specific college's facilities separately.
+- **கவனிக்க வேண்டியது / Important considerations:** இந்த விளக்கம் குறிப்பிட்ட பல்கலைக்கழகப் பாடத்திட்டத்தைச் சார்ந்தது. உங்கள் கல்லூரியின் படிப்பு, சேர்க்கை விதிகள், இன்றைய இடநிலை ஆகியவற்றைத் தனியாகச் சரிபார்க்க வேண்டும். / This description is scoped to the cited university curriculum. Check the particular college's course, admission rules and current seat information separately.
+- **அடுத்து என்ன பார்க்கலாம்? / What to explore next?** இந்தப் பாடத்திட்டத்தின் பாடப் பட்டியலைத் தொடர்புள்ள மற்றொரு பிரிவுடன் ஒப்பிடுங்கள்; பிறகு விரும்பும் கல்லூரியின் அதிகாரப்பூர்வ விவரத்தைப் பாருங்கள். / Compare this curriculum's course list with a related branch, then check the chosen college's official information.
+
+#### BM — BIO MEDICAL ENGINEERING
+
+- **இது என்ன? / What is it?** BIO MEDICAL ENGINEERING என்ற பெயரில் வரும் படிப்பு மருத்துவச் சாதனங்களுக்கான பொறியியல் பற்றிப் படிக்கிறது. / BIO MEDICAL ENGINEERING studies engineering for medical devices.
+- **என்ன படிப்பீர்கள்? / What will you study?** மேற்கோள் காட்டிய பாடத்திட்டத்தில் மின்னணுவியல், மனித உடலியல், உயிர்மருத்துவக் கருவிகள் போன்ற பாடங்கள் உள்ளன. இது அந்தப் பாடத்திட்டத்திற்கான எடுத்துக்காட்டு; எல்லாக் கல்லூரிகளுக்கும் உறுதி அல்ல. / The cited curriculum includes subjects such as electronics, human physiology and biomedical instrumentation. These are examples from that curriculum, not a promise for every college.
+- **செய்முறையும் பயன்பாடும் / Practical learning and applications:** செய்முறைப் பயிற்சி எப்படி இருக்கும் என்பதை மேற்கோள் காட்டிய பாடத்திட்டத்தில் உள்ள ஆய்வகம், திறன் பயிற்சி மற்றும் திட்டப் பாடங்களிலிருந்து பாருங்கள். குறிப்பிட்ட கல்லூரியின் வசதிகள் தனியாகச் சரிபார்க்கப்பட வேண்டும். / Use the cited curriculum's laboratory, skill and project entries to explore practical learning. Check the specific college's facilities separately.
+- **கவனிக்க வேண்டியது / Important considerations:** இந்த விளக்கம் குறிப்பிட்ட பல்கலைக்கழகப் பாடத்திட்டத்தைச் சார்ந்தது. உங்கள் கல்லூரியின் படிப்பு, சேர்க்கை விதிகள், இன்றைய இடநிலை ஆகியவற்றைத் தனியாகச் சரிபார்க்க வேண்டும். / This description is scoped to the cited university curriculum. Check the particular college's course, admission rules and current seat information separately.
+- **அடுத்து என்ன பார்க்கலாம்? / What to explore next?** இந்தப் பாடத்திட்டத்தின் பாடப் பட்டியலைத் தொடர்புள்ள மற்றொரு பிரிவுடன் ஒப்பிடுங்கள்; பிறகு விரும்பும் கல்லூரியின் அதிகாரப்பூர்வ விவரத்தைப் பாருங்கள். / Compare this curriculum's course list with a related branch, then check the chosen college's official information.
+
+#### CE — CIVIL ENGINEERING
+
+- **இது என்ன? / What is it?** கட்டடங்கள், சாலைகள், நீர் அமைப்புகள் மற்றும் பிற உள்கட்டமைப்புகளைப் பற்றிப் படிப்பதுதான் Civil Engineering. / Civil studies the built environment and infrastructure.
+- **என்ன படிப்பீர்கள்? / What will you study?** மேற்கோள் காட்டிய பாடத்திட்டத்தில் கட்டமைப்புகள், மண் பொறியியல், நில அளவீடு போன்ற பாடங்கள் உள்ளன. இது அந்தப் பாடத்திட்டத்திற்கான எடுத்துக்காட்டு; எல்லாக் கல்லூரிகளுக்கும் உறுதி அல்ல. / The cited curriculum includes subjects such as structures, soil and surveying. These are examples from that curriculum, not a promise for every college.
+- **செய்முறையும் பயன்பாடும் / Practical learning and applications:** செய்முறைப் பயிற்சி எப்படி இருக்கும் என்பதை மேற்கோள் காட்டிய பாடத்திட்டத்தில் உள்ள ஆய்வகம், திறன் பயிற்சி மற்றும் திட்டப் பாடங்களிலிருந்து பாருங்கள். குறிப்பிட்ட கல்லூரியின் வசதிகள் தனியாகச் சரிபார்க்கப்பட வேண்டும். / Use the cited curriculum's laboratory, skill and project entries to explore practical learning. Check the specific college's facilities separately.
+- **கவனிக்க வேண்டியது / Important considerations:** இந்த விளக்கம் குறிப்பிட்ட பல்கலைக்கழகப் பாடத்திட்டத்தைச் சார்ந்தது. உங்கள் கல்லூரியின் படிப்பு, சேர்க்கை விதிகள், இன்றைய இடநிலை ஆகியவற்றைத் தனியாகச் சரிபார்க்க வேண்டும். / This description is scoped to the cited university curriculum. Check the particular college's course, admission rules and current seat information separately.
+- **அடுத்து என்ன பார்க்கலாம்? / What to explore next?** இந்தப் பாடத்திட்டத்தின் பாடப் பட்டியலைத் தொடர்புள்ள மற்றொரு பிரிவுடன் ஒப்பிடுங்கள்; பிறகு விரும்பும் கல்லூரியின் அதிகாரப்பூர்வ விவரத்தைப் பாருங்கள். / Compare this curriculum's course list with a related branch, then check the chosen college's official information.
+
+#### EC — ELECTRONICS AND COMMUNICATION ENGINEERING
+
+- **இது என்ன? / What is it?** மின்னணுவியல் (Electronics), சமிக்ஞைகள் (Signals) மற்றும் தகவல் தொடர்பு அமைப்புகளை இணைத்துப் படிப்பதுதான் ECE (Electronics and Communication Engineering) பிரிவு. / ECE combines electronics, signals and communication systems.
+- **என்ன படிப்பீர்கள்? / What will you study?** மேற்கோள் காட்டிய பாடத்திட்டத்தில் மின்சுற்றுகள், சமிக்ஞைகள், தகவல் தொடர்பு அமைப்புகள் போன்ற பாடங்கள் உள்ளன. இது அந்தப் பாடத்திட்டத்திற்கான எடுத்துக்காட்டு; எல்லாக் கல்லூரிகளுக்கும் உறுதி அல்ல. / The cited curriculum includes subjects such as circuits, signals and communication systems. These are examples from that curriculum, not a promise for every college.
+- **செய்முறையும் பயன்பாடும் / Practical learning and applications:** செய்முறைப் பயிற்சி எப்படி இருக்கும் என்பதை மேற்கோள் காட்டிய பாடத்திட்டத்தில் உள்ள ஆய்வகம், திறன் பயிற்சி மற்றும் திட்டப் பாடங்களிலிருந்து பாருங்கள். குறிப்பிட்ட கல்லூரியின் வசதிகள் தனியாகச் சரிபார்க்கப்பட வேண்டும். / Use the cited curriculum's laboratory, skill and project entries to explore practical learning. Check the specific college's facilities separately.
+- **கவனிக்க வேண்டியது / Important considerations:** இந்த விளக்கம் குறிப்பிட்ட பல்கலைக்கழகப் பாடத்திட்டத்தைச் சார்ந்தது. உங்கள் கல்லூரியின் படிப்பு, சேர்க்கை விதிகள், இன்றைய இடநிலை ஆகியவற்றைத் தனியாகச் சரிபார்க்க வேண்டும். / This description is scoped to the cited university curriculum. Check the particular college's course, admission rules and current seat information separately.
+- **அடுத்து என்ன பார்க்கலாம்? / What to explore next?** இந்தப் பாடத்திட்டத்தின் பாடப் பட்டியலைத் தொடர்புள்ள மற்றொரு பிரிவுடன் ஒப்பிடுங்கள்; பிறகு விரும்பும் கல்லூரியின் அதிகாரப்பூர்வ விவரத்தைப் பாருங்கள். / Compare this curriculum's course list with a related branch, then check the chosen college's official information.
+
+#### EE — ELECTRICAL AND ELECTRONICS ENGINEERING
+
+- **இது என்ன? / What is it?** மின்சுற்றுகள், மின் இயந்திரங்கள், மின்சக்தி அமைப்புகள், கட்டுப்பாட்டு முறைமைகள் மற்றும் மின்சக்தி மின்னணுவியல் ஆகியவற்றை மையமாகக் கொண்டது EEE பிரிவு. / EEE focuses on electrical circuits, machines, power systems, control and power electronics.
+- **என்ன படிப்பீர்கள்? / What will you study?** மேற்கோள் காட்டிய பாடத்திட்டத்தில் மின்சுற்றுகள், மின் இயந்திரங்கள், மின்சக்தி அமைப்புகள் போன்ற பாடங்கள் உள்ளன. இது அந்தப் பாடத்திட்டத்திற்கான எடுத்துக்காட்டு; எல்லாக் கல்லூரிகளுக்கும் உறுதி அல்ல. / The cited curriculum includes subjects such as circuits, electrical machines and power systems. These are examples from that curriculum, not a promise for every college.
+- **செய்முறையும் பயன்பாடும் / Practical learning and applications:** செய்முறைப் பயிற்சி எப்படி இருக்கும் என்பதை மேற்கோள் காட்டிய பாடத்திட்டத்தில் உள்ள ஆய்வகம், திறன் பயிற்சி மற்றும் திட்டப் பாடங்களிலிருந்து பாருங்கள். குறிப்பிட்ட கல்லூரியின் வசதிகள் தனியாகச் சரிபார்க்கப்பட வேண்டும். / Use the cited curriculum's laboratory, skill and project entries to explore practical learning. Check the specific college's facilities separately.
+- **கவனிக்க வேண்டியது / Important considerations:** இந்த விளக்கம் குறிப்பிட்ட பல்கலைக்கழகப் பாடத்திட்டத்தைச் சார்ந்தது. உங்கள் கல்லூரியின் படிப்பு, சேர்க்கை விதிகள், இன்றைய இடநிலை ஆகியவற்றைத் தனியாகச் சரிபார்க்க வேண்டும். / This description is scoped to the cited university curriculum. Check the particular college's course, admission rules and current seat information separately.
+- **அடுத்து என்ன பார்க்கலாம்? / What to explore next?** இந்தப் பாடத்திட்டத்தின் பாடப் பட்டியலைத் தொடர்புள்ள மற்றொரு பிரிவுடன் ஒப்பிடுங்கள்; பிறகு விரும்பும் கல்லூரியின் அதிகாரப்பூர்வ விவரத்தைப் பாருங்கள். / Compare this curriculum's course list with a related branch, then check the chosen college's official information.
