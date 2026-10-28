@@ -221,3 +221,6 @@ Do not rewrite frozen documents, original content or experiment history to erase
 **Executed in the October 11 documentation task:** Fresh origin/main verification at a67fc4c; three-file documentation-only scope check; 71 local links checked; status/task/gate consistency and whitespace checks. No application tests, typecheck, browser walkthrough, live call or human session rerun. Prior integration results remain attributed to the implementation baseline.
 
 **Historical next action, 2026-10-27:** Prepare the M4 data-governance feasibility census. This snapshot is superseded by the 2026-10-28 M4-B decisions and bounded M4-A1 authorization above; M5 remains unauthorized.
+## M4 implementation update — 2026-10-28
+
+Owner authorizes synthetic-only M4-A2/A3, implemented at `/journey?step=explore` on the task branch; owner acceptance/merge pending. The real adapter, genuine content approvals and real-data ingestion remain separate decisions. After seven-college validation, proposed scope expands to all other prepared official 2026 records in governed batches; seven is not a permanent cap. See the current implementation and expansion gates in [Project Status](../../PROJECT_STATUS.md#synthetic-m4-a2a3-implementation--2026-10-28). Earlier authorization statements here are historical where superseded by this bounded fixture scope.

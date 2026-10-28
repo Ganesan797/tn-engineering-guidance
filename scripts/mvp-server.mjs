@@ -1,3 +1,4 @@
+import { renderM4Exploration } from "../src/ui/m4-exploration.ts";
 import { CHECK_COPY } from "../src/ui/journey-copy.ts";
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
@@ -70,6 +71,7 @@ const server = createServer(async (request, response) => {
   }
   if (request.method === "GET" && url.pathname === "/journey") {
     const step = url.searchParams.get("step");
+    if (step === "explore") { send(response, 200, renderM4Exploration(url.searchParams)); return; }
     const page = step === "study" || step === "compare" || step === "route" || step === "prepare" || step === "check" ? step : "awareness";
     send(response, 200, renderM2Journey(page, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY, undefined, presentation, language));
     return;

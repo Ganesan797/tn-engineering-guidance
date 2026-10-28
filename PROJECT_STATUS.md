@@ -2,11 +2,27 @@
 
 **Current milestone:** M3 accepted for bounded scope; M4-A1 internal synthetic-fixture view-model accepted.
 
-**Current task:** Preserve the accepted [internal M4-A1 discovery contract](docs/planning/m4_a1_internal_contract_2026-10-28.md) and prepare any next bounded work only after a separate owner decision. M4-A2, production ingestion and student UI are not authorized.
+**Current task:** Owner-authorized synthetic-only M4-A2/A3 review journey implemented on task branch from main `95e73f2`; owner acceptance and merge pending. Production ingestion and real student profile publication remain unauthorized.
 
 **Last reviewed:** 2026-10-28
 
-## Current M4-B decision — 2026-10-28
+## Synthetic M4-A2/A3 implementation — 2026-10-28
+
+The owner explicitly authorized completing the bounded synthetic-only journey and assessing expansion beyond seven colleges. This supersedes earlier UI authorization statements below only for this fixture review scope. Route: `/journey?step=explore`, Tamil default, `&lang=en` for English. Branch-first and college-first navigation lead to programme evidence and next actions; show-all/not-sure recover without requiring marks. The accepted M4-A1 view-model supplies filtered output. Seven invented colleges and twelve invented listings exercise nine links and held BY/XC, AE/N9 cases. No official college identity or candidate profile copy is published; `.test` sources and `fixture_only: true` remain mandatory. Conflicting districts render UNKNOWN. No prediction, LLM, production ingestion or canonical changes.
+
+Validation: 8 focused tests PASS; full 283 tests PASS; strict typecheck PASS. Browser navigation and language-preserving detail switch PASS. Mobile Tamil at 375px and Tamil/English at 320px: no horizontal overflow; wrapping and evidence/next actions inspected; action targets at least 44px. This is engineering review, not human bilingual approval or student validation. T04 NOT_RUN; STUDENT_VALIDATED = NO.
+
+### Next phase proposal: governed expansion, seven is not a permanent cap
+
+The preserved [research census](experiments/m4-governance-census/research-report.md) accounts for 414 colleges, 3,354 source-stage college/programme pairs, 116 codes and 84 proposed profiles. These are research-snapshot counts, not fresh official verification or release-ready data. Booklet metadata is sampled, not statewide complete. Existing candidates allow expansion without repeating a general research exercise.
+
+After owner acceptance of the fixture journey, authorize a real-data governance adapter and seven-college validation slice, then process all other prepared 2026 records in reviewable batches. Account for every prepared pair as approved, held, rejected or unresolved; do not silently truncate at seven or use a numeric coverage target to clear holds. Keep statewide ingestion/publication disabled until its explicit release decision.
+
+Required adapter gates: reconcile each source document/version/hash, year, stream and counselling stage; preserve exact string college/programme codes, source text, printed/PDF page and location status. Compare matrix and booklet identities per field, keep conflicts UNKNOWN, and record source changes as new versions. Require dated genuine approval references for college identity, source-stage offering, exact/variant profile link, and separately factual/Tamil/English profile content; synthetic review references must never authorize real records. Render only approved projections; unapproved copy stays absent. Preserve BY/XC variant and AE/AO/N9 holds, college 1133 identity conflict, districts 1303/4967, scope-code holds and every unresolved census disposition. Provide per-record provenance, rejection reasons, source-version diffs and a review audit; source-stage participation never establishes current vacancy or curriculum equivalence. Validate adapter failure cases and the real seven-college slice before broad release.
+
+Outstanding authorization: owner acceptance/merge of this synthetic implementation; authorization to build and populate the real governance adapter with the bounded seven-college slice; actual claim-level identity/content/language decisions; then explicit authorization for staged ingestion and student publication of approved remaining prepared 2026 records. Expansion is proposed, not executed. M4 comprehensive coverage remains unfinished; M5/CON and live LLM remain outside this task.
+
+## Historical M4-B decision — 2026-10-28
 
 Ganesan accepted the bounded owner recommendation slate and authorized **M4-A1 only**, for an internal view-model and synthetic fixtures. L01–L09 are approved as scoped profile associations; the seven dated identity candidates are accepted separately from their attributes. BY/XC and AE/AO remain held, disputed districts remain UNKNOWN, and MIT autonomy/minority require further evidence. P01–P02 remain on hold for human review; P03–P06 require fixes and review. No profile is approved for student display. See the [decision record](docs/planning/m4_b_owner_decisions_2026-10-28.md) for the exact scope and remaining gates.
 

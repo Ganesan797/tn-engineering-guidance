@@ -4,7 +4,7 @@ A deterministic, source-backed 2026 engineering-admission guidance MVP for a fiv
 
 ## Current Project Phase
 
-Product V1 M0 and M1 are accepted. The reviewed Gemini adapter is merged, while the bounded Live LLM Integration Gate remains partial because live-model evaluation has not run. M2 remains unauthorized. See [Project Status](PROJECT_STATUS.md) for authoritative milestone status.
+M0/M1 and bounded M2/M3 are accepted. M4-A1 is accepted for synthetic fixtures. The owner has authorized the synthetic-only M4-A2/A3 review journey at `/journey?step=explore` (Tamil default; add `&lang=en` for English). It supports branch-first and college-first exploration, evidence and next actions. Real-data ingestion and profile publication await separate approval. Gemini remains paused; the Live LLM Gate remains partial. See [Project Status](PROJECT_STATUS.md) for current scope and expansion gates.
 
 Browse the [documentation guide](docs/README.md) for content batches, evidence, reviews and technical documents.
 

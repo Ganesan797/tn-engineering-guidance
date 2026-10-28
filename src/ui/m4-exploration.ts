@@ -1,0 +1,30 @@
+import { buildDiscoveryFixtureView, type DiscoveryFixtureInput, type DiscoverySelection } from "../m4/discovery-view.ts";
+import { REVIEW_FIXTURES } from "../m4/review-fixtures.ts";
+
+const escape = (s: string) => s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
+export function renderM4Exploration(params: URLSearchParams, input: DiscoveryFixtureInput = REVIEW_FIXTURES): string {
+  const lang = params.get("lang") === "en" ? "en" : "ta";
+  const t = (ta: string, en: string) => lang === "en" ? en : ta;
+  const college = params.get("college");
+  const branch = params.get("branch");
+  const selection: DiscoverySelection = college ? {kind:"COLLEGE",code:college} : branch ? {kind:"PROFILE",id:branch} : {kind:"ALL"};
+  const view = buildDiscoveryFixtureView(input, selection);
+  const all = buildDiscoveryFixtureView(input);
+  const href = (values: Record<string,string>) => {
+    const query = new URLSearchParams({step:"explore",lang,...values});
+    return `/journey?${escape(query.toString())}`;
+  };
+  const link = (values: Record<string,string>, label: string) => `<a class="action" href="${href(values)}">${escape(label)}</a>`;
+  const branches = [...new Set(all.items.filter(i=>i.profile.id).map(i=>i.profile.id!))];
+  const colleges = [...new Map(all.items.map(i=>[i.college.code,i.college])).values()];
+  const programme = params.get("programme");
+  const items = view.items.filter(i => !programme || i.offering.programme_code === programme);
+  const cards = items.map(i => {
+    const source = i.offering.source;
+    const detail = college && programme;
+    const held = i.profile.link_status === "IDENTITY_HOLD" || i.profile.link_status === "PROFILE_HOLD";
+    return `<section class="card"><h2>${escape(i.college.identity.value!)} · ${escape(i.offering.programme_name)}</h2><p>${t("மாவட்டம்","District")}: UNKNOWN${i.college.district.status === "SOURCE_CONFLICT" ? ` — ${t("மூலங்களில் முரண்பாடு","source conflict")}` : ""}</p><p>${t("பாடப்பிரிவு குறியீடு","Programme code")}: ${escape(i.offering.programme_code)}</p><p>${held ? t("இணைப்பு நிறுத்திவைக்கப்பட்டுள்ளது. சுயவிவர உரை கிடைக்கவில்லை.","Mapping held. Profile wording unavailable.") : t("சுயவிவர உரைக்கு ஒப்புதல் நிலுவையில் உள்ளது.","Profile wording awaits approval.")}</p>${detail ? `<h3>${t("சான்றும் வரம்பும்","Evidence and limits")}</h3><p>${escape(source.document)} · ${source.year} · ${escape(source.stream!)} · ${escape(source.stage!)}</p><p>${t("அச்சுப் பக்கம் / PDF பக்கம்","Printed / PDF page")}: ${source.printed_page} / ${source.pdf_page} · ${source.location_status}</p><p>${escape(source.url)}</p><p>${t("இது செயற்கை மூல முகவரி; அதிகாரப்பூர்வ சான்று அல்ல.","This is a synthetic source address, not official evidence.")}</p><h3>${t("அடுத்து என்ன செய்யலாம்?","What next?")}</h3><p>${t("மற்றொரு பாடப்பிரிவைப் பாருங்கள். உண்மையான முடிவுக்கு, சேர்க்கை ஆண்டுக்கான அதிகாரப்பூர்வப் பட்டியல், பாடத்திட்டம் மற்றும் தற்போதைய அறிவிப்பைச் சரிபார்க்க வேண்டும்.","Explore another programme. For a real decision, check the official listing, curriculum and current notice for your admission year.")}</p>${link({college:i.college.code},t("கல்லூரியின் பாடப்பிரிவுகள்","College programmes"))}` : link({college:i.college.code,programme:i.offering.programme_code},t("சான்றும் அடுத்த படியும்","Evidence and next action"))}</section>`;
+  }).join("");
+  const switched = new URLSearchParams(params); switched.set("step","explore"); switched.set("lang",lang === "en" ? "ta" : "en");
+  return `<!doctype html><html lang="${lang}"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>M4 · ${t("ஆராயலாம்","Explore")}</title><style>*{box-sizing:border-box}body{margin:0;background:#f7f8fa;color:#172033;font:17px/1.65 "Nirmala UI",system-ui,sans-serif}main{max-width:760px;margin:auto;padding:16px;overflow-wrap:anywhere}h1{font-size:1.6rem}h2{font-size:1.2rem}.card{background:white;border:1px solid #d8dde6;border-radius:12px;padding:16px;margin:16px 0}.actions{display:flex;flex-wrap:wrap;gap:10px}.action{display:inline-block;max-width:100%;padding:12px;border:1px solid #174ea6;border-radius:8px;color:#174ea6}a:focus-visible{outline:3px solid #174ea6;outline-offset:3px}.notice{background:#fff6e7;padding:16px}</style><main><a href="/journey?${escape(switched.toString())}">${lang === "en" ? "தமிழ்" : "English"}</a><h1>${t("கல்லூரிகளையும் பாடப்பிரிவுகளையும் ஆராயலாம்","Explore colleges and programmes")}</h1><p class="notice">${t("செயற்கைத் தரவு மட்டும் — மதிப்பாய்வுக்கான மாதிரி. இவை உண்மையான கல்லூரிகளோ சேர்க்கை ஆலோசனையோ அல்ல. பகுதியளவு பட்டியல்; தரவரிசை அல்ல. இடங்கள், தகுதி அல்லது சேர்க்கை வாய்ப்பு கணிக்கப்படாது.","Synthetic fixtures only — review demonstration. These are invented colleges, not admission guidance. Partial coverage in source order, not a ranking. No vacancy, eligibility or admission prediction.")}</p><nav class="actions">${link({},t("அனைத்தையும் காட்டு","Show all"))}${link({},t("உறுதியாகத் தெரியவில்லை","Not sure"))}<a class="action" href="/journey?step=study&amp;lang=${lang}">${t("துறைகளைப் புரிந்துகொள்ள","Understand fields")}</a></nav><section class="card"><h2>${t("துறை வழியாக","Branch first")}</h2><p>${t("செயற்கைத் துறை குறியீடுகள்; விளக்க உரைக்கு ஒப்புதல் நிலுவையில் உள்ளது.","Synthetic branch codes; educational wording awaits approval.")}</p><nav class="actions">${branches.map(id=>link({branch:id},id)).join("")}</nav></section><section class="card"><h2>${t("கல்லூரி வழியாக","College first")}</h2><nav class="actions">${colleges.map(c=>link({college:c.code},c.identity.value!)).join("")}</nav></section>${items.length ? cards : `<p role="status">${t("இந்தத் தேர்வில் அங்கீகரிக்கப்பட்ட மாதிரிப் பதிவு இல்லை. அனைத்தையும் பார்க்கலாம்; இதை உண்மையான பாடப்பிரிவு இல்லை என்று கருத வேண்டாம்.","No approved fixture listing for this selection. Show all; this does not establish that a real programme is absent.")}</p>`}<p>${t("BY/XC மற்றும் AE/N9 இணைப்புகள் நிறுத்திவைக்கப்பட்டுள்ளன. முரண்பட்ட மாவட்டங்கள் UNKNOWN ஆகவே உள்ளன.","BY/XC and AE/N9 mappings remain held. Conflicting districts remain UNKNOWN.")}</p></main></html>`;
+}
