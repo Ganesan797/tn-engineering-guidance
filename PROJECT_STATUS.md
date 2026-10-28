@@ -1,8 +1,8 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** M3 accepted for bounded scope; M4-A1 internal fixture-only view-model is authorized.
+**Current milestone:** M3 accepted for bounded scope; M4-A1 internal synthetic-fixture view-model accepted.
 
-**Current task:** Review the implemented [internal M4-A1 discovery contract](docs/planning/m4_a1_internal_contract_2026-10-28.md) and its synthetic fixtures under the [2026-10-28 owner decisions](docs/planning/m4_b_owner_decisions_2026-10-28.md). Production ingestion, student display and later M4 slices require separate authorization.
+**Current task:** Preserve the accepted [internal M4-A1 discovery contract](docs/planning/m4_a1_internal_contract_2026-10-28.md) and prepare any next bounded work only after a separate owner decision. M4-A2, production ingestion and student UI are not authorized.
 
 **Last reviewed:** 2026-10-28
 
@@ -12,7 +12,7 @@ Ganesan accepted the bounded owner recommendation slate and authorized **M4-A1 o
 
 `M4_A1_INTERNAL_FIXTURE_AUTHORIZED = YES`; `M4_PRODUCTION_INGESTION_AUTHORIZED = NO`; `M4_STUDENT_FLOWS_AUTHORIZED = NO`; `M5_IMPLEMENTATION_AUTHORIZED = NO`; `STUDENT_VALIDATED = NO`. The earlier dated M4 authorization statements below are historical snapshots superseded only for M4-A1.
 
-M4-A1's internal contract and fixtures are implemented for review; five focused tests, the 280-test offline suite and strict typecheck passed after fixture-isolation review. M4-A1 owner acceptance and real-student validation are not claimed.
+Ganesan accepts M4-A1 for synthetic-only internal scope at `8e4538d9e8e1f34245638188e190d5e14647fb10`; five focused tests, the 280-test offline suite and strict typecheck passed after fixture-isolation review. Fresh integration validation also passed the 280-test offline suite and strict typecheck. This acceptance does not claim real-student validation or authorize M4-A2, production ingestion or student UI.
 
 ## Historical college-discovery direction — 2026-10-27
 
