@@ -1,0 +1,93 @@
+{
+  "matrix_colleges": 414,
+  "matrix_offerings": 3354,
+  "booklet_detail_colleges": 418,
+  "booklet_only": [
+    "2332",
+    "3555",
+    "4911",
+    "4927"
+  ],
+  "matrix_only": [],
+  "field_statuses": {
+    "address": {
+      "OFFICIAL_SUPPORTED": 410,
+      "NEEDS_REVIEW": 7,
+      "NOT_PUBLISHED": 1
+    },
+    "autonomous_status": {
+      "OFFICIAL_SUPPORTED": 410,
+      "NEEDS_REVIEW": 8
+    },
+    "booklet_college_name_printed": {
+      "OFFICIAL_SUPPORTED": 417,
+      "CONFLICTING": 1
+    },
+    "college_code": {
+      "OFFICIAL_SUPPORTED": 418
+    },
+    "district": {
+      "OFFICIAL_SUPPORTED": 394,
+      "NEEDS_REVIEW": 7,
+      "CONFLICTING": 16,
+      "NOT_PUBLISHED": 1
+    },
+    "email": {
+      "OFFICIAL_SUPPORTED": 410,
+      "NEEDS_REVIEW": 7,
+      "NOT_PUBLISHED": 1
+    },
+    "institution_type": {
+      "OFFICIAL_SUPPORTED": 417,
+      "NEEDS_REVIEW": 1
+    },
+    "matrix_college_name_and_address_printed": {
+      "OFFICIAL_SUPPORTED": 414
+    },
+    "matrix_district_conflict": {
+      "CONFLICTING": 16
+    },
+    "minority_status": {
+      "OFFICIAL_SUPPORTED": 410,
+      "NEEDS_REVIEW": 7,
+      "NOT_PUBLISHED": 1
+    },
+    "phone_fax": {
+      "OFFICIAL_SUPPORTED": 410,
+      "NEEDS_REVIEW": 7,
+      "NOT_PUBLISHED": 1
+    },
+    "pincode": {
+      "OFFICIAL_SUPPORTED": 410,
+      "NEEDS_REVIEW": 7,
+      "NOT_PUBLISHED": 1
+    },
+    "taluk": {
+      "OFFICIAL_SUPPORTED": 410,
+      "NEEDS_REVIEW": 7,
+      "NOT_PUBLISHED": 1
+    },
+    "website": {
+      "OFFICIAL_SUPPORTED": 410,
+      "NEEDS_REVIEW": 7,
+      "NOT_PUBLISHED": 1
+    }
+  },
+  "exception_counts": {
+    "PREVIOUS_YEAR_BOOKLET_DATA": 7,
+    "FIELD_NEEDS_REVIEW": 64,
+    "IDENTITY_CONFLICT": 1,
+    "TYPE_NEEDS_REVIEW": 1,
+    "DISTRICT_CONFLICT": 16,
+    "BOOKLET_ONLY": 4,
+    "FIELD_NOT_PUBLISHED": 8
+  },
+  "category_counts": {
+    "UNIVERSITY DEPARTMENTS": 5,
+    "CONSTITUENT COLLEGES": 16,
+    "SELF FINANCING ENGINEERING COLLEGES": 380,
+    "CECRI AND CIPET": 3,
+    "GOVERNMENT COLLEGES": 11,
+    "GOVERNMENT AIDED COLLEGES": 3
+  }
+}

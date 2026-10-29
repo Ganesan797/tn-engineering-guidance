@@ -2,6 +2,8 @@
 
 Start with [Project Status](../PROJECT_STATUS.md) for the project state and [Current execution plan — T01–T06](planning/current_execution_plan.md) for the single current task map, owners, dependencies, authorization and next decisions.
 
+The current [complete M4 directory candidate package](../experiments/m4-governance-census/directory-candidates-2026/README.md), earlier [bounded expansion review](../review-evidence/m4-expansion-candidates-2026-10-29/review-package.md) and [Tamil review record](../review-evidence/m4-expansion-candidates-2026-10-29/tamil-owner-review.md) supersede older task-status summaries in this guide where they conflict. Candidate preparation does not authorize expanded implementation or student access.
+
 The guided journey remains primary; governed Q&A is optional exploration. Ganesan's [Owner Finding 02 decision](planning/m2_owner_finding_02_decision_2026-10-04.md) passes language presentation and question-specific relevance at `ed03a420…`, with no FIX items, and authorizes integration after checks. T03 factual release and human Tamil-equivalence reviews are next; student validation and M2 acceptance remain pending. Future conversational work remains separate from the frozen M3–M7 roadmap.
 
 ## Content to review
@@ -19,7 +21,7 @@ The [M2 question-to-domain map](planning/m2_one_journey_question_domain_map_v1.m
 
 ## Folder guide
 
-- [M4 college discovery contract](planning/m4_college_discovery_contract_v1.md) — owner approved for planning only; implementation and data ingestion are not authorized.
+- [M4 college discovery contract](planning/m4_college_discovery_contract_v1.md) — approved for planning; later decisions separately authorize bounded owner-only implementation, but not production ingestion or student access.
 - [product/](product/) — frozen mission, student journey, input/output contract and product responsibility/review documents.
 - [planning/](planning/) — implementation plan and technical gap mapping. The [release roadmap](../PLAN_V1.md) remains at repository root.
 - [architecture/](architecture/) — domain/data contracts, schema, data model and AI/RAG architecture addendum.

@@ -1,0 +1,102 @@
+kind,college_code,detail,source_pdf_page
+PREVIOUS_YEAR_BOOKLET_DATA,1102,Header explicitly marks previous-year data; field year and present validity require review,52
+FIELD_NEEDS_REVIEW,1102,address,52
+FIELD_NEEDS_REVIEW,1102,taluk,52
+FIELD_NEEDS_REVIEW,1102,district,52
+FIELD_NEEDS_REVIEW,1102,pincode,52
+FIELD_NEEDS_REVIEW,1102,autonomous_status,52
+FIELD_NEEDS_REVIEW,1102,minority_status,52
+FIELD_NEEDS_REVIEW,1102,website,52
+FIELD_NEEDS_REVIEW,1102,phone_fax,52
+FIELD_NEEDS_REVIEW,1102,email,52
+IDENTITY_CONFLICT,1133,Matrix Annai Veilankannis / booklet Nellai Nadar; same code does not resolve identity; retain both source names,70
+TYPE_NEEDS_REVIEW,1133,Index category requires review; no type inferred from name,5
+FIELD_NEEDS_REVIEW,1133,address,70
+FIELD_NEEDS_REVIEW,1133,taluk,70
+FIELD_NEEDS_REVIEW,1133,district,70
+FIELD_NEEDS_REVIEW,1133,pincode,70
+FIELD_NEEDS_REVIEW,1133,autonomous_status,70
+FIELD_NEEDS_REVIEW,1133,minority_status,70
+FIELD_NEEDS_REVIEW,1133,website,70
+FIELD_NEEDS_REVIEW,1133,phone_fax,70
+FIELD_NEEDS_REVIEW,1133,email,70
+DISTRICT_CONFLICT,1137,"Matrix Vellore; booklet RANIPET; retain both, display UNKNOWN",71
+PREVIOUS_YEAR_BOOKLET_DATA,1221,Header explicitly marks previous-year data; field year and present validity require review,85
+FIELD_NEEDS_REVIEW,1221,address,85
+FIELD_NEEDS_REVIEW,1221,taluk,85
+FIELD_NEEDS_REVIEW,1221,district,85
+FIELD_NEEDS_REVIEW,1221,pincode,85
+FIELD_NEEDS_REVIEW,1221,autonomous_status,85
+FIELD_NEEDS_REVIEW,1221,minority_status,85
+FIELD_NEEDS_REVIEW,1221,website,85
+FIELD_NEEDS_REVIEW,1221,phone_fax,85
+FIELD_NEEDS_REVIEW,1221,email,85
+DISTRICT_CONFLICT,1303,"Matrix Kancheepuram; booklet CHENGALPATTU; retain both, display UNKNOWN",100
+DISTRICT_CONFLICT,1316,"Matrix Kancheepuram; booklet CHENGALPATTU; retain both, display UNKNOWN",107
+DISTRICT_CONFLICT,1333,"Matrix Kancheepuram; booklet CHENGALPATTU; retain both, display UNKNOWN",113
+DISTRICT_CONFLICT,1401,"Matrix Kancheepuram; booklet CHENGALPATTU; retain both, display UNKNOWN",117
+DISTRICT_CONFLICT,1402,"Matrix Villupuram; booklet KALLAKURICHI; retain both, display UNKNOWN",118
+DISTRICT_CONFLICT,1415,"Matrix Villupuram; booklet KALLAKURICHI; retain both, display UNKNOWN",126
+DISTRICT_CONFLICT,1441,"Matrix Villupuram; booklet KALLAKURICHI; retain both, display UNKNOWN",144
+DISTRICT_CONFLICT,1501,"Matrix Vellore; booklet RANIPET; retain both, display UNKNOWN",151
+PREVIOUS_YEAR_BOOKLET_DATA,1510,Header explicitly marks previous-year data; field year and present validity require review,157
+FIELD_NEEDS_REVIEW,1510,address,157
+FIELD_NEEDS_REVIEW,1510,taluk,157
+FIELD_NEEDS_REVIEW,1510,district,157
+FIELD_NEEDS_REVIEW,1510,pincode,157
+FIELD_NEEDS_REVIEW,1510,autonomous_status,157
+FIELD_NEEDS_REVIEW,1510,minority_status,157
+FIELD_NEEDS_REVIEW,1510,website,157
+FIELD_NEEDS_REVIEW,1510,phone_fax,157
+FIELD_NEEDS_REVIEW,1510,email,157
+PREVIOUS_YEAR_BOOKLET_DATA,1516,Header explicitly marks previous-year data; field year and present validity require review,160
+FIELD_NEEDS_REVIEW,1516,address,160
+FIELD_NEEDS_REVIEW,1516,taluk,160
+FIELD_NEEDS_REVIEW,1516,district,160
+FIELD_NEEDS_REVIEW,1516,pincode,160
+FIELD_NEEDS_REVIEW,1516,autonomous_status,160
+FIELD_NEEDS_REVIEW,1516,minority_status,160
+FIELD_NEEDS_REVIEW,1516,website,160
+FIELD_NEEDS_REVIEW,1516,phone_fax,160
+FIELD_NEEDS_REVIEW,1516,email,160
+DISTRICT_CONFLICT,1519,"Matrix Vellore; booklet TIRUPATHUR; retain both, display UNKNOWN",163
+DISTRICT_CONFLICT,1525,"Matrix Vellore; booklet TIRUPATHUR; retain both, display UNKNOWN",167
+DISTRICT_CONFLICT,1605,"Matrix Villupuram; booklet KALLAKURICHI; retain both, display UNKNOWN",169
+BOOKLET_ONLY,2332,No matching matrix offering is inferred from booklet presence,178
+PREVIOUS_YEAR_BOOKLET_DATA,2350,Header explicitly marks previous-year data; field year and present validity require review,187
+FIELD_NEEDS_REVIEW,2350,address,187
+FIELD_NEEDS_REVIEW,2350,taluk,187
+FIELD_NEEDS_REVIEW,2350,district,187
+FIELD_NEEDS_REVIEW,2350,pincode,187
+FIELD_NEEDS_REVIEW,2350,autonomous_status,187
+FIELD_NEEDS_REVIEW,2350,minority_status,187
+FIELD_NEEDS_REVIEW,2350,website,187
+FIELD_NEEDS_REVIEW,2350,phone_fax,187
+FIELD_NEEDS_REVIEW,2350,email,187
+BOOKLET_ONLY,3555,No matching matrix offering is inferred from booklet presence,312
+BOOKLET_ONLY,4911,No matching matrix offering is inferred from booklet presence,371
+BOOKLET_ONLY,4927,No matching matrix offering is inferred from booklet presence,374
+PREVIOUS_YEAR_BOOKLET_DATA,4943,Header explicitly marks previous-year data; field year and present validity require review,383
+FIELD_NOT_PUBLISHED,4943,address,383
+FIELD_NOT_PUBLISHED,4943,taluk,383
+FIELD_NOT_PUBLISHED,4943,district,383
+FIELD_NOT_PUBLISHED,4943,pincode,383
+FIELD_NEEDS_REVIEW,4943,autonomous_status,383
+FIELD_NOT_PUBLISHED,4943,minority_status,383
+FIELD_NOT_PUBLISHED,4943,website,383
+FIELD_NOT_PUBLISHED,4943,phone_fax,383
+FIELD_NOT_PUBLISHED,4943,email,383
+DISTRICT_CONFLICT,4967,"Matrix Tirunelveli; booklet TENKASI; retain both, display UNKNOWN",400
+DISTRICT_CONFLICT,4994,"Matrix Tirunelveli; booklet TENKASI; retain both, display UNKNOWN",419
+DISTRICT_CONFLICT,4998,"Matrix Tirunelveli; booklet Tenkasi; retain both, display UNKNOWN",421
+DISTRICT_CONFLICT,5502,"Matrix Sivagangai; booklet Madurai; retain both, display UNKNOWN",429
+PREVIOUS_YEAR_BOOKLET_DATA,5533,Header explicitly marks previous-year data; field year and present validity require review,432
+FIELD_NEEDS_REVIEW,5533,address,432
+FIELD_NEEDS_REVIEW,5533,taluk,432
+FIELD_NEEDS_REVIEW,5533,district,432
+FIELD_NEEDS_REVIEW,5533,pincode,432
+FIELD_NEEDS_REVIEW,5533,autonomous_status,432
+FIELD_NEEDS_REVIEW,5533,minority_status,432
+FIELD_NEEDS_REVIEW,5533,website,432
+FIELD_NEEDS_REVIEW,5533,phone_fax,432
+FIELD_NEEDS_REVIEW,5533,email,432

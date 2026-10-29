@@ -1,12 +1,14 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** M3 accepted for bounded scope; M4-A1 internal synthetic-fixture view-model accepted.
+**Current milestone:** M3 accepted for bounded scope; bounded M4 owner-only implementation exists on the task branch and remains unmerged.
 
-**Current task:** Owner-authorized synthetic-only M4-A2/A3 review journey implemented on task branch from main `95e73f2`; owner acceptance and merge pending. Production ingestion and real student profile publication remain unauthorized.
+**Current task:** The owner authorized research-only preparation for the complete existing 2026 matrix inventory. The [directory candidate package](experiments/m4-governance-census/directory-candidates-2026/README.md) accounts for 414 matrix colleges and 3,354 offerings, plus four booklet-only codes. It retains individual gates, exceptions and holds; source-text extraction is not factual or owner approval. The earlier [bounded implementation authorization](docs/planning/m4_bounded_implementation_authorization_2026-10-29.md) remains in force for owner-only review. Expanded implementation, production ingestion, deployment and student access remain unauthorized.
 
-**Last reviewed:** 2026-10-28
+**Last reviewed:** 2026-10-29
 
-## Synthetic M4-A2/A3 implementation — 2026-10-28
+Ganesan reported the exact six existing Tamil candidates as good enough: [TAMIL_REVIEW = PASS_OWNER_REPORTED](review-evidence/m4-expansion-candidates-2026-10-29/tamil-owner-review.md). This does not approve facts, English equivalence, offerings, mappings, student display or validation. The entries below are historical snapshots where they conflict with this current paragraph.
+
+## Historical synthetic M4-A2/A3 implementation — 2026-10-28
 
 The owner explicitly authorized completing the bounded synthetic-only journey and assessing expansion beyond seven colleges. This supersedes earlier UI authorization statements below only for this fixture review scope. Route: `/journey?step=explore`, Tamil default, `&lang=en` for English. Branch-first and college-first navigation lead to programme evidence and next actions; show-all/not-sure recover without requiring marks. The accepted M4-A1 view-model supplies filtered output. Seven invented colleges and twelve invented listings exercise nine links and held BY/XC, AE/N9 cases. No official college identity or candidate profile copy is published; `.test` sources and `fixture_only: true` remain mandatory. Conflicting districts render UNKNOWN. No prediction, LLM, production ingestion or canonical changes.
 
