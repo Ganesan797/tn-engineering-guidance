@@ -23,8 +23,8 @@ test("branch-first journey walks from family to branch, matching colleges and ev
   assert.match(family, /Computer Science and Engineering/);
   assert.doesNotMatch(family, /Sample College 1/);
   const branch = follow(family, "Computer Science and Engineering");
-  assert.match(branch, /You could start with programming/);
-  assert.match(branch, /Write three book titles on paper/);
+  assert.match(branch, /data structures.*databases.*operating systems/);
+  assert.match(branch, /software development, software testing/);
   const choices = follow(branch, "See sample colleges for this branch");
   assert.match(choices, /Sample College 1/);
   const collegePage = follow(choices, "Sample College 1");
@@ -77,7 +77,7 @@ test("held and pending content stay out, synthetic boundary and escaping hold", 
   assert.throws(() => renderM4Exploration(new URLSearchParams(), { ...input, fixture_only: false } as never), /Synthetic fixture/);
   const badSource = { ...input.offerings[0].source!, url: "https://official.example.org/source" };
   const unsafe = renderM4Exploration(new URLSearchParams("view=branch&branch=CS&lang=en"), { ...input, offerings: [{ ...input.offerings[0], source: badSource }] });
-  assert.doesNotMatch(unsafe, /Sample subjects: programming/);
+  assert.doesNotMatch(unsafe, /software development, software testing/);
   const hostile = { ...input.colleges[0], identity: { ...input.colleges[0].identity, status: "APPROVED" as const, value: "<script>alert(1)</script>", source: input.offerings[0].source!, review_reference: "fixture" } };
   const safe = renderM4Exploration(new URLSearchParams("view=colleges&lang=en"), { ...input, colleges: [hostile] });
   assert.doesNotMatch(safe, /<script>alert/);
@@ -168,7 +168,7 @@ test("management categories never infer missing, conflicting, pending or unrecog
  assert.match(html,/Type not yet confirmed/);
 });
 
-test("all nine bilingual conversations contain scenarios, learning context, an exercise and scoped official reading", () => {
+test("all nine bilingual explanations retain substantive content and scoped official reading", () => {
  for(const profile of REVIEW_FIXTURES.profiles) for(const lang of ["ta","en"] as const) {
   const html=page(`view=branch&branch=${profile.id}&lang=${lang}`);
   const lines=profile.copy[lang].split("\n");
@@ -179,4 +179,22 @@ test("all nine bilingual conversations contain scenarios, learning context, an e
   assert.ok(html.includes(lang==="en"?"Illustrative copy only":"கற்பனை விளக்கம் மட்டும்"));
   assert.doesNotMatch(html,/Reviewed educational explanation/);
  }
+});
+
+test("CSE gives bilingual decision support while staying inside the fixture and content approval gates", () => {
+  for(const lang of ["ta","en"]) {
+    const html=page(`view=branch&branch=CS&lang=${lang}`);
+    for (const term of lang==="ta" ? ["இந்தப் படிப்பு எதைப் பற்றியது?","தரவுக் கட்டமைப்புகள்","தரவுத்தளங்கள்","மென்பொருள் சோதனை","இயந்திரக் கற்றல்","பாடத்திட்டத்தில் ஒப்பிடுங்கள்"] : ["What is this course about?","data structures","databases","software testing","AI and Data Science","Compare the actual subjects"]) assert.ok(html.includes(term),term);
+    assert.match(html, /branch=AD/);
+    assert.match(html, /branch=CS/);
+    assert.ok(html.includes(lang==="ta" ? "கற்பனை விளக்கம் மட்டும்" : "Illustrative copy only"));
+  }
+  const ta=page("view=branch&branch=CS&lang=ta");
+  const switched=follow(ta,"English");
+  assert.match(switched,/What is this course about/);
+  assert.match(follow(switched,"Explore AI and Data Science too"),/Artificial Intelligence and Data Science/);
+  const input=structuredClone(REVIEW_FIXTURES);
+  const held={...input.profiles[0],status:"HOLD" as const};
+  const output=renderM4Exploration(new URLSearchParams("view=branch&branch=CS&lang=en"),{...input,profiles:[held,...input.profiles.slice(1)]});
+  assert.doesNotMatch(output,/software development, software testing/);
 });
