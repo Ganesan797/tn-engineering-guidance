@@ -3,6 +3,7 @@ import { renderM4Exploration } from "../src/ui/m4-exploration.ts";
 import { CHECK_COPY } from "../src/ui/journey-copy.ts";
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
+import { loadApprovedDirectory } from "../src/m4/approved-directory-preview.mjs";
 
 import { createPilotRuntime } from "../src/application/pilot-runtime.ts";
 import { DEMO_SCENARIO_NAMES, demoScenario } from "../src/demo/scenarios.ts";
@@ -21,6 +22,8 @@ import { renderM2Journey } from "../src/ui/m2-journey.ts";
 import { loadQuestionCollection, renderQuestionCollection } from "../src/ui/explore-questions.ts";
 
 const root = new URL("../", import.meta.url);
+// Explicitly enabled local review only; invalid approval bytes fail closed.
+const ownerDirectory = process.env.M4_OWNER_REVIEW === "1" ? loadApprovedDirectory() : null;
 const awareness = applyApprovedTamilStudentCopy(parseAwarenessPack(
   readFileSync(new URL("data/m1_awareness_content_pack_v1.json", root), "utf8"),
   readFileSync(new URL("docs/content/m1/m1_awareness_content_pack_v1.md", root), "utf8"),
@@ -70,8 +73,8 @@ const server = createServer(async (request, response) => {
     send(response, page.status, page.html);
     return;
   }
-  // Local, opt-in owner review only. No candidate text or unapproved offering is routed.
-  if (request.method === "GET" && url.pathname === "/internal/m4-pilot" && process.env.M4_OWNER_REVIEW === "1") { send(response, 200, renderGovernedPilot(url.searchParams)); return; }
+  // Local, opt-in owner review only; no request parameter supplies approvals.
+  if (request.method === "GET" && url.pathname === "/internal/m4-pilot" && ownerDirectory) { send(response, 200, renderGovernedPilot(url.searchParams, undefined, ownerDirectory)); return; }
   if (request.method === "GET" && url.pathname === "/journey") {
     const step = url.searchParams.get("step");
     if (step === "explore") { send(response, 200, renderM4Exploration(url.searchParams)); return; }

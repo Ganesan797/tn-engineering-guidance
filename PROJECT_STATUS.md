@@ -2,7 +2,7 @@
 
 **Current milestone:** M3 accepted for bounded scope; bounded M4 owner-only implementation exists on the task branch and remains unmerged.
 
-**Current task:** Ganesan approved the exact 8,622 literal, dated source-record IDs in the [directory batch decision](experiments/m4-governance-census/directory-candidates-2026/owner-batch-decision-2026-10-29.md); all 191 exceptions and existing holds remain. The [candidate package](experiments/m4-governance-census/directory-candidates-2026/README.md) accounts for 414 matrix colleges and 3,354 source-stage offerings, plus four booklet-only codes. Source-record approval does not resolve conflicting values, authorize identity joins, content release or student use. The earlier [bounded implementation authorization](docs/planning/m4_bounded_implementation_authorization_2026-10-29.md) remains in force for owner-only review. Expanded implementation, production ingestion, deployment and student access remain unauthorized.
+**Current task:** Ganesan approved the exact 8,622 literal, dated source-record IDs in the [directory batch decision](experiments/m4-governance-census/directory-candidates-2026/owner-batch-decision-2026-10-29.md) and separately authorized their bounded read-only owner-preview projection. The local opt-in `/internal/m4-pilot` displays 389 source-scoped colleges and 3,128 offerings, with 226 source rows excluded; all 191 exceptions and existing holds remain. Source-record approval does not resolve conflicting values, authorize identity joins, release content or permit student use. Production ingestion, deployment and student access remain unauthorized; the local preview flag is not authentication.
 
 **Last reviewed:** 2026-10-29
 
