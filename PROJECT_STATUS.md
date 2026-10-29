@@ -2,7 +2,7 @@
 
 **Current milestone:** M3 accepted for bounded scope; bounded M4 owner-only implementation exists on the task branch and remains unmerged.
 
-**Current task:** The owner authorized research-only preparation for the complete existing 2026 matrix inventory. The [directory candidate package](experiments/m4-governance-census/directory-candidates-2026/README.md) accounts for 414 matrix colleges and 3,354 offerings, plus four booklet-only codes. It retains individual gates, exceptions and holds; source-text extraction is not factual or owner approval. The earlier [bounded implementation authorization](docs/planning/m4_bounded_implementation_authorization_2026-10-29.md) remains in force for owner-only review. Expanded implementation, production ingestion, deployment and student access remain unauthorized.
+**Current task:** Ganesan approved the exact 8,622 literal, dated source-record IDs in the [directory batch decision](experiments/m4-governance-census/directory-candidates-2026/owner-batch-decision-2026-10-29.md); all 191 exceptions and existing holds remain. The [candidate package](experiments/m4-governance-census/directory-candidates-2026/README.md) accounts for 414 matrix colleges and 3,354 source-stage offerings, plus four booklet-only codes. Source-record approval does not resolve conflicting values, authorize identity joins, content release or student use. The earlier [bounded implementation authorization](docs/planning/m4_bounded_implementation_authorization_2026-10-29.md) remains in force for owner-only review. Expanded implementation, production ingestion, deployment and student access remain unauthorized.
 
 **Last reviewed:** 2026-10-29
 
