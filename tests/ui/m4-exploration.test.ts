@@ -24,7 +24,7 @@ test("branch-first journey walks from family to branch, matching colleges and ev
   assert.doesNotMatch(family, /Sample College 1/);
   const branch = follow(family, "Computer Science and Engineering");
   assert.match(branch, /data structures.*databases.*operating systems/);
-  assert.match(branch, /software development, software testing/);
+  assert.match(branch, /software development and testing/);
   const choices = follow(branch, "See sample colleges for this branch");
   assert.match(choices, /Sample College 1/);
   const collegePage = follow(choices, "Sample College 1");
@@ -77,7 +77,7 @@ test("held and pending content stay out, synthetic boundary and escaping hold", 
   assert.throws(() => renderM4Exploration(new URLSearchParams(), { ...input, fixture_only: false } as never), /Synthetic fixture/);
   const badSource = { ...input.offerings[0].source!, url: "https://official.example.org/source" };
   const unsafe = renderM4Exploration(new URLSearchParams("view=branch&branch=CS&lang=en"), { ...input, offerings: [{ ...input.offerings[0], source: badSource }] });
-  assert.doesNotMatch(unsafe, /software development, software testing/);
+  assert.doesNotMatch(unsafe, /software development and testing/);
   const hostile = { ...input.colleges[0], identity: { ...input.colleges[0].identity, status: "APPROVED" as const, value: "<script>alert(1)</script>", source: input.offerings[0].source!, review_reference: "fixture" } };
   const safe = renderM4Exploration(new URLSearchParams("view=colleges&lang=en"), { ...input, colleges: [hostile] });
   assert.doesNotMatch(safe, /<script>alert/);
@@ -184,7 +184,7 @@ test("all nine bilingual explanations retain substantive content and scoped offi
 test("CSE gives bilingual decision support while staying inside the fixture and content approval gates", () => {
   for(const lang of ["ta","en"]) {
     const html=page(`view=branch&branch=CS&lang=${lang}`);
-    for (const term of lang==="ta" ? ["இந்தப் படிப்பு எதைப் பற்றியது?","தரவுக் கட்டமைப்புகள்","தரவுத்தளங்கள்","மென்பொருள் சோதனை","இயந்திரக் கற்றல்","பாடத்திட்டத்தில் ஒப்பிடுங்கள்"] : ["What is this course about?","data structures","databases","software testing","AI and Data Science","Compare the actual subjects"]) assert.ok(html.includes(term),term);
+    for (const term of lang==="ta" ? ["இந்தப் படிப்பு எதைப் பற்றியது?","தரவுக் கட்டமைப்புகள்","தரவுத்தளங்கள்","டெஸ்டிங்","மெஷின் லேர்னிங்","ஒப்பிட்டுப் பார்ப்பது"] : ["What is this course about?","data structures","databases","software development and testing","AI and Data Science","reviewing each college"]) assert.ok(html.includes(term),term);
     assert.match(html, /branch=AD/);
     assert.match(html, /branch=CS/);
     assert.ok(html.includes(lang==="ta" ? "கற்பனை விளக்கம் மட்டும்" : "Illustrative copy only"));
@@ -196,11 +196,11 @@ test("CSE gives bilingual decision support while staying inside the fixture and 
   const input=structuredClone(REVIEW_FIXTURES);
   const held={...input.profiles[0],status:"HOLD" as const};
   const output=renderM4Exploration(new URLSearchParams("view=branch&branch=CS&lang=en"),{...input,profiles:[held,...input.profiles.slice(1)]});
-  assert.doesNotMatch(output,/software development, software testing/);
+  assert.doesNotMatch(output,/software development and testing/);
 });
 
 test("nine branches provide bilingual course, study, practice and next-step explanations with the scoped revised reference", () => {
- const topics={CS:["algorithms","வழிமுறைகள்"],AD:["machine learning","இயந்திரக் கற்றல்"],EC:["microcontrollers","மைக்ரோ கண்ட்ரோலர்கள்"],BM:["biomedical instruments","உயிர்மருத்துவக் கருவிகள்"],EE:["transformers","மின்மாற்றிகள்"],CE:["surveying","நில அளவீடு"],"SYN-MECH":["thermodynamics","வெப்பவியல்"],"SYN-CHEM":["heat transfer","வெப்பப் பரிமாற்றம்"],"SYN-ENV":["wastewater","கழிவுநீர்"]};
+ const topics={CS:["algorithms","வழிமுறைகள்"],AD:["machine learning","மெஷின் லேர்னிங்"],EC:["microcontrollers","மைக்ரோகண்ட்ரோலர்கள்"],BM:["biomedical instrumentation","மருத்துவக் கருவிகள்"],EE:["transformers","டிரான்ஸ்பார்மர்கள்"],CE:["surveying","நில அளவீடு"],"SYN-MECH":["thermodynamics","தெர்மோடைனமிக்ஸ்"],"SYN-CHEM":["heat transfer","வெப்பப் பரிமாற்றம்"],"SYN-ENV":["wastewater","கழிவுநீர்"]};
  for(const [id,terms] of Object.entries(topics)) for(const [lang,index] of [["en",0],["ta",1]] as const) {
    const html=page(`view=branch&branch=${id}&lang=${lang}`);
    assert.ok(html.toLowerCase().includes(terms[index].toLowerCase()),id+lang);

@@ -1,0 +1,5 @@
+# Owner wording update — verification
+
+The user's pasted replacement text was applied to all nine bilingual fixture explanations. The review document contains the rendered copy and an official curriculum link per example. A few spelling/terminology mistakes and unconditional or misleading claims were adjusted: computer operation is not described as thinking; data quality and privacy are separate; shared CSE/AI foundations are not treated as identical; and careers, curriculum, labs and professional qualifications remain qualified. Synthetic identity and content gates remain in force; this update does not itself approve real student-facing wording.
+
+Focused checks: 17/17. TypeScript: PASS. Full tests: 292/292 (`full-test.log`). Mobile: 36 checks across nine branches, both languages and 360px/390px; checked source links, language selection, branch-to-college navigation and overflow. Screenshots include CS, Biomedical, AI/Data and Environmental examples. The English AI/Data screenshot was visually inspected.
