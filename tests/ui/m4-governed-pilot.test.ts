@@ -76,6 +76,8 @@ test("marks-free browsing, bounded filters, bilingual navigation and transient c
  const compare=render("lang=en&view=compare&pick=sample-1%7ECS&pick=sample-2%7EAD");assert.match(compare,/Sample college 1/);assert.match(compare,/Sample college 2/);assert.match(compare,/not a ranking/);assert.match(compare,/2026 General Academic/);
  for(const q of ["pick=sample-1%7ECS","pick=sample-1%7ECS&pick=sample-1%7ECS","pick=sample-1%7ECS&pick=evil%7EX","pick=sample-1%7ECS&pick=sample-2%7EAD&pick=sample-3%7EAD&pick=sample-4%7EAD"])assert.match(render(`lang=en&view=compare&${q}`),/Choose two or three/);
  const ta=render("lang=ta&view=detail&college=sample-1&programme=CS");assert.match(ta,/ஆதாரம் மற்றும் வரம்பு/);assert.match(ta,/பதிவு செய்யப்பட்டது/);assert.match(ta,/lang=en/);
+ assert.doesNotMatch(render("lang=en&view=detail&college=sample-1&programme=CS"),/still under review/);
+ assert.match(render("lang=en&view=detail&college=sample-1&programme=CS"),/class="action primary"[^>]+view=branch/);
  assert.match(render("lang=en&view=detail&college=sample-1&programme=CS"),/does not confirm current availability/);
 });
 
@@ -109,7 +111,9 @@ test("real pilot review route is disabled by default and only enabled by local p
    const response=await fetch(`http://127.0.0.1:${port}/internal/m4-pilot?lang=en&view=colleges&owner=true&approve=true`);
    assert.equal(response.status,enabled?200:404);
    const body=await response.text();
-   if(enabled){assert.match(body,/Internal owner review only/);assert.match(body,/COMPUTER SCIENCE AND ENGINEERING/);assert.doesNotMatch(body,/Nellai Nadar/);}
+   if(enabled){assert.match(body,/Internal owner review only/);assert.match(body,/COMPUTER SCIENCE AND ENGINEERING/);assert.doesNotMatch(body,/Nellai Nadar/);
+    const journey=await fetch(`http://127.0.0.1:${port}/journey?step=awareness&lang=en`);
+    assert.equal(journey.status,200);assert.doesNotMatch(await journey.text(),/\/internal\/m4-pilot/);}
    else assert.doesNotMatch(body,/Anand Institute|Easwari|COMPUTER SCIENCE AND ENGINEERING/);
   }finally{child.kill();await once(child,"exit");}
  }

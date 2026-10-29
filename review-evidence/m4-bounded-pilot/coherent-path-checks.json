@@ -1,0 +1,82 @@
+[
+  {
+    "width": 360,
+    "lang": "ta",
+    "status": "PASS",
+    "checks": [
+      "college-first",
+      "branch-first",
+      "exact programme name",
+      "held explanation link absent",
+      "evidence",
+      "language context",
+      "cross-page comparison",
+      "filters",
+      "empty state",
+      "held identity",
+      "dated metadata",
+      "guided return",
+      "no overflow"
+    ]
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "status": "PASS",
+    "checks": [
+      "college-first",
+      "branch-first",
+      "exact programme name",
+      "held explanation link absent",
+      "evidence",
+      "language context",
+      "cross-page comparison",
+      "filters",
+      "empty state",
+      "held identity",
+      "dated metadata",
+      "guided return",
+      "no overflow"
+    ]
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "status": "PASS",
+    "checks": [
+      "college-first",
+      "branch-first",
+      "exact programme name",
+      "held explanation link absent",
+      "evidence",
+      "language context",
+      "cross-page comparison",
+      "filters",
+      "empty state",
+      "held identity",
+      "dated metadata",
+      "guided return",
+      "no overflow"
+    ]
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "status": "PASS",
+    "checks": [
+      "college-first",
+      "branch-first",
+      "exact programme name",
+      "held explanation link absent",
+      "evidence",
+      "language context",
+      "cross-page comparison",
+      "filters",
+      "empty state",
+      "held identity",
+      "dated metadata",
+      "guided return",
+      "no overflow"
+    ]
+  }
+]

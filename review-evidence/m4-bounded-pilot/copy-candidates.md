@@ -28,7 +28,7 @@ CSE பொதுவான கணினி அமைப்புகளைப் �
 
 **Introduction**
 
-Computer Science and Engineering (CSE) is much more than just writing code; it's about understanding how computers work, how data is organized, and how to solve problems systematically. For instance, building a hospital appointment app involves understanding user needs, storing data securely, writing code, and testing it to ensure it runs smoothly.
+Computer Science and Engineering (CSE) is much more than just writing code; it's about understanding how computers work, how data is organized, and how to solve problems systematically. For instance, building a hospital appointment app involves understanding user needs, storing data, writing code, and testing whether it works correctly.
 
 **Subjects and practice**
 
@@ -66,7 +66,7 @@ Existing revised wording retained; verify data/AI distinctions and bilingual mea
 
 **Introduction**
 
-Artificial Intelligence and Data Science (AI & DS) focuses on extracting meaningful insights from data and teaching computers to recognize patterns from past examples—like analyzing years of rainfall records to build predictive weather models.
+Artificial Intelligence and Data Science (AI & DS) focuses on extracting meaningful insights from data and teaching computers to recognize patterns from past examples—for example, exploring years of rainfall records to estimate future rainfall. This is an illustrative learning activity, not a claim that such estimates will be accurate.
 
 **Subjects and practice**
 
@@ -108,7 +108,7 @@ Biomedical Engineering bridges biological sciences and engineering to understand
 
 **Subjects and practice**
 
-The reference curriculum includes human anatomy and physiology, electrical circuits, sensors, biomedical instrumentation, and medical ethics. You'll learn to apply math and physics alongside biological concepts. Practical training depends heavily on college facilities.
+The reference curriculum includes human anatomy and physiology, electrical circuits, sensors, biomedical instrumentation, and medical ethics. A sensor helps detect and measure changes. Studying this field brings together mathematics, physics and biology; check the practical learning opportunities at each college.
 
 **Paths and reflection**
 
@@ -146,7 +146,7 @@ Civil Engineering involves planning, designing, and constructing the infrastruct
 
 **Subjects and practice**
 
-Key subjects include surveying, construction materials, strength of materials, soil mechanics, structural analysis, and water supply engineering. Learning combines calculations with hands-on field measurements and drafting.
+Key subjects include surveying, construction materials, strength of materials, soil mechanics, structural analysis, and water supply engineering. Study may include field measurements and drawing practice; check the opportunities at the particular college.
 
 **Paths and reflection**
 
@@ -180,7 +180,7 @@ Explain signals in plain language in both versions. [Curriculum reference](https
 
 **Introduction**
 
-Electronics and Communication Engineering (ECE) explores how electronic circuits function and how information travels from one place to another. Think of your smartphone—how tiny internal chips work seamlessly with wireless signals to keep you connected.
+Electronics and Communication Engineering (ECE) explores how electronic circuits function and how information travels from one place to another. For example, consider how the small chips inside a smartphone work together with its signal transmission.
 
 **Subjects and practice**
 
@@ -218,7 +218,7 @@ Describe circuits, machines, power and control without suggesting EEE is only he
 
 **Introduction**
 
-Electrical and Electronics Engineering (EEE) explores electrical power systems, electrical circuits, electronic devices, motors and the methods used to control them. Think about how massive industrial motors and power grids operate seamlessly.
+Electrical and Electronics Engineering (EEE) explores electrical power systems, electrical circuits, electronic devices, motors and the methods used to control them. For example, consider how an electric motor and its control unit operate in a factory.
 
 **Subjects and practice**
 
@@ -231,3 +231,34 @@ Paths to explore include power systems, electrical machinery, automation, or hig
 These are examples to explore; opportunities depend on skills, further training, market conditions and selection.
 
 Decision: **APPROVE exact wording and source scope / FIX with specified edits / HOLD**. Record version, exact both-language text, source URL, locator and scope, factual reviewer, human Tamil reviewer, human English reviewer, owner and decision reference. Any change to wording or source scope requires fresh approval.
+
+
+## Focused evidence and correction check — 2026-10-29, candidate revision 2
+
+Preparation only. P01/P02 HOLD and P03–P06 FIX/review remain unchanged. The six Tamil sections are byte-equivalent under the normalization in the [Tamil owner record](../m4-expansion-candidates-2026-10-29/tamil-owner-review.md); all six hashes were rechecked. No renewed Tamil wording review is triggered by this revision. English changes below require fresh English-equivalence review; neither source checks nor language feedback grant factual or release approval.
+
+All six official PDFs identify Anna University R2025 Revised 1 (2026), **non-autonomous affiliated institutions**, on PDF p1. They are educational references, not a universal “TNEA curriculum”, and do not establish the curriculum of CEG/MIT, autonomous colleges or any particular listed offering. Page numbers below are one-based PDF positions. Official links remain beside each candidate above.
+
+| Candidate | Focused source check | Exact correction in revision 2 / remaining disposition |
+| --- | --- | --- |
+| P01 CS | pp3–4: programming, operating systems, data structures, algorithms, databases and networks; p6: project/internship options. | English hospital example removes added “securely” and “runs smoothly”; retains testing whether it works. Human review must distinguish the hypothetical app/debugging exercise from a mandated activity and confirm the no-prior-coding wording is orientation, not an admission rule. |
+| P02 AD | pp3–4: data analysis, probability/statistics, data privacy, databases and machine learning. | English weather example now matches rainfall estimation and explicitly labels it illustrative, with no accuracy promise. Owner-reviewed Tamil unchanged; bilingual reviewer must decide whether this added English caution needs a Tamil counterpart before release. |
+| P03 BM | pp3–4: anatomy/physiology, circuits, sensors, instrumentation and medical ethics; p2: broader biomedical systems outcomes. | Retains the previously broadened introduction; English now includes the sensor explanation already present in Tamil, and a bounded practical-opportunities prompt. No employment or clinical qualification is established by curriculum titles. |
+| P04 CE | pp3–4: construction, surveying/drawing, soil mechanics, water supply and structural analysis. | English practical-work sentence now uses “may” and matches Tamil field-measurement/drawing examples. Introductions already share buildings, bridges, roads and water systems. |
+| P05 EC | pp3–4: circuits, digital systems, signals, microcontrollers and communication. | Retains the plain signal definition in both languages; removes “seamlessly” from the English phone example. The informal signal explanation still requires factual review. |
+| P06 EE | pp3–5: circuits, electronics, transmission, control, transformers, AC machines and power analysis. | English example now matches the Tamil factory motor/control unit, removing “massive” and “seamlessly”. The introduction already includes circuits/electronics; human reviewers should confirm the later power emphasis is balanced. |
+
+Source-check limits: targeted curriculum-table checks, not exhaustive course-by-course or career verification. Illustrative activities, possible work areas, entry expectations, branch comparisons and the biomedical qualification boundary still require the stated factual reviewer disposition. Curriculum evidence does not establish employment outcomes, facilities, present offerings or admissions rules. No candidate has been placed in the approved runtime registry.
+
+**Consolidated decisions still needed:** (1) factual reviewer disposition on each P01–P06 candidate and the above source scope/limits; (2) human English-equivalence review of revision 2 against the exact owner-reviewed Tamil, including P02's additional caution; (3) explicit owner decision on each profile's exact bilingual text/version/evidence and intended release scope. Preserve existing mapping holds: even an approved explanation may be associated only through the already approved exact L01–L09 links, unless a separate mapping decision is made. Presentation acceptance and student-release/validation decisions remain separate.
+
+Targeted visual check: PDF page 4 of all six documents inspected; text checks covered the page ranges above. Retrieved PDF fingerprints (SHA-256):
+
+| Candidate | SHA-256 |
+| --- | --- |
+| CS | `0c7e0a671b6bd36065a4b1736ec6695bb817ddcc4af92ff44d94b12494affec7` |
+| AD | `9b090aba842c25f5dfc89b866cc57aa2c21ccbf723e8cf1d00d91aae0c73b2a6` |
+| BM | `1e07ddb68e511de2abccf7b18a3e34b55c92e337fcd8efc7d64c29c7754927e8` |
+| CE | `4c73da6687227c09d822f67e5cad5b967e7717767fa95906cf2fb6a45eda7496` |
+| EC | `975d096ceb8033eb47258a9eef299dafdfc7790f3562a209baf4025abe3cb78c` |
+| EE | `7272e330c01f771fa693c29316a0868ced6028671efbab3dcbc6578bdc168b3c` |

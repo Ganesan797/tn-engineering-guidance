@@ -1,5 +1,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
+import { APPROVED_BRANCH_COPY, isReleasedBranchCopy } from "./branch-copy.ts";
+import { GOVERNED_PILOT } from "./governed-pilot.ts";
 
 // These bytes are the owner-approved review artifact and its immutable inputs.
 const expected = Object.freeze({
@@ -52,7 +54,7 @@ function parseCsv(text) {
 }
 
 /** Load only the exact approved bytes. A failed check closes the owner preview. */
-export function loadApprovedDirectory(read = name => readFileSync(new URL(name, root))) {
+export function loadApprovedDirectory(read = name => readFileSync(new URL(name, root)), profiles = APPROVED_BRANCH_COPY) {
   const data = {};
   for (const [name, hash] of Object.entries(expected)) {
     const bytes = read(name);
@@ -77,7 +79,7 @@ export function loadApprovedDirectory(read = name => readFileSync(new URL(name, 
   }
   const getField = (code, field) => {
     const key = `F|${code}|${field}`, f = fields.get(key);
-    return allowed.has(key) && !held.has(key) && f?.status === "OFFICIAL_SUPPORTED" ? f.value : null;
+    return allowed.has(key) && !held.has(key) && f?.status === "OFFICIAL_SUPPORTED" && f.source_year === "2026" ? f.value : null;
   };
   const items = [], seen = new Set(); let excluded = 0;
   for (const o of data["offering-candidates.csv"]) {
@@ -94,8 +96,33 @@ export function loadApprovedDirectory(read = name => readFileSync(new URL(name, 
     for (const [field, value] of [["district",district],["institution_type",type]]) {
       if (value) { const f=fields.get(`F|${o.college_code}|${field}`); fieldEvidence.push({field,url:f.source_url,year:f.source_year,printedPage:f.printed_page,pdfPage:f.pdf_page}); }
     }
+    // Literal source-field approval plus the exact accepted identity, never a code-only join.
+    const metadata = [];
+    if (safeIdentity) for (const field of ["address", "taluk", "pincode", "website", "phone_fax", "email", "autonomous_status", "minority_status"]) {
+      // Specific unresolved decisions outrank the general source-record acceptance.
+      if (o.college_code === "4" && ["autonomous_status", "minority_status"].includes(field)) continue;
+      // Existing pilot source strings disagree on these taluks; do not resolve from booklet alone.
+      if (["1303", "4967"].includes(o.college_code) && field === "taluk") continue;
+      const value = getField(o.college_code, field), f = fields.get(`F|${o.college_code}|${field}`);
+      if (value && f.source_url === "https://static.tneaonline.org/docs/Information_about_colleges_2026.pdf" && /^[1-9]\d*$/.test(f.pdf_page)) {
+        metadata.push({field, value, year:f.source_year, url:f.source_url, printedPage:f.printed_page, pdfPage:f.pdf_page,
+          recordId:`F|${o.college_code}|${field}`, identityDecision:"docs/planning/m4_b_owner_decisions_2026-10-28.md",
+          approval:"experiments/m4-governance-census/directory-candidates-2026/owner-batch-decision-2026-10-29.md"});
+      }
+    }
+    // Reuse only L01-L09 exact offering associations, independent of wording release.
+    const mapping = GOVERNED_PILOT.pairs.find(p => p.offering.college === o.college_code && p.offering.programme === o.programme_code
+      && p.offering.name === o.programme_name_printed && p.offering.source.year === Number(o.source_year)
+      && p.offering.source.url === o.source_url && p.offering.source.stage === o.stage && p.offering.source.stream === o.stream
+      && p.offering.source.pdf_page === Number(o.pdf_page) && p.offering.source.printed_page === Number(o.printed_page)
+      && p.linkDecision.disposition === "APPROVED" && p.linkDecision.reference
+      && p.linkDecision.exact.college === o.college_code && p.linkDecision.exact.programme === o.programme_code
+      && p.linkDecision.exact.profileId === p.profileId);
+    const profileId = mapping?.profileId ?? null;
+    const matches = profileId ? profiles.filter(p => p.id === profileId) : [];
+    const profile = matches.length === 1 && isReleasedBranchCopy(matches[0]) ? structuredClone(matches[0]) : null;
     items.push({key, college:o.college_code, collegeName:safeIdentity ?? name, programme:o.programme_code, programmeName:o.programme_name_printed,
-      district, type, fieldEvidence, source:{document:"TNEA 2026 General Academic seat matrix before special reservation counselling",url:matrixUrl,year:2026,stream:o.stream,stage:o.stage,printed_page:Number(o.printed_page),pdf_page:Number(o.pdf_page),location_status:"RECORDED"}, profileId:null, profile:null});
+      district, type, fieldEvidence, metadata, source:{document:"TNEA 2026 General Academic seat matrix before special reservation counselling",url:matrixUrl,year:2026,stream:o.stream,stage:o.stage,printed_page:Number(o.printed_page),pdf_page:Number(o.pdf_page),location_status:"RECORDED"}, profileId, profile});
   }
   return {classification:"GOVERNED_OWNER_REVIEW",coverage:"BOUNDED_PARTIAL",items,excluded};
 }

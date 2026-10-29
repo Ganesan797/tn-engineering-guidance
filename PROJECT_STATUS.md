@@ -6,6 +6,8 @@
 
 **Last reviewed:** 2026-10-29
 
+The current task preserves the presentation revisions and prepares one coherent owner-preview path. **PRESENTATION_REVIEW = PENDING; M4_ACCEPTED = NO.** Eligible college details now include 52 additional dated source fields across the seven accepted identities, with all other enrichment and specific attribute conflicts held. The existing nine exact L01–L09 associations are connected to the independent copy gate; the approved-copy registry remains empty. All six owner-reviewed Tamil fingerprints are unchanged; focused English corrections and source checks are in [the existing copy review](review-evidence/m4-bounded-pilot/copy-candidates.md). Every internal page returns to the existing guided journey without exposing the preview in normal navigation or changing personal checks. Validation: 309/309 offline tests, strict typecheck and Tamil/English 360px/390px path checks PASS. Commit/push of this technically prepared review candidate is authorized; no merge, deployment, student access or acceptance is authorized. See [verification and screenshots](review-evidence/m4-bounded-pilot/README.md).
+
 Ganesan reported the exact six existing Tamil candidates as good enough: [TAMIL_REVIEW = PASS_OWNER_REPORTED](review-evidence/m4-expansion-candidates-2026-10-29/tamil-owner-review.md). This does not approve facts, English equivalence, offerings, mappings, student display or validation. The entries below are historical snapshots where they conflict with this current paragraph.
 
 ## Historical synthetic M4-A2/A3 implementation — 2026-10-28

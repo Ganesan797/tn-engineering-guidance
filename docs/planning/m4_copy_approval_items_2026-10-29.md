@@ -2,6 +2,8 @@
 
 NOT APPROVED FOR STUDENT DISPLAY. This repository document is the owner preview; it has no public route. `owner=true` / `preview=true` query parameters grant no access. No real wording is loaded by the fixture journey.
 
+**Current candidate:** [six candidates, revision 2 and focused evidence checks](../../review-evidence/m4-bounded-pilot/copy-candidates.md#focused-evidence-and-correction-check--2026-10-29-candidate-revision-2). This supersedes the earlier wording pointers below for current review, preserving their decision history. Six exact Tamil sections retain PASS_OWNER_REPORTED; factual, English-equivalence and exact owner release decisions remain pending. No real copy is loaded.
+
 ## Decisions requested
 
 The authoritative candidate text and curriculum links remain in [P01–P06 exact candidate copy](../../experiments/m4-governance-census/pilot-review.md#exact-candidate-copy-for-p01p06), with source locators in that worksheet's profile table. The [recorded owner decision](m4_b_owner_decisions_2026-10-28.md) takes precedence over the worksheet's earlier proposed decisions.
