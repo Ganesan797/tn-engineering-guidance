@@ -1,3 +1,4 @@
+import { COLLEGE_TYPES, collegeType, BRANCH_READING } from "../../src/m4/exploration-context.ts";
 import { selectBranchCopy, isReleasedBranchCopy, type ReviewedBranchCopy } from "../../src/m4/branch-copy.ts";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -22,17 +23,18 @@ test("branch-first journey walks from family to branch, matching colleges and ev
   assert.match(family, /Computer Science and Engineering/);
   assert.doesNotMatch(family, /Sample College 1/);
   const branch = follow(family, "Computer Science and Engineering");
-  assert.match(branch, /Sample subjects: programming/);
-  assert.match(branch, /Sample practice:/);
+  assert.match(branch, /You could start with programming/);
+  assert.match(branch, /Write three book titles on paper/);
   const choices = follow(branch, "See sample colleges for this branch");
   assert.match(choices, /Sample College 1/);
-  const detail = follow(choices, "Sample College 1");
+  const collegePage = follow(choices, "Sample College 1");
+  const detail = follow(collegePage, "See listing evidence and next step");
   assert.match(detail, /Computer Science and Engineering/);
   assert.match(detail, /<details>/);
   assert.match(detail, /2026/);
   assert.match(detail, /not an official source/);
   assert.match(detail, /District: not known/);
-  assert.match(follow(detail, "Change sample college"), /Choose a sample college/);
+  assert.match(follow(follow(detail, "Back to this college's programmes"), "Change college"), /Choose a sample college/);
   assert.match(follow(branch, "Change branch"), /Choose a branch/);
 });
 
@@ -40,7 +42,7 @@ test("college-first journey, language round trip and change navigation retain se
   const colleges = follow(page(), "Browse by college");
   const college = follow(colleges, "Sample College 3");
   assert.match(college, /Artificial Intelligence and Data Science/);
-  const detail = follow(college, "Artificial Intelligence and Data Science");
+  const detail = follow(college, "See listing evidence and next step");
   assert.match(detail, /Sample College 3/);
   assert.match(detail, /District: not known/);
   assert.doesNotMatch(detail, /Fixture district A|Fixture district B/);
@@ -129,5 +131,52 @@ test("both languages exclude held identities on forged routes and preserve confl
    assert.doesNotMatch(html,/Fixture district A|Fixture district B/);
    assert.ok(html.includes(lang === "ta" ? "தெரியவில்லை" : "not known"));
   }
+ }
+});
+
+test("grouped college browsing shows courses and retains type through language and back navigation", () => {
+ const all=page("lang=en&view=colleges");
+ for(const text of ["Government colleges", "Government-aided colleges", "Private / self-financing colleges", "Type not yet confirmed", "Courses shown in this sample"]) assert.ok(all.includes(text),text);
+ const privatePage=follow(all,"Private / self-financing colleges");
+ assert.match(privatePage,/Sample College 3/);
+ assert.doesNotMatch(privatePage,/Sample College 1<|Sample College 2</);
+ const school=follow(privatePage,"Sample College 3");
+ assert.match(school,/Artificial Intelligence and Data Science/);
+ assert.match(school,/Computer Science and Engineering/);
+ const explanation=follow(school,"What would I learn in this course?");
+ assert.match(explanation,/fictional library/);
+ assert.match(explanation,/Read more: official curriculum/);
+ const returned=follow(explanation,"Back to this college's programmes");
+ const detail=follow(returned,"See listing evidence and next step");
+ const tamil=follow(detail,"தமிழ்");
+ assert.ok(tamil.includes("type=private"));
+ assert.ok(tamil.includes("தனியார் / சுயநிதிக் கல்லூரிகள்"));
+ const back=follow(follow(tamil,"English"),"Back to this college's programmes");
+ assert.ok(follow(back,"Change college").includes("type=private"));
+ assert.doesNotMatch(all,/Synthetic programme BY|Synthetic programme XC|Synthetic programme AE/);
+});
+
+test("management categories never infer missing, conflicting, pending or unrecognised classifications", () => {
+ for (const type of COLLEGE_TYPES.filter(t=>t.value)) assert.equal(collegeType({management:{status:"APPROVED",value:type.value,source:REVIEW_FIXTURES.offerings[0].source!,review_reference:"fixture"}}).id,type.id);
+ const base=structuredClone(REVIEW_FIXTURES);
+ for(const management of [{status:"UNKNOWN",value:null},{status:"NEEDS_REVIEW",value:null},{status:"SOURCE_CONFLICT",value:null,candidates:[]},{status:"APPROVED",value:"UNRECOGNISED",source:base.offerings[0].source!,review_reference:"fixture"}]) {
+  assert.equal(collegeType({management} as never).id,"unknown");
+ }
+ const unapproved={...base.colleges[0],management:{status:"APPROVED" as const,value:"GOVERNMENT",source:base.offerings[0].source!,review_reference:""}};
+ const html=renderM4Exploration(new URLSearchParams("lang=en&view=colleges&type=unknown"),{...base,colleges:[unapproved]});
+ assert.match(html,/Sample College 1/);
+ assert.match(html,/Type not yet confirmed/);
+});
+
+test("all nine bilingual conversations contain scenarios, learning context, an exercise and scoped official reading", () => {
+ for(const profile of REVIEW_FIXTURES.profiles) for(const lang of ["ta","en"] as const) {
+  const html=page(`view=branch&branch=${profile.id}&lang=${lang}`);
+  const lines=profile.copy[lang].split("\n");
+  assert.equal(lines.length,3);
+  assert.ok(lines.every(line=>line.length>100),profile.id+lang);
+  assert.ok(html.includes(BRANCH_READING[profile.id].url));
+  assert.ok(html.includes(lang==="en"?"non-autonomous affiliated institutions":"தன்னாட்சி பெறாத"));
+  assert.ok(html.includes(lang==="en"?"Illustrative copy only":"கற்பனை விளக்கம் மட்டும்"));
+  assert.doesNotMatch(html,/Reviewed educational explanation/);
  }
 });

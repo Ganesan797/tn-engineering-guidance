@@ -1,0 +1,410 @@
+[
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=colleges",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=colleges&type=government",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=colleges&type=aided",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=colleges&type=private",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=colleges&type=unknown",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=college&college=fixture-1",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=branch&branch=CS",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=branch&branch=AD",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=branch&branch=EC",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=branch&branch=BM",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=branch&branch=EE",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=branch&branch=CE",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=branch&branch=SYN-MECH",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=branch&branch=SYN-CHEM",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=branch&branch=SYN-ENV",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "query": "view=detail&college=fixture-3&programme=AD&type=private&from=college",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "action": "type → college → explanation → back → evidence → language switch",
+    "passed": true
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=colleges",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=colleges&type=government",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=colleges&type=aided",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=colleges&type=private",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=colleges&type=unknown",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=college&college=fixture-1",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=branch&branch=CS",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=branch&branch=AD",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=branch&branch=EC",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=branch&branch=BM",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=branch&branch=EE",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=branch&branch=CE",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=branch&branch=SYN-MECH",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=branch&branch=SYN-CHEM",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=branch&branch=SYN-ENV",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "query": "view=detail&college=fixture-3&programme=AD&type=private&from=college",
+    "overflow": false
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "action": "type → college → explanation → back → evidence → language switch",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=colleges",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=colleges&type=government",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=colleges&type=aided",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=colleges&type=private",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=colleges&type=unknown",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=college&college=fixture-1",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=branch&branch=CS",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=branch&branch=AD",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=branch&branch=EC",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=branch&branch=BM",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=branch&branch=EE",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=branch&branch=CE",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=branch&branch=SYN-MECH",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=branch&branch=SYN-CHEM",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=branch&branch=SYN-ENV",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "query": "view=detail&college=fixture-3&programme=AD&type=private&from=college",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "action": "type → college → explanation → back → evidence → language switch",
+    "passed": true
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=colleges",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=colleges&type=government",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=colleges&type=aided",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=colleges&type=private",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=colleges&type=unknown",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=college&college=fixture-1",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=branch&branch=CS",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=branch&branch=AD",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=branch&branch=EC",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=branch&branch=BM",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=branch&branch=EE",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=branch&branch=CE",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=branch&branch=SYN-MECH",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=branch&branch=SYN-CHEM",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=branch&branch=SYN-ENV",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "query": "view=detail&college=fixture-3&programme=AD&type=private&from=college",
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "action": "type → college → explanation → back → evidence → language switch",
+    "passed": true
+  }
+]
