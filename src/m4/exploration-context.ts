@@ -24,5 +24,5 @@ export const BRANCH_READING: Record<string, { title: string; url: string; pages:
   CE: { title: "B.E. Civil Engineering", url: revision + "Civil/B.E.%20Civil%20Engineering%20.pdf", pages: "3–6", revised: true },
   "SYN-MECH": { title: "B.E. Mechanical Engineering", url: revision + "Mech/B.E.%20Mechanical%20Engineering.pdf", pages: "3–6", revised: true },
   "SYN-CHEM": { title: "B.Tech. Chemical Engineering", url: revision + "Tech/B.Tech%20Chemical.pdf", pages: "3–6", revised: true },
-  "SYN-ENV": { title: "B.E. Environmental Engineering", url: "https://cac.annauniv.edu/aidetails/afug_2025_fu/Civil/BE_Environmental%20Engineering.pdf", pages: "3–7", revised: false },
+  "SYN-ENV": { title: "B.E. Environmental Engineering", url: revision + "Civil/BE_Environmental%20Engineering.pdf", pages: "3–7", revised: true },
 };

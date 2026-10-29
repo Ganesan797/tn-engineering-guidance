@@ -144,7 +144,7 @@ test("grouped college browsing shows courses and retains type through language a
  assert.match(school,/Artificial Intelligence and Data Science/);
  assert.match(school,/Computer Science and Engineering/);
  const explanation=follow(school,"What would I learn in this course?");
- assert.match(explanation,/fictional library/);
+ assert.match(explanation,/machine learning/);
  assert.match(explanation,/Read more: official curriculum/);
  const returned=follow(explanation,"Back to this college's programmes");
  const detail=follow(returned,"See listing evidence and next step");
@@ -197,4 +197,19 @@ test("CSE gives bilingual decision support while staying inside the fixture and 
   const held={...input.profiles[0],status:"HOLD" as const};
   const output=renderM4Exploration(new URLSearchParams("view=branch&branch=CS&lang=en"),{...input,profiles:[held,...input.profiles.slice(1)]});
   assert.doesNotMatch(output,/software development, software testing/);
+});
+
+test("nine branches provide bilingual course, study, practice and next-step explanations with the scoped revised reference", () => {
+ const topics={CS:["algorithms","வழிமுறைகள்"],AD:["machine learning","இயந்திரக் கற்றல்"],EC:["microcontrollers","மைக்ரோ கண்ட்ரோலர்கள்"],BM:["biomedical instruments","உயிர்மருத்துவக் கருவிகள்"],EE:["transformers","மின்மாற்றிகள்"],CE:["surveying","நில அளவீடு"],"SYN-MECH":["thermodynamics","வெப்பவியல்"],"SYN-CHEM":["heat transfer","வெப்பப் பரிமாற்றம்"],"SYN-ENV":["wastewater","கழிவுநீர்"]};
+ for(const [id,terms] of Object.entries(topics)) for(const [lang,index] of [["en",0],["ta",1]] as const) {
+   const html=page(`view=branch&branch=${id}&lang=${lang}`);
+   assert.ok(html.toLowerCase().includes(terms[index].toLowerCase()),id+lang);
+   for(const heading of lang==="en"?["What is this course about?","What might you study and practise?","What could come next, and might you enjoy it?"]:["இந்தப் படிப்பு எதைப் பற்றியது?","என்ன படிப்பீர்கள்? எப்படிப் பயிற்சி செய்வீர்கள்?","படிப்புக்குப் பின் என்ன? இது உங்களுக்குப் பிடிக்குமா?"]) assert.ok(html.includes(heading),id+heading);
+   assert.ok(html.includes(BRANCH_READING[id].url),id+" source");
+   assert.ok(html.includes(lang==="en"?"non-autonomous affiliated institutions":"தன்னாட்சி பெறாத"));
+   assert.ok(html.includes(lang==="en"?"Illustrative copy only":"கற்பனை விளக்கம் மட்டும்"));
+   assert.match(html,/branch=/);
+ }
+ assert.equal(BRANCH_READING["SYN-ENV"].revised,true);
+ assert.ok(BRANCH_READING["SYN-ENV"].url.includes("afug_2025_fu%20-%20revision"));
 });

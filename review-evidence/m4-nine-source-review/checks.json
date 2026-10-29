@@ -1,0 +1,290 @@
+[
+  {
+    "width": 360,
+    "lang": "ta",
+    "branch": "CS",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/CSIE/BE%20CSE.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "branch": "AD",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/CSIE/B.Tech.%20AI%20and%20DS.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "branch": "EC",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/ECE/B.E%20ECE.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "branch": "BM",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/ECE/B.E.%20Biomedical.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "branch": "EE",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/EEE/B.E.%20EEE.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "branch": "CE",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Civil/B.E.%20Civil%20Engineering%20.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "branch": "SYN-MECH",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Mech/B.E.%20Mechanical%20Engineering.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "branch": "SYN-CHEM",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Tech/B.Tech%20Chemical.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "ta",
+    "branch": "SYN-ENV",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Civil/BE_Environmental%20Engineering.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "branch": "CS",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/CSIE/BE%20CSE.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "branch": "AD",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/CSIE/B.Tech.%20AI%20and%20DS.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "branch": "EC",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/ECE/B.E%20ECE.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "branch": "BM",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/ECE/B.E.%20Biomedical.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "branch": "EE",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/EEE/B.E.%20EEE.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "branch": "CE",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Civil/B.E.%20Civil%20Engineering%20.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "branch": "SYN-MECH",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Mech/B.E.%20Mechanical%20Engineering.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "branch": "SYN-CHEM",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Tech/B.Tech%20Chemical.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 360,
+    "lang": "en",
+    "branch": "SYN-ENV",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Civil/BE_Environmental%20Engineering.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "branch": "CS",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/CSIE/BE%20CSE.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "branch": "AD",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/CSIE/B.Tech.%20AI%20and%20DS.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "branch": "EC",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/ECE/B.E%20ECE.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "branch": "BM",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/ECE/B.E.%20Biomedical.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "branch": "EE",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/EEE/B.E.%20EEE.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "branch": "CE",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Civil/B.E.%20Civil%20Engineering%20.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "branch": "SYN-MECH",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Mech/B.E.%20Mechanical%20Engineering.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "branch": "SYN-CHEM",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Tech/B.Tech%20Chemical.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "ta",
+    "branch": "SYN-ENV",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Civil/BE_Environmental%20Engineering.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "branch": "CS",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/CSIE/BE%20CSE.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "branch": "AD",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/CSIE/B.Tech.%20AI%20and%20DS.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "branch": "EC",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/ECE/B.E%20ECE.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "branch": "BM",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/ECE/B.E.%20Biomedical.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "branch": "EE",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/EEE/B.E.%20EEE.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "branch": "CE",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Civil/B.E.%20Civil%20Engineering%20.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "branch": "SYN-MECH",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Mech/B.E.%20Mechanical%20Engineering.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "branch": "SYN-CHEM",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Tech/B.Tech%20Chemical.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  },
+  {
+    "width": 390,
+    "lang": "en",
+    "branch": "SYN-ENV",
+    "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/Civil/BE_Environmental%20Engineering.pdf",
+    "overflow": false,
+    "languageAndCollegeNavigation": true
+  }
+]
