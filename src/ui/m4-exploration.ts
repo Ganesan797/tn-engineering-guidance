@@ -1,16 +1,20 @@
 import { buildDiscoveryFixtureView, type DiscoveryFixtureInput } from "../m4/discovery-view.ts";
+import { selectBranchCopy } from "../m4/branch-copy.ts";
 import { REVIEW_FIXTURES } from "../m4/review-fixtures.ts";
 
 const escape = (s: string) => s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 const families = [
   { id: "computing", ta: "கணினித் துறை", en: "Computing", hintTa: "மென்பொருள் மற்றும் தரவு பற்றிப் பாருங்கள்.", hintEn: "Explore software and data.", profiles: ["CS", "AD"] },
   { id: "electrical", ta: "மின்சாரம் மற்றும் மின்னணு", en: "Electrical and electronics", hintTa: "மின்சாரம், சுற்றுகள் மற்றும் கருவிகளைப் பாருங்கள்.", hintEn: "Explore electricity, circuits and devices.", profiles: ["EC", "BM", "EE"] },
-  { id: "mechanical", ta: "இயந்திரம் மற்றும் உற்பத்தி", en: "Mechanical and production", hintTa: "இயந்திரங்கள் மற்றும் உற்பத்தியைப் பாருங்கள்.", hintEn: "Explore machines and manufacturing.", profiles: [] },
+  { id: "mechanical", ta: "இயந்திரம் மற்றும் உற்பத்தி", en: "Mechanical and production", hintTa: "இயந்திரங்கள் மற்றும் உற்பத்தியைப் பாருங்கள்.", hintEn: "Explore machines and manufacturing.", profiles: ["SYN-MECH"] },
   { id: "civil", ta: "கட்டிட மற்றும் கட்டமைப்புத் துறை", en: "Civil and built environment", hintTa: "கட்டிடங்கள் மற்றும் கட்டமைப்புகளைப் பாருங்கள்.", hintEn: "Explore buildings and infrastructure.", profiles: ["CE"] },
-  { id: "chemical", ta: "வேதியியல், உயிரியல் மற்றும் உணவு", en: "Chemical, biological and food-related fields", hintTa: "பொருட்கள், உயிரியல் மற்றும் உணவைப் பாருங்கள்.", hintEn: "Explore materials, biology and food.", profiles: [] },
-  { id: "environment", ta: "சுற்றுச்சூழல், ஆற்றல், வேளாண்மை, வான்வெளி மற்றும் கடல்", en: "Environment, energy, agriculture, air and sea", hintTa: "இந்தச் சிறப்புத் துறைகளையும் ஆராயலாம்.", hintEn: "Explore these specialist fields too.", profiles: [] },
+  { id: "chemical", ta: "வேதியியல், உயிரியல் மற்றும் உணவு", en: "Chemical, biological and food-related fields", hintTa: "பொருட்கள், உயிரியல் மற்றும் உணவைப் பாருங்கள்.", hintEn: "Explore materials, biology and food.", profiles: ["SYN-CHEM"] },
+  { id: "environment", ta: "சுற்றுச்சூழல், ஆற்றல், வேளாண்மை, வான்வெளி மற்றும் கடல்", en: "Environment, energy, agriculture, air and sea", hintTa: "இந்தச் சிறப்புத் துறைகளையும் ஆராயலாம்.", hintEn: "Explore these specialist fields too.", profiles: ["SYN-ENV"] },
 ] as const;
 const names: Record<string, readonly [string, string]> = {
+  "SYN-MECH": ["இயந்திரம் மற்றும் உற்பத்தி — கற்பனை எடுத்துக்காட்டு", "Mechanical and manufacturing — invented example"],
+  "SYN-CHEM": ["வேதிச் செயல்முறை — கற்பனை எடுத்துக்காட்டு", "Chemical processes — invented example"],
+  "SYN-ENV": ["சுற்றுச்சூழல் மற்றும் நீர் — கற்பனை எடுத்துக்காட்டு", "Environment and water — invented example"],
   CS: ["கணினி அறிவியல் மற்றும் பொறியியல்", "Computer Science and Engineering"],
   AD: ["செயற்கை நுண்ணறிவு மற்றும் தரவு அறிவியல்", "Artificial Intelligence and Data Science"],
   EC: ["மின்னணுவியல் மற்றும் தகவல் தொடர்பு பொறியியல்", "Electronics and Communication Engineering"],
@@ -51,8 +55,9 @@ export function renderM4Exploration(params: URLSearchParams, input: DiscoveryFix
     body = `<p class="position">${t("பாடப்பிரிவைத் தேர்ந்தெடுங்கள்", "Choose a branch")}</p><h1>${family ? escape(t(family.ta, family.en)) : t("எல்லா மாதிரிப் பாடப்பிரிவுகளும்", "All sample branches")}</h1><p>${t("முதலில் என்ன படிக்கலாம் என்று தெரிந்துகொள்ளுங்கள். இவை விளக்கத்திற்கான மாதிரிகள் மட்டுமே.", "First see what the branch could involve. These examples are for demonstration only.")}</p>${available.length ? `<div class="grid">${available.map(id => `<a class="choice" href="${escape(url({ view: "branch", branch: id, ...familyParam }))}"><strong>${escape(branchLabel(id))}</strong><span>${t("மாதிரி விளக்கத்தைப் பார்க்க", "See the sample explanation")}</span></a>`).join("")}</div>` : empty}<div class="actions">${home()}${link({ view: "branches" }, t("எல்லாப் பாடப்பிரிவுகளையும் காட்டு", "Show all branches"))}${link({ view: "colleges" }, t("கல்லூரி வழியாகப் பார்க்க", "Browse by college"))}</div>`;
   } else if (page === "branch") {
     const item = items.find(i => i.profile.id === branch);
-    const lines = item?.profile.content?.copy[lang].split("\n") ?? [];
-    body = item && lines.length === 3 ? `<p class="position">${t("நீங்கள் தேர்ந்தெடுத்த பாடப்பிரிவு", "Your selected branch")}</p><h1>${escape(branchLabel(branch))}</h1><section class="card"><h2>${t("இது என்ன?", "What is this?")}</h2><p>${escape(lines[0])}</p><h2>${t("என்ன படிக்கலாம்?", "What might you study?")}</h2><p>${escape(lines[1])}</p><h2>${t("செய்து பார்க்கலாம்", "Try exploring")}</h2><p>${escape(lines[2])}</p></section><div class="actions">${link({ view: "colleges", branch, ...familyParam }, t("இந்தப் பாடப்பிரிவு உள்ள மாதிரி கல்லூரிகளைப் பார்க்க", "See sample colleges for this branch"), true)}${branchBack()}${home()}</div>` : `${empty}<div class="actions">${home()}</div>`;
+    const selectedCopy = item?.profile.content ? selectBranchCopy(branch, item.profile.content.copy) : null;
+    const lines = selectedCopy?.copy[lang].split("\n") ?? [];
+    body = item && lines.length === 3 ? `<p class="position">${t("நீங்கள் தேர்ந்தெடுத்த பாடப்பிரிவு", "Your selected branch")}</p><h1>${escape(branchLabel(branch))}</h1><section class="card"><h2>${t("இது என்ன?", "What is this?")}</h2><p>${escape(lines[0])}</p><h2>${t("என்ன படிக்கலாம்?", "What might you study?")}</h2><p>${escape(lines[1])}</p><h2>${t("செய்து பார்க்கலாம்", "Try exploring")}</h2><p>${escape(lines[2])}</p>${selectedCopy?.kind === "REVIEWED_EDUCATIONAL" ? `<p>${t("மதிப்பாய்வு செய்யப்பட்ட கல்வி விளக்கம்; இந்த மாதிரிக் கல்லூரியின் பாடத்திட்டத்தை உறுதிப்படுத்தாது.", "Reviewed educational explanation; does not establish this sample college’s curriculum.")}</p><p>${escape(selectedCopy.evidence.scope)} · ${escape(selectedCopy.evidence.locator)}</p><a href="${escape(selectedCopy.evidence.url)}">${t("கல்வி விளக்கத்தின் ஆதாரம்", "Educational explanation source")}</a>` : `<p>${t("கற்பனை விளக்கம் மட்டும்; உண்மையான பாடத்திட்டம் மதிப்பாய்வுக்குக் காத்திருக்கிறது.", "Illustrative copy only; real curriculum wording awaits review.")}</p>`}</section><div class="actions">${link({ view: "colleges", branch, ...familyParam }, t("இந்தப் பாடப்பிரிவு உள்ள மாதிரி கல்லூரிகளைப் பார்க்க", "See sample colleges for this branch"), true)}${branchBack()}${home()}</div>` : `${empty}<div class="actions">${home()}</div>`;
   } else if (page === "colleges") {
     const list = branch ? items.filter(i => i.profile.id === branch) : items;
     const choices = [...new Map(list.map(i => [i.college.code, i.college])).values()];

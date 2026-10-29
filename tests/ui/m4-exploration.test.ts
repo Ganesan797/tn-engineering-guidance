@@ -1,3 +1,4 @@
+import { selectBranchCopy, isReleasedBranchCopy, type ReviewedBranchCopy } from "../../src/m4/branch-copy.ts";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { renderM4Exploration } from "../../src/ui/m4-exploration.ts";
@@ -53,10 +54,11 @@ test("college-first journey, language round trip and change navigation retain se
   assert.match(follow(college, "Change college"), /Choose a sample college/);
 });
 
-test("not sure, show all and empty families retain a useful next step", () => {
+test("not sure, show all and every family retain a useful next step", () => {
   for (const label of ["Not sure", "Show all branches"]) assert.match(follow(page(), label), /All sample branches/);
   const empty = follow(page(), "Mechanical and production");
-  assert.match(empty, /no example to show/);
+  assert.match(empty, /Mechanical and manufacturing/);
+  assert.doesNotMatch(empty, /no example to show/);
   assert.match(follow(empty, "Show all branches"), /Computer Science and Engineering/);
 });
 
@@ -78,4 +80,54 @@ test("held and pending content stay out, synthetic boundary and escaping hold", 
   const safe = renderM4Exploration(new URLSearchParams("view=colleges&lang=en"), { ...input, colleges: [hostile] });
   assert.doesNotMatch(safe, /<script>alert/);
   assert.match(safe, /&lt;script&gt;/);
+});
+
+ test("all six families traverse bilingual explanations, college programmes, evidence and next action", () => {
+  const examples = [["computing","CS","1"],["electrical","EC","4"],["mechanical","SYN-MECH","8"],["civil","CE","6"],["chemical","SYN-CHEM","9"],["environment","SYN-ENV","10"]];
+  for (const lang of ["ta", "en"]) for (const [family,branch,college] of examples) {
+    const familyPage = page(`lang=${lang}&view=branches&family=${family}`);
+    assert.ok(familyPage.includes(`branch=${branch}`));
+    const explanation = page(`lang=${lang}&view=branch&family=${family}&branch=${branch}`);
+    assert.match(explanation, /<h2>/);
+    assert.doesNotMatch(explanation, /no example to show/);
+    const choices = page(`lang=${lang}&view=colleges&branch=${branch}`);
+    assert.ok(choices.includes(`college=fixture-${college}`));
+    const detail = page(`lang=${lang}&view=detail&college=fixture-${college}&programme=${branch}`);
+    assert.match(detail, /<details>/);
+    assert.match(detail, /m4.example.test/);
+    assert.ok(detail.includes(lang === "ta" ? "அடுத்து என்ன செய்யலாம்" : "What can you do next"));
+    const collegePage = page(`lang=${lang}&view=college&college=fixture-${college}`);
+    assert.ok(collegePage.includes(`programme=${branch}`));
+  }
+ });
+
+test("real educational copy needs exact version, owner, factual and both language approval independently", () => {
+  const copy = {ta:"அறிமுகம்\nபாடங்கள்\nபயிற்சி",en:"Introduction\nSubjects\nPractice"};
+  const candidate: ReviewedBranchCopy = {id:"CS",version:"review-1",disposition:"HOLD",copy,
+    evidence:{url:"https://curriculum.example.org/cs",locator:"PDF pp3–4",scope:"Named institution and regulation only"},approval:null};
+  assert.equal(selectBranchCopy("CS",copy).kind,"SYNTHETIC_ILLUSTRATION");
+  for (const disposition of ["HOLD","FIX"] as const) assert.equal(selectBranchCopy("CS",copy,[{...candidate,disposition}]).kind,"SYNTHETIC_ILLUSTRATION");
+  const released: ReviewedBranchCopy = {...candidate,disposition:"APPROVED",approval:{version:"review-1",approved_copy:copy,owner:"test owner",factual:"test factual",ta:"test Tamil",en:"test English",reference:"test-only-approval"}};
+  assert.equal(isReleasedBranchCopy(released),true);
+  assert.equal(selectBranchCopy("CS",copy,[released]).kind,"REVIEWED_EDUCATIONAL");
+  for (const key of ["owner","factual","ta","en","reference","version"] as const) assert.equal(isReleasedBranchCopy({...released,approval:{...released.approval!,[key]:""}}),false,key);
+  assert.equal(isReleasedBranchCopy({...released,copy:{...copy,en:"Changed\nSubjects\nPractice"}}),false);
+  assert.equal(isReleasedBranchCopy({...released,evidence:{...released.evidence,url:"https://source.example.test"}}),false);
+  assert.equal(selectBranchCopy("CS",copy,[released,released]).kind,"SYNTHETIC_ILLUSTRATION");
+  assert.equal(selectBranchCopy("AD",copy,[released]).kind,"SYNTHETIC_ILLUSTRATION");
+  assert.doesNotMatch(page("lang=en&view=branch&branch=CS&owner=true&preview=true"),/Reviewed educational explanation/);
+});
+
+test("both languages exclude held identities on forged routes and preserve conflicting districts", () => {
+ for (const lang of ["ta","en"]) {
+  for (const [college,code] of [["fixture-1","BY"],["fixture-1","XC"],["fixture-2","AE"],["fixture-2","N9"]]) {
+   const html=page(`lang=${lang}&view=detail&college=${college}&programme=${code}`);
+   assert.doesNotMatch(html,/<details>/);
+  }
+  for (const college of ["fixture-3","fixture-7"]) {
+   const html=page(`lang=${lang}&view=detail&college=${college}&programme=AD`);
+   assert.doesNotMatch(html,/Fixture district A|Fixture district B/);
+   assert.ok(html.includes(lang === "ta" ? "தெரியவில்லை" : "not known"));
+  }
+ }
 });
