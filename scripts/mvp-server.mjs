@@ -1,3 +1,4 @@
+import { renderGovernedPilot } from "../src/ui/m4-governed-pilot.ts";
 import { renderM4Exploration } from "../src/ui/m4-exploration.ts";
 import { CHECK_COPY } from "../src/ui/journey-copy.ts";
 import { createServer } from "node:http";
@@ -69,6 +70,8 @@ const server = createServer(async (request, response) => {
     send(response, page.status, page.html);
     return;
   }
+  // Local, opt-in owner review only. No candidate text or unapproved offering is routed.
+  if (request.method === "GET" && url.pathname === "/internal/m4-pilot" && process.env.M4_OWNER_REVIEW === "1") { send(response, 200, renderGovernedPilot(url.searchParams)); return; }
   if (request.method === "GET" && url.pathname === "/journey") {
     const step = url.searchParams.get("step");
     if (step === "explore") { send(response, 200, renderM4Exploration(url.searchParams)); return; }
