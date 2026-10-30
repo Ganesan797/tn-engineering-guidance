@@ -19,3 +19,11 @@ This later authorized implementation supersedes the earlier empty-preview snapsh
 - Local review entry `/internal/m4-pilot?lang=ta&view=branches`, explicitly enabled with `M4_OWNER_REVIEW=1` on loopback. Each internal page links to `/journey?step=awareness` in the selected language. No link to the internal preview was added to normal student navigation; no access/authentication claim, hosting or deployment.
 
 Next single owner action: review this candidate and record the presentation outcome alongside the consolidated P01–P06 factual/English/release dispositions. Keep all unresolved fields and mapping holds explicit. Commit/push is authorized; merge and student use are not.
+
+## Owner-preview usability correction — 2026-10-30
+
+The real-record preview now has programme search, clearer counts and recovery, responsive search/filter controls, branch-preserving reset, matching programme first on college detail and immediate temporary comparison links that persist through pages, detail and language changes. The guided journey labels its separate fixture route as invented examples. No projection, approval gate, educational copy or admission rule changed.
+
+Browser checks used the actual eligible directory: branch search → pending explanation → matching colleges → college/programme evidence; known-college search; district filtering and reset; empty-result recovery; two- and three-option comparison; page and language changes; guided-journey return. Desktop, 360px and 390px had no horizontal overflow. At 360px and 390px, the first result began at about 735px and 713px; search button height 48px and filter disclosure 44px. Keyboard focus outline was 3px. Full offline suite **310/310 PASS**; strict typecheck **PASS**. Synthetic-only fixture tests remain separate from these real-record checks.
+
+Before: [earlier 360px Tamil college](coherent-college-ta-360.png). After, real owner-preview records: [360px Tamil branch results](usability-after-real-branch-ta-360.png), [390px Tamil branch results](usability-after-real-branch-ta-390.png), [desktop Tamil branch results](usability-after-real-branch-ta-1280.png), [390px English matching college](usability-after-real-college-en-390.png). These screenshots show the internal candidate, not a student release. Owner presentation PASS remains pending.

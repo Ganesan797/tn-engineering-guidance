@@ -68,10 +68,10 @@ test("unapproved profiles and unresolved conflicts are never rendered; each fiel
 
 test("marks-free browsing, bounded filters, bilingual navigation and transient comparison",()=>{
  const home=render("lang=en");assert.match(home,/No marks are required/);assert.doesNotMatch(home,/name="(?:marks|cutoff|community)"/i);
- const branches=render("lang=en&view=branches");assert.match(branches,/COMPUTING/);assert.match(branches,/bounded pilot/);
+ const branches=render("lang=en&view=branches");assert.match(branches,/COMPUTING/);assert.match(branches,/Search by name or code/);
  const branch=render("lang=en&view=branch&branch=CS");assert.match(branch,/Example introduction/);assert.match(branch,/does not establish any selected college/);
- const filtered=render("lang=en&view=colleges&district=Chennai");assert.match(filtered,/sample-1/);assert.doesNotMatch(filtered,/sample-2|sample-3/);assert.match(filtered,/unknown values are excluded/);
- const all=render("lang=en&view=colleges");assert.match(all,/sample-3/);assert.match(all,/not saved/);assert.match(all,/view=college&amp;college=sample-1/);
+ const filtered=render("lang=en&view=colleges&district=Chennai");assert.match(filtered,/sample-1/);assert.doesNotMatch(filtered,/sample-2|sample-3/);assert.match(filtered,/Unknown district \/ type values are excluded/);
+ const all=render("lang=en&view=colleges");assert.match(all,/sample-3/);assert.match(all,/not saved|not confirmed/);assert.match(all,/view=college&amp;college=sample-1/);
  const collegePage=render("lang=en&view=college&college=sample-1");assert.match(collegePage,/Sample college 1/);assert.match(collegePage,/COMPUTING/);assert.match(collegePage,/view=detail/);
  const compare=render("lang=en&view=compare&pick=sample-1%7ECS&pick=sample-2%7EAD");assert.match(compare,/Sample college 1/);assert.match(compare,/Sample college 2/);assert.match(compare,/not a ranking/);assert.match(compare,/2026 General Academic/);
  for(const q of ["pick=sample-1%7ECS","pick=sample-1%7ECS&pick=sample-1%7ECS","pick=sample-1%7ECS&pick=evil%7EX","pick=sample-1%7ECS&pick=sample-2%7EAD&pick=sample-3%7EAD&pick=sample-4%7EAD"])assert.match(render(`lang=en&view=compare&${q}`),/Choose two or three/);

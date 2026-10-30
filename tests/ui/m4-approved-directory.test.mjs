@@ -55,7 +55,7 @@ test("both browse paths, filters, empty states, comparison and bilingual pending
 test("college groups, distinct counts and compact college detail preserve source limits", () => {
   const all=render("lang=en&view=colleges");
   assert.match(all,/389 colleges · 3128 matching programmes/);
-  assert.equal((all.match(/<article class="card">/g) ?? []).length,15);
+  assert.equal((all.match(/<article class="card result-card">/g) ?? []).length,15);
   assert.equal((all.match(/<h2>University Departments of Anna University, Chennai - CEG Campus<\/h2>/g) ?? []).length,1);
   const detail=render("lang=en&view=college&college=1");
   assert.equal((detail.match(/<h1>University Departments of Anna University, Chennai - CEG Campus<\/h1>/g) ?? []).length,1);
@@ -66,15 +66,34 @@ test("college groups, distinct counts and compact college detail preserve source
 
 test("navigation and temporary comparison selections survive pages without publishing held records", () => {
   const q="lang=en&view=colleges&branch=CS&district=CHENNAI&q=university&page=2&pick=1%7ECS&pick=4%7ECS";
-  const html=render(q);assert.match(html,/2 selected for comparison/);assert.match(html,/Compare selected/);
+  const html=render(q);assert.match(html,/2 selected to compare/);assert.match(html,/Compare selected/);
   assert.match(html,/branch=CS&amp;district=CHENNAI&amp;q=university&amp;page=2/);
   assert.match(html,/pick=1%7ECS&amp;pick=4%7ECS/);
   const detail=render("lang=en&view=detail&college=1&programme=CS&branch=CS&district=CHENNAI&q=university&page=2");
   assert.match(detail,/view=colleges&amp;branch=CS&amp;district=CHENNAI&amp;q=university&amp;page=2|branch=CS&amp;district=CHENNAI&amp;q=university&amp;page=2&amp;view=colleges/);
   const tooMany=render("lang=en&view=colleges&pick=1%7ECS&pick=4%7ECS&pick=1304%7ECS&pick=2603%7EEE");
-  assert.match(tooMany,/Keep at most three selections/);assert.doesNotMatch(tooMany,/>Compare selected<\/a>/);
+  assert.match(tooMany,/3 selected to compare/);assert.doesNotMatch(tooMany,/pick=2603%7EEE/);
   const forged=render("lang=en&view=colleges&pick=1133%7ECS&pick=1%7ECS");
   assert.doesNotMatch(forged,/Nellai Nadar|value="1133~CS"/);
+});
+
+test("branch context, immediate comparison and recovery stay in real owner-preview URLs", () => {
+  const branch=render("lang=en&view=colleges&branch=CM&district=CHENNAI&q=university");
+  assert.match(branch,/Selected programme/);
+  assert.match(branch,/view=colleges&amp;branch=CM">Clear search and filters/);
+  assert.doesNotMatch(branch,/Update comparison selection|type="checkbox"/);
+  const college=render("lang=en&view=college&college=1&branch=CM");
+  assert.ok(college.indexOf("Your matching programme") < college.indexOf("Other listed programmes"));
+  assert.match(college,/Your matching programme<\/h2>.*COMPUTER SCIENCE AND ENGINEERING \(SS\)/s);
+  const empty=render("lang=ta&view=colleges&branch=CM&q=NONEXISTENT");
+  assert.match(empty,/0 கல்லூரிகள்/);
+  assert.match(empty,/தேடலை மாற்றுங்கள் அல்லது வடிகட்டிகளை நீக்குங்கள்/);
+  assert.match(empty,/view=colleges&amp;branch=CM/);
+  const one=render("lang=en&view=colleges&branch=CM&district=CHENNAI");
+  assert.match(one,/1 college/);
+  const compare=render("lang=en&view=colleges&pick=1%7ECS&page=2");
+  assert.match(compare,/1 selected to compare/);
+  assert.match(compare,/<a[^>]*page=3[^>]*pick=1%7ECS[^>]*>Next page/);
 });
 
 
