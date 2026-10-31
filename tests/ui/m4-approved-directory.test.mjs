@@ -96,6 +96,33 @@ test("branch context, immediate comparison and recovery stay in real owner-previ
   assert.match(compare,/<a[^>]*page=3[^>]*pick=1%7ECS[^>]*>Next page/);
 });
 
+test("mission paths keep guidance primary and pending content traversable without fixture crossover", () => {
+  const home=render("lang=en");
+  assert.match(home,/Start with engineering basics/);
+  assert.match(home,/Still unsure\? Explore without choosing/);
+  assert.match(home,/No marks are required/);
+  assert.doesNotMatch(home,/journey\?step=explore|fixture-1/);
+  const branch=render("lang=en&view=branch&branch=CM");
+  assert.match(branch,/still under review/);
+  assert.match(branch,/See 5 listed colleges/);
+  assert.match(branch,/Evidence and its limits/);
+  assert.doesNotMatch(branch,/Example introduction|journey\?step=explore/);
+  assert.match(render("lang=en&view=branch&branch=NOT-A-CODE"),/Back to programme names/);
+  const college=render("lang=en&view=college&college=1");
+  assert.ok(college.indexOf("Listed programmes") < college.indexOf("More college details"));
+  assert.match(college,/href="#college-metadata"/);
+  assert.doesNotMatch(render("lang=en&view=college&college=1102"),/href="#college-metadata"/);
+  const detail=render("lang=en&view=detail&college=1&programme=CM");
+  assert.match(detail,/See colleges listing this programme/);
+  assert.ok(detail.indexOf("still under review") < detail.indexOf("College at a glance"));
+  assert.match(detail,/view=colleges&amp;branch=CM/);
+  const comparison=render("lang=en&view=compare&pick=1%7ECM&pick=4%7ECM");
+  assert.equal((comparison.match(/<article class="compare-field">/g)??[]).length,2);
+  assert.equal((comparison.match(/<details class="card evidence">/g)??[]).length,2);
+  assert.match(comparison,/2026 General Academic; before special-reservation counselling/);
+  assert.match(comparison,/not a ranking/);
+});
+
 
 test("readable details preserve exact names, unknown fields, and pending explanation boundaries", () => {
   for (const lang of ["en", "ta"]) {
