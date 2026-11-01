@@ -90,6 +90,7 @@ export type ProfileHoldReason =
   | "IDENTITY_HOLD"
   | "EVIDENCE_HOLD"
   | "EXPLICIT_SCOPE_HOLD"
+  | "DELIVERY_VARIANT_HOLD"
   | "NEEDS_OWNER_REVIEW"
   | "UNAPPROVED";
 
@@ -104,11 +105,17 @@ export interface BranchApprovalStatus {
 
 export const SCOPE_HELD_CODES: ReadonlySet<string> = new Set(["BP", "DA", "CQ", "IF", "ID", "CJ"]);
 export const EVIDENCE_HELD_CODES: ReadonlySet<string> = new Set(["CA", "ER", "MT", "SF", "TC"]);
+/** 38 Educational Profile Identity Cases (Independent profile identity holds) */
 export const IDENTITY_HELD_CODES: ReadonlySet<string> = new Set([
   "AE", "AI", "AL", "AO", "AP", "BC", "CB", "CG", "CR", "CU", "CV", "CW", "CY", "CZ", "DS",
   "DV", "EA", "EG", "GI", "GL", "IB", "IE", "LE", "MA", "MB", "MG", "MI", "MJ", "MM", "MO",
-  "PA", "PP", "PR", "PT", "RP", "SB", "TS", "VL", "BY", "XC", "IM", "MS", "MF", "XM", "CL",
-  "BS", "TT"
+  "PA", "PP", "PR", "PT", "RP", "SB", "TS", "VL"
+]);
+
+/** 26 Delivery Variant / Offering Subcase Codes (Self-Supporting, Tamil Medium, Sandwich) */
+export const DELIVERY_VARIANT_HELD_CODES: ReadonlySet<string> = new Set([
+  "AS", "AT", "BS", "BY", "CL", "CM", "CN", "EL", "EM", "EU", "EY", "FS", "FY", "IM", "IS",
+  "IY", "MF", "MS", "MY", "PM", "PN", "RA", "TT", "XC", "XM", "XS"
 ]);
 
 /** 41 Owner-Approved Profiles under Option A Comprehensive Release (2026-11-01) */
@@ -155,6 +162,16 @@ export function evaluateBranchApproval(
       holdReason: "IDENTITY_HOLD",
     };
   }
+  if (DELIVERY_VARIANT_HELD_CODES.has(id)) {
+    return {
+      ownerApproved: false,
+      humanTamilApproved: false,
+      factualReviewApproved: false,
+      profileIdentityApproved: false,
+      displayApproved: false,
+      holdReason: "DELIVERY_VARIANT_HOLD",
+    };
+  }
   if (READY_FOR_OWNER_REVIEW_CODES.has(id)) {
     return {
       ownerApproved: false,
@@ -182,7 +199,7 @@ export function evaluateBranchApproval(
   const humanTamilApproved = !!a && present(a.ta) && !a.ta.includes("UNREVIEWED");
   const factualReviewApproved = !!a && present(a.factual) && !a.factual.includes("UNREVIEWED");
   const englishApproved = !!a && present(a.en) && !a.en.includes("UNREVIEWED");
-  const profileIdentityApproved = present(profile.id) && !IDENTITY_HELD_CODES.has(profile.id) && !SCOPE_HELD_CODES.has(profile.id);
+  const profileIdentityApproved = present(profile.id) && !IDENTITY_HELD_CODES.has(profile.id) && !DELIVERY_VARIANT_HELD_CODES.has(profile.id) && !SCOPE_HELD_CODES.has(profile.id);
 
   if (!KNOWN_OWNER_APPROVED_CODES.has(id) && (!ownerApproved || a?.reference === "TEST_ONLY" || a?.reference === "synthetic-review-only")) {
     const isReadyForReview = READY_FOR_OWNER_REVIEW_CODES.has(id);

@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -7,6 +8,7 @@ import {
   SCOPE_HELD_CODES,
   EVIDENCE_HELD_CODES,
   IDENTITY_HELD_CODES,
+  DELIVERY_VARIANT_HELD_CODES,
   KNOWN_OWNER_APPROVED_CODES,
   READY_FOR_OWNER_REVIEW_CODES,
 } from "../../src/m4/branch-copy.ts";
@@ -51,20 +53,99 @@ test("approval gate distinguishes the five orthogonal dimensions and required ho
     assert.equal(status.holdReason, "EVIDENCE_HOLD", `${id} holdReason`);
   }
 
-  // 4. Identity Holds: 38 cases (+ delivery variants)
-  for (const id of ["AE", "AO", "BY", "XC", "AI", "AL", "CB", "CG", "CU", "CV", "CW", "CY", "DS", "DV", "GL", "SB", "TS", "EA", "EG", "VL", "IE", "MB", "MG", "MJ", "MM", "MO", "CZ", "GI", "BC", "IB", "PA", "PP", "PR", "PT", "RP", "IM", "MS", "MF", "XM", "CL", "BS", "TT"]) {
+  // 4. Educational Profile Identity Holds: exactly 38 base cases
+  assert.equal(IDENTITY_HELD_CODES.size, 38);
+  for (const id of IDENTITY_HELD_CODES) {
     const status = evaluateBranchApproval(id, null);
     assert.equal(status.displayApproved, false, `${id} must not be displayApproved`);
     assert.equal(status.holdReason, "IDENTITY_HOLD", `${id} holdReason`);
   }
 
-  // 5. Ready for Owner Review: exactly 0 (all 35 candidate profiles approved under Option A)
+  // 5. Delivery Variant Holds: exactly 26 offering subcase codes
+  assert.equal(DELIVERY_VARIANT_HELD_CODES.size, 26);
+  for (const id of DELIVERY_VARIANT_HELD_CODES) {
+    const status = evaluateBranchApproval(id, null);
+    assert.equal(status.displayApproved, false, `${id} must not be displayApproved`);
+    assert.equal(status.holdReason, "DELIVERY_VARIANT_HOLD", `${id} holdReason`);
+  }
+
+  // 6. Ready for Owner Review: exactly 0 (all 35 candidate profiles approved under Option A)
   assert.equal(READY_FOR_OWNER_REVIEW_CODES.size, 0);
 
-  // 6. Unknown / Unapproved code
+  // 7. Unknown / Unapproved code
   const unknown = evaluateBranchApproval("NONEXISTENT_BRANCH", null);
   assert.equal(unknown.displayApproved, false);
   assert.equal(unknown.holdReason, "UNAPPROVED");
+});
+
+test("complete 116-code census accounting: zero omission, zero overlap, all 26 variants fail-closed", () => {
+  const crosswalkPath = new URL("../../experiments/m4-governance-census/code-crosswalk.csv", import.meta.url);
+  const rows = readFileSync(crosswalkPath, "utf8").trim().split(/\r?\n/).slice(1).map(l => l.split(","));
+  const censusCodes = rows.map(r => r[0]);
+
+  assert.equal(censusCodes.length, 116, "Census must contain exactly 116 codes");
+  assert.equal(new Set(censusCodes).size, 116, "Census codes must be distinct");
+
+  // Verify exact category sizes
+  assert.equal(KNOWN_OWNER_APPROVED_CODES.size, 41, "Approved codes count");
+  assert.equal(IDENTITY_HELD_CODES.size, 38, "Identity-hold base codes count");
+  assert.equal(EVIDENCE_HELD_CODES.size, 5, "Evidence-hold codes count");
+  assert.equal(SCOPE_HELD_CODES.size, 6, "Scope-hold codes count");
+  assert.equal(DELIVERY_VARIANT_HELD_CODES.size, 26, "Delivery-variant codes count");
+
+  // Sum of partitioned sets
+  const totalAccounted = KNOWN_OWNER_APPROVED_CODES.size
+    + IDENTITY_HELD_CODES.size
+    + EVIDENCE_HELD_CODES.size
+    + SCOPE_HELD_CODES.size
+    + DELIVERY_VARIANT_HELD_CODES.size;
+  assert.equal(totalAccounted, 116, "Total accounted codes must equal 116");
+
+  // Verify pairwise disjointness (zero overlap)
+  const allAccounted = [
+    ...KNOWN_OWNER_APPROVED_CODES,
+    ...IDENTITY_HELD_CODES,
+    ...EVIDENCE_HELD_CODES,
+    ...SCOPE_HELD_CODES,
+    ...DELIVERY_VARIANT_HELD_CODES,
+  ];
+  assert.equal(new Set(allAccounted).size, 116, "Must have zero overlap across categories");
+
+  // Verify zero omission against census
+  for (const code of censusCodes) {
+    const isAccounted = KNOWN_OWNER_APPROVED_CODES.has(code)
+      || IDENTITY_HELD_CODES.has(code)
+      || EVIDENCE_HELD_CODES.has(code)
+      || SCOPE_HELD_CODES.has(code)
+      || DELIVERY_VARIANT_HELD_CODES.has(code);
+    assert.ok(isAccounted, `Code ${code} from census must have explicit runtime disposition`);
+  }
+
+  // Verify unreleased identity and variant count is exactly 64
+  const unreleasedIdentityOrVariant = IDENTITY_HELD_CODES.size + DELIVERY_VARIANT_HELD_CODES.size;
+  assert.equal(unreleasedIdentityOrVariant, 64, "Unreleased identity + variant count must be 64");
+
+  // Verify that all 17 previously omitted variants are explicitly in DELIVERY_VARIANT_HELD_CODES
+  const codes17 = ["AS", "AT", "CM", "CN", "EL", "EM", "EU", "EY", "FS", "FY", "IS", "IY", "MY", "PM", "PN", "RA", "XS"];
+  for (const c of codes17) {
+    assert.ok(DELIVERY_VARIANT_HELD_CODES.has(c), `${c} must be in DELIVERY_VARIANT_HELD_CODES`);
+    const status = evaluateBranchApproval(c, null);
+    assert.equal(status.displayApproved, false, `${c} must not be display approved`);
+    assert.equal(status.holdReason, "DELIVERY_VARIANT_HOLD", `${c} holdReason must be DELIVERY_VARIANT_HOLD`);
+  }
+
+  // Critical Safety Rule: No delivery variant may inherit approved base copy
+  for (const variant of DELIVERY_VARIANT_HELD_CODES) {
+    const crosswalkRow = rows.find(r => r[0] === variant);
+    assert.ok(crosswalkRow, `Missing crosswalk row for variant ${variant}`);
+    const baseProfile = crosswalkRow[5];
+
+    // Even if baseProfile is owner-approved, the variant MUST NOT be display-approved
+    const baseApproved = KNOWN_OWNER_APPROVED_CODES.has(baseProfile);
+    const variantStatus = evaluateBranchApproval(variant, null);
+    assert.equal(variantStatus.displayApproved, false, `Variant ${variant} (base ${baseProfile}) must never inherit approval`);
+    assert.equal(variantStatus.holdReason, "DELIVERY_VARIANT_HOLD", `Variant ${variant} must fail-closed as DELIVERY_VARIANT_HOLD`);
+  }
 });
 
 test("display gate fail-closed: removing any single approval dimension revokes display approval", () => {
@@ -95,7 +176,7 @@ test("display gate fail-closed: removing any single approval dimension revokes d
 test("student-facing UI fail-closed: unapproved or held profiles never render approved educational text", () => {
   // Check in governed pilot:
   // Held profiles must show under-review notice, never released explanation text
-  const heldCodes = ["BY", "XC", "AE", "AO", "BP", "DA", "CQ", "IF", "ID", "CJ", "CA", "MT", "SF", "TC", "ER"];
+  const heldCodes = ["BY", "XC", "AE", "AO", "BP", "DA", "CQ", "IF", "ID", "CJ", "CA", "MT", "SF", "TC", "ER", "AS", "AT", "CM", "CN", "EL", "EM", "EU", "EY", "FS", "FY", "IS", "IY", "MY", "PM", "PN", "RA", "XS", "CL", "BS", "TT", "IM", "MS", "MF", "XM"];
   for (const code of heldCodes) {
     const en = renderPilot(`lang=en&view=branch&branch=${code}`);
     const ta = renderPilot(`lang=ta&view=branch&branch=${code}`);
