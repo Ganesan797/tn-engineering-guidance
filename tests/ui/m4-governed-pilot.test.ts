@@ -113,7 +113,10 @@ test("real pilot review route is disabled by default and only enabled by local p
    const response=await fetch(`http://127.0.0.1:${port}/internal/m4-pilot?lang=en&view=colleges&owner=true&approve=true`);
    assert.equal(response.status,enabled?200:404);
    const body=await response.text();
+   const home=await (await fetch(`http://127.0.0.1:${port}/?lang=en`)).text();
+   assert.equal((home.match(/href="\/internal\/m4-pilot\?lang=en"/g)??[]).length,enabled?1:0);
    if(enabled){assert.match(body,/Internal owner review only/);assert.match(body,/COMPUTER SCIENCE AND ENGINEERING/);assert.doesNotMatch(body,/Nellai Nadar/);
+    assert.match(home,/Explore courses and colleges/);
     const journey=await fetch(`http://127.0.0.1:${port}/journey?step=awareness&lang=en`);
     assert.equal(journey.status,200);assert.doesNotMatch(await journey.text(),/\/internal\/m4-pilot/);}
    else assert.doesNotMatch(body,/Anand Institute|Easwari|COMPUTER SCIENCE AND ENGINEERING/);

@@ -52,6 +52,34 @@ test("both browse paths, filters, empty states, comparison and bilingual pending
   assert.match(render("lang=en&view=colleges&page=2"),/Page 2 \/ /);
 });
 
+test("owner exploration bridges study-area orientation and both real-record paths", () => {
+  for (const lang of ["ta", "en"]) {
+    const home=render(`lang=${lang}`);
+    assert.match(home,new RegExp(`/beginner\\?lang=${lang}&amp;section=engineering`));
+    assert.match(home,/view=branches/);
+    assert.match(home,/view=colleges/);
+    const branches=render(`lang=${lang}&view=branches`);
+    assert.match(branches,/COMPUTER SCIENCE AND ENGINEERING \(CS\)/);
+    assert.match(branches,/aria-label="(?:Breadcrumb|நீங்கள் இருக்கும் வழி)"/);
+    const eligibleCodes=new Set(view.items.map(item=>item.programme));
+    assert.match(branches,new RegExp(`<p role="status">${eligibleCodes.size} `));
+    for(const code of eligibleCodes) assert.ok(branches.includes(`(${code})`),`missing eligible programme ${code}`);
+    const branch=render(`lang=${lang}&view=branch&branch=CS`);
+    assert.match(branch,/(?:view=colleges&amp;branch=CS|branch=CS&amp;view=colleges)/);
+    assert.match(branch,/still under review|மதிப்பாய்வில் உள்ளது/);
+    const colleges=render(`lang=${lang}&view=colleges&q=CEG`);
+    assert.match(colleges,/CEG Campus/);
+    const college=render(`lang=${lang}&view=college&college=1&q=CEG&pick=1%7ECS`);
+    assert.match(college,/BIO MEDICAL ENGINEERING \(SS\)/);
+    assert.match(college,/(?:view=colleges&amp;q=CEG|q=CEG&amp;view=colleges)/);
+    assert.match(college,/pick=1%7ECS/);
+    const detail=render(`lang=${lang}&view=detail&college=1&programme=CS&q=CEG&pick=1%7ECS`);
+    assert.match(detail,/COMPUTER SCIENCE AND ENGINEERING/);
+    assert.match(detail,/(?:view=college&amp;college=1|college=1&amp;view=college)/);
+    assert.doesNotMatch(home+branches+branch+colleges+college+detail,/fixture-1|Sample college 1|journey\?step=explore/);
+  }
+});
+
 test("college groups, distinct counts and compact college detail preserve source limits", () => {
   const all=render("lang=en&view=colleges");
   assert.match(all,/389 colleges · 3128 matching programmes/);

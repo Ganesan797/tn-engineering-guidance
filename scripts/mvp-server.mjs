@@ -120,6 +120,7 @@ const server = createServer(async (request, response) => {
     send(response, 200, renderStudentEntryPage(entry, awareness, undefined, {
       section: url.searchParams.get("section") ?? undefined,
       review: url.searchParams.get("review") === "1",
+      ownerPreview: ownerDirectory !== null,
     }));
     return;
   }

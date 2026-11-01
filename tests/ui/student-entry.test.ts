@@ -194,6 +194,21 @@ test("one recommended starting card remains a complete anchor and shortcuts stay
   assert.match(review, /<aside class="review-only">Development review only/);
 });
 
+test("only explicit owner-preview configuration adds the real M4 bridge", () => {
+  for (const language of ["ta", "en"] as const) {
+    const state = { route: "home" as const, language };
+    const normal = renderStudentEntryPage(state, pack);
+    const queryReview = renderStudentEntryPage(state, pack, undefined, { review: true });
+    assert.doesNotMatch(normal + queryReview, /\/internal\/m4-pilot/);
+    const owner = renderStudentEntryPage(state, pack, undefined, { ownerPreview: true });
+    assert.equal((owner.match(/href="\/internal\/m4-pilot\?lang=/g) ?? []).length, 1);
+    assert.match(owner, language === "ta" ? /படிப்புகள் மற்றும் கல்லூரிகளைப் பார்க்கலாம்/ : /Explore courses and colleges/);
+    const learning = renderStudentEntryPage({ route: "beginner", language }, pack, undefined, { section: "engineering", ownerPreview: true });
+    assert.match(learning, new RegExp(`/internal/m4-pilot\\?lang=${language}&amp;view=branches`));
+    assert.doesNotMatch(renderStudentEntryPage({ route: "beginner", language }, pack, undefined, { section: "engineering" }), /\/internal\/m4-pilot/);
+  }
+});
+
 test("live server keeps entry, blank personal form and synthetic demo paths separate", async () => {
   const child = spawn(process.execPath, ["--experimental-strip-types", "scripts/mvp-server.mjs"], {
     cwd: new URL("../../", import.meta.url), env: { ...process.env, PORT: "0" },
