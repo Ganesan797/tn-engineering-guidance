@@ -10,7 +10,7 @@
 
 ## 1. Executive Summary
 
-On 2026-11-01, following the verification and defect repair of the authoritative M4 candidate branch (`task/m4-approved-directory-preview` at commit `863476c`), the Project Owner reviewed the two acceptance paths and formally selected:
+On 2026-11-01, following the verification, defect repair, and complete 116-code accounting reconciliation of the authoritative M4 candidate branch (`task/m4-approved-directory-preview` at authoritative baseline `d580d9f2e56d8751003ecc14842dcbdc2c24f51c`), the Project Owner reviewed the acceptance paths and formally selected:
 
 > **Option A: Comprehensive 41-Profile Release**  
 > Formally approve all 35 prepared candidate profiles across Batches 1, 2, and 3 into student release, promoting the total approved educational profile count from 6 to 41.
@@ -76,25 +76,30 @@ All 41 profiles satisfy the five orthogonal approval dimensions:
 
 ---
 
-## 3. Confirmed Hold Classifications (49 Profiles / 47 Identity-Held Codes in Gate)
+## 3. Confirmed Hold Classifications (116 Total Governed Codes Accounting)
 
-1. **Scope Holds (6 codes — OWNER_APPROVED_HOLD)**:  
-   BP, DA, CQ, IF, ID, CJ. Outside 4-year B.E./B.Tech engineering scope; permanently excluded from engineering family allocations.
-2. **Evidence Holds (5 codes — EVIDENCE_HOLD)**:  
-   CA, MT, SF, TC, ER. Retained under hold pending complete standalone affiliated curricula.
-3. **Identity Holds (38 profile cases / 47 unique codes in gate — IDENTITY_HOLD)**:  
-   - **38 Educational Profile Identity Cases**: AE, AI, AL, AO, AP, BC, CB, CG, CR, CU, CV, CW, CY, CZ, DS, DV, EA, EG, GI, GL, IB, IE, LE, MA, MB, MG, MI, MJ, MM, MO, PA, PP, PR, PT, RP, SB, TS, VL.
-   - **9 Explicit Delivery Variant Codes in Gate**: BY (BM SS), XC (CE Tamil), IM (IT SS), MS (ME Sandwich), MF (ME SS), XM (ME Tamil), CL (CH SS), BS (BT SS), TT (TX SS).
-   - *Rule*: Delivery variants retain distinct identity; zero similarity-based or inferred mapping. Base profile approval does not approve its variants. All remaining delivery variants in the 116 census remain fail-closed.
+1. **Scope Holds (6 codes — `OWNER_APPROVED_HOLD`)**:  
+   `BP`, `DA`, `CQ`, `IF`, `ID`, `CJ`. Outside 4-year B.E./B.Tech engineering scope; permanently excluded from engineering family allocations.
+2. **Evidence Holds (5 codes — `EVIDENCE_HOLD`)**:  
+   `CA`, `MT`, `SF`, `TC`, `ER`. Retained under hold pending complete standalone affiliated curricula.
+3. **Educational Profile Identity Holds (38 profile cases / 38 base codes — `IDENTITY_HOLD`)**:  
+   `AE`, `AI`, `AL`, `AO`, `AP`, `BC`, `CB`, `CG`, `CR`, `CU`, `CV`, `CW`, `CY`, `CZ`, `DS`, `DV`, `EA`, `EG`, `GI`, `GL`, `IB`, `IE`, `LE`, `MA`, `MB`, `MG`, `MI`, `MJ`, `MM`, `MO`, `PA`, `PP`, `PR`, `PT`, `RP`, `SB`, `TS`, `VL`.
+4. **Delivery Variant Holds (26 codes — `DELIVERY_VARIANT_HOLD`)**:  
+   `AS`, `AT`, `BS`, `BY`, `CL`, `CM`, `CN`, `EL`, `EM`, `EU`, `EY`, `FS`, `FY`, `IM`, `IS`, `IY`, `MF`, `MS`, `MY`, `PM`, `PN`, `RA`, `TT`, `XC`, `XM`, `XS`.  
+   *Rule*: Delivery variants retain distinct identity; zero similarity-based or inferred mapping. Base profile approval does not approve its variants. All 26 delivery variants in the 116 census remain fail-closed under explicit runtime disposition.
+5. **Runtime Unreleased Identity or Variant Codes**: Exactly 64 codes ($38 + 26 = 64$).
+6. **Total Governed Source Codes Accounting**: Exactly 116 codes ($41 \text{ approved} + 38 \text{ identity} + 26 \text{ variants} + 5 \text{ evidence} + 6 \text{ scope} = 116$). Unaccounted codes: 0; overlapping dispositions: 0.
 
 ---
 
 ## 4. Verification Evidence & Quality Gates
 
-* **Full Automated Test Suite**: **322 / 322 PASS**
+* **Full Automated Test Suite**: **323 / 323 PASS**
+* **Focused M4 Tests**: **47 / 47 PASS**
 * **Strict TypeScript Typecheck**: **PASS** (0 errors)
 * **Approval Integrity & Provenance Probe**: **PASS** ([`tests/ui/m4-approval-integrity.test.ts`](../../tests/ui/m4-approval-integrity.test.ts))
-* **Responsive Visual Verification**: **66 / 66 PASS** across 360px, 390px, and desktop viewports in Tamil and English ([`scripts/verify-m4-visual.mjs`](../../scripts/verify-m4-visual.mjs))
+* **Responsive Visual Engineering Verification**: **66 / 66 PASS** across 360px, 390px, and desktop viewports in Tamil and English ([`scripts/verify-m4-visual.mjs`](../../scripts/verify-m4-visual.mjs))
+* **Real Student Usability Validation**: `REAL_STUDENT_VALIDATION = NOT_RUN` (engineering verification only)
 * **Immutable Dataset Integrity**: 389 colleges, 3,128 offerings, 6 CSV SHA-256 digests verified.
 
 ---

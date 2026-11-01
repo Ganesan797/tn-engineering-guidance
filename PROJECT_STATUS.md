@@ -7,14 +7,21 @@
 **Last reviewed:** 2026-11-01
 
 **M4 Formal Milestone Acceptance (Option A Comprehensive Release — 2026-11-01):**
-Ganesan (Project Owner / Student Advocate) formally reviewed and accepted Milestone M4 under Option A: Comprehensive 41-Profile Release (M4_ACCEPT = PASS, M4_ACCEPTED = YES).
-- **Approved Profiles:** Exactly 41 bilingual educational profiles released (CS, AD, BM, CE, EC, EE + 35 promoted from Batches 1, 2, and 3: AG, AM, AU, BT, CC, CD, CF, CH, CI, CK, CO, EF, EI, EN, EV, EX, FD, FT, HT, IC, IN, IT, MD, ME, MN, MR, MU, MZ, PC, PE, PH, RI, RM, SC, TX).
-- **Confirmed Holds:** 49 held profiles (6 scope holds as OWNER_APPROVED_HOLD; 5 evidence gaps as EVIDENCE_HOLD; 38 educational profile identity cases as IDENTITY_HOLD; 47 unique codes gated under IDENTITY_HELD_CODES including 9 tracked delivery variants).
+Ganesan (Project Owner / Student Advocate) formally reviewed and accepted Milestone M4 under Option A: Comprehensive 41-Profile Release (`M4_ACCEPT = PASS`, `M4_ACCEPTED = YES`).
+- **Authoritative Baseline SHA:** `d580d9f2e56d8751003ecc14842dcbdc2c24f51c`
+- **Owner-Approved Profiles (41):** Exactly 41 bilingual educational profiles released (`CS`, `AD`, `BM`, `CE`, `EC`, `EE` + 35 promoted from Batches 1, 2, and 3: `AG`, `AM`, `AU`, `BT`, `CC`, `CD`, `CF`, `CH`, `CI`, `CK`, `CO`, `EF`, `EI`, `EN`, `EV`, `EX`, `FD`, `FT`, `HT`, `IC`, `IN`, `IT`, `MD`, `ME`, `MN`, `MR`, `MU`, `MZ`, `PC`, `PE`, `PH`, `RI`, `RM`, `SC`, `TX`).
+- **Educational Profile Identity Holds (38 cases / 38 base codes):** `AE`, `AI`, `AL`, `AO`, `AP`, `BC`, `CB`, `CG`, `CR`, `CU`, `CV`, `CW`, `CY`, `CZ`, `DS`, `DV`, `EA`, `EG`, `GI`, `GL`, `IB`, `IE`, `LE`, `MA`, `MB`, `MG`, `MI`, `MJ`, `MM`, `MO`, `PA`, `PP`, `PR`, `PT`, `RP`, `SB`, `TS`, `VL`.
+- **Delivery Variant Holds (26 codes):** All 26 census delivery variants explicitly gated under `DELIVERY_VARIANT_HELD_CODES` (`AS`, `AT`, `BS`, `BY`, `CL`, `CM`, `CN`, `EL`, `EM`, `EU`, `EY`, `FS`, `FY`, `IM`, `IS`, `IY`, `MF`, `MS`, `MY`, `PM`, `PN`, `RA`, `TT`, `XC`, `XM`, `XS`). Zero inferred mapping or unapproved base copy inheritance.
+- **Runtime Unreleased Identity or Variant Codes:** Exactly 64 codes ($38 + 26 = 64$).
+- **Evidence Holds (5 codes):** `CA`, `ER`, `MT`, `SF`, `TC`.
+- **Scope Holds (6 codes):** `BP`, `DA`, `CQ`, `IF`, `ID`, `CJ` (permanently excluded from 4-year engineering scope).
+- **Total Governed Code Count:** Exactly 116 unique source codes ($41 + 38 + 26 + 5 + 6 = 116$), 0 unaccounted, 0 overlapping.
 - **Directory Data:** 389 colleges, 3,128 offerings, 6 immutable CSV manifests verified with SHA-256 digests.
-- **Family Navigation:** Kept closed by default (APPROVED_FAMILY_MAPPINGS = []) until separate crosswalk approval.
-- **Quality Gates:** 322/322 automated tests PASS, strict TypeScript typecheck PASS (0 errors), responsive visual verification 66/66 PASS (360px, 390px, desktop).
-- **Approval Gate Defect & Synthetic Provenance Defect:** Both Codex audit defects verified and repaired.
-- **Decision Artifact:** Recorded in review-evidence/m4-bounded-pilot/comprehensive-41-owner-decision.md.
+- **Family Navigation:** Kept closed by default (`APPROVED_FAMILY_MAPPINGS = []`) until separate crosswalk approval.
+- **Quality Gates:** Full test suite 323/323 PASS, focused M4 tests 47/47 PASS, strict TypeScript typecheck PASS (0 errors), responsive visual engineering checks 66/66 PASS (360px, 390px, desktop).
+- **Student Usability Validation:** `REAL_STUDENT_VALIDATION = NOT_RUN` (engineering verification only).
+- **Approval Gate & Synthetic Provenance:** Both Codex audit defects verified and repaired.
+- **Decision Artifact:** Recorded in `review-evidence/m4-bounded-pilot/comprehensive-41-owner-decision.md`.
 
 **M4 six-copy connection candidate (2026-11-01):** Ganesan reported factual, source-scope, Tamil, English-equivalence and internal-preview acceptance for the exact CS, AD, BM, CE, EC and EE wording at `3312406ae5b11354fc59120af1e87fdce8e32eef`. Registry version `M4-SIX-2026-11-01-3312406` releases that wording only through the nine already-approved L01–L09 associations; BY → BM and every other identity or variant mapping remain held. The complete catalogue remains **six accepted, 35 other READY_FOR_OWNER_REVIEW, 38 NEEDS_IDENTITY_DECISION and five NEEDS_EVIDENCE**. Targeted checks found no basis to promote CA, MT, SF, TC or ER. Family navigation machinery is closed by default (`APPROVED_FAMILY_MAPPINGS = 0`) while exact all-programme and college-first browsing remain available. Focused M4 tests **29/29**, full offline suite **317/317**, strict typecheck and catalogue validation pass. Windows browser inspection was stopped from the desktop, so 360px/390px/desktop visual checks and new screenshots are **BLOCKED/NOT RUN**, not a visual PASS. No student release, M4 acceptance, merge or deployment is implied.
 
