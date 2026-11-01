@@ -9,7 +9,7 @@
 **M4 Formal Milestone Acceptance (Option A Comprehensive Release — 2026-11-01):**
 Ganesan (Project Owner / Student Advocate) formally reviewed and accepted Milestone M4 under Option A: Comprehensive 41-Profile Release (M4_ACCEPT = PASS, M4_ACCEPTED = YES).
 - **Approved Profiles:** Exactly 41 bilingual educational profiles released (CS, AD, BM, CE, EC, EE + 35 promoted from Batches 1, 2, and 3: AG, AM, AU, BT, CC, CD, CF, CH, CI, CK, CO, EF, EI, EN, EV, EX, FD, FT, HT, IC, IN, IT, MD, ME, MN, MR, MU, MZ, PC, PE, PH, RI, RM, SC, TX).
-- **Confirmed Holds:** 49 codes strictly maintained under fail-closed gates (6 scope holds as OWNER_APPROVED_HOLD; 5 evidence gaps as EVIDENCE_HOLD; 38 delivery variants and specializations as IDENTITY_HOLD).
+- **Confirmed Holds:** 49 held profiles (6 scope holds as OWNER_APPROVED_HOLD; 5 evidence gaps as EVIDENCE_HOLD; 38 educational profile identity cases as IDENTITY_HOLD; 47 unique codes gated under IDENTITY_HELD_CODES including 9 tracked delivery variants).
 - **Directory Data:** 389 colleges, 3,128 offerings, 6 immutable CSV manifests verified with SHA-256 digests.
 - **Family Navigation:** Kept closed by default (APPROVED_FAMILY_MAPPINGS = []) until separate crosswalk approval.
 - **Quality Gates:** 322/322 automated tests PASS, strict TypeScript typecheck PASS (0 errors), responsive visual verification 66/66 PASS (360px, 390px, desktop).

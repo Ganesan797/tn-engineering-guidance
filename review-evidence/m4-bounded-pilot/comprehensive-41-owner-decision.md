@@ -76,14 +76,16 @@ All 41 profiles satisfy the five orthogonal approval dimensions:
 
 ---
 
-## 3. Confirmed Hold Classifications (49 Codes)
+## 3. Confirmed Hold Classifications (49 Profiles / 47 Identity-Held Codes in Gate)
 
-1. **Scope Holds (6 codes — `OWNER_APPROVED_HOLD`)**:  
-   `BP`, `DA`, `CQ`, `IF`, `ID`, `CJ`. Outside 4-year B.E./B.Tech engineering scope; permanently excluded from engineering family allocations.
-2. **Evidence Holds (5 codes — `EVIDENCE_HOLD`)**:  
-   `CA`, `MT`, `SF`, `TC`, `ER`. Retained under hold pending complete standalone affiliated curricula.
-3. **Identity Holds (38 codes — `IDENTITY_HOLD`)**:  
-   `AE`, `AO`, `BY`, `XC`, `AI`, `AL`, `BC`, `CB`, `CG`, `CR`, `CU`, `CV`, `CW`, `CY`, `CZ`, `DS`, `DV`, `EA`, `EG`, `GI`, `GL`, `IB`, `IE`, `LE`, `MA`, `MB`, `MG`, `MI`, `MJ`, `MM`, `MO`, `PA`, `PP`, `PR`, `PT`, `RP`, `SB`, `TS`, `VL` and variants (`IM`, `MS`, `MF`, `XM`, `CL`, `BS`, `TT`). Zero similarity-based or inferred mapping.
+1. **Scope Holds (6 codes — OWNER_APPROVED_HOLD)**:  
+   BP, DA, CQ, IF, ID, CJ. Outside 4-year B.E./B.Tech engineering scope; permanently excluded from engineering family allocations.
+2. **Evidence Holds (5 codes — EVIDENCE_HOLD)**:  
+   CA, MT, SF, TC, ER. Retained under hold pending complete standalone affiliated curricula.
+3. **Identity Holds (38 profile cases / 47 unique codes in gate — IDENTITY_HOLD)**:  
+   - **38 Educational Profile Identity Cases**: AE, AI, AL, AO, AP, BC, CB, CG, CR, CU, CV, CW, CY, CZ, DS, DV, EA, EG, GI, GL, IB, IE, LE, MA, MB, MG, MI, MJ, MM, MO, PA, PP, PR, PT, RP, SB, TS, VL.
+   - **9 Explicit Delivery Variant Codes in Gate**: BY (BM SS), XC (CE Tamil), IM (IT SS), MS (ME Sandwich), MF (ME SS), XM (ME Tamil), CL (CH SS), BS (BT SS), TT (TX SS).
+   - *Rule*: Delivery variants retain distinct identity; zero similarity-based or inferred mapping. Base profile approval does not approve its variants. All remaining delivery variants in the 116 census remain fail-closed.
 
 ---
 
