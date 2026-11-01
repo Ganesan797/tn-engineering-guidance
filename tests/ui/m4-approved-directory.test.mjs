@@ -105,6 +105,17 @@ test("navigation and temporary comparison selections survive pages without publi
   assert.doesNotMatch(forged,/Nellai Nadar|value="1133~CS"/);
 });
 
+test("shared-header language switch preserves validated context and three comparison picks", () => {
+  const html=render("lang=en&view=detail&college=1&programme=CS&branch=CS&district=CHENNAI&type=UNIVERSITY&q=anna&bq=computer&page=2&pick=1%7ECS&pick=4%7ECS&pick=1304%7ECS&approve=true&returnTo=https%3A%2F%2Fevil.example");
+  const switchHref=html.match(/<a lang="ta" href="([^"]+)">தமிழ்<\/a>/)?.[1]?.replaceAll("&amp;","&");
+  assert.ok(switchHref);
+  const url=new URL(switchHref,"http://local.test");
+  assert.equal(url.searchParams.get("lang"),"ta");
+  for(const [name,value] of [["view","detail"],["college","1"],["programme","CS"],["branch","CS"],["district","CHENNAI"],["type","UNIVERSITY"],["q","anna"],["bq","computer"],["page","2"]]) assert.equal(url.searchParams.get(name),value);
+  assert.deepEqual(url.searchParams.getAll("pick"),["1~CS","4~CS","1304~CS"]);
+  assert.equal(url.searchParams.get("approve"),null);assert.equal(url.searchParams.get("returnTo"),null);
+});
+
 test("branch context, immediate comparison and recovery stay in real owner-preview URLs", () => {
   const branch=render("lang=en&view=colleges&branch=CM&district=CHENNAI&q=university");
   assert.match(branch,/Selected programme/);
@@ -124,6 +135,19 @@ test("branch context, immediate comparison and recovery stay in real owner-previ
   assert.match(compare,/<a[^>]*page=3[^>]*pick=1%7ECS[^>]*>Next page/);
 });
 
+test("filter reset keeps branch and comparison selections while comparison clearing is separate", () => {
+  const html=render("lang=en&view=colleges&branch=CS&district=CHENNAI&type=UNIVERSITY&q=anna&page=2&pick=1%7ECS&pick=4%7ECS&pick=1304%7ECS");
+  const reset=html.match(/href="([^"]+)">Clear search and filters<\/a>/)?.[1]?.replaceAll("&amp;","&");
+  assert.ok(reset);const resetUrl=new URL(reset,"http://local.test");
+  assert.equal(resetUrl.searchParams.get("branch"),"CS");
+  assert.deepEqual(resetUrl.searchParams.getAll("pick"),["1~CS","4~CS","1304~CS"]);
+  for(const name of ["q","district","type","page"])assert.equal(resetUrl.searchParams.get(name),null);
+  const clear=html.match(/href="([^"]+)">Clear comparison selections<\/a>/)?.[1]?.replaceAll("&amp;","&");
+  assert.ok(clear);const clearUrl=new URL(clear,"http://local.test");
+  assert.equal(clearUrl.searchParams.get("branch"),"CS");assert.equal(clearUrl.searchParams.get("q"),"anna");
+  assert.deepEqual(clearUrl.searchParams.getAll("pick"),[]);
+});
+
 test("mission paths keep guidance primary and pending content traversable without fixture crossover", () => {
   const home=render("lang=en");
   assert.match(home,/Start with engineering basics/);
@@ -133,7 +157,7 @@ test("mission paths keep guidance primary and pending content traversable withou
   const branch=render("lang=en&view=branch&branch=CM");
   assert.match(branch,/still under review/);
   assert.match(branch,/See 5 listed colleges/);
-  assert.match(branch,/Evidence and its limits/);
+  assert.match(branch,/Source summary and limits/);
   assert.doesNotMatch(branch,/Example introduction|journey\?step=explore/);
   assert.match(render("lang=en&view=branch&branch=NOT-A-CODE"),/Back to programme names/);
   const college=render("lang=en&view=college&college=1");
@@ -147,8 +171,13 @@ test("mission paths keep guidance primary and pending content traversable withou
   const comparison=render("lang=en&view=compare&pick=1%7ECM&pick=4%7ECM");
   assert.equal((comparison.match(/<article class="compare-field">/g)??[]).length,2);
   assert.equal((comparison.match(/<details class="card evidence">/g)??[]).length,2);
+  assert.match(comparison,/class="compare-grid" data-count="2"/);
+  assert.equal((comparison.match(/<details class="compare-more">/g)??[]).length,2);
   assert.match(comparison,/2026 General Academic; before special-reservation counselling/);
   assert.match(comparison,/not a ranking/);
+  const three=render("lang=en&view=compare&pick=1%7ECM&pick=4%7ECM&pick=2006%7ECM");
+  assert.match(three,/class="compare-grid" data-count="3"/);
+  assert.equal((three.match(/<article class="compare-field">/g)??[]).length,3);
 });
 
 test("a single matching programme offers comparison without an extra disclosure", () => {
@@ -186,11 +215,15 @@ test("readable details preserve exact names, unknown fields, and pending explana
 });
 
 
-test("college evidence accounts for all programme source pages", () => {
+test("aggregate evidence is concise while programme detail retains exact source location", () => {
   const rows = view.items.filter(row => row.college === "1");
   const html = render("lang=en&view=college&college=1");
   const disclosure = html.slice(html.indexOf('<details class="card evidence">'));
-  for (const row of rows) assert.ok(disclosure.includes(`${row.source.printed_page} / ${row.source.pdf_page}`));
+  assert.match(disclosure,new RegExp(`Governed scope in this view: ${rows.length} offering records · 1 college · ${new Set(rows.map(row=>row.programme)).size} programme codes`));
+  assert.doesNotMatch(disclosure,/Printed \/ PDF page: .*; /);
+  const item=view.items.find(row=>row.college==="1"&&row.programme==="CS");assert.ok(item);
+  const detail=render("lang=en&view=detail&college=1&programme=CS");
+  assert.match(detail,new RegExp(`Printed / PDF page: ${item.source.printed_page} / ${item.source.pdf_page}`));
 });
 
 

@@ -79,7 +79,7 @@ const server = createServer(async (request, response) => {
     const step = url.searchParams.get("step");
     if (step === "explore") { send(response, 200, renderM4Exploration(url.searchParams)); return; }
     const page = step === "study" || step === "compare" || step === "route" || step === "prepare" || step === "check" ? step : "awareness";
-    send(response, 200, renderM2Journey(page, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY, undefined, presentation, language));
+    send(response, 200, renderM2Journey(page, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY, undefined, presentation, language, { ownerPreview: ownerDirectory !== null }));
     return;
   }
   if (request.method === "POST" && url.pathname === "/journey") {
@@ -97,13 +97,13 @@ const server = createServer(async (request, response) => {
       validatedState = state;
       const navigate = values.get("navigate");
       if (navigate === "awareness" || navigate === "study" || navigate === "compare" || navigate === "route" || navigate === "prepare" || navigate === "check") {
-        send(response, 200, renderM2Journey(navigate, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, state, undefined, presentation, language));
+        send(response, 200, renderM2Journey(navigate, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, state, undefined, presentation, language, { ownerPreview: ownerDirectory !== null }));
         return;
       }
       const next = values.has("edit") ? editJourneyAnswer(state, values.get("edit"))
         : values.get("retry") === "1" ? retryUnknown(state)
         : answerJourneyQuestion(state, values.get("unknown") === "1" ? "unknown" : values.get("answer") ?? "");
-      send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, next, undefined, presentation, language));
+      send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, next, undefined, presentation, language, { ownerPreview: ownerDirectory !== null }));
     } catch {
       const field = validatedState ? nextJourneyQuestion(validatedState) : null;
       const copyIndex = language === "en" ? 1 : 0;
@@ -112,7 +112,7 @@ const server = createServer(async (request, response) => {
         : CHECK_COPY.choiceError[copyIndex];
       send(response, 400, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, validatedState ?? EMPTY_JOURNEY,
         validatedState ? `${instruction} ${CHECK_COPY.errorHelp[copyIndex]}`
-          : CHECK_COPY.lostAnswers[copyIndex], presentation, language));
+          : CHECK_COPY.lostAnswers[copyIndex], presentation, language, { ownerPreview: ownerDirectory !== null }));
     }
     return;
   }

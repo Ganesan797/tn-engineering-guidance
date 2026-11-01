@@ -84,6 +84,7 @@ export function renderM2Journey(
   error?: string,
   presentation: M3PresentationOptions = {},
   language: "ta" | "en" = "ta",
+  options: { ownerPreview?: boolean } = {},
 ): string {
   const en = language === "en";
   const t = (pair: readonly [string, string]) => pair[en ? 1 : 0];
@@ -182,6 +183,7 @@ export function renderM2Journey(
   const preserveCheck = page === "check" || Object.values(state).some((value) => value !== null);
   if (page === "route") body += `<p><a href="/journey/questions?id=Q060${en ? "&amp;lang=en" : ""}"${preserveCheck ? ' target="_blank" rel="noopener"' : ""}>${en ? "Completed a diploma? Read about direct second-year entry" : "டிப்ளமோ முடித்தவரா? நேரடி இரண்டாம் ஆண்டு வழியைப் பார்க்க"}${preserveCheck ? ` (${t(CHECK_COPY.newTab)})` : ""}</a>.</p><p>${t(PREPARATION_COPY.diploma)}</p>`;
   if (page === "check" && nextJourneyQuestion(state) === null) body += `<p><a href="/journey/questions?id=Q002${en ? "&amp;lang=en" : ""}" target="_blank" rel="noopener">${en ? "Cutoff, percentage and rank — explanation (new tab)" : "கட்-ஆஃப், சதவீதம், தரவரிசை — விளக்கம் (புதிய தாவல்)"}</a></p>`;
+  if (page === "study" && options.ownerPreview) body += `<aside class="card owner-study-bridge"><h2>${en ? "Continue with real programme listings" : "உண்மைப் படிப்புப் பட்டியல்களில் தொடருங்கள்"}</h2><p>${en ? "Owner review only: browse exact 2026 programme names and the approved college–programme records. Broad study-area links are still under review, so this does not map every area above to a programme." : "உரிமையாளர் மதிப்பாய்வுக்கு மட்டும்: 2026 பட்டியலின் சரியான படிப்புப் பெயர்களையும் ஒப்புதல் பெற்ற கல்லூரி–படிப்புப் பதிவுகளையும் பாருங்கள். மேலுள்ள பெரிய துறை–படிப்பு இணைப்புகள் இன்னும் மதிப்பாய்வில் உள்ளதால், இது ஒவ்வொரு துறையையும் ஒரு படிப்புடன் இணைக்காது."}</p><a class="action primary" href="/internal/m4-pilot?lang=${language}&amp;view=branches">${en ? "Browse real programme listings" : "உண்மைப் படிப்புப் பட்டியல்களைப் பார்க்க"}</a><p class="notice">${en ? "This real-record owner preview is separate from the synthetic examples below." : "இந்த உண்மைப் பதிவுகளின் உரிமையாளர் முன்னோட்டம் கீழுள்ள செயற்கை எடுத்துக்காட்டுகளிலிருந்து தனியானது."}</p></aside>`;
   body += `<p><a href="/journey/questions${en ? "?lang=en" : ""}"${preserveCheck ? ' target="_blank" rel="noopener"' : ""}>${t(CHECK_COPY.questionsExplore)}${preserveCheck ? ` (${t(CHECK_COPY.newTab)})` : ""}</a></p>`;
   const sources = page === "awareness" || page === "study" || page === "compare" ? item("AW-01").sources : [official];
   const source = `<p class="notice">${t(CHECK_COPY.sourceLimit)}</p><details class="source-details"><summary>${en ? "Sources and review status" : "மூலங்களும் மதிப்பாய்வு நிலையும்"}</summary><p>${t(CHECK_COPY.source)}: ${sources.map((entry) => `<a href="${escape(entry.url)}">${escape(entry.name)}</a>`).join(" · ")}. ${t(CHECK_COPY.reviewNote)}</p></details>`;

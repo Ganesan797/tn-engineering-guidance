@@ -59,7 +59,7 @@ test("unapproved profiles and unresolved conflicts are never rendered; each fiel
  const col=i.colleges[0];const district: PilotField={value:"Hidden conflict",source};
  const conflict={...col,district,districtDecision:accepted(district),districtConflict:[district,{value:"Other",source}]};
  const output=render("lang=en&view=colleges",{...i,colleges:[conflict,...i.colleges.slice(1)]});
- assert.doesNotMatch(output,/Hidden conflict|Other/);assert.match(output,/District: Not known/);
+  assert.doesNotMatch(output,/Hidden conflict|Other|District: Not known/);assert.match(output,/Unavailable or unapproved details are omitted rather than inferred/);
  const strange={value:"UNRECOGNISED",source};
  assert.equal(buildGovernedPilotView({...i,colleges:[{...col,type:strange,typeDecision:accepted(strange)},...i.colleges.slice(1)]}).items[0].type,null);
  const denied={...i,pairs:[{...first,linkDecision:{disposition:"HOLD" as const,reference:null,exact:null}},...i.pairs.slice(1)]};
@@ -77,7 +77,7 @@ test("marks-free browsing, bounded filters, bilingual navigation and transient c
  const collegePage=render("lang=en&view=college&college=sample-1");assert.match(collegePage,/Sample college 1/);assert.match(collegePage,/COMPUTING/);assert.match(collegePage,/view=detail/);
  const compare=render("lang=en&view=compare&pick=sample-1%7ECS&pick=sample-2%7EAD");assert.match(compare,/Sample college 1/);assert.match(compare,/Sample college 2/);assert.match(compare,/not a ranking/);assert.match(compare,/2026 General Academic/);
  for(const q of ["pick=sample-1%7ECS","pick=sample-1%7ECS&pick=sample-1%7ECS","pick=sample-1%7ECS&pick=evil%7EX","pick=sample-1%7ECS&pick=sample-2%7EAD&pick=sample-3%7EAD&pick=sample-4%7EAD"])assert.match(render(`lang=en&view=compare&${q}`),/Choose two or three/);
- const ta=render("lang=ta&view=detail&college=sample-1&programme=CS");assert.match(ta,/ஆதாரம் மற்றும் வரம்பு/);assert.match(ta,/பதிவு செய்யப்பட்டது/);assert.match(ta,/lang=en/);
+  const ta=render("lang=ta&view=detail&college=sample-1&programme=CS");assert.match(ta,/ஆதாரம் மற்றும் சரியான மூல இடம்/);assert.match(ta,/பதிவு செய்யப்பட்டது/);assert.match(ta,/lang=en/);
  assert.doesNotMatch(render("lang=en&view=detail&college=sample-1&programme=CS"),/still under review/);
  assert.match(render("lang=en&view=detail&college=sample-1&programme=CS"),/class="action primary"[^>]+view=branch/);
  assert.match(render("lang=en&view=detail&college=sample-1&programme=CS"),/does not confirm current availability/);
@@ -115,11 +115,13 @@ test("real pilot review route is disabled by default and only enabled by local p
    const body=await response.text();
    const home=await (await fetch(`http://127.0.0.1:${port}/?lang=en`)).text();
    assert.equal((home.match(/href="\/internal\/m4-pilot\?lang=en"/g)??[]).length,enabled?1:0);
-   if(enabled){assert.match(body,/Internal owner review only/);assert.match(body,/COMPUTER SCIENCE AND ENGINEERING/);assert.doesNotMatch(body,/Nellai Nadar/);
+    const study=await (await fetch(`http://127.0.0.1:${port}/journey?step=study&lang=en`)).text();
+    if(enabled){assert.match(body,/Internal owner review only/);assert.match(body,/COMPUTER SCIENCE AND ENGINEERING/);assert.doesNotMatch(body,/Nellai Nadar/);
     assert.match(home,/Explore courses and colleges/);
+     assert.match(study,/Continue with real programme listings/);assert.match(study,/\/internal\/m4-pilot\?lang=en&amp;view=branches/);assert.match(study,/separate from the synthetic examples/);
     const journey=await fetch(`http://127.0.0.1:${port}/journey?step=awareness&lang=en`);
     assert.equal(journey.status,200);assert.doesNotMatch(await journey.text(),/\/internal\/m4-pilot/);}
-   else assert.doesNotMatch(body,/Anand Institute|Easwari|COMPUTER SCIENCE AND ENGINEERING/);
+    else {assert.doesNotMatch(body,/Anand Institute|Easwari|COMPUTER SCIENCE AND ENGINEERING/);assert.doesNotMatch(study,/Continue with real programme listings|\/internal\/m4-pilot/);}
   }finally{child.kill();await once(child,"exit");}
  }
 });
