@@ -199,7 +199,7 @@ test("released copy uses only the nine exact associations; held and unrelated of
   assert.equal(linked.length,9);
   const ids=[...new Set(linked.map(i=>i.profileId))];assert.equal(ids.length,6);
   const profiles=ids.map(id=>{
-    const copy={ta:"சோதனை அறிமுகம்\nசோதனை பாடங்கள்\nசோதனை சிந்தனை",en:"TEST ONLY introduction\nTEST ONLY subjects\nTEST ONLY reflection"};
+    const copy={ta:"சோதனை அறிமுகம்\nசோதனை பாடங்கள்\nசோதனை செய்முறை\nசோதனை கவனம்\nசோதனை அடுத்து",en:"TEST ONLY introduction\nTEST ONLY subjects\nTEST ONLY practice\nTEST ONLY considerations\nTEST ONLY next action"};
     const evidence={url:"https://curriculum.example.org/test-only",locator:"test page",scope:"Test-only scope"};
     return {id,version:"TEST_ONLY",disposition:"APPROVED",copy,evidence,approval:{version:"TEST_ONLY",approved_copy:{...copy},approved_evidence:{...evidence},owner:"test",factual:"test",ta:"test",en:"test",reference:"TEST_ONLY"}};
   });

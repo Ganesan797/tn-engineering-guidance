@@ -26,7 +26,7 @@ export function isReleasedBranchCopy(profile: ReviewedBranchCopy): boolean {
   if (profile.disposition !== "APPROVED" || !a || a.version !== profile.version
     || a.approved_copy.ta !== profile.copy.ta || a.approved_copy.en !== profile.copy.en
     || !a.approved_evidence || a.approved_evidence.url !== profile.evidence.url || a.approved_evidence.locator !== profile.evidence.locator || a.approved_evidence.scope !== profile.evidence.scope
-    || [profile.copy.ta, profile.copy.en].some(copy => copy.split("\n").length !== 3 || copy.split("\n").some(line => !present(line)))
+    || [profile.copy.ta, profile.copy.en].some(copy => copy.split("\n").length !== 5 || copy.split("\n").some(line => !present(line)))
     || ![profile.id, profile.version, profile.copy.ta, profile.copy.en, a.owner, a.factual, a.ta, a.en, a.reference,
       profile.evidence.locator, profile.evidence.scope].every(present)) return false;
   try { const url = new URL(profile.evidence.url); return url.protocol === "https:" && !url.username && !url.password && !url.hostname.endsWith(".test"); }

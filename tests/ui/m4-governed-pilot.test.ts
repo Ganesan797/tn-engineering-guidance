@@ -10,7 +10,7 @@ const unknown = {disposition:"PENDING" as const,reference:null,exact:null};
 function fixtures(): PilotInput {
  const colleges=[1,2,3,4].map(n=>{ const identity={code:`sample-${n}`,name:`Sample college ${n}`,source}; const district={value:n===1?"Chennai":"Madurai",source}; const type={value:n===1?"GOVERNMENT":"PRIVATE",source}; return {identity,identityDecision:accepted(identity),district:n===3?null:district,districtDecision:n===3?unknown:accepted(district),type,typeDecision:accepted(type)}; });
  const pairs=colleges.map((c,n)=>{const offering={college:c.identity.code,programme:n===0?"CS":"AD",name:n===0?"COMPUTING":"DATA SCIENCE",source};const link={college:offering.college,programme:offering.programme,profileId:offering.programme};return {offering,offeringDecision:accepted(offering),profileId:offering.programme,linkDecision:accepted(link)};});
- const copy={ta:"தமிழ் அறிமுகம்\nதமிழ் பாடங்கள்\nதமிழ் பயிற்சி",en:"Example introduction\nExample topics\nExample exercise"};
+ const copy={ta:"தமிழ் அறிமுகம்\nதமிழ் பாடங்கள்\nதமிழ் பயிற்சி\nதமிழ் கவனம்\nதமிழ் அடுத்து",en:"Example introduction\nExample topics\nExample exercise\nExample considerations\nExample next action"};
  const evidence={url:"https://curriculum.example.org/source",locator:"page 1",scope:"Example educational scope"};
  const p:ReviewedBranchCopy={id:"CS",version:"v1",disposition:"APPROVED",copy,evidence,approval:{version:"v1",approved_copy:structuredClone(copy),approved_evidence:structuredClone(evidence),owner:"owner",factual:"facts",ta:"ta",en:"en",reference:"test-approval"}};
  return {classification:"TEST_FIXTURE",colleges,pairs,profiles:[p]};
@@ -70,6 +70,8 @@ test("marks-free browsing, bounded filters, bilingual navigation and transient c
  const home=render("lang=en");assert.match(home,/No marks are required/);assert.doesNotMatch(home,/name="(?:marks|cutoff|community)"/i);
  const branches=render("lang=en&view=branches");assert.match(branches,/COMPUTING/);assert.match(branches,/Search by name or code/);
  const branch=render("lang=en&view=branch&branch=CS");assert.match(branch,/Example introduction/);assert.match(branch,/does not establish any selected college/);
+ for(const heading of ["Simple explanation","Typical subjects","Practical learning and applications","Important considerations","What to explore next?"]) assert.ok(branch.includes(`<h3>${heading}</h3>`));
+ assert.match(branch,/See 1 listed colleges/);
  const filtered=render("lang=en&view=colleges&district=Chennai");assert.match(filtered,/sample-1/);assert.doesNotMatch(filtered,/sample-2|sample-3/);assert.match(filtered,/Unknown district \/ type values are excluded/);
  const all=render("lang=en&view=colleges");assert.match(all,/sample-3/);assert.match(all,/not saved|not confirmed/);assert.match(all,/view=college&amp;college=sample-1/);
  const collegePage=render("lang=en&view=college&college=sample-1");assert.match(collegePage,/Sample college 1/);assert.match(collegePage,/COMPUTING/);assert.match(collegePage,/view=detail/);

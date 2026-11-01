@@ -104,7 +104,7 @@ test("held and pending content stay out, synthetic boundary and escaping hold", 
  });
 
 test("real educational copy needs exact version, owner, factual and both language approval independently", () => {
-  const copy = {ta:"அறிமுகம்\nபாடங்கள்\nபயிற்சி",en:"Introduction\nSubjects\nPractice"};
+  const copy = {ta:"அறிமுகம்\nபாடங்கள்\nபயிற்சி\nகவனம்\nஅடுத்து",en:"Introduction\nSubjects\nPractice\nConsiderations\nNext action"};
   const candidate: ReviewedBranchCopy = {id:"CS",version:"review-1",disposition:"HOLD",copy,
     evidence:{url:"https://curriculum.example.org/cs",locator:"PDF pp3–4",scope:"Named institution and regulation only"},approval:null};
   assert.equal(selectBranchCopy("CS",copy).kind,"SYNTHETIC_ILLUSTRATION");
@@ -113,7 +113,8 @@ test("real educational copy needs exact version, owner, factual and both languag
   assert.equal(isReleasedBranchCopy(released),true);
   assert.equal(selectBranchCopy("CS",copy,[released]).kind,"REVIEWED_EDUCATIONAL");
   for (const key of ["owner","factual","ta","en","reference","version"] as const) assert.equal(isReleasedBranchCopy({...released,approval:{...released.approval!,[key]:""}}),false,key);
-  assert.equal(isReleasedBranchCopy({...released,copy:{...copy,en:"Changed\nSubjects\nPractice"}}),false);
+  assert.equal(isReleasedBranchCopy({...released,copy:{...copy,en:"Changed\nSubjects\nPractice\nConsiderations\nNext action"}}),false);
+  assert.equal(isReleasedBranchCopy({...released,copy:{...copy,en:"Introduction\nSubjects\nPractice"}}),false);
   assert.equal(isReleasedBranchCopy({...released,evidence:{...released.evidence,url:"https://source.example.test"}}),false);
   assert.equal(isReleasedBranchCopy({...released,evidence:{...released.evidence,scope:"Unapproved new scope"}}),false);
   assert.equal(selectBranchCopy("CS",copy,[released,released]).kind,"SYNTHETIC_ILLUSTRATION");

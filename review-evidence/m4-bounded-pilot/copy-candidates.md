@@ -262,3 +262,9 @@ Targeted visual check: PDF page 4 of all six documents inspected; text checks co
 | CE | `4c73da6687227c09d822f67e5cad5b967e7717767fa95906cf2fb6a45eda7496` |
 | EC | `975d096ceb8033eb47258a9eef299dafdfc7790f3562a209baf4025abe3cb78c` |
 | EE | `7272e330c01f771fa693c29316a0868ced6028671efbab3dcbc6578bdc168b3c` |
+
+## Five-field handoff — 2026-11-01
+
+The [complete 84-profile candidate catalogue](../../docs/content/m4/m4_t03_comprehensive_branch_content_review_v1.md#2026-11-01-complete-candidate-handoff) now has revised conversational five-field entries for P01 CS, P02 AD, P03 BM, P04 CE, P05 EC and P06 EE. Each separates a simple explanation, subjects, practical learning, considerations and a next action. The revised first batch uses the same six official curriculum references and focused PDF page ranges above, with the same non-autonomous affiliated-institution limit. It does not establish a listed college's own syllabus.
+
+The six original Tamil sections in this file remain unchanged, and their owner-reported PASS applies **only** to those exact sections. The new five-field Tamil arrangement and English wording in the catalogue require renewed human review. P01/P02 HOLD and P03–P06 FIX/review remain the recorded dispositions until explicit replacement decisions. No content entered `APPROVED_BRANCH_COPY`; no held BY/XC, AE/AO, scope or variant mapping was cleared. Owner decisions must identify the exact five-field version and PDF pages/scope for each profile, then separately record factual, Tamil, English-equivalence and release approval. Programme-to-profile associations beyond L01–L09 require their own decision.
