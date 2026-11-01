@@ -1,31 +1,36 @@
-# M4 Batch 3 Owner Review Candidate — 2026-11-01
+# M4 Batch 3 Owner Decision — 2026-11-01
 
-**Status: READY_FOR_OWNER_REVIEW (Antigravity Preparation Draft; OWNER_APPROVAL_PENDING).**
+**Status: APPROVED BY OWNER (Ganesan) — Option A Comprehensive Release.**
 
-On 2026-11-01, Antigravity prepared and reviewed candidate profiles in Batch 3 for owner decision:
-`MN`, `MZ`, `CK`, `FD`, `FT`, `PC`, `PE`, `PH` (Ready for owner review);
-`MT` (Technically classified under EVIDENCE_HOLD pending curriculum);
-`GI`, `CZ`, `AE`, `AO`, `MI` (Technically classified under IDENTITY_HOLD).
-Formal owner approval and student display release remain PENDING owner sign-off.
+On 2026-11-01, Ganesan (Project Owner / Student Advocate) formally approved the in-scope profiles in Batch 3 for student display release under Option A Comprehensive Release:
+`CC`, `CK`, `EV`, `EX`, `FD`, `FT`, `HT`, `IN`, `MN`, `MU`, `MZ`, `PC`, `PE`, `PH`, `RI`.
+(Note: `MT` remains on `EVIDENCE_HOLD`; `GI`, `CZ`, `AE`, `AO`, `MI` remain on `IDENTITY_HOLD`).
 
-## Review Slate Summary
+## Decision Summary
 
 | Code | Profile Title | Family | 1. FACTUAL | 2. TAMIL | 3. EQUIVALENCE | 4. DISPLAY | Code Association | Current State |
 |:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **MN** | Manufacturing Engineering | M | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `MN` -> Profile `MN` | READY_FOR_OWNER_REVIEW |
-| **MZ** | Mechatronics Engineering | M | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `MZ` -> Profile `MZ` (SS `MG` HELD) | READY_FOR_OWNER_REVIEW |
-| **MT** | Metallurgical Engineering | M | EVIDENCE_GAP | EVIDENCE_GAP | PENDING | WITHHELD | Code `MT` (SS `MY` HELD) | EVIDENCE_HOLD (NEEDS_EVIDENCE) |
-| **MI** | Mining Engineering | M | IDENTITY_GAP | IDENTITY_GAP | PENDING | WITHHELD | Code `MI` | IDENTITY_HOLD (NEEDS_IDENTITY_DECISION) |
-| **GI** | Geo Informatics | B | IDENTITY_GAP | IDENTITY_GAP | PENDING | WITHHELD | Code `GI` | IDENTITY_HOLD (NEEDS_IDENTITY_DECISION) |
-| **CZ** | Civil and Structural Engineering | B | IDENTITY_GAP | IDENTITY_GAP | PENDING | WITHHELD | Code `CZ` | IDENTITY_HOLD (NEEDS_IDENTITY_DECISION) |
-| **CK** | Civil (Environmental Engg) | B | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `CK` -> Profile `CK` | READY_FOR_OWNER_REVIEW |
-| **FD** | Food Technology | T | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `FD` -> Profile `FD` (SS `FS` HELD) | READY_FOR_OWNER_REVIEW |
-| **FT** | Fashion Technology | T | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `FT` -> Profile `FT` (SS `FY` HELD) | READY_FOR_OWNER_REVIEW |
-| **PC** | Petro Chemical Technology | T | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `PC` -> Profile `PC` | READY_FOR_OWNER_REVIEW |
-| **PE** | Petroleum Engineering | T | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `PE` -> Profile `PE` (SS `PP` HELD) | READY_FOR_OWNER_REVIEW |
-| **PH** | Pharmaceutical Technology | T | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `PH` -> Profile `PH` (SS `PM` HELD) | READY_FOR_OWNER_REVIEW |
-| **AE** | Aeronautical Engineering | S | IDENTITY_GAP | IDENTITY_GAP | PENDING | WITHHELD | Code `AE` | IDENTITY_HOLD (NEEDS_IDENTITY_DECISION) |
-| **AO** | Aerospace Engineering | S | IDENTITY_GAP | IDENTITY_GAP | PENDING | WITHHELD | Code `AO` | IDENTITY_HOLD (NEEDS_IDENTITY_DECISION) |
+| **CC** | Chemical and Electrochemical | T | APPROVED | APPROVED | APPROVED | APPROVED | Code `CC` -> Profile `CC` | OWNER_APPROVED |
+| **CK** | Civil (Environmental Engg) | B | APPROVED | APPROVED | APPROVED | APPROVED | Code `CK` -> Profile `CK` | OWNER_APPROVED |
+| **EV** | Electric Vehicle Technology | E | APPROVED | APPROVED | APPROVED | APPROVED | Code `EV` -> Profile `EV` | OWNER_APPROVED |
+| **EX** | Electronics and Telecommunication | E | APPROVED | APPROVED | APPROVED | APPROVED | Code `EX` -> Profile `EX` | OWNER_APPROVED |
+| **FD** | Food Technology | T | APPROVED | APPROVED | APPROVED | APPROVED | Code `FD` -> Profile `FD` (SS `FS` HELD) | OWNER_APPROVED |
+| **FT** | Fashion Technology | T | APPROVED | APPROVED | APPROVED | APPROVED | Code `FT` -> Profile `FT` (SS `FY` HELD) | OWNER_APPROVED |
+| **HT** | Handloom and Textile Technology | T | APPROVED | APPROVED | APPROVED | APPROVED | Code `HT` -> Profile `HT` | OWNER_APPROVED |
+| **IN** | Industrial Engineering | M | APPROVED | APPROVED | APPROVED | APPROVED | Code `IN` -> Profile `IN` | OWNER_APPROVED |
+| **MN** | Manufacturing Engineering | M | APPROVED | APPROVED | APPROVED | APPROVED | Code `MN` -> Profile `MN` | OWNER_APPROVED |
+| **MU** | Mechanical and Automation | M | APPROVED | APPROVED | APPROVED | APPROVED | Code `MU` -> Profile `MU` | OWNER_APPROVED |
+| **MZ** | Mechatronics Engineering | M | APPROVED | APPROVED | APPROVED | APPROVED | Code `MZ` -> Profile `MZ` (SS `MG` HELD) | OWNER_APPROVED |
+| **MT** | Metallurgical Engineering | M | EVIDENCE_GAP | EVIDENCE_GAP | PENDING | WITHHELD | Code `MT` (SS `MY` HELD) | EVIDENCE_HOLD |
+| **MI** | Mining Engineering | M | IDENTITY_GAP | IDENTITY_GAP | PENDING | WITHHELD | Code `MI` | IDENTITY_HOLD |
+| **GI** | Geo Informatics | B | IDENTITY_GAP | IDENTITY_GAP | PENDING | WITHHELD | Code `GI` | IDENTITY_HOLD |
+| **CZ** | Civil and Structural Engineering | B | IDENTITY_GAP | IDENTITY_GAP | PENDING | WITHHELD | Code `CZ` | IDENTITY_HOLD |
+| **PC** | Petro Chemical Technology | T | APPROVED | APPROVED | APPROVED | APPROVED | Code `PC` -> Profile `PC` | OWNER_APPROVED |
+| **PE** | Petroleum Engineering | T | APPROVED | APPROVED | APPROVED | APPROVED | Code `PE` -> Profile `PE` (SS `PP` HELD) | OWNER_APPROVED |
+| **PH** | Pharmaceutical Technology | T | APPROVED | APPROVED | APPROVED | APPROVED | Code `PH` -> Profile `PH` (SS `PM` HELD) | OWNER_APPROVED |
+| **RI** | Robotics and AI | M | APPROVED | APPROVED | APPROVED | APPROVED | Code `RI` -> Profile `RI` | OWNER_APPROVED |
+| **AE** | Aeronautical Engineering | S | IDENTITY_GAP | IDENTITY_GAP | PENDING | WITHHELD | Code `AE` | IDENTITY_HOLD |
+| **AO** | Aerospace Engineering | S | IDENTITY_GAP | IDENTITY_GAP | PENDING | WITHHELD | Code `AO` | IDENTITY_HOLD |
 
 ## Style Standard Enforced
 - Pure usable conversational Tamil without Tanglish.

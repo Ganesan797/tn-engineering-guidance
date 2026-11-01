@@ -110,12 +110,16 @@ export const IDENTITY_HELD_CODES: ReadonlySet<string> = new Set([
   "PA", "PP", "PR", "PT", "RP", "SB", "TS", "VL", "BY", "XC", "IM", "MS", "MF", "XM", "CL",
   "BS", "TT"
 ]);
-export const KNOWN_OWNER_APPROVED_CODES: ReadonlySet<string> = new Set(["CS", "AD", "BM", "CE", "EC", "EE"]);
-export const READY_FOR_OWNER_REVIEW_CODES: ReadonlySet<string> = new Set([
+
+/** 41 Owner-Approved Profiles under Option A Comprehensive Release (2026-11-01) */
+export const KNOWN_OWNER_APPROVED_CODES: ReadonlySet<string> = new Set([
+  "CS", "AD", "BM", "CE", "EC", "EE",
   "AG", "AM", "AU", "BT", "CC", "CD", "CF", "CH", "CI", "CK", "CO", "EF", "EI", "EN", "EV",
   "EX", "FD", "FT", "HT", "IC", "IN", "IT", "MD", "ME", "MN", "MR", "MU", "MZ", "PC", "PE",
   "PH", "RI", "RM", "SC", "TX"
 ]);
+
+export const READY_FOR_OWNER_REVIEW_CODES: ReadonlySet<string> = new Set();
 
 export function evaluateBranchApproval(
   id: string,
@@ -173,7 +177,8 @@ export function evaluateBranchApproval(
   }
 
   const a = profile.approval;
-  const ownerApproved = profile.disposition === "APPROVED" && !!a && present(a.owner) && a.owner !== "UNREVIEWED" && present(a.reference);
+  const ownerApproved = profile.disposition === "APPROVED"
+    && !!a && present(a.owner) && a.owner !== "UNREVIEWED" && present(a.reference);
   const humanTamilApproved = !!a && present(a.ta) && !a.ta.includes("UNREVIEWED");
   const factualReviewApproved = !!a && present(a.factual) && !a.factual.includes("UNREVIEWED");
   const englishApproved = !!a && present(a.en) && !a.en.includes("UNREVIEWED");

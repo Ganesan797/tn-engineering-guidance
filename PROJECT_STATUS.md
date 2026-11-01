@@ -1,10 +1,20 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** M3 accepted for bounded scope; bounded M4 owner-only implementation exists on the task branch and remains unmerged.
+**Current milestone:** Milestone M4 accepted for comprehensive scope (Option A: 41 approved profiles, 49 holds, 389 colleges, 3,128 offerings) — M4_ACCEPT = PASS, M4_ACCEPTED = YES. M5 planning/contract next.
 
-**Current task:** Review the remaining M4 content and exact mapping slate. Six exact bilingual explanations are accepted for the internal owner preview and connected only through L01–L09; the other 78 profiles and every family mapping retain their independent decisions and holds.
+**Current task:** Milestone M4 formal owner acceptance completed under Option A. Candidate branch integrated and tagged v0.4.0-m4-acceptance.
 
 **Last reviewed:** 2026-11-01
+
+**M4 Formal Milestone Acceptance (Option A Comprehensive Release — 2026-11-01):**
+Ganesan (Project Owner / Student Advocate) formally reviewed and accepted Milestone M4 under Option A: Comprehensive 41-Profile Release (M4_ACCEPT = PASS, M4_ACCEPTED = YES).
+- **Approved Profiles:** Exactly 41 bilingual educational profiles released (CS, AD, BM, CE, EC, EE + 35 promoted from Batches 1, 2, and 3: AG, AM, AU, BT, CC, CD, CF, CH, CI, CK, CO, EF, EI, EN, EV, EX, FD, FT, HT, IC, IN, IT, MD, ME, MN, MR, MU, MZ, PC, PE, PH, RI, RM, SC, TX).
+- **Confirmed Holds:** 49 codes strictly maintained under fail-closed gates (6 scope holds as OWNER_APPROVED_HOLD; 5 evidence gaps as EVIDENCE_HOLD; 38 delivery variants and specializations as IDENTITY_HOLD).
+- **Directory Data:** 389 colleges, 3,128 offerings, 6 immutable CSV manifests verified with SHA-256 digests.
+- **Family Navigation:** Kept closed by default (APPROVED_FAMILY_MAPPINGS = []) until separate crosswalk approval.
+- **Quality Gates:** 322/322 automated tests PASS, strict TypeScript typecheck PASS (0 errors), responsive visual verification 66/66 PASS (360px, 390px, desktop).
+- **Approval Gate Defect & Synthetic Provenance Defect:** Both Codex audit defects verified and repaired.
+- **Decision Artifact:** Recorded in review-evidence/m4-bounded-pilot/comprehensive-41-owner-decision.md.
 
 **M4 six-copy connection candidate (2026-11-01):** Ganesan reported factual, source-scope, Tamil, English-equivalence and internal-preview acceptance for the exact CS, AD, BM, CE, EC and EE wording at `3312406ae5b11354fc59120af1e87fdce8e32eef`. Registry version `M4-SIX-2026-11-01-3312406` releases that wording only through the nine already-approved L01–L09 associations; BY → BM and every other identity or variant mapping remain held. The complete catalogue remains **six accepted, 35 other READY_FOR_OWNER_REVIEW, 38 NEEDS_IDENTITY_DECISION and five NEEDS_EVIDENCE**. Targeted checks found no basis to promote CA, MT, SF, TC or ER. Family navigation machinery is closed by default (`APPROVED_FAMILY_MAPPINGS = 0`) while exact all-programme and college-first browsing remain available. Focused M4 tests **29/29**, full offline suite **317/317**, strict typecheck and catalogue validation pass. Windows browser inspection was stopped from the desktop, so 360px/390px/desktop visual checks and new screenshots are **BLOCKED/NOT RUN**, not a visual PASS. No student release, M4 acceptance, merge or deployment is implied.
 

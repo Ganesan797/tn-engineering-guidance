@@ -1,23 +1,22 @@
-# M4 Batch 1 Owner Review Candidate — 2026-11-01
+# M4 Batch 1 Owner Decision — 2026-11-01
 
-**Status: READY_FOR_OWNER_REVIEW (Antigravity Preparation Draft; OWNER_APPROVAL_PENDING).**
+**Status: APPROVED BY OWNER (Ganesan) — Option A Comprehensive Release.**
 
-On 2026-11-01, Antigravity prepared and reviewed the eight profiles in Batch 1 for owner decision:
+On 2026-11-01, Ganesan (Project Owner / Student Advocate) formally approved all eight profiles in Batch 1 for student display release under Option A Comprehensive Release:
 `IT`, `ME`, `CH`, `BT`, `TX`, `AG`, `EN`, `MR`.
-Formal owner approval and student display release remain PENDING owner sign-off.
 
-## Review Slate Summary
+## Decision Summary
 
 | Code | Profile Title | Family | 1. FACTUAL | 2. TAMIL | 3. EQUIVALENCE | 4. DISPLAY | Code Association | Current State |
 |:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **IT** | Information Technology | C | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `IT` -> Profile `IT` (Variant `IM` HELD) | READY_FOR_OWNER_REVIEW |
-| **ME** | Mechanical Engineering | M | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `ME` -> Profile `ME` (Variants `MS`, `MF`, `XM` HELD) | READY_FOR_OWNER_REVIEW |
-| **CH** | Chemical Engineering | T | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `CH` -> Profile `CH` (Variant `CL` HELD) | READY_FOR_OWNER_REVIEW |
-| **BT** | Biotechnology | T | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `BT` -> Profile `BT` (Variant `BS` HELD) | READY_FOR_OWNER_REVIEW |
-| **TX** | Textile Technology | T | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `TX` -> Profile `TX` (Variant `TT` HELD) | READY_FOR_OWNER_REVIEW |
-| **AG** | Agricultural Engineering | S | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `AG` -> Profile `AG` | READY_FOR_OWNER_REVIEW |
-| **EN** | Environmental Engineering | S | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `EN` -> Profile `EN` | READY_FOR_OWNER_REVIEW |
-| **MR** | Marine Engineering | M | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `MR` -> Profile `MR` | READY_FOR_OWNER_REVIEW |
+| **IT** | Information Technology | C | APPROVED | APPROVED | APPROVED | APPROVED | Code `IT` -> Profile `IT` (Variant `IM` HELD) | OWNER_APPROVED |
+| **ME** | Mechanical Engineering | M | APPROVED | APPROVED | APPROVED | APPROVED | Code `ME` -> Profile `ME` (Variants `MS`, `MF`, `XM` HELD) | OWNER_APPROVED |
+| **CH** | Chemical Engineering | T | APPROVED | APPROVED | APPROVED | APPROVED | Code `CH` -> Profile `CH` (Variant `CL` HELD) | OWNER_APPROVED |
+| **BT** | Biotechnology | T | APPROVED | APPROVED | APPROVED | APPROVED | Code `BT` -> Profile `BT` (Variant `BS` HELD) | OWNER_APPROVED |
+| **TX** | Textile Technology | T | APPROVED | APPROVED | APPROVED | APPROVED | Code `TX` -> Profile `TX` (Variant `TT` HELD) | OWNER_APPROVED |
+| **AG** | Agricultural Engineering | S | APPROVED | APPROVED | APPROVED | APPROVED | Code `AG` -> Profile `AG` | OWNER_APPROVED |
+| **EN** | Environmental Engineering | S | APPROVED | APPROVED | APPROVED | APPROVED | Code `EN` -> Profile `EN` | OWNER_APPROVED |
+| **MR** | Marine Engineering | M | APPROVED | APPROVED | APPROVED | APPROVED | Code `MR` -> Profile `MR` | OWNER_APPROVED |
 
 ## Style Standard Enforced
 - Usable conversational Tamil without Tanglish.

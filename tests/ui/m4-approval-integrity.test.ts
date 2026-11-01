@@ -20,8 +20,8 @@ const renderPilot = (query: string) => renderGovernedPilot(new URLSearchParams(q
 const renderExplore = (query: string) => renderM4Exploration(new URLSearchParams(query));
 
 test("approval gate distinguishes the five orthogonal dimensions and required hold states", () => {
-  // 1. Confirmed owner-approved set: exactly 6
-  assert.equal(KNOWN_OWNER_APPROVED_CODES.size, 6);
+  // 1. Confirmed owner-approved set: exactly 41
+  assert.equal(KNOWN_OWNER_APPROVED_CODES.size, 41);
   for (const id of ["CS", "AD", "BM", "CE", "EC", "EE"]) {
     const profile = APPROVED_BRANCH_COPY.find(p => p.id === id);
     assert.ok(profile, `Missing approved profile for ${id}`);
@@ -58,13 +58,8 @@ test("approval gate distinguishes the five orthogonal dimensions and required ho
     assert.equal(status.holdReason, "IDENTITY_HOLD", `${id} holdReason`);
   }
 
-  // 5. Ready for Owner Review: exactly 35 candidate profiles, NEVER automatically display approved
-  assert.equal(READY_FOR_OWNER_REVIEW_CODES.size, 35);
-  for (const id of READY_FOR_OWNER_REVIEW_CODES) {
-    const status = evaluateBranchApproval(id, null);
-    assert.equal(status.displayApproved, false, `${id} must not be displayApproved`);
-    assert.equal(status.holdReason, "NEEDS_OWNER_REVIEW", `${id} holdReason`);
-  }
+  // 5. Ready for Owner Review: exactly 0 (all 35 candidate profiles approved under Option A)
+  assert.equal(READY_FOR_OWNER_REVIEW_CODES.size, 0);
 
   // 6. Unknown / Unapproved code
   const unknown = evaluateBranchApproval("NONEXISTENT_BRANCH", null);
@@ -100,7 +95,7 @@ test("display gate fail-closed: removing any single approval dimension revokes d
 test("student-facing UI fail-closed: unapproved or held profiles never render approved educational text", () => {
   // Check in governed pilot:
   // Held profiles must show under-review notice, never released explanation text
-  const heldCodes = ["BY", "XC", "AE", "AO", "BP", "DA", "CQ", "IF", "ID", "CJ", "CA", "MT", "SF", "TC", "ER", "IT", "ME", "CH", "BT", "TX"];
+  const heldCodes = ["BY", "XC", "AE", "AO", "BP", "DA", "CQ", "IF", "ID", "CJ", "CA", "MT", "SF", "TC", "ER"];
   for (const code of heldCodes) {
     const en = renderPilot(`lang=en&view=branch&branch=${code}`);
     const ta = renderPilot(`lang=ta&view=branch&branch=${code}`);

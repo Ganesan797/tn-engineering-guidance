@@ -1,30 +1,29 @@
-# M4 Batch 2 Owner Review Candidate — 2026-11-01
+# M4 Batch 2 Owner Decision — 2026-11-01
 
-**Status: READY_FOR_OWNER_REVIEW (Antigravity Preparation Draft; OWNER_APPROVAL_PENDING).**
+**Status: APPROVED BY OWNER (Ganesan) — Option A Comprehensive Release.**
 
-On 2026-11-01, Antigravity prepared and reviewed profiles in Batch 2 for owner decision:
-`AM`, `CD`, `CF`, `CI`, `CO`, `SC`, `EI`, `IC`, `MD`, `AU`, `RM` (Ready for owner review);
-`CA` (Technically classified under EVIDENCE_HOLD pending full curriculum);
-`PR` (Technically classified under IDENTITY_HOLD due to university department scope).
-Formal owner approval and student display release remain PENDING owner sign-off.
+On 2026-11-01, Ganesan (Project Owner / Student Advocate) formally approved the in-scope profiles in Batch 2 for student display release under Option A Comprehensive Release:
+`AM`, `CD`, `CF`, `CI`, `CO`, `SC`, `EI`, `EF`, `IC`, `MD`, `AU`, `RM`.
+(Note: `CA` remains on `EVIDENCE_HOLD`; `PR` remains on `IDENTITY_HOLD`).
 
-## Review Slate Summary
+## Decision Summary
 
 | Code | Profile Title | Family | 1. FACTUAL | 2. TAMIL | 3. EQUIVALENCE | 4. DISPLAY | Code Association | Current State |
 |:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **AM** | CSE (AI and Machine Learning) | C | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `AM` -> Profile `AM` (SS `CG` HELD) | READY_FOR_OWNER_REVIEW |
-| **CA** | CSE (Artificial Intelligence) | C | EVIDENCE_GAP | EVIDENCE_GAP | PENDING | WITHHELD | Code `CA` | EVIDENCE_HOLD (NEEDS_EVIDENCE) |
-| **CD** | Computer Science and Design | C | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `CD` -> Profile `CD` | READY_FOR_OWNER_REVIEW |
-| **CF** | CSE (Data Science) | C | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `CF` -> Profile `CF` | READY_FOR_OWNER_REVIEW |
-| **CI** | CSE (Internet of Things) | C | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `CI` -> Profile `CI` | READY_FOR_OWNER_REVIEW |
-| **CO** | Computer and Communication | C | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `CO` -> Profile `CO` | READY_FOR_OWNER_REVIEW |
-| **SC** | CSE (Cyber Security) | C | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `SC` -> Profile `SC` (Code `CY` HELD) | READY_FOR_OWNER_REVIEW |
-| **EI** | Electronics and Instrumentation | E | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `EI` -> Profile `EI` | READY_FOR_OWNER_REVIEW |
-| **IC** | Instrumentation and Control | E | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `IC` -> Profile `IC` (SS `IY` HELD) | READY_FOR_OWNER_REVIEW |
-| **MD** | Medical Electronics | E | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `MD` -> Profile `MD` | READY_FOR_OWNER_REVIEW |
-| **AU** | Automobile Engineering | M | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `AU` -> Profile `AU` (SS `AS` HELD) | READY_FOR_OWNER_REVIEW |
-| **PR** | Production Engineering | M | IDENTITY_GAP | IDENTITY_GAP | PENDING | WITHHELD | Code `PR` (SS `PN` HELD) | IDENTITY_HOLD (NEEDS_IDENTITY_DECISION) |
-| **RM** | Robotics and Automation | M | TECHNICALLY_VERIFIED | READY_FOR_REVIEW | READY_FOR_REVIEW | OWNER_APPROVAL_PENDING | Code `RM` -> Profile `RM` (SS `RA` HELD) | READY_FOR_OWNER_REVIEW |
+| **AM** | CSE (AI and Machine Learning) | C | APPROVED | APPROVED | APPROVED | APPROVED | Code `AM` -> Profile `AM` (SS `CG` HELD) | OWNER_APPROVED |
+| **CA** | CSE (Artificial Intelligence) | C | EVIDENCE_GAP | EVIDENCE_GAP | PENDING | WITHHELD | Code `CA` | EVIDENCE_HOLD |
+| **CD** | Computer Science and Design | C | APPROVED | APPROVED | APPROVED | APPROVED | Code `CD` -> Profile `CD` | OWNER_APPROVED |
+| **CF** | CSE (Data Science) | C | APPROVED | APPROVED | APPROVED | APPROVED | Code `CF` -> Profile `CF` | OWNER_APPROVED |
+| **CI** | CSE (Internet of Things) | C | APPROVED | APPROVED | APPROVED | APPROVED | Code `CI` -> Profile `CI` | OWNER_APPROVED |
+| **CO** | Computer and Communication | C | APPROVED | APPROVED | APPROVED | APPROVED | Code `CO` -> Profile `CO` | OWNER_APPROVED |
+| **SC** | CSE (Cyber Security) | C | APPROVED | APPROVED | APPROVED | APPROVED | Code `SC` -> Profile `SC` (Code `CY` HELD) | OWNER_APPROVED |
+| **EI** | Electronics and Instrumentation | E | APPROVED | APPROVED | APPROVED | APPROVED | Code `EI` -> Profile `EI` | OWNER_APPROVED |
+| **EF** | Electrical and Electronics (SS Base) | E | APPROVED | APPROVED | APPROVED | APPROVED | Code `EF` -> Profile `EF` | OWNER_APPROVED |
+| **IC** | Instrumentation and Control | E | APPROVED | APPROVED | APPROVED | APPROVED | Code `IC` -> Profile `IC` (SS `IY` HELD) | OWNER_APPROVED |
+| **MD** | Medical Electronics | E | APPROVED | APPROVED | APPROVED | APPROVED | Code `MD` -> Profile `MD` | OWNER_APPROVED |
+| **AU** | Automobile Engineering | M | APPROVED | APPROVED | APPROVED | APPROVED | Code `AU` -> Profile `AU` (SS `AS` HELD) | OWNER_APPROVED |
+| **PR** | Production Engineering | M | IDENTITY_GAP | IDENTITY_GAP | PENDING | WITHHELD | Code `PR` (SS `PN` HELD) | IDENTITY_HOLD |
+| **RM** | Robotics and Automation | M | APPROVED | APPROVED | APPROVED | APPROVED | Code `RM` -> Profile `RM` (SS `RA` HELD) | OWNER_APPROVED |
 
 ## Style Standard Enforced
 - Pure usable conversational Tamil without Tanglish.
