@@ -8,6 +8,8 @@ The guided journey remains primary; governed Q&A is optional exploration. Ganesa
 
 ## Content to review
 
+- [M4 complete 84-profile / 116-code catalogue](content/m4/m4_t03_comprehensive_branch_content_review_v1.md) and [consolidated exact-copy/mapping decision package](../review-evidence/m4-bounded-pilot/six-explanations-owner-decision.md) — six exact bilingual explanations are accepted for internal preview through L01–L09 only; 35 other review-ready profiles, 38 identity decisions, five evidence gaps and all family mappings remain for explicit review.
+
 - [T03 factual-scope and human Tamil review worksheet](planning/t03_factual_tamil_review_worksheet_2026-10-04.md) — start with the practical order, then J01; 20 journey/control items and all 70 question pairs, with independent NOT REVIEWED outcomes.
 
 - [Admission answers B01–B08](content/admission/student_pov_admission_batch_int05_int08_v1.md) — INT-05–INT-08; [owner answer review accepted](content/admission/student_pov_admission_owner_review_decision_v1.md), with remaining release reviews identified there.

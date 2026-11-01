@@ -107,7 +107,7 @@ test("real educational copy needs exact version, owner, factual and both languag
   const copy = {ta:"அறிமுகம்\nபாடங்கள்\nபயிற்சி\nகவனம்\nஅடுத்து",en:"Introduction\nSubjects\nPractice\nConsiderations\nNext action"};
   const candidate: ReviewedBranchCopy = {id:"CS",version:"review-1",disposition:"HOLD",copy,
     evidence:{url:"https://curriculum.example.org/cs",locator:"PDF pp3–4",scope:"Named institution and regulation only"},approval:null};
-  assert.equal(selectBranchCopy("CS",copy).kind,"SYNTHETIC_ILLUSTRATION");
+  assert.equal(selectBranchCopy("CS",copy,[]).kind,"SYNTHETIC_ILLUSTRATION");
   for (const disposition of ["HOLD","FIX"] as const) assert.equal(selectBranchCopy("CS",copy,[{...candidate,disposition}]).kind,"SYNTHETIC_ILLUSTRATION");
   const released: ReviewedBranchCopy = {...candidate,disposition:"APPROVED",approval:{version:"review-1",approved_copy:copy,approved_evidence:candidate.evidence,owner:"test owner",factual:"test factual",ta:"test Tamil",en:"test English",reference:"test-only-approval"}};
   assert.equal(isReleasedBranchCopy(released),true);

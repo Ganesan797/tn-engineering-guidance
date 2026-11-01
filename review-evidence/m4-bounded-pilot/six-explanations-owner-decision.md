@@ -1,7 +1,13 @@
 # M4 six-explanation exact-copy decision package
 
-Status: **OWNER REVIEW CANDIDATE — NOT APPROVED FOR DISPLAY**
+Status: **SIX EXACT COPIES OWNER-ACCEPTED FOR INTERNAL PREVIEW; ALL OTHER DECISIONS REMAIN HELD**
 Prepared: 2026-11-01
+
+## Owner decision — 2026-11-01
+
+Ganesan reported acceptance of the exact five-field Tamil and English wording reproduced in this file at source commit `3312406ae5b11354fc59120af1e87fdce8e32eef`, including factual meaning, the recorded source scope, Tamil wording, English equivalence and display in the internal owner preview. Recorded disposition for P01–P06: `FACTUAL = PASS_OWNER_REPORTED`; `TAMIL = PASS_OWNER_REPORTED`; `ENGLISH_EQUIVALENCE = PASS_OWNER_REPORTED`; `DISPLAY = APPROVE_EXACT_VERSION`.
+
+This acceptance is attached to registry version `M4-SIX-2026-11-01-3312406`. It does not broaden any curriculum’s stated institutional applicability and does not approve a programme association. The implementation therefore connects the copies only through the already-approved L01–L09 exact associations. `BY → BM`, all other mappings, delivery variants and scope holds remain `HOLD`.
 
 This package reproduces the existing five-field candidates from the [complete M4 catalogue](../../docs/content/m4/m4_t03_comprehensive_branch_content_review_v1.md) without rewriting them. A decision on one dimension does not decide another. Programme offerings, programme-to-profile associations and display release remain separate. Held delivery variants remain unavailable unless their own mapping decision is recorded.
 
@@ -129,12 +135,26 @@ Required independent mapping decision: `BY_TO_BM_GENERAL_INTRO = APPROVE_SCOPED 
 
 | Item | Factual | Tamil | English equivalence | Display exact five-field version | Mapping/variant note |
 | --- | --- | --- | --- | --- | --- |
-| P01 CS | PENDING | PENDING | PENDING | HOLD | CM/XS unchanged and held separately |
-| P02 AD | PENDING | PENDING | PENDING | HOLD | AT unchanged and held separately |
-| P03 BM | PENDING | PENDING | PENDING | HOLD | BY requires the separate decision below |
-| P04 CE | PENDING | PENDING | PENDING | HOLD | CN/XC unchanged and held separately |
-| P05 EC | PENDING | PENDING | PENDING | HOLD | EM unchanged and held separately |
-| P06 EE | PENDING | PENDING | PENDING | HOLD | EY unchanged and held separately |
+| P01 CS | PASS_OWNER_REPORTED | PASS_OWNER_REPORTED | PASS_OWNER_REPORTED | APPROVE_EXACT_VERSION | Connected only through L01, L02 and L04; CM/XS unchanged and held separately |
+| P02 AD | PASS_OWNER_REPORTED | PASS_OWNER_REPORTED | PASS_OWNER_REPORTED | APPROVE_EXACT_VERSION | Connected only through L03 and L09; AT unchanged and held separately |
+| P03 BM | PASS_OWNER_REPORTED | PASS_OWNER_REPORTED | PASS_OWNER_REPORTED | APPROVE_EXACT_VERSION | Connected only through L06; BY requires the separate decision below |
+| P04 CE | PASS_OWNER_REPORTED | PASS_OWNER_REPORTED | PASS_OWNER_REPORTED | APPROVE_EXACT_VERSION | Connected only through L08; CN/XC unchanged and held separately |
+| P05 EC | PASS_OWNER_REPORTED | PASS_OWNER_REPORTED | PASS_OWNER_REPORTED | APPROVE_EXACT_VERSION | Connected only through L05; EM unchanged and held separately |
+| P06 EE | PASS_OWNER_REPORTED | PASS_OWNER_REPORTED | PASS_OWNER_REPORTED | APPROVE_EXACT_VERSION | Connected only through L07; EY unchanged and held separately |
 | BY → BM general introduction only | — | — | — | HOLD | `APPROVE_SCOPED / FIX / HOLD` |
 
-No row in this package changes `APPROVED_BRANCH_COPY`, releases content to the UI, resolves a held variant, approves an offering association, or authorizes student access.
+P01–P06 now enter `APPROVED_BRANCH_COPY` for internal owner-preview display only. No row resolves a held variant, approves another offering association, authorizes student access, merge or deployment.
+
+## Remaining 78-profile decision slate
+
+The complete, exact 116-code → 84-profile → six-family candidate crosswalk remains in [the existing comprehensive catalogue](../../docs/content/m4/m4_t03_comprehensive_branch_content_review_v1.md#full-tnea-code-disposition-ledger). It is the review source of truth; this package does not duplicate or normalize its names or variants.
+
+- **35 other review-ready profiles:** AM, CD, CF, CI, CO, IT, SC, EF, EI, EV, EX, IC, MD, AU, IN, ME, MN, MU, MZ, RI, RM, CK, BT, CC, CH, FD, FT, HT, PC, PE, PH, TX, AG, EN and MR. Each needs four exact-copy decisions (factual, Tamil, English equivalence and internal-preview display) plus its separate code/profile and family mapping decision.
+- **38 identity/mapping holds:** AI, AL, CB, CG, CU, CV, CW, CY, DS, DV, GL, SB, TS, EA, EG, VL, IE, MB, MG, MI, MJ, MM, MO, PR, CZ, GI, AP, BC, CR, IB, LE, MA, PA, PP, PT, RP, AE and AO. The existing catalogue records the exact related evidence for each; name similarity remains insufficient. Recommended disposition: retain `NEEDS_IDENTITY_DECISION` and decide each exact row rather than sharing another profile automatically.
+- **Five evidence gaps checked:** CA’s official R2025 Revised 1 PDF is 52 pages but exposes only semesters I–II and no later AI course table; ER’s official R2025 PDF is 58 pages but likewise exposes only semesters I–II; TC’s official R2025 index link still returns a missing PDF; SF has a detailed official R2021 curriculum but no applicable R2025 curriculum; MT has official related materials/metallurgy sources but no exact affiliated B.E. Metallurgical Engineering curriculum applicable to the TNEA identity. Recommended disposition: retain `NEEDS_EVIDENCE`; their current cautious five-field drafts stay hidden.
+
+## Family-navigation decision
+
+The UI now has a closed-by-default family registry and supports `family → programme → approved explanation → 2026 listed colleges`. `APPROVED_FAMILY_MAPPINGS = 0`; therefore no family grouping is active. All-programme browsing and college-first search remain available without grouping.
+
+Required decision: for each exact row in the catalogue crosswalk, record `FAMILY_MAPPING = APPROVE_EXACT / FIX / HOLD` together with the programme code, profile ID and one of `C/E/M/B/T/S`. Approval of a profile’s copy does not approve its family association, and approval of a family association does not approve held programme-to-profile mappings.

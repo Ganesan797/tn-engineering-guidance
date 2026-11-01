@@ -64,7 +64,9 @@ export function renderM4Exploration(params: URLSearchParams, input: DiscoveryFix
     body = `<p class="position">${t("பாடப்பிரிவைத் தேர்ந்தெடுங்கள்", "Choose a branch")}</p><h1>${family ? escape(t(family.ta, family.en)) : t("எல்லா மாதிரிப் பாடப்பிரிவுகளும்", "All sample branches")}</h1><p>${t("முதலில் என்ன படிக்கலாம் என்று தெரிந்துகொள்ளுங்கள். இவை விளக்கத்திற்கான மாதிரிகள் மட்டுமே.", "First see what the branch could involve. These examples are for demonstration only.")}</p>${available.length ? `<div class="grid">${available.map(id => `<a class="choice" href="${escape(url({ view: "branch", branch: id, ...familyParam }))}"><strong>${escape(branchLabel(id))}</strong><span>${t("மாதிரி விளக்கத்தைப் பார்க்க", "See the sample explanation")}</span></a>`).join("")}</div>` : empty}<div class="actions">${home()}${link({ view: "branches" }, t("எல்லாப் பாடப்பிரிவுகளையும் காட்டு", "Show all branches"))}${link({ view: "colleges" }, t("கல்லூரி வழியாகப் பார்க்க", "Browse by college"))}</div>`;
   } else if (page === "branch") {
     const item = items.find(i => i.profile.id === branch);
-    const selectedCopy = item?.profile.content ? selectBranchCopy(branch, item.profile.content.copy) : null;
+    // The synthetic walkthrough is a separate review surface. Real owner-approved
+    // wording is never substituted into invented colleges or `.test` evidence.
+    const selectedCopy = item?.profile.content ? selectBranchCopy(branch, item.profile.content.copy, []) : null;
     const lines = selectedCopy?.copy[lang].split("\n") ?? [];
     const paragraphs = (line: string) => line.split("\u2028").map(part => `<p>${escape(part)}</p>`).join("");
     const helpfulCS = branch === "CS" && selectedCopy?.kind === "SYNTHETIC_ILLUSTRATION";

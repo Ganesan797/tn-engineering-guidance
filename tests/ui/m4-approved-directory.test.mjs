@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { loadApprovedDirectory } from "../../src/m4/approved-directory-preview.mjs";
 import { renderGovernedPilot } from "../../src/ui/m4-governed-pilot.ts";
+import { APPROVED_FAMILY_MAPPINGS } from "../../src/m4/family-mapping.ts";
 
 const root = new URL("../../experiments/m4-governance-census/directory-candidates-2026/", import.meta.url);
 const view = loadApprovedDirectory();
@@ -21,7 +22,9 @@ test("source-only listings keep identity, district, scope and profile holds inde
   assert.equal(view.items.length, 3128);
   assert.equal(new Set(view.items.map(x => x.college)).size, 389);
   assert.equal(view.excluded, 226);
-  assert.ok(view.items.every(x => x.profile === null && x.source.year === 2026 && x.source.stream === "GENERAL_ACADEMIC" && x.source.stage === "BEFORE_SPECIAL_RESERVATION_COUNSELLING"));
+  assert.ok(view.items.every(x => x.source.year === 2026 && x.source.stream === "GENERAL_ACADEMIC" && x.source.stage === "BEFORE_SPECIAL_RESERVATION_COUNSELLING"));
+  assert.equal(view.items.filter(x => x.profile).length, 9);
+  assert.deepEqual([...new Set(view.items.filter(x => x.profile).map(x => x.profile.id))].sort(), ["AD","BM","CE","CS","EC","EE"]);
   assert.ok(view.items.every(x => !["1133","1301","1424","2345","2776","3815"].includes(x.college)));
   assert.ok(view.items.every(x => !["AE","AO","BP","DA","CQ","IF","ID","CJ"].includes(x.programme)));
   assert.ok(view.items.some(x => x.programme === "BY") && view.items.some(x => x.programme === "XC"));
@@ -34,8 +37,9 @@ test("source-only listings keep identity, district, scope and profile holds inde
 test("both browse paths, filters, empty states, comparison and bilingual pending copy", () => {
   const home=render("lang=en"); assert.match(home,/No marks are required/);
   const branches=render("lang=en&view=branches"); assert.match(branches,/COMPUTER SCIENCE AND ENGINEERING/);
-  assert.match(render("lang=en&view=branch&branch=CS"),/explanation.*still under review/i);
-  assert.match(render("lang=ta&view=branch&branch=CS"),/விளக்கம் இன்னும் மதிப்பாய்வில் உள்ளது/);
+  assert.match(render("lang=en&view=branch&branch=CS"),/Imagine building a hospital appointment app/);
+  assert.match(render("lang=ta&view=branch&branch=CS"),/ஒரு மருத்துவமனை முன்பதிவுச் செயலியை/);
+  assert.match(render("lang=en&view=branch&branch=CM"),/explanation.*still under review/i);
   assert.match(render("lang=en&view=colleges&q=Easwari"),/Easwari Engineering College/);
   assert.match(render("lang=en&view=college&college=1304"),/COMPUTER SCIENCE AND ENGINEERING/);
   assert.match(render("lang=en&view=colleges&district=CHENNAI"),/District: CHENNAI/);
@@ -66,7 +70,7 @@ test("owner exploration bridges study-area orientation and both real-record path
     for(const code of eligibleCodes) assert.ok(branches.includes(`(${code})`),`missing eligible programme ${code}`);
     const branch=render(`lang=${lang}&view=branch&branch=CS`);
     assert.match(branch,/(?:view=colleges&amp;branch=CS|branch=CS&amp;view=colleges)/);
-    assert.match(branch,/still under review|மதிப்பாய்வில் உள்ளது/);
+    assert.match(branch,/hospital appointment app|மருத்துவமனை முன்பதிவுச் செயலி/);
     const colleges=render(`lang=${lang}&view=colleges&q=CEG`);
     assert.match(colleges,/CEG Campus/);
     const college=render(`lang=${lang}&view=college&college=1&q=CEG&pick=1%7ECS`);
@@ -274,7 +278,27 @@ test("released copy uses only the nine exact associations; held and unrelated of
   for(const altered of [profiles.map(p=>({...p,disposition:"HOLD"})),profiles.map(p=>({...p,copy:{...p.copy,en:"Changed"}})),[...profiles,...profiles]]) {
     assert.ok(loadApprovedDirectory(undefined,altered).items.every(i=>i.profile===null));
   }
-  assert.ok(loadApprovedDirectory().items.every(i=>i.profile===null));
+  const released=loadApprovedDirectory().items.filter(i=>i.profile);
+  assert.equal(released.length,9);
+  assert.deepEqual([...new Set(released.map(i=>i.profile.id))].sort(),["AD","BM","CE","CS","EC","EE"]);
+});
+
+test("family navigation is closed by default and opens only for an exact approved mapping with released copy", () => {
+  assert.deepEqual(APPROVED_FAMILY_MAPPINGS,[]);
+  const closed=render("lang=en&view=families");
+  assert.match(closed,/Study-area-to-programme links are still in owner review/);
+  assert.doesNotMatch(render("lang=en"),/Explore by study area/);
+  const exact={family:"C",profileId:"CS",programmeCode:"CS",version:"TEST",disposition:"APPROVED",approval:{version:"TEST",family:"C",profileId:"CS",programmeCode:"CS",owner:"test",reference:"test-only"}};
+  const opened=renderGovernedPilot(new URLSearchParams("lang=en&view=families"),undefined,view,[exact]);
+  assert.match(opened,/Computing and information/);
+  assert.match(opened,/view=family&amp;family=C/);
+  const programmes=renderGovernedPilot(new URLSearchParams("lang=en&view=family&family=C"),undefined,view,[exact]);
+  assert.match(programmes,/COMPUTER SCIENCE AND ENGINEERING \(CS\)/);
+  assert.match(programmes,/Browse all programmes/);
+  for(const held of [{...exact,disposition:"HOLD"},{...exact,approval:{...exact.approval,programmeCode:"CM"}},exact]) {
+    const registry=held===exact?[exact,{...exact}]:[held];
+    assert.match(renderGovernedPilot(new URLSearchParams("lang=en&view=families"),undefined,view,registry),/still in owner review/);
+  }
 });
 
 test("every owner-preview page returns to the guided journey without passing untrusted state", () => {
