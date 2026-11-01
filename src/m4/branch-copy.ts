@@ -76,18 +76,153 @@ export const APPROVED_BRANCH_COPY: readonly ReviewedBranchCopy[] = [
     en: "Imagine a factory motor and the system that controls it. EEE brings together circuits, electronic devices, electrical machines and power systems.\nThe cited R2025 Revised 1 curriculum lists circuits, electronics, transmission, transformers, electrical machines and control systems.\nExplore how motor speed or a circuit quantity might be measured. Inspect the curriculum’s lab/project entries and the particular college’s arrangements separately.\nEEE includes electronics and control as well as power. The cited curriculum is for non-autonomous affiliated institutions and does not establish every college’s syllabus.\nCompare EEE and ECE course lists, then open the exact curriculum of the college you are considering and the 2026 listing evidence.",
   }, { url: "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/EEE/B.E.%20EEE.pdf", locator: "PDF pp3–5", scope: affiliatedScope }),
 ];
-const present = (s: string) => s.trim().length > 0;
-export function isReleasedBranchCopy(profile: ReviewedBranchCopy): boolean {
-  const a = profile.approval;
-  if (profile.disposition !== "APPROVED" || !a || a.version !== profile.version
-    || a.approved_copy.ta !== profile.copy.ta || a.approved_copy.en !== profile.copy.en
-    || !a.approved_evidence || a.approved_evidence.url !== profile.evidence.url || a.approved_evidence.locator !== profile.evidence.locator || a.approved_evidence.scope !== profile.evidence.scope
-    || [profile.copy.ta, profile.copy.en].some(copy => copy.split("\n").length !== 5 || copy.split("\n").some(line => !present(line)))
-    || ![profile.id, profile.version, profile.copy.ta, profile.copy.en, a.owner, a.factual, a.ta, a.en, a.reference,
-      profile.evidence.locator, profile.evidence.scope].every(present)) return false;
-  try { const url = new URL(profile.evidence.url); return url.protocol === "https:" && !url.username && !url.password && !url.hostname.endsWith(".test"); }
-  catch { return false; }
+
+const present = (s: string) => typeof s === "string" && s.trim().length > 0;
+
+export type ProfileApprovalDimension =
+  | "OWNER_APPROVED"
+  | "HUMAN_TAMIL_APPROVED"
+  | "FACTUAL_REVIEW_APPROVED"
+  | "PROFILE_IDENTITY_APPROVED"
+  | "DISPLAY_APPROVED";
+
+export type ProfileHoldReason =
+  | "IDENTITY_HOLD"
+  | "EVIDENCE_HOLD"
+  | "EXPLICIT_SCOPE_HOLD"
+  | "NEEDS_OWNER_REVIEW"
+  | "UNAPPROVED";
+
+export interface BranchApprovalStatus {
+  readonly ownerApproved: boolean;
+  readonly humanTamilApproved: boolean;
+  readonly factualReviewApproved: boolean;
+  readonly profileIdentityApproved: boolean;
+  readonly displayApproved: boolean;
+  readonly holdReason: ProfileHoldReason | null;
 }
+
+export const SCOPE_HELD_CODES: ReadonlySet<string> = new Set(["BP", "DA", "CQ", "IF", "ID", "CJ"]);
+export const EVIDENCE_HELD_CODES: ReadonlySet<string> = new Set(["CA", "ER", "MT", "SF", "TC"]);
+export const IDENTITY_HELD_CODES: ReadonlySet<string> = new Set([
+  "AE", "AI", "AL", "AO", "AP", "BC", "CB", "CG", "CR", "CU", "CV", "CW", "CY", "CZ", "DS",
+  "DV", "EA", "EG", "GI", "GL", "IB", "IE", "LE", "MA", "MB", "MG", "MI", "MJ", "MM", "MO",
+  "PA", "PP", "PR", "PT", "RP", "SB", "TS", "VL", "BY", "XC", "IM", "MS", "MF", "XM", "CL",
+  "BS", "TT"
+]);
+export const KNOWN_OWNER_APPROVED_CODES: ReadonlySet<string> = new Set(["CS", "AD", "BM", "CE", "EC", "EE"]);
+export const READY_FOR_OWNER_REVIEW_CODES: ReadonlySet<string> = new Set([
+  "AG", "AM", "AU", "BT", "CC", "CD", "CF", "CH", "CI", "CK", "CO", "EF", "EI", "EN", "EV",
+  "EX", "FD", "FT", "HT", "IC", "IN", "IT", "MD", "ME", "MN", "MR", "MU", "MZ", "PC", "PE",
+  "PH", "RI", "RM", "SC", "TX"
+]);
+
+export function evaluateBranchApproval(
+  id: string,
+  profile?: ReviewedBranchCopy | null,
+): BranchApprovalStatus {
+  if (SCOPE_HELD_CODES.has(id)) {
+    return {
+      ownerApproved: false,
+      humanTamilApproved: false,
+      factualReviewApproved: false,
+      profileIdentityApproved: false,
+      displayApproved: false,
+      holdReason: "EXPLICIT_SCOPE_HOLD",
+    };
+  }
+  if (EVIDENCE_HELD_CODES.has(id)) {
+    return {
+      ownerApproved: false,
+      humanTamilApproved: false,
+      factualReviewApproved: false,
+      profileIdentityApproved: false,
+      displayApproved: false,
+      holdReason: "EVIDENCE_HOLD",
+    };
+  }
+  if (IDENTITY_HELD_CODES.has(id)) {
+    return {
+      ownerApproved: false,
+      humanTamilApproved: false,
+      factualReviewApproved: false,
+      profileIdentityApproved: false,
+      displayApproved: false,
+      holdReason: "IDENTITY_HOLD",
+    };
+  }
+  if (READY_FOR_OWNER_REVIEW_CODES.has(id)) {
+    return {
+      ownerApproved: false,
+      humanTamilApproved: false,
+      factualReviewApproved: false,
+      profileIdentityApproved: true,
+      displayApproved: false,
+      holdReason: "NEEDS_OWNER_REVIEW",
+    };
+  }
+  if (!profile) {
+    return {
+      ownerApproved: false,
+      humanTamilApproved: false,
+      factualReviewApproved: false,
+      profileIdentityApproved: false,
+      displayApproved: false,
+      holdReason: "UNAPPROVED",
+    };
+  }
+
+  const a = profile.approval;
+  const ownerApproved = profile.disposition === "APPROVED" && !!a && present(a.owner) && a.owner !== "UNREVIEWED" && present(a.reference);
+  const humanTamilApproved = !!a && present(a.ta) && !a.ta.includes("UNREVIEWED");
+  const factualReviewApproved = !!a && present(a.factual) && !a.factual.includes("UNREVIEWED");
+  const englishApproved = !!a && present(a.en) && !a.en.includes("UNREVIEWED");
+  const profileIdentityApproved = present(profile.id) && !IDENTITY_HELD_CODES.has(profile.id) && !SCOPE_HELD_CODES.has(profile.id);
+
+  if (!KNOWN_OWNER_APPROVED_CODES.has(id) && (!ownerApproved || a?.reference === "TEST_ONLY" || a?.reference === "synthetic-review-only")) {
+    const isReadyForReview = READY_FOR_OWNER_REVIEW_CODES.has(id);
+    return {
+      ownerApproved: false,
+      humanTamilApproved,
+      factualReviewApproved,
+      profileIdentityApproved,
+      displayApproved: false,
+      holdReason: isReadyForReview ? "NEEDS_OWNER_REVIEW" : "UNAPPROVED",
+    };
+  }
+
+  const validEvidence = (() => {
+    try {
+      const url = new URL(profile.evidence.url);
+      return url.protocol === "https:" && !url.username && !url.password && !url.hostname.endsWith(".test");
+    } catch {
+      return false;
+    }
+  })();
+
+  const copyValid = [profile.copy.ta, profile.copy.en].every(c => c.split("\n").length === 5 && c.split("\n").every(present));
+  const exactMatch = !!a && a.version === profile.version && present(a.version) && present(a.reference)
+    && a.approved_copy.ta === profile.copy.ta && a.approved_copy.en === profile.copy.en
+    && !!a.approved_evidence && a.approved_evidence.url === profile.evidence.url
+    && a.approved_evidence.locator === profile.evidence.locator && a.approved_evidence.scope === profile.evidence.scope;
+
+  const displayApproved = ownerApproved && humanTamilApproved && englishApproved && factualReviewApproved && profileIdentityApproved && validEvidence && copyValid && exactMatch;
+
+  return {
+    ownerApproved,
+    humanTamilApproved,
+    factualReviewApproved,
+    profileIdentityApproved,
+    displayApproved,
+    holdReason: displayApproved ? null : "UNAPPROVED",
+  };
+}
+
+export function isReleasedBranchCopy(profile: ReviewedBranchCopy): boolean {
+  if (!profile) return false;
+  return evaluateBranchApproval(profile.id, profile).displayApproved;
+}
+
 export function selectBranchCopy(id: string, illustrative: { readonly ta: string; readonly en: string }, registry: readonly ReviewedBranchCopy[] = APPROVED_BRANCH_COPY) {
   const matches = registry.filter(p => p.id === id);
   const profile = matches.length === 1 && isReleasedBranchCopy(matches[0]) ? matches[0] : null;
