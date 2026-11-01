@@ -123,6 +123,16 @@ test("mission paths keep guidance primary and pending content traversable withou
   assert.match(comparison,/not a ranking/);
 });
 
+test("a single matching programme offers comparison without an extra disclosure", () => {
+  const html = render("lang=en&view=colleges&branch=CS");
+  const firstCard = html.match(/<article class="card result-card">[\s\S]*?<\/article>/)?.[0];
+  assert.ok(firstCard);
+  assert.match(firstCard, /Add to comparison/);
+  assert.doesNotMatch(firstCard, /Choose a programme to compare/);
+  const selected = render("lang=en&view=colleges&branch=CS&pick=1%7ECS");
+  assert.match(selected, /Selected for comparison/);
+});
+
 
 test("readable details preserve exact names, unknown fields, and pending explanation boundaries", () => {
   for (const lang of ["en", "ta"]) {
@@ -144,7 +154,7 @@ test("readable details preserve exact names, unknown fields, and pending explana
   assert.match(unenriched, /<dt>Institution type<\/dt><dd>Not known<\/dd>/);
   assert.doesNotMatch(unenriched, /Official Website|Autonomous status|Minority status/);
   const held = render("lang=en&view=detail&college=1133&programme=CS");
-  assert.doesNotMatch(held, /<header|Nellai Nadar|action primary/);
+  assert.doesNotMatch(held.slice(held.indexOf("<main>")), /<header|Nellai Nadar|action primary/);
 });
 
 

@@ -21,18 +21,20 @@ const pack = applyApprovedTamilStudentCopy(frozenPack, tamilCopyDocument);
 
 const context = { snapshot_id: "CONFIGURED_EVIDENCE", snapshot_stage: null };
 
-test("home offers awareness and three intents without a profile form or backend codes", () => {
+test("home offers a distinct starting choice and three intents without duplicating awareness", () => {
   for (const language of ["en", "ta"] as const) {
     const html = renderStudentEntryPage({ route: "home", language }, pack);
     for (const route of ["beginner", "personal", "counselling"] as const) {
       assert.ok(html.includes(entryHref(route, language)));
     }
     assert.doesNotMatch(html, /<form|<input|profile\.|ELG\d|PREDICATE_|NEEDS_REVIEW|UNKNOWN_OR_UNPUBLISHED|snapshot_id/);
+    assert.doesNotMatch(html, /data-content-id="AW-01"/);
+    const introduction = renderStudentEntryPage({ route: "beginner", language }, pack);
     for (const paragraph of pack.items[0].presentations[language].body.split("\n\n")) {
-      assert.ok(html.includes(paragraph));
+      assert.ok(introduction.includes(paragraph));
     }
-    assert.ok(html.includes(pack.version));
-    assert.ok(html.includes(pack.items[0].sources[0].name));
+    assert.ok(introduction.includes(pack.version));
+    assert.ok(introduction.includes(pack.items[0].sources[0].name));
     assert.doesNotMatch(html, /choice-list builder is not yet available|தேர்வுப் பட்டியல் உருவாக்கும் வசதி இன்னும் இல்லை/);
   }
 });

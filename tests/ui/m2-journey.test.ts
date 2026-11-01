@@ -216,7 +216,7 @@ test("zero-knowledge Tamil path offers engineering and branch awareness before T
   assert.doesNotMatch(start, /name="answer"|type="number"/);
   const study = renderM2Journey("study", pack, reviewed, awarenessReviewed, runtime());
   assert.ok(study.indexOf("தேர்ந்தெடுக்க வேண்டியதில்லை") < study.indexOf('<nav class="actions">'));
-  assert.ok(study.indexOf('<nav class="actions">') < study.indexOf('data-content-id="A04"'));
+  assert.ok(study.indexOf('data-content-id="A04"') < study.indexOf('<nav class="actions">'));
   assert.match(study, /Q037|CSE/);
   assert.match(study, /ECE/);
   assert.match(study, /Mechanical/);
