@@ -49,7 +49,9 @@ function checkPage(name, html, lang, viewport) {
   results.push({ name, lang, viewport, ok: issues.length === 0, issues });
 }
 
-// Visual verification across viewports: 360px, 390px, desktop (1280px)
+// Static HTML checks repeated under viewport labels. This script does not start
+// a browser, set an actual viewport, inspect layout, or capture screenshots.
+// Browser verification is performed separately by verify-m4-browser.mjs.
 const viewports = ["360px", "390px", "desktop"];
 const langs = ["ta", "en"];
 const pages = [
@@ -105,6 +107,8 @@ for (const vp of viewports) {
 
 const failed = results.filter(r => !r.ok);
 console.log(JSON.stringify({
+  checkType: "STATIC_HTML_CONTENT",
+  browserLayoutVerified: false,
   totalChecks: results.length,
   passedChecks: results.length - failed.length,
   failedChecks: failed.length,
@@ -114,6 +118,6 @@ console.log(JSON.stringify({
 }, null, 2));
 
 if (failed.length > 0) {
-  console.error("Visual check failures:", failed);
+  console.error("Static HTML check failures:", failed);
   process.exit(1);
 }

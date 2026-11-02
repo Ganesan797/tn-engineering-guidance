@@ -1,27 +1,31 @@
 # TN Engineering Guidance — Project Status
 
-**Current milestone:** Milestone M4 accepted for comprehensive scope (Option A: 41 approved profiles, 49 holds, 389 colleges, 3,128 offerings) — M4_ACCEPT = PASS, M4_ACCEPTED = YES. M5 planning/contract next.
+**Current milestone:** M4 Option A owner acceptance is recorded for 41 profile dispositions. Acceptance-evidence reconciliation is in progress; no M5 work is started.
 
-**Current task:** Milestone M4 formal owner acceptance completed under Option A. Candidate branch integrated and tagged v0.4.0-m4-acceptance.
+**Current task:** Reconcile the accepted profile scope with immutable runtime copy/association gates and genuine browser evidence on an isolated review branch.
 
-**Last reviewed:** 2026-11-01
+**Last reviewed:** 2026-11-03
 
-**M4 Formal Milestone Acceptance (Option A Comprehensive Release — 2026-11-01):**
-Ganesan (Project Owner / Student Advocate) formally reviewed and accepted Milestone M4 under Option A: Comprehensive 41-Profile Release (`M4_ACCEPT = PASS`, `M4_ACCEPTED = YES`).
-- **Authoritative Baseline SHA:** `d580d9f2e56d8751003ecc14842dcbdc2c24f51c`
-- **Owner-Approved Profiles (41):** Exactly 41 bilingual educational profiles released (`CS`, `AD`, `BM`, `CE`, `EC`, `EE` + 35 promoted from Batches 1, 2, and 3: `AG`, `AM`, `AU`, `BT`, `CC`, `CD`, `CF`, `CH`, `CI`, `CK`, `CO`, `EF`, `EI`, `EN`, `EV`, `EX`, `FD`, `FT`, `HT`, `IC`, `IN`, `IT`, `MD`, `ME`, `MN`, `MR`, `MU`, `MZ`, `PC`, `PE`, `PH`, `RI`, `RM`, `SC`, `TX`).
+**M4 formal owner acceptance (Option A 41-profile scope — 2026-11-01):**
+Ganesan (Project Owner / Student Advocate) formally reviewed and accepted Milestone M4 under Option A (`M4_ACCEPT = PASS`, `M4_ACCEPTED = YES`). This is a genuine owner scope decision, not proof that every accepted copy version is registered in the runtime.
+- **Integrated baseline and tag target:** `7458cc814e0b63982c7912f6bbefa6fb4d860e94`; local tag `v0.4.0-m4-acceptance` points to that commit.
+- **Owner-Approved Profile Dispositions (41):** The Option A decision genuinely records factual, Tamil, English-equivalence, identity and display acceptance for `CS`, `AD`, `BM`, `CE`, `EC`, `EE`, `AG`, `AM`, `AU`, `BT`, `CC`, `CD`, `CF`, `CH`, `CI`, `CK`, `CO`, `EF`, `EI`, `EN`, `EV`, `EX`, `FD`, `FT`, `HT`, `IC`, `IN`, `IT`, `MD`, `ME`, `MN`, `MR`, `MU`, `MZ`, `PC`, `PE`, `PH`, `RI`, `RM`, `SC`, `TX`.
+- **Runtime display activation:** Six exact copy objects (`CS`, `AD`, `BM`, `CE`, `EC`, `EE`) at version `M4-SIX-2026-11-01-3312406` and nine exact L01–L09 offering/profile associations. The other 35 owner-approved dispositions have no explicit immutable copy version in their decision records and therefore fail closed as `MISSING_APPROVED_COPY_VERSION`; they are not currently rendered as approved explanations. One exact [owner decision package](docs/content/m4/m4_remaining_35_exact_version_decision_2026-11-03.md) identifies the candidate blob without transferring approval by inference.
 - **Educational Profile Identity Holds (38 cases / 38 base codes):** `AE`, `AI`, `AL`, `AO`, `AP`, `BC`, `CB`, `CG`, `CR`, `CU`, `CV`, `CW`, `CY`, `CZ`, `DS`, `DV`, `EA`, `EG`, `GI`, `GL`, `IB`, `IE`, `LE`, `MA`, `MB`, `MG`, `MI`, `MJ`, `MM`, `MO`, `PA`, `PP`, `PR`, `PT`, `RP`, `SB`, `TS`, `VL`.
 - **Delivery Variant Holds (26 codes):** All 26 census delivery variants explicitly gated under `DELIVERY_VARIANT_HELD_CODES` (`AS`, `AT`, `BS`, `BY`, `CL`, `CM`, `CN`, `EL`, `EM`, `EU`, `EY`, `FS`, `FY`, `IM`, `IS`, `IY`, `MF`, `MS`, `MY`, `PM`, `PN`, `RA`, `TT`, `XC`, `XM`, `XS`). Zero inferred mapping or unapproved base copy inheritance.
 - **Runtime Unreleased Identity or Variant Codes:** Exactly 64 codes ($38 + 26 = 64$).
 - **Evidence Holds (5 codes):** `CA`, `ER`, `MT`, `SF`, `TC`.
 - **Scope Holds (6 codes):** `BP`, `DA`, `CQ`, `IF`, `ID`, `CJ` (permanently excluded from 4-year engineering scope).
 - **Total Governed Code Count:** Exactly 116 unique source codes ($41 + 38 + 26 + 5 + 6 = 116$), 0 unaccounted, 0 overlapping.
+- **Earlier comprehensive-coverage goal:** Option A accepts a 41-profile display scope plus explicit held dispositions. It closes the 116-code disposition ledger, but it does not turn held profiles/variants into completed explanations and does not support the prior assertion that all verified in-scope branches have released educational copy.
 - **Directory Data:** 389 colleges, 3,128 offerings, 6 immutable CSV manifests verified with SHA-256 digests.
 - **Family Navigation:** Kept closed by default (`APPROVED_FAMILY_MAPPINGS = []`) until separate crosswalk approval.
-- **Quality Gates:** Full test suite 323/323 PASS, focused M4 tests 47/47 PASS, strict TypeScript typecheck PASS (0 errors), responsive visual engineering checks 66/66 PASS (360px, 390px, desktop).
+- **Verification classification:** Full offline suite 323/323 PASS; focused M4 47/47 PASS; strict TypeScript typecheck PASS; catalogue check 116 codes / 84 profiles / 59 source references PASS. The 66/66 result is correctly classified as static HTML/content checking, not browser layout evidence. Genuine Chrome verification PASS covers six Tamil/English flows at actual 360×800, 390×800 and 1280×900 viewports with 54 screenshots, retained-state checks and zero detected horizontal overflow in `review-evidence/m4-acceptance-reconciliation/browser/`.
 - **Student Usability Validation:** `REAL_STUDENT_VALIDATION = NOT_RUN` (engineering verification only).
 - **Approval Gate & Synthetic Provenance:** Both Codex audit defects verified and repaired.
 - **Decision Artifact:** Recorded in `review-evidence/m4-bounded-pilot/comprehensive-41-owner-decision.md`.
+
+The dated M4 candidate snapshots below are historical. Their pending/unauthorized statements describe their own revisions and are superseded for owner acceptance only by the current record above; their narrower copy, association, hold, browser and student-validation limits remain evidence where applicable.
 
 **M4 six-copy connection candidate (2026-11-01):** Ganesan reported factual, source-scope, Tamil, English-equivalence and internal-preview acceptance for the exact CS, AD, BM, CE, EC and EE wording at `3312406ae5b11354fc59120af1e87fdce8e32eef`. Registry version `M4-SIX-2026-11-01-3312406` releases that wording only through the nine already-approved L01–L09 associations; BY → BM and every other identity or variant mapping remain held. The complete catalogue remains **six accepted, 35 other READY_FOR_OWNER_REVIEW, 38 NEEDS_IDENTITY_DECISION and five NEEDS_EVIDENCE**. Targeted checks found no basis to promote CA, MT, SF, TC or ER. Family navigation machinery is closed by default (`APPROVED_FAMILY_MAPPINGS = 0`) while exact all-programme and college-first browsing remain available. Focused M4 tests **29/29**, full offline suite **317/317**, strict typecheck and catalogue validation pass. Windows browser inspection was stopped from the desktop, so 360px/390px/desktop visual checks and new screenshots are **BLOCKED/NOT RUN**, not a visual PASS. No student release, M4 acceptance, merge or deployment is implied.
 
@@ -37,7 +41,7 @@ Ganesan (Project Owner / Student Advocate) formally reviewed and accepted Milest
 
 **M4 owner-preview usability correction (2026-10-30):** The review branch now has programme-name/code search, clearer filters and counts, branch-preserving reset, matching programme first on college detail, immediate URL-based comparison selection, concise mobile results, bilingual recovery and an explicit synthetic label on the guided journey. The internal route still requires local opt-in and remains separate from fixture exploration. Real-record browser walks cover branch-first, college-first, filters, 2–3 choice comparison, pagination, language switching, evidence and return navigation at desktop/360px/390px, with no horizontal overflow. Full offline suite **310/310 PASS** and strict typecheck **PASS**. Presentation review remains **PENDING**; no educational copy or held metadata was released. See the dated screenshots in [existing review evidence](review-evidence/m4-bounded-pilot/README.md).
 
-The current task preserves the presentation revisions and prepares one coherent owner-preview path. **PRESENTATION_REVIEW = PENDING; M4_ACCEPTED = NO.** Eligible college details now include 52 additional dated source fields across the seven accepted identities, with all other enrichment and specific attribute conflicts held. The existing nine exact L01–L09 associations are connected to the independent copy gate; the approved-copy registry remains empty. All six owner-reviewed Tamil fingerprints are unchanged; focused English corrections and source checks are in [the existing copy review](review-evidence/m4-bounded-pilot/copy-candidates.md). Every internal page returns to the existing guided journey without exposing the preview in normal navigation or changing personal checks. Validation: 309/309 offline tests, strict typecheck and Tamil/English 360px/390px path checks PASS. Commit/push of this technically prepared review candidate is authorized; no merge, deployment, student access or acceptance is authorized. See [verification and screenshots](review-evidence/m4-bounded-pilot/README.md).
+**Historical pre-acceptance owner-preview task:** This paragraph's `M4_ACCEPTED = NO` and empty-registry statements describe the earlier candidate and are superseded by the current acceptance/runtime-boundary record above. Its nine-association limit, held attributes, no deployment/student access and no real-student validation remain preserved.
 
 Ganesan reported the exact six existing Tamil candidates as good enough: [TAMIL_REVIEW = PASS_OWNER_REPORTED](review-evidence/m4-expansion-candidates-2026-10-29/tamil-owner-review.md). This does not approve facts, English equivalence, offerings, mappings, student display or validation. The entries below are historical snapshots where they conflict with this current paragraph.
 
@@ -75,7 +79,7 @@ Start M4-A with the governed five-college pilot; consider roughly 15–30 repres
 
 `M4_IMPLEMENTATION_AUTHORIZED = NO`; `M5_IMPLEMENTATION_AUTHORIZED = NO`. M3 acceptance and all validation/LLM states below are unchanged. M6 remains integration and M7 remains pilot readiness/human validation with the amended private-hosting and remote-observation sequence. This current direction supersedes earlier next-M4-task wording only; frozen mission, journey, roadmap and historical decisions remain unchanged.
 
-## Current M3 closure and M4 readiness — 2026-10-26
+## Historical M3 closure and M4 readiness — 2026-10-26
 
 Ganesan accepts bounded M3 Personal Guidance Presentation at `f545e01c0091f4722a427d0bfb1772a60615bbfe`: `M3_BOUNDED_ACCEPTANCE = PASS`. M3-T01 contract work is complete; M3-T02A–D foundations and M3-T03/T03E/T03F student presentation are technically integrated. Owner-reviewed Tamil/English presentation, uncertainty, evidence limits, next actions, edge cases, regression and typecheck are PASS for this scope. Deterministic admission authority, cutoff/eligibility meaning, UNKNOWN/NEEDS_REVIEW and source limitations are preserved. This is owner acceptance, not independent admission-claim verification or real-student usability evidence.
 

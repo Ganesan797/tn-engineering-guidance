@@ -91,6 +91,7 @@ export type ProfileHoldReason =
   | "EVIDENCE_HOLD"
   | "EXPLICIT_SCOPE_HOLD"
   | "DELIVERY_VARIANT_HOLD"
+  | "MISSING_APPROVED_COPY_VERSION"
   | "NEEDS_OWNER_REVIEW"
   | "UNAPPROVED";
 
@@ -118,7 +119,9 @@ export const DELIVERY_VARIANT_HELD_CODES: ReadonlySet<string> = new Set([
   "IY", "MF", "MS", "MY", "PM", "PN", "RA", "TT", "XC", "XM", "XS"
 ]);
 
-/** 41 Owner-Approved Profiles under Option A Comprehensive Release (2026-11-01) */
+/** 41 owner-approved profile dispositions under Option A (2026-11-01).
+ * Display still requires an immutable ReviewedBranchCopy and an independently
+ * approved association; this set alone never releases copy. */
 export const KNOWN_OWNER_APPROVED_CODES: ReadonlySet<string> = new Set([
   "CS", "AD", "BM", "CE", "EC", "EE",
   "AG", "AM", "AU", "BT", "CC", "CD", "CF", "CH", "CI", "CK", "CO", "EF", "EI", "EN", "EV",
@@ -183,6 +186,16 @@ export function evaluateBranchApproval(
     };
   }
   if (!profile) {
+    if (KNOWN_OWNER_APPROVED_CODES.has(id)) {
+      return {
+        ownerApproved: true,
+        humanTamilApproved: true,
+        factualReviewApproved: true,
+        profileIdentityApproved: true,
+        displayApproved: false,
+        holdReason: "MISSING_APPROVED_COPY_VERSION",
+      };
+    }
     return {
       ownerApproved: false,
       humanTamilApproved: false,

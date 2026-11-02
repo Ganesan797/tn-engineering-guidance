@@ -72,6 +72,20 @@ test("approval gate distinguishes the five orthogonal dimensions and required ho
   // 6. Ready for Owner Review: exactly 0 (all 35 candidate profiles approved under Option A)
   assert.equal(READY_FOR_OWNER_REVIEW_CODES.size, 0);
 
+  // The owner decision is preserved for all 41, but 35 have no immutable
+  // approved-copy object. They must remain display-closed until that exact
+  // version is recorded; owner acceptance must not be silently reversed.
+  const registered = new Set(APPROVED_BRANCH_COPY.map(profile => profile.id));
+  const acceptedWithoutVersion = [...KNOWN_OWNER_APPROVED_CODES].filter(id => !registered.has(id));
+  assert.equal(acceptedWithoutVersion.length, 35);
+  for (const id of acceptedWithoutVersion) {
+    const status = evaluateBranchApproval(id, null);
+    assert.equal(status.ownerApproved, true, `${id} owner decision`);
+    assert.equal(status.profileIdentityApproved, true, `${id} identity decision`);
+    assert.equal(status.displayApproved, false, `${id} display gate`);
+    assert.equal(status.holdReason, "MISSING_APPROVED_COPY_VERSION", `${id} missing exact copy version`);
+  }
+
   // 7. Unknown / Unapproved code
   const unknown = evaluateBranchApproval("NONEXISTENT_BRANCH", null);
   assert.equal(unknown.displayApproved, false);

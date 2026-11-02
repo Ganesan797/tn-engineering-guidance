@@ -98,7 +98,8 @@ All 41 profiles satisfy the five orthogonal approval dimensions:
 * **Focused M4 Tests**: **47 / 47 PASS**
 * **Strict TypeScript Typecheck**: **PASS** (0 errors)
 * **Approval Integrity & Provenance Probe**: **PASS** ([`tests/ui/m4-approval-integrity.test.ts`](../../tests/ui/m4-approval-integrity.test.ts))
-* **Responsive Visual Engineering Verification**: **66 / 66 PASS** across 360px, 390px, and desktop viewports in Tamil and English ([`scripts/verify-m4-visual.mjs`](../../scripts/verify-m4-visual.mjs))
+* **Static HTML/Content Verification**: **66 / 66 PASS** under the 360px, 390px and desktop labels in Tamil and English. This script does not start a browser or verify layout ([`scripts/verify-m4-visual.mjs`](../../scripts/verify-m4-visual.mjs)).
+* **Genuine Browser Verification (2026-11-03 reconciliation)**: Chrome PASS for six Tamil/English flows at actual 360×800, 390×800 and 1280×900 viewports; 54 screenshots and retained-state/overflow results are recorded in [`review-evidence/m4-acceptance-reconciliation/browser/`](../m4-acceptance-reconciliation/browser/README.md).
 * **Real Student Usability Validation**: `REAL_STUDENT_VALIDATION = NOT_RUN` (engineering verification only)
 * **Immutable Dataset Integrity**: 389 colleges, 3,128 offerings, 6 CSV SHA-256 digests verified.
 
@@ -109,3 +110,7 @@ All 41 profiles satisfy the five orthogonal approval dimensions:
 **`M4_ACCEPT = PASS`**  
 Signed: Ganesan (Project Owner / Student Advocate)  
 Date: 2026-11-01
+
+## 6. Independent reconciliation note — 2026-11-03
+
+This note does not amend or reverse Ganesan's 41-profile Option A decision. It distinguishes the decision from runtime activation. The six CS/AD/BM/CE/EC/EE copy objects identify an immutable version and are connected through the nine L01–L09 associations. The three batch decision files record acceptance of the other 35 profiles but do not identify an exact commit/blob or copy fingerprint; those 35 therefore remain display-closed as `MISSING_APPROVED_COPY_VERSION`. The [single exact-version decision](../../docs/content/m4/m4_remaining_35_exact_version_decision_2026-11-03.md) identifies the candidate sections and preserves all variant, family and offering-association gates.
