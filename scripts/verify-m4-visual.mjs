@@ -49,7 +49,8 @@ function checkPage(name, html, lang, viewport) {
   results.push({ name, lang, viewport, ok: issues.length === 0, issues });
 }
 
-// Visual verification across viewports: 360px, 390px, desktop (1280px)
+// Static HTML checks repeated under viewport labels. This script does not start
+// a browser, set an actual viewport, inspect layout, or capture screenshots.
 const viewports = ["360px", "390px", "desktop"];
 const langs = ["ta", "en"];
 const pages = [
@@ -58,7 +59,8 @@ const pages = [
   { view: "branches", title: "All Programmes" },
   { view: "branch", branch: "CS", title: "Branch CS (Approved)" },
   { view: "branch", branch: "BY", title: "Branch BY (Held - Identity)" },
-  { view: "branch", branch: "IT", title: "Branch IT (Draft - Under Review)" },
+  { view: "branch", branch: "IT", title: "Branch IT (Option A Approved)" },
+  { view: "branch", branch: "AG", title: "Branch AG (Option A Approved)" },
   { view: "colleges", title: "Colleges Directory" },
   { view: "college", college: "1", title: "College Detail CEG" },
   { view: "detail", college: "1", programme: "CS", title: "Offering Detail" },
@@ -78,7 +80,7 @@ for (const vp of viewports) {
       checkPage(`Pilot ${p.title}`, html, lang, vp);
 
       // Verify specific gate requirements
-      if (p.branch === "BY" || p.branch === "IT") {
+      if (p.branch === "BY") {
         if (html.includes("<h3>Simple explanation</h3>") || html.includes("<h3>எளிய விளக்கம்</h3>")) {
           throw new Error(`Held/unapproved branch ${p.branch} rendered approved explanation!`);
         }
@@ -87,9 +89,9 @@ for (const vp of viewports) {
         }
       }
 
-      if (p.branch === "CS") {
+      if (["CS", "IT", "AG"].includes(p.branch ?? "")) {
         if (!html.includes("general educational explanation") && !html.includes("பொதுவான கல்வி விளக்கம்")) {
-          throw new Error(`Approved branch CS missing explanation!`);
+          throw new Error(`Approved branch ${p.branch} missing explanation!`);
         }
       }
     }
@@ -105,6 +107,8 @@ for (const vp of viewports) {
 
 const failed = results.filter(r => !r.ok);
 console.log(JSON.stringify({
+  checkType: "STATIC_HTML_CONTENT",
+  browserLayoutVerified: false,
   totalChecks: results.length,
   passedChecks: results.length - failed.length,
   failedChecks: failed.length,
@@ -114,6 +118,6 @@ console.log(JSON.stringify({
 }, null, 2));
 
 if (failed.length > 0) {
-  console.error("Visual check failures:", failed);
+  console.error("Static HTML check failures:", failed);
   process.exit(1);
 }

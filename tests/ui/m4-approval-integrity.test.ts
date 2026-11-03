@@ -24,7 +24,9 @@ const renderExplore = (query: string) => renderM4Exploration(new URLSearchParams
 test("approval gate distinguishes the five orthogonal dimensions and required hold states", () => {
   // 1. Confirmed owner-approved set: exactly 41
   assert.equal(KNOWN_OWNER_APPROVED_CODES.size, 41);
-  for (const id of ["CS", "AD", "BM", "CE", "EC", "EE"]) {
+  assert.equal(APPROVED_BRANCH_COPY.length, 41);
+  assert.equal(new Set(APPROVED_BRANCH_COPY.map(profile => profile.id)).size, 41);
+  for (const id of KNOWN_OWNER_APPROVED_CODES) {
     const profile = APPROVED_BRANCH_COPY.find(p => p.id === id);
     assert.ok(profile, `Missing approved profile for ${id}`);
     const status = evaluateBranchApproval(id, profile);
@@ -71,6 +73,14 @@ test("approval gate distinguishes the five orthogonal dimensions and required ho
 
   // 6. Ready for Owner Review: exactly 0 (all 35 candidate profiles approved under Option A)
   assert.equal(READY_FOR_OWNER_REVIEW_CODES.size, 0);
+
+  const agricultural = APPROVED_BRANCH_COPY.find(profile => profile.id === "AG");
+  assert.ok(agricultural);
+  assert.match(agricultural.version, /8df92b33b3a581c7b1f1c5f860460631e78182c4/);
+  assert.match(agricultural.approval?.reference ?? "", /m4_batch1_owner_decision_2026-11-01\.md/);
+  assert.match(renderPilot("lang=en&view=branch&branch=AG"), /Imagine distributing water evenly across a field/);
+  assert.ok(view.items.filter(item => item.programme === "AG").every(item => item.profile === null),
+    "profile release must not create new college-offering associations");
 
   // 7. Unknown / Unapproved code
   const unknown = evaluateBranchApproval("NONEXISTENT_BRANCH", null);

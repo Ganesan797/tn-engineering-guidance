@@ -1,3 +1,5 @@
+import { OPTION_A_ADDITIONAL_APPROVED_BRANCH_COPY } from "./option-a-copy.ts";
+
 /** Educational wording approval is independent of synthetic listing/link approval.
  * No loader or real-data adapter. The default registry is deliberately empty.
  * Owner preview is an offline review artifact, never a query-string permission.
@@ -50,7 +52,7 @@ function ownerApprovedCopy(
 /** Exact owner-reported acceptance at commit 3312406. Association and variant
  * gates remain independent; the directory projection still attaches these only
  * through the previously approved L01-L09 snapshots. */
-export const APPROVED_BRANCH_COPY: readonly ReviewedBranchCopy[] = [
+const SIX_APPROVED_BRANCH_COPY: readonly ReviewedBranchCopy[] = [
   ownerApprovedCopy("CS", {
     ta: "ஒரு மருத்துவமனை முன்பதிவுச் செயலியை உருவாக்குவதாக நினைத்துப் பாருங்கள். பயனரின் தேவையைப் புரிந்து, தகவலை ஒழுங்குபடுத்தி, செயலி சரியாக வேலை செய்கிறதா என்று சோதிப்பது போன்ற சிக்கல்களை CSE-யில் அணுகலாம்.\nமேற்கோள் காட்டிய R2025 Revised 1 பாடத்திட்டத்தில் நிரலாக்கம், தரவுக் கட்டமைப்புகள், வழிமுறைகள், தரவுத்தளங்கள், இயக்க முறைமைகள் மற்றும் நெட்வொர்க்குகள் உள்ளன.\nஒரு சிறிய நிரலை எழுதிப் பிழையைத் திருத்துவது எப்படி இருக்கும் என்று யோசிக்கலாம். மேற்கோள் பாடத்திட்டத்தின் ஆய்வகம் மற்றும் திட்டப் பாடங்களைப் பாருங்கள்; உங்கள் கல்லூரியின் செய்முறை வாய்ப்புகள் தனியாகச் சரிபார்க்கப்பட வேண்டும்.\nஇந்த விளக்கம் தன்னாட்சி பெறாத இணைப்புக் கல்லூரிகளுக்கான குறிப்பிட்ட பாடத்திட்டத்தைச் சார்ந்தது. CEG/MIT அல்லது வேறு கல்லூரியின் பாடத்திட்டத்தை இதிலிருந்து ஊகிக்க வேண்டாம்.\nஅதே மூலத்தில் CSE-யையும் AI & Data Science-யையும் ஒப்பிட்டுப் பாருங்கள்; பிறகு நீங்கள் விரும்பும் கல்லூரியின் சரியான பாடத்திட்டத்தையும் 2026 பட்டியல் ஆதாரத்தையும் திறக்கவும்.",
     en: "Imagine building a hospital appointment app. CSE can help you think through user needs, organize information and test whether the app works.\nThe cited R2025 Revised 1 curriculum lists programming, data structures, algorithms, databases, operating systems and networks.\nConsider writing a small program and correcting an error. Explore the cited curriculum’s lab and project entries; check the particular college’s practical provision separately.\nThis describes a curriculum for non-autonomous affiliated institutions. It does not establish the curriculum at CEG, MIT or another college.\nCompare CSE and AI & Data Science in their cited curricula, then open the exact curriculum of a college you are considering and the 2026 listing evidence.",
@@ -75,6 +77,11 @@ export const APPROVED_BRANCH_COPY: readonly ReviewedBranchCopy[] = [
     ta: "ஒரு தொழிற்சாலையின் மின்மோட்டாரும் அதை இயக்கும் கட்டுப்பாட்டு அமைப்பும் எப்படி செயல்படுகின்றன என்று நினைத்துப் பாருங்கள். மின்சுற்றுகள், மின்னணுக் கூறுகள், மின் இயந்திரங்கள் மற்றும் மின்சக்தியை EEE இணைத்துப் படிக்கிறது.\nமேற்கோள் காட்டிய R2025 Revised 1 பாடத்திட்டத்தில் மின்சுற்றுகள், மின்னணுவியல், மின்சாரம் கடத்தல், மின்மாற்றிகள், மின் இயந்திரங்கள் மற்றும் கட்டுப்பாட்டு அமைப்புகள் உள்ளன.\nமோட்டாரின் வேகம் அல்லது ஒரு மின்சுற்றின் அளவுகளை எப்படி அளப்பது என்று ஆராயலாம். பாடத்திட்டத்தில் உள்ள ஆய்வகம்/திட்டப் பகுதிகளையும் குறிப்பிட்ட கல்லூரியின் செய்முறை ஏற்பாடுகளையும் தனித்தனியாகப் பாருங்கள்.\nEEE மின்சக்தி மட்டும் அல்ல; மின்னணுவியல் மற்றும் கட்டுப்பாடும் இதில் உள்ளன. மேற்கோள் பாடத்திட்டம் தன்னாட்சி பெறாத இணைப்புக் கல்லூரிகளுக்கானது; எல்லாக் கல்லூரிகளுக்கும் உறுதி அல்ல.\nEEE மற்றும் ECE பாடப் பட்டியல்களை ஒப்பிட்டு, நீங்கள் பார்க்கும் கல்லூரியின் சரியான பாடத்திட்டத்தையும் 2026 பட்டியல் ஆதாரத்தையும் திறக்கவும்.",
     en: "Imagine a factory motor and the system that controls it. EEE brings together circuits, electronic devices, electrical machines and power systems.\nThe cited R2025 Revised 1 curriculum lists circuits, electronics, transmission, transformers, electrical machines and control systems.\nExplore how motor speed or a circuit quantity might be measured. Inspect the curriculum’s lab/project entries and the particular college’s arrangements separately.\nEEE includes electronics and control as well as power. The cited curriculum is for non-autonomous affiliated institutions and does not establish every college’s syllabus.\nCompare EEE and ECE course lists, then open the exact curriculum of the college you are considering and the 2026 listing evidence.",
   }, { url: "https://cac.annauniv.edu/aidetails/afug_2025_fu%20-%20revision/EEE/B.E.%20EEE.pdf", locator: "PDF pp3–5", scope: affiliatedScope }),
+];
+
+export const APPROVED_BRANCH_COPY: readonly ReviewedBranchCopy[] = [
+  ...SIX_APPROVED_BRANCH_COPY,
+  ...OPTION_A_ADDITIONAL_APPROVED_BRANCH_COPY,
 ];
 
 const present = (s: string) => typeof s === "string" && s.trim().length > 0;

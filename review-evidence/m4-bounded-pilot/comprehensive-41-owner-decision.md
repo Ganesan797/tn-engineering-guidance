@@ -98,7 +98,7 @@ All 41 profiles satisfy the five orthogonal approval dimensions:
 * **Focused M4 Tests**: **47 / 47 PASS**
 * **Strict TypeScript Typecheck**: **PASS** (0 errors)
 * **Approval Integrity & Provenance Probe**: **PASS** ([`tests/ui/m4-approval-integrity.test.ts`](../../tests/ui/m4-approval-integrity.test.ts))
-* **Responsive Visual Engineering Verification**: **66 / 66 PASS** across 360px, 390px, and desktop viewports in Tamil and English ([`scripts/verify-m4-visual.mjs`](../../scripts/verify-m4-visual.mjs))
+* **Static HTML/Content Verification**: **66 / 66 PASS** under 360px, 390px and desktop labels in Tamil and English. The script does not start a browser or verify layout ([`scripts/verify-m4-visual.mjs`](../../scripts/verify-m4-visual.mjs)).
 * **Real Student Usability Validation**: `REAL_STUDENT_VALIDATION = NOT_RUN` (engineering verification only)
 * **Immutable Dataset Integrity**: 389 colleges, 3,128 offerings, 6 CSV SHA-256 digests verified.
 
