@@ -1,14 +1,16 @@
 # TN Engineering Guidance — Project Status
 
+**Current accepted experience baseline (2026-11-03):** `bd9b335ee62162e1c6f9a4c67a5db37b7b39f7bb` on main. M4 acceptance PASS; technical closeout COMPLETE at `c4e873112e384596545892dd144d810d332c35fd`. M0–M4 experience review PASS_WITH_REFINEMENT; experience refinement PASS (owner-reported). Full test baseline 325/325 PASS; typecheck PASS; targeted bilingual mobile/browser walkthrough PASS (recorded by owner, not rerun by this documentation task). The M3→M4 bridge refers to official 2026 TNEA-listed colleges/programmes and transfers no marks, cutoff, rank, community or quota; no personal-result filtering or admission recommendation occurs. M4 remains marks-free. Governance remains 41 approved profiles / 116 codes; 38 identity, 26 variant, five evidence and six scope holds; family navigation INACTIVE. REAL_STUDENT_VALIDATION = NOT_RUN. Acceptance tag `v0.4.0-m4-acceptance` remains at `7458cc8`; no tag movement. Next milestone: M5 planning/contract only; implementation requires separate authorization.
+
 **Current milestone:** Milestone M4 Option A remains accepted: 41 approved programme-level educational profiles, explicit held dispositions, 389 governed colleges and 3,128 dated offerings. `M4_ACCEPT = PASS`; M5 is not started.
 
-**Current task:** Technical closeout links the unchanged accepted 35-profile catalogue bytes to the existing six-copy runtime registry. No owner content review is reopened and no college-offering or family association is added.
+**Current task:** M4 closeout and approved M0–M4 experience refinement are complete and integrated; next action is separately authorize bounded M5 planning/contract.
 
 **Last reviewed:** 2026-11-03
 
 **M4 Formal Milestone Acceptance (Option A Comprehensive Release — 2026-11-01):**
 Ganesan (Project Owner / Student Advocate) formally reviewed and accepted Milestone M4 under Option A: Comprehensive 41-Profile Release (`M4_ACCEPT = PASS`, `M4_ACCEPTED = YES`).
-- **Accepted release baseline and tag:** `7458cc814e0b63982c7912f6bbefa6fb4d860e94`; `v0.4.0-m4-acceptance`. The technical closeout is a successor candidate and does not amend acceptance.
+- **Accepted release baseline and tag:** `7458cc814e0b63982c7912f6bbefa6fb4d860e94`; `v0.4.0-m4-acceptance`. The integrated technical closeout is a successor to acceptance and does not amend it.
 - **Owner-Approved Profiles (41):** Exactly 41 bilingual programme-level educational profiles are accepted (`CS`, `AD`, `BM`, `CE`, `EC`, `EE` + `AG`, `AM`, `AU`, `BT`, `CC`, `CD`, `CF`, `CH`, `CI`, `CK`, `CO`, `EF`, `EI`, `EN`, `EV`, `EX`, `FD`, `FT`, `HT`, `IC`, `IN`, `IT`, `MD`, `ME`, `MN`, `MR`, `MU`, `MZ`, `PC`, `PE`, `PH`, `RI`, `RM`, `SC`, `TX`). The runtime verifies the exact accepted catalogue Git blob `8df92b33b3a581c7b1f1c5f860460631e78182c4` before loading the 35 additions; changed bytes fail closed.
 - **Association boundary:** Programme-code/profile identity follows the explicit Option A batch decisions on generic programme pages. College-offering projection remains limited to the nine exact L01–L09 associations; profile approval does not create another college association.
 - **Educational Profile Identity Holds (38 cases / 38 base codes):** `AE`, `AI`, `AL`, `AO`, `AP`, `BC`, `CB`, `CG`, `CR`, `CU`, `CV`, `CW`, `CY`, `CZ`, `DS`, `DV`, `EA`, `EG`, `GI`, `GL`, `IB`, `IE`, `LE`, `MA`, `MB`, `MG`, `MI`, `MJ`, `MM`, `MO`, `PA`, `PP`, `PR`, `PT`, `RP`, `SB`, `TS`, `VL`.
