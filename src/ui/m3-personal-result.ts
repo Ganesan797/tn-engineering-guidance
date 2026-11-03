@@ -14,7 +14,7 @@ export const M3_COPY = {
   title: ["உங்கள் அடுத்த தெளிவான படி", "Your next step"],
   review: ["மொழி மதிப்பாய்வுக்கான வரைவு — இங்குள்ள புதிய தமிழ் மற்றும் ஆங்கில வாசகங்கள் இன்னும் ஒப்புதல் பெறவில்லை.", "Language review draft — the new Tamil and English wording here has not yet been approved."],
   exploreBridgeHeading: ["படிப்புகளையும் கல்லூரிகளையும் ஆராயலாம்", "Explore branches and colleges"],
-  exploreBridgeBody: ["2026 சேர்க்கைக்கான அரசு அங்கீகாரம் பெற்ற படிப்புகளையும் கல்லூரிகளையும் மதிப்பெண் நிபந்தனையின்றி இங்கே ஆராயலாம். இது சேர்க்கை பரிந்துரை அல்லது முன்கணிப்பு அல்ல.", "You can explore approved 2026 branch and college listings freely without mark filters. This is exploratory guidance, not an admission prediction or recommendation."],
+  exploreBridgeBody: ["2026 TNEA அதிகாரப்பூர்வ பட்டியலில் உள்ள பாடப்பிரிவுகளையும் கல்லூரிகளையும் மதிப்பெண் நிபந்தனையின்றி இங்கே ஆராயலாம். இது சேர்க்கை பரிந்துரை அல்லது முன்கணிப்பு அல்ல.", "Explore branches and colleges listed in the official 2026 TNEA data without using your marks. This is not an admission recommendation or prediction."],
   exploreBridgeAction: ["படிப்புகளையும் கல்லூரிகளையும் ஆராய", "Explore branches and colleges"],
   personal: ["உங்கள் பதில்கள் சொல்வது", "What your answers tell us"],
   cutoff: ["கணக்கிட்ட கட்-ஆஃப்", "Calculated cutoff"],

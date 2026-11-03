@@ -265,7 +265,7 @@ test("forward exploration bridge allows marks-free exploration without recommend
   const en = renderM3PersonalResult(evaluated, { sources }, "en");
   assert.match(en, /href="\/internal\/m4-pilot\?lang=en"/);
   assert.match(en, /Explore branches and colleges/);
-  assert.match(en, /not an admission prediction or recommendation/);
+  assert.match(en, /not an admission recommendation or prediction/);
   assert.doesNotMatch(en, /suitable for you/);
 });
 
