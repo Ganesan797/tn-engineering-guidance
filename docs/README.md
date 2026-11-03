@@ -1,5 +1,7 @@
 # Documentation guide
 
+**Current accepted experience baseline (2026-11-03):** `bd9b335ee62162e1c6f9a4c67a5db37b7b39f7bb` on main. M4 acceptance PASS; technical closeout COMPLETE at `c4e873112e384596545892dd144d810d332c35fd`. M0–M4 experience review PASS_WITH_REFINEMENT; experience refinement PASS (owner-reported). Full test baseline 325/325 PASS; typecheck PASS; targeted bilingual mobile/browser walkthrough PASS (recorded by owner, not rerun by this documentation task). The M3→M4 bridge refers to official 2026 TNEA-listed colleges/programmes and transfers no marks, cutoff, rank, community or quota; no personal-result filtering or admission recommendation occurs. M4 remains marks-free. Governance remains 41 approved profiles / 116 codes; 38 identity, 26 variant, five evidence and six scope holds; family navigation INACTIVE. REAL_STUDENT_VALIDATION = NOT_RUN. Acceptance tag `v0.4.0-m4-acceptance` remains at `7458cc8`; no tag movement. Next milestone: M5 planning/contract only; implementation requires separate authorization.
+
 Start with [Project Status](../PROJECT_STATUS.md) for the project state and [Current execution plan — T01–T06](planning/current_execution_plan.md) for the single current task map, owners, dependencies, authorization and next decisions.
 
 The current M4 authority is the [Option A owner decision](../review-evidence/m4-bounded-pilot/comprehensive-41-owner-decision.md). It accepts 41 programme-level bilingual profiles. The technical closeout links the unchanged 35-profile catalogue blob to the six existing immutable copies while retaining the nine exact college-offering associations, all holds and inactive family navigation. The [directory package](../experiments/m4-governance-census/directory-candidates-2026/README.md) remains dated source evidence, not current availability or admission evidence.
@@ -17,7 +19,7 @@ The guided journey remains primary; governed Q&A is optional exploration. M2, M3
 - [Awareness answers A01–A07 V2](content/awareness/student_pov_awareness_batch_a01_a07_v2.md) — content direction accepted; see the [review decision](content/awareness/student_pov_awareness_review_decision_v1.md) for approval limits.
 - [Awareness evidence](content/awareness/student_pov_awareness_evidence_v2.md) and [question coverage](content/awareness/student_pov_awareness_coverage_review_v1.md).
 - [Student question and intent map](content/student_question_intent_review_v1.md).
-- [M2 one-journey readiness proposal](planning/m2_one_journey_readiness_proposal_v1.md) and [dated bounded authorization](planning/m2_one_journey_authorization_decision_2026-10-03.md) — the specified journey is implemented for review; M2 acceptance remains pending.
+- [M2 one-journey readiness proposal](planning/m2_one_journey_readiness_proposal_v1.md) and [dated bounded authorization](planning/m2_one_journey_authorization_decision_2026-10-03.md) — the bounded journey is accepted; real-student validation remains outstanding.
 
 The [M2 question-to-domain map](planning/m2_one_journey_question_domain_map_v1.md) records the single progressive path. Tamil-equivalence review and actual student validation remain pending. Answer coverage is not final release approval.
 
