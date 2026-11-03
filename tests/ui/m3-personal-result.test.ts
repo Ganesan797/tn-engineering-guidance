@@ -253,3 +253,32 @@ test("friendly empty-state copy is preserved verbatim in both languages", () => 
   assert.ok(html.includes(GENERAL_GUIDANCE_MESSAGES.empty.ta));
   assert.ok(html.includes(GENERAL_GUIDANCE_MESSAGES.empty.en));
 });
+
+test("forward exploration bridge allows marks-free exploration without recommendation", () => {
+  const ta = renderM3PersonalResult(evaluated, { sources }, "ta");
+  assert.match(ta, /href="\/internal\/m4-pilot\?lang=ta"/);
+  assert.match(ta, /படிப்புகளையும் கல்லூரிகளையும் ஆராயலாம்/);
+  assert.match(ta, /மதிப்பெண் நிபந்தனையின்றி இங்கே ஆராயலாம்/);
+  assert.doesNotMatch(ta, /\/internal\/m4-pilot[^"']*cutoff=/);
+  assert.doesNotMatch(ta, /\/internal\/m4-pilot[^"']*marks=/);
+
+  const en = renderM3PersonalResult(evaluated, { sources }, "en");
+  assert.match(en, /href="\/internal\/m4-pilot\?lang=en"/);
+  assert.match(en, /Explore branches and colleges/);
+  assert.match(en, /not an admission prediction or recommendation/);
+  assert.doesNotMatch(en, /suitable for you/);
+});
+
+test("student mode suppresses internal review disclaimer and mirror, review mode preserves them", () => {
+  const student = renderM3PersonalResult(evaluated, { sources, review: false }, "ta");
+  assert.doesNotMatch(student, /data-language-review="pending"/);
+  assert.doesNotMatch(student, /English — wording for review/);
+  assert.doesNotMatch(student, /இந்தச் சோதனைப் பதிப்பைப் பற்றி/);
+  assert.doesNotMatch(student, /மொழி மதிப்பாய்வுக்கான வரைவு/);
+
+  const review = renderM3PersonalResult(evaluated, { sources, review: true }, "ta");
+  assert.match(review, /data-language-review="pending"/);
+  assert.match(review, /English — wording for review/);
+  assert.match(review, /இந்தச் சோதனைப் பதிப்பைப் பற்றி/);
+  assert.match(review, /மொழி மதிப்பாய்வுக்கான வரைவு/);
+});
