@@ -3,6 +3,44 @@ import { APPROVED_FAMILY_MAPPINGS, buildReleasedFamilies, type ReviewedFamilyMap
 import { APPROVED_BRANCH_COPY, isReleasedBranchCopy } from "../m4/branch-copy.ts";
 import { renderSiteHeader, SITE_SHELL_CSS } from "./site-shell.ts";
 
+
+const SEARCH_ALIASES: Record<string, string> = {
+  govt: "government",
+  tech: "technology",
+  engg: "engineering",
+  eng: "engineering",
+  inst: "institute",
+  univ: "university",
+  dept: "department",
+  col: "college",
+  cse: "computer science",
+  ece: "electronics and communication",
+  eee: "electrical and electronics",
+  mech: "mechanical",
+  civil: "civil",
+  aids: "artificial intelligence",
+};
+
+function matchesSearch(text: string, collegeName: string, query: string): boolean {
+  if (!query) return true;
+  const q = query.toLowerCase();
+  if (text.includes(q)) return true;
+  const rawTokens = q.split(/[\s,+/]+/).filter(Boolean);
+  const normalizedTokens = rawTokens.map(tok => SEARCH_ALIASES[tok] || tok);
+  if (normalizedTokens.every(tok => text.includes(tok))) return true;
+  if (q.length >= 2 && !q.includes(" ")) {
+    const cleanName = collegeName.replace(/[^a-zA-Z0-9\s]/g, " ");
+    const words = cleanName.split(/\s+/).filter(Boolean);
+    const stopWords = new Set(["of", "and", "the", "for", "in", "autonomous"]);
+    const meaningfulWords = words.filter(w => !stopWords.has(w.toLowerCase()));
+    const meaningfulAcronym = meaningfulWords.map(w => w[0].toLowerCase()).join("");
+    if (meaningfulAcronym === q || meaningfulAcronym.startsWith(q)) return true;
+    const fullAcronym = words.map(w => w[0].toLowerCase()).join("");
+    if (fullAcronym === q || fullAcronym.startsWith(q)) return true;
+  }
+  return false;
+}
+
 const esc = (v: string) => v.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
 const route = "/internal/m4-pilot";
 const types: Record<string,readonly [string,string]> = {
@@ -37,7 +75,7 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
  const sourceText=(i:(typeof items)[number])=>t(`${i.source.year} பொதுக் கல்விப் பிரிவு; சிறப்புப் பிரிவு கலந்தாய்வுக்கு முந்தைய நிலை.`,`${i.source.year} General Academic; before special-reservation counselling.`);
  const limit=t("இந்தப் பட்டியல் அந்த ஆண்டின் ஒரு நிலையை மட்டும் காட்டுகிறது; இன்றைய கிடைப்பையோ சேர்க்கையையோ உறுதிப்படுத்தாது.","This listing records a stage in the stated year; it does not confirm current availability or admission.");
  const blank=`<p role="status">${t("இந்த வரையறுக்கப்பட்ட ஆய்வில் காட்ட ஒப்புதல் பெற்ற பதிவு இல்லை. அனைத்தையும் பாருங்கள் அல்லது அதிகாரப்பூர்வத் தகவலைச் சரிபார்க்கவும்.","No display-approved records for this selection in the bounded pilot. Show all or check official information.")}</p>`;
- const matching=items.filter(i => (!branch || i.programme===branch) && (!district || i.district===district) && (!type || i.type===type) && (!search || (i.collegeName+" "+i.college+" "+i.programmeName+" "+i.programme).toLowerCase().includes(search.toLowerCase())));
+ const matching=items.filter(i => (!branch || i.programme===branch) && (!district || i.district===district) && (!type || i.type===type) && matchesSearch((i.collegeName+" "+i.college+" "+i.programmeName+" "+i.programme).toLowerCase(), i.collegeName, search));
  const grouped = new Map<string,typeof items>();
  for(const i of matching) { const group=grouped.get(i.college); if(group)group.push(i);else grouped.set(i.college,[i]); }
  const groups=[...grouped.values()], pageSize=15, requestedPage=Number(params.get("page") ?? "1");

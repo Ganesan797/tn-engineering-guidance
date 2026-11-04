@@ -309,3 +309,15 @@ test("every owner-preview page returns to the guided journey without passing unt
     assert.doesNotMatch(footer,/evil.example|marks=|approve=/);
   }
 });
+
+test("search supports college acronyms and multi-word tokens naturally", () => {
+  const gct = render("lang=en&view=colleges&q=gct");
+  assert.match(gct, /Government College of Technology/);
+  assert.match(gct, /2005/);
+
+  const cit = render("lang=en&view=colleges&q=cit");
+  assert.match(cit, /Coimbatore Institute of Technology|Chennai Institute of Technology/);
+
+  const govtCbe = render("lang=en&view=colleges&q=govt+coimbatore");
+  assert.match(govtCbe, /Government College of Technology/);
+});
