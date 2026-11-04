@@ -320,4 +320,14 @@ test("search supports college acronyms and multi-word tokens naturally", () => {
 
   const govtCbe = render("lang=en&view=colleges&q=govt+coimbatore");
   assert.match(govtCbe, /Government College of Technology/);
+
+  const branchCse = render("lang=en&view=branches&bq=cse");
+  assert.match(branchCse, /COMPUTER SCIENCE AND ENGINEERING/);
+  assert.match(branchCse, /17 matching programmes/);
+
+  const branchMech = render("lang=en&view=branches&bq=mech");
+  assert.match(branchMech, /MECHANICAL ENGINEERING/);
+
+  const branchEce = render("lang=en&view=branches&bq=ece");
+  assert.match(branchEce, /ELECTRONICS AND COMMUNICATION ENGINEERING/);
 });

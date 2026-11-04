@@ -19,9 +19,18 @@ const SEARCH_ALIASES: Record<string, string> = {
   mech: "mechanical",
   civil: "civil",
   aids: "artificial intelligence",
+  aiml: "machine learning",
+  ai: "artificial intelligence",
+  ml: "machine learning",
+  ds: "data science",
+  it: "information technology",
+  biotech: "biotechnology",
+  bme: "biomedical",
+  aero: "aeronautical",
+  auto: "automobile",
 };
 
-function matchesSearch(text: string, collegeName: string, query: string): boolean {
+function matchesSearch(text: string, entityName: string, query: string): boolean {
   if (!query) return true;
   const q = query.toLowerCase();
   if (text.includes(q)) return true;
@@ -29,7 +38,7 @@ function matchesSearch(text: string, collegeName: string, query: string): boolea
   const normalizedTokens = rawTokens.map(tok => SEARCH_ALIASES[tok] || tok);
   if (normalizedTokens.every(tok => text.includes(tok))) return true;
   if (q.length >= 2 && !q.includes(" ")) {
-    const cleanName = collegeName.replace(/[^a-zA-Z0-9\s]/g, " ");
+    const cleanName = entityName.replace(/[^a-zA-Z0-9\s]/g, " ");
     const words = cleanName.split(/\s+/).filter(Boolean);
     const stopWords = new Set(["of", "and", "the", "for", "in", "autonomous"]);
     const meaningfulWords = words.filter(w => !stopWords.has(w.toLowerCase()));
@@ -84,7 +93,7 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
  const hidden=(name:string,value:string)=>`<input type="hidden" name="${esc(name)}" value="${esc(value)}">`;
  const programmeLabels = [...new Map(items.map(i=>[i.programme,i.programmeName])).entries()];
  const releasedFamilies=buildReleasedFamilies(items,familyRegistry);
- const branchMatches=programmeLabels.filter(([code,name])=>(`${code} ${name}`).toLocaleLowerCase().includes(branchSearch.toLocaleLowerCase()));
+ const branchMatches=programmeLabels.filter(([code,name])=>matchesSearch((`${code} ${name}`).toLowerCase(), name, branchSearch));
  const districtLabels = [...new Set(items.map(i=>i.district).filter((v):v is string=>!!v))];
  const typeLabels = [...new Set(items.map(i=>i.type).filter((v):v is string=>!!v && !!types[v]))];
  const facts=(i:(typeof items)[number])=>`<p>${[[t("கல்லூரிக் குறியீடு","College code"),i.college],...(i.district?[[t("மாவட்டம்","District"),i.district]]:[]),...(i.type&&types[i.type]?[[t("வகை","Type"),typeName(i.type)]]:[])].map(([label,value])=>`${esc(label!)}: ${esc(value!)}`).join(" · ")}</p>`;
