@@ -75,7 +75,7 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
  const sourceText=(i:(typeof items)[number])=>t(`${i.source.year} பொதுக் கல்விப் பிரிவு; சிறப்புப் பிரிவு கலந்தாய்வுக்கு முந்தைய நிலை.`,`${i.source.year} General Academic; before special-reservation counselling.`);
  const limit=t("இந்தப் பட்டியல் அந்த ஆண்டின் ஒரு நிலையை மட்டும் காட்டுகிறது; இன்றைய கிடைப்பையோ சேர்க்கையையோ உறுதிப்படுத்தாது.","This listing records a stage in the stated year; it does not confirm current availability or admission.");
  const blank=`<p role="status">${t("இந்த வரையறுக்கப்பட்ட ஆய்வில் காட்ட ஒப்புதல் பெற்ற பதிவு இல்லை. அனைத்தையும் பாருங்கள் அல்லது அதிகாரப்பூர்வத் தகவலைச் சரிபார்க்கவும்.","No display-approved records for this selection in the bounded pilot. Show all or check official information.")}</p>`;
- const matching=items.filter(i => (!branch || i.programme===branch) && (!district || i.district===district) && (!type || i.type===type) && matchesSearch((i.collegeName+" "+i.college+" "+i.programmeName+" "+i.programme).toLowerCase(), i.collegeName, search));
+ const matching=items.filter(i => (!branch || i.programme===branch) && (!district || i.district===district) && (!type || i.type===type) && matchesSearch((i.collegeName+" "+i.college+" "+i.programmeName+" "+i.programme+(i.district ? " "+i.district : "")).toLowerCase(), i.collegeName, search));
  const grouped = new Map<string,typeof items>();
  for(const i of matching) { const group=grouped.get(i.college); if(group)group.push(i);else grouped.set(i.college,[i]); }
  const groups=[...grouped.values()], pageSize=15, requestedPage=Number(params.get("page") ?? "1");

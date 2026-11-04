@@ -24,6 +24,7 @@ const identitySnapshots = new Map([
   ["4", "University Departments of Anna University, Chennai - MIT Campus"],
   ["1303", "Anand Institute of Higher Technology (Autonomous)"],
   ["1304", "Easwari Engineering College (Autonomous)"],
+  ["2005", "Government College of Technology (Autonomous)"],
   ["2603", "Government College of Engineering (Autonomous), Bargur"],
   ["3018", "University College of Engineering, Thirukkuvalai"],
   ["4967", "S Veerasamy Chettiar College of Engineering and Technology"],

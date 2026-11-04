@@ -30,7 +30,7 @@ test("source-only listings keep identity, district, scope and profile holds inde
   assert.ok(view.items.some(x => x.programme === "BY") && view.items.some(x => x.programme === "XC"));
   assert.ok(view.items.filter(x => ["1303","4967"].includes(x.college)).every(x => x.district === null));
   assert.ok(view.items.some(x => x.college === "1102") && view.items.filter(x => ["1102","1221","1510","1516","2350","4943","5533"].includes(x.college)).every(x => x.district === null && x.type === null));
-  assert.ok(view.items.filter(x => !["1","4","1303","1304","2603","3018","4967"].includes(x.college)).every(x => x.district === null && x.type === null));
+  assert.ok(view.items.filter(x => !["1","4","1303","1304","2005","2603","3018","4967"].includes(x.college)).every(x => x.district === null && x.type === null));
   assert.ok(view.items.every(x => !["2332","3555","4911","4927"].includes(x.college)));
 });
 
@@ -234,8 +234,8 @@ test("aggregate evidence is concise while programme detail retains exact source 
 test("additional metadata requires both accepted identity and exact dated field approval", () => {
   const colleges = [...new Map(view.items.map(i=>[i.college,i])).values()];
   const enriched = colleges.filter(i=>i.metadata.length);
-  assert.deepEqual(enriched.map(i=>i.college), ["1","4","1303","1304","2603","3018","4967"]);
-  assert.equal(enriched.reduce((n,i)=>n+i.metadata.length,0),52);
+  assert.deepEqual(enriched.map(i=>i.college), ["1","4","1303","1304","2005","2603","3018","4967"]);
+  assert.equal(enriched.reduce((n,i)=>n+i.metadata.length,0),60);
   const approved = readFileSync(new URL("batch-supported.csv",root),"utf8");
   for(const college of enriched) for(const field of college.metadata) {
     assert.ok(approved.includes(field.recordId));
