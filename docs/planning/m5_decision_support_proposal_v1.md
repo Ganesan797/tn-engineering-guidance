@@ -1,6 +1,6 @@
 # M5 decision support — final execution proposal for owner review
 
-**Status (2026-11-06): PLANNING_PROPOSAL_PREPARED; OWNER_DECISIONS_PENDING; IMPLEMENTATION_AUTHORIZED = NO.** This is the single current M5 planning package. It reconciles the earlier bounded proposal with the supplied M5-T01–T12 execution draft; no second task plan is authoritative. “Final” describes a reviewable proposal, not an approved contract. The accepted M0–M4 baseline, M4 acceptance tag, exact profile/offering decisions, held mappings, deterministic admission authority and historical records remain unchanged. No M5 ingestion, application work, publication, merge, deployment, model restart or access change is authorized. `REAL_STUDENT_VALIDATION = NOT_RUN` and pilot readiness is unapproved.
+**Status (2026-11-06): PLANNING_PROPOSAL_PREPARED; M5-T01 = ACCEPTED; M5-T02 = AUTHORIZED_FOR_BOUNDED_SOURCE_ASSESSMENT; IMPLEMENTATION_AUTHORIZED = NO.** This is the single current M5 planning package. It reconciles the earlier bounded proposal with the supplied M5-T01–T12 execution draft; no second task plan is authoritative. “Final” describes a reviewable proposal, not implementation approval. The accepted M0–M4 baseline, M4 acceptance tag, exact profile/offering decisions, held mappings, deterministic admission authority and historical records remain unchanged. No M5 extraction experiment, production ingestion, application work, publication, merge, deployment, model restart or access change is authorized. `REAL_STUDENT_VALIDATION = NOT_RUN` and pilot readiness is unapproved. The owner accepted the [T01 contract](m5_contract_spec_v1.md) at reviewed commit `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`; its T02 questions remain open.
 
 ## Delivery boundary and evidence state
 
@@ -19,20 +19,20 @@ The repository's `data/cutoffs.csv` is header-only and contains no approved hist
 ### M5-T01 — Bounded contract, provenance and privacy
 
 - **Scope:** Draft D5 comparison semantics, exact identity/source fields, optional input rules, separate General Academic and 7.5% routes, missing/conflict states, applicant-data exclusion and source-copy retention proposal. Define what a published closing measure means before comparison.
-- **Student outcome / deliverable:** A reviewable historical contract that makes a factual comparison understandable without forcing a marks or quota input; this document is its planning outline, not an approved data contract.
+- **Student outcome / deliverable:** The [accepted T01 contract](m5_contract_spec_v1.md) sets the input, schema, metric, provenance and privacy boundaries without forcing a marks or quota input.
 - **Dependencies:** Accepted M0–M4 authority, D5 methodology requirement, M4 governed directory and official source leads.
 - **Validation:** Check each proposed field against a named claim; verify that cutoff, aggregate closing rank, seat matrix, vacancy and allotment cannot be interchanged and that no applicant-level field is retained.
-- **Human gate:** Owner approves the exact contract and reviewer roles; legal/source-use and privacy decisions remain separate where applicable.
-- **Authorization status:** Planning draft prepared; contract approval and any implementation are **PENDING**.
+- **Human gate:** Owner accepted the exact contract at `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`; reviewer assignments and legal/source-use decisions remain open where applicable.
+- **Authorization status:** **T01 ACCEPTED** for the reviewed specification; extraction and implementation remain unauthorized.
 
 ### M5-T02 — Bounded official-source discovery
 
-- **Scope:** Inspect a limited set of official 2024/2025 source types and access paths by year, stream, stage, round, published measure, finality, page shape and reuse conditions. This is a **bounded source-availability assessment**, not a statewide record census or an extraction commitment.
+- **Scope:** Reuse existing official source leads to inspect a limited set of 2024/2025 source types and access paths. Check availability, historical metric definitions, category/route/round meanings, finality, page shape and access limitations. This is a **bounded source-availability assessment**, not a statewide record census or an extraction commitment. Do not extract applicant data.
 - **Student outcome / deliverable:** Source-availability matrix with explicit accessible, unavailable and unresolved cells, including General Academic and 7.5% separately.
-- **Dependencies:** T01's proposed questions and a precise owner authorization for the source-assessment scope.
+- **Dependencies:** Accepted T01 questions and the owner's bounded source-assessment authorization, both now recorded.
 - **Validation:** Reopen recorded official URLs, record access date/result and original source wording, and distinguish source discovery from evidence approval or historical coverage.
 - **Human gate:** Owner reviews findings and decides which source types merit method review; findings alone approve no data.
-- **Authorization status:** **PENDING** precise initial source-assessment authorization; preliminary spot checks do not complete T02.
+- **Authorization status:** **AUTHORIZED_FOR_BOUNDED_SOURCE_ASSESSMENT; NOT_STARTED**. Preliminary spot checks do not complete T02. T03–T04 remain unauthorized.
 
 ### M5-T03 — Historical identity audit and candidate cohort
 
@@ -157,15 +157,15 @@ After bounded M5 acceptance, a separate owner review may consider batches using 
 
 | Decision | Precise decision required | Status |
 | --- | --- | --- |
-| **1. Bounded contract and initial assessment** | Approve/revise T01, 10-college/20-pair ceilings and reviewers; separately specify and authorize T02's limited official-source assessment. | **PENDING** |
+| **1. Bounded contract and initial assessment** | Accept T01's reviewed contract and authorize T02's limited official-source assessment; assign reviewers as needed before downstream gates. | **PARTIAL: T01 ACCEPTED; T02 AUTHORIZED; reviewer assignments OPEN** |
 | **2. Research experiment** | After T02/T03, approve/revise the exact T04 sample and extraction-experiment authority, including privacy and research-artifact limits. No production ingestion follows automatically. | **PENDING** |
 | **3. Historical method and comparison** | Review Gate A's source, identity, error/effort and D5 evidence; decide actual cohort, General Academic and 7.5% scopes independently, and any B implementation/data use. | **PENDING** |
 | **4. Wording, shortlist and retention** | Separately decide factual/Tamil-English copy, C implementation, opt-in 30-day ID-only storage and historical-source retention/rights policy. None is conferred by Gate A. | **PENDING** |
 | **5. Bounded acceptance and later expansion** | Decide bounded M5 acceptance from D evidence. If expansion is later proposed, make an additional explicit expansion decision; M5 may pass without it. Student publication, deployment and real-student validation remain separate later gates. | **PENDING** |
 
-**Next single action:** Owner decides the bounded contract and the precise initial T02 source-assessment authorization. Until then, M5-T01–T12 remain a planning map and `IMPLEMENTATION_AUTHORIZED = NO`.
+**Next single action:** Execute the authorized bounded T02 source assessment and present the findings for owner review. T03–T04, extraction, production ingestion and application implementation remain unauthorized; `IMPLEMENTATION_AUTHORIZED = NO`.
 
 
 ## T01 detailed specification
 
-See [M5-T01 contract candidate](m5_contract_spec_v1.md). Specification drafting is authorized; owner contract acceptance and T02 execution remain pending.
+See the [accepted M5-T01 contract](m5_contract_spec_v1.md), reviewed at `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`. T02 bounded assessment is authorized; its findings and all downstream gates remain open.

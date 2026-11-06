@@ -1,9 +1,9 @@
 # M5-T01 — Bounded contract, provenance and privacy specification
 
-Status: DRAFT_FOR_OWNER_REVIEW. Prepared 2026-11-06.
+Status: **M5-T01 = ACCEPTED** by Ganesan on 2026-11-06. Reviewed commit: `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`; reviewed contract blob: `c625d358adf8236595e42119a4c64f66d2b57775`. This administrative status record does not alter the reviewed input, schema, metric or privacy terms.
 Base: b4dfd5483437dcdc6127cba8d9d87376234241c9.
 Authority: [M5 proposal](m5_decision_support_proposal_v1.md), [mission](../product/product_mission.md), [implementation plan](implementation_plan_v1.md).
-This task authorizes specification preparation only. The contract is not frozen or owner-approved. No extraction, ingestion, application implementation, source access, deployment or model execution is authorized here. Accepted M0–M4 content, tags, UI decisions and holds remain unchanged.
+Owner acceptance covers this T01 specification only. T02 is separately authorized for a bounded official-source assessment of availability, historical metric definitions, category/route/round meanings, finality and access limitations, reusing existing source leads without applicant-data extraction. No extraction experiment, production ingestion, application implementation, deployment or model execution is authorized. Accepted M0–M4 content, tags, UI decisions and holds remain unchanged.
 
 ## 1. Student outcome and scope
 
@@ -101,8 +101,8 @@ These are operational controls, not a legal-compliance certification. Source-use
 
 ## 8. T01 completion and remaining decisions
 
-Specification preparation complete; owner acceptance PENDING. T01 freezes only after the owner accepts an exact revision.
-Owner decision: approve/fix this input/schema/metric/privacy contract and name reviewers. Source-specific definitions remain explicit T02 questions, not invented facts.
+Specification preparation is complete; the owner accepted the exact reviewed revision at `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`. Reviewer assignments and source-specific definitions remain open T02/downstream questions, not invented facts.
 T02 must establish official measure meaning, category vocabulary, route/quota/round semantics, publication finality, available years, portal/source locators, source-use restrictions and access stability.
 No extraction accuracy threshold, derived method, historical cohort, source retention duration, persistence policy, bilingual copy or implementation is approved here.
-Next single action: owner decides this T01 candidate and separately authorizes the precise T02 source assessment.
+Rank comparison remains outside the first slice. Device persistence remains separately proposed.
+Next single action: execute the authorized bounded T02 source assessment and present its findings for owner review. Do not start T03 or T04 without separate authorization.
