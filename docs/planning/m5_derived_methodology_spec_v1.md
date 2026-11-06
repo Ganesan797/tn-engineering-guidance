@@ -1,177 +1,193 @@
-# M5-D5 — Derived Metric Methodology and Ephemeral Privacy Specification
+# M5-D5 — derived provisional-allotment minimum methodology
 
-Status: **PROPOSED FOR OWNER REVIEW** (2026-11-06).
-Base: `51bb945bb4b2b591ba528b5b7885ffec9583e9bb`.
-Authority: [Accepted M5-T01 Contract](m5_contract_spec_v1.md), [Accepted M5-T02 Assessment](m5_source_census_v1.md), [M5 Execution Proposal](m5_decision_support_proposal_v1.md).
-Governing Context: The official cutoff portal (`cutoff.tneaonline.org`) remains unavailable (HTTP 503). This specification proposes an alternative evidence method to derive historical observation candidates from official provisional allotment publications. Competitor practices (e.g. TNEAhelp) provide context on data availability only; they do not constitute project authority.
+**Status:** `D5_EXACT_REVISION = PROPOSED_FOR_OWNER_ACCEPTANCE`; `D5_ACCEPTANCE = PENDING`; `T03_T04 = NOT_AUTHORIZED`. Prepared 2026-11-06 from base `78abf60c38c6ffb5976bd72687fbe1bb1bdbcbbf`.
 
-Acceptance of this D5 specification approves the methodology and privacy controls only. It does **not** authorize production ingestion, application implementation, merge, deployment, or automatic execution of T03/T04.
+**Authority:** [Accepted M5-T01 contract](m5_contract_spec_v1.md), [accepted M5-T02 assessment](m5_source_census_v1.md) and [current M5 execution proposal](m5_decision_support_proposal_v1.md).
 
----
+The bounded T02 assessment did not locate an accessible official aggregate college–programme closing-cutoff publication and observed HTTP 503 from the official cutoff portal during its access window. It did not establish that no such publication exists. Competitor descriptions are not evidence of a derivation pipeline and provide no project authority.
 
-## 1. Meaning and Semantic Boundary
+Owner acceptance of this exact D5 revision would approve only the proposed meaning, research-candidate schema, completeness tests and privacy controls for a later separately authorized T04 experiment. It would not authorize source access or applicant-row processing, T03 or T04 execution, a route/year/round source set, research-output retention, production ingestion, bilingual copy, application implementation, publication, merge or deployment.
 
-1. **Precise Metric Identity:**
-   The output of this method is formally defined as the:
-   > **“Minimum observed mark in the specified provisional allotment publication”**
-2. **Prohibited Equivalence:**
-   * It is **not** an “official closing cutoff.”
-   * It is **not** an official minimum admission threshold, entitlement, or eligibility guarantee.
-   * It represents an observed statistical minimum among candidates allotted in a specific dated provisional publication.
-3. **Metric Classification:**
-   * `metric_type` = `CUTOFF_SCORE`
-   * `metric_unit` = `SCORE_200`
-   * `observation_basis` = `DERIVED`
-   * `derivation_method_version` = `"D5-PROVISIONAL-ALLOTMENT-MIN-V1"`
-   * `publication_status` = `PROVISIONAL`
-   * `closing_rank` = `null` (rank comparison remains strictly excluded from the first slice)
+## 1. Metric identity and prohibited equivalence
 
----
+The only metric proposed by this method is:
 
-## 2. Source Scope and Grouping Semantics
+> **Derived minimum observed aggregate mark in one identified provisional allotment publication, for one exact source-literal bucket.**
 
-### A. Target Official Sources
-* **Publisher:** Tamil Nadu Engineering Admissions (TNEA) / Directorate of Technical Education (DoTE).
-* **Location:** Official `static.tneaonline.org/docs/` repository.
-* **Eligible Documents:** Round 1, Round 2, and Round 3 provisional allotment lists for General Academic and Government School 7.5% Academic for candidate years 2024 and 2025.
+Its stable research identifier is `DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK`. It is not any of the following:
 
-### B. Grouping Dimensions
-Every derived observation must be strictly partitioned across all eight dimensions:
+- an `OFFICIAL_PUBLISHED_CLOSING_VALUE`;
+- an official cutoff or official closing threshold;
+- final admission, sanctioned intake, vacancy or seat-fill evidence;
+- an admission probability, entitlement, recommendation or preference signal.
 
-$$\text{Bucket Key} = (\text{year}, \text{stream}, \text{route}, \text{stage}, \text{round}, \text{college\_code}, \text{programme\_code}, \text{allotted\_category})$$
+The accepted T01 production observation schema is not silently changed. D5 outputs are isolated research candidates and therefore do not populate `closing_cutoff`, `cutoff_status` or `data/cutoffs.csv`. A later methodology/data decision would be required to map any reviewed candidate into an approved product observation.
 
-| Dimension | Permitted Values and Semantics |
-| :--- | :--- |
-| `year` | `2024` or `2025` (explicit source year; no year-averaging or synthetic trend). |
-| `stream` | `ENGINEERING_ACADEMIC` |
-| `route` | `GENERAL_ACADEMIC` vs `GOVT_SCHOOL_7_5` (strictly isolated; zero cross-substitution). |
-| `stage` | `PROVISIONAL_ALLOTMENT` |
-| `round` | `ROUND_1`, `ROUND_2`, or `ROUND_3` |
-| `college_code` | Literal 4-digit source string (e.g. `"2722"`, `"0001"`). No numeric truncation. |
-| `programme_code` | Literal 2-letter source string (e.g. `"CS"`, `"EC"`). |
-| `allotted_category` | `"OC"`, `"BC"`, `"BCM"`, `"MBC"`, `"SC"`, `"SCA"`, `"ST"`. Allotted category is strictly distinguished from applicant community. `OC` is an allotment quota, never an applicant community. |
+## 2. Research-candidate schema
 
-### C. Mathematical Derivation
-For each non-empty bucket:
+Every persisted D5 research candidate must use the following fields and meanings. Exact strings from the source are retained where named `*_literal`; normalization never overwrites them.
 
-$$\text{closing\_cutoff} = \min_{i \in \text{Bucket}}(\text{aggregate\_mark}_i)$$
+| Field | Required meaning |
+| --- | --- |
+| `research_candidate_id`, `method_version` | Stable research identity; method version `D5-PROVISIONAL-ALLOTMENT-MIN-V2`. |
+| `source_url`, `source_sha256`, `retrieved_at` | Exact approved URL, streamed-byte hash and access timestamp. |
+| `source_title_literal` | Exact publication heading as observed. |
+| `source_year_literal`, `source_route_literal`, `source_stage_literal`, `source_round_literal` | Exact source labels; normalized helper values may be added separately but may not replace these literals. |
+| `source_college_code_literal`, `source_programme_code_literal`, `source_allotted_category_literal` | Exact strings from the applicable source columns. No numeric coercion, name-similarity join or category reinterpretation. |
+| `source_mark_heading_literal` | Exact heading of the published aggregate-mark column used by the method. |
+| `derived_metric_type` | Always `DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK`. |
+| `derived_minimum_mark` | Numeric minimum of valid published aggregate-mark values in the exact bucket; null whenever completeness or semantics are unresolved. |
+| `official_closing_value` | Always null in a D5 research candidate. |
+| `official_closing_value_status` | Always `NOT_ESTABLISHED_BY_D5`. |
+| `observation_basis`, `publication_status` | `DERIVED`; `PROVISIONAL`. |
+| `source_scope_status`, `extraction_status`, `category_semantics_status` | Independently record verified or unresolved source scope, extraction completeness and category meaning. |
+| `nonpersonal_source_locator` | Document-level or page-span locator only; never an applicant row number, applicant value or screenshot. |
+| `research_status` | `CANDIDATE`, `WITHHELD_NEEDS_REVIEW` or `REJECTED`. Never `REPORTED` or `APPROVED_FOR_PRODUCT`. |
 
-Where $\text{aggregate\_mark}$ is normalized Class 12 merit score out of 200.00 ($\text{Maths} + \frac{\text{Physics} + \text{Chemistry}}{2}$).
+Rank fields are absent. Rank comparison remains outside the first slice.
 
----
+### Synthetic schema example
 
-## 3. Completeness, Failures, and Scope Limits
+The following is synthetic and is not a TNEA fact:
 
-To prevent generating unjustified or falsely elevated minimums from incomplete extractions:
-
-1. **Document-Level Integrity:**
-   * Before parsing, verify that the PDF has a valid EOF marker, non-zero byte size, and matches expected page counts.
-   * If any page in the target PDF fails rendering, decryption, or table extraction, the entire document extraction is flagged `EXTRACTION_FAILED`.
-2. **Bucket-Level Completeness:**
-   * If extraction fails on any page containing rows for a target `(college_code, programme_code)`, the closing cutoff for that bucket must be marked `NEEDS_REVIEW`, and no numerical value is emitted.
-   * Tabular row structures must match the expected column count. Any row with shifted or unparseable columns aborts derivation for that institution–round.
-3. **Empty Buckets (`NOT_REPORTED`):**
-   * If an approved directory pair has zero allotted students in a category for a given round, the status is `NOT_REPORTED`.
-   * An empty bucket must **never** be populated with `0.0`, an arbitrary baseline, or a pass mark (e.g. 40%).
-4. **Scope Gaps and Cancellations:**
-   * Withdrawn allotments, cancelled seats, or special supplementary rounds not in the primary list are not inferred.
-   * Missing rounds remain `UNKNOWN`.
-
----
-
-## 4. Timing and Upward Movement Semantics
-
-Provisional allotment lists represent a point-in-time snapshot during counselling. Timing claims must be factually supported:
-
-1. **Source-Faithful Stage Description:**
-   * The qualifier **“before upward movement”** may be used **only** where the official schedule or document heading explicitly defines that stage (e.g. initial Round 1 provisional lists).
-   * Where a later round list (e.g. Round 2 or Round 3) incorporates upward movement from earlier rounds, or where the source text does not state the upward movement relationship, do not make an unevidenced stage claim.
-2. **Mandatory Truth-in-Guidance Copy:**
-   * **General Disclosure:**
-     > *“Minimum observed mark in the official {year} Round {round} provisional allotment publication. Subsequent candidate reporting confirmation, fee payment non-reporting, upward movement, and later counselling rounds are not reflected.”*
-   * **Tamil Equivalence:**
-     > *“அதிகாரப்பூர்வ {year} சுற்று {round} தற்காலிக ஒதுக்கீட்டுப் பதிப்பில் காணப்பட்ட குறைந்தபட்ச மதிப்பெண். மாணவர் சேர்க்கை உறுதிப்படுத்தல், கட்டணம் செலுத்தாமை, மேல்நோக்கிய நகர்வு (upward movement) மற்றும் பிந்தைய சுற்று மாற்றங்கள் இதில் கணக்கில் கொள்ளப்படவில்லை.”*
-3. **Prohibited Claims:**
-   * Must not imply that obtaining a score equal to or greater than the observed minimum guarantees admission or allotment.
-
----
-
-## 5. End-to-End Operational Privacy Architecture
-
-“In-memory processing” alone is insufficient without concrete lifecycle boundaries. The extraction pipeline must enforce strict controls across files, memory, logs, caches, and failures:
-
-```mermaid
-flowchart TD
-    subgraph Isolated Scratch ["Isolated Scratch Directory (scratch/m5-t04-transient/)"]
-        PDF["Downloaded Official PDF"]
-    end
-
-    subgraph Parser Stream ["In-Memory Stream Iterator"]
-        Stream["Page-by-page table parser"]
-        Drop["IMMEDIATE DROP:\nName, App No, Rank, Personal Community"]
-        Keep["RETAIN IN TUPLE:\n(college, programme, allotted_cat, mark)"]
-    end
-
-    subgraph Aggregation ["In-Memory Aggregator"]
-        Min["Compute min(mark) per bucket key"]
-    end
-
-    subgraph Persisted Artifact ["Governed Output (cutoffs.csv)"]
-        Output["Aggregate Record Only:\n(observation_id, college, branch, year, round, cat, min_mark, locator)"]
-    end
-
-    PDF --> Stream
-    Stream --> Drop
-    Stream --> Keep
-    Keep --> Min
-    Min --> Output
-    Min -. Failure or Exit Hook .-> Cleanup["SCRUB & DELETE:\nPurge scratch/, temp buffers & caches"]
-    Cleanup -. Auto-delete .-> PDF
+```json
+{
+  "research_candidate_id": "SYNTHETIC-D5-001",
+  "method_version": "D5-PROVISIONAL-ALLOTMENT-MIN-V2",
+  "source_title_literal": "SYNTHETIC PROVISIONAL ALLOTMENT LIST",
+  "source_year_literal": "20XX",
+  "source_route_literal": "SYNTHETIC GENERAL ACADEMIC",
+  "source_stage_literal": "PROVISIONAL ALLOTMENT",
+  "source_round_literal": "ROUND X",
+  "source_college_code_literal": "9999",
+  "source_programme_code_literal": "ZZ",
+  "source_allotted_category_literal": "OC",
+  "source_mark_heading_literal": "AGGREGATE MARK",
+  "derived_metric_type": "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK",
+  "derived_minimum_mark": 174.5,
+  "official_closing_value": null,
+  "official_closing_value_status": "NOT_ESTABLISHED_BY_D5",
+  "observation_basis": "DERIVED",
+  "publication_status": "PROVISIONAL",
+  "research_status": "CANDIDATE"
+}
 ```
 
-1. **Storage Isolation:**
-   * Raw PDF artifacts reside strictly in `<workspace>/scratch/m5-t04-transient/`.
-   * This directory is git-ignored, excluded from manifests, and isolated from production code.
-2. **Immediate Token Filtering:**
-   * The parser iterates line-by-line across PDF tables.
-   * Columns for `S.No`, `Application Number`, `Applicant Name`, `Applicant Community`, `General Rank`, and `Government Rank` are dropped immediately at the row-unpack step.
-   * They are never stored in lists, DataFrames, dictionaries, or intermediate JSON/CSV files.
-3. **Zero Personal Data in Logs or Stack Traces:**
-   * Log statements record aggregate counts only (e.g. `Inspected page 42; 28 candidate rows parsed`).
-   * Exception handlers must catch parsing errors without printing the raw line text, preventing accidental logging of applicant names or IDs.
-4. **Failure and Exit Clean-up:**
-   * The extraction harness uses `try...finally` constructs and `atexit` handlers.
-   * Whether the script succeeds, fails, or is cancelled, all downloaded PDFs, OS temp files, and parser buffers in the scratch directory are immediately deleted.
-5. **Accidental Capture Protocol:**
-   * If any applicant identifier is detected in an output artifact, processing halts immediately, all output files are purged, and the extraction logic is corrected before re-running.
+## 3. Source eligibility and independent route gates
 
----
+D5 does not assume that 2024 or 2025 evidence exists for every pair or that all three rounds are published. A source is eligible for a later T04 experiment only when its exact URL and literal title/year/route/stage/round have been recorded and the owner has authorized that exact source set for research access.
 
-## 6. Sample Validation Ledger Requirements (Before Approval)
+General Academic and government-school 7.5% are independent evidence streams. Any T04 authorization must name exactly one or both streams and approve each independently. Evidence, category semantics, success or failure in one stream does not transfer to the other.
 
-No derived dataset may be approved or ingested into product directories without a completed **Validation Ledger**:
+Before T04 source access, the following remain separate required decisions:
 
-1. **Visual Spot-Check Ratio:**
-   * At least 10% of derived buckets—and at least one bucket per candidate college—must be manually checked against the visual PDF page.
-   * Record the exact PDF filename, visual PDF page number, table row index, and confirmed minimum mark.
-2. **Ledger Audit Fields:**
-   * `source_sha256`: Hash of source PDF prior to transient processing.
-   * `total_pages_inspected`: Integer count.
-   * `total_rows_parsed`: Integer count.
-   * `error_count`: Number of extraction anomalies encountered.
-   * `derivation_method_version`: Must equal `"D5-PROVISIONAL-ALLOTMENT-MIN-V1"`.
-3. **Approval Boundary:**
-   * Owner reviews the validation ledger before any derived record is promoted to `data/cutoffs.csv`.
-   * Derived records must never overwrite or delete historical M0–M4 data.
+1. exact official URL list and access method;
+2. applicable source-use and privacy review;
+3. route, year, stage and round scope;
+4. transient-source retention/deletion procedure and research-output retention;
+5. category semantics, including the literal meaning of the allotted-category field.
 
----
+Unavailable or unverified documents remain unavailable/unverified. No unofficial source, competitor value, inferred URL, brute-force filename or applicant-level mirror may substitute.
 
-## 7. Decoupled Task Sequencing & Governance
+## 4. Derivation rule
 
-1. **D5 Acceptance Gate:**
-   * Owner reviews and accepts/revises this specification.
-   * Acceptance of D5 does **not** authorize T04 extraction.
-2. **M5-T03 Independent Cohort Audit:**
-   * T03 identity research (auditing 10 candidate colleges and 20 exact pairs across 2024–2026 catalogues for name/code continuity) does **not** require applicant data and may be authorized independently.
-3. **M5-T04 Extraction Experiment Authorization:**
-   * T04 requires its own distinct authorization following T03 cohort approval and D5 validation.
+The method uses the source's published aggregate-mark value exactly as represented in the identified aggregate-mark column. It does not recompute marks from Mathematics, Physics or Chemistry and does not infer a scale from component marks.
+
+For an authorized source, rows are partitioned by this exact source-literal key:
+
+```text
+(source_year_literal,
+ source_route_literal,
+ source_stage_literal,
+ source_round_literal,
+ source_college_code_literal,
+ source_programme_code_literal,
+ source_allotted_category_literal)
+```
+
+For a non-empty bucket whose source scope, category semantics and extraction completeness pass their gates:
+
+```text
+derived_minimum_mark = min(valid parsed source aggregate-mark values in that exact bucket)
+```
+
+No year averaging, cross-round collapse, cross-route substitution, category fallback or identity join occurs in this calculation. A later round does not overwrite an earlier round. The result remains a derived provisional-publication minimum even if it numerically matches a value published elsewhere.
+
+## 5. Completeness and failure semantics
+
+Completeness is assessed at three distinct levels and is never claimed from successful parsing alone.
+
+### 5.1 Artifact integrity
+
+- Hash the exact response bytes before parsing and record the HTTP result and byte count.
+- Open the PDF with two independent checks: structural page enumeration and full-page render/text-access traversal.
+- A truncated response, encrypted/unreadable page, unexpected content type or page-access failure makes the whole source `WITHHELD_NEEDS_REVIEW`.
+
+### 5.2 Publication-scope completeness
+
+- Record only what the literal title/index/schedule establishes about year, route, stage and round.
+- Do not call a publication statewide-complete, final or exhaustive unless the official source explicitly establishes that scope.
+- A document-level extraction can be complete while the publication's coverage remains unverified. In that case, no candidate may be used as a comparison value.
+
+### 5.3 Extraction completeness
+
+- Traverse every page of the authorized document before emitting any candidate from it.
+- Validate headings and column positions on every table transition. Any shifted, ambiguous or unparseable applicant row with a potentially applicable bucket withholds all candidates from that source; it is not silently skipped.
+- Record aggregate counts and anomaly counts only. Do not persist raw rows, row text, serial numbers or applicant values.
+
+### 5.4 Empty and missing cases
+
+Zero observed rows does not establish `NOT_REPORTED`, zero seats or no allotment. No numeric candidate is emitted; the outcome is `UNKNOWN_NO_OBSERVED_ROW` unless the official source explicitly reports the bucket and its empty state. Missing source, missing round, unresolved category meaning and failed extraction remain distinct unknown/needs-review states.
+
+## 6. Provisional timing and copy boundary
+
+The research label must retain the literal source year, route, stage and round and the phrase **derived provisional-allotment minimum**. It must not be shortened to “closing cutoff.” Claims about upward movement, reporting, fee payment, supplementary rounds or final admission may be made only where the applicable official source or schedule expressly supports them.
+
+D5 approves no English or Tamil student-facing sentence. Factual disclosure requirements may inform a later copy draft, but bilingual wording and human equivalence retain their separate Gate B review.
+
+## 7. Technically bounded privacy lifecycle
+
+A later T04 run would necessarily process applicant-row publications transiently. D5 therefore claims data minimization and bounded retention—not that applicant data was never processed and not cryptographic secure erasure.
+
+1. **No execution before T04 authorization.** The exact sources, operator, machine, route scope, output-retention decision and stop conditions must be named first.
+2. **Process-scoped local scratch.** Use a newly created, current-user-only directory under an approved local operating-system temporary root. Resolve and verify that it is outside the repository, OneDrive/other synchronized roots and backup-managed project paths. Do not use `<workspace>/scratch` or a hard-coded conversation path.
+3. **Constrained processing.** Use local deterministic tooling only. Do not send PDFs, rows or extracted text to an external model, OCR service, telemetry endpoint or clipboard.
+4. **Minimum transient tuple.** After the parser identifies the applicable columns, retain in working memory only the exact source-literal bucket fields and aggregate-mark value. Applicant name, application/registration number, applicant community, individual ranks and raw row text must not enter collections, DataFrames, debug output or persisted intermediates.
+5. **Sanitized diagnostics.** Logs contain source hash, page/count totals, status codes and enumerated error codes only. Exceptions exposed outside the parser must not include raw lines, PDF text or applicant fields.
+6. **Controlled temporary files.** Redirect parser/library temp paths into the approved process scratch. Disable crash dumps where the execution environment permits. No screenshots or full-text exports are allowed.
+7. **Cleanup with verification.** Delete process-created files in a `finally` path, verify the scratch directory is empty, and record only cleanup status. On the next run, detect and remove abandoned task-owned scratch directories before fetching a source. Ordinary deletion is not represented as secure erasure; residual OS/storage risk is recorded in the T04 report.
+8. **Accidental capture.** Stop immediately, prevent further copying, delete task-controlled derivatives, identify affected artifact classes without repeating identifiers, and require owner disposition before retry.
+
+No raw PDF, full text, applicant row, row-level locator, applicant identifier, individual rank or applicant-level manifest may be committed or retained as a T04 output.
+
+## 8. T04 research-candidate isolation
+
+T04 outputs must remain research candidates isolated from governed production data and application code.
+
+- During a run, sanitized candidates and the validation ledger remain outside the repository in the approved task scratch.
+- They may be copied into `experiments/m5-derived-minimum-candidates/<run-id>/` only after the authorized privacy scan passes and the owner explicitly approves retention of that exact sanitized research package.
+- They must never be written to `data/cutoffs.csv`, another production dataset, application fixtures or browser storage under T04 authority.
+- A retained package may contain only the research-candidate schema, aggregate counts, enumerated errors, source hashes/URLs, nonpersonal locators, validation results, measured effort and cleanup outcome.
+- Research retention does not approve factual use. Promotion requires a later explicit data/methodology decision, a separately approved production mapping and applicable copy/implementation/publication gates.
+
+## 9. Validation ledger and stop rules
+
+T04, if separately authorized, must measure rather than assume reliability.
+
+1. Record fetch result, source hash, page checks, aggregate row/bucket counts, anomalies, elapsed operator time and cleanup outcome.
+2. Use an independently implemented or manual controlled check for every numeric candidate proposed for later use. A feasibility experiment may sample fewer candidates, but every unverified candidate stays withheld.
+3. A manual check may record source page span and pass/fail only. It must not record applicant row number, applicant value, name, identifier, rank, screenshot or copied text.
+4. Any source-scope uncertainty, category ambiguity, page/table failure, mismatch between derivations, privacy-control failure or cleanup failure stops candidate emission for the affected source.
+5. Report false parses, withheld candidates and effort honestly. No accuracy threshold or promotion rule is approved merely by accepting D5.
+
+## 10. Exact owner decision requested
+
+The owner may accept or revise this exact methodology revision. Acceptance confirms only:
+
+1. the semantic identity `DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK` and its separation from official published closing values;
+2. exact source-literal preservation and independent General Academic/7.5% gates;
+3. the three-part completeness model and unknown/withheld semantics;
+4. the bounded privacy lifecycle and its stated residual risks;
+5. isolation of any later T04 outputs as research candidates.
+
+`T03_EXECUTION = NOT_AUTHORIZED`; `T04_EXECUTION = NOT_AUTHORIZED`; `PRODUCTION_INGESTION = NOT_AUTHORIZED`; `APPLICATION_IMPLEMENTATION = NOT_AUTHORIZED`.

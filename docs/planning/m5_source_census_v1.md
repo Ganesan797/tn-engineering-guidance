@@ -1,6 +1,6 @@
 # M5-T02 — bounded official-source assessment
 
-**Status:** `M5_T02 = ACCEPTED` by Ganesan on 2026-11-06; `BLOCKER_RESOLUTION = AUTHORIZED_D5_DERIVATION`; `T03_T04 = NOT_AUTHORIZED`. Assessment date: 2026-11-06. Access window: approximately 2026-11-06T07:20Z–07:23Z. Governing contract: [accepted M5-T01](m5_contract_spec_v1.md), reviewed at `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`.
+**Status:** `M5_T02 = ACCEPTED` by Ganesan on 2026-11-06; `D5_EXACT_REVISION = PROPOSED_FOR_OWNER_ACCEPTANCE`; `T03_TASK = PREPARED_NOT_AUTHORIZED`; `T04 = NOT_AUTHORIZED`. Assessment date: 2026-11-06. Access window: approximately 2026-11-06T07:20Z–07:23Z. Governing contract: [accepted M5-T01](m5_contract_spec_v1.md), reviewed at `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`.
 
 This is source discovery and semantic assessment only. It did not download or retain raw PDFs, copy applicant rows, create a historical dataset, derive a cutoff, inspect statewide records, ingest data or change the application. A successful request below establishes accessibility during this access window only. It does not establish long-term stability, reuse permission, completeness or factual approval. Unavailable and unlocated sources remain unavailable/unverified; unofficial mirrors were not substituted.
 
@@ -141,9 +141,9 @@ These sources resolve route, round and publication-state vocabulary; they do not
 
 ## Recommended T03 scope and authorization
 
-`T03_AUTHORIZATION_RECOMMENDATION = HOLD` pending an owner decision on the blockers below. T03 should not be started merely because provisional applicant lists are accessible.
+The bounded [M5-T03 identity-audit task](m5_t03_identity_audit_task_v1.md) is prepared but not authorized. It may be considered independently of D5 only because it excludes applicant publications and historical metrics; provisional applicant lists do not authorize it.
 
-Before authorizing T03, establish at least one accessible official, non-applicant source that (a) carries exact college/programme identities for a target year/route and (b) explicitly defines a usable aggregate closing cutoff, or obtain an authoritative portal definition/export that does so. Also decide source-use/retention conditions. If those prerequisites are met, a future T03 authorization should remain capped at **at most 10 colleges and 20 exact pairs**, select by source and identity feasibility, begin with the approved route only, keep General Academic and 7.5% separate, preserve missing years as unknown, exclude rank comparison and perform no extraction experiment.
+Any T03 authorization must name the permitted official non-applicant identity sources and remain capped at **at most 10 colleges and 20 exact pairs**. Selection follows source and identity feasibility; missing years remain unknown. T03 cannot resolve the aggregate historical metric blocker and cannot perform an extraction experiment.
 
 ## Blockers to historical comparison
 
@@ -158,4 +158,4 @@ Before authorizing T03, establish at least one accessible official, non-applican
 
 No statewide college/programme enumeration; no brute-force filename discovery; no applicant-row inspection or parsing; no logged-in portal path; no API reverse engineering; no 2021–2023 records; no B.Arch, vocational, supplementary, SCA-to-SC or other special-reservation census; no unofficial mirror validation; no source download/hash; no historical identity joins; no extraction accuracy experiment; and no application, storage or bilingual-copy work.
 
-**Owner decision (2026-11-06):** Ganesan accepted the M5-T02 findings as complete for the authorized bounded scope. Portal downtime is not resolved; an alternative evidence method has been proposed in the **M5-D5 Derived Metric Methodology & Ephemeral Privacy Specification** to investigate deriving minimum observed marks from official Round 1–3 provisional allotment PDFs on static.tneaonline.org using clean-room controls (zero applicant-data retention) and honest provisional labeling. D5 acceptance does not automatically authorize T03 or T04. T03 identity research may proceed independently where it does not require applicant extraction; T04 extraction experiments, production ingestion, application implementation, merge and deployment remain unauthorized.
+**Owner decision and current proposals (2026-11-06):** Ganesan accepted the M5-T02 findings as complete for the authorized bounded scope. Portal downtime is not resolved. The corrected exact [M5-D5 methodology](m5_derived_methodology_spec_v1.md) proposes derived provisional-publication minima as isolated research candidates, not official closing values, and awaits owner acceptance. The separate [M5-T03 identity task](m5_t03_identity_audit_task_v1.md) is prepared from governed identities and non-applicant evidence but requires explicit authorization. T04 extraction, production ingestion, application implementation, merge and deployment remain unauthorized.
