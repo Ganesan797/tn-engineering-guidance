@@ -1,6 +1,6 @@
 # M5 decision support — final execution proposal for owner review
 
-**Status (2026-11-06): PLANNING_PROPOSAL_PREPARED; M5-T01 = ACCEPTED; M5-T02 = ACCEPTED; M5-D5_SPEC = AUTHORIZED; IMPLEMENTATION_AUTHORIZED = NO.** This is the single current M5 planning package. It reconciles the earlier bounded proposal with the supplied M5-T01–T12 execution draft; no second task plan is authoritative. “Final” describes a reviewable proposal, not implementation approval. The accepted M0–M4 baseline, M4 acceptance tag, exact profile/offering decisions, held mappings, deterministic admission authority and historical records remain unchanged. No M5 extraction experiment, production ingestion, application work, publication, merge, deployment, model restart or access change is authorized. `REAL_STUDENT_VALIDATION = NOT_RUN` and pilot readiness is unapproved. The owner accepted the [T01 contract](m5_contract_spec_v1.md) at reviewed commit `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`; the owner accepted the [bounded T02 source assessment](m5_source_census_v1.md) and authorized resolving the aggregate-cutoff blocker via the M5-D5 methodology specification.
+**Status (2026-11-06): PLANNING_PROPOSAL_PREPARED; M5-T01 = ACCEPTED; M5-T02 = ACCEPTED; M5-D5_SPEC = PROPOSED_FOR_REVIEW; IMPLEMENTATION_AUTHORIZED = NO.** This is the single current M5 planning package. It reconciles the earlier bounded proposal with the supplied M5-T01–T12 execution draft; no second task plan is authoritative. “Final” describes a reviewable proposal, not implementation approval. The accepted M0–M4 baseline, M4 acceptance tag, exact profile/offering decisions, held mappings, deterministic admission authority and historical records remain unchanged. No M5 extraction experiment, production ingestion, application work, publication, merge, deployment, model restart or access change is authorized. `REAL_STUDENT_VALIDATION = NOT_RUN` and pilot readiness is unapproved. The owner accepted the [T01 contract](m5_contract_spec_v1.md) at reviewed commit `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`; the owner accepted the [bounded T02 source assessment](m5_source_census_v1.md). Portal downtime is not resolved; an alternative evidence method has been proposed in the M5-D5 methodology specification.
 
 ## Delivery boundary and evidence state
 
@@ -32,7 +32,7 @@ The repository's `data/cutoffs.csv` is header-only and contains no approved hist
 - **Dependencies:** Accepted T01 questions and the owner's bounded source-assessment authorization, both now recorded.
 - **Validation:** Reopen recorded official URLs, record access date/result and original source wording, and distinguish source discovery from evidence approval or historical coverage.
 - **Human gate:** Owner reviews findings and decides which source types merit method review; findings alone approve no data.
-- **Authorization status:** **T02 ACCEPTED BY OWNER (2026-11-06)**. The aggregate-cutoff blocker is resolved by authorizing preparation of the M5-D5 Derived Metric Methodology & Ephemeral Privacy Specification. T03–T04 remain unauthorized pending D5 review.
+- **Authorization status:** **T02 ACCEPTED BY OWNER (2026-11-06)**. Portal downtime is not resolved; an alternative evidence method is proposed in M5-D5. D5 acceptance does not automatically authorize T03 or T04. T03 identity research may proceed independently without applicant data; T04 extraction requires separate explicit authorization.
 
 ### M5-T03 — Historical identity audit and candidate cohort
 
@@ -157,15 +157,15 @@ After bounded M5 acceptance, a separate owner review may consider batches using 
 
 | Decision | Precise decision required | Status |
 | --- | --- | --- |
-| **1. Bounded contract and initial assessment** | Accept T01's reviewed contract and authorize T02's limited official-source assessment; accept T02 findings and decide blocker resolution strategy. | **RESOLVED: T01 ACCEPTED; T02 ACCEPTED; BLOCKER RESOLUTION AUTHORIZED VIA D5 SPECIFICATION** |
+| **1. Bounded contract and initial assessment** | Accept T01's reviewed contract and authorize T02's limited official-source assessment; accept T02 findings; propose D5 alternative method. | **RESOLVED: T01 ACCEPTED; T02 ACCEPTED; D5 SPECIFICATION PROPOSED FOR REVIEW** |
 | **2. Research experiment** | After T02/T03, approve/revise the exact T04 sample and extraction-experiment authority, including privacy and research-artifact limits. No production ingestion follows automatically. | **PENDING** |
 | **3. Historical method and comparison** | Review Gate A's source, identity, error/effort and D5 evidence; decide actual cohort, General Academic and 7.5% scopes independently, and any B implementation/data use. | **PENDING** |
 | **4. Wording, shortlist and retention** | Separately decide factual/Tamil-English copy, C implementation, opt-in 30-day ID-only storage and historical-source retention/rights policy. None is conferred by Gate A. | **PENDING** |
 | **5. Bounded acceptance and later expansion** | Decide bounded M5 acceptance from D evidence. If expansion is later proposed, make an additional explicit expansion decision; M5 may pass without it. Student publication, deployment and real-student validation remain separate later gates. | **PENDING** |
 
-**Next single action:** Draft the authorized M5-D5 Derived Metric Methodology & Ephemeral Privacy Specification for owner review. T03–T04, extraction, production ingestion and application implementation remain unauthorized; `IMPLEMENTATION_AUTHORIZED = NO`.
+**Next single action:** Owner reviews the proposed [M5-D5 specification](m5_derived_methodology_spec_v1.md). T03 identity research may proceed independently without applicant data; T04 extraction, production ingestion and application implementation remain unauthorized; `IMPLEMENTATION_AUTHORIZED = NO`.
 
 
 ## T01 detailed specification
 
-See the [accepted M5-T01 contract](m5_contract_spec_v1.md), reviewed at `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`, and the [accepted T02 source assessment](m5_source_census_v1.md). D5 specification preparation is authorized.
+See the [accepted M5-T01 contract](m5_contract_spec_v1.md), reviewed at `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`, and the [accepted T02 source assessment](m5_source_census_v1.md). The [M5-D5 specification](m5_derived_methodology_spec_v1.md) is proposed for owner review.

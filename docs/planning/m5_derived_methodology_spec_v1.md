@@ -1,116 +1,177 @@
 # M5-D5 — Derived Metric Methodology and Ephemeral Privacy Specification
 
 Status: **PROPOSED FOR OWNER REVIEW** (2026-11-06).
+Base: `51bb945bb4b2b591ba528b5b7885ffec9583e9bb`.
 Authority: [Accepted M5-T01 Contract](m5_contract_spec_v1.md), [Accepted M5-T02 Assessment](m5_source_census_v1.md), [M5 Execution Proposal](m5_decision_support_proposal_v1.md).
-Governing Decision: Owner resolved the aggregate-cutoff source blocker by authorizing this D5 specification to govern derivation from official provisional allotment publications.
+Governing Context: The official cutoff portal (`cutoff.tneaonline.org`) remains unavailable (HTTP 503). This specification proposes an alternative evidence method to derive historical observation candidates from official provisional allotment publications. Competitor practices (e.g. TNEAhelp) provide context on data availability only; they do not constitute project authority.
+
+Acceptance of this D5 specification approves the methodology and privacy controls only. It does **not** authorize production ingestion, application implementation, merge, deployment, or automatic execution of T03/T04.
 
 ---
 
-## 1. Purpose and Scope
+## 1. Meaning and Semantic Boundary
 
-Because the official cutoff portal (`cutoff.tneaonline.org`) is currently inaccessible (HTTP 503) and no official static closing-cutoff aggregate summary is published by the Directorate of Technical Education (DoTE), this specification establishes:
-1. **The mathematical and semantic derivation rule** for computing representative closing cutoff metrics from official Round 1–3 provisional allotment lists (`static.tneaonline.org`).
-2. **The ephemeral clean-room privacy architecture** guaranteeing that zero applicant-level personal identifiers (names, application numbers, individual ranks, row records) are retained, stored, or committed.
-3. **The semantic qualification and disclosure rules** ensuring students are never misled into treating a provisional allotment minimum as a final sanctioned closing guarantee.
-
-This specification does **not** authorize statewide ingestion, production application implementation, or student-facing release.
+1. **Precise Metric Identity:**
+   The output of this method is formally defined as the:
+   > **“Minimum observed mark in the specified provisional allotment publication”**
+2. **Prohibited Equivalence:**
+   * It is **not** an “official closing cutoff.”
+   * It is **not** an official minimum admission threshold, entitlement, or eligibility guarantee.
+   * It represents an observed statistical minimum among candidates allotted in a specific dated provisional publication.
+3. **Metric Classification:**
+   * `metric_type` = `CUTOFF_SCORE`
+   * `metric_unit` = `SCORE_200`
+   * `observation_basis` = `DERIVED`
+   * `derivation_method_version` = `"D5-PROVISIONAL-ALLOTMENT-MIN-V1"`
+   * `publication_status` = `PROVISIONAL`
+   * `closing_rank` = `null` (rank comparison remains strictly excluded from the first slice)
 
 ---
 
-## 2. Derivation Methodology (`D5-PROVISIONAL-ALLOTMENT-MIN-V1`)
+## 2. Source Scope and Grouping Semantics
 
-### A. Raw Source Target
+### A. Target Official Sources
 * **Publisher:** Tamil Nadu Engineering Admissions (TNEA) / Directorate of Technical Education (DoTE).
-* **Domain:** `static.tneaonline.org/docs/`.
-* **Eligible Documents:** Official General Academic and Government School 7.5% Academic provisional allotment PDF publications for candidate historical years (2024 and 2025), specifically Rounds 1, 2, and 3.
+* **Location:** Official `static.tneaonline.org/docs/` repository.
+* **Eligible Documents:** Round 1, Round 2, and Round 3 provisional allotment lists for General Academic and Government School 7.5% Academic for candidate years 2024 and 2025.
 
-### B. Grouping and Aggregation Rule
-For each target admission year and counselling route (General Academic and 7.5% quota evaluated strictly independently):
+### B. Grouping Dimensions
+Every derived observation must be strictly partitioned across all eight dimensions:
 
-$$\text{Bucket Key} = (\text{college\_code}, \text{programme\_code}, \text{allotted\_category}, \text{counselling\_round}, \text{academic\_year})$$
+$$\text{Bucket Key} = (\text{year}, \text{stream}, \text{route}, \text{stage}, \text{round}, \text{college\_code}, \text{programme\_code}, \text{allotted\_category})$$
 
-Where:
-* `college_code`: Exact 4-digit source string (e.g., `"2722"`, `"0001"`). No numeric truncation.
-* `programme_code`: Exact 2-letter source string (e.g., `"CS"`, `"EC"`).
-* `allotted_category`: Exact allotted community column value (`"OC"`, `"BC"`, `"BCM"`, `"MBC"`, `"SC"`, `"SCA"`, `"ST"`). Allotted category is strictly distinguished from applicant community.
-* `aggregate_mark`: Normalized merit mark out of 200.00 ($\text{Maths} + \frac{\text{Physics} + \text{Chemistry}}{2}$).
+| Dimension | Permitted Values and Semantics |
+| :--- | :--- |
+| `year` | `2024` or `2025` (explicit source year; no year-averaging or synthetic trend). |
+| `stream` | `ENGINEERING_ACADEMIC` |
+| `route` | `GENERAL_ACADEMIC` vs `GOVT_SCHOOL_7_5` (strictly isolated; zero cross-substitution). |
+| `stage` | `PROVISIONAL_ALLOTMENT` |
+| `round` | `ROUND_1`, `ROUND_2`, or `ROUND_3` |
+| `college_code` | Literal 4-digit source string (e.g. `"2722"`, `"0001"`). No numeric truncation. |
+| `programme_code` | Literal 2-letter source string (e.g. `"CS"`, `"EC"`). |
+| `allotted_category` | `"OC"`, `"BC"`, `"BCM"`, `"MBC"`, `"SC"`, `"SCA"`, `"ST"`. Allotted category is strictly distinguished from applicant community. `OC` is an allotment quota, never an applicant community. |
 
-The closing cutoff metric for each bucket is derived deterministically as:
+### C. Mathematical Derivation
+For each non-empty bucket:
 
-$$\text{closing\_cutoff} = \min_{i \in \text{Allotted}}(\text{aggregate\_mark}_i)$$
+$$\text{closing\_cutoff} = \min_{i \in \text{Bucket}}(\text{aggregate\_mark}_i)$$
 
-### C. Observation Classification
-In accordance with the [M5-T01 schema](m5_contract_spec_v1.md#L35):
-* `observation_basis` = `DERIVED`
-* `derivation_method_version` = `"D5-PROVISIONAL-ALLOTMENT-MIN-V1"`
-* `metric_type` = `CUTOFF_SCORE`
-* `metric_unit` = `SCORE_200`
-* `cutoff_status` = `REPORTED` (if $\ge 1$ allotted student in bucket) or `NOT_REPORTED` (if 0 allotted students in bucket)
-* `closing_rank` = `null` (rank comparison is strictly excluded from the first slice)
-* `publication_status` = `PROVISIONAL`
+Where $\text{aggregate\_mark}$ is normalized Class 12 merit score out of 200.00 ($\text{Maths} + \frac{\text{Physics} + \text{Chemistry}}{2}$).
 
 ---
 
-## 3. Ephemeral Clean-Room Privacy Architecture
+## 3. Completeness, Failures, and Scope Limits
 
-To comply strictly with M5-T01 Section 6 (*Zero applicant-level names, application numbers, dates of birth, individual ranks or row-level records in repository files, manifests, extracted datasets, logs, screenshots or product derivatives*):
+To prevent generating unjustified or falsely elevated minimums from incomplete extractions:
+
+1. **Document-Level Integrity:**
+   * Before parsing, verify that the PDF has a valid EOF marker, non-zero byte size, and matches expected page counts.
+   * If any page in the target PDF fails rendering, decryption, or table extraction, the entire document extraction is flagged `EXTRACTION_FAILED`.
+2. **Bucket-Level Completeness:**
+   * If extraction fails on any page containing rows for a target `(college_code, programme_code)`, the closing cutoff for that bucket must be marked `NEEDS_REVIEW`, and no numerical value is emitted.
+   * Tabular row structures must match the expected column count. Any row with shifted or unparseable columns aborts derivation for that institution–round.
+3. **Empty Buckets (`NOT_REPORTED`):**
+   * If an approved directory pair has zero allotted students in a category for a given round, the status is `NOT_REPORTED`.
+   * An empty bucket must **never** be populated with `0.0`, an arbitrary baseline, or a pass mark (e.g. 40%).
+4. **Scope Gaps and Cancellations:**
+   * Withdrawn allotments, cancelled seats, or special supplementary rounds not in the primary list are not inferred.
+   * Missing rounds remain `UNKNOWN`.
+
+---
+
+## 4. Timing and Upward Movement Semantics
+
+Provisional allotment lists represent a point-in-time snapshot during counselling. Timing claims must be factually supported:
+
+1. **Source-Faithful Stage Description:**
+   * The qualifier **“before upward movement”** may be used **only** where the official schedule or document heading explicitly defines that stage (e.g. initial Round 1 provisional lists).
+   * Where a later round list (e.g. Round 2 or Round 3) incorporates upward movement from earlier rounds, or where the source text does not state the upward movement relationship, do not make an unevidenced stage claim.
+2. **Mandatory Truth-in-Guidance Copy:**
+   * **General Disclosure:**
+     > *“Minimum observed mark in the official {year} Round {round} provisional allotment publication. Subsequent candidate reporting confirmation, fee payment non-reporting, upward movement, and later counselling rounds are not reflected.”*
+   * **Tamil Equivalence:**
+     > *“அதிகாரப்பூர்வ {year} சுற்று {round} தற்காலிக ஒதுக்கீட்டுப் பதிப்பில் காணப்பட்ட குறைந்தபட்ச மதிப்பெண். மாணவர் சேர்க்கை உறுதிப்படுத்தல், கட்டணம் செலுத்தாமை, மேல்நோக்கிய நகர்வு (upward movement) மற்றும் பிந்தைய சுற்று மாற்றங்கள் இதில் கணக்கில் கொள்ளப்படவில்லை.”*
+3. **Prohibited Claims:**
+   * Must not imply that obtaining a score equal to or greater than the observed minimum guarantees admission or allotment.
+
+---
+
+## 5. End-to-End Operational Privacy Architecture
+
+“In-memory processing” alone is insufficient without concrete lifecycle boundaries. The extraction pipeline must enforce strict controls across files, memory, logs, caches, and failures:
 
 ```mermaid
-flowchart LR
-    A["Raw Official PDF (static.tneaonline.org)"] --> B["Transient Stream in isolated scratch/"]
-    B --> C["In-Memory Token Extraction\n(college, branch, category, mark)"]
-    C --> D["In-Memory GroupBy & min(mark)"]
-    D --> E["Aggregate Observation Only\n(cutoffs.csv)"]
-    B -. Immediate scrub .-> F["Raw PDF Deleted"]
-    C -. Discarded in memory .-> G["Applicant identifiers dropped"]
+flowchart TD
+    subgraph Isolated Scratch ["Isolated Scratch Directory (scratch/m5-t04-transient/)"]
+        PDF["Downloaded Official PDF"]
+    end
+
+    subgraph Parser Stream ["In-Memory Stream Iterator"]
+        Stream["Page-by-page table parser"]
+        Drop["IMMEDIATE DROP:\nName, App No, Rank, Personal Community"]
+        Keep["RETAIN IN TUPLE:\n(college, programme, allotted_cat, mark)"]
+    end
+
+    subgraph Aggregation ["In-Memory Aggregator"]
+        Min["Compute min(mark) per bucket key"]
+    end
+
+    subgraph Persisted Artifact ["Governed Output (cutoffs.csv)"]
+        Output["Aggregate Record Only:\n(observation_id, college, branch, year, round, cat, min_mark, locator)"]
+    end
+
+    PDF --> Stream
+    Stream --> Drop
+    Stream --> Keep
+    Keep --> Min
+    Min --> Output
+    Min -. Failure or Exit Hook .-> Cleanup["SCRUB & DELETE:\nPurge scratch/, temp buffers & caches"]
+    Cleanup -. Auto-delete .-> PDF
 ```
 
-### Mandatory Execution Protocol
-1. **Isolated Scratch Workspace:** Any transient downloading occurs strictly in `<conversation>/scratch/m5-t04-transient/`. This directory is strictly ignored by Git and never committed.
-2. **In-Memory Streaming & Transformation:** The extraction script reads tabular streams page-by-page. It captures only the tuple `(college_code, programme_code, allotted_category, aggregate_mark)`.
-3. **Immediate Dropping of Identifiers:** Columns for `S.No`, `Application Number`, `Applicant Name`, `Applicant Community`, and `Rank` are discarded in memory at the row parse stage. They are never written to any intermediate text, JSON, or CSV file.
-4. **Immediate Deletion of Raw Artifacts:** Upon completion of bucket aggregation, the downloaded raw PDF is immediately deleted from the scratch directory.
-5. **Persisted Output Constraint:** The only persisted output is the aggregate observation record:
-   ```csv
-   observation_id,college_code,programme_code,year,round,route,category,closing_cutoff,cutoff_status,observation_basis,derivation_method_version,source_url,pdf_page_range
-   ```
-6. **Accidental Capture Response:** If an applicant identifier is detected in any output artifact, processing halts immediately, all output files are purged, and the extraction logic is corrected before re-running.
+1. **Storage Isolation:**
+   * Raw PDF artifacts reside strictly in `<workspace>/scratch/m5-t04-transient/`.
+   * This directory is git-ignored, excluded from manifests, and isolated from production code.
+2. **Immediate Token Filtering:**
+   * The parser iterates line-by-line across PDF tables.
+   * Columns for `S.No`, `Application Number`, `Applicant Name`, `Applicant Community`, `General Rank`, and `Government Rank` are dropped immediately at the row-unpack step.
+   * They are never stored in lists, DataFrames, dictionaries, or intermediate JSON/CSV files.
+3. **Zero Personal Data in Logs or Stack Traces:**
+   * Log statements record aggregate counts only (e.g. `Inspected page 42; 28 candidate rows parsed`).
+   * Exception handlers must catch parsing errors without printing the raw line text, preventing accidental logging of applicant names or IDs.
+4. **Failure and Exit Clean-up:**
+   * The extraction harness uses `try...finally` constructs and `atexit` handlers.
+   * Whether the script succeeds, fails, or is cancelled, all downloaded PDFs, OS temp files, and parser buffers in the scratch directory are immediately deleted.
+5. **Accidental Capture Protocol:**
+   * If any applicant identifier is detected in an output artifact, processing halts immediately, all output files are purged, and the extraction logic is corrected before re-running.
 
 ---
 
-## 4. Semantic Disclosures and Student Copy Rules
+## 6. Sample Validation Ledger Requirements (Before Approval)
 
-Because a minimum observed provisional allotment does not account for later counselling dynamics, the UI and documentation must enforce the following truth-in-guidance disclosures:
+No derived dataset may be approved or ingested into product directories without a completed **Validation Ledger**:
 
-1. **Explicit Qualification:**
-   * **English:** *"Derived from official Round {round} provisional allotment records. Does not reflect upward movement, reporting dropouts, or supplementary rounds."*
-   * **Tamil:** *"அதிகாரப்பூர்வ சுற்று {round} தற்காலிக ஒதுக்கீட்டுப் பதிவுகளிலிருந்து பெறப்பட்டது. இது மேல்நோக்கிய நகர்வு (upward movement) அல்லது இறுதி சேர்க்கை மாற்றங்களைக் கணக்கில் கொள்ளாது."*
-2. **Prohibited Interpretations:**
-   * Never describe a derived value as an "Official Closing Cutoff" without the qualifier "Provisional Allotment Minimum."
-   * Never infer admission probability, chance, or safe status based on a positive delta ($\text{student\_cutoff} > \text{historical\_cutoff}$).
-   * Never compare across routes (General Academic cutoffs must never be shown to a student seeking 7.5% quota comparison, or vice-versa).
-
----
-
-## 5. Candidate Validation Cohort (Gate A Scope)
-
-When authorized under M5-T03/T04, this methodology will be executed on a bounded sample strictly observing the T01 ceilings:
-* **Colleges Ceiling:** At most 10 governed institutions from the accepted 2026 directory.
-* **Pairs Ceiling:** At most 20 exact college–programme pairs.
-* **Candidate Institutions:**
-  1. `2722` — Sri Krishna College of Technology (Autonomous, Coimbatore)
-  2. `0001` — University Departments of Anna University, CEG Campus (Chennai)
-  3. `0004` — University Departments of Anna University, MIT Campus (Chromepet)
-  4. `1304` — Easwari Engineering College (Autonomous, Chennai)
-  5. `2005` — Government College of Technology (GCT, Coimbatore)
-  6. `2603` — Government College of Engineering, Bargur (Krishnagiri)
-  7. `3018` — University College of Engineering, Thirukkuvalai (Nagapattinam)
-  8. `4967` — S. Veerasamy Chettiar College of Engineering and Technology (Tenkasi)
+1. **Visual Spot-Check Ratio:**
+   * At least 10% of derived buckets—and at least one bucket per candidate college—must be manually checked against the visual PDF page.
+   * Record the exact PDF filename, visual PDF page number, table row index, and confirmed minimum mark.
+2. **Ledger Audit Fields:**
+   * `source_sha256`: Hash of source PDF prior to transient processing.
+   * `total_pages_inspected`: Integer count.
+   * `total_rows_parsed`: Integer count.
+   * `error_count`: Number of extraction anomalies encountered.
+   * `derivation_method_version`: Must equal `"D5-PROVISIONAL-ALLOTMENT-MIN-V1"`.
+3. **Approval Boundary:**
+   * Owner reviews the validation ledger before any derived record is promoted to `data/cutoffs.csv`.
+   * Derived records must never overwrite or delete historical M0–M4 data.
 
 ---
 
-## 6. Review Gates and Next Actions
+## 7. Decoupled Task Sequencing & Governance
 
-1. **Owner Review:** Ganesan reviews this D5 specification to approve the derivation formula, clean-room privacy protocol, and semantic disclosures.
-2. **T03 Authorization:** Upon D5 approval, authorize M5-T03 to audit and lock the exact candidate cohort of up to 10 colleges and 20 pairs across 2024 and 2025.
-3. **T04 Authorization:** Authorize the bounded extraction experiment under the clean-room protocol in an isolated scratch environment.
+1. **D5 Acceptance Gate:**
+   * Owner reviews and accepts/revises this specification.
+   * Acceptance of D5 does **not** authorize T04 extraction.
+2. **M5-T03 Independent Cohort Audit:**
+   * T03 identity research (auditing 10 candidate colleges and 20 exact pairs across 2024–2026 catalogues for name/code continuity) does **not** require applicant data and may be authorized independently.
+3. **M5-T04 Extraction Experiment Authorization:**
+   * T04 requires its own distinct authorization following T03 cohort approval and D5 validation.
