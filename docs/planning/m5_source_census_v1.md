@@ -1,6 +1,6 @@
 # M5-T02 — bounded official-source assessment
 
-**Status:** `M5_T02_ASSESSMENT = COMPLETE_FOR_AUTHORIZED_SCOPE`; `OWNER_REVIEW = PENDING`; `T03_T04 = NOT_AUTHORIZED`. Assessment date: 2026-11-06. Access window: approximately 2026-11-06T07:20Z–07:23Z. Governing contract: [accepted M5-T01](m5_contract_spec_v1.md), reviewed at `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`.
+**Status:** `M5_T02 = ACCEPTED` by Ganesan on 2026-11-06; `BLOCKER_RESOLUTION = AUTHORIZED_D5_DERIVATION`; `T03_T04 = NOT_AUTHORIZED`. Assessment date: 2026-11-06. Access window: approximately 2026-11-06T07:20Z–07:23Z. Governing contract: [accepted M5-T01](m5_contract_spec_v1.md), reviewed at `b332c61216ecf8329ec9f7336f6de6f4bfc9d7e4`.
 
 This is source discovery and semantic assessment only. It did not download or retain raw PDFs, copy applicant rows, create a historical dataset, derive a cutoff, inspect statewide records, ingest data or change the application. A successful request below establishes accessibility during this access window only. It does not establish long-term stability, reuse permission, completeness or factual approval. Unavailable and unlocated sources remain unavailable/unverified; unofficial mirrors were not substituted.
 
@@ -158,4 +158,4 @@ Before authorizing T03, establish at least one accessible official, non-applican
 
 No statewide college/programme enumeration; no brute-force filename discovery; no applicant-row inspection or parsing; no logged-in portal path; no API reverse engineering; no 2021–2023 records; no B.Arch, vocational, supplementary, SCA-to-SC or other special-reservation census; no unofficial mirror validation; no source download/hash; no historical identity joins; no extraction accuracy experiment; and no application, storage or bilingual-copy work.
 
-**Next owner decision:** accept/revise the T02 findings and decide how to resolve the aggregate-cutoff source blocker. Do not authorize T03 or T04 by implication.
+**Owner decision (2026-11-06):** Ganesan accepted the M5-T02 findings as complete for the authorized bounded scope. The aggregate-cutoff source blocker is resolved by authorizing preparation of the **M5-D5 Derived Metric Methodology & Ephemeral Privacy Specification**. Rather than waiting for the dormant cutoff portal or using third-party scrapers, the project will derive closing metrics from official Round 1–3 provisional allotment PDFs on static.tneaonline.org using an in-memory clean-room protocol (zero retention of applicant identifiers) and honest provisional labeling. T03–T04, extraction experiments, production ingestion and application implementation remain unauthorized pending D5 methodology review.
