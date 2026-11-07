@@ -23,7 +23,8 @@ import { loadQuestionCollection, renderQuestionCollection } from "../src/ui/expl
 
 const root = new URL("../", import.meta.url);
 // Explicitly enabled local review only; invalid approval bytes fail closed.
-const ownerDirectory = process.env.M4_OWNER_REVIEW === "1" ? loadApprovedDirectory() : null;
+const publicDirectory = loadApprovedDirectory();
+const ownerDirectory = process.env.M4_OWNER_REVIEW === "1" ? publicDirectory : null;
 const awareness = applyApprovedTamilStudentCopy(parseAwarenessPack(
   readFileSync(new URL("data/m1_awareness_content_pack_v1.json", root), "utf8"),
   readFileSync(new URL("docs/content/m1/m1_awareness_content_pack_v1.md", root), "utf8"),
@@ -74,7 +75,11 @@ const server = createServer(async (request, response) => {
     return;
   }
   // Local, opt-in owner review only; no request parameter supplies approvals.
-  if (request.method === "GET" && url.pathname === "/internal/m4-pilot" && ownerDirectory) { send(response, 200, renderGovernedPilot(url.searchParams, undefined, ownerDirectory)); return; }
+  if (request.method === "GET" && url.pathname === "/colleges" && publicDirectory) {
+    send(response, 200, renderGovernedPilot(url.searchParams, undefined, publicDirectory, undefined, "/colleges"));
+    return;
+  }
+  if (request.method === "GET" && url.pathname === "/internal/m4-pilot" && ownerDirectory) { send(response, 200, renderGovernedPilot(url.searchParams, undefined, ownerDirectory, undefined, "/internal/m4-pilot")); return; }
   if (request.method === "GET" && url.pathname === "/journey") {
     const step = url.searchParams.get("step");
     if (step === "explore") { send(response, 200, renderM4Exploration(url.searchParams)); return; }
@@ -121,6 +126,9 @@ const server = createServer(async (request, response) => {
       section: url.searchParams.get("section") ?? undefined,
       review: url.searchParams.get("review") === "1",
       ownerPreview: ownerDirectory !== null,
+      maths: url.searchParams.get("maths") ?? undefined,
+      physics: url.searchParams.get("physics") ?? undefined,
+      chemistry: url.searchParams.get("chemistry") ?? undefined,
     }));
     return;
   }

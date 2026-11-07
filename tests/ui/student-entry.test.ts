@@ -25,7 +25,7 @@ test("home offers a distinct starting choice and three intents without duplicati
   for (const language of ["en", "ta"] as const) {
     const html = renderStudentEntryPage({ route: "home", language }, pack);
     for (const route of ["beginner", "personal", "counselling"] as const) {
-      assert.ok(html.includes(entryHref(route, language)));
+      assert.ok(html.includes(entryHref(route, language))); assert.ok(html.includes(`/colleges?lang=${language}`));
     }
     assert.doesNotMatch(html, /<form|<input|profile\.|ELG\d|PREDICATE_|NEEDS_REVIEW|UNKNOWN_OR_UNPUBLISHED|snapshot_id/);
     assert.doesNotMatch(html, /data-content-id="AW-01"/);
@@ -269,5 +269,94 @@ test("live server keeps entry, blank personal form and synthetic demo paths sepa
     assert.equal(await post(), eligible);
   } finally {
     if (child.exitCode === null) { const exited = once(child, "exit"); child.kill(); await exited; }
+  }
+});
+
+test("Fix 2: Instant cutoff calculator on /personal provides deterministic calculation and mandatory copy", () => {
+  // 1. Initial empty state (Tamil)
+  const emptyTa = renderStudentEntryPage({ route: "personal", language: "ta" }, pack);
+  assert.match(emptyTa, /id="cutoff-calc-form"/);
+  assert.match(emptyTa, /name="maths"/);
+  assert.match(emptyTa, /name="physics"/);
+  assert.match(emptyTa, /name="chemistry"/);
+  assert.match(emptyTa, /value=""/);
+  assert.match(emptyTa, /இது உங்கள் பாட மதிப்பெண்களிலிருந்து கணக்கிடப்பட்ட கட்-ஆஃப் மதிப்பு/);
+  assert.match(emptyTa, /href="\/colleges\?lang=ta"/);
+  assert.match(emptyTa, /href="\/journey\?step=check"/);
+  assert.match(emptyTa, /href="\/personal\/reference\?lang=ta"/);
+
+  // 2. Computed cutoff with marks (Tamil)
+  const calcTa = renderStudentEntryPage({ route: "personal", language: "ta" }, pack, undefined, {
+    maths: "95", physics: "90", chemistry: "91",
+  });
+  assert.match(calcTa, /185\.5 \/ 200/);
+  assert.match(calcTa, /95 \+ \(90 \+ 91\) \/ 2 = 185\.5/);
+  assert.match(calcTa, /இது உங்கள் பாட மதிப்பெண்களிலிருந்து கணக்கிடப்பட்ட கட்-ஆஃப் மதிப்பு\. இதுவே முழுமையான சேர்க்கைத் தகுதியையோ, அதிகாரப்பூர்வ தரவரிசையையோ, கல்லூரி இடம் கிடைப்பதையோ உறுதி செய்யாது\./);
+  assert.match(calcTa, /Merit Ranking/);
+  assert.match(calcTa, /href="\/colleges\?lang=ta"/);
+
+  // 3. Computed cutoff in English
+  const calcEn = renderStudentEntryPage({ route: "personal", language: "en" }, pack, undefined, {
+    maths: "100", physics: "90", chemistry: "90",
+  });
+  assert.match(calcEn, /190 \/ 200/);
+  assert.match(calcEn, /This is the cutoff score calculated from your subject marks\. This alone does not establish complete admission eligibility, official rank, or a college seat\./);
+  assert.match(calcEn, /merit ranking only/);
+  assert.match(calcEn, /href="\/colleges\?lang=en"/);
+  assert.doesNotMatch(calcEn, /href="\/personal\/reference\?lang=en"/);
+});
+
+test("Fix 2: Beginner admissions page includes static cutoff walkthrough without interactive form controls", () => {
+  for (const language of ["ta", "en"] as const) {
+    const html = renderStudentEntryPage({ route: "beginner", language }, pack, undefined, { section: "admission" });
+    assert.doesNotMatch(html, /<form|<input|<script/);
+    assert.match(html, new RegExp(`/personal\\?lang=${language}`));
+    if (language === "ta") {
+      assert.match(html, /கட்-ஆஃப் = கணிதம் \+ \(இயற்பியல் \+ வேதியியல்\) \/ 2/);
+      assert.match(html, /170 \/ 200/);
+      assert.match(html, /Merit Ranking/);
+    } else {
+      assert.match(html, /Cutoff = Mathematics \+ \(Physics \+ Chemistry\) \/ 2/);
+      assert.match(html, /170 \/ 200/);
+      assert.match(html, /merit ranking/);
+    }
+  }
+});
+
+test("Fix 4: Counselling page provides factual procedural guidance on choice order, upward movement, and 7.5% quota", () => {
+  for (const language of ["ta", "en"] as const) {
+    const html = renderStudentEntryPage({ route: "counselling", language }, pack);
+    assert.doesNotMatch(html, /disabled|<form/);
+    assert.match(html, new RegExp(`/colleges\\?lang=${language}`));
+    assert.match(html, new RegExp(`/personal\\?lang=${language}`));
+    assert.match(html, new RegExp(`/beginner\\?lang=${language}`));
+
+    if (language === "ta") {
+      // Choice Ordering
+      assert.match(html, /வரிசை 1-லிருந்து வரிசையாக/);
+      assert.match(html, /தானாக பூட்டப்படுவதில்லை/);
+      // Upward Movement
+      assert.match(html, /Accept &amp; Upward/);
+      assert.match(html, /குறிப்பிட்ட காலக்கெடுவுக்குள் ஆவணங்களைச் சரிபார்த்து கட்டணம் செலுத்தி உறுதிசெய்தால் மட்டுமே/);
+      assert.match(html, /Decline &amp; Upward/);
+      assert.match(html, /அடுத்த சுற்றுகளில் \(Subsequent Rounds\) பங்கேற்கும் தகுதி தக்கவைக்கப்படும்/);
+      // 7.5% Quota
+      assert.match(html, /7\.5% அரசுப் பள்ளி முன்னுரிமை இடஒதுக்கீடு/);
+      assert.match(html, /6-ஆம் வகுப்பு முதல் 12-ஆம் வகுப்பு வரை/);
+      assert.match(html, /TNEA உதவி மையங்களில் \(TFC\)/);
+    } else {
+      // Choice Ordering
+      assert.match(html, /sequentially from Choice 1 downward/);
+      assert.match(html, /does not lock arbitrary predictions/);
+      // Upward Movement
+      assert.match(html, /Accept &amp; Upward/);
+      assert.match(html, /fulfilled within the stipulated deadline/);
+      assert.match(html, /Decline &amp; Upward/);
+      assert.match(html, /subsequent rounds is retained/);
+      // 7.5% Quota
+      assert.match(html, /7\.5% Government School Quota/);
+      assert.match(html, /Standard 6 to Standard 12/);
+      assert.match(html, /TNEA Facilitation Centres \(TFC\)/);
+    }
   }
 });

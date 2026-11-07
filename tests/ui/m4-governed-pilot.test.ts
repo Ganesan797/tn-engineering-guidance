@@ -92,6 +92,18 @@ test("untrusted values are escaped and approval parameters cannot publish candid
  const alteredIdentity={...real.colleges[0],identity:{...real.colleges[0].identity,name:"Other college"}};
  assert.equal(buildGovernedPilotView({...real,colleges:[alteredIdentity,...real.colleges.slice(1)],pairs:[approvedPair]}).items.length,0);
 });
+test("governed pilot renders with public /colleges base route by default and supports overriding base route", () => {
+ const html = render("lang=en&view=colleges");
+ assert.match(html, /href="\/colleges\?/);
+ assert.doesNotMatch(html, /href="\/internal\/m4-pilot/);
+ assert.match(html, /Colleges and Programmes Directory/);
+ const htmlTa = render("lang=ta&view=colleges");
+ assert.match(htmlTa, /கல்லூரி மற்றும் பாடப்பிரிவு பட்டியல்/);
+ const reviewHtml = renderGovernedPilot(new URLSearchParams("lang=en&view=colleges"), fixtures(), undefined, undefined, "/internal/m4-pilot");
+ assert.match(reviewHtml, /href="\/internal\/m4-pilot\?/);
+ assert.match(reviewHtml, /Pilot review/);
+});
+
 import { spawn } from "node:child_process";
 import { once } from "node:events";
 

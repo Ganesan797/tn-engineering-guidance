@@ -215,3 +215,13 @@ test("nine branches provide bilingual course, study, practice and next-step expl
  assert.equal(BRANCH_READING["SYN-ENV"].revised,true);
  assert.ok(BRANCH_READING["SYN-ENV"].url.includes("afug_2025_fu%20-%20revision"));
 });
+
+test("branch profiles provide direct approved handoff to governed public /colleges directory", () => {
+ const csTa = page("view=branch&branch=CS&lang=ta");
+ assert.match(csTa, /href="\/colleges\?branch=CS&amp;lang=ta"/);
+ assert.match(csTa, /இந்தப் பாடப்பிரிவு உள்ள கல்லூரிகளைப் பார்க்க/);
+
+ const csEn = page("view=branch&branch=CS&lang=en");
+ assert.match(csEn, /href="\/colleges\?branch=CS&amp;lang=en"/);
+ assert.match(csEn, /View colleges offering this branch/);
+});
