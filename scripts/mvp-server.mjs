@@ -126,9 +126,6 @@ const server = createServer(async (request, response) => {
       section: url.searchParams.get("section") ?? undefined,
       review: url.searchParams.get("review") === "1",
       ownerPreview: ownerDirectory !== null,
-      maths: url.searchParams.get("maths") ?? undefined,
-      physics: url.searchParams.get("physics") ?? undefined,
-      chemistry: url.searchParams.get("chemistry") ?? undefined,
     }));
     return;
   }
@@ -141,6 +138,22 @@ const server = createServer(async (request, response) => {
   if (request.method === "GET" && url.pathname === "/demo") {
     const form = demoScenario(scenarioName(url));
     send(response, 200, withDemoNavigation(renderStudentGuidancePage({ form, response: null })));
+    return;
+  }
+  if (request.method === "POST" && url.pathname === "/personal") {
+    const chunks = [];
+    for await (const chunk of request) chunks.push(chunk);
+    const body = Buffer.concat(chunks).toString("utf8");
+    const values = Object.fromEntries(new URLSearchParams(body));
+    const lang = url.searchParams.get("lang") === "en" ? "en" : "ta";
+    const postEntry = { route: "personal", language: lang };
+    send(response, 200, renderStudentEntryPage(postEntry, awareness, undefined, {
+      maths: values.maths ?? undefined,
+      physics: values.physics ?? undefined,
+      chemistry: values.chemistry ?? undefined,
+      review: url.searchParams.get("review") === "1",
+      ownerPreview: ownerDirectory !== null,
+    }));
     return;
   }
   if (request.method === "POST" && (url.pathname === "/guidance" || url.pathname === "/demo/guidance")) {

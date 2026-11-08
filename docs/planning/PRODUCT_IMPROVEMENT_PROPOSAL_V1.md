@@ -1,7 +1,7 @@
 # TN Engineering Guidance — Product Improvement Proposal V1 (Revised)
 
-**Document ID:** `PROP-2026-001-REV1`  
-**Status:** `APPROVED_WITH_MANDATORY_REVISIONS`  
+**Document ID:** `PROP-2026-001-REV1`
+**Status:** `APPROVED_WITH_MANDATORY_REVISIONS`
 **Project Control State:**
 * `PRODUCT_DIRECTION = ACCEPTED`
 * `FIX_1 = APPROVED_WITH_SAFEGUARDS` (P1)
@@ -58,7 +58,7 @@ flowchart LR
 #### Fix 1: Connect Governed M4 Directory to the Ordinary Student Journey
 * **Public Route:** Expose `/colleges` as the primary public catalog, directly linked from branch explanations and personal guidance.
 * **Exact Wording:** The branch-to-college handoff button must use:
-  > **"இந்தப் பாடப்பிரிவு உள்ள கல்லூரிகளைப் பார்க்க"** *(View colleges with this branch)*  
+  > **"இந்தப் பாடப்பிரிவு உள்ள கல்லூரிகளைப் பார்க்க"** *(View colleges with this branch)*
   *(Avoid phrasing like "in our pilot directory" or any implication of admission guarantee).*
 * **Safeguards & Invariant Governance:**
   * Reuses accepted M4 application logic and data pipelines (`src/ui/m4-governed-pilot.ts`).
@@ -93,10 +93,10 @@ flowchart LR
 * **Placement:**
   * `/personal`: Full interactive calculator using existing deterministic calculation authority.
   * `/beginner?section=admission`: Static educational example with an explicit link to `/personal`.
-* **Mandatory Educational Correction:**  
+* **Mandatory Educational Correction:**
   Cutoff is for **merit ranking**, not qualifying eligibility (which has separate minimum percentage rules and normalization provisions).
 * **Approved Student-Facing Tamil Copy:**
-  > **"இது உங்கள் பாட மதிப்பெண்களிலிருந்து கணக்கிடப்பட்ட கட்-ஆஃப் மதிப்பு. இதுவே முழுமையான சேர்க்கைத் தகுதியையோ, அதிகாரப்பூர்வ தரவரிசையையோ, கல்லூரி இடம் கிடைப்பதையோ உறுதி செய்யாது."**  
+  > **"இது உங்கள் பாட மதிப்பெண்களிலிருந்து கணக்கிடப்பட்ட கட்-ஆஃப் மதிப்பு. இதுவே முழுமையான சேர்க்கைத் தகுதியையோ, அதிகாரப்பூர்வ தரவரிசையையோ, கல்லூரி இடம் கிடைப்பதையோ உறுதி செய்யாது."**
   *(This is the cutoff score calculated from your subject marks. This alone does not establish complete admission eligibility, official rank, or a college seat).*
 * **Next Action:** Links to general college exploration (`/colleges`), never to cutoff-based prediction or probability filtering.
 
@@ -143,3 +143,5 @@ Student comprehension must be verified through structured observation, not assum
 | **Release 1** | **Fix 1, Fix 3, Fix 5** | • Public `/colleges` directory route registered unconditionally.<br>• 2026 TNEA source provenance notice displayed with explicit vacancy bounds.<br>• Branch-to-college handoff copy: `"இந்தப் பாடப்பிரிவு உள்ள கல்லூரிகளைப் பார்க்க"`.<br>• Site nav header and home landing cards connected to directory. | **COMPLETED & PASSING** (328 tests) |
 | **Release 2** | **Fix 2, Fix 4** | • Interactive deterministic cutoff calculator on `/personal` ($M + (P+C)/2$).<br>• Mandatory Tamil & English educational disclaimer (cutoff for merit ranking, not admission guarantee).<br>• Static cutoff walkthrough on `/beginner?section=admission` linking to calculator.<br>• Factual counselling guidance on `/counselling` (sequential Choice 1..N order, Accept & Upward conditions, Decline & Upward round retention, 7.5% Govt quota continuous Std 6–12 verified at TFC). | **COMPLETED & PASSING** (331 tests) |
 | **Release 3** | **Observation Protocol** | Bounded S1–S3 student observation protocol with 3–5 real students on physical mobile handsets. | **READY TO PROCEED** |
+
+

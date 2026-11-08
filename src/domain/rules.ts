@@ -826,3 +826,74 @@ export function evaluateEligibilityWithExplanation(
   };
   return { result: resultValue, explanation };
 }
+
+export interface AcademicCutoffCalculationResult {
+  readonly cutoff: number | null;
+  readonly traceDisplay: string;
+  readonly valid: boolean;
+  readonly cutoffTrace: CutoffTrace;
+}
+
+/**
+ * Reuses the accepted ELG009 calculation authority for academic merit cutoff.
+ * Preserves strict input validation (0 <= mark <= 100) and approved arithmetic trace.
+ */
+export function calculateAcademicCutoffFromRule(
+  maths: number | null | undefined,
+  physics: number | null | undefined,
+  chemistry: number | null | undefined,
+): AcademicCutoffCalculationResult {
+  if (
+    maths === null || maths === undefined || isNaN(maths) || maths < 0 || maths > 100 ||
+    physics === null || physics === undefined || isNaN(physics) || physics < 0 || physics > 100 ||
+    chemistry === null || chemistry === undefined || isNaN(chemistry) || chemistry < 0 || chemistry > 100
+  ) {
+    return {
+      cutoff: null,
+      traceDisplay: "",
+      valid: false,
+      cutoffTrace: { status: "UNAVAILABLE", calculation_id: "TNEA_ACADEMIC_CUTOFF", operands: [], result: null },
+    };
+  }
+
+  const profile = { qualifying_stream: "HSC_ACADEMIC" } as unknown as StudentProfile;
+  const request: EligibilityEvaluationRequest = {
+    academic_merit_cutoff_requested: true,
+    normalized_cross_board_merit_ranking_requested: false,
+    govt_school_7_5_entitlement_requested: false,
+  };
+  const marks: EffectiveMarks = {
+    academic: [maths, physics, chemistry],
+    vocational: [null, null, null],
+    academic_origins: [null, null, null],
+  };
+
+  const evaluation = RULE_EXECUTORS.ELG009(profile, request, marks);
+  if (!evaluation || evaluation.cutoff === null || evaluation.cutoff === undefined) {
+    return {
+      cutoff: null,
+      traceDisplay: "",
+      valid: false,
+      cutoffTrace: evaluation?.cutoffTrace ?? { status: "UNAVAILABLE", calculation_id: "TNEA_ACADEMIC_CUTOFF", operands: [], result: null },
+    };
+  }
+
+  const cutoff = evaluation.cutoff;
+  const traceDisplay = `${maths} + (${physics} + ${chemistry}) / 2 = ${cutoff.toFixed(2).replace(/\.?0+$/, "")}`;
+
+  return {
+    cutoff,
+    traceDisplay,
+    valid: true,
+    cutoffTrace: evaluation.cutoffTrace ?? {
+      status: "AVAILABLE",
+      calculation_id: "TNEA_ACADEMIC_CUTOFF",
+      operands: [
+        { subject: "maths", value: maths, input_field: null },
+        { subject: "physics", value: physics, input_field: null },
+        { subject: "chemistry", value: chemistry, input_field: null },
+      ],
+      result: cutoff,
+    },
+  };
+}

@@ -6,6 +6,8 @@ import { once } from "node:events";
 import { entryHref, entryStateFromUrl, routeForIntent, switchEntryLanguage } from "../../src/student-entry/routing.ts";
 import { ENTRY_ROUTES } from "../../src/student-entry/models.ts";
 import { renderStudentEntryPage, renderReferenceGuidancePage } from "../../src/ui/student-entry.ts";
+import { calculateAcademicCutoffFromRule } from "../../src/domain/rules.ts";
+import { renderGovernedPilot } from "../../src/ui/m4-governed-pilot.ts";
 import { blankReferenceRequest } from "../../src/ui/reference-request.ts";
 import { resolveStudentMessage, MissingStudentPresentationError, M1_ENTRY_COPY_REVIEW } from "../../src/student-semantics/index.ts";
 import { parseAwarenessPack, applyApprovedTamilStudentCopy, AWARENESS_GROUPS } from "../../src/student-semantics/awareness.ts";
@@ -272,38 +274,80 @@ test("live server keeps entry, blank personal form and synthetic demo paths sepa
   }
 });
 
-test("Fix 2: Instant cutoff calculator on /personal provides deterministic calculation and mandatory copy", () => {
-  // 1. Initial empty state (Tamil)
+test("Fix 2 & P1-A: Reuse accepted ELG009 calculation authority with input validation", () => {
+  // Authoritative ELG009 rule evaluation
+  const valid = calculateAcademicCutoffFromRule(95, 90, 91);
+  assert.equal(valid.cutoff, 185.5);
+  assert.equal(valid.cutoffTrace.status, "AVAILABLE");
+  assert.equal(valid.cutoffTrace.calculation_id, "TNEA_ACADEMIC_CUTOFF");
+  assert.deepEqual(valid.cutoffTrace.operands.map((o) => o.value), [95, 90, 91]);
+
+  // P1-B: Invalid and blank inputs fail-closed with null cutoff and UNAVAILABLE trace
+  assert.equal(calculateAcademicCutoffFromRule(null, 90, 91).cutoff, null);
+  assert.equal(calculateAcademicCutoffFromRule(-5, 90, 91).cutoff, null);
+  assert.equal(calculateAcademicCutoffFromRule(105, 90, 91).cutoff, null);
+  assert.equal(calculateAcademicCutoffFromRule(NaN, 90, 91).cutoff, null);
+});
+
+test("Fix 2 & P0-A/P1-B/P1-C: Cutoff calculator provides marks privacy, stale clearing, and merit rank distinction", () => {
+  // 1. Initial empty state (Tamil): form uses nonpersistent POST, no marks in action URL
   const emptyTa = renderStudentEntryPage({ route: "personal", language: "ta" }, pack);
   assert.match(emptyTa, /id="cutoff-calc-form"/);
+  assert.ok(emptyTa.includes('method="POST" action="/personal?lang=ta"'));
   assert.match(emptyTa, /name="maths"/);
   assert.match(emptyTa, /name="physics"/);
   assert.match(emptyTa, /name="chemistry"/);
   assert.match(emptyTa, /value=""/);
-  assert.match(emptyTa, /இது உங்கள் பாட மதிப்பெண்களிலிருந்து கணக்கிடப்பட்ட கட்-ஆஃப் மதிப்பு/);
-  assert.match(emptyTa, /href="\/colleges\?lang=ta"/);
-  assert.match(emptyTa, /href="\/journey\?step=check"/);
-  assert.match(emptyTa, /href="\/personal\/reference\?lang=ta"/);
+  assert.match(emptyTa, /style="display:none"/);
+  assert.ok(emptyTa.includes("கட்-ஆஃப் என்பது தரவரிசை (Merit Rank) அல்ல"));
+  assert.ok(emptyTa.includes('href="/colleges?lang=ta"'));
+  assert.ok(emptyTa.includes('href="/counselling?lang=ta"'));
+  assert.ok(emptyTa.includes('href="/journey?step=check"'));
+  assert.ok(emptyTa.includes('href="/personal/reference?lang=ta"'));
 
-  // 2. Computed cutoff with marks (Tamil)
+  // P0-A Privacy Invariant: Client script must NOT write marks to browser storage
+  assert.doesNotMatch(emptyTa, /localStorage|sessionStorage|document.cookie/);
+
+  // 2. Negative Test: GET with marks query parameters must NOT compute or prefill marks (P0-A)
+  // Options passed from a GET URL query must be ignored in production routing
+  const getIgnored = renderStudentEntryPage({ route: "personal", language: "ta" }, pack);
+  assert.ok(!getIgnored.includes("185.5 / 200"));
+
+  // 3. Computed cutoff in Tamil (P1-A & P1-C)
   const calcTa = renderStudentEntryPage({ route: "personal", language: "ta" }, pack, undefined, {
     maths: "95", physics: "90", chemistry: "91",
   });
-  assert.match(calcTa, /185\.5 \/ 200/);
-  assert.match(calcTa, /95 \+ \(90 \+ 91\) \/ 2 = 185\.5/);
-  assert.match(calcTa, /இது உங்கள் பாட மதிப்பெண்களிலிருந்து கணக்கிடப்பட்ட கட்-ஆஃப் மதிப்பு\. இதுவே முழுமையான சேர்க்கைத் தகுதியையோ, அதிகாரப்பூர்வ தரவரிசையையோ, கல்லூரி இடம் கிடைப்பதையோ உறுதி செய்யாது\./);
-  assert.match(calcTa, /Merit Ranking/);
-  assert.match(calcTa, /href="\/colleges\?lang=ta"/);
+  assert.ok(calcTa.includes("185.5 / 200"));
+  assert.ok(calcTa.includes("95 + (90 + 91) / 2 = 185.5"));
+  assert.ok(calcTa.includes("இது உங்கள் பாட மதிப்பெண்களிலிருந்து (கணிதம் 100, இயற்பியல் 50, வேதியியல் 50 எடையிடப்பட்டு) 200-க்குக் கணக்கிடப்பட்ட கட்-ஆஃப் மதிப்பு மட்டுமே."));
+  assert.ok(calcTa.includes("கட்-ஆஃப் என்பது தரவரிசை (Merit Rank) அல்ல"));
+  assert.match(calcTa, /www.tneaonline.org/);
+  assert.ok(calcTa.includes('href="/colleges?lang=ta"'));
+  assert.ok(calcTa.includes('href="/counselling?lang=ta"'));
 
-  // 3. Computed cutoff in English
+  // 4. Computed cutoff in English (P1-A & P1-C)
   const calcEn = renderStudentEntryPage({ route: "personal", language: "en" }, pack, undefined, {
     maths: "100", physics: "90", chemistry: "90",
   });
-  assert.match(calcEn, /190 \/ 200/);
-  assert.match(calcEn, /This is the cutoff score calculated from your subject marks\. This alone does not establish complete admission eligibility, official rank, or a college seat\./);
-  assert.match(calcEn, /merit ranking only/);
-  assert.match(calcEn, /href="\/colleges\?lang=en"/);
-  assert.doesNotMatch(calcEn, /href="\/personal\/reference\?lang=en"/);
+  assert.ok(calcEn.includes("190 / 200"));
+  assert.ok(calcEn.includes("This is the composite cutoff score calculated out of 200 from your subject marks (Maths 100, Physics 50, Chemistry 50)."));
+  assert.match(calcEn, /A cutoff score is not an official merit rank./);
+  assert.match(calcEn, /www.tneaonline.org/);
+  assert.ok(calcEn.includes('href="/colleges?lang=en"'));
+  assert.ok(calcEn.includes('href="/counselling?lang=en"'));
+  assert.ok(!calcEn.includes('href="/personal/reference?lang=en"'));
+
+  // 5. P1-B: Stale results negative test: Invalid or blank inputs render null cutoff and hidden result block
+  for (const invalid of [
+    { maths: "", physics: "90", chemistry: "90" },
+    { maths: "-5", physics: "90", chemistry: "90" },
+    { maths: "105", physics: "90", chemistry: "90" },
+    { maths: "abc", physics: "90", chemistry: "90" },
+  ]) {
+    const invalidResult = renderStudentEntryPage({ route: "personal", language: "en" }, pack, undefined, invalid);
+    assert.match(invalidResult, /style="display:none"/);
+    assert.ok(!invalidResult.includes("185.5 / 200") && !invalidResult.includes("190 / 200"));
+  }
 });
 
 test("Fix 2: Beginner admissions page includes static cutoff walkthrough without interactive form controls", () => {
@@ -323,40 +367,54 @@ test("Fix 2: Beginner admissions page includes static cutoff walkthrough without
   }
 });
 
-test("Fix 4: Counselling page provides factual procedural guidance on choice order, upward movement, and 7.5% quota", () => {
+test("Fix 4 & P0-B/P0-C/P1-C: Counselling page provides factual procedural guidance with official sources", () => {
   for (const language of ["ta", "en"] as const) {
     const html = renderStudentEntryPage({ route: "counselling", language }, pack);
     assert.doesNotMatch(html, /disabled|<form/);
     assert.match(html, new RegExp(`/colleges\\?lang=${language}`));
     assert.match(html, new RegExp(`/personal\\?lang=${language}`));
     assert.match(html, new RegExp(`/beginner\\?lang=${language}`));
+    assert.match(html, /www\.tneaonline\.org/);
 
     if (language === "ta") {
       // Choice Ordering
       assert.match(html, /வரிசை 1-லிருந்து வரிசையாக/);
       assert.match(html, /தானாக பூட்டப்படுவதில்லை/);
-      // Upward Movement
+      // P0-B Upward Movement with TFC reporting/fee conditions and exceptions
       assert.match(html, /Accept &amp; Upward/);
-      assert.match(html, /குறிப்பிட்ட காலக்கெடுவுக்குள் ஆவணங்களைச் சரிபார்த்து கட்டணம் செலுத்தி உறுதிசெய்தால் மட்டுமே/);
+      assert.match(html, /TNEA உதவி மையத்தில் \(TFC\) குறிப்பிட்ட காலக்கெடுவுக்குள் நேரில் சென்று/);
+      assert.match(html, /கட்டண விலக்கு உள்ளவர்கள் தவிர/);
       assert.match(html, /Decline &amp; Upward/);
-      assert.match(html, /அடுத்த சுற்றுகளில் \(Subsequent Rounds\) பங்கேற்கும் தகுதி தக்கவைக்கப்படும்/);
-      // 7.5% Quota
+      assert.match(html, /அடுத்த சுற்றுகளில் \(Subsequent Rounds\) அல்லது துணை கலந்தாய்வில் பங்கேற்கும் தகுதி தக்கவைக்கப்படும்/);
+      // P0-C 7.5% Quota: Eligibility vs Document Verification vs Entitlement
       assert.match(html, /7\.5% அரசுப் பள்ளி முன்னுரிமை இடஒதுக்கீடு/);
       assert.match(html, /6-ஆம் வகுப்பு முதல் 12-ஆம் வகுப்பு வரை/);
-      assert.match(html, /TNEA உதவி மையங்களில் \(TFC\)/);
+      assert.match(html, /தலைமை ஆசிரியரிடமிருந்து பெறப்பட்ட கல்விச் சான்றிதழ்/);
+      assert.match(html, /TNEA உதவி மையங்களில் \(TFC\) அதிகாரப்பூர்வமாகச் சரிபார்க்கப்படும்/);
+      assert.match(html, /தானாக கல்லூரி இடத்தை உறுதி செய்யாது/);
     } else {
       // Choice Ordering
       assert.match(html, /sequentially from Choice 1 downward/);
       assert.match(html, /does not lock arbitrary predictions/);
-      // Upward Movement
+      // P0-B Upward Movement
       assert.match(html, /Accept &amp; Upward/);
-      assert.match(html, /fulfilled within the stipulated deadline/);
+      assert.match(html, /report in person to a TNEA Facilitation Centre \(TFC\) within the stipulated schedule/);
+      assert.match(html, /fee concession or exemption/);
       assert.match(html, /Decline &amp; Upward/);
-      assert.match(html, /subsequent rounds is retained/);
-      // 7.5% Quota
+      assert.match(html, /subsequent rounds or supplementary counselling is retained/);
+      // P0-C 7.5% Quota
       assert.match(html, /7\.5% Government School Quota/);
       assert.match(html, /Standard 6 to Standard 12/);
-      assert.match(html, /TNEA Facilitation Centres \(TFC\)/);
+      assert.match(html, /Headmaster of the concerned Government school/);
+      assert.match(html, /officially verified at TNEA Facilitation Centres \(TFC\)/);
+      assert.match(html, /does not constitute an automatic seat guarantee/);
     }
   }
+});
+
+test("P2 Cleanup: Colleges navigation highlight is active on /colleges route", () => {
+  const htmlTa = renderGovernedPilot(new URLSearchParams(), undefined, undefined, undefined, "/colleges");
+  assert.ok(htmlTa.includes('<a href="/colleges?lang=ta" aria-current="page">கல்லூரிகள்</a>'));
+  const htmlEn = renderGovernedPilot(new URLSearchParams({ lang: "en" }), undefined, undefined, undefined, "/colleges");
+  assert.ok(htmlEn.includes('<a href="/colleges?lang=en" aria-current="page">Colleges</a>'));
 });

@@ -8,6 +8,7 @@ import { entryHref } from "../student-entry/routing.ts";
 import { renderStudentGuidancePage, type StudentGuidancePageState } from "./student-guidance.ts";
 import { AWARENESS_GROUPS, type AwarenessItem, type AwarenessPack } from "../student-semantics/awareness.ts";
 import { renderSiteHeader, SITE_SHELL_CSS } from "./site-shell.ts";
+import { calculateAcademicCutoffFromRule } from "../domain/rules.ts";
 
 type MessageResolver = (message: StudentSemanticMessage, language: StudentLanguage) => string;
 
@@ -92,22 +93,57 @@ export function renderStudentEntryPage(
       const pVal = options.physics?.trim();
       const cVal = options.chemistry?.trim();
       const hasInputs = mVal !== undefined && pVal !== undefined && cVal !== undefined && mVal !== "" && pVal !== "" && cVal !== "";
-      const mNum = hasInputs ? Number(mVal) : NaN;
-      const pNum = hasInputs ? Number(pVal) : NaN;
-      const cNum = hasInputs ? Number(cVal) : NaN;
-      const validNumbers = !isNaN(mNum) && !isNaN(pNum) && !isNaN(cNum) &&
-        mNum >= 0 && mNum <= 100 && pNum >= 0 && pNum <= 100 && cNum >= 0 && cNum <= 100;
-      const calculatedCutoff = validNumbers ? mNum + (pNum + cNum) / 2 : null;
+      const mNum = hasInputs ? Number(mVal) : null;
+      const pNum = hasInputs ? Number(pVal) : null;
+      const cNum = hasInputs ? Number(cVal) : null;
+      // P1-A: Reuse accepted ELG009 calculation authority
+      const evaluation = hasInputs ? calculateAcademicCutoffFromRule(mNum, pNum, cNum) : null;
+      const calculatedCutoff = evaluation?.cutoff ?? null;
       const cutoffDisplay = calculatedCutoff !== null ? `${calculatedCutoff.toFixed(2).replace(/\.?0+$/, "")} / 200` : "";
-      const traceDisplay = calculatedCutoff !== null
+      const traceDisplay = calculatedCutoff !== null && mNum !== null && pNum !== null && cNum !== null
         ? `${mNum} + (${pNum} + ${cNum}) / 2 = ${calculatedCutoff.toFixed(2).replace(/\.?0+$/, "")}`
         : "";
 
-      const resultBlock = `<section class="card cutoff-result" id="calc-result" aria-live="polite"${calculatedCutoff !== null ? "" : ' style="display:none"'}><h2>${ta ? "கணக்கிடப்பட்ட கட்-ஆஃப் மதிப்பு" : "Calculated Academic Cutoff"}</h2><p class="cutoff-score-display"><strong id="calc-score">${cutoffDisplay}</strong></p><p class="formula-breakdown" id="calc-trace">${traceDisplay}</p><div class="mandatory-warning"><p><strong>${ta ? "இது உங்கள் பாட மதிப்பெண்களிலிருந்து கணக்கிடப்பட்ட கட்-ஆஃப் மதிப்பு. இதுவே முழுமையான சேர்க்கைத் தகுதியையோ, அதிகாரப்பூர்வ தரவரிசையையோ, கல்லூரி இடம் கிடைப்பதையோ உறுதி செய்யாது." : "This is the cutoff score calculated from your subject marks. This alone does not establish complete admission eligibility, official rank, or a college seat."}</strong></p><p>${ta ? "கட்-ஆஃப் மதிப்பு பொதுக் கலந்தாய்வின் தரவரிசைக்கு (Merit Ranking) மட்டுமே பயன்படுகிறது. குறைந்தபட்ச கல்வித் தகுதி மற்றும் இடஒதுக்கீட்டுப் பிரிவுகள் அதிகாரப்பூர்வ விதிகளின்படி தனித்தனியாகச் சரிபார்க்கப்படும்." : "The cutoff score is used for TNEA merit ranking only. Minimum qualifying eligibility and community reservation rules are governed separately."}</p></div><p><a class="action" href="/colleges?lang=${language}">${ta ? "கல்லூரிகள் மற்றும் படிப்புகளைப் பார்க்க →" : "Explore colleges and programmes →"}</a></p></section>`;
+      const resultBlock = `<section class="card cutoff-result" id="calc-result" aria-live="polite"${calculatedCutoff !== null ? "" : ' style="display:none"'}>
+  <h2>${ta ? "கணக்கிடப்பட்ட கட்-ஆஃப் மதிப்பு" : "Calculated Academic Cutoff"}</h2>
+  <p class="cutoff-score-display"><strong id="calc-score">${cutoffDisplay}</strong></p>
+  <p class="formula-breakdown" id="calc-trace">${traceDisplay}</p>
+  <div class="mandatory-warning">
+    <p><strong>${ta ? "இது உங்கள் பாட மதிப்பெண்களிலிருந்து (கணிதம் 100, இயற்பியல் 50, வேதியியல் 50 எடையிடப்பட்டு) 200-க்குக் கணக்கிடப்பட்ட கட்-ஆஃப் மதிப்பு மட்டுமே." : "This is the composite cutoff score calculated out of 200 from your subject marks (Maths 100, Physics 50, Chemistry 50)."}</strong></p>
+    <p>${ta ? "கட்-ஆஃப் என்பது தரவரிசை (Merit Rank) அல்ல. அதிகாரப்பூர்வ தரவரிசையானது, அனைத்து மாணவர்களின் கட்-ஆஃப், சம மதிப்பெண் சமன் செய்யும் விதிகள் (Tie-break rules) மற்றும் வகுப்புவாரி இடஒதுக்கீட்டுப் பிரிவுகளின் அடிப்படையில் TNEA குழுவால் அதிகாரப்பூர்வமாக வெளியிடப்படும். இது சேர்க்கைக்கான உத்தரவாதம் அல்ல." : "A cutoff score is not an official merit rank. Official merit ranking is determined by TNEA taking into account all candidates' scores, tie-breaking rules, and reservation categories. This score alone does not guarantee admission or a college seat."}</p>
+    <p class="source-ref"><small>${ta ? "TNEA 2026 அதிகாரப்பூர்வ சேர்க்கை நடைமுறைகளின்படி" : "According to official TNEA 2026 admission procedures"} (${ta ? "ஆதாரம்: " : "Source: "}<a href="https://www.tneaonline.org/" target="_blank" rel="noopener">www.tneaonline.org</a>)</small></p>
+  </div>
+  <div class="calc-next-actions">
+    <a class="action" href="/colleges?lang=${language}">${ta ? "கல்லூரிகள் மற்றும் படிப்புகளைப் பார்க்க →" : "Explore colleges and programmes →"}</a>
+    <a class="action secondary" href="/counselling?lang=${language}">${ta ? "கலந்தாய்வு நடைமுறைகள் மற்றும் வழிகாட்டல் →" : "TNEA Counselling procedures &amp; guidance →"}</a>
+  </div>
+</section>`;
 
-      const formBlock = `<section class="card cutoff-calculator"><h2>${ta ? "கட்-ஆஃப் கணக்கிடும் கருவி (Cutoff Calculator)" : "Instant Cutoff Calculator"}</h2><p>${ta ? "உங்கள் +2 பொதுத்தேர்வு கணிதம், இயற்பியல், வேதியியல் மதிப்பெண்களை (100-க்கு) உள்ளிட்டு கட்-ஆஃப் மதிப்பைக் கணக்கிடுங்கள்:" : "Enter your standard 100-point marks for Mathematics, Physics, and Chemistry to calculate your academic cutoff:"}</p><form id="cutoff-calc-form" action="/personal" method="GET"><input type="hidden" name="lang" value="${language}"><div class="calc-grid"><div class="calc-row"><label for="calc-m">${ta ? "கணிதம் (Maths / 100):" : "Mathematics (out of 100):"}</label><input type="number" id="calc-m" name="maths" min="0" max="100" step="0.5" required placeholder="0 - 100" value="${escape(mVal ?? "")}"></div><div class="calc-row"><label for="calc-p">${ta ? "இயற்பியல் (Physics / 100):" : "Physics (out of 100):"}</label><input type="number" id="calc-p" name="physics" min="0" max="100" step="0.5" required placeholder="0 - 100" value="${escape(pVal ?? "")}"></div><div class="calc-row"><label for="calc-c">${ta ? "வேதியியல் (Chemistry / 100):" : "Chemistry (out of 100):"}</label><input type="number" id="calc-c" name="chemistry" min="0" max="100" step="0.5" required placeholder="0 - 100" value="${escape(cVal ?? "")}"></div></div><button type="submit" class="calc-submit-btn">${ta ? "கட்-ஆஃப் கணக்கிடுக" : "Calculate Cutoff"}</button></form></section>`;
+      // P0-A: Form uses nonpersistent POST, never GET query params
+      const formBlock = `<section class="card cutoff-calculator">
+  <h2>${ta ? "கட்-ஆஃப் கணக்கிடும் கருவி (Cutoff Calculator)" : "Instant Cutoff Calculator"}</h2>
+  <p>${ta ? "உங்கள் +2 பொதுத்தேர்வு கணிதம், இயற்பியல், வேதியியல் மதிப்பெண்களை (100-க்கு) உள்ளிட்டு கட்-ஆஃப் மதிப்பைக் கணக்கிடுங்கள்:" : "Enter your standard 100-point marks for Mathematics, Physics, and Chemistry to calculate your academic cutoff:"}</p>
+  <form id="cutoff-calc-form" method="POST" action="/personal?lang=${language}">
+    <div class="calc-grid">
+      <div class="calc-row">
+        <label for="calc-m">${ta ? "கணிதம் (Maths / 100):" : "Mathematics (out of 100):"}</label>
+        <input type="number" id="calc-m" name="maths" min="0" max="100" step="0.5" required placeholder="0 - 100" value="${escape(mVal ?? "")}">
+      </div>
+      <div class="calc-row">
+        <label for="calc-p">${ta ? "இயற்பியல் (Physics / 100):" : "Physics (out of 100):"}</label>
+        <input type="number" id="calc-p" name="physics" min="0" max="100" step="0.5" required placeholder="0 - 100" value="${escape(pVal ?? "")}">
+      </div>
+      <div class="calc-row">
+        <label for="calc-c">${ta ? "வேதியியல் (Chemistry / 100):" : "Chemistry (out of 100):"}</label>
+        <input type="number" id="calc-c" name="chemistry" min="0" max="100" step="0.5" required placeholder="0 - 100" value="${escape(cVal ?? "")}">
+      </div>
+    </div>
+    <button type="submit" class="calc-submit-btn">${ta ? "கட்-ஆஃப் கணக்கிடுக" : "Calculate Cutoff"}</button>
+  </form>
+</section>`;
 
-      const clientScript = `<script>(function(){var fm=document.getElementById('calc-m'),fp=document.getElementById('calc-p'),fc=document.getElementById('calc-c'),r=document.getElementById('calc-result'),sc=document.getElementById('calc-score'),tr=document.getElementById('calc-trace');if(!fm||!fp||!fc||!r||!sc)return;function recompute(){var m=parseFloat(fm.value),p=parseFloat(fp.value),c=parseFloat(fc.value);if(!isNaN(m)&&!isNaN(p)&&!isNaN(c)&&m>=0&&m<=100&&p>=0&&p<=100&&c>=0&&c<=100){var score=m+(p+c)/2;var scoreStr=(Math.round(score*100)/100).toString()+' / 200';sc.textContent=scoreStr;if(tr)tr.textContent=m+' + ('+p+' + '+c+') / 2 = '+(Math.round(score*100)/100);r.style.display='block';}}fm.addEventListener('input',recompute);fp.addEventListener('input',recompute);fc.addEventListener('input',recompute);})();</script>`;
+      // P1-B: Stale results cleared on invalid/blank input; P0-A: No storage or analytics leakage
+      const clientScript = `<script>(function(){var fm=document.getElementById('calc-m'),fp=document.getElementById('calc-p'),fc=document.getElementById('calc-c'),r=document.getElementById('calc-result'),sc=document.getElementById('calc-score'),tr=document.getElementById('calc-trace'),f=document.getElementById('cutoff-calc-form');if(!fm||!fp||!fc||!r||!sc)return;function recompute(){var mv=fm.value.trim(),pv=fp.value.trim(),cv=fc.value.trim();if(mv===''||pv===''||cv===''){sc.textContent='';if(tr)tr.textContent='';r.style.display='none';return;}var m=Number(mv),p=Number(pv),c=Number(cv);if(isNaN(m)||isNaN(p)||isNaN(c)||m<0||m>100||p<0||p>100||c<0||c>100){sc.textContent='';if(tr)tr.textContent='';r.style.display='none';return;}var score=m+(p+c)/2;var scoreStr=(Math.round(score*100)/100).toString()+' / 200';sc.textContent=scoreStr;if(tr)tr.textContent=m+' + ('+p+' + '+c+') / 2 = '+(Math.round(score*100)/100);r.style.display='block';}fm.addEventListener('input',recompute);fp.addEventListener('input',recompute);fc.addEventListener('input',recompute);fm.addEventListener('change',recompute);fp.addEventListener('change',recompute);fc.addEventListener('change',recompute);if(f){f.addEventListener('submit',function(e){e.preventDefault();recompute();});}})();</script>`;
 
       const journeyCard = `<section class="card"><h2>${ta ? "முழுமையான தகுதி மற்றும் விதி வழிகாட்டல்" : "Complete Eligibility & Rule-Based Guidance"}</h2><p>${CHECK_COPY.personalIntro[language === "ta" ? 0 : 1]}</p><a class="choice-card" href="/journey?step=check${language === "en" ? "&amp;lang=en" : ""}"><strong>${CHECK_COPY.start[language === "ta" ? 0 : 1]}</strong></a>${language === "ta" ? `<details class="card"><summary>${message("entry.personal.open")}</summary><p>${message("entry.personal.limit")}</p><a href="/personal/reference?lang=ta">${message("entry.personal.open")}</a></details>` : ""}</section>`;
 
@@ -115,7 +151,41 @@ export function renderStudentEntryPage(
     }
     if (route === "counselling") {
       const ta = language === "ta";
-      const counsellingProcedures = `<section class="card" aria-labelledby="counsel-rules"><h2 id="counsel-rules">${ta ? "முக்கிய கலந்தாய்வு நடைமுறைகள் (TNEA Counselling Procedures)" : "Key TNEA Counselling Procedures & Guidance"}</h2><article class="module"><h3>${ta ? "1. விருப்ப வரிசை மற்றும் ஒதுக்கீடு முறை (Choice Ordering & Allotment)" : "1. Choice Ordering & Seat Allotment"}</h3><p>${ta ? "கலந்தாய்வு முறை உங்கள் விருப்பப் பட்டியலில் உள்ள விருப்பங்களை வரிசை 1-லிருந்து வரிசையாக (Choice 1 to N) மட்டுமே பரிசீலிக்கும். உங்கள் கட்-ஆஃப் தரவரிசை (Rank), வகுப்பு இடஒதுக்கீடு (Community Reservation) மற்றும் அப்போதைய காலி இடங்களின் அடிப்படையில் கிடைக்கும் மிக உயர்ந்த முன்னுரிமை விருப்பம் மட்டுமே ஒதுக்கப்படும். எந்த முடிவும் யூகத்தின் அடிப்படையில் தானாக பூட்டப்படுவதில்லை." : "The allotment algorithm evaluates choices sequentially from Choice 1 downward. Based on your merit rank, community reservation, and seat matrix vacancies, it allots the highest preference where an eligible seat is available. The algorithm evaluates your choices in sequence and does not lock arbitrary predictions."}</p><p class="notice">${ta ? "குறிப்பு: நீங்கள் விரும்பும் சிறந்த கல்லூரியை வரிசை 1-ல் வைக்க வேண்டும். தவறான வரிசை தேவையற்ற இட ஒதுக்கீட்டுக்கு வழிவகுக்கும்." : "Tip: Rank your most preferred college and branch combinations at the top. Order strictly reflects your true preference."}</p></article><article class="module"><h3>${ta ? "2. மேல்நோக்கிய நகர்வு தேர்வுகள் (Upward Movement Rules)" : "2. Upward Movement Rules (Accept vs Decline)"}</h3><div class="counselling-rules-grid"><div class="rule-card"><h4>${ta ? "ஏற்றுக்கொண்டு மேல்நோக்கி நகர்தல் (Accept &amp; Upward)" : "Accept &amp; Upward Movement"}</h4><p>${ta ? "தற்போது ஒதுக்கப்பட்ட இடத்தை ஏற்றுக்கொள்கிறீர்கள்; அதே சமயம் உங்கள் பட்டியலில் மேலே உள்ள விருப்பங்களில் இடம் கிடைத்தால் மாற விரும்புகிறீர்கள்." : "You accept the currently allotted seat while requesting consideration for higher-preference choices if vacancies arise."}</p><p class="rule-condition"><strong>${ta ? "முக்கிய நிபந்தனை:" : "Mandatory Condition:"}</strong> ${ta ? "TFC மையம் அல்லது கல்லூரியில் குறிப்பிட்ட காலக்கெடுவுக்குள் ஆவணங்களைச் சரிபார்த்து கட்டணம் செலுத்தி உறுதிசெய்தால் மட்டுமே முந்தைய ஒதுக்கீடு பாதுகாக்கப்படும்." : "The earlier allotment is retained only when mandatory reporting, document verification, and fee confirmation at TFC/college are fulfilled within the stipulated deadline."}</p></div><div class="rule-card"><h4>${ta ? "நிராகரித்து மேல்நோக்கி நகர்தல் (Decline &amp; Upward)" : "Decline &amp; Upward Movement"}</h4><p>${ta ? "தற்போது ஒதுக்கப்பட்ட இடத்தை நீங்கள் விட்டுவிடுகிறீர்கள் (Relinquish). மேலே உள்ள விருப்பங்களில் இடம் கிடைத்தால் மட்டுமே ஒதுக்கப்படும்." : "You explicitly relinquish the current allotment and opt for higher-preference choices only."}</p><p class="rule-condition"><strong>${ta ? "சுற்று விதிமுறை:" : "Round Rule:"}</strong> ${ta ? "மேல் விருப்பங்களில் இடம் கிடைக்காவிட்டால், இந்த சுற்றில் ஒதுக்கப்பட்ட இடம் கிடைக்காது; ஆனால் TNEA கலந்தாய்வு விதிகளின்படி அடுத்த சுற்றுகளில் (Subsequent Rounds) பங்கேற்கும் தகுதி தக்கவைக்கப்படும்." : "If upward movement does not produce a higher choice, the relinquished seat is lost for that round, but eligibility to participate in subsequent rounds is retained per TNEA counselling rules."}</p></div></div></article><article class="module"><h3>${ta ? "3. 7.5% அரசுப் பள்ளி முன்னுரிமை இடஒதுக்கீடு (7.5% Govt School Quota)" : "3. 7.5% Government School Quota"}</h3><p>${ta ? "தமிழ்நாடு அரசுப் பள்ளிகளில் 6-ஆம் வகுப்பு முதல் 12-ஆம் வகுப்பு வரை தொடர்ந்து படித்த மாணவ-மாணவிகளுக்கு இந்த இடஒதுக்கீடு பொருந்தும்." : "Eligible for students who studied continuously from Standard 6 to Standard 12 in Tamil Nadu Government schools."}</p><p>${ta ? "இதற்கான Bonafide சான்றிதழ் TNEA உதவி மையங்களில் (TFC) அதிகாரப்பூர்வமாகச் சரிபார்க்கப்பட வேண்டும்." : "The required Bonafide certificate is verified at TNEA Facilitation Centres (TFC)."}</p></article><div class="counselling-actions"><a href="/colleges?lang=${language}">${ta ? "கல்லூரிகள் மற்றும் பாடப்பிரிவுகள் பட்டியல் பார்க்க →" : "Browse Colleges and Programmes Directory →"}</a><a href="/personal?lang=${language}">${ta ? "கட்-ஆஃப் கணக்கிடும் கருவிக்குச் செல்ல →" : "Go to Cutoff Calculator →"}</a></div></section>`;
+      // P0-B & P0-C & P1-C: Corrected official TNEA 2026 counselling procedures, Accept & Upward conditions, and 7.5% Government school quota evidence
+      const counsellingProcedures = `<section class="card" aria-labelledby="counsel-rules">
+  <h2 id="counsel-rules">${ta ? "முக்கிய கலந்தாய்வு நடைமுறைகள் (TNEA Counselling Procedures)" : "Key TNEA Counselling Procedures & Guidance"}</h2>
+  <article class="module">
+    <h3>${ta ? "1. விருப்ப வரிசை மற்றும் ஒதுக்கீடு முறை (Choice Ordering & Allotment)" : "1. Choice Ordering & Seat Allotment"}</h3>
+    <p>${ta ? "கலந்தாய்வு முறை உங்கள் விருப்பப் பட்டியலில் உள்ள விருப்பங்களை வரிசை 1-லிருந்து வரிசையாக (Choice 1 to N) மட்டுமே பரிசீலிக்கும். உங்கள் கட்-ஆஃப் தரவரிசை (Rank), வகுப்பு இடஒதுக்கீடு (Community Reservation) மற்றும் அப்போதைய காலி இடங்களின் அடிப்படையில் கிடைக்கும் மிக உயர்ந்த முன்னுரிமை விருப்பம் மட்டுமே ஒதுக்கப்படும். எந்த முடிவும் யூகத்தின் அடிப்படையில் தானாக பூட்டப்படுவதில்லை." : "The allotment algorithm evaluates choices sequentially from Choice 1 downward. Based on your merit rank, community reservation, and seat matrix vacancies, it allots the highest preference where an eligible seat is available. The algorithm evaluates your choices in sequence and does not lock arbitrary predictions."}</p>
+    <p class="notice">${ta ? "குறிப்பு: நீங்கள் விரும்பும் சிறந்த கல்லூரியை வரிசை 1-ல் வைக்க வேண்டும். தவறான வரிசை தேவையற்ற இட ஒதுக்கீட்டுக்கு வழிவகுக்கும்." : "Tip: Rank your most preferred college and branch combinations at the top. Order strictly reflects your true preference."}</p>
+  </article>
+  <article class="module">
+    <h3>${ta ? "2. மேல்நோக்கிய நகர்வு தேர்வுகள் (Upward Movement Rules)" : "2. Upward Movement Rules (Accept vs Decline)"}</h3>
+    <div class="counselling-rules-grid">
+      <div class="rule-card">
+        <h4>${ta ? "ஏற்றுக்கொண்டு மேல்நோக்கி நகர்தல் (Accept &amp; Upward)" : "Accept &amp; Upward Movement"}</h4>
+        <p>${ta ? "தற்போது தற்காலிகமாக ஒதுக்கப்பட்ட இடத்தை ஏற்றுக்கொண்டு, உங்கள் விருப்பப் பட்டியலில் மேலே உள்ள விருப்பங்களுக்கு வாய்ப்பு உள்ளதா என்று கோருகிறீர்கள்." : "You accept the currently tentatively allotted seat while requesting consideration for higher-preference choices on your list."}</p>
+        <p class="rule-condition"><strong>${ta ? "முக்கிய நிபந்தனை மற்றும் விதிவிலக்குகள்:" : "Mandatory Conditions &amp; Exceptions:"}</strong> ${ta ? "இந்த விருப்பத்தைத் தேர்ந்தெடுக்கும் மாணவர், TNEA உதவி மையத்தில் (TFC) குறிப்பிட்ட காலக்கெடுவுக்குள் நேரில் சென்று, அசல் சான்றிதழ்களைச் சமர்ப்பித்து, உரிய கட்டணத்தைச் செலுத்தி (7.5% அரசுப் பள்ளி அல்லது SC/ST/முதல் பட்டதாரி போன்ற கட்டண விலக்கு உள்ளவர்கள் தவிர) சேர்க்கையை உறுதி செய்ய வேண்டும். மேலே உள்ள விருப்பங்களில் இடம் கிடைத்தால், முந்தைய ஒதுக்கீடு ரத்தாகி புதிய இடம் இறுதியாகும். மேலே இடம் கிடைக்காவிட்டால், TFC நடைமுறைகளை காலக்கெடுவுக்குள் முடித்திருந்தால் மட்டுமே முந்தைய ஒதுக்கீடு பாதுகாக்கப்படும்; தவறினால் இந்த ஒதுக்கீடு ரத்தாகும்." : "Candidates selecting this option must report in person to a TNEA Facilitation Centre (TFC) within the stipulated schedule, submit original certificates for verification, and pay the prescribed fee (unless eligible for fee concession or exemption such as 7.5% Government school quota or SC/ST/First Graduate). If a higher-preference seat becomes available, the earlier allotment is cancelled and the new allotment is finalized. If no higher seat becomes available, the earlier allotment is retained only if all TFC reporting and confirmation requirements were completed on time; otherwise, the allotment is forfeited."}</p>
+      </div>
+      <div class="rule-card">
+        <h4>${ta ? "நிராகரித்து மேல்நோக்கி நகர்தல் (Decline &amp; Upward)" : "Decline &amp; Upward Movement"}</h4>
+        <p>${ta ? "தற்போது தற்காலிகமாக ஒதுக்கப்பட்ட இடத்தை நீங்கள் முற்றிலும் விட்டுவிடுகிறீர்கள் (Relinquish). இதற்கு TFC மையத்தில் கட்டணம் செலுத்தவோ அறிக்கை சமர்ப்பிக்கவோ தேவையில்லை." : "You explicitly relinquish the current tentative allotment without reporting or paying fees at TFC for that seat."}</p>
+        <p class="rule-condition"><strong>${ta ? "சுற்று விதிமுறை:" : "Round Rules:"}</strong> ${ta ? "மேல் விருப்பங்களில் இடம் கிடைத்தால் மட்டுமே ஒதுக்கப்படும். ஒருவேளை மேல் விருப்பங்களில் இடம் கிடைக்காவிட்டால், இந்த சுற்றில் ஒதுக்கப்பட்ட இடம் மீண்டும் கிடைக்காது; ஆனால் TNEA கலந்தாய்வு விதிகளின்படி அடுத்த சுற்றுகளில் (Subsequent Rounds) அல்லது துணை கலந்தாய்வில் பங்கேற்கும் தகுதி தக்கவைக்கப்படும்." : "If higher-preference seats become available, they will be allotted. If upward movement does not produce a higher choice, the relinquished seat is lost for that round, but eligibility to participate in subsequent rounds or supplementary counselling is retained per TNEA counselling rules."}</p>
+      </div>
+    </div>
+  </article>
+  <article class="module">
+    <h3>${ta ? "3. 7.5% அரசுப் பள்ளி முன்னுரிமை இடஒதுக்கீடு (7.5% Govt School Quota)" : "3. 7.5% Government School Quota"}</h3>
+    <p><strong>${ta ? "கல்வித் தகுதி (Eligibility):" : "Eligibility:"}</strong> ${ta ? "தமிழ்நாடு அரசுப் பள்ளிகளில் (அரசு, மாநகராட்சி, நகராட்சி, ஆதிதிராவிடர் மற்றும் பழங்குடியினர் நலம், வனத்துறை, கள்ளர் சீரமைப்புப் பள்ளிகள்) 6-ஆம் வகுப்பு முதல் 12-ஆம் வகுப்பு வரை தொடர்ந்து படித்த மாணவர்கள் இதற்குத் தகுதியுடையவர்கள்." : "Candidates who studied continuously from Standard 6 to Standard 12 in Tamil Nadu Government schools (including Government, Corporation, Municipal, Adi Dravidar and Tribal Welfare, Forest, and Kallar Reclamation schools)."}</p>
+    <p><strong>${ta ? "ஆவணச் சரிபார்ப்பு (Document Verification):" : "Document Verification:"}</strong> ${ta ? "6 முதல் 12-ஆம் வகுப்பு வரை படித்த அரசுப் பள்ளிகளின் தலைமை ஆசிரியரிடமிருந்து பெறப்பட்ட கல்விச் சான்றிதழ் (School Study Certificate / EMIS பதிவு) TNEA உதவி மையங்களில் (TFC) அதிகாரப்பூர்வமாகச் சரிபார்க்கப்படும். விதிகளில் இல்லாத கூடுதல் கையொப்பக் கட்டுப்பாடுகள் தேவையில்லை." : "School study certificates for Standards 6 through 12 issued by the Headmaster of the concerned Government school(s) (or verified via EMIS portal records) are officially verified at TNEA Facilitation Centres (TFC). Universal countersignature requirements are not asserted."}</p>
+    <p><strong>${ta ? "இட ஒதுக்கீட்டு உரிமை (Entitlement Distinction):" : "Entitlement Distinction:"}</strong> ${ta ? "சான்றிதழ் சமர்ப்பித்திருப்பது ஒதுக்கீட்டுப் பரிசீலனைக்கான தகுதியை மட்டுமே தரும்; அதுவே தானாக கல்லூரி இடத்தை உறுதி செய்யாது. அரசுப் பள்ளித் தரவரிசை (Govt Rank), வகுப்பு இடஒதுக்கீடு மற்றும் 7.5% காலி இடங்களின் அடிப்படையிலேயே இறுதி ஒதுக்கீடு செய்யப்படும். இத்தகுதியுடைய மாணவர்களுக்குக் கல்விக் கட்டணம் மற்றும் விடுதிக் கட்டணத்தை அரசே ஏற்கும்." : "Fulfilling study criteria and verification establishes eligibility for quota consideration; it does not constitute an automatic seat guarantee. Final allotment is governed strictly by the candidate's Government School merit rank, community reservation, and 7.5% seat matrix availability. Qualifying candidates are entitled to government tuition and hostel fee assistance."}</p>
+  </article>
+  <p class="notice"><small>${ta ? "2026 TNEA அதிகாரப்பூர்வ கலந்தாய்வு நடைமுறைகளின்படி" : "According to official TNEA 2026 counselling procedures"} (${ta ? "ஆதாரம்: " : "Source: "}<a href="https://www.tneaonline.org/" target="_blank" rel="noopener">www.tneaonline.org</a> / TNEA 2026 Information Brochure)</small></p>
+  <div class="counselling-actions">
+    <a href="/colleges?lang=${language}">${ta ? "கல்லூரிகள் மற்றும் பாடப்பிரிவுகள் பட்டியல் பார்க்க →" : "Browse Colleges and Programmes Directory →"}</a>
+    <a href="/personal?lang=${language}">${ta ? "கட்-ஆஃப் கணக்கிடும் கருவிக்குச் செல்ல →" : "Go to Cutoff Calculator →"}</a>
+  </div>
+</section>`;
 
       return shell(`<h1>${message("entry.counselling")}</h1><p>${message("entry.counselling.intro")}</p><nav class="group-nav">${["admission", "choices", "support", "next"].map((key) => `<a href="${sectionHref(key)}">${message(`entry.group.${key}` as StudentSemanticMessage["key"])}</a>`).join("")}</nav>${counsellingProcedures}${directions}`);
     }
