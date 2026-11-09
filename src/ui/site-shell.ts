@@ -15,7 +15,7 @@ export const SITE_SHELL_CSS = `
 .site-language form{margin:0}
 .site-context{width:100%;font-size:.82rem;line-height:1.4;color:#46536a;font-weight:700;letter-spacing:.02em}
 .site-header a:focus-visible,.site-header button:focus-visible{outline:3px solid #174ea6;outline-offset:2px}
-@media(max-width:640px){.site-header-inner{padding:8px 16px;gap:4px 12px}.site-brand{width:100%;font-size:1rem}.site-nav{order:2;width:100%;flex:none;justify-content:space-between}.site-nav a{padding:8px 6px;font-size:.9rem}.site-language{order:1}.site-context{order:3}}
+@media(max-width:640px){.site-header-inner{padding:8px 12px;gap:6px 10px}.site-brand{flex:1;min-width:0;font-size:.98rem;order:1}.site-language{order:2;margin-left:auto}.site-language a,.site-language button,.site-language span{padding:6px 8px;font-size:.88rem}.site-nav{order:3;width:100%;flex:none;justify-content:flex-start;gap:4px;border-top:1px solid #edf0f5;padding-top:4px}.site-nav a{padding:8px 8px;font-size:.88rem;flex:1;justify-content:center;text-align:center}.site-context{order:4}}
 `;
 
 export function renderSiteHeader(

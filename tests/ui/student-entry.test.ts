@@ -26,11 +26,11 @@ const context = { snapshot_id: "CONFIGURED_EVIDENCE", snapshot_stage: null };
 test("home offers a distinct starting choice and three intents without duplicating awareness", () => {
   for (const language of ["en", "ta"] as const) {
     const html = renderStudentEntryPage({ route: "home", language }, pack);
-    for (const route of ["beginner", "personal", "counselling"] as const) {
+    for (const route of ["personal", "counselling"] as const) {
       assert.ok(html.includes(entryHref(route, language))); assert.ok(html.includes(`/colleges?lang=${language}`));
     }
     assert.doesNotMatch(html, /<form|<input|profile\.|ELG\d|PREDICATE_|NEEDS_REVIEW|UNKNOWN_OR_UNPUBLISHED|snapshot_id/);
-    assert.doesNotMatch(html, /data-content-id="AW-01"/);
+    assert.doesNotMatch(html, /data-content-id="AW-01"|class="home-more"|href="\/beginner/);
     const introduction = renderStudentEntryPage({ route: "beginner", language }, pack);
     for (const paragraph of pack.items[0].presentations[language].body.split("\n\n")) {
       assert.ok(introduction.includes(paragraph));
@@ -326,7 +326,7 @@ test("Fix 2 & P0-A/P1-B/P1-C: Cutoff calculator provides marks privacy, stale cl
   assert.ok(emptyTa.includes('href="/colleges?view=colleges&amp;lang=ta"'));
   assert.ok(emptyTa.includes('href="/counselling?lang=ta"'));
   assert.ok(emptyTa.includes('href="/journey?step=check"'));
-  assert.ok(emptyTa.includes('href="/personal/reference?lang=ta"'));
+  assert.doesNotMatch(emptyTa, /href="\/personal\/reference\?lang=ta"|ஆங்கிலத்தில் விரிவான படிவத்தைத் திறக்கலாம்/);
 
   // Authority & Privacy Invariant: Zero independent arithmetic in client script; no browser storage writes
   assert.doesNotMatch(emptyTa, /score\s*=\s*m\s*\+\s*\(p\s*\+\s*c\)/);
