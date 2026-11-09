@@ -26,7 +26,7 @@ To ensure complete student privacy and regulatory compliance:
 * **Intervention Rule:** If a student is completely stuck for $> 90\text{ seconds}$ on a navigation step, note it as an **Assisted Task / Friction Point** before giving a single minimal hint.
 * **Recording Invariants:**
   * Record exact student words where confusion occurs.
-  * Record whether the student distinguishes between *Cutoff* (merit rank) and *Eligibility* (minimum qualifications).
+  * Record whether the student distinguishes between *Cutoff* (composite score out of 200) and official *Ranks* (Overall Rank, Community Rank, and eligible 7.5% Government School ranks) as well as *Eligibility* (minimum qualifications).
   * Record whether the student understands that an offering listed in `/colleges` does not guarantee a current seat.
 
 ---
@@ -59,8 +59,8 @@ To ensure complete student privacy and regulatory compliance:
 * **Task Instruction:** *"உங்கள் கணிதம், இயற்பியல், வேதியியல் மதிப்பெண்களை உள்ளிட்டு கட்-ஆஃப் கணக்கிடுங்கள். பின்னர் திரையில் உள்ள குறிப்பைப் படித்து, கட்-ஆஃப் என்றால் என்ன என்று விளக்குங்கள். தொடர்ந்து கலந்தாய்வு வழிகாட்டுதலுக்குச் சென்று 'Accept & Upward' என்றால் என்னவென்று பாருங்கள்."*
 * **Core Checkpoints:**
   1. Can they operate the 3-box calculator ($M + \frac{P+C}{2}$) on their mobile phone?
-  2. Do they understand that composite cutoff ($M + \frac{P+C}{2}$) is reduced to 200 and differs from official TNEA merit rank (which incorporates tie-break rules and community reservation)?
-  3. Do they understand the mandatory conditions for *Accept & Upward* (in-person reporting to TFC/allotted college, original certificate verification, and fee payment within schedule, checking individual eligibility for fee concessions or scholarships per official TNEA guidelines)?
+  2. Do they understand that composite cutoff ($M + \frac{P+C}{2}$) is calculated out of 200 and is distinct from official TNEA Overall Rank, Community Rank, and eligible 7.5% Government School Ranks (which incorporate tie-break rules and statutory reservation categories)?
+  3. Do they understand the mandatory conditions for *Accept & Upward* (reporting in person to the nearest TFC, original certificate verification, and fee payment within schedule, noting conditional fee exemptions for eligible 7.5% Govt quota, First Graduate, and PMSS candidates per official TNEA 2026 procedures)?
   4. Do they understand that *Decline & Upward* relinquishes the tentatively allotted seat for that round without reporting or paying fees for it, while retaining eligibility for subsequent rounds?
   5. Do they understand that 7.5% Government School Quota requires continuous Std 6–12 TN Govt school study verified per official TNEA 2026 Information Brochure guidelines at TFC, establishing quota consideration rather than an automatic admission guarantee?
 
@@ -171,5 +171,3 @@ Following the completion of live sessions with P01–P05, observers will tally t
    * Specific English/Tamil terms that caused hesitation or required translation (e.g. *Cutoff, Allotment, Upward Movement, Quota*).
 
 **Next Action:** Awaiting owner scheduling and execution of in-person observations using physical handsets.
-
-

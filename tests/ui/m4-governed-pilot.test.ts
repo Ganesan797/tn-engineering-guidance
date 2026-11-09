@@ -59,7 +59,7 @@ test("unapproved profiles and unresolved conflicts are never rendered; each fiel
  const col=i.colleges[0];const district: PilotField={value:"Hidden conflict",source};
  const conflict={...col,district,districtDecision:accepted(district),districtConflict:[district,{value:"Other",source}]};
  const output=render("lang=en&view=colleges",{...i,colleges:[conflict,...i.colleges.slice(1)]});
-  assert.doesNotMatch(output,/Hidden conflict|Other|District: Not known/);assert.match(output,/Unavailable or unapproved details are omitted rather than inferred/);
+  assert.doesNotMatch(output,/Hidden conflict|Other|District: Not known/);assert.match(output,/Unavailable or (?:unapproved|unverified) details are omitted rather than inferred/);
  const strange={value:"UNRECOGNISED",source};
  assert.equal(buildGovernedPilotView({...i,colleges:[{...col,type:strange,typeDecision:accepted(strange)},...i.colleges.slice(1)]}).items[0].type,null);
  const denied={...i,pairs:[{...first,linkDecision:{disposition:"HOLD" as const,reference:null,exact:null}},...i.pairs.slice(1)]};

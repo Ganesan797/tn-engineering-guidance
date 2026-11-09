@@ -413,6 +413,8 @@ test("Fix 4 & P0-B/P0-C/P1-C: Counselling page provides factual procedural guida
       assert.match(html, /நேரில் சென்று அறிக்கை சமர்ப்பிக்க வேண்டும்/);
       assert.match(html, /அசல் சான்றிதழ்களைச் சமர்ப்பித்து சரிபார்க்க வேண்டும்/);
       assert.match(html, /உரிய கட்டணத்தைச் செலுத்த வேண்டும்/);
+      assert.match(html, /அருகிலுள்ள TNEA உதவி மையத்திற்கு \(Nearest TFC\)/);
+      assert.match(html, /போஸ்ட்-மெட்ரிக் கல்வி உதவித்தொகைத் திட்டம் \(PMSS\)/);
       assert.match(html, /தனிப்பட்ட தகுதி மற்றும் வருமான வரம்புகளைச் சரிபார்க்க வேண்டும்/);
       assert.match(html, /பிரிவின் அடிப்படையில் மட்டுமே கட்டண விலக்கு தானாகக் கிடைக்காது/);
       assert.match(html, /Decline &amp; Upward/);
@@ -432,6 +434,8 @@ test("Fix 4 & P0-B/P0-C/P1-C: Counselling page provides factual procedural guida
       assert.match(html, /report in person/);
       assert.match(html, /submit original certificates for verification/);
       assert.match(html, /pay the prescribed fee/);
+      assert.match(html, /nearest TFC \(TNEA Facilitation Centre\)/);
+      assert.match(html, /Post Matric Scholarship Scheme \(PMSS\)/);
       assert.match(html, /verify their specific eligibility and income conditions/);
       assert.match(html, /fee exemptions are not automatic based on category alone/);
       assert.match(html, /Decline &amp; Upward/);
