@@ -1,3 +1,5 @@
+import { loadApprovedDirectory } from "../../src/m4/approved-directory-preview.mjs";
+import { renderGovernedPilot } from "../../src/ui/m4-governed-pilot.ts";
 import { COLLEGE_TYPES, collegeType, BRANCH_READING } from "../../src/m4/exploration-context.ts";
 import { selectBranchCopy, isReleasedBranchCopy, type ReviewedBranchCopy } from "../../src/m4/branch-copy.ts";
 import test from "node:test";
@@ -216,12 +218,39 @@ test("nine branches provide bilingual course, study, practice and next-step expl
  assert.ok(BRANCH_READING["SYN-ENV"].url.includes("afug_2025_fu%20-%20revision"));
 });
 
-test("branch profiles provide direct approved handoff to governed public /colleges directory", () => {
- const csTa = page("view=branch&branch=CS&lang=ta");
- assert.match(csTa, /href="\/colleges\?branch=CS&amp;lang=ta"/);
- assert.match(csTa, /இந்தப் பாடப்பிரிவு உள்ள கல்லூரிகளைப் பார்க்க/);
+test("branch profiles provide direct approved handoff to governed public /colleges directory with full roundtrip navigation", () => {
+  // 1. Branch explanation exposes handoff link to filtered /colleges view
+  const csTa = page("view=branch&branch=CS&lang=ta");
+  assert.match(csTa, /href="\/colleges\?view=colleges&amp;branch=CS&amp;lang=ta"/);
+  assert.match(csTa, /இந்தப் பாடப்பிரிவு உள்ள கல்லூரிகளைப் பார்க்க/);
 
- const csEn = page("view=branch&branch=CS&lang=en");
- assert.match(csEn, /href="\/colleges\?branch=CS&amp;lang=en"/);
- assert.match(csEn, /View colleges offering this branch/);
+  const csEn = page("view=branch&branch=CS&lang=en");
+  assert.match(csEn, /href="\/colleges\?view=colleges&amp;branch=CS&amp;lang=en"/);
+  assert.match(csEn, /View colleges offering this branch/);
+
+  // 2. Real student navigation: Branch explanation -> Offering colleges -> Filtered results -> College details -> Back
+  const publicDirectory = loadApprovedDirectory();
+
+  // Step 2a: Filtered results view on /colleges
+  const collegesTa = renderGovernedPilot(new URLSearchParams("view=colleges&branch=CS&lang=ta"), undefined, publicDirectory, undefined, "/colleges");
+  assert.match(collegesTa, /class="active-branch"/);
+  assert.match(collegesTa, /CS/);
+  assert.match(collegesTa, /href="\/colleges\?lang=ta&amp;branch=CS&amp;view=college&amp;college=/);
+
+  // Step 2b: Follow link to college details
+  const collegeMatch = collegesTa.match(/href="(\/colleges\?[^"]*view=college(?:&|&amp;|")[^"]*)"/);
+  assert.ok(collegeMatch, "Expected link to college detail view");
+  const collegeUrl = new URL(collegeMatch[1].replaceAll("&amp;", "&"), "http://localhost");
+  const collegeDetails = renderGovernedPilot(collegeUrl.searchParams, undefined, publicDirectory, undefined, "/colleges");
+  assert.match(collegeDetails, /college-metadata/);
+
+  // Step 2c: Follow back link from college details to filtered colleges listing
+  const backMatch = collegeDetails.match(/<a\s+class="text-link"\s+href="(\/colleges\?[^"]*view=colleges[^"]*)"/);
+  assert.ok(backMatch, "Expected back link to filtered colleges listing");
+  const backUrl = new URL(backMatch[1].replaceAll("&amp;", "&"), "http://localhost");
+  assert.equal(backUrl.searchParams.get("view"), "colleges");
+  assert.equal(backUrl.searchParams.get("branch"), "CS");
+  const backPage = renderGovernedPilot(backUrl.searchParams, undefined, publicDirectory, undefined, "/colleges");
+  assert.match(backPage, /class="active-branch"/);
+  assert.match(backPage, /CS/);
 });

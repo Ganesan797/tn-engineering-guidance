@@ -15,7 +15,7 @@ To ensure complete student privacy and regulatory compliance:
 1. **Strict Anonymization:** Students are assigned neutral identifiers (`P01`, `P02`, `P03`, `P04`, `P05`).
 2. **Zero PII Collection:** Observers must **never** record student names, school names, phone numbers, email addresses, TNEA registration numbers, or community certificate details.
 3. **No Real Sensitive Academic Data:** Students must not be pressured to disclose actual confidential board examination scores. They may use self-chosen hypothetical numbers, sample mark sheets, or approximate ranges.
-4. **No Usability Claims Before Testing:** All scenario evaluation fields remain `PENDING_OBSERVATION`. Engineering test suite completion ($331/331$ tests passing) is an infrastructure baseline, not proof of real student comprehension.
+4. **No Usability Claims Before Testing:** All scenario evaluation fields remain `PENDING_OBSERVATION`. Engineering test suite completion is an infrastructure baseline, not proof of real student comprehension.
 
 ---
 
@@ -60,9 +60,9 @@ To ensure complete student privacy and regulatory compliance:
 * **Core Checkpoints:**
   1. Can they operate the 3-box calculator ($M + \frac{P+C}{2}$) on their mobile phone?
   2. Do they understand that composite cutoff ($M + \frac{P+C}{2}$) is reduced to 200 and differs from official TNEA merit rank (which incorporates tie-break rules and community reservation)?
-  3. Do they understand the mandatory conditions for *Accept & Upward* (in-person reporting to TFC, certificate verification, and fee payment within schedule, noting fee-exempt categories like 7.5% Govt quota, SC/ST, and First Graduate)?
-  4. Do they understand that *Decline & Upward* relinquishes the tentatively allotted seat for that round without TFC reporting or fee payment while retaining eligibility for subsequent rounds?
-  5. Do they understand that 7.5% Government School Quota requires continuous Std 6–12 TN Govt school study verified via Headmaster study certificate or EMIS records at TFC, establishing quota consideration rather than an automatic admission guarantee?
+  3. Do they understand the mandatory conditions for *Accept & Upward* (in-person reporting to TFC/allotted college, original certificate verification, and fee payment within schedule, checking individual eligibility for fee concessions or scholarships per official TNEA guidelines)?
+  4. Do they understand that *Decline & Upward* relinquishes the tentatively allotted seat for that round without reporting or paying fees for it, while retaining eligibility for subsequent rounds?
+  5. Do they understand that 7.5% Government School Quota requires continuous Std 6–12 TN Govt school study verified per official TNEA 2026 Information Brochure guidelines at TFC, establishing quota consideration rather than an automatic admission guarantee?
 
 ---
 

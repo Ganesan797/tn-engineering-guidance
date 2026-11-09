@@ -238,6 +238,27 @@ test("live server keeps entry, blank personal form and synthetic demo paths sepa
         if (href.startsWith("/")) assert.equal((await fetch(base + href)).status, 200, href);
       }
     }
+    // Authoritative browser calculation test: form POST to /personal executes ELG009 without client arithmetic
+    const calcPost = await fetch(base + "/personal?lang=en", {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ maths: "95", physics: "90", chemistry: "91" }).toString(),
+    });
+    assert.equal(calcPost.status, 200);
+    const postHtml = await calcPost.text();
+    assert.match(postHtml, /185\.5 \/ 200/);
+    assert.match(postHtml, /95 \+ \(90 \+ 91\) \/ 2 = 185\.5/);
+    assert.match(postHtml, /Calculated Academic Cutoff Score/);
+    assert.doesNotMatch(postHtml, /score\s*=\s*m\s*\+\s*\(p\s*\+\s*c\)/);
+    assert.doesNotMatch(postHtml, /e\.preventDefault/);
+
+    // Negative privacy test: GET with marks in query string is completely ignored
+    const calcGet = await fetch(base + "/personal?lang=en&maths=95&physics=90&chemistry=91");
+    assert.equal(calcGet.status, 200);
+    const getHtml = await calcGet.text();
+    assert.doesNotMatch(getHtml, /185\.5 \/ 200/);
+    assert.match(getHtml, /name="maths" min="0" max="100"[^>]*value=""/);
+
     const personal = await (await fetch(base + "/personal/reference?lang=en&scenario=eligible")).text();
     assert.match(personal, /name="profile.maths_mark"[^>]*value=""/);
     assert.doesNotMatch(personal, /value="90"|value="ECE" selected/);
@@ -299,17 +320,21 @@ test("Fix 2 & P0-A/P1-B/P1-C: Cutoff calculator provides marks privacy, stale cl
   assert.match(emptyTa, /name="chemistry"/);
   assert.match(emptyTa, /value=""/);
   assert.match(emptyTa, /style="display:none"/);
-  assert.ok(emptyTa.includes("கட்-ஆஃப் என்பது தரவரிசை (Merit Rank) அல்ல"));
-  assert.ok(emptyTa.includes('href="/colleges?lang=ta"'));
+  assert.ok(emptyTa.includes("Overall Merit Rank"));
+  assert.ok(emptyTa.includes("Community Rank"));
+  assert.ok(emptyTa.includes("Govt School Rank"));
+  assert.ok(emptyTa.includes('href="/colleges?view=colleges&amp;lang=ta"'));
   assert.ok(emptyTa.includes('href="/counselling?lang=ta"'));
   assert.ok(emptyTa.includes('href="/journey?step=check"'));
   assert.ok(emptyTa.includes('href="/personal/reference?lang=ta"'));
 
-  // P0-A Privacy Invariant: Client script must NOT write marks to browser storage
+  // Authority & Privacy Invariant: Zero independent arithmetic in client script; no browser storage writes
+  assert.doesNotMatch(emptyTa, /score\s*=\s*m\s*\+\s*\(p\s*\+\s*c\)/);
+  assert.doesNotMatch(emptyTa, /e\.preventDefault/);
+  assert.match(emptyTa, /function clearStale/);
   assert.doesNotMatch(emptyTa, /localStorage|sessionStorage|document.cookie/);
 
   // 2. Negative Test: GET with marks query parameters must NOT compute or prefill marks (P0-A)
-  // Options passed from a GET URL query must be ignored in production routing
   const getIgnored = renderStudentEntryPage({ route: "personal", language: "ta" }, pack);
   assert.ok(!getIgnored.includes("185.5 / 200"));
 
@@ -319,10 +344,10 @@ test("Fix 2 & P0-A/P1-B/P1-C: Cutoff calculator provides marks privacy, stale cl
   });
   assert.ok(calcTa.includes("185.5 / 200"));
   assert.ok(calcTa.includes("95 + (90 + 91) / 2 = 185.5"));
-  assert.ok(calcTa.includes("இது உங்கள் பாட மதிப்பெண்களிலிருந்து (கணிதம் 100, இயற்பியல் 50, வேதியியல் 50 எடையிடப்பட்டு) 200-க்குக் கணக்கிடப்பட்ட கட்-ஆஃப் மதிப்பு மட்டுமே."));
-  assert.ok(calcTa.includes("கட்-ஆஃப் என்பது தரவரிசை (Merit Rank) அல்ல"));
-  assert.match(calcTa, /www.tneaonline.org/);
-  assert.ok(calcTa.includes('href="/colleges?lang=ta"'));
+  assert.ok(calcTa.includes("கணக்கிடப்பட்ட கூட்டு கட்-ஆஃப் மதிப்பு"));
+  assert.ok(calcTa.includes("இது உங்கள் பாட மதிப்பெண்களிலிருந்து (கணிதம் 100, இயற்பியல் 50, வேதியியல் 50 எடையிடப்பட்டு) 200-க்குக் கணக்கிடப்பட்ட கூட்டு கட்-ஆஃப் மதிப்பு மட்டுமே."));
+  assert.match(calcTa, /www\.tneaonline\.org/);
+  assert.ok(calcTa.includes('href="/colleges?view=colleges&amp;lang=ta"'));
   assert.ok(calcTa.includes('href="/counselling?lang=ta"'));
 
   // 4. Computed cutoff in English (P1-A & P1-C)
@@ -330,10 +355,11 @@ test("Fix 2 & P0-A/P1-B/P1-C: Cutoff calculator provides marks privacy, stale cl
     maths: "100", physics: "90", chemistry: "90",
   });
   assert.ok(calcEn.includes("190 / 200"));
-  assert.ok(calcEn.includes("This is the composite cutoff score calculated out of 200 from your subject marks (Maths 100, Physics 50, Chemistry 50)."));
-  assert.match(calcEn, /A cutoff score is not an official merit rank./);
-  assert.match(calcEn, /www.tneaonline.org/);
-  assert.ok(calcEn.includes('href="/colleges?lang=en"'));
+  assert.ok(calcEn.includes("Calculated Academic Cutoff Score"));
+  assert.ok(calcEn.includes("This is the composite academic cutoff score calculated out of 200 from your subject marks (Maths 100, Physics 50, Chemistry 50)."));
+  assert.ok(calcEn.includes("A cutoff score is not an admission guarantee or an official rank."));
+  assert.match(calcEn, /www\.tneaonline\.org/);
+  assert.ok(calcEn.includes('href="/colleges?view=colleges&amp;lang=en"'));
   assert.ok(calcEn.includes('href="/counselling?lang=en"'));
   assert.ok(!calcEn.includes('href="/personal/reference?lang=en"'));
 
@@ -371,42 +397,50 @@ test("Fix 4 & P0-B/P0-C/P1-C: Counselling page provides factual procedural guida
   for (const language of ["ta", "en"] as const) {
     const html = renderStudentEntryPage({ route: "counselling", language }, pack);
     assert.doesNotMatch(html, /disabled|<form/);
-    assert.match(html, new RegExp(`/colleges\\?lang=${language}`));
+    assert.match(html, new RegExp(`/colleges\\?view=colleges&amp;lang=${language}`));
     assert.match(html, new RegExp(`/personal\\?lang=${language}`));
     assert.match(html, new RegExp(`/beginner\\?lang=${language}`));
     assert.match(html, /www\.tneaonline\.org/);
+    assert.match(html, /2_Information_Brochure_2026\.pdf/);
+    assert.match(html, /8_TNEA_2024_Counselling_procedure_2026\.pdf/);
 
     if (language === "ta") {
       // Choice Ordering
       assert.match(html, /வரிசை 1-லிருந்து வரிசையாக/);
-      assert.match(html, /தானாக பூட்டப்படுவதில்லை/);
-      // P0-B Upward Movement with TFC reporting/fee conditions and exceptions
+      assert.match(html, /தானாக எந்த அனுமான முடிவையும் பூட்டாது/);
+      // Upward Movement with TFC reporting/fee conditions and verified exceptions
       assert.match(html, /Accept &amp; Upward/);
-      assert.match(html, /TNEA உதவி மையத்தில் \(TFC\) குறிப்பிட்ட காலக்கெடுவுக்குள் நேரில் சென்று/);
-      assert.match(html, /கட்டண விலக்கு உள்ளவர்கள் தவிர/);
+      assert.match(html, /நேரில் சென்று அறிக்கை சமர்ப்பிக்க வேண்டும்/);
+      assert.match(html, /அசல் சான்றிதழ்களைச் சமர்ப்பித்து சரிபார்க்க வேண்டும்/);
+      assert.match(html, /உரிய கட்டணத்தைச் செலுத்த வேண்டும்/);
+      assert.match(html, /தனிப்பட்ட தகுதி மற்றும் வருமான வரம்புகளைச் சரிபார்க்க வேண்டும்/);
+      assert.match(html, /பிரிவின் அடிப்படையில் மட்டுமே கட்டண விலக்கு தானாகக் கிடைக்காது/);
       assert.match(html, /Decline &amp; Upward/);
       assert.match(html, /அடுத்த சுற்றுகளில் \(Subsequent Rounds\) அல்லது துணை கலந்தாய்வில் பங்கேற்கும் தகுதி தக்கவைக்கப்படும்/);
-      // P0-C 7.5% Quota: Eligibility vs Document Verification vs Entitlement
+      // 7.5% Quota: Eligibility vs Document Verification vs Entitlement
       assert.match(html, /7\.5% அரசுப் பள்ளி முன்னுரிமை இடஒதுக்கீடு/);
       assert.match(html, /6-ஆம் வகுப்பு முதல் 12-ஆம் வகுப்பு வரை/);
-      assert.match(html, /தலைமை ஆசிரியரிடமிருந்து பெறப்பட்ட கல்விச் சான்றிதழ்/);
-      assert.match(html, /TNEA உதவி மையங்களில் \(TFC\) அதிகாரப்பூர்வமாகச் சரிபார்க்கப்படும்/);
+      assert.match(html, /TNEA 2026 தகவல் கையேட்டில் குறிப்பிடப்பட்டுள்ள அதிகாரப்பூர்வ நடைமுறைகளின்படி/);
+      assert.match(html, /TNEA உதவி மையங்களில் \(TFC\) சரிபார்க்கப்படும்/);
       assert.match(html, /தானாக கல்லூரி இடத்தை உறுதி செய்யாது/);
     } else {
       // Choice Ordering
-      assert.match(html, /sequentially from Choice 1 downward/);
+      assert.match(html, /strictly in sequence starting from Choice 1 downward/);
       assert.match(html, /does not lock arbitrary predictions/);
-      // P0-B Upward Movement
+      // Upward Movement
       assert.match(html, /Accept &amp; Upward/);
-      assert.match(html, /report in person to a TNEA Facilitation Centre \(TFC\) within the stipulated schedule/);
-      assert.match(html, /fee concession or exemption/);
+      assert.match(html, /report in person/);
+      assert.match(html, /submit original certificates for verification/);
+      assert.match(html, /pay the prescribed fee/);
+      assert.match(html, /verify their specific eligibility and income conditions/);
+      assert.match(html, /fee exemptions are not automatic based on category alone/);
       assert.match(html, /Decline &amp; Upward/);
       assert.match(html, /subsequent rounds or supplementary counselling is retained/);
-      // P0-C 7.5% Quota
-      assert.match(html, /7\.5% Government School Quota/);
+      // 7.5% Quota
+      assert.match(html, /7\.5% Government School Preferential Quota/);
       assert.match(html, /Standard 6 to Standard 12/);
-      assert.match(html, /Headmaster of the concerned Government school/);
-      assert.match(html, /officially verified at TNEA Facilitation Centres \(TFC\)/);
+      assert.match(html, /official procedures specified in the TNEA 2026 Information Brochure/);
+      assert.match(html, /verified at TNEA Facilitation Centres \(TFC\)/);
       assert.match(html, /does not constitute an automatic seat guarantee/);
     }
   }
