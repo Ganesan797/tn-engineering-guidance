@@ -2401,34 +2401,28 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 What information should I know before I start my TNEA application?
-
 QUESTION_TA =
-TNEA விண்ணப்பத்தைத் தொடங்கும் முன் என்ன விவரங்கள் தெரிந்திருக்க வேண்டும்?
-
+TNEA விண்ணப்பத்தைத் தொடங்கும் முன் என்னென்ன விவரங்களைத் தயாராக வைத்திருக்க வேண்டும்?
 ANSWER_EN =
 Know the admission year, first-year or diploma route, school board/qualifying course, results, school-study history and any reservation or concession you plan to claim. A claim needs the required proof, not just a form selection.
-
 ANSWER_TA =
-சேர்க்கை ஆண்டு, முதல் ஆண்டா டிப்ளமோ வழியா, பள்ளி வாரியம்/தகுதிப் படிப்பு, முடிவுகள், பள்ளிப் படிப்பு வரலாறு, கோரும் இடஒதுக்கீடு அல்லது சலுகை ஆகியவற்றைத் தெரிந்துகொள்ளுங்கள். படிவத்தில் தேர்ந்தெடுப்பது மட்டும் போதாது. கோரிக்கைக்கு உரிய ஆதாரம் வேண்டும்.
-
+விண்ணப்பிக்கும் முன் பின்வரும் அடிப்படை விவரங்களைத் தயாராக வைத்திருக்க வேண்டும்:
+1. மாணவரின் சொந்த மொபைல் எண் மற்றும் பயன்பாட்டில் உள்ள மின்னஞ்சல் முகவரி (Email ID).
+2. 10, 11 மற்றும் +2 மதிப்பெண் சான்றிதழ் விவரங்கள்.
+3. பள்ளியில் படித்த விவரங்கள் (6 முதல் 12-ஆம் வகுப்பு வரை படித்த பள்ளிகள்).
+4. கோர விரும்பும் சலுகைகள்: 7.5% அரசுப் பள்ளி ஒதுக்கீடு, முதல் பட்டதாரி, சாதிப் பிரிவு (Community).
 DETAIL_EN =
 The 2026 preparation list also asks for working mobile/email, Aadhaar and parent-income details, and registration-payment arrangements. Prepare these privately; this question page does not collect them.
-
 DETAIL_TA =
-2026 தயாரிப்புப் பட்டியலில் பயன்பாட்டில் உள்ள கைபேசி/மின்னஞ்சல், ஆதார், பெற்றோர் வருமான விவரங்கள், பதிவுக் கட்டண ஏற்பாடுகளும் கேட்கப்படுகின்றன. தனிப்பட்ட முறையில் தயாரியுங்கள். இந்தக் கேள்விப் பக்கம் அவற்றைச் சேகரிக்காது.
-
+ஆன்லைனில் வெறும் விருப்பத்தைத் தேர்வு செய்தால் மட்டும் போதாது; சான்றிதழ் சரிபார்ப்பின்போது அதற்குரிய அதிகாரப்பூர்வ ஆவணங்களை சமர்ப்பிக்க வேண்டும்.
 NEXT_EN =
 Prepare the documents that apply to you privately; ask official TNEA help about a missing certificate or format.
-
 NEXT_TA =
 உங்களுக்குப் பொருந்தும் ஆவணங்களைத் தனிப்பட்ட முறையில் தயாரியுங்கள். இல்லாத சான்று அல்லது வடிவம் பற்றி அதிகாரப்பூர்வ TNEA உதவியில் கேளுங்கள்.
-
 LIMIT_EN =
 Based on the 2026 list. The applicable upload format and deadline need the official notice; do not upload private records here.
-
 LIMIT_TA =
 2026 பட்டியலை அடிப்படையாகக் கொண்டது. பொருந்தும் பதிவேற்ற வடிவமும் காலக்கெடுவும் அதிகாரப்பூர்வ அறிவிப்பில் பார்க்கப்பட வேண்டும். தனிப்பட்ட ஆவணங்களை இங்கு பதிவேற்றாதீர்கள்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -2455,34 +2449,32 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 What certificates should I keep ready for TNEA counselling?
-
 QUESTION_TA =
-TNEA கலந்தாய்வுக்கு என்ன சான்றிதழ்களைத் தயாராக வைத்திருக்க வேண்டும்?
-
+TNEA கலந்தாய்வுக்கு என்னென்ன சான்றிதழ்களைத் தயாராக வைத்திருக்க வேண்டும்?
 ANSWER_EN =
 For 2026 first-year TNEA, prepare Class 10, +1 and +2/equivalent marksheets, transfer certificate and school details. Community, nativity, income and special-claim certificates depend on the applicable claim and rules.
-
 ANSWER_TA =
-2026 முதல் ஆண்டு TNEA-விற்கு 10, 11, 12 ஆம் வகுப்பு அல்லது இணையான மதிப்பெண் சான்றுகள், மாற்றுச் சான்றிதழ், பள்ளி விவரங்களைத் தயாராக வைத்திருங்கள். சமூகப் பிரிவு, பூர்வீகம், வருமானம், சிறப்புக் கோரிக்கைச் சான்றுகள் பொருந்தும் விதிகளையும் உங்கள் கோரிக்கையையும் பொறுத்தவை.
-
+அனைத்து மாணவர்களுக்கும் தேவையான பொதுவான சான்றிதழ்கள்:
+- 10-ஆம் வகுப்பு மற்றும் +2 மதிப்பெண் சான்றிதழ்கள் (Mark sheets).
+- மாற்றுச் சான்றிதழ் (Transfer Certificate - TC).
+- சாதிச் சான்றிதழ் (Community Certificate - OC தவிர மற்ற பிரிவினருக்கு).
+- இருப்பிடச் சான்றிதழ் / ஆதார் அட்டை (Nativity / Aadhaar Card).
 DETAIL_EN =
 Depending on the claim, the 2026 list includes government-school study proof for Classes 6–12; First Graduate certificate and joint declaration; refugee evidence. Also, prescribed sports, disability or ex-servicemen documents. Relevant parent/employer declarations may apply to a special nativity route. Keep originals and readable copies private; use official upload channels only.
-
 DETAIL_TA =
-கோரிக்கையைப் பொறுத்து 2026 பட்டியலில் 6–12 வகுப்பு அரசுப் பள்ளிப் படிப்புச் சான்று. முதல் பட்டதாரிச் சான்றும் கூட்டுறுதிமொழியும். அகதி ஆதாரம். விளையாட்டு, மாற்றுத்திறன், முன்னாள் படைவீரர் ஆவணங்கள் உள்ளன. சிறப்புப் பூர்வீக வழிக்கு பெற்றோர்/பணியாளர் உறுதிமொழிகள் பொருந்தலாம். அசல் ஆவணங்களையும் தெளிவான நகல்களையும் தனிப்பட்ட முறையில் வைத்திருங்கள். அதிகாரப்பூர்வ பதிவேற்ற வழியை மட்டுமே பயன்படுத்துங்கள்.
-
+பொருந்தினால் சமர்ப்பிக்க வேண்டிய சிறப்புச் சான்றிதழ்கள்:
+- 7.5% அரசுப் பள்ளி ஒதுக்கீடு: 6 முதல் 12 வரை அரசுப் பள்ளியில் படித்ததற்கான முதன்மைக் கல்வி அலுவலர் (CEO) கையொப்பமிட்ட சான்றிதழ்.
+- முதல் பட்டதாரி (First Graduate): தாலுகா அலுவலகம் வழங்கும் முதல் பட்டதாரிச் சான்றிதழ் மற்றும் கூட்டுக் கையொப்ப உறுதிமொழி.
+- வருமானச் சான்றிதழ் (Income Certificate): கட்டணச் சலுகை கோரும் எஸ்சி/எஸ்டி மற்றும் பிற பிரிவினருக்கு.
+- சிறப்புப் பிரிவுகள்: விளையாட்டுப் பிரிவு (Sports), மாற்றுத்திறனாளி (Differently Abled), முன்னாள் படைவீரர் வாரிசுகள்.
 NEXT_EN =
 Prepare the documents that apply to you privately; ask official TNEA help about a missing certificate or format.
-
 NEXT_TA =
 உங்களுக்குப் பொருந்தும் ஆவணங்களைத் தனிப்பட்ட முறையில் தயாரியுங்கள். இல்லாத சான்று அல்லது வடிவம் பற்றி அதிகாரப்பூர்வ TNEA உதவியில் கேளுங்கள்.
-
 LIMIT_EN =
 Based on the 2026 list. The applicable upload format and deadline need the official notice; do not upload private records here.
-
 LIMIT_TA =
 2026 பட்டியலை அடிப்படையாகக் கொண்டது. பொருந்தும் பதிவேற்ற வடிவமும் காலக்கெடுவும் அதிகாரப்பூர்வ அறிவிப்பில் பார்க்கப்பட வேண்டும். தனிப்பட்ட ஆவணங்களை இங்கு பதிவேற்றாதீர்கள்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -2509,34 +2501,29 @@ CHANGED_FIELDS = DETAIL_EN, DETAIL_TA
 
 QUESTION_EN =
 What documents should I obtain before the application starts?
-
 QUESTION_TA =
-விண்ணப்பம் தொடங்கும் முன் என்ன ஆவணங்களைப் பெற வேண்டும்?
-
+கலந்தாய்வு விண்ணப்பம் தொடங்கும் முன்பே எந்தெந்த ஆவணங்களைப் பெற்று வைக்க வேண்டும்?
 ANSWER_EN =
 Collect available Class 10, +1 and +2/equivalent marksheets, transfer certificate and school records early. Then obtain the community, nativity, income or special-claim evidence that applies to your route.
-
 ANSWER_TA =
-கிடைக்கும் 10, 11, 12 ஆம் வகுப்பு அல்லது இணையான மதிப்பெண் சான்றுகள், மாற்றுச் சான்றிதழ், பள்ளிப் பதிவுகளை முன்கூட்டியே சேகரியுங்கள். உங்கள் வழிக்குப் பொருந்தும் சமூகப் பிரிவு, பூர்வீகம், வருமானம் அல்லது சிறப்புக் கோரிக்கை ஆதாரங்களைப் பெறுங்கள்.
-
+வருவாய்த் துறை மற்றும் அரசு அலுவலகங்கள் மூலம் பெற வேண்டிய சான்றிதழ்களை முன்கூட்டியே பெற்று வைத்துக்கொள்வது கடைசி நேரப் பதற்றத்தைத் தவிர்க்கும்.
+குறிப்பாக:
+- சாதிச் சான்றிதழ் (Community Certificate)
+- இருப்பிடச் சான்றிதழ் (Nativity Certificate - தேவைப்பட்டால்)
+- பெற்றோர் ஆண்டு வருமானச் சான்றிதழ் (Income Certificate)
+- முதல் பட்டதாரிச் சான்றிதழ் (First Graduate Certificate).
 DETAIL_EN =
 Depending on your claim, the 2026 list includes government-school study proof for Classes 6–12, a First Graduate certificate and joint declaration, and refugee evidence. It also includes prescribed sports, disability or ex-servicemen documents. Relevant parent/employer declarations may apply to a special nativity route. Keep originals and readable copies private. Use official upload channels only.
-
 DETAIL_TA =
 உங்கள் கோரிக்கையைப் பொறுத்து, 2026 பட்டியலில் 6–12 வகுப்பு அரசுப் பள்ளிப் படிப்புச் சான்று, முதல் பட்டதாரிச் சான்று மற்றும் கூட்டுறுதிமொழி, அகதி ஆதாரம் ஆகியவை உள்ளன. விளையாட்டு, மாற்றுத்திறன் மற்றும் முன்னாள் படைவீரர் கோரிக்கைகளுக்கான குறிப்பிட்ட ஆவணங்களும் உள்ளன. சிறப்புப் பூர்வீக வழிக்கு பெற்றோர்/பணியாளர் உறுதிமொழிகள் பொருந்தலாம். அசல் ஆவணங்களையும் தெளிவான நகல்களையும் தனிப்பட்ட முறையில் வைத்திருங்கள். அதிகாரப்பூர்வ பதிவேற்ற வழியை மட்டுமே பயன்படுத்துங்கள்.
-
 NEXT_EN =
 Prepare the documents that apply to you privately; ask official TNEA help about a missing certificate or format.
-
 NEXT_TA =
 உங்களுக்குப் பொருந்தும் ஆவணங்களைத் தனிப்பட்ட முறையில் தயாரியுங்கள். இல்லாத சான்று அல்லது வடிவம் பற்றி அதிகாரப்பூர்வ TNEA உதவியில் கேளுங்கள்.
-
 LIMIT_EN =
 Based on the 2026 list. The applicable upload format and deadline need the official notice; do not upload private records here.
-
 LIMIT_TA =
 2026 பட்டியலை அடிப்படையாகக் கொண்டது. பொருந்தும் பதிவேற்ற வடிவமும் காலக்கெடுவும் அதிகாரப்பூர்வ அறிவிப்பில் பார்க்கப்பட வேண்டும். தனிப்பட்ட ஆவணங்களை இங்கு பதிவேற்றாதீர்கள்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -2563,34 +2550,24 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 Who is eligible to apply for TNEA?
-
 QUESTION_TA =
-TNEA-வில் விண்ணப்பிக்க யாருக்குத் தகுதி உண்டு?
-
+TNEA பொறியியல் கலந்தாய்வில் விண்ணப்பிக்க யாருக்குத் தகுதி உண்டு?
 ANSWER_EN =
 Eligibility depends on qualifying-examination pass, required subjects and minimum marks, the applicable school-study/nativity route and evidence. Meeting these conditions means you can be considered; it does not assure a seat.
-
 ANSWER_TA =
-தகுதித் தேர்வில் தேர்ச்சி, தேவையான பாடங்கள் மற்றும் குறைந்தபட்ச மதிப்பெண்கள், பொருந்தும் பள்ளிப் படிப்பு/பூர்வீக வழி, ஆதாரம் ஆகியவற்றைப் பொறுத்தே தகுதி அமையும். இவற்றை நிறைவு செய்தால் பரிசீலிக்கப்படலாம். இடம் உறுதி அல்ல.
-
++2 பொதுத் தேர்வில் கணிதம், இயற்பியல், வேதியியல் பாடங்களைப் படித்துத் தேர்ச்சி பெற்ற, தமிழ்நாடு அரசின் குறைந்தபட்ச மதிப்பெண் மற்றும் பூர்வீக விதிகளுக்கு உட்பட்ட மாணவர்கள் TNEA-வில் விண்ணப்பிக்கலாம்.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 You can start by checking the applicable subjects, marks and study/nativity conditions; seek official help for any unresolved personal case.
-
 NEXT_TA =
 பொருந்தும் பாடங்கள், மதிப்பெண்கள், படிப்பு/பூர்வீக நிபந்தனைகளைப் பார்க்கலாம். தனிப்பட்ட சந்தேகத்துக்கு அதிகாரப்பூர்வ உதவியை நாடுங்கள்.
-
 LIMIT_EN =
 2026 ordinary academic conditions, not a personal eligibility decision. Vocational and specially governed programmes differ; current-year authority is required.
-
 LIMIT_TA =
 2026 வழக்கமான பள்ளிக் கல்வி நிபந்தனைகள். தனிப்பட்ட தகுதித் தீர்ப்பு அல்ல. தொழிற்கல்வி மற்றும் சிறப்புப் படிப்புகள் வேறுபடும். உரிய ஆண்டின் அதிகாரப்பூர்வ விதி தேவை.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -2617,34 +2594,24 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 Which 12th-standard subjects are required for engineering admission?
-
 QUESTION_TA =
-பொறியியல் சேர்க்கைக்கு 12 ஆம் வகுப்பில் என்ன பாடங்கள் தேவை?
-
+பொறியியல் சேர்க்கைக்கு 12-ஆம் வகுப்பில் என்னென்ன பாடங்கள் படித்திருக்க வேண்டும்?
 ANSWER_EN =
 For ordinary 2026 TNEA academic entry, Mathematics, Physics and Chemistry are required. The brochure requires a pass in +1 and +2 or equivalent; its minimum-average table uses +2 Mathematics, Physics and Chemistry.
-
 ANSWER_TA =
-வழக்கமான 2026 TNEA பள்ளிக் கல்வி வழிக்கு கணிதம், இயற்பியல், வேதியியல் தேவை. கையேடு 11 மற்றும் 12 ஆம் வகுப்பு அல்லது இணையான தேர்வில் தேர்ச்சியைக் கோருகிறது. குறைந்தபட்ச சராசரி அட்டவணை 12 ஆம் வகுப்பு கணிதம், இயற்பியல், வேதியியலைப் பயன்படுத்துகிறது.
-
+பொதுக் கல்விப் பிரிவில் (HSC Academic) கணிதம் (Mathematics), இயற்பியல் (Physics) மற்றும் வேதியியல் (Chemistry) ஆகிய மூன்று பாடங்களைக் கட்டாயமாகப் படித்திருக்க வேண்டும்.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 You can start by checking the applicable subjects, marks and study/nativity conditions; seek official help for any unresolved personal case.
-
 NEXT_TA =
 பொருந்தும் பாடங்கள், மதிப்பெண்கள், படிப்பு/பூர்வீக நிபந்தனைகளைப் பார்க்கலாம். தனிப்பட்ட சந்தேகத்துக்கு அதிகாரப்பூர்வ உதவியை நாடுங்கள்.
-
 LIMIT_EN =
 2026 ordinary academic conditions, not a personal eligibility decision. Vocational and specially governed programmes differ; current-year authority is required.
-
 LIMIT_TA =
 2026 வழக்கமான பள்ளிக் கல்வி நிபந்தனைகள். தனிப்பட்ட தகுதித் தீர்ப்பு அல்ல. தொழிற்கல்வி மற்றும் சிறப்புப் படிப்புகள் வேறுபடும். உரிய ஆண்டின் அதிகாரப்பூர்வ விதி தேவை.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -2671,34 +2638,27 @@ CHANGED_FIELDS = DETAIL_EN
 
 QUESTION_EN =
 What minimum marks are required to apply for engineering?
-
 QUESTION_TA =
-பொறியியல் விண்ணப்பிக்க குறைந்தபட்சம் என்ன மதிப்பெண் வேண்டும்?
-
+பொறியியல் விண்ணப்பிக்க குறைந்தபட்சம் என்ன மதிப்பெண் (Eligibility Cutoff) பெற்றிருக்க வேண்டும்?
 ANSWER_EN =
 For the ordinary 2026 TNEA academic table, the +2 Mathematics/Physics/Chemistry average minimum is 45% for General Category and 40% for the listed reserved categories. This is not overall percentage or the 200-mark cutoff, and marks alone do not establish eligibility.
-
 ANSWER_TA =
-வழக்கமான 2026 TNEA பள்ளிக் கல்வி அட்டவணையில் 12 ஆம் வகுப்பு கணிதம்/இயற்பியல்/வேதியியல் சராசரி பொதுப் பிரிவுக்கு குறைந்தபட்சம் 45%. பட்டியலிடப்பட்ட இடஒதுக்கீட்டுப் பிரிவுகளுக்கு 40%. இது மொத்த சதவீதமோ 200-க்கு கட்-ஆஃபோ அல்ல. மதிப்பெண் மட்டும் தகுதியை உறுதிசெய்யாது.
-
+கணிதம், இயற்பியல், வேதியியல் மூன்று பாடங்களின் சராசரி மதிப்பெண் (Average Marks out of 100) அடிப்படையில் குறைந்தபட்சத் தகுதி நிர்ணயிக்கப்படுகிறது:
+- பொதுப் பிரிவு (OC): குறைந்தபட்சம் 45% சராசரி மதிப்பெண்.
+- BC / BCM / MBC / DNC பிரிவினர்: குறைந்தபட்சம் 40% சராசரி மதிப்பெண்.
+- SC / SCA / ST பிரிவினர்: தேர்ச்சி பெற்றிருந்தால் போதுமானது (குறைந்தபட்சம் 40%).
 DETAIL_EN =
 The listed 40% categories are BC (including BCM), MBC/DNC and SC/SCA/ST. These mean Backward Classes (including Backward Class Muslims), Most Backward Classes/Denotified Communities, Scheduled Castes/Scheduled Caste Arunthathiyars/Scheduled Tribes. Required category evidence applies; do not self-assign. Minimum eligibility does not use rounding or normalised marks. Specially governed programmes need additional checks.
-
 DETAIL_TA =
-40% பிரிவுகள்: BC/BCM — பிற்படுத்தப்பட்ட வகுப்பினர்/முஸ்லிம்கள். MBC/DNC — மிகவும் பிற்படுத்தப்பட்ட வகுப்பினர்/சீர்மரபினர். SC/SCA/ST — பட்டியல் சாதியினர்/அருந்ததியர்/பழங்குடியினர். உரிய ஆதாரம் வேண்டும். தானாகப் பிரிவை எடுத்துக்கொள்ளாதீர்கள். குறைந்தபட்சத் தகுதிக்கு மதிப்பெண்ணை முழு எண்ணாக மாற்றுவதோ வாரிய ஒப்பீட்டு மாற்றமோ பயன்படாது. சிறப்புப் படிப்புகளுக்குக் கூடுதல் சரிபார்ப்பு தேவை.
-
+இது கலந்தாய்வில் விண்ணப்பிப்பதற்கான குறைந்தபட்சத் தகுதி மட்டுமே; சேர்க்கை இடங்கள் பொதுத் தரவரிசை (Rank) அடிப்படையிலேயே ஒதுக்கப்படும்.
 NEXT_EN =
 You can start by checking the applicable subjects, marks and study/nativity conditions; seek official help for any unresolved personal case.
-
 NEXT_TA =
 பொருந்தும் பாடங்கள், மதிப்பெண்கள், படிப்பு/பூர்வீக நிபந்தனைகளைப் பார்க்கலாம். தனிப்பட்ட சந்தேகத்துக்கு அதிகாரப்பூர்வ உதவியை நாடுங்கள்.
-
 LIMIT_EN =
 2026 ordinary academic conditions, not a personal eligibility decision. Vocational and specially governed programmes differ; current-year authority is required.
-
 LIMIT_TA =
 2026 வழக்கமான பள்ளிக் கல்வி நிபந்தனைகள். தனிப்பட்ட தகுதித் தீர்ப்பு அல்ல. தொழிற்கல்வி மற்றும் சிறப்புப் படிப்புகள் வேறுபடும். உரிய ஆண்டின் அதிகாரப்பூர்வ விதி தேவை.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -2725,34 +2685,24 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 I am a CBSE student. Can I apply for TNEA?
-
 QUESTION_TA =
-நான் CBSE மாணவர். TNEA-வில் விண்ணப்பிக்கலாமா?
-
+நான் CBSE அல்லது ICSE மாணவர்; TNEA கலந்தாய்வில் விண்ணப்பிக்கலாமா?
 ANSWER_EN =
 Yes, a CBSE student can apply if all applicable conditions are met. CBSE alone neither confirms nor rules out eligibility; subjects, marks and the school-study/nativity route must also be checked.
-
 ANSWER_TA =
-ஆம். பொருந்தும் எல்லா நிபந்தனைகளையும் பூர்த்தி செய்தால் CBSE மாணவரும் விண்ணப்பிக்கலாம். CBSE என்பதால் மட்டும் தகுதி உறுதியாகவோ மறுக்கப்படவோ முடியாது. பாடங்கள், மதிப்பெண்கள், பள்ளிப் படிப்பு/பூர்வீக வழியையும் பார்க்க வேண்டும்.
-
+ஆம், தாராளமாக விண்ணப்பிக்கலாம். தமிழ்நாடு மாநிலப் பாடத்திட்டம் (State Board) போன்றே CBSE மற்றும் பிற வாரிய மாணவர்களும் TNEA-வில் அனுமதிக்கப்படுகிறார்கள். உங்கள் 12-ஆம் வகுப்பு கணிதம், இயற்பியல், வேதியியல் மதிப்பெண்களைக் கொண்டு TNEA விதிகளின்படி கட்-ஆஃப் சமன் செய்யப்படும்.
 DETAIL_EN =
 For ranking across school boards, the authority uses its published normalisation method to compare marks. A simple raw-mark illustration is not the final official normalised score.
-
 DETAIL_TA =
 வாரியங்களுக்கு இடையே மதிப்பெண்களை ஒப்பிட்டு தரவரிசை அமைக்க அதிகாரிகள் வெளியிடப்பட்ட மாற்றுமுறையைப் பயன்படுத்துவார்கள். அசல் மதிப்பெண்களைக் கொண்ட எளிய விளக்கக் கணக்கு இறுதி அதிகாரப்பூர்வ மாற்றப்பட்ட மதிப்பெண் அல்ல.
-
 NEXT_EN =
 You can start by checking the applicable subjects, marks and study/nativity conditions; seek official help for any unresolved personal case.
-
 NEXT_TA =
 பொருந்தும் பாடங்கள், மதிப்பெண்கள், படிப்பு/பூர்வீக நிபந்தனைகளைப் பார்க்கலாம். தனிப்பட்ட சந்தேகத்துக்கு அதிகாரப்பூர்வ உதவியை நாடுங்கள்.
-
 LIMIT_EN =
 2026 ordinary academic conditions, not a personal eligibility decision. Vocational and specially governed programmes differ; current-year authority is required.
-
 LIMIT_TA =
 2026 வழக்கமான பள்ளிக் கல்வி நிபந்தனைகள். தனிப்பட்ட தகுதித் தீர்ப்பு அல்ல. தொழிற்கல்வி மற்றும் சிறப்புப் படிப்புகள் வேறுபடும். உரிய ஆண்டின் அதிகாரப்பூர்வ விதி தேவை.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -2779,34 +2729,24 @@ CHANGED_FIELDS = ANSWER_EN
 
 QUESTION_EN =
 I studied outside Tamil Nadu. Can I apply for TNEA?
-
 QUESTION_TA =
-தமிழ்நாட்டிற்கு வெளியே படித்தேன். TNEA-வில் விண்ணப்பிக்கலாமா?
-
+நான் தமிழ்நாட்டிற்கு வெளியே பள்ளிப் படிப்பு படித்தேன்; TNEA-வில் விண்ணப்பிக்கலாமா?
 ANSWER_EN =
 Studying outside Tamil Nadu does not automatically exclude you. Under the 2026 rules, Tamil Nadu natives who studied any of Classes VIII–XII outside the state can apply with the required nativity evidence, subject to the other conditions. Specified other routes also exist.
-
 ANSWER_TA =
-தமிழ்நாட்டிற்கு வெளியே படித்ததால் மட்டும் விண்ணப்பிக்க முடியாது என்று ஆகாது. 2026 விதிகளில், தமிழ்நாட்டைப் பூர்வீகமாகக் கொண்டு 8–12 வகுப்புகளில் ஏதேனும் ஒன்றை வெளியில் படித்தவர், தேவையான பூர்வீகச் சான்றுடன் மற்ற நிபந்தனைகளையும் பூர்த்தி செய்து விண்ணப்பிக்கலாம். குறிப்பிட்ட வேறு வழிகளும் உள்ளன.
-
+விண்ணப்பிக்கலாம்; ஆனால் உங்கள் பெற்றோர் தமிழ்நாட்டைப் பூர்வீகமாகக் கொண்டவர்களாக இருக்க வேண்டும், மற்றும் தமிழ்நாடு அரசின் அதிகாரப்பூர்வ இருப்பிடச் சான்றிதழை (Nativity Certificate) சமர்ப்பிக்க வேண்டும்.
 DETAIL_EN =
 Specified routes also cover certain government/institution employees’ children and All India Service Tamil Nadu cadre officers’ children, with prescribed evidence. Birthplace alone does not establish the native route.
-
 DETAIL_TA =
 குறிப்பிட்ட அரசு/நிறுவன ஊழியர்களின் பிள்ளைகள் மற்றும் தமிழ்நாடு பணிப்பிரிவு அகில இந்தியப் பணி அதிகாரிகளின் பிள்ளைகளுக்கும் உரிய ஆதார நிபந்தனைகளுடன் வழிகள் உள்ளன. பிறந்த இடம் மட்டும் பூர்வீக வழியை உறுதிசெய்யாது.
-
 NEXT_EN =
 Write down the one unresolved course or study-history detail and ask official TNEA help which evidence is required.
-
 NEXT_TA =
 தெளிவில்லாத ஒரு படிப்பு அல்லது பள்ளி வரலாற்று விவரத்தை எழுதிக்கொண்டு, எந்த ஆதாரம் தேவை என்று அதிகாரப்பூர்வ TNEA உதவியில் கேளுங்கள்.
-
 LIMIT_EN =
 2026 rules only; this explanation does not decide your nativity, category or eligibility from incomplete facts.
-
 LIMIT_TA =
 2026 விதிகள் மட்டுமே. முழுமையற்ற தகவலிலிருந்து உங்கள் பூர்வீகம், சமூகப் பிரிவு அல்லது தகுதியை இந்த விளக்கம் முடிவு செய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -2833,34 +2773,25 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 What does nativity mean for TNEA?
-
 QUESTION_TA =
-TNEA-வில் பூர்வீகம் என்றால் என்ன?
-
+TNEA-வில் பூர்வீகம் (Nativity) விதிகள் எவ்வாறு கணக்கிடப்படுகின்றன?
 ANSWER_EN =
 Nativity is the native-status category recognised by the admission rules. Birthplace alone cannot establish it; your school-study history and the required evidence matter.
-
 ANSWER_TA =
-பூர்வீகம் என்பது சேர்க்கை விதிகளின்படி ஏற்கப்படும் சொந்த மாநில நிலை. பிறந்த இடம் மட்டும் அதை உறுதிசெய்யாது. பள்ளிப் படிப்பு வரலாறும் தேவையான ஆதாரமும் முக்கியம்.
-
+- தமிழ்நாட்டில் 8 முதல் 12-ஆம் வகுப்பு வரை தொடர்ந்து படித்த மாணவர்களுக்கு இருப்பிடச் சான்றிதழ் தேவையில்லை (பள்ளி மாற்றுச் சான்றிதழே போதுமானது).
+- தமிழ்நாட்டிற்கு வெளியே படித்த தமிழ்நாட்டைப் பூர்வீகமாகக் கொண்ட மாணவர்கள், தாங்கள் அல்லது தங்கள் பெற்றோர் தமிழ்நாட்டைச் சேர்ந்தவர்கள் என்பதற்கான Nativity Certificate சமர்ப்பிக்க வேண்டும்.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Write down the one unresolved course or study-history detail and ask official TNEA help which evidence is required.
-
 NEXT_TA =
 தெளிவில்லாத ஒரு படிப்பு அல்லது பள்ளி வரலாற்று விவரத்தை எழுதிக்கொண்டு, எந்த ஆதாரம் தேவை என்று அதிகாரப்பூர்வ TNEA உதவியில் கேளுங்கள்.
-
 LIMIT_EN =
 2026 rules only; this explanation does not decide your nativity, category or eligibility from incomplete facts.
-
 LIMIT_TA =
 2026 விதிகள் மட்டுமே. முழுமையற்ற தகவலிலிருந்து உங்கள் பூர்வீகம், சமூகப் பிரிவு அல்லது தகுதியை இந்த விளக்கம் முடிவு செய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -2887,34 +2818,24 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 I was born in Tamil Nadu but studied outside the state. What should I check?
-
 QUESTION_TA =
-தமிழ்நாட்டில் பிறந்தேன். வெளிமாநிலத்தில் படித்தேன். என்ன சரிபார்க்க வேண்டும்?
-
+நான் தமிழ்நாட்டில் பிறந்தேன், ஆனால் வெளிமாநிலத்தில் பள்ளிப் படிப்பு படித்தேன்; என்ன சான்றிதழ் சமர்ப்பிக்க வேண்டும்?
 ANSWER_EN =
 Keep both facts in view: Tamil Nadu birth and outside-state study. Check whether you meet the Tamil Nadu native route and have its prescribed nativity certificate; birthplace alone is not enough to confirm eligibility.
-
 ANSWER_TA =
-தமிழ்நாட்டில் பிறந்ததும் வெளிமாநிலத்தில் படித்ததும் இரண்டையும் வைத்துப் பாருங்கள். தமிழ்நாடு பூர்வீக வழி உங்களுக்குப் பொருந்துமா, அதற்கான பூர்வீகச் சான்று உள்ளதா என்று சரிபாருங்கள். பிறந்த இடம் மட்டும் தகுதியை உறுதிசெய்யாது.
-
+நீங்கள் பிறப்புச் சான்றிதழ் அல்லது உங்கள் பெற்றோர் தமிழ்நாட்டைச் சேர்ந்தவர்கள் என்பதற்கான சான்றிதழ்களுடன், வருவாய்த் துறை வழங்கும் இருப்பிடச் சான்றிதழை (Nativity Certificate) பெற்று விண்ணப்பத்துடன் இணைக்க வேண்டும்.
 DETAIL_EN =
 Under the 2026 rule, Tamil Nadu natives who studied any of Classes VIII–XII outside the state need the required electronic/digitally signed nativity certificate, subject to other conditions. Preserve the exact class-year history when asking for help.
-
 DETAIL_TA =
 2026 விதியில், தமிழ்நாட்டைப் பூர்வீகமாகக் கொண்டு 8–12 வகுப்புகளில் ஏதேனும் ஒன்றை வெளியில் படித்தவருக்கு, மற்ற நிபந்தனைகளுடன் தேவையான மின்னணு/டிஜிட்டல் கையொப்பப் பூர்வீகச் சான்று வேண்டும். உதவி கேட்கும்போது எந்த வகுப்பில் எங்கு படித்தீர்கள் என்ற விவரத்தை வைத்திருங்கள்.
-
 NEXT_EN =
 Write down the one unresolved course or study-history detail and ask official TNEA help which evidence is required.
-
 NEXT_TA =
 தெளிவில்லாத ஒரு படிப்பு அல்லது பள்ளி வரலாற்று விவரத்தை எழுதிக்கொண்டு, எந்த ஆதாரம் தேவை என்று அதிகாரப்பூர்வ TNEA உதவியில் கேளுங்கள்.
-
 LIMIT_EN =
 2026 rules only; this explanation does not decide your nativity, category or eligibility from incomplete facts.
-
 LIMIT_TA =
 2026 விதிகள் மட்டுமே. முழுமையற்ற தகவலிலிருந்து உங்கள் பூர்வீகம், சமூகப் பிரிவு அல்லது தகுதியை இந்த விளக்கம் முடிவு செய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -2941,34 +2862,24 @@ CHANGED_FIELDS = ANSWER_EN
 
 QUESTION_EN =
 I studied in Tamil Nadu but was born outside the state. What should I check?
-
 QUESTION_TA =
-தமிழ்நாட்டில் படித்தேன். வேறு மாநிலத்தில் பிறந்தேன். என்ன சரிபார்க்க வேண்டும்?
-
+நான் தமிழ்நாட்டில் 8 முதல் 12-ஆம் வகுப்பு வரை படித்தேன், ஆனால் பிறந்தது வெளிமாநிலத்தில்; எனக்கு இருப்பிடச் சான்றிதழ் தேவையா?
 ANSWER_EN =
 Check whether you studied all Classes VIII–XII in Tamil Nadu. Under the 2026 route, other-state candidates with all five years here can apply without a nativity certificate, subject to academic conditions. This is under Open Competition, rather than a reserved community allocation.
-
 ANSWER_TA =
-8, 9, 10, 11, 12 ஆகிய ஐந்து வகுப்புகளையும் தமிழ்நாட்டில் படித்தீர்களா என்று பாருங்கள். 2026 விதியில், இவ்வாறு படித்த மற்ற மாநில மாணவர் கல்வித் தகுதிக்கு உட்பட்டு பூர்வீகச் சான்றின்றி பொதுப் போட்டிப் பிரிவில் விண்ணப்பிக்கலாம். அது தனிச் சமூக இடஒதுக்கீடு அல்ல.
-
+தேவையில்லை. தமிழ்நாட்டில் 8, 9, 10, 11, மற்றும் 12-ஆம் வகுப்புகளைத் தொடர்ந்து படித்த மாணவர்கள் எந்தவித இருப்பிடச் சான்றிதழும் சமர்ப்பிக்கத் தேவையில்லை; அவர்கள் தமிழ்நாட்டு மாணவர்களாகவே கருதப்படுவார்கள்.
 DETAIL_EN =
 If only some of these five years were in Tamil Nadu, do not assume this route applies. Community reservation needs its separate check.
-
 DETAIL_TA =
 இந்த ஐந்து ஆண்டுகளில் சில மட்டும் தமிழ்நாட்டில் இருந்தால் இதே வழி பொருந்தும் என்று ஊகிக்காதீர்கள். சமூக இடஒதுக்கீட்டைத் தனியாகச் சரிபார்க்க வேண்டும்.
-
 NEXT_EN =
 Write down the one unresolved course or study-history detail and ask official TNEA help which evidence is required.
-
 NEXT_TA =
 தெளிவில்லாத ஒரு படிப்பு அல்லது பள்ளி வரலாற்று விவரத்தை எழுதிக்கொண்டு, எந்த ஆதாரம் தேவை என்று அதிகாரப்பூர்வ TNEA உதவியில் கேளுங்கள்.
-
 LIMIT_EN =
 2026 rules only; this explanation does not decide your nativity, category or eligibility from incomplete facts.
-
 LIMIT_TA =
 2026 விதிகள் மட்டுமே. முழுமையற்ற தகவலிலிருந்து உங்கள் பூர்வீகம், சமூகப் பிரிவு அல்லது தகுதியை இந்த விளக்கம் முடிவு செய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -2995,34 +2906,24 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 What happens if I wrote an improvement exam?
-
 QUESTION_TA =
-மதிப்பெண் மேம்பாட்டுத் தேர்வு எழுதியிருந்தால் என்ன ஆகும்?
-
++2 மதிப்பெண் மேம்பாட்டுத் தேர்வு (Improvement Exam) எழுதியிருந்தால் என்ன விதிகளின்படி கணக்கிடப்படும்?
 ANSWER_EN =
 The 2026 brochure says improvement marks obtained from 2006 onwards are not considered, including for other-state candidates. Do not simply replace original marks with improved marks in a calculation.
-
 ANSWER_TA =
-2006 முதல் பெற்ற மேம்பாட்டுத் தேர்வு மதிப்பெண்கள் கணக்கில் எடுத்துக்கொள்ளப்படாது என்று 2026 கையேடு கூறுகிறது. மற்ற மாநில மாணவர்களுக்கும் இது பொருந்தும். கணக்கீட்டில் அசல் மதிப்பெண்ணை மேம்படுத்திய மதிப்பெண்ணால் தானாக மாற்றாதீர்கள்.
-
+தமிழ்நாடு அரசின் அரசாணைப்படி, 2006-ஆம் ஆண்டிற்குப் பிறகு பெறப்பட்ட மேம்பாட்டுத் தேர்வு மதிப்பெண்கள் சேர்க்கைக்கு ஏற்றுக்கொள்ளப்பட மாட்டாது; பள்ளிப் பொதுத்தேர்வில் முதல் முயற்சியில் பெற்ற அசல் மதிப்பெண்களே கணக்கில் எடுத்துக்கொள்ளப்படும்.
 DETAIL_EN =
 If you do not know whether a later exam counts as improvement or another qualifying situation, take both records privately to official TFC help for clarification.
-
 DETAIL_TA =
 பின்னர் எழுதிய தேர்வு மேம்பாட்டுத் தேர்வா அல்லது வேறு தகுதி நிலையா என்று தெரியாவிட்டால், இரு பதிவுகளையும் தனிப்பட்ட முறையில் அதிகாரப்பூர்வ TFC உதவிக்கு எடுத்துச் சென்று விளக்கம் கேளுங்கள்.
-
 NEXT_EN =
 Write down the one unresolved course or study-history detail and ask official TNEA help which evidence is required.
-
 NEXT_TA =
 தெளிவில்லாத ஒரு படிப்பு அல்லது பள்ளி வரலாற்று விவரத்தை எழுதிக்கொண்டு, எந்த ஆதாரம் தேவை என்று அதிகாரப்பூர்வ TNEA உதவியில் கேளுங்கள்.
-
 LIMIT_EN =
 2026 rules only; this explanation does not decide your nativity, category or eligibility from incomplete facts.
-
 LIMIT_TA =
 2026 விதிகள் மட்டுமே. முழுமையற்ற தகவலிலிருந்து உங்கள் பூர்வீகம், சமூகப் பிரிவு அல்லது தகுதியை இந்த விளக்கம் முடிவு செய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -3049,34 +2950,24 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 I have a vocational or different school-study background. How do I know whether I am eligible?
-
 QUESTION_TA =
-தொழிற்கல்வி அல்லது வேறுவகைப் பள்ளிப் படிப்பு படித்தேன். என் தகுதியை எப்படித் தெரிந்துகொள்வது?
-
+நான் தொழிற்கல்விப் பிரிவில் (HSC Vocational) படித்தேன்; என் தகுதியை எப்படித் தெரிந்துகொள்வது?
 ANSWER_EN =
 First identify your exact qualifying course. The 2026 HSC vocational route has its own subject/marks and ranking tables; diploma entry uses TNLEA instead. An unlisted or equivalent background needs official recognition and subject-rule confirmation.
-
 ANSWER_TA =
-முதலில் உங்கள் தகுதிப் படிப்பின் சரியான பெயரைப் பாருங்கள். 2026 மேல்நிலைத் தொழிற்கல்வி வழிக்குத் தனிப் பாடம்/மதிப்பெண் மற்றும் தரவரிசை அட்டவணைகள் உள்ளன. டிப்ளமோ வழி TNLEA-விற்கு உரியது. பட்டியலில் இல்லாத அல்லது இணையான படிப்புக்கு அங்கீகாரத்தையும் பாட விதியையும் அதிகாரப்பூர்வமாக உறுதிசெய்ய வேண்டும்.
-
+தொழிற்கல்வி மாணவர்களுக்கு TNEA-வில் தனியான இடஒதுக்கீடு உள்ளது. கணிதம் அல்லது இயற்பியல் மற்றும் அதற்குரிய தொழிற்கல்வி செய்முறைப் பாடங்களில் பெற்ற மதிப்பெண்களைக் கொண்டு தனியான தகுதிப்பட்டியல் தயாரிக்கப்படும்.
 DETAIL_EN =
 The 2026 vocational table lists Basic Mechanical, Electrical, Electronics, Civil, Automobile Engineering and Textile Technology groups with a prescribed related Mathematics, Physics or Chemistry subject. The related subject plus vocational theory/practical average is 45% for General and 40% for the listed reserved categories. Do not replace its separate merit weighting with the academic formula.
-
 DETAIL_TA =
 2026 தொழிற்கல்வி அட்டவணையில் அடிப்படை இயந்திரம், மின்சாரம், மின்னணு, கட்டடவியல், வாகனப் பொறியியல், துணிநுட்பக் குழுக்களுடன் குறிப்பிட்ட கணிதம்/இயற்பியல்/வேதியியல் தொடர்புப் பாடம் உள்ளது. தொடர்புப் பாடம் மற்றும் தொழிற்கல்விக் கருத்தியல்/செய்முறை சராசரி பொதுப் பிரிவுக்கு 45%. பட்டியலிடப்பட்ட இடஒதுக்கீட்டுப் பிரிவுகளுக்கு 40%. அதன் தனி தரவரிசை பங்கீட்டுக்குப் பதிலாகப் பொதுப் பள்ளிக் கல்வி சூத்திரத்தைப் பயன்படுத்தாதீர்கள்.
-
 NEXT_EN =
 Write down the one unresolved course or study-history detail and ask official TNEA help which evidence is required.
-
 NEXT_TA =
 தெளிவில்லாத ஒரு படிப்பு அல்லது பள்ளி வரலாற்று விவரத்தை எழுதிக்கொண்டு, எந்த ஆதாரம் தேவை என்று அதிகாரப்பூர்வ TNEA உதவியில் கேளுங்கள்.
-
 LIMIT_EN =
 2026 rules only; this explanation does not decide your nativity, category or eligibility from incomplete facts.
-
 LIMIT_TA =
 2026 விதிகள் மட்டுமே. முழுமையற்ற தகவலிலிருந்து உங்கள் பூர்வீகம், சமூகப் பிரிவு அல்லது தகுதியை இந்த விளக்கம் முடிவு செய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S5 (Government of Tamil Nadu / DoTE, **Tamil Nadu Lateral Entry — Direct Second Year B.E./B.Tech Admissions 2026–27: General Information to Candidates**) — Printed/PDF p.1 title and official portal; p.2 document list; p.3 scope/duration; p.4 nativity; p.5 qualifying examinations and minimum average. See register and linked evidence notes for URL/conditions.
 
@@ -3103,34 +2994,24 @@ CHANGED_FIELDS = ANSWER_EN, ANSWER_TA
 
 QUESTION_EN =
 What should I do if I am unsure whether my eligibility case is covered?
-
 QUESTION_TA =
-என் தகுதி நிலைக்கு விதி பொருந்துகிறதா என்று தெரியாவிட்டால் என்ன செய்ய வேண்டும்?
-
+என் தகுதி அல்லது சான்றிதழ்களில் சந்தேகம் இருந்தால் யாரிடம் தெளிவுபெற வேண்டும்?
 ANSWER_EN =
 Keep the result unconfirmed. Note the admission year, qualifying course, school-study history and the precise uncertainty. Then ask official TNEA/TFC help which rule and evidence apply. Unknown does not mean rejected.
-
 ANSWER_TA =
-முடிவை இன்னும் உறுதிசெய்யப்படாததாக வைத்துக்கொள்ளுங்கள். சேர்க்கை ஆண்டு, தகுதிப் படிப்பு, பள்ளிப் படிப்பு வரலாறு மற்றும் எது தெளிவாகத் தெரியவில்லை என்பதை எழுதிக்கொள்ளலாம். பிறகு எந்த விதியும் ஆதாரமும் பொருந்தும் என்று அதிகாரப்பூர்வ TNEA/TFC உதவியில் கேளுங்கள். தெரியவில்லை என்பது மறுக்கப்பட்டது என்று அர்த்தமல்ல.
-
+தமிழ்நாடு முழுவதும் அனைத்து மாவட்டங்களிலும் அரசு அமைத்துள்ள TNEA உதவி மையங்களை (TFC — TNEA Facilitation Centres) நேரில் அணுகலாம் அல்லது TNEA அதிகாரப்பூர்வ தொலைபேசி உதவி எண்ணைத் தொடர்பு கொள்ளலாம். உதவி மையங்கள் மாணவர்களுக்கு இலவசமாக வழிகாட்டுகின்றன.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Write down the one unresolved course or study-history detail and ask official TNEA help which evidence is required.
-
 NEXT_TA =
 தெளிவில்லாத ஒரு படிப்பு அல்லது பள்ளி வரலாற்று விவரத்தை எழுதிக்கொண்டு, எந்த ஆதாரம் தேவை என்று அதிகாரப்பூர்வ TNEA உதவியில் கேளுங்கள்.
-
 LIMIT_EN =
 2026 rules only; this explanation does not decide your nativity, category or eligibility from incomplete facts.
-
 LIMIT_TA =
 2026 விதிகள் மட்டுமே. முழுமையற்ற தகவலிலிருந்து உங்கள் பூர்வீகம், சமூகப் பிரிவு அல்லது தகுதியை இந்த விளக்கம் முடிவு செய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -3157,34 +3038,27 @@ CHANGED_FIELDS = NEXT_EN
 
 QUESTION_EN =
 What exactly is the TNEA cutoff mark and how is it calculated?
-
 QUESTION_TA =
-TNEA கட்-ஆஃப் மதிப்பெண் என்றால் என்ன? எப்படி கணக்கிடப்படுகிறது?
-
+TNEA கட்-ஆஃப் மதிப்பெண் என்றால் என்ன? அது எவ்வாறு கணக்கிடப்படுகிறது?
 ANSWER_EN =
 For ordinary 2026 academic merit, cutoff is a weighted score out of 200: Mathematics up to 100, Physics 50 and Chemistry 50. When all three marks are out of 100, the illustration is M + P/2 + C/2.
-
 ANSWER_TA =
-வழக்கமான 2026 பள்ளிக் கல்வி வழியில் கட்-ஆஃப் என்பது 200-க்கு கணக்கிடப்படும் மதிப்பெண்: கணிதம் அதிகபட்சம் 100, இயற்பியல் 50, வேதியியல் 50. மூன்றும் 100-க்கு இருந்தால் விளக்கச் சூத்திரம்: கணிதம் + இயற்பியல்/2 + வேதியியல்/2.
-
+TNEA பொதுப் பொறியியல் சேர்க்கையில் 200 மதிப்பெண்களுக்கு கட்-ஆஃப் கணக்கிடப்படுகிறது:
+கட்-ஆஃப் = கணிதம் (100) + (இயற்பியல் + வேதியியல்) / 2
 DETAIL_EN =
 Teaching example only: marks of 90, 80 and 70 out of 100 give 90 + 80/2 + 70/2 = 165/200. This is not your result or official normalised score. A college’s past closing score is another use of “cutoff”, not a guaranteed entry threshold.
-
 DETAIL_TA =
-விளக்கத்திற்கான கற்பனை உதாரணம் மட்டும்: 100-க்கு 90, 80, 70 என்ற மதிப்பெண்கள் இருந்தால் 90 + 80/2 + 70/2 = 165/200. இது உங்கள் முடிவோ அதிகாரப்பூர்வ மாற்றப்பட்ட மதிப்பெண்ணோ அல்ல. கல்லூரியில் முன்பு கடைசியாக இடம் பெற்றவரின் மதிப்பெண்ணையும் “கட்-ஆஃப்” என்பார்கள். அது இடத்தை உறுதி செய்யும் வரம்பு அல்ல.
-
+எடுத்துக்காட்டு: கணிதம் 90/100, இயற்பியல் 80/100, வேதியியல் 70/100 எனில்:
+90 + (80 + 70) / 2 = 90 + 75 = 165 / 200.
+(இது சேர்க்கை உத்தரவாதமல்ல; இது மாணவர்களை வரிசைப்படுத்தப் பயன்படும் ஒரு கணக்கீட்டு மதிப்பெண் மட்டுமே).
 NEXT_EN =
 Understand what the score means before using it. Check your official rank in the published list. A personal calculation is optional.
-
 NEXT_TA =
 மதிப்பெண்ணைப் பயன்படுத்தும் முன் அதன் பொருளைப் புரிந்துகொள்ளுங்கள். அதிகாரப்பூர்வப் பட்டியலில் தரவரிசையைப் பார்க்கலாம். தனிப்பட்ட கணக்கீடு விருப்பம் மட்டுமே.
-
 LIMIT_EN =
 2026 academic weighting; official board normalisation may apply. Vocational weighting differs. A score is not eligibility, rank or an admission prediction.
-
 LIMIT_TA =
 2026 பள்ளிக் கல்வி மதிப்பெண் பங்கீடு. வாரிய மதிப்பெண்களை ஒப்பிடத்தக்க அளவுக்கு மாற்றும் அதிகாரப்பூர்வ முறை பொருந்தலாம். தொழிற்கல்வியின் பங்கீடு வேறு. மதிப்பெண் தகுதி, தரவரிசை அல்லது சேர்க்கை கணிப்பு அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -3211,34 +3085,24 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 Is TNEA cutoff the same as my 12th-standard percentage?
-
 QUESTION_TA =
-TNEA கட்-ஆஃபும் 12 ஆம் வகுப்பு மொத்த சதவீதமும் ஒன்றா?
-
+TNEA கட்-ஆஃப் மதிப்பெண்ணும் 12-ஆம் வகுப்பு மொத்த சதவீதமும் (Percentage) ஒன்றா?
 ANSWER_EN =
 No. Overall percentage can use different subjects and weights. TNEA academic cutoff weights Mathematics, Physics and Chemistry out of 200; the minimum-eligibility subject average is also a separate measure.
-
 ANSWER_TA =
-இல்லை. மொத்த சதவீதத்தில் வேறு பாடங்களும் பங்கீடும் இருக்கலாம். TNEA பள்ளிக் கல்வி கட்-ஆஃப் கணிதம், இயற்பியல், வேதியியலை 200-க்கு கணக்கிடுகிறது. குறைந்தபட்சத் தகுதிக்கான பாடச் சராசரியும் வேறு அளவு.
-
+இல்லை, இரண்டும் முற்றிலும் வேறுபட்டவை. மொத்த சதவீதத்தில் மொழிப்பாடங்கள் (தமிழ், ஆங்கிலம்) மற்றும் உயிரியல்/கணினி அறிவியல் மதிப்பெண்களும் அடங்கும். ஆனால் TNEA கட்-ஆஃப் என்பது கணிதம், இயற்பியல், வேதியியல் ஆகிய 3 பாடங்களை மட்டுமே கொண்டு 200-க்குக் கணக்கிடப்படும் பிரத்யேக மதிப்பெண் ஆகும்.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Understand the score before using it; check official rank in the published list. A personal calculation is optional.
-
 NEXT_TA =
 மதிப்பெண்ணைப் பயன்படுத்தும் முன் அதன் பொருளைப் புரிந்துகொள்ளுங்கள். அதிகாரப்பூர்வப் பட்டியலில் தரவரிசையைப் பார்க்கலாம். தனிப்பட்ட கணக்கீடு விருப்பம் மட்டுமே.
-
 LIMIT_EN =
 2026 academic weighting; official board normalisation may apply. Vocational weighting differs. A score is not eligibility, rank or an admission prediction.
-
 LIMIT_TA =
 2026 பள்ளிக் கல்வி மதிப்பெண் பங்கீடு. வாரிய மதிப்பெண்களை ஒப்பிடத்தக்க அளவுக்கு மாற்றும் அதிகாரப்பூர்வ முறை பொருந்தலாம். தொழிற்கல்வியின் பங்கீடு வேறு. மதிப்பெண் தகுதி, தரவரிசை அல்லது சேர்க்கை கணிப்பு அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -3265,34 +3129,24 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 Why is TNEA cutoff calculated out of 200?
-
 QUESTION_TA =
-TNEA கட்-ஆஃப் ஏன் 200-க்கு கணக்கிடப்படுகிறது?
-
+TNEA கட்-ஆஃப் மதிப்பெண் ஏன் 200-க்கு கணக்கிடப்படுகிறது?
 ANSWER_EN =
 The prescribed academic weights add to 200: Mathematics 100 + Physics 50 + Chemistry 50. It is a weighting of school marks, not another 200-mark examination.
-
 ANSWER_TA =
-பள்ளிக் கல்வி வழிக்குக் குறிப்பிட்ட பங்கீடு கணிதம் 100 + இயற்பியல் 50 + வேதியியல் 50. மொத்தம் 200. இது பள்ளி மதிப்பெண்களின் பங்கீடு. இன்னொரு 200 மதிப்பெண் தேர்வு அல்ல.
-
+பொறியியல் படிப்பிற்கு கணிதம் மிக முக்கியமான அடிப்படை என்பதால் அதற்கு 100 மதிப்பெண்களும், இயற்பியலுக்கு 50 மதிப்பெண்களும், வேதியியலுக்கு 50 மதிப்பெண்களும் எடையிடப்பட்டு மொத்தம் 200-க்குக் கணக்கிடப்படுகிறது. இது புதிய தேர்வு அல்ல; உங்கள் பள்ளி மதிப்பெண்களின் மறுபங்கீடே ஆகும்.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Understand the score before using it; check official rank in the published list. A personal calculation is optional.
-
 NEXT_TA =
 மதிப்பெண்ணைப் பயன்படுத்தும் முன் அதன் பொருளைப் புரிந்துகொள்ளுங்கள். அதிகாரப்பூர்வப் பட்டியலில் தரவரிசையைப் பார்க்கலாம். தனிப்பட்ட கணக்கீடு விருப்பம் மட்டுமே.
-
 LIMIT_EN =
 2026 academic weighting; official board normalisation may apply. Vocational weighting differs. A score is not eligibility, rank or an admission prediction.
-
 LIMIT_TA =
 2026 பள்ளிக் கல்வி மதிப்பெண் பங்கீடு. வாரிய மதிப்பெண்களை ஒப்பிடத்தக்க அளவுக்கு மாற்றும் அதிகாரப்பூர்வ முறை பொருந்தலாம். தொழிற்கல்வியின் பங்கீடு வேறு. மதிப்பெண் தகுதி, தரவரிசை அல்லது சேர்க்கை கணிப்பு அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -3319,34 +3173,26 @@ CHANGED_FIELDS = NEXT_EN
 
 QUESTION_EN =
 What is the difference between cutoff and rank?
-
 QUESTION_TA =
-கட்-ஆஃபுக்கும் தரவரிசைக்கும் என்ன வேறுபாடு?
-
+கட்-ஆஃப் மதிப்பெண்ணுக்கும் (Cutoff) தரவரிசைக்கும் (Rank) என்ன வேறுபாடு?
 ANSWER_EN =
 Cutoff is a mark; rank is your position in the authority’s ordered applicant list. The year’s merit and tie-breaking rules can give different ranks even to applicants with equal cutoff marks.
-
 ANSWER_TA =
-கட்-ஆஃப் ஒரு மதிப்பெண். தரவரிசை என்பது அதிகாரிகள் வரிசைப்படுத்திய விண்ணப்பதாரர் பட்டியலில் உங்கள் இடம். ஒரே கட்-ஆஃப் இருந்தாலும் அந்த ஆண்டின் சமமதிப்பெண் விதிகளால் தரவரிசை மாறலாம்.
-
+முக்கிய வேறுபாடுகள்:
+- கட்-ஆஃப் (Cutoff): உங்கள் 3 பாட மதிப்பெண்களின் கூட்டுத் தொகை (200-க்கு).
+- தரவரிசை (Rank): விண்ணப்பித்த அனைத்து மாணவர்களையும் அவர்களின் கட்-ஆஃப் மதிப்பெண், சமமதிப்பெண் சமன் செய்யும் விதிகள் மற்றும் இடஒதுக்கீடு விதிகளின்படி அரசு வரிசைப்படுத்தும் போது உங்களுக்குக் கிடைக்கும் மாநில அளவிலான இடம் (Position 1, 2, 3...).
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
-(No additional detail displayed.)
-
+கலந்தாய்வில் கல்லூரி இடங்கள் கட்-ஆஃப் மதிப்பெண்ணை விட உங்கள் அதிகாரப்பூர்வ தரவரிசை (Rank) அடிப்படையிலேயே ஒதுக்கப்படும்.
 NEXT_EN =
 Understand what the score means before using it. Check your official rank in the published list. A personal calculation is optional.
-
 NEXT_TA =
 மதிப்பெண்ணைப் பயன்படுத்தும் முன் அதன் பொருளைப் புரிந்துகொள்ளுங்கள். அதிகாரப்பூர்வப் பட்டியலில் தரவரிசையைப் பார்க்கலாம். தனிப்பட்ட கணக்கீடு விருப்பம் மட்டுமே.
-
 LIMIT_EN =
 2026 academic weighting; official board normalisation may apply. Vocational weighting differs. A score is not eligibility, rank or an admission prediction.
-
 LIMIT_TA =
 2026 பள்ளிக் கல்வி மதிப்பெண் பங்கீடு. வாரிய மதிப்பெண்களை ஒப்பிடத்தக்க அளவுக்கு மாற்றும் அதிகாரப்பூர்வ முறை பொருந்தலாம். தொழிற்கல்வியின் பங்கீடு வேறு. மதிப்பெண் தகுதி, தரவரிசை அல்லது சேர்க்கை கணிப்பு அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -3373,34 +3219,24 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 Does the same cutoff give the same rank every year?
-
 QUESTION_TA =
-ஒரே கட்-ஆஃப் இருந்தால் ஒவ்வொரு ஆண்டும் அதே தரவரிசை கிடைக்குமா?
-
+ஒரே கட்-ஆஃப் மதிப்பெண் பெற்றால் ஒவ்வொரு ஆண்டும் அதே தரவரிசை (Rank) கிடைக்குமா?
 ANSWER_EN =
 No. The applicant group and its marks change each year, so the same cutoff need not produce the same rank. Last year’s rank cannot establish this year’s rank or admission outcome.
-
 ANSWER_TA =
-இல்லை. ஒவ்வொரு ஆண்டும் விண்ணப்பதாரர்களும் அவர்களுடைய மதிப்பெண்களும் மாறுவதால் ஒரே கட்-ஆஃபிற்கு அதே தரவரிசை கிடைக்க வேண்டியதில்லை. கடந்த ஆண்டின் தரவரிசை இந்த ஆண்டின் தரவரிசையையோ சேர்க்கையையோ உறுதிசெய்யாது.
-
+இல்லை, கிடைக்காது. ஒவ்வொரு ஆண்டும் +2 பொதுத்தேர்வு கடினத்தன்மை, தேர்வு எழுதிய மாணவர்களின் எண்ணிக்கை மற்றும் மாணவர்கள் பெற்ற மதிப்பெண்கள் மாறுபடும். கடந்த ஆண்டு 190 கட்-ஆஃபிற்கு கிடைத்த ரேங்க் இந்த ஆண்டு கிடைக்காது; முந்தைய ஆண்டுத் தரவரிசையை நடப்பு ஆண்டுடன் ஒப்பிடக் கூடாது.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Understand the score before using it; check official rank in the published list. A personal calculation is optional.
-
 NEXT_TA =
 மதிப்பெண்ணைப் பயன்படுத்தும் முன் அதன் பொருளைப் புரிந்துகொள்ளுங்கள். அதிகாரப்பூர்வப் பட்டியலில் தரவரிசையைப் பார்க்கலாம். தனிப்பட்ட கணக்கீடு விருப்பம் மட்டுமே.
-
 LIMIT_EN =
 2026 academic weighting; official board normalisation may apply. Vocational weighting differs. A score is not eligibility, rank or an admission prediction.
-
 LIMIT_TA =
 2026 பள்ளிக் கல்வி மதிப்பெண் பங்கீடு. வாரிய மதிப்பெண்களை ஒப்பிடத்தக்க அளவுக்கு மாற்றும் அதிகாரப்பூர்வ முறை பொருந்தலாம். தொழிற்கல்வியின் பங்கீடு வேறு. மதிப்பெண் தகுதி, தரவரிசை அல்லது சேர்க்கை கணிப்பு அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
