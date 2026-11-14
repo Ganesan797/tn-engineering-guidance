@@ -582,34 +582,30 @@ CHANGE_TYPE = POLISH
 
 QUESTION_EN =
 What are the main engineering departments or branches?
-
 QUESTION_TA =
-பொறியியலின் முக்கியப் பாடப்பிரிவுகள் எவை?
-
+பொறியியலில் உள்ள முக்கியப் பாடப்பிரிவுகள் (Branches) எவை?
 ANSWER_EN =
 A useful first map is: computing (CSE, IT, AI/data); electronics and communication (ECE); electrical power and machines (EEE); machines, design and manufacturing (Mechanical); buildings and infrastructure (Civil); plus chemical, biotechnology, food, agriculture, textile, aeronautical and other specialist branches.
-
 ANSWER_TA =
-பொறியியலில் பல முக்கியத் துறைகள் உள்ளன. ஒரு எளிமையான அறிமுகமாக இவற்றைப் பார்க்கலாம்: கணினிப் பிரிவுகள் (CSE, IT, AI & Data Science); மின்னணு மற்றும் தகவல் தொடர்பு (ECE); மின்சக்தி மற்றும் மின் இயந்திரங்கள் (EEE); இயந்திரங்கள், வடிவமைப்பு மற்றும் உற்பத்தி (Mechanical); கட்டடங்கள் மற்றும் உள்கட்டமைப்பு (Civil). இவை தவிர வேதியியல், உயிரித் தொழில்நுட்பம், உணவு, வேளாண்மை, துணிநுட்பம், வானூர்தி போன்ற சிறப்புத் துறைகளும் உள்ளன.
-
+பொறியியலில் பல முக்கியத் துறைகள் உள்ளன. எளிமையான வகைப்பாடு:
+- கணினி சார்ந்த துறைகள்: CSE, IT, AI & Data Science
+- மின்னணு & தகவல் தொடர்பு: ECE
+- மின்சாரம் & மின் இயந்திரங்கள்: EEE
+- இயந்திரவியல் & வடிவமைப்பு: Mechanical
+- கட்டுமானம் & உள்கட்டமைப்பு: Civil
+- சிறப்புத் துறைகள்: Chemical, Biotechnology, Biomedical, Food Technology, Agriculture போன்றவை.
 DETAIL_EN =
 This is a map, not a ranking.
-
 DETAIL_TA =
-இது ஒரு ஆரம்ப அறிமுக வரைபடம் மட்டுமே; எந்தத் துறை சிறந்தது என்று சொல்லும் தரவரிசை அல்ல.
-
+இது துறைகளைப் புரிந்துகொள்வதற்கான ஆரம்ப வரைபடம் மட்டுமே; எந்தத் துறையும் மற்றதை விட உயர்ந்ததோ தாழ்ந்ததோ அல்ல (தரவரிசை அல்ல).
 NEXT_EN =
 Explore a related field, then check the exact college’s curriculum and admission route.
-
 NEXT_TA =
 தொடர்புள்ள இன்னொரு துறையைப் பார்க்கலாம். பின்னர் குறிப்பிட்ட கல்லூரியின் பாடத்திட்டத்தையும் சேர்க்கைவழியையும் சரிபார்க்கலாம்.
-
 LIMIT_EN =
 Examples use Anna University affiliated non-autonomous R2025 Revised 1 (2026) curricula; other institutions may differ.
-
 LIMIT_TA =
 உதாரணங்கள் அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத கல்லூரிகளின் R2025 திருத்தம் 1 (2026) பாடத்திட்டத்திலிருந்து. மற்ற நிறுவனங்களில் மாறலாம்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty. See register and linked evidence notes for URL/conditions.
 
@@ -634,34 +630,26 @@ CHANGE_TYPE = POLISH
 
 QUESTION_EN =
 What is Computer Science and Engineering (CSE)?
-
 QUESTION_TA =
 கணினி அறிவியல் மற்றும் பொறியியல் (CSE) என்றால் என்ன?
-
 ANSWER_EN =
 CSE studies how computing systems and software work.
-
 ANSWER_TA =
-கணினி அமைப்புகளும் மென்பொருளும் எப்படி வேலை செய்கின்றன என்பதைப் படிப்பதுதான் CSE (Computer Science and Engineering) பிரிவு.
-
+கணினி அமைப்புகளின் அடிப்படைகள் (Hardware Architecture) மற்றும் மென்பொருட்கள் (Software) எவ்வாறு உருவாக்கப்பட்டு இயங்குகின்றன என்பதை ஆழமாகக் கற்கும் பிரிவு CSE ஆகும்.
 DETAIL_EN =
 In the reviewed curriculum, examples include C programming, computer organisation, data structures, object-oriented programming, operating systems, algorithms, databases, networks, AI/ML and full-stack development. Practical work includes programming, lab-integrated courses and a final project/internship.
-
 DETAIL_TA =
-நாம் பார்த்த பாடத்திட்டத்தில் C மொழி நிரலாக்கம், கணினி அமைப்பு, தரவுக் கட்டமைப்புகள் (Data Structures), பொருள்நோக்கு நிரலாக்கம், இயக்க முறைமைகள், படிமுறைகள் (Algorithms), தரவுத்தளங்கள், வலையமைப்புகள், செயற்கை நுண்ணறிவு/இயந்திரக் கற்றல் மற்றும் full-stack development போன்ற பாடங்கள் உள்ளன. நிரலாக்க ஆய்வகங்கள், பாடத்துடன் இணைந்த செய்முறைப் பயிற்சிகள் மற்றும் இறுதி திட்டம்/பணிப்பயிற்சியும் இடம்பெறும்.
-
+முக்கியப் பாடங்கள் மற்றும் பயிற்சிகள்:
+- பாடங்கள்: C / C++ / Python Programming, Data Structures & Algorithms, Object-Oriented Programming (OOP), Operating Systems (OS), Database (DBMS), Computer Networks.
+- செய்முறைகள்: கோடிங் லேப் (Programming Labs), வெப் டெவலப்மென்ட் மற்றும் இறுதி ஆண்டு ப்ராஜெக்ட்.
 NEXT_EN =
 Explore a related field, then check the exact college’s curriculum and admission route.
-
 NEXT_TA =
 தொடர்புள்ள இன்னொரு துறையைப் பார்க்கலாம். பின்னர் குறிப்பிட்ட கல்லூரியின் பாடத்திட்டத்தையும் சேர்க்கைவழியையும் சரிபார்க்கலாம்.
-
 LIMIT_EN =
 Examples use Anna University affiliated non-autonomous R2025 Revised 1 (2026) curricula; other institutions may differ.
-
 LIMIT_TA =
 உதாரணங்கள் அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத கல்லூரிகளின் R2025 திருத்தம் 1 (2026) பாடத்திட்டத்திலிருந்து. மற்ற நிறுவனங்களில் மாறலாம்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`. See register and linked evidence notes for URL/conditions.
 
@@ -686,34 +674,24 @@ CHANGE_TYPE = POLISH
 
 QUESTION_EN =
 What is Information Technology (IT)?
-
 QUESTION_TA =
 தகவல் தொழில்நுட்பம் (IT) என்றால் என்ன?
-
 ANSWER_EN =
 IT focuses on building, using and managing software and information systems.
-
 ANSWER_TA =
-மென்பொருள் மற்றும் தகவல் அமைப்புகளை உருவாக்குவது, பயன்படுத்துவது மற்றும் நிர்வகிப்பதில் கவனம் செலுத்துவதுதான் IT (Information Technology) பிரிவு.
-
+நிறுவனங்கள் மற்றும் அன்றாடப் பயன்பாடுகளுக்குத் தேவையான மென்பொருட்கள், இணையதளங்கள் மற்றும் தகவல் அமைப்புகளை (Information Systems) உருவாக்கி நிர்வகிப்பதில் கவனம் செலுத்தும் பிரிவு IT ஆகும்.
 DETAIL_EN =
 Its reviewed curriculum overlaps strongly with CSE—programming, data structures, databases, operating systems, networks, machine learning and web/full-stack work—and also names IT essentials and web technologies. The exact difference is curriculum-specific, not decided by the label alone.
-
 DETAIL_TA =
-இதன் பாடத்திட்டம் CSE-யுடன் பல இடங்களில் ஒத்திருக்கிறது. நிரலாக்கம், தரவுக் கட்டமைப்புகள், தரவுத்தளங்கள், இயக்க முறைமைகள், வலையமைப்புகள் மற்றும் இயந்திரக் கற்றல் போன்ற பல பொதுவான பாடங்கள் இதில் உண்டு. அதோடு, தகவல் தொழில்நுட்ப அடிப்படைகள் மற்றும் இணையத் தொழில்நுட்பங்கள் போன்ற சிறப்புப் பகுதிகளும் இதில் வரும். CSE-க்கும் IT-க்கும் உள்ள துல்லியமான வேறுபாடு நீங்கள் பார்க்கும் பாடத்திட்டத்தைப் பொறுத்து மாறலாம். ஒரே பெயர் அல்லது ஒத்த பாடங்கள் இருப்பதால் இரண்டும் ஒரே படிப்பு என்று கருதக்கூடாது.
-
+CSE மற்றும் IT பாடத்திட்டங்கள் 80%–90% ஒரே மாதிரியானவை. Programming, Data Structures, Networks, Databases போன்றவை இரண்டிலும் உண்டு; IT-யில் இணையத் தொழில்நுட்பங்கள் (Web Technologies) மற்றும் பயன்பாட்டு மென்பொருட்களுக்கு கூடுதல் முக்கியத்துவம் இருக்கும்.
 NEXT_EN =
 Explore a related field, then check the exact college’s curriculum and admission route.
-
 NEXT_TA =
 தொடர்புள்ள இன்னொரு துறையைப் பார்க்கலாம். பின்னர் குறிப்பிட்ட கல்லூரியின் பாடத்திட்டத்தையும் சேர்க்கைவழியையும் சரிபார்க்கலாம்.
-
 LIMIT_EN =
 Examples use Anna University affiliated non-autonomous R2025 Revised 1 (2026) curricula; other institutions may differ.
-
 LIMIT_TA =
 உதாரணங்கள் அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத கல்லூரிகளின் R2025 திருத்தம் 1 (2026) பாடத்திட்டத்திலிருந்து. மற்ற நிறுவனங்களில் மாறலாம்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`. See register and linked evidence notes for URL/conditions.
 
@@ -738,34 +716,26 @@ CHANGE_TYPE = POLISH
 
 QUESTION_EN =
 What is Electronics and Communication Engineering (ECE)?
-
 QUESTION_TA =
 மின்னணு மற்றும் தகவல் தொடர்புப் பொறியியல் (ECE) என்றால் என்ன?
-
 ANSWER_EN =
 ECE combines electronics, signals and communication systems.
-
 ANSWER_TA =
-மின்னணுவியல் (Electronics), சமிக்ஞைகள் (Signals) மற்றும் தகவல் தொடர்பு அமைப்புகளை இணைத்துப் படிப்பதுதான் ECE (Electronics and Communication Engineering) பிரிவு.
-
+மின்னணுச் சுற்றுகள் (Electronic Circuits), மைக்ரோசிப்கள் (Microchips), சிக்னல்கள் மற்றும் செல்போன்/சாட்டிலைட் தகவல் தொடர்பு நெட்வொர்க்குகளைப் பற்றிப் படிக்கும் துறை ECE ஆகும்.
 DETAIL_EN =
 Example subjects include electronic devices, circuits, signals, digital design, analog/digital communication, microcontrollers, signal processing, VLSI and embedded/IoT systems. It also includes programming and data structures. Practical work includes circuits, communication, microcontroller and electronics labs.
-
 DETAIL_TA =
-மின்னணுச் சாதனங்கள், மின்சுற்றுகள், சமிக்ஞைகள், எண்ம வடிவமைப்பு (Digital Design), analog/digital communication, நுண்கட்டுப்படுத்திகள் (Microcontrollers), சமிக்ஞைச் செயலாக்கம், VLSI மற்றும் embedded/IoT systems போன்ற பகுதிகள் இதில் இடம்பெறும். இவற்றுடன் programming மற்றும் data structures-மும் இருக்கும். மின்சுற்று, தகவல் தொடர்பு, microcontroller மற்றும் electronics ஆய்வகங்களும் இதில் உள்ளன.
-
+முக்கியப் பாடங்கள் மற்றும் பயிற்சிகள்:
+- பாடங்கள்: Digital Electronics, Circuit Theory, Signals & Systems, Microprocessors & Microcontrollers, VLSI (Chip Design), Communication Networks.
+- செய்முறைகள்: சர்க்யூட் லேப், சிப் டிசைன் பயிற்சிகள், மற்றும் மென்பொருள் நிரலாக்கம் (Embedded C/Python).
 NEXT_EN =
 Explore a related field, then check the exact college’s curriculum and admission route.
-
 NEXT_TA =
 தொடர்புள்ள இன்னொரு துறையைப் பார்க்கலாம். பின்னர் குறிப்பிட்ட கல்லூரியின் பாடத்திட்டத்தையும் சேர்க்கைவழியையும் சரிபார்க்கலாம்.
-
 LIMIT_EN =
 Examples use Anna University affiliated non-autonomous R2025 Revised 1 (2026) curricula; other institutions may differ.
-
 LIMIT_TA =
 உதாரணங்கள் அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத கல்லூரிகளின் R2025 திருத்தம் 1 (2026) பாடத்திட்டத்திலிருந்து. மற்ற நிறுவனங்களில் மாறலாம்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`. See register and linked evidence notes for URL/conditions.
 
@@ -790,34 +760,26 @@ CHANGE_TYPE = POLISH
 
 QUESTION_EN =
 What is Electrical and Electronics Engineering (EEE)?
-
 QUESTION_TA =
 மின் மற்றும் மின்னணுப் பொறியியல் (EEE) என்றால் என்ன?
-
 ANSWER_EN =
 EEE focuses on electrical circuits, machines, power systems, control and power electronics, while also covering electronics and computing.
-
 ANSWER_TA =
-மின்சுற்றுகள், மின் இயந்திரங்கள், மின்சக்தி அமைப்புகள், கட்டுப்பாட்டு முறைமைகள் மற்றும் மின்சக்தி மின்னணுவியல் (Power Electronics) ஆகியவற்றை மையமாகக் கொண்டது EEE (Electrical and Electronics Engineering) பிரிவு. இதில் மின்னணுவியல் மற்றும் கணினிப் பகுதிகளும் சேர்ந்து வரும்.
-
+மின் உற்பத்தி (Power Generation), மின் பரிமாற்றம் (Transmission), மோட்டார்கள், மின்சார வாகனங்கள் (EV) மற்றும் மின் கட்டுப்பாட்டு அமைப்புகள் பற்றிப் படிக்கும் துறை EEE ஆகும்.
 DETAIL_EN =
 Example subjects include circuit analysis, electrical machines, transmission/distribution, control, measurements, protection, microcontrollers and high-voltage engineering. Practical work includes machines, circuits, control/instrumentation, power-electronics and power-system labs.
-
 DETAIL_TA =
-மின்சுற்றுப் பகுப்பாய்வு, மின் இயந்திரங்கள், மின்சாரக் கடத்தல் மற்றும் விநியோகம், கட்டுப்பாடு, அளவீடு, பாதுகாப்பு, நுண்கட்டுப்படுத்திகள் மற்றும் உயர் மின்னழுத்தப் பொறியியல் போன்ற பாடங்கள் இதில் உள்ளன. மின் இயந்திரங்கள், மின்சுற்றுகள், கட்டுப்பாடு/அளவீடு, power electronics மற்றும் power systems தொடர்பான ஆய்வகப் பயிற்சிகளும் இடம்பெறும்.
-
+முக்கியப் பாடங்கள் மற்றும் பயிற்சிகள்:
+- பாடங்கள்: Electric Circuits, Power Systems, Electrical Machines, Control Systems, Power Electronics.
+- செய்முறைகள்: எலக்ட்ரிக்கல் மெஷின்ஸ் லேப், பவர் எலக்ட்ரானிக்ஸ் மற்றும் எலக்ட்ரிக் வாகனத் தொழில்நுட்பப் பயிற்சிகள்.
 NEXT_EN =
 Explore a related field, then check the exact college’s curriculum and admission route.
-
 NEXT_TA =
 தொடர்புள்ள இன்னொரு துறையைப் பார்க்கலாம். பின்னர் குறிப்பிட்ட கல்லூரியின் பாடத்திட்டத்தையும் சேர்க்கைவழியையும் சரிபார்க்கலாம்.
-
 LIMIT_EN =
 Examples use Anna University affiliated non-autonomous R2025 Revised 1 (2026) curricula; other institutions may differ.
-
 LIMIT_TA =
 உதாரணங்கள் அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத கல்லூரிகளின் R2025 திருத்தம் 1 (2026) பாடத்திட்டத்திலிருந்து. மற்ற நிறுவனங்களில் மாறலாம்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -842,34 +804,26 @@ CHANGE_TYPE = POLISH
 
 QUESTION_EN =
 What is Mechanical Engineering?
-
 QUESTION_TA =
-இயந்திரப் பொறியியல் என்றால் என்ன?
-
+இயந்திரப் பொறியியல் (Mechanical Engineering) என்றால் என்ன?
 ANSWER_EN =
 Mechanical studies machines, motion, forces, heat, materials, design and manufacturing.
-
 ANSWER_TA =
-இயந்திரங்கள், இயக்கம், விசைகள், வெப்பம், பொருட்கள், வடிவமைப்பு மற்றும் உற்பத்தி ஆகியவற்றைப் படிப்பதுதான் Mechanical Engineering.
-
+வாகனங்கள், தொழிற்சாலை இயந்திரங்கள் மற்றும் பல்வேறு கருவிகளின் வடிவமைப்பு (Design), இயக்கம், உற்பத்தி (Manufacturing) மற்றும் பராமரிப்பு பற்றிப் படிக்கும் துறை Mechanical Engineering ஆகும்.
 DETAIL_EN =
 Examples include mechanics, thermodynamics, strength of materials, machine dynamics, fluid mechanics, manufacturing, machine design, heat transfer and computer-aided modelling. Practical work includes makerspace, manufacturing, measurement, modelling and project/internship work.
-
 DETAIL_TA =
-mechanics, thermodynamics, strength of materials, machine dynamics, fluid mechanics, manufacturing, machine design, heat transfer மற்றும் computer-aided modelling போன்ற பகுதிகள் இதில் உள்ளன. makerspace, manufacturing, measurement, modelling, project மற்றும் internship போன்ற செய்முறைகளும் இடம்பெறும்.
-
+முக்கியப் பாடங்கள் மற்றும் பயிற்சிகள்:
+- பாடங்கள்: Thermodynamics, Fluid Mechanics, Strength of Materials, Machine Design, CAD / CAM (கணினி வழி வடிவமைப்பு).
+- செய்முறைகள்: ஒர்க்‌ஷாப் (Workshops), இயந்திரப் பட்டறைப் பயிற்சி, 3D மாடலிங் மற்றும் உற்பத்திப் பயிற்சிகள்.
 NEXT_EN =
 Explore a related field, then check the exact college’s curriculum and admission route.
-
 NEXT_TA =
 தொடர்புள்ள இன்னொரு துறையைப் பார்க்கலாம். பின்னர் குறிப்பிட்ட கல்லூரியின் பாடத்திட்டத்தையும் சேர்க்கைவழியையும் சரிபார்க்கலாம்.
-
 LIMIT_EN =
 Examples use Anna University affiliated non-autonomous R2025 Revised 1 (2026) curricula; other institutions may differ.
-
 LIMIT_TA =
 உதாரணங்கள் அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத கல்லூரிகளின் R2025 திருத்தம் 1 (2026) பாடத்திட்டத்திலிருந்து. மற்ற நிறுவனங்களில் மாறலாம்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -894,34 +848,26 @@ CHANGE_TYPE = POLISH
 
 QUESTION_EN =
 What is Civil Engineering?
-
 QUESTION_TA =
-கட்டடவியல் பொறியியல் என்றால் என்ன?
-
+கட்டுமானப் பொறியியல் (Civil Engineering) என்றால் என்ன?
 ANSWER_EN =
 Civil studies the built environment and infrastructure.
-
 ANSWER_TA =
-கட்டடங்கள், சாலைகள், நீர் அமைப்புகள் மற்றும் பிற உள்கட்டமைப்புகளைப் பற்றிப் படிப்பதுதான் Civil Engineering.
-
+கட்டிடங்கள், பாலங்கள், சாலைகள், அணைகள், குடிநீர் மற்றும் கழிவுநீர் மேலாண்மை போன்ற உள்கட்டமைப்புகளை (Infrastructure) திட்டமிட்டு, வடிவமைத்து, உருவாக்கும் துறை Civil Engineering ஆகும்.
 DETAIL_EN =
 Examples include surveying, fluid mechanics, geology, structural analysis, soil mechanics, concrete, water supply, highways, foundations, wastewater, and concrete/steel design. Practical work includes surveying, materials, fluids, soil, environmental and drawing labs, plus field/project work.
-
 DETAIL_TA =
-நில அளவை (Surveying), திரவ இயக்கவியல், நிலவியல், கட்டமைப்புப் பகுப்பாய்வு, மண் இயியல், கான்கிரீட், குடிநீர், நெடுஞ்சாலைகள், அடித்தளம், கழிவுநீர் மற்றும் concrete/steel design போன்ற பகுதிகள் இதில் உள்ளன. நில அளவை, கட்டுமானப் பொருட்கள், திரவங்கள், மண், சுற்றுச்சூழல் மற்றும் drawing labs-உடன் களப்பணி மற்றும் திட்டப்பணிகளும் இடம்பெறும்.
-
+முக்கியப் பாடங்கள் மற்றும் பயிற்சிகள்:
+- பாடங்கள்: Surveying (நில அளவீடு), Structural Analysis, Building Materials & Concrete Technology, Soil Mechanics, Environmental Engineering.
+- செய்முறைகள்: சர்வேயிங் லேப், கட்டுமானப் பொருட்கள் உறுதித்தன்மை சோதனை, மற்றும் வரைபட வடிவமைப்பு (AutoCAD).
 NEXT_EN =
 Explore a related field, then check the exact college’s curriculum and admission route.
-
 NEXT_TA =
 தொடர்புள்ள இன்னொரு துறையைப் பார்க்கலாம். பின்னர் குறிப்பிட்ட கல்லூரியின் பாடத்திட்டத்தையும் சேர்க்கைவழியையும் சரிபார்க்கலாம்.
-
 LIMIT_EN =
 Examples use Anna University affiliated non-autonomous R2025 Revised 1 (2026) curricula; other institutions may differ.
-
 LIMIT_TA =
 உதாரணங்கள் அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத கல்லூரிகளின் R2025 திருத்தம் 1 (2026) பாடத்திட்டத்திலிருந்து. மற்ற நிறுவனங்களில் மாறலாம்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -946,38 +892,27 @@ CHANGE_TYPE = POLISH
 
 QUESTION_EN =
 What are AI & Data Science and AI & Machine Learning branches?
-
 QUESTION_TA =
-செயற்கை நுண்ணறிவு மற்றும் தரவு அறிவியல், செயற்கை நுண்ணறிவு மற்றும் இயந்திரக் கற்றல் பிரிவுகள் என்றால் என்ன?
-
+AI & Data Science மற்றும் AI & Machine Learning பிரிவுகள் எதைப் பற்றிய படிப்புகள்?
 ANSWER_EN =
 Both are computing programmes with programming, data structures, algorithms, databases and maths.
-
 ANSWER_TA =
-AI & Data Science மற்றும் AI & ML இரண்டும் programming, data structures, algorithms, databases மற்றும் maths ஆகியவற்றை அடிப்படையாகக் கொண்ட கணினிப் படிப்புகள்.
-
+இவை இரண்டும் கணினித் துறையின் (Computing) சிறப்புப் பிரிவுகளாகும். அடிப்படை நிரலாக்கத்தோடு சேர்த்து, கணிதப் புள்ளிவிவரங்கள் (Statistics) மற்றும் பெருந்தரவுகளை (Big Data) ஆய்வு செய்து தானியங்கி முடிவுகளை எடுக்கும் வழிமுறைகளை இவை கற்பிக்கின்றன.
 DETAIL_EN =
 In the same reviewed regulation, AI & Data Science places named emphasis on Python for data science, exploratory data analysis, probability/statistics, data privacy, machine learning, NLP and data-oriented systems. CSE (AI & ML) keeps a CSE base—software engineering, operating systems, compiler design, databases and networks—then adds Python for data science, AI, big-data analytics, machine learning, deep learning and an AI engineering lab. They overlap; neither title alone proves a better course or career.
-
 DETAIL_TA =
-நாம் பார்த்த ஒரே விதிமுறைப் பாடத்திட்டத்தில், AI & Data Science தரவுப் பகுப்பாய்வு, probability/statistics, data privacy, machine learning, NLP மற்றும் data-oriented systems போன்ற பகுதிகளில் அதிக கவனம் செலுத்துகிறது.
-
-CSE (AI & ML) ஒரு CSE அடிப்படையை வைத்துக் கொண்டு software engineering, operating systems, compiler design, databases மற்றும் networks ஆகியவற்றுடன் AI, big-data analytics, machine learning, deep learning மற்றும் AI engineering lab போன்றவற்றைச் சேர்க்கிறது.
-
-இரண்டிலும் பல பொதுப் பகுதிகள் உள்ளன. பெயரை மட்டும் வைத்து ஒன்று மற்றொன்றை விட சிறந்தது என்று சொல்ல முடியாது.
-
+முக்கிய வேறுபாடுகள்:
+- AI & Data Science: தரவு பகுப்பாய்வு (Data Analysis), கணித மாதிரிகள் மற்றும் வணிக முடிவுகளுக்குத் தேவையான புள்ளிவிவரங்களில் கூடுதல் கவனம் செலுத்துகிறது.
+- CSE (AI & ML): கணினி அறிவியல் அடிப்படைகளுடன் (Software Engineering, Operating Systems) செயற்கை நுண்ணறிவு மற்றும் ஆழ்தொழில்நுட்ப இயந்திரக் கற்றலை (Deep Learning) இணைத்துப் படிக்கிறது.
+(பெயரை மட்டுமே பார்க்காமல், இரண்டு படிப்புகளின் பாடத்திட்டங்களையும் ஒப்பிட்டுப் பார்க்க வேண்டும்).
 NEXT_EN =
 Explore a related field, then check the exact college’s curriculum and admission route.
-
 NEXT_TA =
 தொடர்புள்ள இன்னொரு துறையைப் பார்க்கலாம். பின்னர் குறிப்பிட்ட கல்லூரியின் பாடத்திட்டத்தையும் சேர்க்கைவழியையும் சரிபார்க்கலாம்.
-
 LIMIT_EN =
 Examples use Anna University affiliated non-autonomous R2025 Revised 1 (2026) curricula; other institutions may differ.
-
 LIMIT_TA =
 உதாரணங்கள் அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத கல்லூரிகளின் R2025 திருத்தம் 1 (2026) பாடத்திட்டத்திலிருந்து. மற்ற நிறுவனங்களில் மாறலாம்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -1002,34 +937,24 @@ CHANGE_TYPE = POLISH
 
 QUESTION_EN =
 What will I study in each engineering branch?
-
 QUESTION_TA =
-ஒவ்வொரு பொறியியல் பிரிவிலும் என்ன படிப்பேன்?
-
+குறிப்பிட்ட பொறியியல் பிரிவில் என்னென்ன பாடங்கள் வரும் என்பதை எப்படி அறிவது?
 ANSWER_EN =
 The subjects depend on the branch: computing includes programming and systems; ECE includes circuits and communication; EEE includes power and machines; Mechanical includes design and manufacturing; Civil includes structures, soil and water.
-
 ANSWER_TA =
-நீங்கள் எந்தப் பிரிவைத் தேர்வு செய்கிறீர்கள் என்பதைப் பொறுத்து பாடங்கள் மாறும். கணினிப் பிரிவுகளில் programming மற்றும் computer systems இருக்கும். ECE-இல் circuits மற்றும் communication. EEE-இல் power systems மற்றும் electrical machines. Mechanical-இல் design மற்றும் manufacturing. Civil-இல் structures, soil மற்றும் water-related subjects போன்றவை இருக்கும்.
-
+பொதுவான வழிகாட்டலைத் தாண்டி, நீங்கள் சேர விரும்பும் குறிப்பிட்ட கல்லூரியின் அதிகாரப்பூர்வப் பாடத்திட்டத்தை (Syllabus / Curriculum) இணையதளத்தில் பதிவிறக்கம் செய்து பார்க்க வேண்டும்.
 DETAIL_EN =
 Check semesters, core subjects, laboratory-integrated courses, electives, project/internship, and whether the college is autonomous. Do not assume a syllabus from a similar branch name.
-
 DETAIL_TA =
-கல்லூரி மற்றும் பாடத்திட்டப் பதிப்பைப் பொறுத்து உள்ளடக்கம் மாறலாம். அதனால் குறிப்பிட்ட கல்லூரியின் semesters, core subjects, labs, electives, project/internship மற்றும் அந்தக் கல்லூரி autonomous-ஆ இல்லையா என்பதைக் பார்க்க வேண்டும். Branch பெயர் மட்டும் ஒத்திருக்கிறது என்பதால் syllabus-மும் ஒரே மாதிரி இருக்கும் என்று கருத வேண்டாம்.
-
+கவனிக்க வேண்டியவை: செமஸ்டர் வாரியான முக்கியப் பாடங்கள் (Core Subjects), செய்முறை ஆய்வகங்கள் (Labs), விருப்பப் பாடங்கள் (Electives), மற்றும் கல்லூரி தன்னாட்சி (Autonomous) பெற்றதா என்பதைப் பார்த்து முடிவெடுக்கவும்.
 NEXT_EN =
 Explore a related field, then check the exact college’s curriculum and admission route.
-
 NEXT_TA =
 தொடர்புள்ள இன்னொரு துறையைப் பார்க்கலாம். பின்னர் குறிப்பிட்ட கல்லூரியின் பாடத்திட்டத்தையும் சேர்க்கைவழியையும் சரிபார்க்கலாம்.
-
 LIMIT_EN =
 Examples use Anna University affiliated non-autonomous R2025 Revised 1 (2026) curricula; other institutions may differ.
-
 LIMIT_TA =
 உதாரணங்கள் அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத கல்லூரிகளின் R2025 திருத்தம் 1 (2026) பாடத்திட்டத்திலிருந்து. மற்ற நிறுவனங்களில் மாறலாம்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -1056,23 +981,21 @@ QUESTION_EN =
 CSE vs AI & Data Science --- which should I choose in TNEA?
 
 QUESTION_TA =
-TNEA-வில் CSE அல்லது AI & Data Science — எதைத் தேர்வு செய்யலாம்?
+TNEA கலந்தாய்வில் CSE அல்லது AI & Data Science — எதைத் தேர்வு செய்யலாம்?
 
 ANSWER_EN =
 Consider CSE for broad computing exploration, or AI & Data Science if you want sustained data/AI study; compare the actual curricula before choosing through TNEA.
 
 ANSWER_TA =
-பரந்த கணினி அடிப்படையைப் படிக்க விரும்பினால் CSE ஒரு நல்ல வழியாக இருக்கலாம். தரவு, புள்ளியியல் மற்றும் செயற்கை நுண்ணறிவு சார்ந்த பகுதிகளில் தொடர்ந்து ஆர்வம் இருந்தால் AI & Data Science-ஐயும் பார்க்கலாம். TNEA-வில் தேர்வு செய்வதற்கு முன், நீங்கள் பார்க்கும் கல்லூரிகளின் உண்மையான பாடத்திட்டங்களை ஒப்பிடுவது முக்கியம்.
+இரண்டுமே கணினித் துறை சார்ந்த சிறந்த படிப்புகள்தான்:
+- கணினி அறிவியலின் அனைத்துப் பொதுவான அடிப்படைகளையும் விரிவாகப் படிக்க விரும்பினால் CSE தேர்வு செய்யலாம்.
+- கணிதப் புள்ளிவிவரங்கள் மற்றும் தரவு ஆய்வில் (Data Analytics & Machine Learning) பிரத்யேக ஆர்வம் இருந்தால் AI & Data Science தேர்வு செய்யலாம்.
 
 DETAIL_EN =
 In the reviewed pair, CSE gives the broader named computing base across systems, software, algorithms, databases and networks, with AI/ML included. AI & DS shares that base but makes data analysis, statistics, privacy, machine learning, NLP and data systems more central. Prefer CSE if you want broader computing exploration; consider AI & DS if you already want sustained data/AI study. Before choosing, compare the target colleges’ actual syllabus, labs, faculty/support and cost. This is guidance, not a personal verdict.
 
 DETAIL_TA =
-நாம் பார்த்த பாடத்திட்டங்களில் CSE கணினி அமைப்புகள், மென்பொருள், படிமுறைகள், தரவுத்தளங்கள், வலையமைப்புகள் போன்ற பரந்த கணினி அடிப்படையைக் கொண்டுள்ளது; AI/ML-மும் இதில் இடம்பெறும்.
-
-AI & Data Science-லும் பல பொதுப் பகுதிகள் உள்ளன; ஆனால் தரவுப் பகுப்பாய்வு, புள்ளியியல், data privacy, machine learning, NLP மற்றும் data systems போன்றவற்றில் அதிக கவனம் உள்ளது.
-
-அதனால் “எது சிறந்தது?” என்று மட்டும் பார்க்காமல், நீங்கள் படிக்க விரும்பும் பகுதிகள், கல்லூரியின் syllabus, labs, learning support மற்றும் செலவு ஆகியவற்றை ஒப்பிடலாம். இது உங்களுக்கான இறுதித் தீர்ப்பு அல்ல.
+கலந்தாய்வு சாய்ஸ் ஃபில்லிங்கில் (Choice Filling) இரண்டையுமே உங்கள் விருப்ப வரிசையில் அடுத்தடுத்து வைத்துக்கொள்ளலாம். குறிப்பிட்ட கல்லூரியின் பாடத்திட்டம் மற்றும் ஆய்வக வசதிகளையும் ஒப்பிட்டுப் பார்ப்பது நல்லது.
 
 NEXT_EN =
 You can start by comparing the named programmes’ subjects and practical work at the colleges you are considering, then check admission requirements.
@@ -1085,7 +1008,6 @@ Comparison is limited to the reviewed Anna University affiliated non-autonomous 
 
 LIMIT_TA =
 ஒப்பீடு ஆய்வு செய்த அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத R2025 திருத்தம் 1 பாடத்திட்டங்களுக்கு மட்டுமே. இது தரவரிசையோ வேலை உறுதியோ அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -1110,36 +1032,24 @@ CHANGE_TYPE = POLISH
 
 QUESTION_EN =
 Is IT very different from CSE? The cutoffs look similar.
-
 QUESTION_TA =
-IT-க்கும் CSE-க்கும் நிறைய வேறுபாடு உள்ளதா? கட்-ஆஃப் மதிப்பெண்கள் ஒரே மாதிரி தெரிகின்றன.
-
+IT-க்கும் CSE-க்கும் பெரிய வித்தியாசம் உள்ளதா? கலந்தாய்வில் கட்-ஆஃப் மதிப்பெண்கள் ஒரே மாதிரி உள்ளதே?
 ANSWER_EN =
 In the equivalent reviewed curricula, IT and CSE overlap substantially in programming, databases, systems and networks, but they are not identical. Similar cutoffs do not establish similar curricula.
-
 ANSWER_TA =
-IT-க்கும் CSE-க்கும் பல பொதுப் பாடங்கள் இருக்கலாம். ஆனால் இரண்டும் ஒரே படிப்பு அல்ல. கட்-ஆஃப் மதிப்பெண்கள் ஒத்திருக்கிறது என்பதால் பாடத்திட்டமும் ஒரே மாதிரி என்று சொல்ல முடியாது.
-
+இல்லை, பெரிய வித்தியாசம் இல்லை. பெரும்பாலான பல்கலைக்கழகப் பாடத்திட்டங்களில் CSE மற்றும் IT இரண்டிலும் 80%–90% பாடங்கள், செய்முறைகள் மற்றும் வேலைவாய்ப்புகள் பொதுவானவையே.
 DETAIL_EN =
 CSE names more computer organisation, algorithms and core computing theory; IT names IT essentials, web technologies and information-system application. Similar historical cutoffs do **not** make curricula identical; admission demand and curriculum content are separate facts.
-
 DETAIL_TA =
-நாம் பார்த்த பாடத்திட்டங்களில் CSE கணினி அமைப்பு, algorithms மற்றும் core computing theory போன்ற பகுதிகளை அதிகம் பெயரிடுகிறது. IT-ல் IT essentials, web technologies மற்றும் information-system applications போன்ற பகுதிகள் பெயரிடப்பட்டுள்ளன.
-
-இன்னொரு முக்கியமான விஷயம்: historical cutoff என்பது சேர்க்கைத் தேவையைப் பற்றிய ஒரு தகவல்; பாடத்திட்டம் என்ன கற்பிக்கிறது என்பது வேறு தகவல். இரண்டையும் ஒன்றாகக் கருதக்கூடாது.
-
+கட்-ஆஃப் மதிப்பெண்களும் வேலைவாய்ப்பு வாய்ப்புகளும் ஏறக்குறைய சமமாகவே இருக்கும். எனவே கல்லூரியைத் தேர்வு செய்யும்போது CSE கிடைக்கவில்லை என்றால் தயங்காமல் IT-ஐ அடுத்த விருப்பமாகத் தேர்ந்தெடுக்கலாம்.
 NEXT_EN =
 You can start by comparing the named programmes’ subjects and practical work at the colleges you are considering, then check admission requirements.
-
 NEXT_TA =
 நீங்கள் பார்க்கும் கல்லூரிகளில் IT மற்றும் CSE பாடத்திட்டங்களை நேரடியாக ஒப்பிட்டு, அதன் பிறகு சேர்க்கைத் தேவைகளைப் பாருங்கள்.
-
 LIMIT_EN =
 Comparison is limited to the reviewed Anna University affiliated non-autonomous R2025 Revised 1 curricula; it is not a ranking or employment promise.
-
 LIMIT_TA =
 ஒப்பீடு ஆய்வு செய்த அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத R2025 திருத்தம் 1 பாடத்திட்டங்களுக்கு மட்டுமே. இது தரவரிசையோ வேலை உறுதியோ அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E14 (**TNEA Cutoff Portal**, Government of Tamil Nadu / Directorate of Technical Education, records 2021–2025) — Search by year, college, programme and applicable admission dimensions. See register and linked evidence notes for URL/conditions.
 
@@ -1164,38 +1074,28 @@ CHANGE_TYPE = POLISH
 
 QUESTION_EN =
 How different are CSE, IT, AI & Data Science and AI & ML?
-
 QUESTION_TA =
-CSE, IT, AI & Data Science, AI & ML — இந்த நான்கும் எப்படி வேறுபடுகின்றன?
-
+CSE, IT, AI & Data Science, AI & ML — இந்த நான்கும் எவ்வாறு வேறுபடுகின்றன?
 ANSWER_EN =
 In the reviewed curricula, CSE provides a broad computing foundation; IT emphasises web/information systems; AI & Data Science emphasises data analysis and statistics with AI; CSE (AI & ML) combines a CSE base with more AI/ML study.
-
 ANSWER_TA =
-இந்த நான்கு படிப்புகளிலும் பல பொதுவான கணினிப் பாடங்கள் இருக்கும். ஆனால் அவற்றின் கவனம் கொஞ்சம் வேறுபடும்.
-
-CSE பரந்த கணினி அடிப்படையைக் கொண்டது. IT இணையம் மற்றும் தகவல் அமைப்புகளை அதிகம் வலியுறுத்துகிறது. AI & Data Science தரவுப் பகுப்பாய்வு, புள்ளியியல் மற்றும் AI சார்ந்த பகுதிகளில் அதிக கவனம் செலுத்துகிறது. நாம் பார்த்த CSE (AI & ML) பாடத்திட்டம் CSE அடிப்படையுடன் AI மற்றும் Machine Learning பகுதிகளை மேலும் சேர்க்கிறது.
-
+நான்கிலும் கோடிங் (Coding), தரவுத்தளங்கள் (Databases), மற்றும் கணிதம் பொதுவானவை.
+- CSE: கணினி அமைப்புகள், மென்பொருள், வன்பொருள் இணைப்பு மற்றும் ஆழமான கோட்பாட்டு அடிப்படைகள்.
+- IT: பயன்பாட்டு மென்பொருட்கள், வெப் டெக்னாலஜி மற்றும் நிறுவனத் தகவல் மேலாண்மை.
+- AI & Data Science: கணிதப் புள்ளிவிவரங்கள், தரவு பகுப்பாய்வு மற்றும் கணிப்பு மாதிரிகள்.
+- AI & ML: செயற்கை நுண்ணறிவு வழிமுறைகள், தானியங்கி நிரலாக்கம் மற்றும் இயந்திரக் கற்றல்.
 DETAIL_EN =
 All four share programming and substantial computing material. The reviewed AI & ML example is specifically CSE (AI & ML), not proof about every programme with a similar name. Compare the exact institution and regulation; these are study differences, not separate job guarantees.
-
 DETAIL_TA =
-நான்கிலும் programming மற்றும் பல computing subjects பொதுவாக இருக்கும். இங்கு “AI & ML” என்று கூறப்படும் உதாரணம் குறிப்பாக CSE (AI & ML) பாடத்திட்டத்தைச் சார்ந்தது; இதை ஒத்த பெயருள்ள எல்லா படிப்புகளுக்கும் பொதுவாகப் பயன்படுத்த முடியாது.
-
-அதனால் பெயரை மட்டும் வைத்து முடிவு செய்யாமல், குறிப்பிட்ட கல்லூரி, curriculum regulation, subjects மற்றும் practical work ஆகியவற்றை ஒப்பிடுங்கள். இவை படிப்பு வேறுபாடுகள் மட்டுமே; தனித்தனி வேலை உத்தரவாதங்கள் அல்ல.
-
+நான்கிற்கும் நிரலாக்க வேலைவாய்ப்புகள் பொதுவானதே; துறைப் பெயரைக் காட்டிலும் நீங்கள் கற்கும் திறன்களே முக்கியம்.
 NEXT_EN =
 You can start by comparing the named programmes’ subjects and practical work at the colleges you are considering, then check admission requirements.
-
 NEXT_TA =
 நீங்கள் பார்க்கும் கல்லூரிகளில் இந்த நான்கு படிப்புகளின் syllabus மற்றும் practical work-ஐ ஒப்பிட்டு, பின்னர் சேர்க்கைத் தேவைகளைப் பாருங்கள்.
-
 LIMIT_EN =
 Comparison is limited to the reviewed Anna University affiliated non-autonomous R2025 Revised 1 curricula; it is not a ranking or employment promise.
-
 LIMIT_TA =
 ஒப்பீடு ஆய்வு செய்த அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத R2025 திருத்தம் 1 பாடத்திட்டங்களுக்கு மட்டுமே. இது தரவரிசையோ வேலை உறுதியோ அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -1220,36 +1120,28 @@ CHANGE_TYPE = POLISH
 
 QUESTION_EN =
 What should I check in a branch curriculum before choosing it?
-
 QUESTION_TA =
-ஒரு பிரிவைத் தேர்வு செய்யும் முன் அதன் பாடத்திட்டத்தில் என்ன பார்க்க வேண்டும்?
-
+ஒரு பொறியியல் பிரிவைத் தேர்வு செய்யும் முன் அதன் பாடத்திட்டத்தில் எவற்றைச் சரிபார்க்க வேண்டும்?
 ANSWER_EN =
 Check: applicable regulation/year; core subjects by semester; lab or lab-integrated hours; maths/statistics load; programming/drawing/workshop/fieldwork; electives; internship/project; prerequisites. Also, whether the curriculum belongs to that exact institution.
-
 ANSWER_TA =
-ஒரு பிரிவைத் தேர்வு செய்வதற்கு முன், அந்தப் பாடத்திட்டத்தை கொஞ்சம் முழுமையாகப் பாருங்கள். எந்த ஆண்டு/விதிமுறைப் பாடத்திட்டம், ஒவ்வொரு பருவத்தின் முக்கியப் பாடங்கள், ஆய்வகங்கள், கணிதம்/புள்ளியியல் அளவு, programming/drawing/workshop/fieldwork, electives, project/internship மற்றும் prerequisites ஆகியவை என்ன என்று கவனிக்கலாம்.
-
-முக்கியமாக, நீங்கள் பார்க்கும் syllabus அந்தக் கல்லூரிக்கே பொருந்துகிறதா என்பதையும் சரிபார்க்க வேண்டும்.
-
+முக்கியமாக 4 விஷயங்களைச் சரிபார்க்க வேண்டும்:
+1. முதல் 4 செமஸ்டர்களில் வரும் அடிப்படைக் கணிதம் மற்றும் முக்கியப் பாடங்கள்.
+2. ஆய்வகங்கள் (Labs) மற்றும் செய்முறை பயிற்சிகளின் எண்ணிக்கை.
+3. உயர் செமஸ்டர்களில் உங்களுக்குப் பிடித்த துறைகளைத் தேர்வு செய்யக்கூடிய விருப்பப் பாடங்கள் (Professional Electives).
+4. தொழிற்துறைப் பயிற்சி மற்றும் இன்டர்ன்ஷிப் (Internship) வாய்ப்புகள்.
 DETAIL_EN =
 Write down what attracts or concerns you.
-
 DETAIL_TA =
 அதில் உங்களுக்கு ஆர்வம் தரும் விஷயங்களையும், சிரமமாகத் தோன்றும் விஷயங்களையும் தனியாக எழுதிப் பாருங்கள். இது இரண்டு அல்லது மூன்று பிரிவுகளை ஒப்பிட எளிதாக இருக்கும்.
-
 NEXT_EN =
 You can start by comparing the named programmes’ subjects and practical work at the colleges you are considering, then check admission requirements.
-
 NEXT_TA =
 நீங்கள் பார்க்கும் இரண்டு படிப்புகளின் subjects மற்றும் practical work-ஐ ஒப்பிட்டு, அதன் பிறகு சேர்க்கைத் தேவைகளைப் பார்க்கலாம்.
-
 LIMIT_EN =
 Comparison is limited to the reviewed Anna University affiliated non-autonomous R2025 Revised 1 curricula; it is not a ranking or employment promise.
-
 LIMIT_TA =
 ஒப்பீடு ஆய்வு செய்த அண்ணா பல்கலைக்கழக இணைப்பு பெற்ற, தன்னாட்சி இல்லாத R2025 திருத்தம் 1 பாடத்திட்டங்களுக்கு மட்டுமே. இது தரவரிசையோ வேலை உறுதியோ அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty. See register and linked evidence notes for URL/conditions.
 
@@ -1277,34 +1169,24 @@ CHANGED_FIELDS = ANSWER_EN, DETAIL_EN, DETAIL_TA
 
 QUESTION_EN =
 Everyone's running to CSE. Is Mechanical or Civil still worth taking?
-
 QUESTION_TA =
-எல்லோரும் CSE-ஐ நோக்கிச் செல்கிறார்கள். இயந்திரப் பொறியியல் அல்லது கட்டடவியல் இன்னும் தேர்வு செய்யத் தகுந்ததா?
-
+எல்லோரும் CSE-யை மட்டுமே தேர்வு செய்கிறார்களே; Mechanical அல்லது Civil படிப்பது இன்னும் நல்ல முடிவா?
 ANSWER_EN =
 Mechanical or Civil can be worth exploring if their subjects and practical work interest you and the college supports that learning. CSE’s popularity alone is not a reason to reject them.
-
 ANSWER_TA =
-அந்தப் பாடங்களும் செய்முறைகளும் உங்களுக்கு ஆர்வமளித்து, கல்லூரியில் உரிய கற்றல் உதவி இருந்தால் இயந்திரப் பொறியியல் அல்லது கட்டடவியலை ஆராயலாம். CSE பிரபலமாக இருப்பதால் மட்டும் இவற்றை நிராகரிக்க வேண்டியதில்லை.
-
+ஆம், தாராளமாகத் தேர்வு செய்யலாம். மனித சமூகம் இயங்குவதற்கு கட்டிடங்கள், சாலைகள், மின்சாரம், வாகனங்கள் மற்றும் உற்பத்தித் தொழிற்சாலைகள் எப்போதும் தேவை.
 DETAIL_EN =
 Explore them if their subjects and practical work interest you and the college supports that learning. Avoid choosing them only as a fallback or rejecting them only because CSE is popular. No branch or degree guarantees employment.
-
 DETAIL_TA =
-இயந்திரப் பொறியியலில் வடிவமைப்பு, இயந்திரங்கள், வெப்ப அமைப்புகள் மற்றும் உற்பத்தி போன்ற பகுதிகள் இருக்கும். கட்டடவியலில் கட்டமைப்பு, மண், நீர், போக்குவரத்து மற்றும் கட்டுமானம் போன்ற பகுதிகள் இருக்கும். “CSE கிடைக்கவில்லை” என்பதற்காக மட்டும் இந்தப் பிரிவுகளைத் தேர்வு செய்ய வேண்டாம். அதேபோல் CSE பிரபலமாக இருப்பதால் மட்டும் இவற்றை நிராகரிக்கவும் வேண்டாம். எந்தப் பட்டமும் வேலைக்கு உத்தரவாதம் அல்ல.
-
+பிறர் செய்கிறார்கள் என்பதற்காக உங்கள் விருப்பத்திற்கு மாறாக கணினிப் பிரிவைத் தேர்ந்தெடுக்க வேண்டியதில்லை. Mechanical அல்லது Civil துறையில் ஆர்வம் இருந்து, அதனுடன் தொடர்புடைய நவீன கணினித் திறன்களையும் (CAD, Automation, Coding) கற்றுக்கொண்டால் சிறந்த வாய்ப்புகளை உருவாக்க முடியும்.
 NEXT_EN =
 You can start by comparing the study activities you prefer; keep admission feasibility separate from interest.
-
 NEXT_TA =
 எந்த வகை படிப்புப் பணிகள் உங்களுக்கு ஆர்வம் தருகின்றன என்று ஒப்பிடுங்கள். இடம் கிடைப்பதையும் ஆர்வத்தையும் தனித்தனியாகப் பார்க்கலாம்.
-
 LIMIT_EN =
 No aptitude, placement or admission outcome can be inferred.
-
 LIMIT_TA =
 திறன், வேலைவாய்ப்பு அல்லது சேர்க்கை முடிவை இதிலிருந்து ஊகிக்க முடியாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -1332,34 +1214,24 @@ CHANGED_FIELDS = DETAIL_EN, LIMIT_EN, NEXT_TA
 
 QUESTION_EN =
 Is ECE easier to get than CSE? What cutoff does ECE need?
-
 QUESTION_TA =
-CSE-ஐ விட ECE-இல் இடம் கிடைப்பது எளிதா? ECE-க்கு என்ன கட்-ஆஃப் வேண்டும்?
-
+CSE-ஐ விட ECE-யில் இடம் கிடைப்பது எளிதா? ECE-க்கு எவ்வளவு கட்-ஆஃப் தேவைப்படும்?
 ANSWER_EN =
 There is no single ECE cutoff, and ECE is not always easier.
-
 ANSWER_TA =
-ECE-க்கு ஒரே கட்-ஆஃப் இல்லை. எல்லா இடங்களிலும் CSE-ஐ விட எளிதாகக் கிடைக்கும் என்றும் சொல்ல முடியாது. குறிப்பிட்ட மதிப்பெண்ணைச் சொல்ல தேவையான ஒப்பீட்டு விவரங்கள் இங்கு இல்லை.
-
+குறிப்பிட்ட ஒரு கட்-ஆஃப் மதிப்பெண்ணை முன்கூட்டியே உறுதியாகச் சொல்ல முடியாது. ஒரு குறிப்பிட்ட கல்லூரியில் பொதுவான வழக்கப்படி CSE-ஐ விட ECE கட்-ஆஃப் சற்று குறைவாக இருக்கலாம்; ஆனால் இது கல்லூரி, ஆண்டு, மற்றும் இடஒதுக்கீட்டுப் பிரிவைப் பொறுத்து மாறும்.
 DETAIL_EN =
 The saved evidence references official TNEA historical cutoff records for 2021–2025. For a valid comparison, the records must match on college, admission year, academic/vocational stream, counselling type/round, community/allotted category, quota/special reservation and programme/seat type. These are past observations, not predictions for the next allotment.
-
 DETAIL_TA =
-கடந்தகால ஒப்பீட்டில் கல்லூரி, சேர்க்கை ஆண்டு, பள்ளிக் கல்வி/தொழிற்கல்வி வழி, கலந்தாய்வு வகை/சுற்று, சமூக/ஒதுக்கீட்டுப் பிரிவு, சிறப்பு ஒதுக்கீடு, படிப்பு/இடவகை பொருந்த வேண்டும். சேமிக்கப்பட்ட ஆதாரம் அதிகாரப்பூர்வ TNEA தளத்தின் 2021–2025 பதிவுகளைச் சுட்டுகிறது. அவை கடந்த சேர்க்கைப் பதிவுகள். அடுத்த ஒதுக்கீட்டிற்கான கணிப்பு அல்ல.
-
+பகுதி விளக்கம் மட்டுமே: குறிப்பிட்ட கல்லூரி, சேர்க்கை ஆண்டு, கலந்தாய்வுச் சுற்று மற்றும் உங்கள் வகுப்புவாரி இடஒதுக்கீடு (Community Reservation) விவரங்கள் இன்றி ஒரு நிலையான கட்-ஆஃப் எண்ணையோ, இடம் கிடைப்பதற்கான உத்தரவாதத்தையோ கணிக்க முடியாது.
 NEXT_EN =
 You can use matching college, year, stream, round, category/quota and seat-type records in the official historical cutoff portal; do not use them as a prediction.
-
 NEXT_TA =
 அதிகாரப்பூர்வ பழைய கட்-ஆஃப் பதிவுகளில் கல்லூரி, ஆண்டு, படிப்புவழி, சுற்று, பிரிவு/ஒதுக்கீடு, இடவகை ஆகியவை பொருந்தும் பதிவுகளை ஒப்பிட்டுப் பார்க்கலாம். அவற்றை எதிர்காலச் சேர்க்கைக்கான கணிப்பாகப் பயன்படுத்த வேண்டாம்.
-
 LIMIT_EN =
 PARTIAL: no matching college, admission year, stream, round, category/quota or programme/seat type was supplied. So neither a numeric ECE cutoff nor an ECE-versus-CSE admission comparison is established. Official portal availability was unresolved in the saved evidence.
-
 LIMIT_TA =
 பகுதி விளக்கம் மட்டுமே: கல்லூரி, ஆண்டு, படிப்புவழி, சுற்று, சமூகப் பிரிவு/ஒதுக்கீடு, படிப்பு/இடவகை தெரியவில்லை. ஆகவே ECE-க்கான எண்ணையோ CSE-யுடன் இடம் கிடைக்கும் ஒப்பீட்டையோ உறுதிசெய்ய முடியாது. சேமிக்கப்பட்ட ஆதாரத்தில் அதிகாரப்பூர்வ தளத்தின் கிடைப்பும் உறுதியாகவில்லை.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E14 (**TNEA Cutoff Portal**, Government of Tamil Nadu / Directorate of Technical Education, records 2021–2025) — Search by year, college, programme and applicable admission dimensions. See register and linked evidence notes for URL/conditions.
 
@@ -1386,34 +1258,29 @@ CHANGED_FIELDS = ANSWER_EN, ANSWER_TA, DETAIL_TA
 
 QUESTION_EN =
 How do I know which engineering branch matches my interests?
-
 QUESTION_TA =
-என் ஆர்வத்திற்கு எந்தப் பொறியியல் பிரிவு பொருந்தும் என்று எப்படித் தெரிந்துகொள்வது?
-
+என் ஆர்வத்திற்கு எந்தப் பொறியியல் துறை பொருந்தும் என்பதை எப்படித் தெரிந்துகொள்வது?
 ANSWER_EN =
 Think about which activities you would like to do regularly: coding and reasoning about systems; working with circuits and signals; studying electricity and machines; designing and manufacturing mechanisms; or working with structures, land, water and transport.
-
 ANSWER_TA =
-எந்த வகையான பணிகளைத் தொடர்ந்து செய்ய விரும்புகிறீர்கள் என்று யோசித்துப் பாருங்கள்: நிரலாக்கமும் கணினி அமைப்புகளைப் பற்றி சிந்திப்பதும்; மின்சுற்றுகளும் சமிக்ஞைகளும்; மின்சாரமும் இயந்திரங்களும்; இயந்திர வடிவமைப்பும் உற்பத்தியும்; அல்லது கட்டமைப்பு, நிலம், நீர், போக்குவரத்து சார்ந்த பணிகளும்.
-
+எந்த வகையான வேலைகளைச் செய்ய உங்களுக்கு இயல்பாக ஆர்வம் உள்ளது என்று சிந்தித்துப் பாருங்கள்:
+- கணினித் திரையில் அமர்ந்து நிரலாக்கம் செய்யப் பிடிக்குமா? → CSE / IT
+- மொபைல், சிப், சர்க்யூட்களை ஆராயப் பிடிக்குமா? → ECE
+- மின்சாரம், மோட்டார்கள் மற்றும் பேட்டரி தொழில்நுட்பமா? → EEE
+- இயந்திரங்கள், வாகனங்கள், உதிரிபாகங்கள் வடிவமைப்பா? → Mechanical
+- கட்டிடங்கள், பாலங்கள், வரைபடங்கள், களப்பணியா? → Civil
 DETAIL_EN =
 Read subjects, try one small activity, and note what you want to learn even when it becomes difficult. This supports your choice; it does not calculate aptitude.
-
 DETAIL_TA =
-பாடங்களைப் பார்த்து, அது தொடர்பான ஒரு சிறிய செயலை முயற்சி செய்யலாம். கடினமாக இருந்தாலும் எதைத் தொடர்ந்து கற்க விரும்புகிறீர்கள் என்று பாருங்கள். இது உங்கள் தேர்வைப் பற்றி யோசிக்க உதவும். உங்கள் திறனைக் கணக்கிட்டுத் தீர்ப்பு வழங்காது.
-
+பாடங்களைப் பார்த்துவிட்டு ஏதேனும் ஒரு சிறிய திட்டத்தை முயற்சித்துப் பாருங்கள். இது உங்கள் விருப்பத்தைப் புரிந்துகொள்ள உதவும் வழிகாட்டி மட்டுமே; எந்தத் தீர்ப்பும் வழங்காது.
 NEXT_EN =
 You can start by comparing the study activities you prefer; keep admission feasibility separate from interest.
-
 NEXT_TA =
 எந்த வகை படிப்புப் பணிகள் உங்களுக்கு ஆர்வம் தருகின்றன என்று ஒப்பிடுங்கள். இடம் கிடைப்பதையும் ஆர்வத்தையும் தனித்தனியாகப் பார்க்கலாம்.
-
 LIMIT_EN =
 No aptitude, placement or admission outcome can be inferred.
-
 LIMIT_TA =
 திறன், வேலைவாய்ப்பு அல்லது சேர்க்கை முடிவை இதிலிருந்து ஊகிக்க முடியாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -1440,34 +1307,24 @@ CHANGED_FIELDS = DETAIL_EN
 
 QUESTION_EN =
 Should I choose a branch only based on placement opportunities?
-
 QUESTION_TA =
-வேலைவாய்ப்பை மட்டும் வைத்து ஒரு பிரிவைத் தேர்வு செய்யலாமா?
-
+கேம்பஸ் வேலைவாய்ப்பு (Placements) எண்ணிக்கையை மட்டுமே வைத்து ஒரு பொறியியல் பிரிவைத் தேர்வு செய்யலாமா?
 ANSWER_EN =
 No.
-
 ANSWER_TA =
-வேண்டாம்.
-
+கூடாது. வெறும் விளம்பர எண்களையோ, உடனடி வேலைவாய்ப்புப் போக்கையோ மட்டுமே நம்பி முடிவெடுக்க வேண்டாம்.
 DETAIL_EN =
 Verified placement data can be one input. Also compare the curriculum, practical work, learning support, cost, location and your willingness to study the subject. Check which branch and batch the placement figures cover, and how many students those figures are based on. A promotional total does not establish your outcome.
-
 DETAIL_TA =
-சரிபார்க்கப்பட்ட வேலைவாய்ப்புத் தகவல் ஒரு பகுதி மட்டுமே. பாடத்திட்டம், செய்முறை, கற்றல் உதவி, செலவு, இடம், அந்தப் பாடத்தைத் தொடர்ந்து கற்கும் விருப்பத்தையும் பாருங்கள். வேலைவாய்ப்பு எண்ணிக்கை எந்தப் பிரிவுக்கும் எந்த ஆண்டுக் குழுவுக்கும் உரியது, எத்தனை மாணவர்களில் எத்தனை பேர் என்ற அடிப்படை என்ன என்று சரிபாருங்கள். விளம்பர எண் உங்கள் முடிவை உறுதி செய்யாது.
-
+4 ஆண்டுகள் நீங்கள் விருப்பத்தோடு படிக்கக்கூடிய பாடமாக அது இருக்க வேண்டும். கல்லூரி வழங்கும் பயிற்சிகள், ஆசிரியர்கள், ஆய்வக வசதிகள், உங்கள் சொந்த ஆர்வம் மற்றும் தொடர்ந்து கற்கும் விருப்பம் ஆகிய அனைத்தையும் சமமாக யோசித்து முடிவெடுக்க வேண்டும்.
 NEXT_EN =
 You can start by comparing the study activities you prefer; keep admission feasibility separate from interest.
-
 NEXT_TA =
 எந்த வகை படிப்புப் பணிகள் உங்களுக்கு ஆர்வம் தருகின்றன என்று ஒப்பிடுங்கள். இடம் கிடைப்பதையும் ஆர்வத்தையும் தனித்தனியாகப் பார்க்கலாம்.
-
 LIMIT_EN =
 No aptitude, placement or admission outcome can be inferred.
-
 LIMIT_TA =
 திறன், வேலைவாய்ப்பு அல்லது சேர்க்கை முடிவை இதிலிருந்து ஊகிக்க முடியாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
