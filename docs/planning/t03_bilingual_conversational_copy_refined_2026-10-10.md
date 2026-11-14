@@ -1351,16 +1351,17 @@ CHANGED_FIELDS = ANSWER_TA, DETAIL_EN
 
 QUESTION_EN =
 What career options are available after each branch?
-
 QUESTION_TA =
-ஒவ்வொரு பிரிவுக்குப் பிறகும் என்ன வேலைப் பாதைகள் உள்ளன?
-
+ஒவ்வொரு பொறியியல் துறைக்குப் பிறகும் என்னென்ன வேலைப் பாதைகள் (Career Options) இருக்கும்?
 ANSWER_EN =
 Possible work families include software/data for computing branches, electronics/communication for ECE, electrical power/control for EEE, design/manufacturing for Mechanical, and structures/construction/water for Civil. These are examples, not guaranteed jobs.
-
 ANSWER_TA =
-உதாரணமாக, கணினிப் பிரிவுகளிலிருந்து மென்பொருள் மற்றும் தரவு சார்ந்த வேலைப் பாதைகள் இருக்கலாம். ECE-இலிருந்து மின்னணு மற்றும் தகவல் தொடர்பு; EEE-இலிருந்து மின்சக்தி மற்றும் கட்டுப்பாடு; இயந்திரப் பொறியியலிலிருந்து வடிவமைப்பு மற்றும் உற்பத்தி; கட்டடவியலிலிருந்து கட்டமைப்பு, கட்டுமானம் மற்றும் நீர் சார்ந்த பாதைகள் இருக்கலாம். இவை உதாரணங்கள் மட்டுமே. வேலை கிடைக்கும் என்ற உறுதி அல்ல.
-
+துறை வாரியாகப் பலதரப்பட்ட வேலைவாய்ப்புகள் உள்ளன:
+- CSE / IT / AI & DS: மென்பொருள் உருவாக்குநர் (Software Developer), தரவு ஆய்வாளர் (Data Analyst), கிளவுட்/சைபர் செக்யூரிட்டி இன்ஜினியர்.
+- ECE: எம்படெட் சிஸ்டம்ஸ் (Embedded Systems), சிப் டிசைன் (VLSI), மொபைல் & தகவல் தொடர்பு நெட்வொர்க் இன்ஜினியர்.
+- EEE: மின் உற்பத்தி & மின் பகிர்வு, மின்சார வாகனங்கள் (EV), பவர் கிரிட் & ஆட்டோமேஷன் இன்ஜினியர்.
+- Mechanical: வாகன உற்பத்தி, இயந்திர வடிவமைப்பு (CAD/CAM), ஏரோஸ்பேஸ், ஆட்டோமேஷன் மற்றும் உற்பத்தி ஆலைகள்.
+- Civil: கட்டுமான வடிவமைப்பு (Structural Design), உள்கட்டமைப்பு திட்டமிடல், அரசுப் பொதுப்பணித்துறை (PWD) மற்றும் திட்ட மேலாண்மை.
 DETAIL_EN =
 Here are some examples:
 
@@ -1371,22 +1372,16 @@ Here are some examples:
 - Civil: structures, construction, geotechnical, transport, water/environment and surveying.
 
 Actual eligibility depends on the employer, role, further qualifications and evidence of skills.
-
 DETAIL_TA =
-கணினிப் பிரிவுகளில் சோதனை, வலையமைப்பு, செயற்கை நுண்ணறிவு. ECE-இல் சாதனத்துக்குள் இயங்கும் கணினி, சமிக்ஞை, மின்சுற்று வடிவமைப்பு. EEE-இல் மின் இயந்திரங்கள், மின்சக்தி மின்னணுவியல். இயந்திரப் பொறியியலில் வெப்ப/ஆற்றல், பராமரிப்பு, வாகனம், தானியக்கம். கட்டடவியலில் மண், போக்குவரத்து, சுற்றுச்சூழல், நில அளவை ஆகிய உதாரணங்களும் உள்ளன. சில பிற பிரிவுகளிலிருந்தும் மென்பொருள் வழிகள் இருக்கலாம். நிறுவனமும் வேலைவகையும் கோரும் கல்வி, கூடுதல் தகுதி, திறன் ஆதாரத்தைப் பொறுத்தே உண்மையான தகுதி அமையும்.
-
+இவை பொதுவான உதாரணங்கள் மட்டுமே. பட்டம் பெறுவதோடு உங்கள் தொழில்நுட்பத் திறன்களை வளர்த்துக்கொள்வதே நல்ல வேலைவாய்ப்பை உறுதி செய்யும்.
 NEXT_EN =
 Choose a possible role and check its published qualifications and skills before planning your preparation.
-
 NEXT_TA =
 ஒரு வேலைவகையைப் பார்த்து, அதற்குத் தெரிவிக்கப்பட்டுள்ள கல்வித் தகுதியையும் திறன்களையும் சரிபார்த்து தயாரிப்பைத் திட்டமிடுங்கள்.
-
 LIMIT_EN =
 Occupation examples are not current vacancies or universal employer eligibility.
-
 LIMIT_TA =
 வேலைவகை உதாரணங்கள் தற்போதைய காலியிடங்களோ எல்லா நிறுவனங்களுக்கும் பொருந்தும் தகுதிகளோ அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E15 (**National Classification of Occupations 2015, Volume II-A**, Ministry of Labour and Employment / National Career Service, 2015) — pp.224 onward, occupation family 2512; software developer, engineer trainee and engineering-analysis roles; E16 (**National Classification of Occupations 2015, Volume I**, Ministry of Labour and Employment / National Career Service, 2015) — Occupation families 2142–2153 and 2512; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -1413,34 +1408,24 @@ CHANGED_FIELDS = DETAIL_EN, DETAIL_TA
 
 QUESTION_EN =
 Can I work in software if I study ECE, EEE, Mechanical or another non-CSE branch?
-
 QUESTION_TA =
-ECE, EEE, இயந்திரப் பொறியியல் அல்லது வேறு CSE அல்லாத பிரிவு படித்தாலும் மென்பொருள் துறையில் வேலை செய்ய முடியுமா?
-
+ECE, EEE, Mechanical அல்லது Civil போன்ற பிற துறைகளைப் படித்தாலும் மென்பொருள் (IT/Software) துறையில் வேலை செய்ய முடியுமா?
 ANSWER_EN =
 It is possible, but not automatic.
-
 ANSWER_TA =
-முடியும். ஆனால் தானாக கிடைக்காது.
-
+ஆம், நிச்சயமாக முடியும். ஆனால் தானாகக் கிடைக்காது; உரிய திறன்களை வளர்த்துக்கொள்ள வேண்டும்.
 DETAIL_EN =
 The reviewed ECE, EEE and Mechanical curricula include some programming/computing. The National Classification of Occupations also recognises software and engineering-analysis roles. For a particular software role, check which degrees the employer accepts. Learn the required programming, data structures and tools, and build evidence through projects or internships. You must also pass the employer’s selection process. Some employers or higher-study programmes restrict eligible branches.
-
 DETAIL_TA =
-ஆய்வு செய்த ECE, EEE, இயந்திரப் பொறியியல் பாடத்திட்டங்களிலும் சில நிரலாக்க/கணினிப் பகுதிகள் உள்ளன. தேசிய வேலைவகைப் பட்டியலிலும் மென்பொருள் மற்றும் பொறியியல் பகுப்பாய்வு வேலைகள் உள்ளன. முதலில் குறிப்பிட்ட நிறுவனம் எந்தப் பட்டம்/பிரிவை ஏற்கிறது என்று பாருங்கள். தேவையான நிரலாக்கம், தரவுக் கட்டமைப்புகள் மற்றும் கருவிகளைக் கற்று, திட்டப்பணி அல்லது பணிப்பயிற்சி மூலம் திறனை நிரூபிக்க வேண்டும். அந்த நிறுவனத்தின் தேர்வுமுறையையும் நிறைவு செய்ய வேண்டும். சில நிறுவனங்கள் அல்லது மேற்படிப்புகளில் பிரிவுக் கட்டுப்பாடு இருக்கும்.
-
+பெரும்பாலான மென்பொருள் நிறுவனங்கள் துறை வேறுபாடின்றி அனைத்துப் பொறியியல் மாணவர்களையும் வேலைவாய்ப்புத் தேர்வில் அனுமதிக்கின்றன. கல்லூரியில் படிக்கும்போதே C++, Java அல்லது Python போன்ற நிரலாக்க மொழிகளையும் (Coding), Data Structures & Algorithms மற்றும் இணையதள உருவாக்கத்தையும் தானாகக் கற்றுக்கொண்டால் ஐடி துறையில் வேலை பெற முடியும்.
 NEXT_EN =
 Choose a possible role and check its published qualifications and skills before planning your preparation.
-
 NEXT_TA =
 ஒரு வேலைவகையைப் பார்த்து, அதற்குத் தெரிவிக்கப்பட்டுள்ள கல்வித் தகுதியையும் திறன்களையும் சரிபார்த்து தயாரிப்பைத் திட்டமிடுங்கள்.
-
 LIMIT_EN =
 Occupation examples are not current vacancies or universal employer eligibility.
-
 LIMIT_TA =
 வேலைவகை உதாரணங்கள் தற்போதைய காலியிடங்களோ எல்லா நிறுவனங்களுக்கும் பொருந்தும் தகுதிகளோ அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E15 (**National Classification of Occupations 2015, Volume II-A**, Ministry of Labour and Employment / National Career Service, 2015) — pp.224 onward, occupation family 2512; software developer, engineer trainee and engineering-analysis roles; E16 (**National Classification of Occupations 2015, Volume I**, Ministry of Labour and Employment / National Career Service, 2015) — Occupation families 2142–2153 and 2512; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -1467,34 +1452,24 @@ CHANGED_FIELDS = DETAIL_EN
 
 QUESTION_EN =
 Can I change my career field after completing an engineering branch?
-
 QUESTION_TA =
-ஒரு பொறியியல் பிரிவை முடித்தபின் வேறு வேலைத் துறைக்கு மாற முடியுமா?
-
+ஒரு பொறியியல் பிரிவை முடித்த பிறகு வேறு வேலைத் துறைக்கு மாற முடியுமா?
 ANSWER_EN =
 Yes, some people move into adjacent or different fields, but the route depends on the target.
-
 ANSWER_TA =
-சிலர் தொடர்புள்ள அல்லது வேறு வேலைத் துறைக்கு மாறுகிறார்கள். ஆனால் அது விரும்பும் வேலைவகையின் தகுதிகளையும் தேவையான புதிய கற்றலையும் பொறுத்தது.
-
+ஆம், பொறியியல் படிப்பு சிக்கல்களைத் தீர்க்கும் திறனை (Problem-solving) வளர்ப்பதால் துறை மாறுவது சாத்தியமே.
 DETAIL_EN =
 Compare the target role’s published qualifications and skills with what you have. Where required, fill the gaps through courses, projects, internship/work evidence, certification or further study. Regulated or specialist roles may require a specific degree or licence. A career change is possible, but not guaranteed.
-
 DETAIL_TA =
-விரும்பும் வேலைவகையின் வெளியிடப்பட்ட கல்வி/திறன் தேவைகளை உங்களுடையவற்றுடன் ஒப்பிடுங்கள். தேவைப்பட்டால் படிப்பு, திட்டம், பணிப்பயிற்சி/வேலை ஆதாரம், சான்றிதழ் அல்லது மேற்படிப்பு மூலம் இடைவெளியை நிரப்புங்கள். சில ஒழுங்குபடுத்தப்பட்ட அல்லது சிறப்பு வேலைகளுக்குக் குறிப்பிட்ட பட்டம் அல்லது உரிமம் தேவை. மாறுவது சாத்தியம். உறுதி அல்ல.
-
+உதாரணமாக, மெக்கானிக்கல் படித்துவிட்டு மென்பொருள் துறைக்கு மாறுவது, அல்லது பொறியியல் முடித்துவிட்டு MBA படித்து வணிக மேலாண்மை, நிதி (Finance), அல்லது அரசுத் தேர்வுகளுக்கு (UPSC, TNPSC, Banking) செல்வது போன்றவை மிகவும் பொதுவானவை.
 NEXT_EN =
 Choose a possible role and check its published qualifications and skills before planning your preparation.
-
 NEXT_TA =
 ஒரு வேலைவகையைப் பார்த்து, அதற்குத் தெரிவிக்கப்பட்டுள்ள கல்வித் தகுதியையும் திறன்களையும் சரிபார்த்து தயாரிப்பைத் திட்டமிடுங்கள்.
-
 LIMIT_EN =
 Occupation examples are not current vacancies or universal employer eligibility.
-
 LIMIT_TA =
 வேலைவகை உதாரணங்கள் தற்போதைய காலியிடங்களோ எல்லா நிறுவனங்களுக்கும் பொருந்தும் தகுதிகளோ அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E15 (**National Classification of Occupations 2015, Volume II-A**, Ministry of Labour and Employment / National Career Service, 2015) — pp.224 onward, occupation family 2512; software developer, engineer trainee and engineering-analysis roles; E16 (**National Classification of Occupations 2015, Volume I**, Ministry of Labour and Employment / National Career Service, 2015) — Occupation families 2142–2153 and 2512. See register and linked evidence notes for URL/conditions.
 
@@ -1521,34 +1496,26 @@ CHANGED_FIELDS = LIMIT_TA, NEXT_TA
 
 QUESTION_EN =
 How can I join an engineering college after 12th?
-
 QUESTION_TA =
-12 ஆம் வகுப்புக்குப் பிறகு பொறியியல் கல்லூரியில் எப்படிச் சேரலாம்?
-
++2-க்குப் பிறகு பொறியியல் கல்லூரியில் சேருவது எப்படி?
 ANSWER_EN =
 First identify the admission route for the programme, check its year and eligibility, then apply through its official portal. You can understand the options before choosing a college.
-
 ANSWER_TA =
-முதலில் படிப்பின் சேர்க்கைவழியை அறிந்து, அந்த ஆண்டின் தகுதியைச் சரிபார்த்து, அதன் அதிகாரப்பூர்வ தளத்தில் விண்ணப்பிக்க வேண்டும். இப்போதே கல்லூரியைத் தேர்வு செய்யாமல் வழிகளைப் புரிந்துகொள்ளலாம்.
-
+தமிழ்நாட்டில் +2-க்குப் பிறகு பொறியியல் சேர முக்கியமாக இரண்டு வழிகள் உள்ளன:
+1. TNEA ஒற்றைச் சாளரக் கலந்தாய்வு (Single Window System): அரசு மற்றும் அரசு உதவிபெறும் கல்லூரிகள் மற்றும் தனியார் கல்லூரிகளின் அரசு ஒதுக்கீட்டு இடங்களுக்கு (+2 மதிப்பெண்கள் மட்டுமே அடிப்படை).
+2. தேசிய நுழைவுத் தேர்வுகள் (JEE): IIT, NIT போன்ற மத்திய அரசு கல்வி நிறுவனங்களில் சேருவதற்கு.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Learn the relevant application process before choosing colleges.
-
 NEXT_TA =
 கல்லூரிகளைத் தேர்வு செய்யும் முன், உங்களுக்குப் பொருந்தும் விண்ணப்ப முறையைத் தெரிந்துகொள்ளலாம்.
-
 LIMIT_EN =
 2026 route orientation only; special programmes and each authority’s requirements must be checked.
-
 LIMIT_TA =
 இது 2026 சேர்க்கைவழிகளின் அறிமுகம் மட்டுமே. சிறப்புப் படிப்புகளுக்கான தேவைகளையும், சேர்க்கை நடத்தும் ஒவ்வொரு அமைப்பின் விதிகளையும் சரிபார்க்க வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S3 (National Testing Agency, **JEE (Main) 2026 Information Bulletin**) — §1.3 About JEE (Main), PDF p.13; §§5.8.1–5.8.3, printed pp.36–38, admission and seat allocation; S4 (JEE Advanced 2026, **Admission Criteria** and **Eligibility Criteria**) — Admission Criteria: “Joint Seat Allocation”; Eligibility: “Performance in JEE (Main) 2026” and simultaneous criteria. See register and linked evidence notes for URL/conditions.
 
@@ -1575,34 +1542,28 @@ CHANGED_FIELDS = LIMIT_TA, NEXT_TA
 
 QUESTION_EN =
 What are the different routes to engineering admission in Tamil Nadu?
-
 QUESTION_TA =
 தமிழ்நாட்டில் பொறியியல் சேர்க்கைக்கு என்னென்ன வழிகள் உள்ளன?
-
 ANSWER_EN =
 Routes include first-year TNEA for its listed seats, entrance-examination routes such as JEE, and institution-managed admissions under their rules. Diploma holders can check the separate direct-second-year TNLEA route.
-
 ANSWER_TA =
-பட்டியலிடப்பட்ட முதல் ஆண்டு இடங்களுக்கு TNEA, JEE போன்ற நுழைவுத்தேர்வு வழிகள், விதிகளுக்கு உட்பட்ட நிறுவனச் சேர்க்கை வழிகள் உள்ளன. டிப்ளமோ முடித்தவர்கள் தனியான நேரடி இரண்டாம் ஆண்டு TNLEA வழியைப் பார்க்கலாம்.
-
+முக்கிய வழிகள்:
+- TNEA அரசு ஒதுக்கீடு: +2 கட்-ஆஃப் மதிப்பெண் அடிப்படையில் தமிழ்நாடு அரசின் கலந்தாய்வு.
+- 7.5% சிறப்பு ஒதுக்கீடு: 6 முதல் 12 வரை அரசுப் பள்ளியில் படித்த மாணவர்களுக்கான பிரத்யேகக் கலந்தாய்வு (முழு கல்விக் கட்டணச் சலுகையுடன்).
+- தனியார் கல்லூரி நிர்வாக ஒதுக்கீடு (Management Quota): தனியார் கல்லூரிகள் நேரடியாக நிரப்பும் இடங்கள்.
+- மத்திய நிறுவனங்கள் (IIT / NIT): JEE Main & Advanced நுழைவுத் தேர்வுகள் மூலம்.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Learn the relevant application process before choosing colleges.
-
 NEXT_TA =
 கல்லூரிகளைத் தேர்வு செய்யும் முன், உங்களுக்குப் பொருந்தும் விண்ணப்ப முறையைத் தெரிந்துகொள்ளலாம்.
-
 LIMIT_EN =
 2026 route orientation only; special programmes and each authority’s requirements must be checked.
-
 LIMIT_TA =
 இது 2026 சேர்க்கைவழிகளின் அறிமுகம் மட்டுமே. சிறப்புப் படிப்புகளுக்கான தேவைகளையும், சேர்க்கை நடத்தும் ஒவ்வொரு அமைப்பின் விதிகளையும் சரிபார்க்க வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S3 (National Testing Agency, **JEE (Main) 2026 Information Bulletin**) — §1.3 About JEE (Main), PDF p.13; §§5.8.1–5.8.3, printed pp.36–38, admission and seat allocation; S4 (JEE Advanced 2026, **Admission Criteria** and **Eligibility Criteria**) — Admission Criteria: “Joint Seat Allocation”; Eligibility: “Performance in JEE (Main) 2026” and simultaneous criteria; S5 (Government of Tamil Nadu / DoTE, **Tamil Nadu Lateral Entry — Direct Second Year B.E./B.Tech Admissions 2026–27: General Information to Candidates**) — Printed/PDF p.1 title and official portal; p.2 document list; p.3 scope/duration; p.4 nativity; p.5 qualifying examinations and minimum average; S6 (AICTE, **Approval Process Handbook 2024–25 to 2026–27**, hosted by Anna University) — §§18.11–18.14, Mandatory Disclosures: admission procedure/calendar, criteria/weightages, applicants and management-seat results; printed pp.176–177. See register and linked evidence notes for URL/conditions.
 
@@ -1629,34 +1590,24 @@ CHANGED_FIELDS = LIMIT_TA, NEXT_EN, NEXT_TA
 
 QUESTION_EN =
 What is JEE?
-
 QUESTION_TA =
-JEE என்றால் என்ன?
-
+JEE (Joint Entrance Examination) என்றால் என்ன?
 ANSWER_EN =
 JEE means Joint Entrance Examination. JEE Main is an entrance-examination route for participating institutes such as NITs and IIITs; IIT admission uses JEE Advanced with its separate requirements and seat-allocation process.
-
 ANSWER_TA =
-JEE என்பது கூட்டு நுழைவுத்தேர்வு. JEE Main வழியில் NIT, IIIT போன்ற பங்கேற்கும் நிறுவனங்களுக்குச் சேர்க்கை நடைபெறுகிறது. IIT சேர்க்கைக்கு JEE Advanced-ன் தனி நிபந்தனைகளும் இடஒதுக்கீட்டுச் செயல்முறையும் உள்ளன.
-
+JEE என்பது இந்தியாவின் புகழ்பெற்ற மத்திய கல்வி நிறுவனங்களான IIT, NIT, IIIT மற்றும் மத்திய நிதியுதவி பெறும் கல்வி நிறுவனங்களில் (CFTIs) பொறியியல் படிப்பில் சேருவதற்காக நடத்தப்படும் தேசிய அளவிலான நுழைவுத் தேர்வாகும்.
 DETAIL_EN =
 JEE Main is conducted by the National Testing Agency and includes a B.E./B.Tech paper. NIT means National Institute of Technology, IIIT means Indian Institute of Information Technology, and IIT means Indian Institute of Technology. Taking the examination alone does not secure a seat.
-
 DETAIL_TA =
 தேசிய தேர்வு முகமை JEE Main-ஐ நடத்துகிறது. அதில் B.E./B.Tech தேர்வுத்தாள் உள்ளது. NIT என்பது தேசிய தொழில்நுட்ப நிறுவனம். IIIT என்பது இந்திய தகவல் தொழில்நுட்ப நிறுவனம். IIT என்பது இந்திய தொழில்நுட்ப நிறுவனம். தேர்வு எழுதுவது மட்டும் இடத்தை உறுதி செய்யாது.
-
 NEXT_EN =
 You can start by comparing JEE and TNEA. Then check the official requirements of the route you intend to use.
-
 NEXT_TA =
 முதலில் JEE மற்றும் TNEA வழிகள் எப்படி வேறுபடுகின்றன என்று ஒப்பிட்டுப் பார்க்கலாம். பிறகு நீங்கள் பயன்படுத்த விரும்பும் வழியின் அதிகாரப்பூர்வத் தேவைகளைச் சரிபார்க்கலாம்.
-
 LIMIT_EN =
 2026 route orientation only; special programmes and each authority’s requirements must be checked.
-
 LIMIT_TA =
 இது 2026 சேர்க்கைவழிகளின் அறிமுகம் மட்டுமே. சிறப்புப் படிப்புகளுக்கான தேவைகளையும், சேர்க்கை நடத்தும் ஒவ்வொரு அமைப்பின் விதிகளையும் சரிபார்க்க வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S3 (National Testing Agency, **JEE (Main) 2026 Information Bulletin**) — §1.3 About JEE (Main), PDF p.13; §§5.8.1–5.8.3, printed pp.36–38, admission and seat allocation; S4 (JEE Advanced 2026, **Admission Criteria** and **Eligibility Criteria**) — Admission Criteria: “Joint Seat Allocation”; Eligibility: “Performance in JEE (Main) 2026” and simultaneous criteria. See register and linked evidence notes for URL/conditions.
 
@@ -1683,34 +1634,26 @@ CHANGED_FIELDS = LIMIT_TA, NEXT_TA
 
 QUESTION_EN =
 What is the difference between JEE and TNEA?
-
 QUESTION_TA =
-JEE-க்கும் TNEA-க்கும் என்ன வேறுபாடு?
-
+JEE தேர்வுக்கும் TNEA-க்கும் என்ன வேறுபாடு?
 ANSWER_EN =
 JEE uses entrance-examination performance. The ordinary TNEA academic route uses prescribed school marks and counselling rules. An exam application and a TNEA application are separate processes.
-
 ANSWER_TA =
-JEE நுழைவுத்தேர்வு மதிப்பெண்ணைப் பயன்படுத்துகிறது. வழக்கமான TNEA பள்ளிக் கல்வி வழியில் குறிப்பிட்ட பள்ளி மதிப்பெண்களும் கலந்தாய்வு விதிகளும் பயன்படுகின்றன. தேர்வு விண்ணப்பமும் TNEA விண்ணப்பமும் தனித்தனி.
-
+முக்கிய வேறுபாடுகள்:
+- TNEA: தமிழ்நாட்டின் பொறியியல் சேர்க்கை முறை. இதற்கு நுழைவுத் தேர்வு கிடையாது; +2 கணிதம், இயற்பியல், வேதியியல் மதிப்பெண்களைக் கொண்டு கணக்கிடப்படும் கட்-ஆஃப் (Cutoff / 200) மட்டுமே அடிப்படை.
+- JEE: அகில இந்திய நுழைவுத் தேர்வு. இதில் பெறும் மதிப்பெண்/ரேங்க் அடிப்படையிலேயே மத்திய கல்வி நிறுவனங்களில் சேர்க்கை நடக்கும்; +2 மதிப்பெண்கள் கட்-ஆஃப்பாக எடுத்துக்கொள்ளப்படாது.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Learn the relevant application process before choosing colleges.
-
 NEXT_TA =
 கல்லூரிகளைத் தேர்வு செய்யும் முன், உங்களுக்குப் பொருந்தும் விண்ணப்ப முறையைத் தெரிந்துகொள்ளலாம்.
-
 LIMIT_EN =
 2026 route orientation only; special programmes and each authority’s requirements must be checked.
-
 LIMIT_TA =
 இது 2026 சேர்க்கைவழிகளின் அறிமுகம் மட்டுமே. சிறப்புப் படிப்புகளுக்கான தேவைகளையும், சேர்க்கை நடத்தும் ஒவ்வொரு அமைப்பின் விதிகளையும் சரிபார்க்க வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S3 (National Testing Agency, **JEE (Main) 2026 Information Bulletin**) — §1.3 About JEE (Main), PDF p.13; §§5.8.1–5.8.3, printed pp.36–38, admission and seat allocation; S4 (JEE Advanced 2026, **Admission Criteria** and **Eligibility Criteria**) — Admission Criteria: “Joint Seat Allocation”; Eligibility: “Performance in JEE (Main) 2026” and simultaneous criteria. See register and linked evidence notes for URL/conditions.
 
@@ -1737,34 +1680,24 @@ CHANGED_FIELDS = LIMIT_TA, NEXT_TA
 
 QUESTION_EN =
 Do I need JEE to study engineering in Tamil Nadu?
-
 QUESTION_TA =
-தமிழ்நாட்டில் பொறியியல் படிக்க JEE அவசியமா?
-
+தமிழ்நாட்டில் பொறியியல் படிக்க JEE நுழைவுத் தேர்வு எழுத வேண்டியது கட்டாயமா?
 ANSWER_EN =
 No, JEE is not needed for the ordinary TNEA academic route. A college or programme using JEE or another entrance route has its own requirements; TNEA does not cover every seat.
-
 ANSWER_TA =
-இல்லை. வழக்கமான TNEA பள்ளிக் கல்வி வழிக்கு JEE தேவையில்லை. JEE அல்லது வேறு நுழைவுத்தேர்வு வழியில் சேர்க்கும் நிறுவனம் அல்லது படிப்புக்குத் தனித் தேவைகள் இருக்கும். எல்லா இடங்களும் TNEA-வில் இல்லை.
-
+இல்லை, கட்டாயம் அல்ல. தமிழ்நாட்டில் உள்ள அண்ணா பல்கலைக்கழகம் மற்றும் 400-க்கும் மேற்பட்ட அரசு மற்றும் தனியார் சுயநிதிப் பொறியியல் கல்லூரிகளில் சேர TNEA கலந்தாய்வு மட்டுமே போதுமானது. IIT சென்னை அல்லது NIT திருச்சியில் சேர விரும்பினால் மட்டுமே JEE தேர்வு அவசியம்.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Learn the relevant application process before choosing colleges.
-
 NEXT_TA =
 கல்லூரிகளைத் தேர்வு செய்யும் முன், உங்களுக்குப் பொருந்தும் விண்ணப்ப முறையைத் தெரிந்துகொள்ளலாம்.
-
 LIMIT_EN =
 2026 route orientation only; special programmes and each authority’s requirements must be checked.
-
 LIMIT_TA =
 இது 2026 சேர்க்கைவழிகளின் அறிமுகம் மட்டுமே. சிறப்புப் படிப்புகளுக்கான தேவைகளையும், சேர்க்கை நடத்தும் ஒவ்வொரு அமைப்பின் விதிகளையும் சரிபார்க்க வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S3 (National Testing Agency, **JEE (Main) 2026 Information Bulletin**) — §1.3 About JEE (Main), PDF p.13; §§5.8.1–5.8.3, printed pp.36–38, admission and seat allocation; S4 (JEE Advanced 2026, **Admission Criteria** and **Eligibility Criteria**) — Admission Criteria: “Joint Seat Allocation”; Eligibility: “Performance in JEE (Main) 2026” and simultaneous criteria. See register and linked evidence notes for URL/conditions.
 
@@ -1791,34 +1724,24 @@ CHANGED_FIELDS = ANSWER_EN, ANSWER_TA, LIMIT_TA, NEXT_TA
 
 QUESTION_EN =
 Can I apply through both JEE and TNEA?
-
 QUESTION_TA =
-JEE மற்றும் TNEA இரண்டிலும் விண்ணப்பிக்கலாமா?
-
+ஒரே நேரத்தில் JEE மற்றும் TNEA இரண்டிலும் விண்ணப்பிக்க முடியுமா?
 ANSWER_EN =
 You can pursue both if you meet each route’s requirements and deadlines. Register separately. Before accepting or joining, check each authority’s acceptance, withdrawal and fee rules.
-
 ANSWER_TA =
-ஒவ்வொரு வழியின் தகுதியையும் காலக்கெடுவையும் பூர்த்தி செய்தால் இரண்டையும் முயற்சி செய்யலாம். தனித்தனியாகப் பதிவு செய்ய வேண்டும். இடத்தை ஏற்கும் முன்போ கல்லூரியில் சேரும் முன்போ, இடத்தை ஏற்றல், விலகல் மற்றும் கட்டண விதிகளை அந்தந்த சேர்க்கை அமைப்பிடம் சரிபாருங்கள்.
-
+ஆம், தாராளமாக இரண்டிற்கும் தனித்தனியாக விண்ணப்பிக்கலாம். JEE கலந்தாய்வு (JoSAA) மற்றும் TNEA கலந்தாய்வு தனித்தனியாக நடக்கும்; உங்களுக்கு எதில் சிறந்த கல்லூரி அமைகிறதோ அதைத் தேர்வு செய்துகொள்ளலாம்.
 DETAIL_EN =
 This guidance combines separate application processes; it is not a quoted joint-permission rule and does not permit indefinite retention of two admissions.
-
 DETAIL_TA =
 தனித்தனி விண்ணப்ப முறைகளை இணைத்து விளக்கும் வழிகாட்டல் இது. இரண்டிற்குமான ஒரே அனுமதி விதியின் மேற்கோள் அல்ல. இரண்டு இடங்களையும் காலவரையின்றி வைத்திருக்கலாம் என்ற அனுமதியும் அல்ல.
-
 NEXT_EN =
 Learn the relevant application process before choosing colleges.
-
 NEXT_TA =
 கல்லூரிகளைத் தேர்வு செய்யும் முன், உங்களுக்குப் பொருந்தும் விண்ணப்ப முறையைத் தெரிந்துகொள்ளலாம்.
-
 LIMIT_EN =
 2026 route orientation only; special programmes and each authority’s requirements must be checked.
-
 LIMIT_TA =
 இது 2026 சேர்க்கைவழிகளின் அறிமுகம் மட்டுமே. சிறப்புப் படிப்புகளுக்கான தேவைகளையும், சேர்க்கை நடத்தும் ஒவ்வொரு அமைப்பின் விதிகளையும் சரிபார்க்க வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S3 (National Testing Agency, **JEE (Main) 2026 Information Bulletin**) — §1.3 About JEE (Main), PDF p.13; §§5.8.1–5.8.3, printed pp.36–38, admission and seat allocation; S4 (JEE Advanced 2026, **Admission Criteria** and **Eligibility Criteria**) — Admission Criteria: “Joint Seat Allocation”; Eligibility: “Performance in JEE (Main) 2026” and simultaneous criteria. See register and linked evidence notes for URL/conditions.
 
@@ -1845,34 +1768,26 @@ CHANGED_FIELDS = LIMIT_TA, NEXT_TA
 
 QUESTION_EN =
 Are all engineering colleges in Tamil Nadu available through TNEA?
-
 QUESTION_TA =
-தமிழ்நாட்டின் எல்லாப் பொறியியல் கல்லூரிகளும் TNEA-வில் உள்ளனவா?
-
+தமிழ்நாட்டில் உள்ள எல்லாக் கல்லூரிகளும் TNEA கலந்தாய்வில் வருமா?
 ANSWER_EN =
 No. TNEA covers the colleges and seats specified in its brochure, not every engineering college or every seat in Tamil Nadu.
-
 ANSWER_TA =
-இல்லை. TNEA கையேட்டில் குறிப்பிடப்பட்ட கல்லூரிகளும் இடங்களுமே அதில் உள்ளன. தமிழ்நாட்டின் எல்லாப் பொறியியல் கல்லூரிகளும் எல்லா இடங்களும் அல்ல.
+பெரும்பாலான கல்லூரிகள் TNEA-வில் வரும் (அண்ணா பல்கலைக்கழக வளாகங்கள், அரசு மற்றும் அரசு உதவிபெறும் கல்லூரிகள், மற்றும் தனியார் பொறியியல் கல்லூரிகளின் அரசு ஒதுக்கீட்டு இடங்கள்).
 
+விலக்கு: IIT சென்னை, NIT திருச்சி (JEE மூலம் சேர வேண்டும்) மற்றும் தனியார் நிகர்நிலைப் பல்கலைக்கழகங்கள் (Deemed Universities - சொந்த நுழைவுத் தேர்வு மூலம் சேர்க்கை நடத்துபவை).
 DETAIL_EN =
 The 2026 scope includes government/government-aided engineering colleges, specified university departments and constituent colleges, Annamalai University and seats surrendered by participating institutions. Check the listed seats rather than assuming a whole institution is covered.
-
 DETAIL_TA =
 2026 வரம்பில் அரசு/அரசு உதவிப் பொறியியல் கல்லூரிகள், குறிப்பிட்ட பல்கலைக்கழகத் துறைகள் மற்றும் உறுப்புக் கல்லூரிகள், அண்ணாமலைப் பல்கலைக்கழகம், பங்கேற்கும் நிறுவனங்கள் ஒப்படைக்கும் இடங்கள் உள்ளன. முழு நிறுவனமும் அதில் உள்ளது என்று ஊகிக்காமல் பட்டியலிடப்பட்ட இடங்களைப் பாருங்கள்.
-
 NEXT_EN =
 Learn the relevant application process before choosing colleges.
-
 NEXT_TA =
 கல்லூரிகளைத் தேர்வு செய்யும் முன், உங்களுக்குப் பொருந்தும் விண்ணப்ப முறையைத் தெரிந்துகொள்ளலாம்.
-
 LIMIT_EN =
 2026 route orientation only; special programmes and each authority’s requirements must be checked.
-
 LIMIT_TA =
 இது 2026 சேர்க்கைவழிகளின் அறிமுகம் மட்டுமே. சிறப்புப் படிப்புகளுக்கான தேவைகளையும், சேர்க்கை நடத்தும் ஒவ்வொரு அமைப்பின் விதிகளையும் சரிபார்க்க வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S3 (National Testing Agency, **JEE (Main) 2026 Information Bulletin**) — §1.3 About JEE (Main), PDF p.13; §§5.8.1–5.8.3, printed pp.36–38, admission and seat allocation; S4 (JEE Advanced 2026, **Admission Criteria** and **Eligibility Criteria**) — Admission Criteria: “Joint Seat Allocation”; Eligibility: “Performance in JEE (Main) 2026” and simultaneous criteria. See register and linked evidence notes for URL/conditions.
 
@@ -1899,34 +1814,24 @@ CHANGED_FIELDS = NEXT_TA
 
 QUESTION_EN =
 What is management quota?
-
 QUESTION_TA =
-நிர்வாக ஒதுக்கீடு என்றால் என்ன?
-
+நிர்வாக ஒதுக்கீடு (Management Quota) என்றால் என்ன?
 ANSWER_EN =
 Management quota generally refers to seats whose admission is managed by a self-financing institution under applicable rules, rather than allotted through state counselling. It does not remove eligibility requirements or guarantee admission for payment.
-
 ANSWER_TA =
-நிர்வாக ஒதுக்கீடு என்பது பொதுவாக மாநிலக் கலந்தாய்வுக்கு வெளியே, பொருந்தும் விதிகளின்படி சுயநிதி நிறுவனம் சேர்க்கை நடத்தும் இடங்களைக் குறிக்கும். தகுதி விதிகளைத் தவிர்க்கலாம் என்றோ பணம் கொடுத்தால் இடம் உறுதி என்றோ அர்த்தமல்ல.
-
+தனியார் சுயநிதிக் கல்லூரிகளில் குறிப்பிட்ட சதவீத இடங்களை (பொதுவாக 35% முதல் 50% வரை) கல்லூரிகள் நேரடியாக மாணவர்களைச் சேர்த்துக்கொள்ள அனுமதிக்கும் முறையே நிர்வாக ஒதுக்கீடு ஆகும்.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
-(No additional detail displayed.)
-
+இதற்கு TNEA கலந்தாய்வு வழியாகச் செல்ல வேண்டியதில்லை; நேரடியாகக் கல்லூரியை அணுகி விண்ணப்பிக்க வேண்டும். அரசு நிர்ணயித்த கட்டணத்தை விட நிர்வாக ஒதுக்கீட்டுக் கட்டணம் அதிகமாக இருக்கும்; மேலும் இதில் அரசு வழங்கும் 7.5% சலுகை அல்லது முதல் பட்டதாரி உதவித்தொகை போன்ற அரசு சலுகைகள் பொருந்தாது.
 NEXT_EN =
 Ask the institution for its official selection, fee and refund notice before applying.
-
 NEXT_TA =
 விண்ணப்பிக்கும் முன், நிறுவனத்திடம் அதிகாரப்பூர்வத் தேர்வுமுறை, கட்டணம் மற்றும் பணத்தைத் திரும்பப் பெறும் விதிகளைக் கேட்டுத் தெரிந்துகொள்ளலாம்.
-
 LIMIT_EN =
 Institution-specific fees, seat share and selection terms are not verified.
-
 LIMIT_TA =
 குறிப்பிட்ட நிறுவனத்தின் கட்டணம், இடப்பங்கு, தேர்வுவிதிகள் உறுதிசெய்யப்படவில்லை.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S6 (AICTE, **Approval Process Handbook 2024–25 to 2026–27**, hosted by Anna University) — §§18.11–18.14, Mandatory Disclosures: admission procedure/calendar, criteria/weightages, applicants and management-seat results; printed pp.176–177; S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling. See register and linked evidence notes for URL/conditions.
 
@@ -1953,34 +1858,24 @@ CHANGED_FIELDS = NEXT_EN
 
 QUESTION_EN =
 What is lateral entry in engineering?
-
 QUESTION_TA =
-பொறியியலில் நேரடி இரண்டாம் ஆண்டு சேர்க்கை என்றால் என்ன?
-
+பொறியியலில் நேரடி இரண்டாம் ஆண்டு சேர்க்கை (Lateral Entry) என்றால் என்ன?
 ANSWER_EN =
 Lateral entry means entering an eligible engineering programme directly in second year. Tamil Nadu’s 2026 TNLEA process is separate from first-year TNEA and has its own eligibility, documents and counselling.
-
 ANSWER_TA =
-நேரடி இரண்டாம் ஆண்டு சேர்க்கை என்பது பொருந்தும் பொறியியல் படிப்பில் முதல் ஆண்டுக்குப் பதிலாக இரண்டாம் ஆண்டில் சேர்வது. தமிழ்நாட்டின் 2026 TNLEA முறை முதல் ஆண்டு TNEA-விலிருந்து தனியானது. தனித் தகுதி, ஆவணங்கள், கலந்தாய்வு உள்ளன.
-
+3 வருட பாலிடெக்னிக் டிப்ளமோ (Diploma) அல்லது B.Sc முடித்த மாணவர்கள், 4 வருட பொறியியல் படிப்பின் முதல் ஆண்டைத் தவிர்த்து, நேரடியாக 2-ஆம் ஆண்டில் (3-வது செமஸ்டர்) சேர்ந்து 3 ஆண்டுகளில் பொறியியல் பட்டம் பெறும் நடைமுறைக்கு Lateral Entry என்று பெயர்.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Start by checking the intended year’s TNLEA guide using your diploma details. Do not restart a Class-12 check.
-
 NEXT_TA =
 உங்கள் டிப்ளமோ விவரங்களுடன் சேர விரும்பும் ஆண்டின் TNLEA கையேட்டைப் பார்க்கலாம். 12 ஆம் வகுப்பு சரிபார்ப்பை மீண்டும் தொடங்க வேண்டாம்.
-
 LIMIT_EN =
 2026–27 guide only. Exact diploma eligibility, branch equivalence and seats still need confirmation. The first-year personal check does not assess lateral entry.
-
 LIMIT_TA =
 ஆதாரம் 2026–27 கையேடு மட்டுமே. டிப்ளமோ தகுதி, பிரிவு இணைவு, இடங்கள் இன்னும் சரிபார்க்கப்பட வேண்டும். முதல் ஆண்டு தனிப்பட்ட சரிபார்ப்பு நேரடி இரண்டாம் ஆண்டு தகுதியை மதிப்பிடாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S5 (Government of Tamil Nadu / DoTE, **Tamil Nadu Lateral Entry — Direct Second Year B.E./B.Tech Admissions 2026–27: General Information to Candidates**) — Printed/PDF p.1 title and official portal; p.2 document list; p.3 scope/duration; p.4 nativity; p.5 qualifying examinations and minimum average. See register and linked evidence notes for URL/conditions.
 
@@ -2007,34 +1902,24 @@ CHANGED_FIELDS = NEXT_EN
 
 QUESTION_EN =
 I completed a diploma. Can I join engineering?
-
 QUESTION_TA =
-நான் டிப்ளமோ முடித்துவிட்டேன். பொறியியலில் சேர முடியுமா?
-
+நான் டிப்ளமோ முடித்துவிட்டேன்; பொறியியல் பட்டப்படிப்பில் சேர முடியுமா?
 ANSWER_EN =
 A completed diploma makes the direct-second-year TNLEA route worth checking. Admission is conditional on the exact diploma, results, programme and applicable rules; completing a diploma does not automatically secure a seat.
-
 ANSWER_TA =
-டிப்ளமோ முடித்திருப்பதால் நேரடி இரண்டாம் ஆண்டு TNLEA வழியைப் பார்க்கலாம். உங்கள் டிப்ளமோ, முடிவுகள், விரும்பும் படிப்பு மற்றும் பொருந்தும் விதிகளைச் சரிபார்க்க வேண்டும். டிப்ளமோ முடித்தாலே இடம் உறுதி அல்ல.
-
+ஆம், கண்டிப்பாகச் சேரலாம். நீங்கள் முடித்த டிப்ளமோ படிப்பின் மதிப்பெண்கள் அடிப்படையில் நேரடி இரண்டாம் ஆண்டு சேர்க்கை (Direct Second Year B.E / B.Tech) மூலம் சேரலாம்.
 DETAIL_EN =
 The 2026 TNLEA guide requires a qualifying pass and the prescribed semester-mark average, with applicable nativity/category rules and document verification. The Class-12 TNEA formula is not the diploma admission calculation.
-
 DETAIL_TA =
 2026 TNLEA கையேடு தகுதித் தேர்ச்சி, குறிப்பிட்ட பருவ மதிப்பெண் சராசரி, பொருந்தும் பூர்வீகம்/பிரிவு விதிகள் மற்றும் ஆவணச் சரிபார்ப்பைக் கோருகிறது. 12 ஆம் வகுப்பு TNEA சூத்திரம் டிப்ளமோ சேர்க்கைக்கான கணக்கீடு அல்ல.
-
 NEXT_EN =
 Start by checking the intended year’s TNLEA guide using your diploma details. Do not restart a Class-12 check.
-
 NEXT_TA =
 உங்கள் டிப்ளமோ விவரங்களுடன் சேர விரும்பும் ஆண்டின் TNLEA கையேட்டைப் பார்க்கலாம். 12 ஆம் வகுப்பு சரிபார்ப்பை மீண்டும் தொடங்க வேண்டாம்.
-
 LIMIT_EN =
 2026–27 guide only. Exact diploma eligibility, branch equivalence and seats still need confirmation. The first-year personal check does not assess lateral entry.
-
 LIMIT_TA =
 ஆதாரம் 2026–27 கையேடு மட்டுமே. டிப்ளமோ தகுதி, பிரிவு இணைவு, இடங்கள் இன்னும் சரிபார்க்கப்பட வேண்டும். முதல் ஆண்டு தனிப்பட்ட சரிபார்ப்பு நேரடி இரண்டாம் ஆண்டு தகுதியை மதிப்பிடாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S5 (Government of Tamil Nadu / DoTE, **Tamil Nadu Lateral Entry — Direct Second Year B.E./B.Tech Admissions 2026–27: General Information to Candidates**) — Printed/PDF p.1 title and official portal; p.2 document list; p.3 scope/duration; p.4 nativity; p.5 qualifying examinations and minimum average. See register and linked evidence notes for URL/conditions.
 
@@ -2061,34 +1946,24 @@ CHANGED_FIELDS = NEXT_EN
 
 QUESTION_EN =
 Can a diploma student join directly in second year?
-
 QUESTION_TA =
-டிப்ளமோ மாணவர் நேரடியாக இரண்டாம் ஆண்டில் சேர முடியுமா?
-
+டிப்ளமோ மாணவர் முதல் ஆண்டைத் தவிர்த்து நேரடியாக இரண்டாம் ஆண்டில் சேர முடியுமா?
 ANSWER_EN =
 Yes, the TNLEA route allows eligible diploma holders to seek direct second-year entry. The prescribed qualifying marks, nativity/category rules and document verification still apply.
-
 ANSWER_TA =
-ஆம். தகுதியுள்ள டிப்ளமோ மாணவர் TNLEA வழியில் நேரடி இரண்டாம் ஆண்டு சேர்க்கையை நாடலாம். குறிப்பிட்ட தகுதி மதிப்பெண், பூர்வீகம்/பிரிவு விதிகள், ஆவணச் சரிபார்ப்பு ஆகியவை பொருந்தும்.
-
+ஆம், AICTE விதிகளின்படி டிப்ளமோ முடித்த மாணவர்கள் நேரடியாக இரண்டாம் ஆண்டில் இணைய அனுமதிக்கப்படுகிறார்கள். அவர்கள் 3 ஆண்டுகள் மட்டும் படித்தால் போதுமானது.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Start by checking the intended year’s TNLEA guide using your diploma details. Do not restart a Class-12 check.
-
 NEXT_TA =
 உங்கள் டிப்ளமோ விவரங்களுடன் சேர விரும்பும் ஆண்டின் TNLEA கையேட்டைப் பார்க்கலாம். 12 ஆம் வகுப்பு சரிபார்ப்பை மீண்டும் தொடங்க வேண்டாம்.
-
 LIMIT_EN =
 2026–27 guide only. Exact diploma eligibility, branch equivalence and seats still need confirmation. The first-year personal check does not assess lateral entry.
-
 LIMIT_TA =
 ஆதாரம் 2026–27 கையேடு மட்டுமே. டிப்ளமோ தகுதி, பிரிவு இணைவு, இடங்கள் இன்னும் சரிபார்க்கப்பட வேண்டும். முதல் ஆண்டு தனிப்பட்ட சரிபார்ப்பு நேரடி இரண்டாம் ஆண்டு தகுதியை மதிப்பிடாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S5 (Government of Tamil Nadu / DoTE, **Tamil Nadu Lateral Entry — Direct Second Year B.E./B.Tech Admissions 2026–27: General Information to Candidates**) — Printed/PDF p.1 title and official portal; p.2 document list; p.3 scope/duration; p.4 nativity; p.5 qualifying examinations and minimum average. See register and linked evidence notes for URL/conditions.
 
@@ -2115,34 +1990,24 @@ CHANGED_FIELDS = NEXT_EN
 
 QUESTION_EN =
 Is lateral-entry admission part of regular TNEA counselling?
-
 QUESTION_TA =
-நேரடி இரண்டாம் ஆண்டு சேர்க்கையும் வழக்கமான TNEA கலந்தாய்வின் பகுதியா?
-
+நேரடி இரண்டாம் ஆண்டு (Lateral Entry) சேர்க்கையும் வழக்கமான TNEA கலந்தாய்வின் கீழ் வருமா?
 ANSWER_EN =
 No. Tamil Nadu’s 2026 direct-second-year TNLEA process has a separate application and counselling process from regular first-year TNEA. Do not apply the Class-12 TNEA cutoff formula to diploma admission.
-
 ANSWER_TA =
-இல்லை. 2026 நேரடி இரண்டாம் ஆண்டு TNLEA விண்ணப்பமும் கலந்தாய்வும் வழக்கமான முதல் ஆண்டு TNEA-விலிருந்து தனியானவை. டிப்ளமோ சேர்க்கைக்கு 12 ஆம் வகுப்பு TNEA கட்-ஆஃப் சூத்திரத்தைப் பயன்படுத்தாதீர்கள்.
-
+இல்லை. வழக்கமான TNEA கலந்தாய்வு என்பது +2 பள்ளி முடித்த மாணவர்களுக்கான முதல் ஆண்டு சேர்க்கைக்கானது. டிப்ளமோ மாணவர்களுக்கான Lateral Entry சேர்க்கை தமிழ்நாடு தொழில்நுட்பக் கல்வி இயக்ககத்தால் (DoTE) தனியான இணையதளத்தில் தனியாக நடத்தப்படும்.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Start by checking the intended year’s TNLEA guide using your diploma details. Do not restart a Class-12 check.
-
 NEXT_TA =
 உங்கள் டிப்ளமோ விவரங்களுடன் சேர விரும்பும் ஆண்டின் TNLEA கையேட்டைப் பார்க்கலாம். 12 ஆம் வகுப்பு சரிபார்ப்பை மீண்டும் தொடங்க வேண்டாம்.
-
 LIMIT_EN =
 2026–27 guide only. Exact diploma eligibility, branch equivalence and seats still need confirmation. The first-year personal check does not assess lateral entry.
-
 LIMIT_TA =
 ஆதாரம் 2026–27 கையேடு மட்டுமே. டிப்ளமோ தகுதி, பிரிவு இணைவு, இடங்கள் இன்னும் சரிபார்க்கப்பட வேண்டும். முதல் ஆண்டு தனிப்பட்ட சரிபார்ப்பு நேரடி இரண்டாம் ஆண்டு தகுதியை மதிப்பிடாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S5 (Government of Tamil Nadu / DoTE, **Tamil Nadu Lateral Entry — Direct Second Year B.E./B.Tech Admissions 2026–27: General Information to Candidates**) — Printed/PDF p.1 title and official portal; p.2 document list; p.3 scope/duration; p.4 nativity; p.5 qualifying examinations and minimum average. See register and linked evidence notes for URL/conditions.
 
@@ -2171,13 +2036,18 @@ QUESTION_EN =
 How does TNEA counselling actually work? I'm the first engineer in my family.
 
 QUESTION_TA =
-என் குடும்பத்தில் முதலில் பொறியியல் படிக்கப் போகிறேன். TNEA கலந்தாய்வு உண்மையில் எப்படி நடக்கும்?
+என் குடும்பத்தில் நான்தான் முதல் பொறியாளர்; TNEA கலந்தாய்வு நடைமுறை உண்மையில் எப்படி நடக்கும்?
 
 ANSWER_EN =
 You register, submit the required records, check verification and rank, enter your preferred college-and-branch choices, respond to the allotment, and complete the required joining steps. An official TNEA Facilitation Centre (TFC) can help you through the process.
 
 ANSWER_TA =
-பதிவு செய்து தேவையான ஆவணங்களை அளிக்க வேண்டும். சரிபார்ப்பையும் தரவரிசையையும் பார்த்து, விருப்பமான கல்லூரி–பிரிவுகளை வரிசைப்படுத்த வேண்டும். ஒதுக்கப்பட்ட இடத்திற்குப் பதில் அளித்து, சேர்க்கைப் பணிகளை முடிக்க வேண்டும். அதிகாரப்பூர்வ TNEA உதவி மையம் (TFC) இதில் உதவும்.
+பயப்பட வேண்டிய அவசியமில்லை. இது முற்றிலும் இணையவழியில் (Online) நடைபெறும் 5 எளிய படிகள்:
+1. விண்ணப்பப் பதிவு: TNEA தளத்தில் விவரங்களைப் பதிவு செய்தல்.
+2. சான்றிதழ் சரிபார்ப்பு: TFC மையங்கள் அல்லது ஆன்லைனில் ஆவணங்களைச் சரிபார்த்தல்.
+3. ரேங்க் பட்டியல்: +2 மதிப்பெண் & இடஒதுக்கீடு அடிப்படையில் தரவரிசை வெளியீடு.
+4. விருப்பக் கல்லூரித் தேர்வு: உங்கள் சுற்றில் பிடித்த கல்லூரிகளை விருப்ப வரிசையில் பதிவு செய்தல்.
+5. ஒதுக்கீடு & சேர்க்கை: இடத்தை உறுதிசெய்து கல்லூரியில் கட்டணம் செலுத்திச் சேருதல்.
 
 DETAIL_EN =
 After certificate verification, check your rank and details. Report any errors promptly. In your notified round, confirm your choices in your preferred order. Read the tentative allotment options and respond/report by the notified deadline. Seeing a seat on screen is not the last step.
@@ -2196,7 +2066,6 @@ LIMIT_EN =
 
 LIMIT_TA =
 இது 2026 செயல்முறை மட்டுமே. இப்போது சுற்று திறந்துள்ளது என்ற தகவல் அல்ல. குறை தெரிவிக்கும் காலத்தில் சேமிக்கப்பட்ட ஆதாரங்கள் முரண்படுகின்றன. காலத்தை ஊகிக்காமல் உரிய அறிவிப்பைப் பாருங்கள்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S2 (Directorate of Technical Education, **TNEA 2026 — Online Counselling Procedure**) — PDF p.1: registration, verification, rank list, grievance and counselling; pp.2–4: choices, allotment and confirmation options. See register and linked evidence notes for URL/conditions.
 
@@ -2223,34 +2092,24 @@ CHANGED_FIELDS = NEXT_TA
 
 QUESTION_EN =
 What is TNEA?
-
 QUESTION_TA =
-TNEA என்றால் என்ன?
-
+TNEA (Tamil Nadu Engineering Admissions) என்றால் என்ன?
 ANSWER_EN =
 TNEA means Tamil Nadu Engineering Admissions: the application and counselling process for the engineering seats covered by its brochure. It is an admission process, not itself an entrance examination.
-
 ANSWER_TA =
-TNEA என்பது தமிழ்நாடு பொறியியல் சேர்க்கை. அதன் கையேட்டில் உள்ள பொறியியல் இடங்களுக்கான விண்ணப்பம் மற்றும் கலந்தாய்வு முறை. இது சேர்க்கைச் செயல்முறை. தனி நுழைவுத்தேர்வு அல்ல.
-
+தமிழ்நாடு அரசின் தொழில்நுட்பக் கல்வி இயக்ககம் (DoTE) நடத்தும் அரசுப் பொறியியல் சேர்க்கைக்கான ஒற்றைச் சாளர இணையவழி கலந்தாய்வு முறைக்கு TNEA என்று பெயர்.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 You can start by checking the official notice for your next stage and deadline; ask a TNEA Facilitation Centre if unsure.
-
 NEXT_TA =
 உங்கள் அடுத்த படி மற்றும் அதற்கான காலக்கெடு பற்றி அதிகாரப்பூர்வ அறிவிப்பைப் பார்க்கலாம். சந்தேகமிருந்தால் TNEA உதவி மையத்தில் கேளுங்கள்.
-
 LIMIT_EN =
 Based on the 2026 TNEA process. This definition does not establish your eligibility, an open application window or a seat.
-
 LIMIT_TA =
 2026 TNEA செயல்முறையின் விளக்கம். இது உங்கள் தகுதி, இப்போது விண்ணப்பம் திறந்துள்ளதா, அல்லது இடம் கிடைக்குமா என்பதை உறுதிசெய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S2 (Directorate of Technical Education, **TNEA 2026 — Online Counselling Procedure**) — PDF p.1: registration, verification, rank list, grievance and counselling; pp.2–4: choices, allotment and confirmation options. See register and linked evidence notes for URL/conditions.
 
@@ -2277,34 +2136,24 @@ CHANGED_FIELDS = NEXT_TA
 
 QUESTION_EN =
 Is TNEA an entrance exam?
-
 QUESTION_TA =
-TNEA ஒரு நுழைவுத்தேர்வா?
-
+TNEA என்பது ஏதேனும் நுழைவுத் தேர்வா?
 ANSWER_EN =
 No. TNEA is an admission and counselling process. The ordinary academic route uses relevant school marks under its merit rules; special programmes can have additional requirements.
-
 ANSWER_TA =
-இல்லை. TNEA என்பது சேர்க்கை மற்றும் கலந்தாய்வு முறை. வழக்கமான பள்ளிக் கல்வி வழியில் உரிய பள்ளி மதிப்பெண்கள் தரவரிசை விதிகளின்படி பயன்படும். சிறப்புப் படிப்புகளுக்குக் கூடுதல் தேவைகள் இருக்கலாம்.
-
+இல்லை, TNEA எந்தவித நுழைவுத் தேர்வும் அல்ல. உங்கள் +2 பொதுத் தேர்வில் கணிதம், இயற்பியல், வேதியியல் பாடங்களில் பெற்ற மதிப்பெண்களைக் கொண்டு கணக்கிடப்படும் கட்-ஆஃப் மதிப்பெண் (200-க்கு) மட்டுமே சேர்க்கைக்கு அடிப்படையாகும்.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 You can start by checking the official notice for your next stage and deadline; ask a TNEA Facilitation Centre if unsure.
-
 NEXT_TA =
 உங்கள் அடுத்த படி மற்றும் அதற்கான காலக்கெடு பற்றி அதிகாரப்பூர்வ அறிவிப்பைப் பார்க்கலாம். சந்தேகமிருந்தால் TNEA உதவி மையத்தில் கேளுங்கள்.
-
 LIMIT_EN =
 Based on the 2026 TNEA process. This definition does not establish your eligibility, an open application window or a seat.
-
 LIMIT_TA =
 2026 TNEA செயல்முறையின் விளக்கம். இது உங்கள் தகுதி, இப்போது விண்ணப்பம் திறந்துள்ளதா, அல்லது இடம் கிடைக்குமா என்பதை உறுதிசெய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S2 (Directorate of Technical Education, **TNEA 2026 — Online Counselling Procedure**) — PDF p.1: registration, verification, rank list, grievance and counselling; pp.2–4: choices, allotment and confirmation options. See register and linked evidence notes for URL/conditions.
 
@@ -2331,34 +2180,24 @@ CHANGED_FIELDS = NONE
 
 QUESTION_EN =
 Who conducts TNEA?
-
 QUESTION_TA =
-TNEA-வை யார் நடத்துகிறார்கள்?
-
+TNEA கலந்தாய்வை யார் நடத்துகிறார்கள்?
 ANSWER_EN =
 The Directorate of Technical Education, Government of Tamil Nadu, conducts TNEA. Use its official TNEA notices for the applicable admission year.
-
 ANSWER_TA =
-தமிழ்நாடு அரசின் தொழில்நுட்பக் கல்வி இயக்ககம் TNEA-வை நடத்துகிறது. நீங்கள் சேர விரும்பும் ஆண்டுக்கான அதன் அதிகாரப்பூர்வ TNEA அறிவிப்புகளைப் பாருங்கள்.
-
+தமிழ்நாடு அரசின் உயர்கல்வித் துறையின் கீழ் இயங்கும் தொழில்நுட்பக் கல்வி இயக்ககம் (Directorate of Technical Education - DoTE) TNEA கலந்தாய்வை அதிகாரப்பூர்வமாக நடத்துகிறது.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Read the official TNEA explanation of the application and counselling steps.
-
 NEXT_TA =
 விண்ணப்பம் மற்றும் கலந்தாய்வுப் படிகளுக்கான அதிகாரப்பூர்வ TNEA விளக்கத்தைப் பார்க்கலாம்.
-
 LIMIT_EN =
 Based on the 2026 TNEA process. This definition does not establish your eligibility, an open application window or a seat.
-
 LIMIT_TA =
 2026 TNEA செயல்முறையின் விளக்கம். இது உங்கள் தகுதி, இப்போது விண்ணப்பம் திறந்துள்ளதா, அல்லது இடம் கிடைக்குமா என்பதை உறுதிசெய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S2 (Directorate of Technical Education, **TNEA 2026 — Online Counselling Procedure**) — PDF p.1: registration, verification, rank list, grievance and counselling; pp.2–4: choices, allotment and confirmation options. See register and linked evidence notes for URL/conditions.
 
@@ -2385,34 +2224,25 @@ CHANGED_FIELDS = DETAIL_EN, NEXT_TA
 
 QUESTION_EN =
 What happens from TNEA application to joining a college?
-
 QUESTION_TA =
-TNEA விண்ணப்பத்திலிருந்து கல்லூரியில் சேர்வது வரை என்ன நடக்கும்?
-
+TNEA-வில் விண்ணப்பிப்பதில் இருந்து கல்லூரியில் சேர்வது வரை என்னென்ன கட்டங்கள் நடக்கும்?
 ANSWER_EN =
 The sequence is application, certificate verification, rank publication, choice entry, tentative allotment, your response and the required reporting/joining steps. Submitting a form or seeing an allotted seat is not the final step.
-
 ANSWER_TA =
-விண்ணப்பம், சான்றிதழ் சரிபார்ப்பு, தரவரிசை வெளியீடு, விருப்பத் தேர்வுகள், தற்காலிக இடஒதுக்கீடு, உங்கள் பதில், தேவையான சேர்க்கைப் பணிகள் என்று தொடரும். படிவம் அளித்ததோ திரையில் இடம் தெரிந்ததோ கடைசிப் படி அல்ல.
-
+முக்கியக் கட்டங்கள்:
+விண்ணப்பப் பதிவு → சான்றிதழ் சரிபார்ப்பு → ரேங்க் பட்டியல் வெளியீடு → கலந்தாய்வுச் சுற்றுகள் (Rounds) → விருப்ப வரிசைப் பதிவு (Choice Filling) → தற்காலிக ஒதுக்கீடு (Provisional Allotment) → மாணவர் உறுதிப்படுத்தல் (Confirmation) → கல்லூரியில் நேரடி அறிக்கை & சேர்க்கை (Reporting & Admission).
 DETAIL_EN =
 In the notified round, confirm your college-and-branch choices in your preferred order. Allotment depends on rank, applicable reservation, choices and available eligible seats. Respond to the tentative allotment by the stated deadline. Complete the specified college/TFC reporting, fees and documents.
-
 DETAIL_TA =
-அறிவிக்கப்பட்ட சுற்றில் கல்லூரி–பிரிவுகளை விருப்ப வரிசையில் உறுதிசெய்யுங்கள். தரவரிசை, பொருந்தும் இடஒதுக்கீடு, விருப்பங்கள், கிடைக்கும் உரிய இடங்களைப் பொறுத்து ஒதுக்கீடு அமையும். தற்காலிக ஒதுக்கீட்டிற்குக் குறிப்பிட்ட காலத்தில் பதிலளித்து, தெரிவிக்கப்பட்ட கல்லூரி/TFC வருகை, கட்டணம், ஆவணப் பணிகளை முடிக்க வேண்டும்.
-
+தற்காலிக ஒதுக்கீடு கிடைத்ததும் குறிப்பிட்ட காலக்கெடுவுக்குள் அதை உறுதிசெய்து கட்டணம் செலுத்த வேண்டும்; தவறினால் அந்த இடம் தானாக ரத்தாகிவிடும்.
 NEXT_EN =
 You can start by checking the official notice for your next stage and deadline; ask a TNEA Facilitation Centre if unsure.
-
 NEXT_TA =
 உங்கள் அடுத்த படி மற்றும் அதற்கான காலக்கெடு பற்றி அதிகாரப்பூர்வ அறிவிப்பைப் பார்க்கலாம். சந்தேகமிருந்தால் TNEA உதவி மையத்தில் கேளுங்கள்.
-
 LIMIT_EN =
 2026 process only, not a claim that a round is open. Saved sources disagree on the grievance window; check the controlling notice rather than assuming a deadline.
-
 LIMIT_TA =
 இது 2026 செயல்முறை மட்டுமே. இப்போது சுற்று திறந்துள்ளது என்ற தகவல் அல்ல. குறை தெரிவிக்கும் காலத்தில் சேமிக்கப்பட்ட ஆதாரங்கள் முரண்படுகின்றன. காலத்தை ஊகிக்காமல் உரிய அறிவிப்பைப் பாருங்கள்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S2 (Directorate of Technical Education, **TNEA 2026 — Online Counselling Procedure**) — PDF p.1: registration, verification, rank list, grievance and counselling; pp.2–4: choices, allotment and confirmation options. See register and linked evidence notes for URL/conditions.
 
@@ -2439,34 +2269,24 @@ CHANGED_FIELDS = NEXT_TA
 
 QUESTION_EN =
 What is counselling in TNEA?
-
 QUESTION_TA =
-TNEA-வில் கலந்தாய்வு என்றால் என்ன?
-
+TNEA-வில் கலந்தாய்வு (Counselling) என்றால் என்ன?
 ANSWER_EN =
 Counselling is the organised process of giving your college-and-branch preferences, receiving an allotment under the rules, responding to it and completing joining requirements. It is not an interview that guarantees a college.
-
 ANSWER_TA =
-கலந்தாய்வு என்பது விருப்பமான கல்லூரி–பிரிவுகளைத் தெரிவித்து, விதிகளின்படி ஒதுக்கீட்டைப் பெற்று, அதற்குப் பதிலளித்து, சேர்க்கைத் தேவைகளை முடிக்கும் முறை. இது கல்லூரி இடத்தை உறுதி செய்யும் நேர்முகத் தேர்வு அல்ல.
-
+மாணவர்கள் தங்களுக்கு விருப்பமான கல்லூரிகள் மற்றும் பாடப்பிரிவுகளை முன்னுரிமை வரிசையில் (Choice 1, Choice 2...) இணையத்தில் பதிவு செய்து, அரசு விதிகளின்படி தகுதியான இடத்தைப் பெற்றுக்கொள்ளும் வெளிப்படையான ஒதுக்கீட்டு நடைமுறையே கலந்தாய்வு ஆகும். இது நேர்முகத் தேர்வு அல்ல.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 You can start by checking the official notice for your next stage and deadline; ask a TNEA Facilitation Centre if unsure.
-
 NEXT_TA =
 உங்கள் அடுத்த படி மற்றும் அதற்கான காலக்கெடு பற்றி அதிகாரப்பூர்வ அறிவிப்பைப் பார்க்கலாம். சந்தேகமிருந்தால் TNEA உதவி மையத்தில் கேளுங்கள்.
-
 LIMIT_EN =
 Based on the 2026 TNEA process. This definition does not establish your eligibility, an open application window or a seat.
-
 LIMIT_TA =
 2026 TNEA செயல்முறையின் விளக்கம். இது உங்கள் தகுதி, இப்போது விண்ணப்பம் திறந்துள்ளதா, அல்லது இடம் கிடைக்குமா என்பதை உறுதிசெய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S2 (Directorate of Technical Education, **TNEA 2026 — Online Counselling Procedure**) — PDF p.1: registration, verification, rank list, grievance and counselling; pp.2–4: choices, allotment and confirmation options. See register and linked evidence notes for URL/conditions.
 
@@ -2493,34 +2313,24 @@ CHANGED_FIELDS = NEXT_TA
 
 QUESTION_EN =
 Why do I need to register for TNEA?
-
 QUESTION_TA =
 TNEA-வில் ஏன் பதிவு செய்ய வேண்டும்?
-
 ANSWER_EN =
 Registration enters you into the TNEA admission process so your application and records can be considered. Registration alone is not a seat allotment; later verification, choices and responses still matter.
-
 ANSWER_TA =
-உங்கள் விண்ணப்பமும் ஆவணங்களும் பரிசீலிக்கப்பட TNEA சேர்க்கை முறையில் பதிவு செய்ய வேண்டும். பதிவு மட்டும் இடஒதுக்கீடு அல்ல. பின்னர் சரிபார்ப்பு, விருப்பத் தேர்வுகள், பதிலளித்தல் ஆகியவை முக்கியம்.
-
+TNEA அரசு ஒதுக்கீட்டு இடங்களில் சேர விரும்பும் எந்த ஒரு மாணவரும் கண்டிப்பாக அதிகாரப்பூர்வ தளத்தில் பதிவு செய்திருக்க வேண்டும். பதிவு செய்யாத மாணவர்களைக் கலந்தாய்வு அமைப்பால் பரிசீலிக்க முடியாது.
 DETAIL_EN =
 (No additional detail displayed.)
-
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 You can start by checking the official notice for your next stage and deadline; ask a TNEA Facilitation Centre if unsure.
-
 NEXT_TA =
 உங்கள் அடுத்த படி மற்றும் அதற்கான காலக்கெடு பற்றி அதிகாரப்பூர்வ அறிவிப்பைப் பார்க்கலாம். சந்தேகமிருந்தால் TNEA உதவி மையத்தில் கேளுங்கள்.
-
 LIMIT_EN =
 Based on the 2026 TNEA process. This definition does not establish your eligibility, an open application window or a seat.
-
 LIMIT_TA =
 2026 TNEA செயல்முறையின் விளக்கம். இது உங்கள் தகுதி, இப்போது விண்ணப்பம் திறந்துள்ளதா, அல்லது இடம் கிடைக்குமா என்பதை உறுதிசெய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S2 (Directorate of Technical Education, **TNEA 2026 — Online Counselling Procedure**) — PDF p.1: registration, verification, rank list, grievance and counselling; pp.2–4: choices, allotment and confirmation options. See register and linked evidence notes for URL/conditions.
 
@@ -2547,34 +2357,24 @@ CHANGED_FIELDS = NEXT_TA
 
 QUESTION_EN =
 What is a TNEA rank list?
-
 QUESTION_TA =
-TNEA தரவரிசைப் பட்டியல் என்றால் என்ன?
-
+TNEA தரவரிசைப் பட்டியல் (Rank List) என்றால் என்ன?
 ANSWER_EN =
 A rank list orders eligible applicants under the year’s merit and tie-breaking rules. Overall rank and community rank are different lists; rank is your place in a list, not your cutoff mark.
-
 ANSWER_TA =
-அந்த ஆண்டின் மதிப்பெண் மற்றும் சமமதிப்பெண் விதிகளின்படி தகுதியுள்ள விண்ணப்பதாரர்களை வரிசைப்படுத்துவது தரவரிசைப் பட்டியல். பொதுத் தரவரிசையும் சமூகப் பிரிவு தரவரிசையும் வேறு பட்டியல்கள். தரவரிசை என்பது வரிசை இடம். கட்-ஆஃப் மதிப்பெண் அல்ல.
-
+விண்ணப்பித்த அனைத்து மாணவர்களுக்கும் +2 கட்-ஆஃப் மதிப்பெண்கள், சமமதிப்பெண் சமன் செய்யும் விதிகள் (Tie-break rules) மற்றும் வகுப்புவாரி இடஒதுக்கீடு விதிகளின்படி அரசு வெளியிடும் அதிகாரப்பூர்வ வரிசைப் பட்டியலே ரேங்க் லிஸ்ட் ஆகும்.
 DETAIL_EN =
 Equal cutoff marks can be separated by tie-breaking rules. Check the authority’s published list rather than deriving an official rank from one score.
-
 DETAIL_TA =
-ஒரே கட்-ஆஃப் இருந்தாலும் சமமதிப்பெண் விதிகளால் வரிசை வேறுபடலாம். ஒரு மதிப்பெண்ணிலிருந்து அதிகாரப்பூர்வ தரவரிசையை ஊகிக்காமல் வெளியிடப்பட்ட பட்டியலைப் பாருங்கள்.
-
+இதில் பொதுத் தரவரிசை (Overall Merit Rank) மற்றும் வகுப்புவாரித் தரவரிசை (Community Rank) இரண்டும் தனித்தனியாகக் குறிப்பிடப்பட்டிருக்கும். ரேங்க் அடிப்படையிலேயே நீங்கள் எந்தச் சுற்றில் (Round) கலந்துகொள்வீர்கள் என்பது தீர்மானிக்கப்படும்.
 NEXT_EN =
 You can start by checking the official notice for your next stage and deadline; ask a TNEA Facilitation Centre if unsure.
-
 NEXT_TA =
 உங்கள் அடுத்த படி மற்றும் அதற்கான காலக்கெடு பற்றி அதிகாரப்பூர்வ அறிவிப்பைப் பார்க்கலாம். சந்தேகமிருந்தால் TNEA உதவி மையத்தில் கேளுங்கள்.
-
 LIMIT_EN =
 2026 ranking rules; the official list establishes your rank. A cutoff alone cannot establish rank or admission.
-
 LIMIT_TA =
 2026 தரவரிசை விதிகள். அதிகாரப்பூர்வப் பட்டியலே உங்கள் தரவரிசையை உறுதிசெய்யும். கட்-ஆஃப் மட்டும் தரவரிசையையோ சேர்க்கையையோ உறுதிசெய்யாது.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 S1 (Directorate of Technical Education, **Tamil Nadu Engineering Admissions 2026 — Information Brochure**) — Printed p.1, admission scope/§1; pp.1–3 §3 eligibility/nativity; p.4 §4.2 community evidence; p.5 §5 special reservation; p.9 §6(a) merit/normalisation/tie-break; p.10 §6(b) vocational and §7 concessions; pp.11–12 §§8–9 registration/documents; pp.12–14 §10 counselling; S2 (Directorate of Technical Education, **TNEA 2026 — Online Counselling Procedure**) — PDF p.1: registration, verification, rank list, grievance and counselling; pp.2–4: choices, allotment and confirmation options. See register and linked evidence notes for URL/conditions.
 
