@@ -344,8 +344,8 @@ test("Fix 2 & P0-A/P1-B/P1-C: Cutoff calculator provides marks privacy, stale cl
   });
   assert.ok(calcTa.includes("185.5 / 200"));
   assert.ok(calcTa.includes("95 + (90 + 91) / 2 = 185.5"));
-  assert.ok(calcTa.includes("கணக்கிடப்பட்ட கூட்டு கட்-ஆஃப் மதிப்பு"));
-  assert.ok(calcTa.includes("இது உங்கள் பாட மதிப்பெண்களிலிருந்து (கணிதம் 100, இயற்பியல் 50, வேதியியல் 50 எடையிடப்பட்டு) 200-க்குக் கணக்கிடப்பட்ட கூட்டு கட்-ஆஃப் மதிப்பு மட்டுமே."));
+  assert.ok(calcTa.includes("உங்கள் TNEA Cutoff மதிப்பெண்"));
+  assert.ok(calcTa.includes("கணக்கீட்டு முறை: இது கணிதம் (100) + இயற்பியல் (50) + வேதியியல் (50) ஆகியவற்றின் அடிப்படையில் 200-க்குக் கணக்கிடப்பட்ட Cutoff மதிப்பெண் மட்டுமே."));
   assert.match(calcTa, /www\.tneaonline\.org/);
   assert.ok(calcTa.includes('href="/colleges?view=colleges&amp;lang=ta"'));
   assert.ok(calcTa.includes('href="/counselling?lang=ta"'));
@@ -406,8 +406,8 @@ test("Fix 4 & P0-B/P0-C/P1-C: Counselling page provides factual procedural guida
 
     if (language === "ta") {
       // Choice Ordering
-      assert.match(html, /வரிசை 1-லிருந்து வரிசையாக/);
-      assert.match(html, /தானாக எந்த அனுமான முடிவையும் பூட்டாது/);
+      assert.match(html, /வரிசை 1-லிருந்து கீழ்நோக்கி வரிசையாக/);
+      assert.match(html, /தானாக எந்த முடிவையும் பூட்டவோ செய்யாது/);
       // Upward Movement with TFC reporting/fee conditions and verified exceptions
       assert.match(html, /Accept &amp; Upward/);
       assert.match(html, /நேரில் சென்று அறிக்கை சமர்ப்பிக்க வேண்டும்/);

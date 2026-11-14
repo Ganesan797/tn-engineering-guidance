@@ -192,7 +192,7 @@ test("zero-knowledge Tamil path offers engineering and branch awareness before T
   const start = renderM2Journey("awareness", pack, reviewed, awarenessReviewed, runtime());
   assert.match(start, /<html lang="ta"/);
   assert.match(start, /data-content-id="AW-01"/);
-  assert.match(start, /மதிப்பெண்களோ கல்லூரித் தேர்வோ இப்போது தேவையில்லை/);
+  assert.match(start, /மதிப்பெண்கள் அல்லது கல்லூரி விவரங்கள் இன்றி/);
   assert.match(start, /data-content-id="A01"/);
   assert.match(start, /data-content-id="A04"/);
   // Let students choose a route after the introduction, before optional expanded examples.
@@ -223,11 +223,11 @@ test("zero-knowledge Tamil path offers engineering and branch awareness before T
   assert.match(study, /Civil/);
   assert.doesNotMatch(study, /name="answer"|type="number"/);
   const compare = renderM2Journey("compare", pack, reviewed, awarenessReviewed, runtime());
-  assert.ok(compare.indexOf("திறன் தீர்ப்பு அல்ல") < compare.indexOf('<nav class="actions">'));
+  assert.ok(compare.indexOf("விருப்பத்தைப் புரிந்துகொள்ளும் வழிகாட்டி") < compare.indexOf('<nav class="actions">'));
   assert.ok(compare.indexOf('data-content-id="A06"') < compare.indexOf('<nav class="actions">') && compare.indexOf('data-content-id="A05"') < compare.indexOf('<nav class="actions">')); assert.doesNotMatch(compare, /data-content-id="A04"/);
   assert.match(compare, /data-content-id="A06"/);
   assert.match(compare, /data-content-id="A05"/);
-  assert.match(compare, /திறன் தீர்ப்பு அல்ல/);
+  assert.match(compare, /விருப்பத்தைப் புரிந்துகொள்ளும் வழிகாட்டி/);
   assert.doesNotMatch(compare, /name="answer"|type="number"/);
   assert.match(reviewedAwarenessTamilQuestion(awarenessReviewed, "A04", "Q041"), /Mechanical/);
   const route = renderM2Journey("route", pack, reviewed, awarenessReviewed, runtime());
