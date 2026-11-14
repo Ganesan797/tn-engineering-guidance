@@ -41,32 +41,32 @@ QUESTION_EN =
 I know I want to do engineering, but I don't know how to start.
 
 QUESTION_TA =
-பொறியியல் படிக்க வேண்டும் என்று நினைக்கிறேன். ஆனால் எங்கிருந்து தொடங்குவது என்று தெரியவில்லை.
-
+பொறியியல் படிக்க வேண்டும் என்று நினைக்கிறேன்; ஆனால் எங்கிருந்து தொடங்குவது என்று தெரியவில்லை.
 ANSWER_EN =
 Start with three questions: What problems interest me? What subjects and practical work are in the related branch? How do I enter that programme? You do not need marks or a college choice to begin.
 
 ANSWER_TA =
-இப்போதே கல்லூரியையோ பிரிவையோ முடிவு செய்ய வேண்டியதில்லை. முதலில் மூன்று விஷயங்களைப் பார்ப்போம்: எந்த வகையான பிரச்சினைகள் அல்லது வேலைகள் உங்களுக்கு ஆர்வம் தருகின்றன? அதனுடன் தொடர்புள்ள பொறியியல் பிரிவில் என்ன பாடங்களும் செய்முறைப் பணிகளும் இருக்கும்? அந்தப் படிப்பில் சேர என்ன வழிகள் உள்ளன? தொடங்குவதற்கு உங்கள் மதிப்பெண்களையோ கல்லூரித் தேர்வையோ இப்போதே சொல்ல வேண்டியதில்லை.
+இப்போதே கல்லூரியையோ பாடப்பிரிவையோ முடிவு செய்ய வேண்டியதில்லை. முதலில் 3 எளிய விஷயங்களில் இருந்து தொடங்குங்கள்:
+1. உங்களுக்கு எந்த வகையான பிரச்சினைகளுக்குத் தீர்வு காணப் பிடிக்கும்?
+2. அந்தத் துறை சார்ந்த பொறியியல் படிப்பில் என்னென்ன பாடங்களும் செய்முறைப் பயிற்சிகளும் இருக்கும்?
+3. அதில் சேருவதற்கான TNEA சேர்க்கை வழிமுறைகள் என்ன?
 
+இப்போதே மதிப்பெண்களோ கல்லூரியோ தேவையில்லை; உங்கள் ஆர்வத்தைப் புரிந்துகொள்வதே முதல் படி.
 DETAIL_EN =
 (No additional detail displayed.)
 
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Start with one engineering field that interests you. Once you understand what you would study, you can look at the available admission routes.
 
 NEXT_TA =
-முதலில் உங்களுக்கு ஆர்வமாகத் தோன்றும் ஒரு துறையைத் தேர்ந்தெடுத்து, அதில் என்ன படிப்பீர்கள் என்று பாருங்கள். அதன் பிறகு அந்தப் படிப்பில் சேரும் வழியைப் புரிந்துகொள்ளலாம்.
-
+முதலில் ஆர்வமுள்ள ஒரு துறையைத் தேர்ந்தெடுத்து, அதில் என்ன படிப்பீர்கள் என்று பாருங்கள். அதன் பிறகு அந்தப் படிப்பில் சேரும் வழியைப் புரிந்துகொள்ளலாம்.
 LIMIT_EN =
 The best fit depends on your interests and circumstances, and programme details can vary by college and curriculum. Check the specific programme before deciding.
 
 LIMIT_TA =
 இது தொடங்குவதற்கான வழிகாட்டல் மட்டுமே. எந்தப் பிரிவு உங்களுக்கு மிகவும் பொருத்தமானது என்பதையும், குறிப்பிட்ட கல்லூரியின் பாடத்திட்டத்தையும் தனியாகப் பார்த்துதான் முடிவு செய்ய வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E01 (**Engineering and Technology career stream**, Tamil Nadu School Education career-guidance portal / Naan Mudhalvan, current page; repository `SRC006`) — Engineering skills and specialisations; E02 (**India Sudar Career Guidance Book — MAR/2025**, India Sudar Educational and Charitable Trust, 2025; repository `SRC008`) — Printed pp.44–45 (viewer pp.50–51); E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty. See register and linked evidence notes for URL/conditions.
 
@@ -93,32 +93,27 @@ QUESTION_EN =
 What is engineering?
 
 QUESTION_TA =
-பொறியியல் என்றால் என்ன?
-
+பொறியியல் (Engineering) என்றால் என்ன?
 ANSWER_EN =
 Engineering applies mathematics, science, design and testing to create or improve things and systems: for example, software, circuits, machines, buildings, transport or water systems.
 
 ANSWER_TA =
-எளிமையாகச் சொன்னால், கணிதம், அறிவியல், வடிவமைப்பு மற்றும் சோதனை ஆகியவற்றைப் பயன்படுத்தி நம்மைச் சுற்றியுள்ள பொருட்களையும் அமைப்புகளையும் உருவாக்குவது அல்லது மேம்படுத்துவதுதான் பொறியியல். மென்பொருள், மின்சுற்று, இயந்திரம், கட்டிடம், போக்குவரத்து மற்றும் நீர் அமைப்பு போன்றவை இதற்கு சில உதாரணங்கள்.
-
+எளிமையாகச் சொன்னால், அறிவியல் மற்றும் கணிதக் கோட்பாடுகளைப் பயன்படுத்தி, மனிதர்களின் அன்றாட வாழ்க்கைப் பிரச்சினைகளுக்கு நடைமுறைத் தீர்வுகளை உருவாக்குவதே பொறியியல் ஆகும். மென்பொருட்கள் (Software), மின்சுற்றுகள் (Circuits), இயந்திரங்கள் (Machines), பாலங்கள்/கட்டிடங்கள் (Infrastructure) போன்ற பலவற்றை உருவாக்குவதும் மேம்படுத்துவதும் இதில் அடங்கும்.
 DETAIL_EN =
 (No additional detail displayed.)
 
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Start with one engineering field that interests you. Once you understand what you would study, you can look at the available admission routes.
 
 NEXT_TA =
-உங்களுக்கு ஆர்வமாக இருக்கும் ஒரு பொறியியல் துறையை முதலில் பாருங்கள். அதில் என்ன படிப்பீர்கள் என்று தெரிந்துகொண்ட பிறகு, அந்தப் படிப்பில் சேரும் வழியைப் பார்க்கலாம்.
-
+பொறியியலில் உள்ள முக்கியத் துறைகளைப் பார்த்து, எதில் என்ன செய்வார்கள் என்பதைப் புரிந்துகொள்ளலாம்.
 LIMIT_EN =
 The best fit depends on your interests and circumstances, and programme details can vary by college and curriculum. Check the specific programme before deciding.
 
 LIMIT_TA =
 எந்தத் துறை உங்களுக்கு ஏற்றது என்பதும், ஒவ்வொரு கல்லூரியிலும் உள்ள படிப்பின் விவரங்களும் மாறுபடலாம். அவற்றைத் தனியாகப் பார்த்துதான் முடிவு செய்ய வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E01 (**Engineering and Technology career stream**, Tamil Nadu School Education career-guidance portal / Naan Mudhalvan, current page; repository `SRC006`) — Engineering skills and specialisations; E02 (**India Sudar Career Guidance Book — MAR/2025**, India Sudar Educational and Charitable Trust, 2025; repository `SRC008`) — Printed pp.44–45 (viewer pp.50–51); E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty. See register and linked evidence notes for URL/conditions.
 
@@ -145,32 +140,27 @@ QUESTION_EN =
 Why do people study engineering?
 
 QUESTION_TA =
-சிலர் ஏன் பொறியியல் படிக்கத் தேர்வு செய்கிறார்கள்?
-
+மாணவர்கள் ஏன் பொறியியல் படிக்கத் தேர்வு செய்கிறார்கள்?
 ANSWER_EN =
 People may choose it because they want to understand how things work and learn to design, build, test or improve practical solutions.
 
 ANSWER_TA =
-பொருட்களும் அமைப்புகளும் எப்படி வேலை செய்கின்றன என்பதைப் புரிந்துகொள்வதில் சிலருக்கு ஆர்வம் இருக்கும். நடைமுறைப் பிரச்சினைகளுக்குத் தீர்வு வடிவமைக்கவும், அதை உருவாக்கிச் சோதித்து மேம்படுத்தவும் விரும்புவதால் அவர்கள் பொறியியல் படிக்கத் தேர்வு செய்கிறார்கள்.
-
+பொருட்களும் தொழில்நுட்பங்களும் எவ்வாறு இயங்குகின்றன என்பதைப் புரிந்துகொள்ளவும், புதிய கருவிகள் அல்லது மென்பொருட்களை சொந்தமாக உருவாக்கவும் விரும்புபவர்கள் பொறியியலைத் தேர்வு செய்கிறார்கள்.
 DETAIL_EN =
 It is a good reason to explore engineering, but it does not guarantee that the course will suit every student or lead to a particular job.
 
 DETAIL_TA =
-இவை பொறியியலை ஆராய நல்ல காரணங்கள். ஆனால் பொறியியல் எல்லோருக்கும் பொருத்தமாக இருக்கும் என்றோ, இதைப் படித்தால் ஒரு குறிப்பிட்ட வேலை கண்டிப்பாகக் கிடைக்கும் என்றோ சொல்ல முடியாது.
-
+இது நல்ல தொடக்க ஆர்வம்தான்; ஆனால் பொறியியல் மட்டுமே ஒரே சிறந்த படிப்பு என்றோ, பட்டம் பெற்றாலே குறிப்பிட்ட வேலை உறுதியாகக் கிடைக்கும் என்றோ கருதக்கூடாது.
 NEXT_EN =
 Start with one engineering field that interests you. Once you understand what you would study, you can look at the available admission routes.
 
 NEXT_TA =
 உங்களுக்கு ஆர்வம் தரும் ஒரு துறையைத் தேர்ந்தெடுத்து, அதில் என்ன படிப்பீர்கள் மற்றும் எந்த மாதிரியான வேலைகள் செய்வீர்கள் என்று முதலில் பாருங்கள். பிறகு அந்தப் படிப்பில் சேரும் வழியை அறிந்துகொள்ளலாம்.
-
 LIMIT_EN =
 The best fit depends on your interests and circumstances, and programme details can vary by college and curriculum. Check the specific programme before deciding.
 
 LIMIT_TA =
 உங்களுக்கு எந்தத் துறை பொருத்தமாக இருக்கும் என்பதும், குறிப்பிட்ட படிப்பின் விவரங்களும் உங்கள் விருப்பம், கல்லூரி மற்றும் பாடத்திட்டத்தைப் பொறுத்து மாறலாம்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E01 (**Engineering and Technology career stream**, Tamil Nadu School Education career-guidance portal / Naan Mudhalvan, current page; repository `SRC006`) — Engineering skills and specialisations; E02 (**India Sudar Career Guidance Book — MAR/2025**, India Sudar Educational and Charitable Trust, 2025; repository `SRC008`) — Printed pp.44–45 (viewer pp.50–51); E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E15 (**National Classification of Occupations 2015, Volume II-A**, Ministry of Labour and Employment / National Career Service, 2015) — pp.224 onward, occupation family 2512; software developer, engineer trainee and engineering-analysis roles; E16 (**National Classification of Occupations 2015, Volume I**, Ministry of Labour and Employment / National Career Service, 2015) — Occupation families 2142–2153 and 2512. See register and linked evidence notes for URL/conditions.
 
@@ -197,32 +187,30 @@ QUESTION_EN =
 What does an engineer actually do?
 
 QUESTION_TA =
-ஒரு பொறியாளர் என்ன மாதிரியான வேலைகளைச் செய்வார்?
-
+ஒரு பொறியாளர் அன்றாடம் என்ன மாதிரியான பணிகளைச் செய்வார்?
 ANSWER_EN =
 Depending on the field, an engineer understands a need, designs or models a solution, builds or programs it, tests it and works with others to improve it.
 
 ANSWER_TA =
-அது அவர் பணிபுரியும் துறையைப் பொறுத்தது. பொதுவாக, ஒரு தேவையையோ பிரச்சினையையோ புரிந்துகொண்டு, அதற்கான தீர்வை வடிவமைப்பார். பிறகு அதை உருவாக்கி அல்லது நிரலாக்கி, சோதித்து, குழுவுடன் சேர்ந்து மேலும் மேம்படுத்துவார்.
-
+துறைக்குத் துறை பணி மாறுபடும். பொதுவாக, ஒரு தேவையையோ சிக்கலையோ புரிந்துகொண்டு, அதற்கான தீர்வை வடிவமைப்பார் (Design). பின் அதை உருவாக்கி அல்லது நிரலாக்கம் செய்து (Build/Code), சோதித்து (Test), பிழைகளைச் சரிசெய்வார் (Troubleshoot).
 DETAIL_EN =
 An engineer may understand a need, calculate or model a solution, make a design, build or program a prototype, test it, find faults, document results and work with others. A civil engineer might test materials or plan infrastructure; a software engineer might design, code and test a system.
 
 DETAIL_TA =
-வேலையின் ஒரு பகுதியாகக் கணக்கிடுதல், மாதிரி உருவாக்குதல், வடிவமைத்தல், சோதித்தல், பிழைகளைக் கண்டறிதல் மற்றும் முடிவுகளைப் பதிவு செய்தல் ஆகியவை இருக்கலாம். உதாரணமாக, சிவில் பொறியாளர் கட்டுமானப் பொருட்களைச் சோதிக்கலாம் அல்லது உள்கட்டமைப்பைத் திட்டமிடலாம். மென்பொருள் பொறியாளர் ஒரு அமைப்பை வடிவமைத்து, நிரலாக்கிச் சோதிக்கலாம்.
-
+துறை வாரியான எடுத்துக்காட்டுகள்:
+- மென்பொருள் பொறியாளர் (Software): செயலிகளை வடிவமைத்து, கோடிங் செய்து, சோதிப்பார்.
+- சிவில் பொறியாளர் (Civil): கட்டுமானப் பொருட்களின் உறுதித்தன்மையைச் சோதித்து, திட்ட வரைபடங்களை உருவாக்குவார்.
+- இயந்திரப் பொறியாளர் (Mechanical): இயந்திர உதிரிபாகங்களை வடிவமைத்து உற்பத்தி செய்வார்.
 NEXT_EN =
 Start with one engineering field that interests you. Once you understand what you would study, you can look at the available admission routes.
 
 NEXT_TA =
 உங்களுக்கு ஆர்வமாக இருக்கும் ஒரு துறையைத் தேர்ந்தெடுத்து, அந்தத் துறையில் ஒரு பொறியாளரின் அன்றாட வேலை எப்படி இருக்கும் என்று முதலில் பாருங்கள். பிறகு அதற்கான படிப்பு மற்றும் சேர்க்கை வழியை அறிந்துகொள்ளலாம்.
-
 LIMIT_EN =
 The best fit depends on your interests and circumstances, and programme details can vary by college and curriculum. Check the specific programme before deciding.
 
 LIMIT_TA =
 பொறியாளரின் வேலை துறை, நிறுவனம் மற்றும் பொறுப்பைப் பொறுத்து மாறும். அதேபோல், உங்களுக்கு ஏற்ற துறையும் குறிப்பிட்ட படிப்பின் விவரங்களும் தனியாகப் பார்க்கப்பட வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E01 (**Engineering and Technology career stream**, Tamil Nadu School Education career-guidance portal / Naan Mudhalvan, current page; repository `SRC006`) — Engineering skills and specialisations; E02 (**India Sudar Career Guidance Book — MAR/2025**, India Sudar Educational and Charitable Trust, 2025; repository `SRC008`) — Printed pp.44–45 (viewer pp.50–51); E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E15 (**National Classification of Occupations 2015, Volume II-A**, Ministry of Labour and Employment / National Career Service, 2015) — pp.224 onward, occupation family 2512; software developer, engineer trainee and engineering-analysis roles; E16 (**National Classification of Occupations 2015, Volume I**, Ministry of Labour and Employment / National Career Service, 2015) — Occupation families 2142–2153 and 2512. See register and linked evidence notes for URL/conditions.
 
@@ -249,32 +237,27 @@ QUESTION_EN =
 I want to study engineering, but where should I start?
 
 QUESTION_TA =
-பொறியியல் படிக்க விரும்புகிறேன். எங்கிருந்து தொடங்கலாம்?
-
+பொறியியல் துறைகளைத் தெரிந்துகொள்ள எங்கு தொடங்குவது?
 ANSWER_EN =
 Begin by understanding the study and work in a field that interests you; you do not need to choose a college now.
 
 ANSWER_TA =
-முதலில் உங்களுக்கு ஆர்வமாக இருக்கும் ஒரு துறையைப் பாருங்கள். அந்தத் துறையில் என்ன படிப்பார்கள், என்ன மாதிரியான வேலைகள் இருக்கும் என்று புரிந்துகொள்ளலாம். இப்போதே எந்தக் கல்லூரியைத் தேர்வு செய்வது என்று முடிவு செய்ய வேண்டியதில்லை.
-
+கணினி (CSE/IT), எலக்ட்ரானிக்ஸ் (ECE), மின்சாரம் (EEE), இயந்திரம் (Mech), கட்டுமானம் (Civil) எனப் பல துறைகள் உள்ளன. முதலில் உங்களுக்கு இயல்பாக ஈர்ப்புள்ள ஏதேனும் 1 அல்லது 2 துறைகளைத் தேர்ந்தெடுத்து, அவற்றின் பாடங்களை ஒப்பிட்டுப் பாருங்கள்.
 DETAIL_EN =
 (No additional detail displayed.)
 
 DETAIL_TA =
 (No additional detail displayed.)
-
 NEXT_EN =
 Start with one engineering field that interests you. Once you understand what you would study, you can look at the available admission routes.
 
 NEXT_TA =
 உங்களுக்கு ஆர்வமாகத் தோன்றும் ஒரு பொறியியல் துறையிலிருந்து தொடங்கலாம். அதில் என்ன படிப்பீர்கள் என்று தெரிந்துகொண்ட பிறகு, அந்தப் படிப்பில் சேரும் வழிகளைப் பார்க்கலாம்.
-
 LIMIT_EN =
 The best fit depends on your interests and circumstances, and programme details can vary by college and curriculum. Check the specific programme before deciding.
 
 LIMIT_TA =
 எந்தத் துறை உங்களுக்கு ஏற்றது என்பது உங்கள் ஆர்வம் மற்றும் சூழ்நிலையைப் பொறுத்தது. கல்லூரி மற்றும் பாடத்திட்டத்தின் அடிப்படையில் படிப்பு விவரங்களும் மாறலாம். முடிவு செய்வதற்கு முன் குறிப்பிட்ட படிப்பைச் சரிபார்க்க வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E01 (**Engineering and Technology career stream**, Tamil Nadu School Education career-guidance portal / Naan Mudhalvan, current page; repository `SRC006`) — Engineering skills and specialisations; E02 (**India Sudar Career Guidance Book — MAR/2025**, India Sudar Educational and Charitable Trust, 2025; repository `SRC008`) — Printed pp.44–45 (viewer pp.50–51); E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty. See register and linked evidence notes for URL/conditions.
 
@@ -301,36 +284,30 @@ QUESTION_EN =
 What should I understand before choosing engineering?
 
 QUESTION_TA =
-பொறியியல் தேர்வு செய்யும் முன் எவற்றைப் புரிந்துகொள்ள வேண்டும்?
-
+பொறியியல் படிப்பைத் தேர்வு செய்யும் முன் மாணவர்கள் கவனிக்க வேண்டியவை என்ன?
 ANSWER_EN =
 Understand that branches study different subjects; all require sustained learning and some mathematics; practical work may include labs, drawing, programming, workshops, projects or fieldwork; curricula differ across institutions. Also, a degree does not guarantee a job.
 
 ANSWER_TA =
-ஒவ்வொரு பொறியியல் பிரிவிலும் படிக்கும் பாடங்கள் வேறுபடும். படிப்பு முழுவதும் தொடர்ந்து கற்க வேண்டியிருக்கும்; கணிதமும் பல இடங்களில் பயன்படுத்தப்படும்.
-
-பிரிவைப் பொறுத்து ஆய்வகம், வரைதல், நிரலாக்கம், பட்டறைப் பயிற்சி, திட்டப்பணி அல்லது களப்பணி போன்ற செய்முறைகள் இருக்கலாம். நீங்கள் சேரும் கல்லூரி மற்றும் பாடத்திட்டத்தைப் பொறுத்து இவை மாறலாம்.
-
-இன்னொரு முக்கியமான விஷயம்: பொறியியல் பட்டம் பெறுவது மட்டும் ஒரு குறிப்பிட்ட வேலை கிடைக்கும் என்று உறுதி செய்யாது.
-
+முக்கியமாக 3 விஷயங்களைப் புரிந்துகொள்ள வேண்டும்:
+1. தொடர் கற்றல்: பள்ளி போல மனப்பாடம் செய்யாமல், தொடர்ந்து புதிய விஷயங்களைப் புரிந்துகொண்டு படிக்க வேண்டும்.
+2. செய்முறைப் பயிற்சிகள்: லேப் (Labs), வரைபடங்கள் (Drawing), கம்ப்யூட்டர் கோடிங் (Coding), மற்றும் ப்ராஜெக்ட்கள் (Projects) அதிகம் இருக்கும்.
+3. வேலைவாய்ப்பு உண்மை: வெறும் பட்டம் மட்டுமே வேலைக்கு உத்தரவாதம் தராது; பயிலும் காலத்தில் நீங்கள் வளர்த்துக்கொள்ளும் திறன்களே வேலையைத் தீர்மானிக்கும்.
 DETAIL_EN =
 First understand the field, then the admission route, and only later compare colleges.
 
 DETAIL_TA =
-முதலில் எந்தத் துறை உங்களுக்கு புரிகிறது என்று பாருங்கள். அடுத்து அந்தப் படிப்பில் சேரும் வழியைத் தெரிந்துகொள்ளலாம். அதன் பிறகு கல்லூரிகளை ஒப்பிடுவது எளிதாக இருக்கும்.
-
+முதலில் எந்தத் துறையின் பாடங்கள் உங்களுக்கு இயல்பாகப் புரிகிறது என்று பாருங்கள். அதன்பின் குறிப்பிட்ட கல்லூரியின் பாடத்திட்டத்தை ஒப்பிட்டுப் பார்க்கலாம்.
 NEXT_EN =
 Start with one engineering field that interests you. Once you understand what you would study, you can look at the available admission routes.
 
 NEXT_TA =
 உங்களுக்கு ஆர்வமாக இருக்கும் ஒரு துறையை முதலில் பாருங்கள். அதில் என்ன படிப்பீர்கள் என்று புரிந்துகொண்ட பிறகு, சேர்க்கை வழிகளைப் பார்க்கலாம்.
-
 LIMIT_EN =
 The best fit depends on your interests and circumstances, and programme details can vary by college and curriculum. Check the specific programme before deciding.
 
 LIMIT_TA =
 எந்தத் துறை உங்களுக்கு ஏற்றது என்பது உங்கள் ஆர்வம் மற்றும் சூழ்நிலையைப் பொறுத்தது. கல்லூரி மற்றும் பாடத்திட்டத்தின் அடிப்படையில் படிப்பு விவரங்களும் மாறலாம். முடிவு செய்வதற்கு முன் குறிப்பிட்ட படிப்பைச் சரிபார்க்க வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E01 (**Engineering and Technology career stream**, Tamil Nadu School Education career-guidance portal / Naan Mudhalvan, current page; repository `SRC006`) — Engineering skills and specialisations; E02 (**India Sudar Career Guidance Book — MAR/2025**, India Sudar Educational and Charitable Trust, 2025; repository `SRC008`) — Printed pp.44–45 (viewer pp.50–51); E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -357,32 +334,27 @@ QUESTION_EN =
 Is engineering suitable for me?
 
 QUESTION_TA =
-பொறியியல் எனக்கு ஏற்ற படிப்பா?
-
+பொறியியல் எனக்கு ஏற்ற படிப்புதானா என்பதை எப்படித் தெரிந்துகொள்வது?
 ANSWER_EN =
 A reliable answer cannot come from one mark or interest.
 
 ANSWER_TA =
-ஒரு மதிப்பெண் அல்லது ஒரு ஆர்வத்தை மட்டும் வைத்து, பொறியியல் உங்களுக்கு முழுமையாகப் பொருந்துமா என்று சொல்ல முடியாது.
-
+பிரச்சினைகளுக்குக் காரணங்களை ஆராயவும், புதிய தொழில்நுட்பங்களை உருவாக்கவும், கணினி அல்லது இயந்திரங்கள் பழுதுபட்டால் அதைச் சரிசெய்து பார்க்கவும் ஆர்வம் இருந்தால், பொறியியல் உங்களுக்குப் பொருத்தமாக இருக்கும்.
 DETAIL_EN =
 Try a small exploration: read the first-year and branch subjects, watch or try one related practical activity, and notice whether you are willing to keep learning when a problem is difficult. Also consider cost, study support and other courses. This helps you judge fit; it is not an aptitude test.
 
 DETAIL_TA =
-இதைப் பற்றி யோசிக்க ஒரு சின்ன வழி: முதல் ஆண்டு மற்றும் நீங்கள் விரும்பும் பிரிவின் பாடங்களை ஒருமுறை பார்த்துப் பாருங்கள். அது தொடர்பான ஒரு சிறிய செய்முறையையும் முயற்சி செய்யலாம். ஒரு கடினமான பிரச்சினை வந்தாலும் தொடர்ந்து கற்றுக்கொள்ள ஆர்வம் இருக்கிறதா என்று உங்களையே கேட்டுக்கொள்ளுங்கள். அதோடு, படிப்புச் செலவு, உங்களுக்கு கிடைக்கும் கற்றல் உதவி மற்றும் மற்ற படிப்பு விருப்பங்களையும் யோசித்துப் பாருங்கள்.
-
+முன்கூட்டியே நீங்கள் பெரிய புத்திசாலியாகவோ, கோடிங் தெரிந்தவராகவோ இருக்க வேண்டிய அவசியமில்லை; கற்றுக்கொள்ளும் ஆர்வமும் விடாமுயற்சியும் இருந்தாலே போதும்.
 NEXT_EN =
 Look at one branch’s subjects and identify the learning support you can use.
 
 NEXT_TA =
 ஒரு பிரிவின் பாடங்களைப் பார்த்து, கற்க யாருடைய உதவி கிடைக்கும் என்று சிந்தியுங்கள்.
-
 LIMIT_EN =
 This is exploration, not an aptitude or eligibility decision.
 
 LIMIT_TA =
 இது உங்களுக்கு சிந்திக்க உதவும் வழிகாட்டல் மட்டுமே. இது திறனறித் தீர்ப்போ சேர்க்கைத் தகுதித் தீர்ப்போ அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E01 (**Engineering and Technology career stream**, Tamil Nadu School Education career-guidance portal / Naan Mudhalvan, current page; repository `SRC006`) — Engineering skills and specialisations; E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -409,32 +381,27 @@ QUESTION_EN =
 Do I need to be very strong in Maths to study engineering?
 
 QUESTION_TA =
-பொறியியல் படிக்க கணிதத்தில் மிகவும் வலுவாக இருக்க வேண்டுமா?
-
+பொறியியல் படிக்க கணிதத்தில் (Maths) மிகவும் சிறந்து விளங்க வேண்டுமா?
 ANSWER_EN =
 You do not need to arrive knowing all engineering mathematics, but mathematics is a continuing part of the course.
 
 ANSWER_TA =
-பொறியியல் படிப்பில் சேருவதற்கு முன்பே எல்லா உயர்நிலை கணிதமும் தெரிந்திருக்க வேண்டியதில்லை. ஆனால் படிப்பு முழுவதும் கணிதம் ஒரு முக்கியப் பகுதியாக இருக்கும்.
-
+பொறியியலில் கணிதம் ஒரு முக்கியக் கருவிதான்; ஆனால் பள்ளி வகுப்பில் அதிக மதிப்பெண் எடுத்தவர்களால் மட்டுமே பொறியியல் படிக்க முடியும் என்பதில்லை.
 DETAIL_EN =
 The reviewed curricula include calculus and later branch-specific topics such as linear algebra, probability, statistics or differential equations. If maths worries you, identify the weak topic, revise Class 11–12 foundations, practise regularly and use teacher/peer support. Difficulty now is not a verdict that you cannot study engineering.
 
 DETAIL_TA =
-நாம் பார்த்த பாடத்திட்டங்களில் நுண்கணிதம் (calculus), நேரியல் இயற்கணிதம், நிகழ்தகவு, புள்ளியியல், வகைக்கெழுச் சமன்பாடுகள் போன்ற பகுதிகள் வருகின்றன. கணிதத்தில் சிரமம் இருந்தால், எந்தப் பகுதியில் தடுமாறுகிறீர்கள் என்று முதலில் பாருங்கள். 11 மற்றும் 12-ஆம் வகுப்பு அடிப்படைகளை மீண்டும் படித்து, தொடர்ந்து பயிற்சி செய்து, ஆசிரியர் அல்லது நண்பர்களின் உதவியைப் பெறலாம். இப்போது கணிதத்தில் சிரமம் இருப்பது, “உங்களால் பொறியியல் படிக்க முடியாது” என்ற அர்த்தம் அல்ல.
-
+பொறியியலில் நுண்கணிதம் (Calculus), புள்ளியியல் (Statistics) போன்ற பகுதிகள் வருகின்றன. பள்ளிக் கணிதத்தில் ஏதேனும் குழப்பம் இருந்தால், 11 & 12 அடிப்படைகளை மீண்டும் பயிற்சி செய்தும், கல்லூரியில் பேராசிரியர்களின் வழிகாட்டலோடும் அதை எளிதாகக் கற்றுக்கொள்ள முடியும்.
 NEXT_EN =
 Look at one branch’s subjects and identify the learning support you can use.
 
 NEXT_TA =
 ஒரு பிரிவின் பாடங்களைப் பார்த்து, கற்க யாருடைய உதவி கிடைக்கும் என்று சிந்தியுங்கள்.
-
 LIMIT_EN =
 This is exploration, not an aptitude or eligibility decision.
 
 LIMIT_TA =
 இது சிந்திக்க உதவும் வழிகாட்டல் மட்டுமே. திறன் அல்லது சேர்க்கைத் தகுதித் தீர்ப்பு அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E01 (**Engineering and Technology career stream**, Tamil Nadu School Education career-guidance portal / Naan Mudhalvan, current page; repository `SRC006`) — Engineering skills and specialisations; E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -461,32 +428,32 @@ QUESTION_EN =
 What skills or interests are useful for engineering?
 
 QUESTION_TA =
-பொறியியல் படிக்க எந்தத் திறன்களும் ஆர்வங்களும் உதவும்?
-
+பொறியியல் படிக்க எந்தத் திறன்களும் ஆர்வமும் எனக்கு உதவும்?
 ANSWER_EN =
 Useful starting qualities include curiosity about how things work, willingness to break a problem into steps, careful observation, basic numerical reasoning, patience in testing and correcting mistakes, communication and teamwork.
 
 ANSWER_TA =
-நம்மைச் சுற்றியுள்ள பொருட்கள் எப்படி வேலை செய்கின்றன என்ற ஆர்வம், ஒரு பெரிய பிரச்சினையைச் சிறிய பகுதிகளாகப் பிரித்து யோசிப்பது, விஷயங்களை கவனமாகப் பார்ப்பது போன்ற இயல்புகள் பொறியியல் படிக்க உதவும்.
+முக்கியமாக 3 இயல்புகள் பெரிதும் உதவும்:
+- ஆர்வம் (Curiosity): பொருட்கள் அல்லது மென்பொருட்கள் எப்படி இயங்குகின்றன என்பதைத் தெரிந்துகொள்ளும் ஆர்வம்.
+- சிக்கல் தீர்க்கும் திறன் (Problem Solving): ஒரு பெரிய பிரச்சினையைச் சிறிய பகுதிகளாகப் பிரித்து சிந்திப்பது.
+- பொறுமை: செய்முறைகளில் தவறு நடக்கும்போது பொறுமையுடன் மீண்டும் மீண்டும் சோதித்துப் பார்ப்பது.
 
+முன்கூட்டியே கோடிங்கோ பட்டறை வேலையோ தெரிந்திருக்க வேண்டியதில்லை; கல்லூரியில் எளிதாகக் கற்றுக்கொள்ளலாம்.
 DETAIL_EN =
 Programming, drawing or workshop experience can help in some branches, but students can learn them during the course.
 
 DETAIL_TA =
 அதோடு, அடிப்படை எண் சிந்தனை, பிழைகள் வந்தால் பொறுமையாகச் சோதித்துத் திருத்துவது, மற்றவர்களுடன் பேசிப் பணியாற்றுவது போன்றவையும் உதவும். நிரலாக்கம் (programming), வரைதல் அல்லது பட்டறை வேலைகள் முன்கூட்டியே தெரிந்திருக்க வேண்டும் என்பதில்லை; கல்லூரியில் படிக்கும்போதும் அவற்றைக் கற்றுக்கொள்ளலாம்.
-
 NEXT_EN =
 Look at one branch’s subjects and identify the learning support you can use.
 
 NEXT_TA =
 ஒரு பிரிவின் பாடங்களைப் பார்த்து, கற்க யாருடைய உதவி கிடைக்கும் என்று சிந்தியுங்கள்.
-
 LIMIT_EN =
 This is exploration, not an aptitude or eligibility decision.
 
 LIMIT_TA =
 இவை உதவும் ஆரம்பத் திறன்கள் மட்டுமே. இவை சேர்க்கைக்கான கட்டாயத் தேர்வோ திறனறி அளவுகோலோ அல்ல.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E01 (**Engineering and Technology career stream**, Tamil Nadu School Education career-guidance portal / Naan Mudhalvan, current page; repository `SRC006`) — Engineering skills and specialisations; E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -513,14 +480,14 @@ QUESTION_EN =
 How is engineering different from a science degree?
 
 QUESTION_TA =
-பொறியியல் படிப்புக்கும் அறிவியல் பட்டப்படிப்புக்கும் என்ன வித்தியாசம்?
-
+பொறியியல் (B.E / B.Tech) படிப்புக்கும் அறிவியல் பட்டப்படிப்புக்கும் (B.Sc) என்ன வேறுபாடு?
 ANSWER_EN =
 Engineering programmes generally use science and mathematics to design and test practical systems and include engineering labs, design/project work and an internship or project.
 
 ANSWER_TA =
-எளிமையாகச் சொன்னால், பொறியியல் படிப்பில் அறிவியல் மற்றும் கணிதத்தைப் பயன்படுத்தி நடைமுறை பிரச்சினைகளுக்கு தீர்வுகளை வடிவமைத்து சோதிப்பது முக்கியம். அதனால் ஆய்வகம், வடிவமைப்பு, திட்டப்பணி மற்றும் பணிப்பயிற்சி போன்றவை அதிகமாக இருக்கும்.
-
+எளிமையான ஒப்பீடு:
+- B.Sc (அறிவியல்): ஒரு குறிப்பிட்ட அறிவியல் துறை உருவான விதிகளையும் கோட்பாடுகளையும் (Theory & Principles) ஆழமாக ஆராயும் படிப்பு.
+- B.E / B.Tech (பொறியியல்): அந்த அறிவியல் மற்றும் கணிதக் கோட்பாடுகளைப் பயன்படுத்தி, மனிதப் பயன்பாட்டிற்கான கருவிகள், பொருட்கள் மற்றும் மென்பொருட்களை நடைமுறையில் உருவாக்கும் (Practical Application) படிப்பு.
 DETAIL_EN =
 A science degree studies a scientific subject in greater disciplinary depth and can also include theory and laboratory work. For example, Anna University engineering curricula combine mathematics/science with programme design, labs and projects, while Bharathiar University’s B.Sc. Physics is organised around physics and its practical papers. This is an illustrative comparison, not a rule for every university: compare the exact two curricula before choosing.
 
@@ -528,19 +495,16 @@ DETAIL_TA =
 அறிவியல் பட்டப்படிப்பில் ஒரு அறிவியல் துறையை இன்னும் ஆழமாகப் படிப்பது முக்கியமாக இருக்கும். அதிலும் கருத்தியல் மற்றும் செய்முறைப் பயிற்சிகள் இருக்கலாம். உதாரணமாக, நாம் பார்த்த அண்ணா பல்கலைக்கழகப் பொறியியல் பாடத்திட்டங்களில் கணிதம், அறிவியல், வடிவமைப்பு, ஆய்வகம் மற்றும் திட்டப்பணி இடம்பெறுகின்றன. பாரதியார் பல்கலைக்கழகத்தின் B.Sc. Physics பாடத்திட்டம் இயற்பியல் பாடங்களையும் செய்முறைகளையும் மையமாகக் கொண்டுள்ளது.
 
 இது எல்லா பல்கலைக்கழகங்களுக்கும் ஒரே மாதிரி இருக்கும் என்ற விதி அல்ல. நீங்கள் பார்க்கும் இரண்டு குறிப்பிட்ட படிப்புகளின் பாடத்திட்டங்களை ஒப்பிடுவது தான் சரியான வழி.
-
 NEXT_EN =
 You can start by comparing one engineering course and one alternative: subjects, practical work, entry route, time and cost.
 
 NEXT_TA =
 உங்களுக்கு ஆர்வமுள்ள ஒரு பொறியியல் படிப்பையும், வேறு ஒரு படிப்பையும் எடுத்துக் கொண்டு பாடங்கள், செய்முறைப் பயிற்சி, சேர்க்கை வழி, படிப்பு காலம் மற்றும் செலவு ஆகியவற்றை ஒப்பிட்டுப் பார்க்கலாம்.
-
 LIMIT_EN =
 Course eligibility and current admission terms need the relevant official source.
 
 LIMIT_TA =
 ஒவ்வொரு படிப்பிற்கும் பொருந்தும் தகுதி மற்றும் தற்போதைய சேர்க்கை விதிகளை அந்தப் படிப்பின் அதிகாரப்பூர்வ ஆதாரத்தில் சரிபார்க்க வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E12 (**B.Sc. Physics**, Bharathiar University, affiliated colleges, 2023–24 onwards, 2023) — Programme structure and theory/practical papers; E13 (**Career Options After +2**, Tamil Nadu Department of Employment and Training, 2025/26 publication) — Course-family map: entrance exams; medical/allied health; arts/science; commerce/management; design; law; teacher education; diploma/certificate options; E04 (**B.E. Computer Science and Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–5, semesters I–VI; repository extract `A03-CSE`; E05 (**B.Tech. Information Technology Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-IT`; E06 (**B.E. Electronics and Communication Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–6, semesters I–VI; repository extract `A03-ECE`; E07 (**B.E. Electrical and Electronics Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E08 (**B.E. Mechanical Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E09 (**B.E. Civil Engineering Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–8, semesters I–VIII; E10 (**B.Tech. Artificial Intelligence and Data Science Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII; E11 (**B.E. CSE (Artificial Intelligence and Machine Learning) Curriculum**, Anna University, R2025 Revised 1 (2026)) — PDF pp.1–7, semesters I–VIII. See register and linked evidence notes for URL/conditions.
 
@@ -567,14 +531,16 @@ QUESTION_EN =
 What are my options after 12th if I do not choose engineering?
 
 QUESTION_TA =
-பொறியியல் தேர்வு செய்யாவிட்டால், 12-ஆம் வகுப்புக்குப் பிறகு என்னென்ன வழிகள் இருக்கலாம்?
-
+பொறியியல் தவிர, +2-க்குப் பிறகு என்னென்ன மாற்றுப் படிப்பு வழிகள் உள்ளன?
 ANSWER_EN =
 Options can include arts and science, commerce, management, law, design, architecture, health, agriculture, teacher education, hospitality, diploma or skill programmes, depending on your subjects and the applicable eligibility rules.
 
 ANSWER_TA =
-பொறியியல் மட்டும் ஒரே வழி அல்ல. உங்கள் 12-ஆம் வகுப்பு பாடங்கள், ஆர்வம் மற்றும் தகுதியைப் பொறுத்து கலை/அறிவியல், வணிகம், மேலாண்மை, சட்டம், வடிவமைப்பு, கட்டடக்கலை, உடல்நலம், வேளாண்மை, ஆசிரியர் கல்வி, உணவு/விடுதி மேலாண்மை, டிப்ளமோ அல்லது திறன் படிப்புகள் போன்ற பல வழிகள் இருக்கலாம்.
-
+பொறியியல் மட்டுமே ஒரே வழி அல்ல. உங்கள் ஆர்வம் மற்றும் பாடப்பிரிவைப் பொறுத்து பல வழிகள் உள்ளன:
+- கலை & அறிவியல் (Arts & Science): B.Sc, B.Com, B.A, BBA
+- மருத்துவம் & துணை மருத்துவம்: MBBS, BDS, Nursing, Allied Health
+- சிறப்புப் படிப்புகள்: சட்டம் (Law), வடிவமைப்பு (Design), கட்டடக்கலை (B.Arch), வேளாண்மை (Agriculture)
+- தொழிற்கல்வி & டிப்ளமோ: நேரடி வேலைவாய்ப்பு சார்ந்த திறன் படிப்புகள்.
 DETAIL_EN =
 Depending on your Class 12 subjects, interests and current eligibility rules, options can include arts and science degrees, commerce/management, law, design, architecture, medicine and allied health, agriculture, teacher education, hotel/tourism programmes, diploma/polytechnic, ITI or other skill programmes. The Tamil Nadu Department of Employment and Training’s official “Career Options After +2” guide maps these families. First shortlist a field, then verify its current eligibility, entrance route, duration, fees and recognised institutions from the relevant official authority.
 
@@ -582,19 +548,16 @@ DETAIL_TA =
 தமிழ்நாடு வேலைவாய்ப்பு மற்றும் பயிற்சித் துறையின் “12-ஆம் வகுப்புக்குப் பிறகு” வழிகாட்டியில் இந்தப் பெரிய படிப்பு வழிகள் கொடுக்கப்பட்டுள்ளன. மருத்துவம் மற்றும் துணை மருத்துவம், சுற்றுலா, தொழிற்பயிற்சி போன்ற துறைகளுக்கும் தனித்தனி தகுதி மற்றும் சேர்க்கை முறைகள் இருக்கலாம்.
 
 முதலில் உங்களுக்கு ஆர்வமான இரண்டு அல்லது மூன்று துறைகளை மட்டும் தேர்ந்தெடுத்து பாருங்கள். பிறகு அவற்றின் தற்போதைய தகுதி, நுழைவு முறை, படிப்பு காலம், கட்டணம் மற்றும் அங்கீகரிக்கப்பட்ட நிறுவனங்களை அதிகாரப்பூர்வ தகவலில் சரிபார்க்கலாம்.
-
 NEXT_EN =
 You can start by comparing one engineering course and one alternative: subjects, practical work, entry route, time and cost.
 
 NEXT_TA =
 ஒரு பொறியியல் படிப்பையும், உங்களுக்கு ஆர்வமுள்ள வேறு ஒரு படிப்பையும் எடுத்துக் கொண்டு பாடங்கள், செய்முறை, சேர்க்கை வழி, காலம் மற்றும் செலவு ஆகியவற்றை ஒப்பிட்டுப் பார்க்கலாம்.
-
 LIMIT_EN =
 Course eligibility and current admission terms need the relevant official source.
 
 LIMIT_TA =
 ஒவ்வொரு படிப்பிற்கும் தகுதி மற்றும் சேர்க்கை விதிகள் வேறுபடலாம். தற்போதைய விவரங்களை அந்தப் படிப்பின் அதிகாரப்பூர்வ ஆதாரத்தில் சரிபார்க்க வேண்டும்.
-
 SOURCE_REFERENCES_APPLICABLE_YEAR =
 E03 (**Curriculum and Syllabi — R2025 Revision 1 (2026), 2026–27 batch**, Anna University Centre for Academic Courses, 2026) — Programme index by faculty; E12 (**B.Sc. Physics**, Bharathiar University, affiliated colleges, 2023–24 onwards, 2023) — Programme structure and theory/practical papers; E13 (**Career Options After +2**, Tamil Nadu Department of Employment and Training, 2025/26 publication) — Course-family map: entrance exams; medical/allied health; arts/science; commerce/management; design; law; teacher education; diploma/certificate options. See register and linked evidence notes for URL/conditions.
 
