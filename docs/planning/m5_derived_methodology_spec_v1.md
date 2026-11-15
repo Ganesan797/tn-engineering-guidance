@@ -1,12 +1,12 @@
 # M5-D5 — derived provisional-allotment minimum methodology
 
-**Status:** `D5_DECISION = ACCEPT`; `D5_ACCEPTANCE = ACCEPTED`; `T03_EXECUTION = NOT_AUTHORIZED`; `T04_EXECUTION = NOT_AUTHORIZED`. Ganesan accepted this exact methodology on 2026-11-15 at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`, blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d`. Prepared 2026-11-06 from base `78abf60c38c6ffb5976bd72687fbe1bb1bdbcbbf`.
+**Status:** `D5_EXACT_REVISION = PROPOSED_FOR_OWNER_ACCEPTANCE`; `D5_ACCEPTANCE = PENDING`; `T03_T04 = NOT_AUTHORIZED`. Prepared 2026-11-06 from base `78abf60c38c6ffb5976bd72687fbe1bb1bdbcbbf`.
 
 **Authority:** [Accepted M5-T01 contract](m5_contract_spec_v1.md), [accepted M5-T02 assessment](m5_source_census_v1.md) and [current M5 execution proposal](m5_decision_support_proposal_v1.md).
 
 The bounded T02 assessment did not locate an accessible official aggregate college–programme closing-cutoff publication and observed HTTP 503 from the official cutoff portal during its access window. It did not establish that no such publication exists. Competitor descriptions are not evidence of a derivation pipeline and provide no project authority.
 
-Owner acceptance of this exact D5 revision approves only the accepted metric meaning, research-candidate schema, completeness tests and privacy controls for a later separately authorized T04 experiment. It does not authorize source access or applicant-row processing, T03 or T04 execution, a route/year/round source set, research-output retention, production ingestion, bilingual copy, application implementation, publication, merge or deployment.
+Owner acceptance of this exact D5 revision would approve only the proposed meaning, research-candidate schema, completeness tests and privacy controls for a later separately authorized T04 experiment. It would not authorize source access or applicant-row processing, T03 or T04 execution, a route/year/round source set, research-output retention, production ingestion, bilingual copy, application implementation, publication, merge or deployment.
 
 ## 1. Metric identity and prohibited equivalence
 
@@ -180,9 +180,9 @@ T04, if separately authorized, must measure rather than assume reliability.
 4. Any source-scope uncertainty, category ambiguity, page/table failure, mismatch between derivations, privacy-control failure or cleanup failure stops candidate emission for the affected source.
 5. Report false parses, withheld candidates and effort honestly. No accuracy threshold or promotion rule is approved merely by accepting D5.
 
-## 10. Exact owner decision recorded
+## 10. Exact owner decision requested
 
-On 2026-11-15, Ganesan accepted the exact revision at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`, blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d`. The acceptance confirms only:
+The owner may accept or revise this exact methodology revision. Acceptance confirms only:
 
 1. the semantic identity `DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK` and its separation from official published closing values;
 2. exact source-literal preservation and independent General Academic/7.5% gates;
@@ -190,4 +190,4 @@ On 2026-11-15, Ganesan accepted the exact revision at commit `74351fcb51ac1ec699
 4. the bounded privacy lifecycle and its stated residual risks;
 5. isolation of any later T04 outputs as research candidates.
 
-`T03_EXECUTION = NOT_AUTHORIZED`; `T04_EXECUTION = NOT_AUTHORIZED`; `APPLICANT_DATA_PROCESSING = NOT_AUTHORIZED`; `PRODUCTION_INGESTION = NOT_AUTHORIZED`; `APPLICATION_IMPLEMENTATION = NOT_AUTHORIZED`; `PUBLICATION = NOT_AUTHORIZED`.
+`T03_EXECUTION = NOT_AUTHORIZED`; `T04_EXECUTION = NOT_AUTHORIZED`; `PRODUCTION_INGESTION = NOT_AUTHORIZED`; `APPLICATION_IMPLEMENTATION = NOT_AUTHORIZED`.

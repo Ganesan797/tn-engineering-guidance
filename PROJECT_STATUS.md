@@ -5,19 +5,22 @@
 **Current milestone:** Milestone M4 Option A remains accepted: 41 approved programme-level educational profiles, explicit held dispositions, 389 governed colleges and 3,128 dated offerings. `M4_ACCEPT = PASS`. Milestone M5 is in a bounded planning and authorization-reconciliation state.
 
 **Current task:** M5 Authorization Reconciliation and Scope Preparation under Codex HOLD review.
-- `M5_T01 = ACCEPTED` ([M5-T01 Contract](docs/planning/m5_contract_spec_v1.md))
-- `M5_T02 = ACCEPTED` ([M5-T02 Bounded Source Assessment](docs/planning/m5_source_census_v1.md))
-- `M5_D5 = ACCEPTED` ([M5-D5 Derived Methodology](docs/planning/m5_derived_methodology_spec_v1.md) recorded at commit `9c9ec585562c0f1e3917093034b15acb080221ba`)
-- `REVISED_COHORT_AMENDMENT = PENDING` ([Revised Cohort Proposal](docs/planning/m5_revised_cohort_and_t03_amendment_proposal_v1.md) for 53–55 colleges awaiting owner review)
-- `M5_T03_EXECUTION = NOT_AUTHORIZED` (Previous execution on rejected branch `codex/m5-revised-cohort-t03-amendment` at `a28596b` was unauthorized; preserved as historical audit evidence only, not accepted)
-- `M5_T04_EXECUTION = NOT_AUTHORIZED` (Previous extraction on rejected branch was unauthorized; unapproved temporary artifacts in `<workspace>/scratch` violated D5 scratch isolation rules and have been removed; not accepted)
-- `GATE_A_STATUS = PENDING`
-- `M5_APPLICATION_IMPLEMENTATION = NOT_AUTHORIZED` (T05–T12 application code, shortlist persistence, and comparison UI on rejected branch were unauthorized and remain isolated from the accepted repository; not merged)
+- `T01 = ACCEPTED` ([M5-T01 Contract](docs/planning/m5_contract_spec_v1.md))
+- `T02 = ACCEPTED` ([M5-T02 Bounded Source Assessment](docs/planning/m5_source_census_v1.md))
+- `D5 = ACCEPTED` ([Accepted D5 Methodology Specification](docs/planning/m5_derived_methodology_spec_v1.md), exact blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d` at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`; administrative acceptance recorded at commit `9c9ec585562c0f1e3917093034b15acb080221ba`)
+- `REVISED_COHORT = PENDING_OWNER_APPROVAL` ([Revised Cohort Proposal](docs/planning/m5_revised_cohort_and_t03_amendment_proposal_v1.md) for 53–55 colleges awaiting owner review)
+- `YEAR_AMENDMENT = PENDING_OWNER_APPROVAL` (Amending T01 candidate scope to 2025/2026 awaiting owner review)
+- `T03 = NOT_AUTHORIZED` (Prior execution on rejected branch is unaccepted historical audit evidence only)
+- `T04 = NOT_AUTHORIZED` (Prior extraction on rejected branch was unauthorized and violated D5 scratch rules; not accepted)
+- `GATE_A = PENDING`
+- `T05_T12 = NOT_AUTHORIZED` (T05–T12 application code, shortlist persistence, and comparison UI on rejected branch were unauthorized and remain isolated from the accepted repository; not merged)
+- `M5_RELEASE = NOT_AUTHORIZED`
+- `PRIVACY_INCIDENT = OPEN/PARTIALLY_CONTAINED` (Local scratch directory removed; OneDrive cloud residual risk remains OPEN/PENDING awaiting owner checklist verification)
 - `PRODUCTION_BOUNDARIES = M0–M4 marks-free directory and personal guidance; no cutoff comparison in production or pilot`
 
-**Next Single Action:** Owner review and explicit authorization decision on the revised cohort proposal and bounded T03 identity audit.
+**Next Single Action:** Focused Codex verification of corrected reconciliation.
 
-**Last reviewed:** 2026-11-15 (M5 authorization reconciliation; rejected M5 branch frozen; accepted M0–M4 baseline preserved)
+**Last reviewed:** 2026-11-15 (M5 authorization reconciliation; rejected M5 branch frozen; accepted M0–M4 baseline preserved; exact D5 blob 3b885d3f restored)
 
 **M4 Formal Milestone Acceptance (Option A Comprehensive Release — 2026-11-01):**
 Ganesan (Project Owner / Student Advocate) formally reviewed and accepted Milestone M4 under Option A: Comprehensive 41-Profile Release (`M4_ACCEPT = PASS`, `M4_ACCEPTED = YES`).

@@ -12,8 +12,8 @@ The guided journey remains primary; governed Q&A is optional exploration. M2, M3
 
 - [M5-T01 input provenance and privacy contract](planning/m5_contract_spec_v1.md) — ACCEPTED
 - [M5-T02 bounded official-source assessment](planning/m5_source_census_v1.md) — ACCEPTED
-- [M5-D5 derived provisional-allotment minimum methodology](planning/m5_derived_methodology_spec_v1.md) — ACCEPTED (recorded at `9c9ec585562c0f1e3917093034b15acb080221ba`)
-- [M5 revised cohort and T03 amendment proposal](planning/m5_revised_cohort_and_t03_amendment_proposal_v1.md) — PENDING owner review
+- [M5-D5 derived provisional-allotment minimum methodology](planning/m5_derived_methodology_spec_v1.md) — ACCEPTED (exact blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d` at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`; administrative acceptance recorded at commit `9c9ec585562c0f1e3917093034b15acb080221ba`)
+- [M5 revised cohort and T03 amendment proposal](planning/m5_revised_cohort_and_t03_amendment_proposal_v1.md) — PENDING owner approval
 - [M5-T03 bounded historical identity-audit task](planning/m5_t03_identity_audit_task_v1.md) — PREPARED; execution NOT_AUTHORIZED
 - [M5 decision support execution proposal](planning/m5_decision_support_proposal_v1.md) — Planning proposal
 
