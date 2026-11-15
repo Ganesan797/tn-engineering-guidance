@@ -3,7 +3,7 @@
 **Status:** `PLANNING_PROPOSAL_PREPARED`; `OWNER_REVIEW_PENDING`.
 **Task Authorization & Governance State:**
 - `M5_T01 = ACCEPTED` ([M5-T01 Contract](m5_contract_spec_v1.md), commit `b332c61`)
-- `M5_T02 = ACCEPTED` ([M5-T02 Source Assessment](m5_source_census_v1.md), commit `9a6fd5c`)
+- `M5_T02 = ACCEPTED` ([M5-T02 Source Assessment](m5_source_census_v1.md); authorized at commit `9a6fd5c`, accepted at commit `51bb945bb4b2b591ba528b5b7885ffec9583e9bb`)
 - `M5_D5 = ACCEPTED` ([Accepted D5 Methodology Specification](m5_derived_methodology_spec_v1.md), exact blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d` at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`; administrative acceptance recorded at `9c9ec585562c0f1e3917093034b15acb080221ba`)
 - `REVISED_COHORT = PENDING_OWNER_APPROVAL`
 - `YEAR_AMENDMENT = PENDING_OWNER_APPROVAL`
@@ -18,7 +18,7 @@
 
 **Date:** 2026-11-15
 **Base Commit:** `f3c83d6499302bd49d8a33d4d067437e86cfba61` on `origin/main`
-**Authority:** [Accepted M5-T01 Contract](m5_contract_spec_v1.md), [Accepted M5-T02 Assessment](m5_source_census_v1.md), [Accepted M5-D5 Methodology](m5_derived_methodology_spec_v1.md) (blob `3b885d3`), [M5 Decision Support Proposal](m5_decision_support_proposal_v1.md).
+**Authority:** [Accepted M5-T01 Contract](m5_contract_spec_v1.md), [Accepted M5-T02 Assessment](m5_source_census_v1.md) (authorized at `9a6fd5c`, accepted at `51bb945`), [Accepted M5-D5 Methodology](m5_derived_methodology_spec_v1.md) (blob `3b885d3`), [M5 Decision Support Proposal](m5_decision_support_proposal_v1.md).
 
 ---
 
@@ -287,9 +287,12 @@ This proposal strictly adheres to the accepted D5 methodology ([m5_derived_metho
 A prior unauthorized execution placed temporary extraction files in `<workspace>/scratch/m5-t04-transient/` inside the local project workspace. Because this repository resides under a Microsoft OneDrive synchronization root (`C:\Users\Ganesan S\OneDrive\文档\ChatGPT\AI assister career guidance`), this incident created a potential cloud synchronization risk.
 
 **Incident Status Accounting:**
-- **Local Workspace Cleanup:** `REPORTED / LOCALLY_VERIFIED`. The untracked local directory `scratch\` was completely removed from the workspace. Zero scratch files currently exist in the local workspace.
-- **Git History:** `VERIFIED_CLEAN`. Zero task-created extraction artifacts entered Git history (`git log --all -- "scratch"` returned 0 matches).
-- **Cloud Residual Risk:** **`OPEN / PENDING`**. It is unknown whether OneDrive synchronized these temporary files to Microsoft cloud storage prior to local deletion, whether version history retains copies, or whether cloud recycle bins contain residual artifacts.
+- **Local Workspace Cleanup:** `REPORTED / LOCALLY_VERIFIED`. Workspace scratch artifacts were not found in the local workspace, and the untracked local directory `scratch\` was removed.
+- **Git History Accounting:**
+  * Workspace scratch artifacts were not identified as committed scratch files in the reviewed Git history (`git log --all -- "scratch"` returned 0 matches).
+  * However, Git history is **not** free of task-created M5 artifacts: the rejected M5 branch (`codex/m5-revised-cohort-t03-amendment`) contains committed extraction artifacts, including the Python extraction script (`scripts/build_historical_data.py`), historical-data application modules (`src/m5/historical-data.ts`, `src/m5/comparison-engine.ts`, `src/m5/bilingual-copy.ts`), and T03/T04 research reports.
+  * The safe reconciliation branch (`codex/m5-authorization-reconciliation`) strictly isolates and does not import these files, preserving the clean repository baseline.
+- **Cloud Residual Risk:** **`OPEN / PENDING`** (`PRIVACY_INCIDENT = OPEN/PARTIALLY_CONTAINED`). It remains unknown whether OneDrive synchronized the temporary scratch files to Microsoft cloud storage prior to local deletion, whether cloud version history retains copies, or whether cloud recycle bins contain residual copies. Privacy incident closure requires separate verification evidence.
 
 **Owner-Operated Cloud Verification & Purge Checklist:**
 1. [ ] **Check OneDrive Sync Status:** Confirm OneDrive desktop client status is "Up to date" and that no sync activity is pending.
