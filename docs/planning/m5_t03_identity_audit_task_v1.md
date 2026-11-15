@@ -1,7 +1,7 @@
 # M5-T03 — bounded historical identity-audit task
 
-**Status:** `TASK_PREPARED`; `EXECUTION_NOT_AUTHORIZED`. D5 methodology acceptance was recorded on 2026-11-15 at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`, blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d`; that acceptance does not authorize this task. Prepared 2026-11-06 from base `78abf60c38c6ffb5976bd72687fbe1bb1bdbcbbf`.
-*Proposed Amendment (Under Review):* An explicit scope amendment proposal has been prepared at [m5_revised_cohort_and_t03_amendment_proposal_v1.md](m5_revised_cohort_and_t03_amendment_proposal_v1.md) proposing an extended identity cohort (up to 53–55 colleges across official DoTE categories) and candidate years 2025/2026, while retaining the at most 20-pair extraction feasibility limit. Ceiling and scope changes remain subject to owner review and approval.
+**Status:** `T03_AUDIT_COMPLETED` (Non-applicant identity research only). D5 methodology acceptance was recorded on 2026-11-15 at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`, blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d`. The owner approved the revised 55-institution non-applicant research scope on 2026-11-15; see the consolidated audit report at [m5_t03_identity_audit_report_v1.md](m5_t03_identity_audit_report_v1.md).
+*Authorizations:* `T03_EXECUTION = COMPLETED`; `T04_EXECUTION = NOT_AUTHORIZED`; `APPLICANT_ROW_PROCESSING = NOT_AUTHORIZED`; `PRODUCTION_INGESTION = NOT_AUTHORIZED`; `APPLICATION_IMPLEMENTATION = NOT_AUTHORIZED`.
 
 This is the exact non-applicant identity task proposed under M5-T03. It does not authorize source discovery beyond the approved inputs, source download, applicant-row access, D5/T04 extraction, data ingestion or application implementation.
 
@@ -81,4 +81,4 @@ The execution deliverable, if separately authorized, is a bounded non-applicant 
 
 The owner must approve the exact cohort and every supported cross-year relationship before T04 sampling or product use. D5 acceptance does not authorize T03; T03 acceptance does not authorize T04.
 
-`M5_T03_TASK = PREPARED`; `M5_T03_EXECUTION = NOT_AUTHORIZED`; `M5_T04 = NOT_AUTHORIZED`; `M5_IMPLEMENTATION_AUTHORIZED = NO`.
+`M5_T03_TASK = COMPLETED`; `M5_T03_EXECUTION = COMPLETED`; `M5_T04 = NOT_AUTHORIZED`; `M5_IMPLEMENTATION_AUTHORIZED = NO`.
