@@ -7,7 +7,11 @@ This is the exact non-applicant identity task proposed under M5-T03. It does not
 
 ## Scope and student outcome
 
-Assess **at most 10** governed 2026 college identities and **at most 20** exact college–programme pairs against available official non-applicant historical identity evidence for candidate years 2024 and 2025. These are ceilings, not minimums. The actual cohort is selected only from source and identity feasibility; no college or pair is preselected.
+**Approved Research Scope (Amended 2026-11-15):**
+- **Approved Cohort Ceiling:** Exactly **55 institutions** (Core 53 + 2 separately classified: Code 3 SAP Anna University B.Plan only; Code 5 Annamalai University FEAT).
+- **Target Admission Years:** **2025 and 2026** (explicitly amending the preliminary candidate-year scope of 2024/2025).
+- **Future T04 Extraction Ceiling:** Strictly capped at **at most 20 exact college–programme pairs**. The 579 governed 2026 offerings identified across the 55 colleges serve solely as a 2026 identity baseline and must not be treated as an extraction target or authorization.
+- **Superseded Scope Context:** The preliminary pilot scope of *at most 10 governed 2026 college identities and candidate years 2024/2025* is preserved as superseded historical planning context.
 
 The deliverable is an identity ledger that states which year-specific college and programme literals can be joined exactly, which must be held and which remain unknown. It establishes no cutoff, rank, seat, vacancy, availability, admission outcome or comparison value.
 
