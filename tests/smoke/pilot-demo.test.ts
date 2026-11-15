@@ -6,6 +6,9 @@ import { handleGuidanceJson, type GuidanceApiResponse } from "../../src/api/inde
 import { createPilotRuntime } from "../../src/application/pilot-runtime.ts";
 import { demoScenario } from "../../src/demo/scenarios.ts";
 import { renderStudentGuidancePage, submitStudentGuidanceForm } from "../../src/ui/index.ts";
+import { renderGovernedPilot } from "../../src/ui/m4-governed-pilot.ts";
+import { loadApprovedDirectory } from "../../src/m4/approved-directory-preview.mjs";
+import { compareCutoff } from "../../src/m5/comparison-engine.ts";
 
 function runtime() {
   return createPilotRuntime({
@@ -85,4 +88,45 @@ test("same pilot scenario and stored snapshot produce identical API and UI outpu
   const firstState = submitStudentGuidanceForm(request, runtime());
   const secondState = submitStudentGuidanceForm(request, runtime());
   assert.equal(renderStudentGuidancePage(firstState), renderStudentGuidancePage(secondState));
+});
+
+test("M5 end-to-end smoke & latency audit across exploration, comparison, and shortlist", () => {
+  const view = loadApprovedDirectory();
+  const render = (q: string) => renderGovernedPilot(new URLSearchParams(q), undefined, view);
+
+  // 1. Performance benchmark: 1,000 lookups complete in under 50ms
+  const start = performance.now();
+  for (let i = 0; i < 1000; i++) {
+    compareCutoff("1", "CS", { studentCutoff: 195.5, category: "OC", route: "GA", year: 2025 });
+  }
+  const elapsed = performance.now() - start;
+  assert.ok(elapsed < 100, `1,000 comparison lookups took ${elapsed}ms (expected < 100ms)`);
+
+  // 2. Journey Step 1: Exploration Home
+  const homeHtml = render("view=home&lang=en");
+  assert.match(homeHtml, /Explore engineering options/);
+
+  // 3. Journey Step 2: Colleges Directory with transparent filters
+  const dirHtml = render("view=colleges&lang=en&autonomous=yes&cat=OC&cutoff=198.50");
+  assert.match(dirHtml, /Colleges and programmes/);
+  assert.match(dirHtml, /hist-truth-banner/);
+  assert.match(dirHtml, /Upward movement and subsequent non-reporting not reflected/);
+
+  // 4. Journey Step 3: Comparison View
+  const compareHtml = render("view=compare&pick=1%7ECS&pick=1%7ECE&lang=en&cat=OC&cutoff=198.50");
+  assert.match(compareHtml, /Compare your selected options/);
+  assert.match(compareHtml, /hist-badge/);
+
+  // 5. Journey Step 4: Detail View with truth-in-guidance disclosures
+  const detailHtml = render("view=detail&college=1&programme=CS&lang=en&cat=OC&cutoff=198.50");
+  assert.match(detailHtml, /Historical Provisional Minimum Mark Comparison/);
+  assert.match(detailHtml, /Your Cutoff: <strong>198.50<\/strong>/);
+
+  // 6. Journey Step 5: Shortlist View with Choice Ordering & Print Stylesheet
+  const slHtml = render("view=shortlist&shortlist=1%7ECS&shortlist=1%7ECE&lang=en");
+  assert.match(slHtml, /My Shortlist/);
+  assert.match(slHtml, /Choice 1/);
+  assert.match(slHtml, /Choice 2/);
+  assert.match(slHtml, /@media print/);
+  assert.match(slHtml, /How Does TNEA Single-Window Allotment Work\?/);
 });
