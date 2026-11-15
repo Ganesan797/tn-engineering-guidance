@@ -1,12 +1,21 @@
 # Documentation guide
 
-**Current accepted experience baseline (2026-11-03):** `bd9b335ee62162e1c6f9a4c67a5db37b7b39f7bb` on main. M4 acceptance PASS; technical closeout COMPLETE at `c4e873112e384596545892dd144d810d332c35fd`. M0–M4 experience review PASS_WITH_REFINEMENT; experience refinement PASS (owner-reported). Full test baseline 325/325 PASS; typecheck PASS; targeted bilingual mobile/browser walkthrough PASS (recorded by owner, not rerun by this documentation task). The M3→M4 bridge refers to official 2026 TNEA-listed colleges/programmes and transfers no marks, cutoff, rank, community or quota; no personal-result filtering or admission recommendation occurs. M4 remains marks-free. Governance remains 41 approved profiles / 116 codes; 38 identity, 26 variant, five evidence and six scope holds; family navigation INACTIVE. REAL_STUDENT_VALIDATION = NOT_RUN. Acceptance tag `v0.4.0-m4-acceptance` remains at `7458cc8`; no tag movement. Next milestone: M5 planning/contract only; implementation requires separate authorization.
+**Current accepted experience baseline (2026-11-15):** `f3c83d6499302bd49d8a33d4d067437e86cfba61` on `origin/main`. `M4_ACCEPTANCE = PASS`; `M4_TECHNICAL_CLOSEOUT = COMPLETE`; `M0_M4_EXPERIENCE_REFINEMENT = PASS`. Full test baseline 333/333 PASS; typecheck PASS. Governance remains 41 approved profiles / 116 codes; 38 identity, 26 delivery-variant, five evidence and six scope holds; family navigation INACTIVE. `REAL_STUDENT_VALIDATION = NOT_RUN`. Acceptance tag `v0.4.0-m4-acceptance` remains at `7458cc8`; no tag movement. Milestone M5 is in a bounded planning and authorization-reconciliation state.
 
-Start with [Project Status](../PROJECT_STATUS.md) for the project state and [Current execution plan — T01–T06](planning/current_execution_plan.md) for the single current task map, owners, dependencies, authorization and next decisions.
+Start with [Project Status](../PROJECT_STATUS.md) for the project state and [Current execution plan](planning/current_execution_plan.md) for the single current task map, owners, dependencies, authorization and next decisions.
 
 The current M4 authority is the [Option A owner decision](../review-evidence/m4-bounded-pilot/comprehensive-41-owner-decision.md). It accepts 41 programme-level bilingual profiles. The technical closeout links the unchanged 35-profile catalogue blob to the six existing immutable copies while retaining the nine exact college-offering associations, all holds and inactive family navigation. The [directory package](../experiments/m4-governance-census/directory-candidates-2026/README.md) remains dated source evidence, not current availability or admission evidence.
 
-The guided journey remains primary; governed Q&A is optional exploration. M2, M3 and M4 retain their recorded bounded acceptance. `REAL_STUDENT_VALIDATION = NOT_RUN`, pilot readiness is not approved, M5 is not started, Gemini remains paused and future conversational work remains separate from the frozen roadmap.
+The guided journey remains primary; governed Q&A is optional exploration. M2, M3 and M4 retain their recorded bounded acceptance. `REAL_STUDENT_VALIDATION = NOT_RUN`, pilot readiness is not approved, M5 is in planning reconciliation, Gemini remains paused and future conversational work remains separate from the frozen roadmap.
+
+## Milestone M5 Planning Records (Bounded Planning State)
+
+- [M5-T01 input provenance and privacy contract](planning/m5_contract_spec_v1.md) — ACCEPTED
+- [M5-T02 bounded official-source assessment](planning/m5_source_census_v1.md) — ACCEPTED
+- [M5-D5 derived provisional-allotment minimum methodology](planning/m5_derived_methodology_spec_v1.md) — ACCEPTED (recorded at `9c9ec585562c0f1e3917093034b15acb080221ba`)
+- [M5 revised cohort and T03 amendment proposal](planning/m5_revised_cohort_and_t03_amendment_proposal_v1.md) — PENDING owner review
+- [M5-T03 bounded historical identity-audit task](planning/m5_t03_identity_audit_task_v1.md) — PREPARED; execution NOT_AUTHORIZED
+- [M5 decision support execution proposal](planning/m5_decision_support_proposal_v1.md) — Planning proposal
 
 ## Content to review
 

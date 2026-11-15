@@ -1,3 +1,4 @@
 node_modules/
 .pnpm-store/
 experiments/track-a-rag/live-llm/output/
+scratch/

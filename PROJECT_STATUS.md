@@ -1,12 +1,23 @@
 # TN Engineering Guidance — Project Status
 
-**Current accepted experience baseline (2026-11-03):** `bd9b335ee62162e1c6f9a4c67a5db37b7b39f7bb` on main. M4 acceptance PASS; technical closeout COMPLETE at `c4e873112e384596545892dd144d810d332c35fd`. M0–M4 experience review PASS_WITH_REFINEMENT; experience refinement PASS (owner-reported). Full test baseline 325/325 PASS; typecheck PASS; targeted bilingual mobile/browser walkthrough PASS (recorded by owner, not rerun by this documentation task). The M3→M4 bridge refers to official 2026 TNEA-listed colleges/programmes and transfers no marks, cutoff, rank, community or quota; no personal-result filtering or admission recommendation occurs. M4 remains marks-free. Governance remains 41 approved profiles / 116 codes; 38 identity, 26 variant, five evidence and six scope holds; family navigation INACTIVE. REAL_STUDENT_VALIDATION = NOT_RUN. Acceptance tag `v0.4.0-m4-acceptance` remains at `7458cc8`; no tag movement. Next milestone: M5 planning/contract only; implementation requires separate authorization.
+**Current accepted experience baseline (2026-11-15):** `f3c83d6499302bd49d8a33d4d067437e86cfba61` on `origin/main`. `M4_ACCEPTANCE = PASS`; `M4_TECHNICAL_CLOSEOUT = COMPLETE`; `M0_M4_EXPERIENCE_REFINEMENT = PASS`. The accepted validation baseline is full tests **333/333 PASS**, strict typecheck **PASS** and diff check **PASS**. M4 remains marks-free. Governance remains 41 approved profiles / 116 codes; 38 identity, 26 delivery-variant, five evidence and six scope holds; family navigation remains INACTIVE. `REAL_STUDENT_VALIDATION = NOT_RUN`. Acceptance tag `v0.4.0-m4-acceptance` remains at `7458cc8`; it is not moved by later refinements. M0–M4 is the accepted closed baseline.
 
-**Current milestone:** Milestone M4 Option A remains accepted: 41 approved programme-level educational profiles, explicit held dispositions, 389 governed colleges and 3,128 dated offerings. `M4_ACCEPT = PASS`; M5 is not started.
+**Current milestone:** Milestone M4 Option A remains accepted: 41 approved programme-level educational profiles, explicit held dispositions, 389 governed colleges and 3,128 dated offerings. `M4_ACCEPT = PASS`. Milestone M5 is in a bounded planning and authorization-reconciliation state.
 
-**Current task:** M4 closeout and approved M0–M4 experience refinement are complete and integrated; next action is separately authorize bounded M5 planning/contract.
+**Current task:** M5 Authorization Reconciliation and Scope Preparation under Codex HOLD review.
+- `M5_T01 = ACCEPTED` ([M5-T01 Contract](docs/planning/m5_contract_spec_v1.md))
+- `M5_T02 = ACCEPTED` ([M5-T02 Bounded Source Assessment](docs/planning/m5_source_census_v1.md))
+- `M5_D5 = ACCEPTED` ([M5-D5 Derived Methodology](docs/planning/m5_derived_methodology_spec_v1.md) recorded at commit `9c9ec585562c0f1e3917093034b15acb080221ba`)
+- `REVISED_COHORT_AMENDMENT = PENDING` ([Revised Cohort Proposal](docs/planning/m5_revised_cohort_and_t03_amendment_proposal_v1.md) for 53–55 colleges awaiting owner review)
+- `M5_T03_EXECUTION = NOT_AUTHORIZED` (Previous execution on rejected branch `codex/m5-revised-cohort-t03-amendment` at `a28596b` was unauthorized; preserved as historical audit evidence only, not accepted)
+- `M5_T04_EXECUTION = NOT_AUTHORIZED` (Previous extraction on rejected branch was unauthorized; unapproved temporary artifacts in `<workspace>/scratch` violated D5 scratch isolation rules and have been removed; not accepted)
+- `GATE_A_STATUS = PENDING`
+- `M5_APPLICATION_IMPLEMENTATION = NOT_AUTHORIZED` (T05–T12 application code, shortlist persistence, and comparison UI on rejected branch were unauthorized and remain isolated from the accepted repository; not merged)
+- `PRODUCTION_BOUNDARIES = M0–M4 marks-free directory and personal guidance; no cutoff comparison in production or pilot`
 
-**Last reviewed:** 2026-11-03
+**Next Single Action:** Owner review and explicit authorization decision on the revised cohort proposal and bounded T03 identity audit.
+
+**Last reviewed:** 2026-11-15 (M5 authorization reconciliation; rejected M5 branch frozen; accepted M0–M4 baseline preserved)
 
 **M4 Formal Milestone Acceptance (Option A Comprehensive Release — 2026-11-01):**
 Ganesan (Project Owner / Student Advocate) formally reviewed and accepted Milestone M4 under Option A: Comprehensive 41-Profile Release (`M4_ACCEPT = PASS`, `M4_ACCEPTED = YES`).
