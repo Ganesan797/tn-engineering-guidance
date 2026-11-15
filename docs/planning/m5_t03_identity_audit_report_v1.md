@@ -1,10 +1,11 @@
 # M5-T03 — Consolidated 55-Institution Non-Applicant Identity Audit Report
 
-**Status:** `T03_AUDIT_COMPLETED` (Non-applicant identity research only).  
+**Status:** `T03_STATUS = ACCEPTED`; `T03_DECISION = ACCEPT`; `T03_ACCEPTANCE = ACCEPTED`.  
 **Task Authorization State:**
 - `T03_EXECUTION = COMPLETED`
-- `T04_EXECUTION = NOT_AUTHORIZED`
-- `APPLICANT_ROW_PROCESSING = NOT_AUTHORIZED`
+- `T04_AUTHORIZATION = AUTHORIZED (Clean-room extraction feasibility for 55 colleges under D5 privacy controls)`
+- `T04_EXTRACTION_CEILING = 55_INSTITUTIONS_ALL_AUDITED_COHORT`
+- `APPLICANT_ROW_PROCESSING = TRANSIENT_ONLY_UNDER_D5_PRIVACY`
 - `PRODUCTION_INGESTION = NOT_AUTHORIZED`
 - `APPLICATION_IMPLEMENTATION = NOT_AUTHORIZED`
 - `M5_STUDENT_RELEASE = NOT_AUTHORIZED`
@@ -42,7 +43,7 @@ Under the owner's explicit scope decision, this audit evaluated exactly **55 can
   - **`NOT_APPLICABLE_TO_SOURCE_SCOPE`:** The inspected 2025 DAP seat matrix is explicitly bounded to the special-reservation differently-abled route and is not applicable for ordinary General Academic or 7.5% quota allocations.
 - **Programme-Level Boundary:** 579 offerings in 2026 are baseline counts; target-route 2025 programme matches equal **0** due to absence of official ordinary General Academic and 7.5% seat matrices.
 - **Excluded M4 Directory Holds:** All 6 identity-disputed directory codes (`1133`, `1301`, `1424`, `2345`, `2776`, `3815`) remain strictly excluded from the cohort.
-- **Future T04 Ceiling Preservation:** The extraction-feasibility ceiling remains strictly capped at **at most 20 exact college–programme pairs**; the 579 offerings identified across the 55 colleges are an identity denominator, not an extraction target.
+- **T04 Extraction Ceiling Amendment:** Formally amended by owner on 2026-11-15 to cover **all 55 institutions** in the audited cohort for D5 clean-room extraction feasibility (superseding the earlier 20-pair ceiling).
 
 ---
 
@@ -160,9 +161,8 @@ Across the 55 audited institutions, the 2026 directory establishes **579 unique 
 - **2026 Baseline Offering Count:** 579 offerings across 89 programme codes are established in the 2026 directory.
 - **Verified 2025 Target-Route Programme Matches:** **0 verified matches** for ordinary General Academic and 7.5% Government School reservation routes. Official statewide 2025 seat matrices for these routes were unlocated/unavailable during census (HTTP 403 / unlinked on official portal); thus, the 579 offerings cannot be converted into verified historical pairs.
 - **Special-Reservation DAP Offerings:** The 2025 DAP PDF contains branch-specific quota seat counts for differently-abled candidates, demonstrating that engineering programmes operated under these codes in 2025, but these allocations are not applicable to ordinary General Academic / 7.5% candidate counselling.
-- **Strict Invariant on Future T04 Extraction Limit:** The presence of 579 verified 2026 offerings does **not** authorize statewide or cohort-wide historical extraction.
-- **Ceiling:** Any future T04 extraction-feasibility experiment remains strictly bounded to **at most 20 exact college–programme pairs**.
-- **Expansion Gate:** Expanding extraction beyond the 20-pair feasibility test requires an explicit owner decision based on measured error rates and verification effort.
+- **T04 Extraction Ceiling Scope:** Formally amended by owner on 2026-11-15 to cover **all 55 institutions** of the audited cohort for D5 clean-room extraction feasibility (General Academic and 7.5% Government School reservation quota across Rounds 1–3).
+- **Execution Invariant:** Raw allotment PDFs are streamed, processed, and auto-scrubbed in isolated clean-room transient storage under D5; applicant identifiers and individual ranks are dropped in-memory immediately. Production datasets (`data/cutoffs.csv`) remain untouched.
 
 ---
 
@@ -216,13 +216,14 @@ All six identity-disputed codes from the M4 governance census remain strictly ex
 ## 8. Status Declarations & Audit Guardrails
 
 ```text
-T03_STATUS = COMPLETED (Non-applicant identity research only)
-T04_STATUS = NOT_AUTHORIZED
-APPLICANT_ROW_PROCESSING = NOT_AUTHORIZED
+T03_STATUS = ACCEPTED (Formal Owner Acceptance Recorded)
+T03_DECISION = ACCEPT
+T04_STATUS = AUTHORIZED (Clean-Room Feasibility for 55 Colleges under D5)
+APPLICANT_ROW_PROCESSING = TRANSIENT_ONLY_UNDER_D5_PRIVACY
 PRODUCTION_INGESTION = NOT_AUTHORIZED
 APPLICATION_IMPLEMENTATION = NOT_AUTHORIZED
 M5_STUDENT_RELEASE = NOT_AUTHORIZED
 REAL_STUDENT_VALIDATION = NOT_RUN
 ```
 
-**Next Single Action:** Owner reviews reconciled T03 evidence and decides whether a bounded T04 feasibility experiment (capped at at most 20 pairs) is justified.
+**Next Single Action:** Execute Task 1.2 & 1.3: Run isolated D5 clean-room extraction harness across the 55 colleges for Rounds 1–3 (General Academic and 7.5% quota), emit sample validation ledger with visual PDF spot-checks (>=10%), and present for Owner Review at Gate A.

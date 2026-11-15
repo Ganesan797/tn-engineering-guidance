@@ -1,7 +1,7 @@
 # M5-T03 — bounded historical identity-audit task
 
-**Status:** `T03_AUDIT_COMPLETED` (Non-applicant identity research only). D5 methodology acceptance was recorded on 2026-11-15 at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`, blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d`. The owner approved the revised 55-institution non-applicant research scope on 2026-11-15; see the consolidated audit report at [m5_t03_identity_audit_report_v1.md](m5_t03_identity_audit_report_v1.md).
-*Authorizations:* `T03_EXECUTION = COMPLETED`; `T04_EXECUTION = NOT_AUTHORIZED`; `APPLICANT_ROW_PROCESSING = NOT_AUTHORIZED`; `PRODUCTION_INGESTION = NOT_AUTHORIZED`; `APPLICATION_IMPLEMENTATION = NOT_AUTHORIZED`.
+**Status:** `T03_STATUS = ACCEPTED`; `T03_ACCEPTANCE = ACCEPTED`; `T04_AUTHORIZATION = AUTHORIZED (Clean-room extraction feasibility on 55 institutions under D5 privacy controls)`. D5 methodology acceptance was recorded on 2026-11-15 at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`, blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d`. The owner formally accepted the revised 55-institution non-applicant research report on 2026-11-15 (54 `SUPPORTED_EXACT`, 1 `HELD_NEEDS_REVIEW` for College 1516); see the consolidated audit report at [m5_t03_identity_audit_report_v1.md](m5_t03_identity_audit_report_v1.md).
+*Authorizations:* `T03_EXECUTION = COMPLETED`; `T04_EXECUTION = AUTHORIZED (Isolated transient extraction under D5)`; `APPLICANT_ROW_PROCESSING = TRANSIENT_ONLY_UNDER_D5_PRIVACY`; `PRODUCTION_INGESTION = NOT_AUTHORIZED`; `APPLICATION_IMPLEMENTATION = NOT_AUTHORIZED`.
 
 This is the exact non-applicant identity task proposed under M5-T03. It does not authorize source discovery beyond the approved inputs, source download, applicant-row access, D5/T04 extraction, data ingestion or application implementation.
 
@@ -10,8 +10,8 @@ This is the exact non-applicant identity task proposed under M5-T03. It does not
 **Approved Research Scope (Amended 2026-11-15):**
 - **Approved Cohort Ceiling:** Exactly **55 institutions** (Core 53 + 2 separately classified: Code 3 SAP Anna University B.Plan only; Code 5 Annamalai University FEAT).
 - **Target Admission Years:** **2025 and 2026** (explicitly amending the preliminary candidate-year scope of 2024/2025).
-- **Future T04 Extraction Ceiling:** Strictly capped at **at most 20 exact college–programme pairs**. The 579 governed 2026 offerings identified across the 55 colleges serve solely as a 2026 identity baseline and must not be treated as an extraction target or authorization.
-- **Superseded Scope Context:** The preliminary pilot scope of *at most 10 governed 2026 college identities and candidate years 2024/2025* is preserved as superseded historical planning context.
+- **Future T04 Extraction Ceiling:** Formally amended by owner on 2026-11-15 to cover **all 55 institutions** in the audited cohort for D5 clean-room extraction feasibility.
+- **Superseded Scope Context:** The preliminary pilot scope of *at most 10 governed 2026 college identities, at most 20 exact pairs, and candidate years 2024/2025* is preserved as superseded historical planning context.
 
 The deliverable is an identity ledger that states which year-specific college and programme literals can be joined exactly, which must be held and which remain unknown. It establishes no cutoff, rank, seat, vacancy, availability, admission outcome or comparison value.
 
@@ -83,6 +83,6 @@ Each proposed relationship records:
 
 The execution deliverable, if separately authorized, is a bounded non-applicant identity ledger plus a short feasibility count: sources inspected, colleges/pairs screened, supported, held and unknown, with effort and blockers. It contains no derived minimum or product data.
 
-The owner must approve the exact cohort and every supported cross-year relationship before T04 sampling or product use. D5 acceptance does not authorize T03; T03 acceptance does not authorize T04.
+The owner formally accepted the M5-T03 55-Institution Identity Audit Report on 2026-11-15 (54 `SUPPORTED_EXACT`, 1 `HELD_NEEDS_REVIEW`) and authorized the clean-room T04 extraction feasibility experiment across all 55 colleges under strict D5 privacy controls.
 
-`M5_T03_TASK = COMPLETED`; `M5_T03_EXECUTION = COMPLETED`; `M5_T04 = NOT_AUTHORIZED`; `M5_IMPLEMENTATION_AUTHORIZED = NO`.
+`M5_T03_TASK = ACCEPTED`; `M5_T03_EXECUTION = COMPLETED`; `M5_T04 = AUTHORIZED (Clean-Room Feasibility for 55 Colleges)`; `M5_IMPLEMENTATION_AUTHORIZED = NO`.
