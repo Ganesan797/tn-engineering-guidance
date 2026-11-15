@@ -1,6 +1,7 @@
 # M5-T03 — bounded historical identity-audit task
 
 **Status:** `TASK_PREPARED`; `EXECUTION_NOT_AUTHORIZED`. D5 methodology acceptance was recorded on 2026-11-15 at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`, blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d`; that acceptance does not authorize this task. Prepared 2026-11-06 from base `78abf60c38c6ffb5976bd72687fbe1bb1bdbcbbf`.
+*Proposed Amendment (Under Review):* An explicit scope amendment proposal has been prepared at [m5_revised_cohort_and_t03_amendment_proposal_v1.md](m5_revised_cohort_and_t03_amendment_proposal_v1.md) proposing an extended identity cohort (up to 53–55 colleges across official DoTE categories) and candidate years 2025/2026, while retaining the at most 20-pair extraction feasibility limit. Ceiling and scope changes remain subject to owner review and approval.
 
 This is the exact non-applicant identity task proposed under M5-T03. It does not authorize source discovery beyond the approved inputs, source download, applicant-row access, D5/T04 extraction, data ingestion or application implementation.
 
