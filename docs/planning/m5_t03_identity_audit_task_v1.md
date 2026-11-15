@@ -1,6 +1,6 @@
 # M5-T03 — bounded historical identity-audit task
 
-**Status:** `TASK_PREPARED`; `EXECUTION_NOT_AUTHORIZED`. Prepared 2026-11-06 from base `78abf60c38c6ffb5976bd72687fbe1bb1bdbcbbf`.
+**Status:** `TASK_PREPARED`; `EXECUTION_NOT_AUTHORIZED`. D5 methodology acceptance was recorded on 2026-11-15 at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`, blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d`; that acceptance does not authorize this task. Prepared 2026-11-06 from base `78abf60c38c6ffb5976bd72687fbe1bb1bdbcbbf`.
 
 This is the exact non-applicant identity task proposed under M5-T03. It does not authorize source discovery beyond the approved inputs, source download, applicant-row access, D5/T04 extraction, data ingestion or application implementation.
 
