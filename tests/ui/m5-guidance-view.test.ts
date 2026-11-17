@@ -158,57 +158,137 @@ test("M6-T02 Choice List Print & Export: Ink-friendly @media print stylesheet, p
 });
 
 test("M6-T03 Acronym & Search Polish: Students can instantly search by college acronyms (CEG, MIT, GCT, PSG, CIT, etc.)", () => {
-  // Test "CEG" matches College 1
+  // 1. Univ Depts Acronyms
   const htmlCeg = renderM5GuidancePage(new URLSearchParams({ q: "CEG" }));
   assert.ok(htmlCeg.includes("College of Engineering Guindy (CEG)"));
   assert.ok(!htmlCeg.includes("Government College of Technology, Coimbatore"));
 
-  // Test "MIT" matches College 4
   const htmlMit = renderM5GuidancePage(new URLSearchParams({ q: "MIT" }));
   assert.ok(htmlMit.includes("Madras Institute of Technology (MIT)"));
 
-  // Test "GCT" matches College 2005
+  const htmlAct = renderM5GuidancePage(new URLSearchParams({ q: "ACT" }));
+  assert.ok(htmlAct.includes("Alagappa College of Technology (ACT)"));
+
+  const htmlSap = renderM5GuidancePage(new URLSearchParams({ q: "SAP" }));
+  assert.ok(htmlSap.includes("School of Architecture and Planning (SAP)"));
+
+  const htmlFeat = renderM5GuidancePage(new URLSearchParams({ q: "FEAT" }));
+  assert.ok(htmlFeat.includes("Faculty of Engineering &amp; Technology, Annamalai University"));
+
+  // 2. Premier Govt & Aided Acronyms
   const htmlGct = renderM5GuidancePage(new URLSearchParams({ q: "GCT" }));
   assert.ok(htmlGct.includes("Government College of Technology, Coimbatore"));
 
-  // Test "PSG" matches College 2006 and 2377
   const htmlPsg = renderM5GuidancePage(new URLSearchParams({ q: "PSG" }));
   assert.ok(htmlPsg.includes("PSG College of Technology"));
   assert.ok(htmlPsg.includes("PSG Institute of Technology and Applied Research"));
 
-  // Test "CIT" matches College 2007 and 1399
   const htmlCit = renderM5GuidancePage(new URLSearchParams({ q: "CIT" }));
   assert.ok(htmlCit.includes("Coimbatore Institute of Technology"));
   assert.ok(htmlCit.includes("Chennai Institute of Technology"));
 
-  // Test "TCE" matches College 5008
   const htmlTce = renderM5GuidancePage(new URLSearchParams({ q: "TCE" }));
   assert.ok(htmlTce.includes("Thiagarajar College of Engineering"));
 
-  // Test "KCT" matches College 2712
+  const htmlIrtt = renderM5GuidancePage(new URLSearchParams({ q: "IRTT" }));
+  assert.ok(htmlIrtt.includes("Government College of Engineering, Erode (IRTT)"));
+
+  const htmlAccet = renderM5GuidancePage(new URLSearchParams({ q: "ACCET" }));
+  assert.ok(htmlAccet.includes("Alagappa Chettiar Government College of Engineering and Technology"));
+
+  // 3. Constituent & Regional Colleges
+  const htmlBit = renderM5GuidancePage(new URLSearchParams({ q: "BIT Trichy" }));
+  assert.ok(htmlBit.includes("(3011)"));
+
+  const htmlVoc = renderM5GuidancePage(new URLSearchParams({ q: "VOC Thoothukudi" }));
+  assert.ok(htmlVoc.includes("(5022)"));
+
+  const htmlUcev = renderM5GuidancePage(new URLSearchParams({ q: "UCEV" }));
+  assert.ok(htmlUcev.includes("(1013)"));
+
+  const htmlUcet = renderM5GuidancePage(new URLSearchParams({ q: "UCET" }));
+  assert.ok(htmlUcet.includes("(1014)"));
+
+  const htmlUcea = renderM5GuidancePage(new URLSearchParams({ q: "UCEA" }));
+  assert.ok(htmlUcea.includes("(1015)"));
+
+  const htmlAurcc = renderM5GuidancePage(new URLSearchParams({ q: "AURCC" }));
+  assert.ok(htmlAurcc.includes("(2025)"));
+
+  // 4. Top Autonomous SFCs
   const htmlKct = renderM5GuidancePage(new URLSearchParams({ q: "KCT" }));
   assert.ok(htmlKct.includes("Kumaraguru College of Technology"));
 
-  // Test "Mepco" matches College 4960
   const htmlMepco = renderM5GuidancePage(new URLSearchParams({ q: "Mepco" }));
   assert.ok(htmlMepco.includes("Mepco Schlenk Engineering College"));
 
-  // Test "SVCE" matches College 1219
-  const htmlSvce = renderM5GuidancePage(new URLSearchParams({ q: "SVCE" }));
-  assert.ok(htmlSvce.includes("Sri Venkateswara College of Engineering"));
+  const htmlSsrec = renderM5GuidancePage(new URLSearchParams({ q: "SSREC" }));
+  assert.ok(htmlSsrec.includes("Sri Sai Ram Engineering College"));
 
-  // Test "REC" matches College 1211
   const htmlRec = renderM5GuidancePage(new URLSearchParams({ q: "REC" }));
   assert.ok(htmlRec.includes("Rajalakshmi Engineering College"));
 
-  // Test "LICET" matches College 1450
+  const htmlSvce = renderM5GuidancePage(new URLSearchParams({ q: "SVCE" }));
+  assert.ok(htmlSvce.includes("Sri Venkateswara College of Engineering"));
+
   const htmlLicet = renderM5GuidancePage(new URLSearchParams({ q: "LICET" }));
   assert.ok(htmlLicet.includes("Loyola-ICAM College of Engineering and Technology (LICET)"));
 
-  // Test acronym + branch combination: "CEG CSE" matches CEG CS but not CEG ME
+  const htmlSkcet = renderM5GuidancePage(new URLSearchParams({ q: "SKCET" }));
+  assert.ok(htmlSkcet.includes("Sri Krishna College of Engineering and Technology"));
+
+  const htmlVec = renderM5GuidancePage(new URLSearchParams({ q: "VEC" }));
+  assert.ok(htmlVec.includes("Velammal Engineering College"));
+
+  // 5. Compound & Multi-Token Queries
   const htmlCegCse = renderM5GuidancePage(new URLSearchParams({ q: "CEG CSE" }));
   assert.ok(htmlCegCse.includes("College of Engineering Guindy (CEG)"));
   assert.ok(htmlCegCse.includes("COMPUTER SCIENCE AND ENGINEERING"));
+
+  const htmlPsgEce = renderM5GuidancePage(new URLSearchParams({ q: "PSG ECE" }));
+  assert.ok(htmlPsgEce.includes("PSG College of Technology"));
+  assert.ok(htmlPsgEce.includes("ELECTRONICS AND COMMUNICATION"));
+
+  const htmlGctMech = renderM5GuidancePage(new URLSearchParams({ q: "GCT Mech" }));
+  assert.ok(htmlGctMech.includes("Government College of Technology, Coimbatore"));
+  assert.ok(htmlGctMech.includes("MECHANICAL ENGINEERING"));
+
+  // Distinguish CIT Chennai vs CIT Coimbatore
+  const htmlCitCh = renderM5GuidancePage(new URLSearchParams({ q: "CIT Chennai" }));
+  assert.ok(htmlCitCh.includes("(1399)"));
+  assert.ok(!htmlCitCh.includes("(2007)"));
+
+  const htmlCitCbe = renderM5GuidancePage(new URLSearchParams({ q: "CIT Coimbatore" }));
+  assert.ok(htmlCitCbe.includes("(2007)"));
+  assert.ok(!htmlCitCbe.includes("(1399)"));
+
+  // 6. Direct TNEA Choice Syntax (1~CS, 2006~EC)
+  const html1Cs = renderM5GuidancePage(new URLSearchParams({ q: "1~CS" }));
+  assert.ok(html1Cs.includes("College of Engineering Guindy (CEG)"));
+  assert.ok(html1Cs.includes("COMPUTER SCIENCE AND ENGINEERING"));
+  assert.ok(!html1Cs.includes("MECHANICAL ENGINEERING"));
+  assert.ok(!html1Cs.includes("(1113)"));
+
+  const html2006Ec = renderM5GuidancePage(new URLSearchParams({ q: "2006~EC" }));
+  assert.ok(html2006Ec.includes("PSG College of Technology"));
+  assert.ok(html2006Ec.includes("ELECTRONICS AND COMMUNICATION"));
+
+  // 7. Bilingual Parity: Tamil Regional Queries
+  const htmlChennai = renderM5GuidancePage(new URLSearchParams({ q: "சென்னை" }));
+  assert.ok(htmlChennai.includes("College of Engineering Guindy (CEG)"));
+  assert.ok(!htmlChennai.includes("Government College of Technology, Coimbatore"));
+
+  const htmlKovai = renderM5GuidancePage(new URLSearchParams({ q: "கோவை" }));
+  assert.ok(htmlKovai.includes("Government College of Technology, Coimbatore"));
+  assert.ok(htmlKovai.includes("PSG College of Technology"));
+  assert.ok(!htmlKovai.includes("College of Engineering Guindy (CEG)"));
+
+  const htmlMadurai = renderM5GuidancePage(new URLSearchParams({ q: "மதுரை" }));
+  assert.ok(htmlMadurai.includes("Thiagarajar College of Engineering"));
+  assert.ok(!htmlMadurai.includes("Government College of Technology, Coimbatore"));
+
+  const htmlTrichy = renderM5GuidancePage(new URLSearchParams({ q: "திருச்சி" }));
+  assert.ok(htmlTrichy.includes("(3011)"));
 });
 
 test("M5 UI: Counselling Guidance tab displays factual TNEA procedures without unsupported claims", () => {

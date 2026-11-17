@@ -62,7 +62,7 @@ export const COHORT_55_METADATA: Record<string, CollegeMeta> = {
   "1015": { code: "1015", name: "University College of Engineering, Arni", type: "CONSTITUENT", district: "Tiruvannamalai", aliases: ["UCEA", "UCE Arni"] },
   "1026": { code: "1026", name: "University College of Engineering, Kancheepuram", type: "CONSTITUENT", district: "Kancheepuram", aliases: ["UCEK", "UCE Kancheepuram", "UCE Kanchi"] },
   "2025": { code: "2025", name: "Anna University Regional Campus, Coimbatore", type: "CONSTITUENT", district: "Coimbatore", aliases: ["AURCC", "AURC Coimbatore"] },
-  "3011": { code: "3011", name: "University College of Engineering, Tiruchirappalli (BIT Campus)", type: "CONSTITUENT", district: "Tiruchirappalli", aliases: ["BIT", "BIT Campus", "UCE Trichy"] },
+  "3011": { code: "3011", name: "University College of Engineering, Tiruchirappalli (BIT Campus)", type: "CONSTITUENT", district: "Tiruchirappalli", aliases: ["BIT", "BIT Campus", "BIT Trichy", "UCE Trichy", "UCE Tiruchirappalli"] },
   "3016": { code: "3016", name: "University College of Engineering, Ariyalur", type: "CONSTITUENT", district: "Ariyalur", aliases: ["UCE Ariyalur"] },
   "3018": { code: "3018", name: "University College of Engineering, Nagercoil", type: "CONSTITUENT", district: "Kanyakumari", aliases: ["UCEN", "UCE Nagercoil"] },
   "3019": { code: "3019", name: "University College of Engineering, Panruti", type: "CONSTITUENT", district: "Cuddalore", aliases: ["UCE Panruti"] },
@@ -72,7 +72,7 @@ export const COHORT_55_METADATA: Record<string, CollegeMeta> = {
   "4024": { code: "4024", name: "University College of Engineering, Dindigul", type: "CONSTITUENT", district: "Dindigul", aliases: ["UCED", "UCE Dindigul"] },
   "5010": { code: "5010", name: "Anna University Regional Campus, Madurai", type: "CONSTITUENT", district: "Madurai", aliases: ["AURCM", "AURC Madurai"] },
   "5017": { code: "5017", name: "University College of Engineering, Thirukkuvalai", type: "CONSTITUENT", district: "Nagapattinam", aliases: ["UCE Thirukkuvalai"] },
-  "5022": { code: "5022", name: "University College of Engineering, Thoothukudi", type: "CONSTITUENT", district: "Thoothukudi", aliases: ["UCE Thoothukudi", "UCE Tuticorin", "VOC", "VOC College"] },
+  "5022": { code: "5022", name: "University College of Engineering, Thoothukudi", type: "CONSTITUENT", district: "Thoothukudi", aliases: ["UCE Thoothukudi", "UCE Tuticorin", "VOC", "VOC College", "VOC Thoothukudi", "VOC Tuticorin"] },
   // 20 SFC
   "1113": { code: "1113", name: "R.M.K. Engineering College, Gummidipoondi, Tiruvallur", type: "SFC", district: "Tiruvallur", aliases: ["RMK", "RMKEC"] },
   "1120": { code: "1120", name: "Velammal Engineering College, Ambattur, Chennai", type: "SFC", district: "Chennai", aliases: ["VEC", "VEC Chennai"] },
@@ -81,7 +81,7 @@ export const COHORT_55_METADATA: Record<string, CollegeMeta> = {
   "1304": { code: "1304", name: "Easwari Engineering College, Ramapuram, Chennai", type: "SFC", district: "Chennai", aliases: ["EEC", "Easwari"] },
   "1317": { code: "1317", name: "St. Joseph's College of Engineering, OMR, Chennai", type: "SFC", district: "Chennai", aliases: ["SJCE", "St Josephs", "St Joseph"] },
   "1399": { code: "1399", name: "Chennai Institute of Technology, Kundrathur, Chennai", type: "SFC", district: "Chennai", aliases: ["CIT", "CIT Chennai", "CIT Kundrathur"] },
-  "1419": { code: "1419", name: "Sri Sai Ram Engineering College, West Tambaram, Chennai", type: "SFC", district: "Kancheepuram", aliases: ["SEC", "Sairam", "Sai Ram"] },
+  "1419": { code: "1419", name: "Sri Sai Ram Engineering College, West Tambaram, Chennai", type: "SFC", district: "Kancheepuram", aliases: ["SEC", "SSREC", "Sairam", "Sai Ram", "Sri Sai Ram"] },
   "1422": { code: "1422", name: "SRM Valliammai Engineering College, Kattankulathur", type: "SFC", district: "Chengalpattu", aliases: ["SRMVEC", "Valliammai"] },
   "1450": { code: "1450", name: "Loyola-ICAM College of Engineering and Technology (LICET), Chennai", type: "SFC", district: "Chennai", aliases: ["LICET", "Loyola ICAM", "Loyola"] },
   "2377": { code: "2377", name: "PSG Institute of Technology and Applied Research, Neelambur, Coimbatore", type: "SFC", district: "Coimbatore", aliases: ["PSG", "PSG iTech", "PSGITECH", "PSG IT"] },
@@ -139,6 +139,71 @@ export const SEARCH_ALIASES: Record<string, string> = {
   robo: "robotics",
   robotics: "robotics",
   aided: "aided",
+  trichy: "tiruchirappalli",
+  nellai: "tirunelveli",
+  tuticorin: "thoothukudi",
+  ramnad: "ramanathapuram",
+  kanchi: "kancheepuram",
+  sathy: "sathyamangalam",
+  // Tamil district & location queries
+  "சென்னை": "chennai",
+  "மதராஸ்": "chennai",
+  "கோவை": "coimbatore",
+  "கோயம்புத்தூர்": "coimbatore",
+  "மதுரை": "madurai",
+  "திருச்சி": "tiruchirappalli",
+  "திருச்சிராப்பள்ளி": "tiruchirappalli",
+  "சேலம்": "salem",
+  "நெல்லை": "tirunelveli",
+  "திருநெல்வேலி": "tirunelveli",
+  "வேலூர்": "vellore",
+  "ஈரோடு": "erode",
+  "திண்டுக்கல்": "dindigul",
+  "தஞ்சாவூர்": "thanjavur",
+  "தஞ்சை": "thanjavur",
+  "தருமபுரி": "dharmapuri",
+  "தர்மபுரி": "dharmapuri",
+  "தூத்துக்குடி": "thoothukudi",
+  "கன்னியாகுமரி": "kanyakumari",
+  "நாகர்கோவில்": "kanyakumari",
+  "விழுப்புரம்": "villupuram",
+  "திண்டிவனம்": "villupuram",
+  "காஞ்சிபுரம்": "kancheepuram",
+  "காஞ்சி": "kancheepuram",
+  "செங்கல்பட்டு": "chengalpattu",
+  "குரோம்பேட்டை": "chengalpattu",
+  "திருவள்ளூர்": "tiruvallur",
+  "விருதுநகர்": "virudhunagar",
+  "சிவகாசி": "virudhunagar",
+  "சிவகங்கை": "sivaganga",
+  "காரைக்குடி": "sivaganga",
+  "புதுக்கோட்டை": "pudukkottai",
+  "தேனி": "theni",
+  "போடி": "theni",
+  "போடிநாயக்கனூர்": "theni",
+  "நாமக்கல்": "namakkal",
+  "திருச்செங்கோடு": "namakkal",
+  "அரியலூர்": "ariyalur",
+  "நாகப்பட்டினம்": "nagapattinam",
+  "திருக்குவளை": "nagapattinam",
+  "ராமநாதபுரம்": "ramanathapuram",
+  "கடலூர்": "cuddalore",
+  "சிதம்பரம்": "cuddalore",
+  "பண்ருட்டி": "cuddalore",
+  "திருவண்ணாமலை": "tiruvannamalai",
+  "ஆரணி": "tiruvannamalai",
+  // Tamil branch & keyword queries
+  "கணினி": "computer science",
+  "கம்ப்யூட்டர்": "computer science",
+  "மெக்கானிக்கல்": "mechanical",
+  "சிவில்": "civil",
+  "எலக்ட்ரானிக்ஸ்": "electronics",
+  "எலக்ட்ரிக்கல்": "electrical",
+  "செயற்கை": "artificial",
+  "நுண்ணறிவு": "intelligence",
+  "தகவல்": "information",
+  "தொழில்நுட்பம்": "technology",
+  "அரசு": "government",
 };
 
 export function matchesOfferingSearch(
@@ -150,6 +215,17 @@ export function matchesOfferingSearch(
   const q = query.trim().toLowerCase();
   if (!q) return true;
 
+  // Direct TNEA choice syntax: "1~CS", "2006~EC", "2005~ME"
+  if (q.includes("~")) {
+    const [qCol, qProg] = q.split("~").map((s) => s.trim().toLowerCase());
+    if (qCol && qProg) {
+      return (
+        college.code.toLowerCase() === qCol &&
+        off.programmeCode.toLowerCase() === qProg
+      );
+    }
+  }
+
   const aliasStr = (college.aliases ?? []).join(" ");
   const comboStr = `${college.code}~${off.programmeCode}`;
   const directText = `${college.code} ${comboStr} ${college.name} ${aliasStr} ${off.programmeCode} ${off.programmeName} ${college.district}`.toLowerCase();
@@ -158,7 +234,14 @@ export function matchesOfferingSearch(
   const rawTokens = q.split(/[\s,+/~-]+/).filter(Boolean);
   if (rawTokens.length > 0) {
     const normalizedTokens = rawTokens.map((tok) => SEARCH_ALIASES[tok] || tok);
-    if (normalizedTokens.every((tok) => directText.includes(tok))) return true;
+    const words = directText.split(/[\s~,()·.-]+/).filter(Boolean);
+
+    return normalizedTokens.every((tok) => {
+      if (/^\d+$/.test(tok)) {
+        return college.code === tok || words.includes(tok);
+      }
+      return directText.includes(tok);
+    });
   }
 
   return false;
