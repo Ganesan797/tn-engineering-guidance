@@ -68,7 +68,7 @@ export const COHORT_55_METADATA: Record<string, CollegeMeta> = {
   "4024": { code: "4024", name: "University College of Engineering, Dindigul", type: "CONSTITUENT", district: "Dindigul", aliases: ["UCED", "UCE Dindigul"] },
   "5010": { code: "5010", name: "Anna University Regional Campus, Madurai", type: "CONSTITUENT", district: "Madurai", aliases: ["AURCM", "AURC Madurai"] },
   "5017": { code: "5017", name: "University College of Engineering, Thirukkuvalai", type: "CONSTITUENT", district: "Nagapattinam", aliases: ["UCE Thirukkuvalai"] },
-  "5022": { code: "5022", name: "University College of Engineering, Thoothukudi", type: "CONSTITUENT", district: "Thoothukudi", aliases: ["UCE Thoothukudi", "UCE Tuticorin"] },
+  "5022": { code: "5022", name: "University College of Engineering, Thoothukudi", type: "CONSTITUENT", district: "Thoothukudi", aliases: ["UCE Thoothukudi", "UCE Tuticorin", "VOC", "VOC College"] },
   // 20 SFC
   "1113": { code: "1113", name: "R.M.K. Engineering College, Gummidipoondi, Tiruvallur", type: "SFC", district: "Tiruvallur", aliases: ["RMK", "RMKEC"] },
   "1120": { code: "1120", name: "Velammal Engineering College, Ambattur, Chennai", type: "SFC", district: "Chennai", aliases: ["VEC", "VEC Chennai"] },
@@ -115,6 +115,26 @@ export const SEARCH_ALIASES: Record<string, string> = {
   aero: "aeronautical",
   auto: "automobile",
   govt: "government",
+  cs: "computer science",
+  ec: "electronics and communication",
+  ee: "electrical and electronics",
+  me: "mechanical",
+  ce: "civil",
+  cyber: "cyber security",
+  csbs: "business systems",
+  chem: "chemical",
+  ch: "chemical",
+  prod: "production",
+  pr: "production",
+  agri: "agricultural",
+  ag: "agricultural",
+  textile: "textile",
+  tx: "textile",
+  food: "food technology",
+  ft: "food technology",
+  robo: "robotics",
+  robotics: "robotics",
+  aided: "aided",
 };
 
 export function matchesOfferingSearch(
@@ -127,10 +147,11 @@ export function matchesOfferingSearch(
   if (!q) return true;
 
   const aliasStr = (college.aliases ?? []).join(" ");
-  const directText = `${college.code} ${college.name} ${aliasStr} ${off.programmeCode} ${off.programmeName} ${college.district}`.toLowerCase();
+  const comboStr = `${college.code}~${off.programmeCode}`;
+  const directText = `${college.code} ${comboStr} ${college.name} ${aliasStr} ${off.programmeCode} ${off.programmeName} ${college.district}`.toLowerCase();
   if (directText.includes(q)) return true;
 
-  const rawTokens = q.split(/[\s,+/]+/).filter(Boolean);
+  const rawTokens = q.split(/[\s,+/~-]+/).filter(Boolean);
   if (rawTokens.length > 0) {
     const normalizedTokens = rawTokens.map((tok) => SEARCH_ALIASES[tok] || tok);
     if (normalizedTokens.every((tok) => directText.includes(tok))) return true;
