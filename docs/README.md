@@ -17,6 +17,7 @@ The guided journey remains primary; governed Q&A is optional exploration. M2, M3
 - [M5-T03 bounded historical identity-audit task](planning/m5_t03_identity_audit_task_v1.md) — AUTHORIZED BY OWNER
 - [M5-T03 55-institution non-applicant identity audit report](planning/m5_t03_identity_audit_report_v1.md) — COMPLETED (54 SUPPORTED_EXACT, 1 HELD_NEEDS_REVIEW, 555 offerings)
 - [M5-T04 clean-room extraction feasibility report](planning/m5_t04_extraction_report_v1.md) — VERIFIED & GATE A APPROVED (4,332 D5 candidate buckets across 55 colleges, 0 applicant data, benchmark spot checks PASS)
+- [M5 technical closeout report](planning/m5_technical_closeout_report_v1.md) — COMPLETE & ACCEPTED (M5 decision support fully verified, Gate A approved, 536/555 offerings with history active at runtime)
 - [M5 decision support execution proposal](planning/m5_decision_support_proposal_v1.md) — Planning proposal
 
 ## Content to review
