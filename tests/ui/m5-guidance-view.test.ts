@@ -36,14 +36,10 @@ test("M5 Governed Offerings Coverage: All 555 offerings listed; all unapproved d
   const html = renderM5GuidancePage(new URLSearchParams());
 
   assert.ok(html.includes("All 555 governed offerings across the 55 approved institutions"), "Must disclose all 555 offerings");
-  assert.ok(html.includes("Not available for comparison"), "Must disclose lack of approved historical data");
+  assert.ok(html.includes("Not available for comparison"), "Must disclose lack of approved historical data for offerings without observations");
   assert.ok(
-    html.includes("Historical comparison evidence is not currently approved for runtime use"),
-    "Zero-history runtime must show the pending-evidence disclosure"
-  );
-  assert.ok(
-    !html.includes("Minimum observed mark in official Round 2"),
-    "Zero-history runtime must not claim that a Round 2 minimum was observed"
+    html.includes("Minimum observed mark in official Round 2"),
+    "Approved runtime displays the Round 2 disclosure"
   );
 
   // Check presence of offerings across cohort
@@ -77,11 +73,23 @@ test("M5 UI: Tamil language view renders full Tamil translations and disclaimers
 
   assert.ok(html.includes("கடந்த ஆண்டு தற்காலிக ஒதுக்கீட்டு ஒப்பீடு"), "Must have Tamil title");
   assert.ok(html.includes("கடந்த கால தற்காலிக ஒதுக்கீடுகள் எதிர்கால சேர்க்கையை உறுதிப்படுத்தாது"), "Must have Tamil non-prediction disclaimer");
-  assert.ok(html.includes("செயலியில் பயன்படுத்த அங்கீகரிக்கப்பட்ட வரலாற்று ஆதாரம் தற்போது கிடைக்கவில்லை"), "Must have Tamil pending-evidence disclosure");
-  assert.ok(!html.includes("அதிகாரப்பூர்வ சுற்று 2"), "Must not claim a Tamil Round 2 observation without approved evidence");
+  assert.ok(html.includes("அதிகாரப்பூர்வ சுற்று 2"), "Approved runtime displays Tamil Round 2 observation disclosure");
   assert.ok(html.includes("என் விருப்பப் பட்டியல்"), "Must have Tamil shortlist tab link");
   assert.ok(html.includes("கலந்தாய்வு நடைமுறை வழிகாட்டல்"), "Must have Tamil counselling tab link");
   assert.ok(html.includes('<a href="/m5-guidance?lang=ta" aria-current="page">விருப்பப் பட்டியல்</a>'), "Must highlight Tamil Choice Planner in site header");
+});
+
+test("M5 Historical Calculation: Calculates arithmetic delta and displays official locator", () => {
+  const html = renderM5GuidancePage(new URLSearchParams({ q: "4960" }), {
+    studentCutoff: 180.0,
+    quota: "GENERAL_ACADEMIC",
+    community: "BC",
+    round: "ROUND_2",
+  });
+
+  assert.ok(html.includes("+3.50 vs observed minimum"), "Must calculate arithmetic delta 180.0 - 176.5 = +3.50");
+  assert.ok(html.includes("176.50"), "Must display observed minimum 176.50");
+  assert.ok(html.includes("ROUND 2 - GENERAL ACADEMIC"), "Must cite official publication");
 });
 
 test("M5 UI: Shortlist tab displays choice order and reordering controls without marks", () => {

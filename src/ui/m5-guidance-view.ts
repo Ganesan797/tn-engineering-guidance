@@ -3,6 +3,7 @@ import {
   compareOffering,
   getComparisonCopy,
   getCounsellingGuidance,
+  type AllotmentRound,
   type CommunityCategory,
   type ComparisonResult,
   type GovernedOffering,
@@ -94,6 +95,7 @@ export interface M5GuidanceRenderOptions {
   studentCutoff?: number | null;
   quota?: QuotaStream;
   community?: CommunityCategory;
+  round?: AllotmentRound;
 }
 
 export function renderM5GuidancePage(
@@ -123,6 +125,13 @@ export function renderM5GuidancePage(
     ["OC", "BC", "BCM", "MBC", "SC", "SCA", "ST"].includes(inputState.community)
       ? (inputState.community as CommunityCategory)
       : "OC";
+
+  const round: AllotmentRound =
+    inputState.round && ["ROUND_1", "ROUND_2", "ROUND_3"].includes(inputState.round)
+      ? (inputState.round as AllotmentRound)
+      : quota === "GOVT_SCHOOL_7_5"
+      ? "ROUND_1"
+      : "ROUND_2";
 
   // Non-sensitive navigation / search filters from URL
   const query = (params.get("q") ?? "").trim().toLowerCase();
@@ -155,10 +164,14 @@ export function renderM5GuidancePage(
 
     const result = compareOffering({
       studentCutoff,
+      year: 2025,
+      stage: "PROVISIONAL_ALLOTMENT",
+      round,
       quota,
       community,
       collegeCode: off.collegeCode,
       programmeCode: off.programmeCode,
+      metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK",
     });
 
     evaluatedRows.push({
@@ -270,6 +283,7 @@ export function renderM5GuidancePage(
             studentCutoff,
             quota,
             community,
+            round,
             query,
             typeFilter,
             evaluatedRows,
@@ -288,6 +302,7 @@ function renderComparisonTab(
   studentCutoff: number | null,
   quota: QuotaStream,
   community: CommunityCategory,
+  round: AllotmentRound,
   query: string,
   typeFilter: string,
   rows: Array<{ college: CollegeMeta; offering: GovernedOffering; result: ComparisonResult }>,
@@ -299,7 +314,7 @@ function renderComparisonTab(
     .map((row) => row.result)
     .find(
       (result) =>
-        result.status === "AVAILABLE" &&
+        (result.status === "AVAILABLE" || result.status === "STUDENT_CUTOFF_MISSING") &&
         result.year !== null &&
         result.stage !== null &&
         result.round !== null &&
@@ -341,6 +356,21 @@ function renderComparisonTab(
               .map(
                 (cat) =>
                   `<option value="${cat}" ${community === cat ? "selected" : ""}>${esc(copy.communityName(cat))}</option>`
+              )
+              .join("")}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="round-select">${esc(copy.roundLabel)}</label>
+          <select id="round-select" name="round">
+            ${(quota === "GOVT_SCHOOL_7_5"
+              ? (["ROUND_1", "ROUND_2"] as AllotmentRound[])
+              : (["ROUND_2", "ROUND_3"] as AllotmentRound[])
+            )
+              .map(
+                (r) =>
+                  `<option value="${r}" ${round === r ? "selected" : ""}>${esc(copy.roundName(r))}</option>`
               )
               .join("")}
           </select>

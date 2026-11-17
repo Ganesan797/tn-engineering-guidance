@@ -8,35 +8,54 @@ import {
   type DerivedHistoricalObservation,
 } from "../../src/m5/index.ts";
 
-test("M5 Runtime Isolation: Zero unverified research candidates loaded at runtime", () => {
-  // Verify that the runtime repository contains 0 observations (Gate A is PENDING)
+test("M5 Runtime Historical Data: Verified 4,332 D5 candidates loaded at runtime (Gate A Cleared)", () => {
+  // Verify that the runtime repository contains exactly 4,332 verified observations
   const allObs = HISTORICAL_OBSERVATIONS.getAll();
-  assert.equal(allObs.length, 0, "Zero unverified research candidates may be loaded at runtime");
+  assert.equal(allObs.length, 4332, "Must contain exactly 4,332 verified Gate A observations");
 
   // All 555 governed options must remain discoverable
   const offerings = HISTORICAL_OBSERVATIONS.getAllGovernedOfferings();
   assert.equal(offerings.length, 555, "Must contain exactly 555 governed offerings across 55 colleges");
 
-  // Counts accounting
+  // Counts accounting: 536 with observed allotments in evaluated rounds, 19 without allotments
   const counts = HISTORICAL_OBSERVATIONS.getOfferingsCount();
   assert.equal(counts.total, 555);
-  assert.equal(counts.withHistory, 0, "Approved historical data available must be 0 at runtime");
-  assert.equal(counts.missingHistory, 555);
+  assert.equal(counts.withHistory, 536, "Approved historical data available must be 536 offerings");
+  assert.equal(counts.missingHistory, 19);
 
-  // In runtime application, comparison is unavailable for all offerings
-  const runtimeRes = compareOffering({
+  // In runtime application, calling without explicit round fails closed (no implicit round selection)
+  const runtimeResNoRound = compareOffering({
     studentCutoff: 185.0,
     quota: "GENERAL_ACADEMIC",
     community: "BC",
     collegeCode: "4960",
     programmeCode: "CS",
   });
-  assert.equal(runtimeRes.status, "NO_HISTORICAL_DATA");
-  assert.equal(runtimeRes.evidenceSemantics, "NOT_AVAILABLE_FOR_COMPARISON");
-  assert.equal(runtimeRes.historicalMin, null);
-  assert.equal(runtimeRes.delta, null);
-  assert.equal(runtimeRes.officialClosingValue, null);
-  assert.equal(runtimeRes.officialClosingValueStatus, "NOT_ESTABLISHED_BY_D5");
+  assert.equal(runtimeResNoRound.status, "NO_HISTORICAL_DATA");
+  assert.equal(runtimeResNoRound.evidenceSemantics, "NOT_AVAILABLE_FOR_COMPARISON");
+  assert.equal(runtimeResNoRound.historicalMin, null);
+  assert.equal(runtimeResNoRound.delta, null);
+  assert.equal(runtimeResNoRound.officialClosingValue, null);
+  assert.equal(runtimeResNoRound.officialClosingValueStatus, "NOT_ESTABLISHED_BY_D5");
+
+  // In runtime application, calling with explicit round, year, stage, and metricType returns verified observation
+  const runtimeResWithRound = compareOffering({
+    studentCutoff: 185.0,
+    year: 2025,
+    stage: "PROVISIONAL_ALLOTMENT",
+    round: "ROUND_2",
+    quota: "GENERAL_ACADEMIC",
+    community: "BC",
+    collegeCode: "4960",
+    programmeCode: "EC",
+    metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK",
+  });
+  assert.equal(runtimeResWithRound.status, "AVAILABLE");
+  assert.equal(runtimeResWithRound.evidenceSemantics, "DERIVED_PROVISIONAL_OBSERVATION");
+  assert.equal(runtimeResWithRound.historicalMin, 176.5);
+  assert.equal(runtimeResWithRound.delta, 8.5); // 185.0 - 176.5 = +8.5
+  assert.equal(runtimeResWithRound.allotmentCount, 16);
+  assert.ok(runtimeResWithRound.locator?.includes("Document 'ROUND 2 - GENERAL ACADEMIC"));
 });
 
 test("M5 Synthetic Comparison Engine: Exact Evidence Matching & Arithmetic Delta", () => {

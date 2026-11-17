@@ -254,8 +254,78 @@ export class HistoricalRepository {
   }
 }
 
-// Runtime singleton: Zero unverified research candidates loaded.
-export const HISTORICAL_OBSERVATIONS = new HistoricalRepository();
+function mapRouteLiteral(routeLiteral: string): QuotaStream {
+  if (routeLiteral === "GENERAL ACADEMIC") {
+    return "GENERAL_ACADEMIC";
+  }
+  if (routeLiteral.includes("7.5%")) {
+    return "GOVT_SCHOOL_7_5";
+  }
+  throw new Error(`Unknown route literal: ${routeLiteral}`);
+}
+
+function mapRoundLiteral(roundLiteral: string): AllotmentRound {
+  if (roundLiteral === "ROUND 1") return "ROUND_1";
+  if (roundLiteral === "ROUND 2") return "ROUND_2";
+  if (roundLiteral === "ROUND 3") return "ROUND_3";
+  throw new Error(`Unknown round literal: ${roundLiteral}`);
+}
+
+interface RawCandidateRecord {
+  research_candidate_id: string;
+  source_college_code_literal: string;
+  source_programme_code_literal: string;
+  source_route_literal: string;
+  source_round_literal: string;
+  source_allotted_category_literal: string;
+  source_year_literal: string;
+  source_title_literal: string;
+  derived_minimum_mark: number;
+  allotment_count_in_bucket: number;
+  nonpersonal_source_locator: string;
+  extraction_status: string;
+}
+
+export function loadVerifiedHistoricalObservations(): DerivedHistoricalObservation[] {
+  try {
+    const candidatesUrl = new URL(
+      "../../experiments/m5-derived-minimum-candidates/run-2025-cohort-55/candidates.json",
+      import.meta.url
+    );
+    const filePath = fileURLToPath(candidatesUrl);
+    const raw = readFileSync(filePath, "utf-8");
+    const records = JSON.parse(raw) as RawCandidateRecord[];
+    return records.map((r) => {
+      const quota = mapRouteLiteral(r.source_route_literal);
+      const round = mapRoundLiteral(r.source_round_literal);
+      const category = r.source_allotted_category_literal as CommunityCategory;
+      const isHeld = r.source_college_code_literal === "1516" || r.extraction_status === "HELD_NEEDS_REVIEW";
+      return {
+        candidateId: r.research_candidate_id,
+        year: parseInt(r.source_year_literal, 10),
+        stage: "PROVISIONAL_ALLOTMENT" as const,
+        sourceTitle: r.source_title_literal,
+        round,
+        quota,
+        collegeCode: r.source_college_code_literal,
+        programmeCode: r.source_programme_code_literal,
+        allottedCategory: category,
+        metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK" as const,
+        derivedMinimumMark: r.derived_minimum_mark,
+        allotmentCount: r.allotment_count_in_bucket,
+        locator: r.nonpersonal_source_locator,
+        isHeld,
+        holdNotice: isHeld ? COLLEGE_1516_HOLD_NOTICE : null,
+      };
+    });
+  } catch (err) {
+    console.error("Warning: Failed to load verified candidates.json:", err);
+    return [];
+  }
+}
+
+// Runtime singleton: Gate A verified historical observations loaded.
+export const HISTORICAL_OBSERVATIONS = new HistoricalRepository(loadVerifiedHistoricalObservations());
 
 // Factory helper for tests using synthetic fixtures only
 export function createSyntheticRepository(
