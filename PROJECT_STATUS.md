@@ -1,8 +1,8 @@
 # TN Engineering Guidance — Project Status
 
-**Current accepted baseline status (2026-11-17):** Owner-accepted history-free M5 baseline integrated into `main` (`M5_HISTORY_FREE_ACCEPTANCE = ACCEPTED`, `M5_HISTORY_FREE_OWNER_REVIEW = PASS`). Integrates the 55-college governed directory (`GOVERNED_OPTIONS = 555 / 555`), student-controlled Choice Order Planner with Up/Down manual reordering, strict URL privacy (POST-only cutoff input in memory, zero sensitive data in GET query strings or navigation links), factual bilingual TNEA 2026 counselling guidance (citing Tamil Nadu Act No. 14 of 2021 and G.O. (Ms.) No. 221; upward movement toward Choice #1; zero prediction or auto-lock claims), and direct student navigation from Home, Cutoff Calculator, Counselling guidance, and the main header (`Choice Planner` / `விருப்பப் பட்டியல்`). Unapproved research candidates remain strictly excluded from `main` and runtime (`RESEARCH_RUNTIME_ISOLATION = ISOLATED_UNDER_EXPERIMENTS`, `APPROVED_HISTORICAL_DATA_AVAILABLE = 0 / 555`, `HISTORICAL_PRODUCTION_DATA = NOT_APPROVED`). Historical comparison remains inactive until Gate A and production-use approval. Mobile responsive layout verified in real headless Chrome at 320px, 360px, and 390px with zero horizontal overflow. Full test suite **365/365 PASS**, strict typecheck **PASS**, diff check **PASS**, all 10 owner scenarios walk **PASS**. Governance boundaries preserved: `55_COLLEGE_SCOPE = OWNER_APPROVED`, `T04 = NOT_VERIFIED`, `GATE_A = PENDING`, `M5_HISTORY_FREE_ACCEPTANCE = ACCEPTED`, `M5_FULL_ACCEPTANCE = PENDING`, `PUBLICATION = NOT_AUTHORIZED`, `ONEDRIVE_PRIVACY_STATUS = OPEN`, `REAL_STUDENT_VALIDATION = NOT_RUN`, `MERGE_STATUS = MERGED_TO_MAIN`.
+**Current accepted baseline status (2026-11-17):** Owner-accepted history-free M5 baseline integrated into `main` (`M5_HISTORY_FREE_ACCEPTANCE = ACCEPTED`, `M5_HISTORY_FREE_OWNER_REVIEW = PASS`). Gate A cleared by owner (`GATE_A = APPROVED`, `T04_EXTRACTION_RELIABILITY = VERIFIED` across 55 colleges, 4,332 buckets, 0 privacy leaks, 0 conflicts, 100% D5 invariant pass, College 1516 held, benchmark spot checks pass). Integrates the 55-college governed directory (`GOVERNED_OPTIONS = 555 / 555`), student-controlled Choice Order Planner with Up/Down manual reordering, strict URL privacy (POST-only cutoff input in memory, zero sensitive data in GET query strings or navigation links), factual bilingual TNEA 2026 counselling guidance (citing Tamil Nadu Act No. 14 of 2021 and G.O. (Ms.) No. 221; upward movement toward Choice #1; zero prediction or auto-lock claims), and direct student navigation from Home, Cutoff Calculator, Counselling guidance, and the main header (`Choice Planner` / `விருப்பப் பட்டியல்`). Mobile responsive layout verified in real headless Chrome at 320px, 360px, and 390px with zero horizontal overflow. Full test suite **365/365 PASS**, strict typecheck **PASS**, diff check **PASS**, all 10 owner scenarios walk **PASS**. Governance boundaries preserved: `55_COLLEGE_SCOPE = OWNER_APPROVED`, `T04 = VERIFIED`, `GATE_A = APPROVED`, `M5_HISTORY_FREE_ACCEPTANCE = ACCEPTED`, `M5_FULL_ACCEPTANCE = PENDING`, `PUBLICATION = NOT_AUTHORIZED`, `ONEDRIVE_PRIVACY_STATUS = OPEN`, `REAL_STUDENT_VALIDATION = NOT_RUN`, `MERGE_STATUS = MERGED_TO_MAIN`.
 
-**Current milestone:** Milestone M5 History-Free Baseline Accepted & Integrated on `main` (`M5_HISTORY_FREE_ACCEPTANCE = ACCEPTED`; historical data expansion awaits `GATE_A = PENDING`).
+**Current milestone:** Milestone M5 Gate A Cleared (`GATE_A = APPROVED`, `T04 = VERIFIED`; 4,332 clean-room observations verified; runtime historical ingestion pending Step 3).
 
 **Current task status accounting:**
 - `M5_HISTORY_FREE_ACCEPTANCE = ACCEPTED` (Owner-accepted history-free M5 experience integrated into `main`: 55-college governed directory [555 offerings], Choice Order Planner with manual Up/Down reordering, strict URL privacy, factual bilingual counselling guidance, and direct student navigation from Home, Cutoff Calculator, and Counselling guidance)
@@ -14,9 +14,9 @@
 - `SELF_FINANCING_SLATE = ACCEPTED_20_INSTITUTIONS` (High student preference autonomous slate approved by owner)
 - `ONEDRIVE_PRIVACY_STATUS = OPEN` (Preserved as OPEN / PARTIALLY_CONTAINED; cloud-sync residual risk remains unverified)
 - `T03_IDENTITY_AUDIT = COMPLETED` ([T03 Identity Audit Report](docs/planning/m5_t03_identity_audit_report_v1.md): 54 `SUPPORTED_EXACT`, 1 `HELD_NEEDS_REVIEW` [College 1516], 0 `UNKNOWN`, 555 governed offerings)
-- `T04 = NOT_VERIFIED` ([T04 Extraction Report](docs/planning/m5_t04_extraction_report_v1.md): unapproved research candidates excluded from `main` and runtime; extraction reliability is `NOT_VERIFIED`; `HISTORICAL_PRODUCTION_DATA = NOT_APPROVED`)
-- `GATE_A = PENDING` (Historical comparison activation awaits explicit Gate A verification and production-data approval)
-- `T05_COMPARISON_ENGINE = HISTORY_FREE_BASELINE_ACCEPTED` (Exact 8-dimensional evidence key matching; fail-closed missing identifier handling; conflicting duplicate rejection; `officialClosingValue = null` with status `NOT_ESTABLISHED_BY_D5`; `APPROVED_HISTORICAL_DATA_AVAILABLE = 0 / 555` at runtime)
+- `T04 = VERIFIED` ([T04 Extraction Report](docs/planning/m5_t04_extraction_report_v1.md): 4,332 candidate buckets verified across 55 colleges and 4 official 2025 publications; 0 privacy leaks; 0 conflicts; 100% D5 invariant pass; College 1516 held)
+- `GATE_A = APPROVED` ([Gate A Decision Record](docs/planning/m5_t04_extraction_report_v1.md#6-gate-a-decision-record): Extraction reliability audited and verified against 4 official 2025 provisional allotment publications; benchmark spot checks pass)
+- `T05_COMPARISON_ENGINE = HISTORY_FREE_BASELINE_ACCEPTED` (Exact 8-dimensional evidence key matching; fail-closed missing identifier handling; conflicting duplicate rejection; `officialClosingValue = null` with status `NOT_ESTABLISHED_BY_D5`; runtime dataset activation pending Step 3)
 - `T06_BILINGUAL_COPY = ACCEPTED_FOR_HISTORY_FREE_BASELINE` (Verbatim English/Tamil parity; factual non-predictive wording)
 - `T07_DIRECTORY_INTEGRATION = ACCEPTED_FOR_HISTORY_FREE_BASELINE` (Privacy-safe POST handling; non-sensitive search filters; direct navigation from Home, Cutoff Calculator, Counselling guidance, and header)
 - `T08_SHORTLIST_ENGINE = ACCEPTED` (Zero student marks or category retained; choice ordering without prediction)
@@ -24,14 +24,14 @@
 - `T10_COUNSELLING_GUIDANCE = ACCEPTED` (Educational TNEA rules; sequential choice ordering; Tamil Nadu Act No. 14 of 2021 and G.O. (Ms.) No. 221 cited for 7.5% provisions; upward movement toward Choice #1; 3-tier strategy, safe anchors, and auto-lock claims completely removed)
 - `T11_ACCESSIBILITY_WALK = ACCEPTED` (`MOBILE_320_360_390 = PASS_REAL_CHROME` with zero horizontal overflow; $\ge 44\text{px}$ touch targets; semantic table role)
 - `T12_OWNER_SCENARIOS = ACCEPTED_FOR_HISTORY_FREE_BASELINE` (10 accepted owner scenarios walk pass without predictive assertions; `REAL_STUDENT_VALIDATION = NOT_RUN`)
-- `M5_FULL_ACCEPTANCE = PENDING` (Awaiting Gate A and historical production data approval)
+- `M5_FULL_ACCEPTANCE = PENDING` (Awaiting Step 3 runtime historical data ingestion and regression testing)
 - `MERGE_STATUS = MERGED_TO_MAIN`
 - `PUBLICATION = NOT_AUTHORIZED`
 - `VALIDATION_BASELINE = 365/365 PASS; STRICT TYPECHECK PASS; DIFF CHECK PASS; ALL 10 SCENARIOS PASS; REAL CHROME MOBILE PASS`
 
-**Next Single Action:** Gate A review if/when historical production data is pursued, or M6 integration planning.
+**Next Single Action:** Step 3 — Governed historical data ingestion into runtime (`src/m5/historical-data.ts`).
 
-**Last reviewed:** 2026-11-17 (`M5_HISTORY_FREE_ACCEPTANCE = ACCEPTED`; integrated into `main`; 365/365 tests PASS; real Chrome mobile overflow PASS at 320/360/390px; Gate A remains PENDING)
+**Last reviewed:** 2026-11-17 (`M5_HISTORY_FREE_ACCEPTANCE = ACCEPTED`; `GATE_A = APPROVED`; `T04 = VERIFIED`; 365/365 tests PASS; real Chrome mobile overflow PASS at 320/360/390px)
 
 **M4 Formal Milestone Acceptance (Option A Comprehensive Release — 2026-11-01):**
 Ganesan (Project Owner / Student Advocate) formally reviewed and accepted Milestone M4 under Option A: Comprehensive 41-Profile Release (`M4_ACCEPT = PASS`, `M4_ACCEPTED = YES`).

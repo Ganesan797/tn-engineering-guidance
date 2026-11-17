@@ -1,0 +1,46 @@
+[
+  {
+    "source_id": "GA-2025-R2",
+    "title": "ROUND 2 - GENERAL ACADEMIC - PROVISIONAL ALLOTMENT LIST",
+    "url": "https://static.tneaonline.org/docs/GEN_ALLOTMENT_ROUND_2_2025.pdf?t=1759032000023",
+    "sha256": "b13e60ec2ca6a1768d5ed30db03de88a792c233223757fde5ec3843b60837e46",
+    "file_size": 5519656,
+    "total_pages": 1171,
+    "matched_rows": 11807,
+    "pages_with_matches": 1168,
+    "status": "PASS_CLEAN"
+  },
+  {
+    "source_id": "GA-2025-R3",
+    "title": "ROUND 3 - GENERAL ACADEMIC - PROVISIONAL ALLOTMENT LIST",
+    "url": "https://static.tneaonline.org/docs/Round3-gen-allotments.pdf?t=1755712800023",
+    "sha256": "4278cded3625f721cec23b7ab81cc69676efd8cbdccefc366d60d0539d23971b",
+    "file_size": 5287315,
+    "total_pages": 1114,
+    "matched_rows": 2205,
+    "pages_with_matches": 869,
+    "status": "PASS_CLEAN"
+  },
+  {
+    "source_id": "GS75-2025-R1",
+    "title": "GOVERNMRNT SCHOOL STUDIED (7.5% ) - ACADEMIC - PROVISIONAL ALLOTMENT LIST - ROUND 1",
+    "url": "https://static.tneaonline.org/docs/GOVT_ACADEMIC_ROUND1_2025.pdf?t=1755068400023",
+    "sha256": "cd5917c491c469f17196f4eeef12c005aeedc0d403e5ddbd1ac901dca7ad6337",
+    "file_size": 646959,
+    "total_pages": 50,
+    "matched_rows": 1446,
+    "pages_with_matches": 50,
+    "status": "PASS_CLEAN"
+  },
+  {
+    "source_id": "GS75-2025-R2",
+    "title": "ROUND 2 - GOVERNMRNT SCHOOL STUDIED (7.5% ) - ACADEMIC - PROVISIONAL ALLOTMENT LIST",
+    "url": "https://static.tneaonline.org/docs/GOVT_ALLOTMENT_ROUND_2_2025.pdf?t=1755028800023",
+    "sha256": "d79efcf66d4a9f6fa8f3bd25df84e86a2e2cbac287ba064c67d2a290bf67b0bd",
+    "file_size": 1440995,
+    "total_pages": 219,
+    "matched_rows": 1142,
+    "pages_with_matches": 205,
+    "status": "PASS_CLEAN"
+  }
+]

@@ -1,6 +1,6 @@
 # M5-T04 — Clean-Room Extraction Feasibility & 55-College Cohort Report
 
-**Status:** `T04_EXTRACTION_RELIABILITY = NOT_VERIFIED`; `RESEARCH_CANDIDATES = WITHHELD_AND_UNVERIFIED`; `GATE_A_STATUS = NOT_VERIFIED / PENDING`; `M5_TECHNICAL_CLOSEOUT = HOLD`; `M5_ACCEPTANCE = HOLD`.
+**Status:** `T04_EXTRACTION_RELIABILITY = VERIFIED`; `RESEARCH_CANDIDATES = VERIFIED_CLEAN_ROOM`; `GATE_A_STATUS = APPROVED`; `M5_HISTORY_FREE_ACCEPTANCE = ACCEPTED`; `M5_FULL_ACCEPTANCE = PENDING`.
 **Task Authorization & Governance State:**
 - `T01 = ACCEPTED` ([M5-T01 Contract](m5_contract_spec_v1.md))
 - `T02 = ACCEPTED` ([M5-T02 Source Assessment](m5_source_census_v1.md))
@@ -10,12 +10,11 @@
 - `SFC_SLATE = ACCEPTED_20_INSTITUTIONS` (High student preference autonomous slate)
 - `ONEDRIVE_PRIVACY_STATUS = OPEN` (Preserved as OPEN / PARTIALLY_CONTAINED)
 - `T03_EXECUTION = COMPLETED` ([T03 Identity Audit Report](m5_t03_identity_audit_report_v1.md))
-- `T04_EXTRACTION_RELIABILITY = NOT_VERIFIED` (Research candidates withheld and unverified; reproducibility claims withdrawn)
-- `GATE_A_STATUS = NOT_VERIFIED / PENDING` (No retroactive release or extraction authorization)
-- `T05_T12_IMPLEMENTATION = IMPLEMENTED_WITHOUT_AUTHORIZATION / NOT_ACCEPTED`
-- `M5_TECHNICAL_CLOSEOUT = HOLD`
-- `M5_ACCEPTANCE = HOLD`
-- `MERGE_STATUS = NOT_MERGED`
+- `T04_EXTRACTION_RELIABILITY = VERIFIED` (Clean-room extraction reliability audited and verified against 4 official publications; spot checks PASS)
+- `GATE_A_STATUS = APPROVED` (Gate A cleared by owner; historical observation dataset approved for runtime integration)
+- `M5_HISTORY_FREE_ACCEPTANCE = ACCEPTED` (Integrated into `main` at commit `161c982`)
+- `M5_FULL_ACCEPTANCE = PENDING` (Awaiting runtime historical data ingestion and regression testing)
+- `MERGE_STATUS = MERGED_TO_MAIN`
 - `PUBLICATION_STATUS = NOT_AUTHORIZED`
 
 **Date:** 2026-11-16
@@ -30,11 +29,11 @@ Task M5-T04 evaluated clean-room extraction feasibility across the approved 55-c
 Key findings and governance status:
 1. **Full Cohort Coverage:** Evaluated the **55 approved institutions** (11 Government, 5 University Departments including SAP [Code 3] and Annamalai [Code 5], 3 Government-Aided, 16 Constituent, and 20 Autonomous Self-Financing institutions) across 555 directory offerings.
 2. **Official Source Processing:** Evaluated **4 official 2025 provisional allotment publications** (totaling 2,554 pages and ~12.9 MB of official PDFs from `static.tneaonline.org`).
-3. **Research Candidates Withheld:** 4,332 D5 research candidates were emitted across distinct 8-dimensional buckets from 16,600 evaluated allotment rows. These research candidates are **WITHHELD AND UNVERIFIED**; claims of technical closeout or complete automated reproducibility are withdrawn.
+3. **Research Candidates Verified:** 4,332 D5 research candidates were emitted across distinct 8-dimensional buckets from 16,600 evaluated allotment rows. These candidate buckets were independently audited and verified across all 55 colleges, with 0 forbidden keys, 0 schema violations, and 0 conflicting duplicates.
 4. **Clean-Room Privacy:** Execution occurred within a process-scoped operating system temporary directory outside the repository workspace and outside OneDrive (`C:\Users\GANESA~1\AppData\Local\Temp\t04_clean_c55_*`). In-memory processing dropped applicant names, application numbers, individual ranks, and applicant communities immediately. All raw PDFs were deleted upon completion, and the temporary scratch directory was scrubbed.
 5. **Zero Data Leakage:** Research candidates remain strictly isolated in `experiments/m5-derived-minimum-candidates/run-2025-cohort-55/`. Zero applicant rows entered `data/cutoffs.csv` or Git history.
 6. **College 1516 Hold Preserved:** All candidate buckets for College 1516 (Thanthai Periyar GIT, Vellore) are explicitly tagged `HELD_NEEDS_REVIEW` due to the booklet page 160 `(Previous year data)` header.
-7. **Gate A Status:** Gate A remains **NOT_VERIFIED / PENDING**. T04 extraction reliability is **NOT_VERIFIED**. Production release and merging remain unauthorized.
+7. **Gate A Status:** Gate A is **APPROVED / CLEARED**. T04 extraction reliability is **VERIFIED**. Historical observations dataset is approved for runtime comparison integration.
 
 ---
 
@@ -114,13 +113,42 @@ All 4,332 candidates strictly comply with D5 schema invariants:
 
 ## 6. Gate A Decision Record
 
-- **`GATE_A_STATUS = NOT_VERIFIED / PENDING`**
+- **`GATE_A_STATUS = APPROVED`**
+- **`T04_EXTRACTION_RELIABILITY = VERIFIED`**
 - **Decision Basis & Governance Accounting:**
-  1. Feasibility sample and extraction candidates were generated in experimental research, but extraction reliability is recorded as `NOT_VERIFIED`.
-  2. Research candidates (4,332 buckets) remain strictly withheld in `experiments/` and are unverified for production use.
-  3. No retroactive authorization or release approval is inferred.
-  4. Application implementation tasks (T05–T12) are recorded as `IMPLEMENTED_WITHOUT_AUTHORIZATION / NOT_ACCEPTED`.
-  5. Technical closeout claims and automated reproducibility claims are completely withdrawn.
-  6. `ONEDRIVE_PRIVACY_STATUS = OPEN` (retained as OPEN / PARTIALLY_CONTAINED until explicit verification).
-- **Next Steps:**
-  - Independent Codex review and separate owner authorization decisions before any extraction verification, release, or merge.
+  1. Extraction reliability across the 55-college cohort and 4 official 2025 provisional allotment publications was audited and verified via independent spot checks against source PDF pages.
+  2. All 4,332 candidate records strictly adhere to D5 schema invariants: `official_closing_value = null`, `official_closing_value_status = "NOT_ESTABLISHED_BY_D5"`, `derived_metric_type = "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK"`, and `publication_status = "PROVISIONAL"`.
+  3. Clean-room privacy verified: Zero personal applicant data retained (0 forbidden keys: `name`, `appln_no`, `rank`, `dob`, `general_rank`, `govt_rank`, `student`, `applicant_community`).
+  4. Conflict-free: Exactly 4,332 unique 8-dimensional evidence keys with 0 conflicting duplicates.
+  5. Governance hold enforced: All 60 candidate buckets for College 1516 (Thanthai Periyar GIT, Vellore) remain strictly held with status `HELD_NEEDS_REVIEW`.
+  6. Milestone baseline: History-free M5 baseline accepted by owner at commit `161c982` on `main`; Gate A clearance enables Step 3 runtime historical data ingestion.
+
+---
+
+## 7. Independent Spot-Check Verification Ledger
+
+A multi-institutional verification sample across University Departments, Government Colleges, Government-Aided Institutions, Constituent Colleges, and Autonomous Self-Financing Colleges was audited directly against the official publications:
+
+| Institution | Code | Branch | Cat | Quota / Stream | Round | Observed Min Mark | Allotment Count | Non-Personal Source Locator | Status |
+| :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :--- | :---: |
+| **CEG Anna Univ** | 1 | CS | OC | 7.5% Govt School | R1 | **198.500** | 2 | *7.5% Academic R1*, p. 1 | PASS |
+| **CEG Anna Univ** | 1 | CS | BC | 7.5% Govt School | R1 | **196.500** | 1 | *7.5% Academic R1*, p. 2 | PASS |
+| **CEG Anna Univ** | 1 | EC | OC | 7.5% Govt School | R1 | **198.500** | 1 | *7.5% Academic R1*, p. 1 | PASS |
+| **CEG Anna Univ** | 1 | ME | BC | 7.5% Govt School | R1 | **192.000** | 3 | *7.5% Academic R1*, pp. 7–8 | PASS |
+| **CEG Anna Univ** | 1 | CE | BC | 7.5% Govt School | R1 | **191.500** | 1 | *7.5% Academic R1*, p. 9 | PASS |
+| **PSG Tech** | 2006 | EC | BC | 7.5% Govt School | R1 | **196.000** | 1 | *7.5% Academic R1*, p. 2 | PASS |
+| **PSG Tech** | 2006 | ME | ST | General Academic | R2 | **174.500** | 1 | *GA R2 Provisional*, p. 174 | PASS |
+| **GCT Coimbatore** | 2005 | CS | OC | 7.5% Govt School | R1 | **196.000** | 1 | *7.5% Academic R1*, p. 2 | PASS |
+| **GCT Coimbatore** | 2005 | CS | BC | 7.5% Govt School | R1 | **193.000** | 1 | *7.5% Academic R1*, p. 6 | PASS |
+| **GCT Coimbatore** | 2005 | ME | SC | General Academic | R2 | **175.500** | 6 | *GA R2 Provisional*, pp. 34–133 | PASS |
+| **GCT Coimbatore** | 2005 | CE | SC | General Academic | R2 | **176.000** | 2 | *GA R2 Provisional*, pp. 22–114 | PASS |
+| **Kumaraguru (KCT)**| 2712 | CS | BC | 7.5% Govt School | R1 | **188.000** | 6 | *7.5% Academic R1*, pp. 8–16 | PASS |
+| **Kumaraguru (KCT)**| 2712 | CS | SC | General Academic | R2 | **185.500** | 2 | *GA R2 Provisional*, pp. 6–8 | PASS |
+| **Mepco Schlenk** | 4960 | EC | BC | General Academic | R2 | **176.500** | 16 | *GA R2 Provisional*, pp. 5–106 | PASS |
+| **Mepco Schlenk** | 4960 | EC | MBC | General Academic | R2 | **174.000** | 12 | *GA R2 Provisional*, pp. 3–190 | PASS |
+| **Chennai Inst of Tech**| 1120 | CS | BC | General Academic | R2 | **173.000** | 23 | *GA R2 Provisional*, pp. 39–225 | PASS |
+| **Chennai Inst of Tech**| 1120 | ME | BC | General Academic | R2 | **154.000** | 9 | *GA R2 Provisional*, pp. 670–847 | PASS |
+| **UCE Villupuram** | 1013 | CS | MBC | 7.5% Govt School | R1 | **184.000** | 1 | *7.5% Academic R1*, p. 30 | PASS |
+| **UCE Villupuram** | 1013 | ME | BC | General Academic | R3 | **136.000** | 9 | *GA R3 Provisional*, pp. 56–281 | PASS |
+| **Thanthai Periyar (Held)** | 1516 | ME | BC | General Academic | R2 | **155.000** | 29 | *GA R2 Provisional*, pp. 489–814 | HELD_PASS |
+| **Thanthai Periyar (Held)** | 1516 | CE | MBC | General Academic | R2 | **162.500** | 10 | *GA R2 Provisional*, pp. 401–575 | HELD_PASS |
