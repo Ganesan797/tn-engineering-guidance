@@ -201,6 +201,7 @@ test("M6-T04: Real Browser & Mobile Layout Audit across 320px, 360px, 390px, 768
           expression: `
             ({
               headerVisible: window.getComputedStyle(document.querySelector('.print-header') || document.body).display !== 'none',
+              headerText: (document.querySelector('.print-header')?.innerText || '').trim(),
               screenOnlyHidden: Array.from(document.querySelectorAll('.screen-only')).every(el => window.getComputedStyle(el).display === 'none')
             })
           `,
@@ -208,6 +209,17 @@ test("M6-T04: Real Browser & Mobile Layout Audit across 320px, 360px, 390px, 768
         });
         assert.equal(evalPrint.result.value.headerVisible, true, `Print header should be visible in print on ${p.name}`);
         assert.equal(evalPrint.result.value.screenOnlyHidden, true, `Screen-only elements should be hidden in print on ${p.name}`);
+        if (p.name === "Shortlist TA") {
+          const taHeaderText: string = evalPrint.result.value.headerText;
+          assert.ok(
+            taHeaderText.includes("அதிகாரப்பூர்வ TNEA விருப்பப் பதிவு முன்னுரிமைப் பணித்தாள் — கணிப்பு அல்லாத குறிப்புப் படிவம்"),
+            `Rendered Tamil print header missing Tamil subtitle: ${taHeaderText}`
+          );
+          assert.ok(
+            !taHeaderText.includes("Student Choice Preference Worksheet"),
+            `Rendered Tamil print header must not contain untranslated English prose: ${taHeaderText}`
+          );
+        }
         await sendPageCommand("Emulation.setEmulatedMedia", { media: "" });
       }
     }

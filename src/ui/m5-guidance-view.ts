@@ -769,7 +769,7 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
     <section>
       <div class="print-header print-only">
         <h1>${esc(t("தமிழ்நாடு பொறியியல் சேர்க்கை (TNEA) — மாணவர் விருப்ப முன்னுரிமைப் பணித்தாள்", "Tamil Nadu Engineering Admissions (TNEA) — Student Choice Preference Worksheet"))}</h1>
-        <p>${esc(t("Tamil Nadu Engineering Admissions (TNEA) — Student Choice Preference Worksheet", "Official TNEA Choice Entry Preference Worksheet — Non-predictive Reference"))}</p>
+        <p>${esc(t("அதிகாரப்பூர்வ TNEA விருப்பப் பதிவு முன்னுரிமைப் பணித்தாள் — கணிப்பு அல்லாத குறிப்புப் படிவம்", "Official TNEA Choice Entry Preference Worksheet — Non-predictive Reference"))}</p>
         <p style="margin-top: 4pt; font-size: 8.5pt; color: #555;">${esc(t("அதிகாரப்பூர்வ TNEA கலந்தாய்வு இணையதளத்தில் வரிசைப்படி பதிவு செய்வதற்கான சரிபார்ப்புப் படிவம்.", "Student-controlled preference worksheet organized according to genuine priority for official TNEA online choice filling."))}</p>
       </div>
 

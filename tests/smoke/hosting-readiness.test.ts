@@ -16,9 +16,17 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     windowsHide: true,
   });
 
+  let stdout = "";
   let stderr = "";
+  let exited = false;
+  child.stdout.on("data", (chunk) => {
+    stdout += chunk.toString();
+  });
   child.stderr.on("data", (chunk) => {
     stderr += chunk.toString();
+  });
+  child.on("exit", () => {
+    exited = true;
   });
 
   try {
@@ -74,7 +82,7 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     assert.ok(calcHtml.includes("185.5 / 200"), "Calculator should return exact academic cutoff");
     assert.ok(calcHtml.includes('action="/m5-guidance?lang=en"'), "Calculator should render POST bridge to M5");
 
-    // D. M5 Guidance POST bridge with memory cutoff
+    // D. M5 Guidance POST bridge with memory cutoff (normal within-limit POST)
     const m5PostRes = await fetch(`${base}/m5-guidance?lang=en`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -89,21 +97,70 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     const notFoundRes = await fetch(`${base}/unknown-route-${Date.now()}`);
     assert.equal(notFoundRes.status, 404, "Unknown route should return 404 Not Found");
 
-    // 3. Security: Oversized POST payload DoS Protection (> 8KB for /m5-guidance)
-    const largeBody = "x=".repeat(10000);
-    try {
-      const largeRes = await fetch(`${base}/m5-guidance`, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: largeBody,
-      });
-      // If server responds instead of resetting connection, it must not be 200
-      assert.notEqual(largeRes.status, 200, "Oversized payload must be rejected");
-    } catch {
-      // Socket hang up or ECONNRESET is expected when server throws on payload > 8KB
-      assert.ok(true, "Oversized request safely disconnected");
-    }
+    // 3. Security & Stability: Oversized POST handling on BOTH payload limits without crashing server
+    // Boundary A: POST /m5-guidance (8192-byte limit)
+    const oversizedM5Body = `cutoff=197.75&community=MBC&q=${"a".repeat(9000)}`;
+    const m5LargeRes = await fetch(`${base}/m5-guidance?lang=en`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: oversizedM5Body,
+    });
+    assert.equal(m5LargeRes.status, 413, "Oversized /m5-guidance POST must return controlled HTTP 413");
+    const m5LargeText = await m5LargeRes.text();
+    assert.ok(!m5LargeText.includes("197.75"), "413 response must never echo submitted student cutoff");
+    assert.ok(!m5LargeText.includes("MBC"), "413 response must never echo submitted community");
+    assert.equal(exited, false, "Server process must remain alive after oversized /m5-guidance POST");
+    assert.equal(child.exitCode, null, "Server exitCode must remain null after oversized /m5-guidance POST");
 
+    // Verify server immediately serves a subsequent valid request after rejecting /m5-guidance
+    const afterM5ValidRes = await fetch(`${base}/m5-guidance?lang=en`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ cutoff: "184.0", quota: "GENERAL_ACADEMIC", community: "BC", round: "ROUND_2" }).toString(),
+    });
+    assert.equal(afterM5ValidRes.status, 200, "Subsequent valid POST after oversized /m5-guidance must succeed");
+    assert.ok((await afterM5ValidRes.text()).includes('value="184"'), "Subsequent valid POST must compute normally");
+
+    // Boundary B: POST /journey (4096-byte limit)
+    const oversizedJourneyBody = `cutoff=191.25&community=SCA&state=${"b".repeat(5000)}`;
+    const journeyLargeRes = await fetch(`${base}/journey?lang=ta`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: oversizedJourneyBody,
+    });
+    assert.equal(journeyLargeRes.status, 413, "Oversized /journey POST must return controlled HTTP 413");
+    const journeyLargeText = await journeyLargeRes.text();
+    assert.ok(!journeyLargeText.includes("191.25"), "413 response must never echo submitted marks");
+    assert.ok(!journeyLargeText.includes("SCA"), "413 response must never echo submitted community");
+    assert.equal(exited, false, "Server process must remain alive after oversized /journey POST");
+    assert.equal(child.exitCode, null, "Server exitCode must remain null after oversized /journey POST");
+
+    // Verify server immediately serves a subsequent valid request after rejecting /journey
+    const afterJourneyValidRes = await fetch(`${base}/journey?lang=ta`);
+    assert.equal(afterJourneyValidRes.status, 200, "Subsequent valid GET /journey must succeed");
+
+    // Boundary C: POST /personal (8192-byte limit)
+    const oversizedPersonalBody = `maths=99&physics=98&chemistry=97&pad=${"c".repeat(9000)}`;
+    const personalLargeRes = await fetch(`${base}/personal?lang=en`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: oversizedPersonalBody,
+    });
+    assert.equal(personalLargeRes.status, 413, "Oversized /personal POST must return controlled HTTP 413");
+    assert.equal(exited, false, "Server process must remain alive after oversized /personal POST");
+
+    const afterPersonalValidRes = await fetch(`${base}/personal?lang=en`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ maths: "95", physics: "90", chemistry: "91" }).toString(),
+    });
+    assert.equal(afterPersonalValidRes.status, 200, "Subsequent valid POST /personal must succeed");
+
+    // 4. Privacy Invariant in Application Logs: Zero submitted student values in stdout/stderr
+    const combinedLogs = `${stdout}\n${stderr}`;
+    for (const sensitive of ["197.75", "191.25", "185.5", "184.0", "MBC", "SCA"]) {
+      assert.ok(!combinedLogs.includes(sensitive), `Server logs must never leak sensitive student value: ${sensitive}`);
+    }
   } finally {
     child.kill();
   }

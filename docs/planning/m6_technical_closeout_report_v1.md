@@ -1,20 +1,22 @@
 # Milestone M6 Technical Closeout Report: End-to-End Product V1 Integration & Hosting Readiness
 
-**Document Version:** 1.0  
-**Date:** 2026-11-17  
-**Status:** COMPLETE & COMMITTED (`M6_TECHNICAL_CLOSEOUT = COMPLETE`)  
-**Baseline Branch:** `main`  
-**Test Suite Status:** 372 / 372 PASS  
-**TypeScript Check:** 0 errors (`tsc -p tsconfig.json`)  
-**Mobile & Layout Audit:** Real Headless Chrome at 320px, 360px, 390px, 768px, and 1280px (0 horizontal overflow)
+- **Document Version:** 1.1 (HOLD Resolution Pass)
+- **Date:** 2026-11-17
+- **Technical Status:** `M6_TECHNICAL_CLOSEOUT = COMPLETE` (`M6_OWNER_ACCEPTANCE = PENDING`)
+- **M7 Authorization Status:** `M7_AUTHORIZATION = NOT_AUTHORIZED` (`PILOT_READINESS = NOT_APPROVED`)
+- **Real-Student Validation:** `REAL_STUDENT_VALIDATION = NOT_RUN` (engineering verification only)
+- **Baseline Branch:** `main`
+- **Test Suite Status:** 372 / 372 PASS
+- **TypeScript Check:** 0 errors (`tsc -p tsconfig.json`)
+- **Mobile & Layout Audit:** Real Headless Chrome at 320px, 360px, 390px, 768px, and 1280px (0 horizontal overflow)
 
 ---
 
 ## 1. Executive Summary
 
-Milestone M6 (End-to-End Product V1 Integration & Hosting Readiness) completes the consolidation and operational readiness of the Tamil Nadu Engineering Admissions (TNEA) student guidance application. Building on the verified Gate A historical cutoff baseline and 55-college cohort established in Milestone M5, Milestone M6 transforms the independent modules into a cohesive, production-grade product ready for deployment and owner review.
+Milestone M6 (End-to-End Product V1 Integration & Hosting Readiness) completes the technical consolidation of the Tamil Nadu Engineering Admissions (TNEA) student guidance application. Building on the verified Gate A historical cutoff baseline and 55-college cohort established in Milestone M5, Milestone M6 integrates the student journeys into a cohesive flow ready for owner review.
 
-All five planned tasks (M6-T01 through M6-T05) have been executed, automated tests authored, and verified on `main`.
+All five planned tasks (M6-T01 through M6-T05) and all HOLD resolution corrections have been implemented, automated tests executed, and verified on `main`. Automated and engineering verification does not replace owner acceptance or real-student validation (`REAL_STUDENT_VALIDATION = NOT_RUN`).
 
 ---
 
@@ -55,16 +57,14 @@ All five planned tasks (M6-T01 through M6-T05) have been executed, automated tes
   - Automated Chrome DevTools protocol test in `tests/ui/m6-end-to-end-audit.test.ts` evaluating 10 key student journey pages across 5 viewport widths.
   - **Horizontal Scroll Check:** `scrollWidth <= innerWidth` and `bodyScrollWidth <= innerWidth` evaluated to `true` (0 horizontal overflow) across all 50 viewport-page combinations.
   - **Touch Target Ergonomics:** Primary navigation links and action buttons maintain minimum touch bounding dimensions ($\ge 34\text{px}$ to $\ge 44\text{px}$) on mobile screens.
-  - **Print Emulation:** Verified `@media print` rules cleanly suppress `.screen-only` elements while preserving `.print-only` headers and tabular columns.
+  - **Print Emulation:** Verified `@media print` rules cleanly suppress `.screen-only` elements while preserving `.print-only` headers and tabular columns, including full Tamil print header parity with zero unintended English prose.
 
 ### Task M6-T05: Hosting & Deployment Readiness Verification
 - **Objective:** Ensure production server startup, route handling, error safety, and resource bounding without reliance on development tools or external network services.
 - **Implementation & Results:**
   - Updated `scripts/mvp-server.mjs` to bind to `HOST` (or `0.0.0.0` in `NODE_ENV=production`) while maintaining backward-compatible `127.0.0.1` default for Windows test execution.
-  - Authored `tests/smoke/hosting-readiness.test.ts` verifying clean process startup without API keys or database dependencies.
-  - Validated 200 OK responses on Home (`/`), Cutoff Calculator (`/personal`), Comparison (`/m5-guidance`), and Choice Order Planner.
-  - Verified 404 response on unknown routes.
-  - Verified DoS protection with strict POST payload bounding (8KB limit on `/m5-guidance`, 4KB limit on `/journey`).
+  - Added `readBoundedBody` and top-level error handling so oversized POST payloads return a controlled HTTP `413 Payload Too Large` response without crashing or terminating the server, without echoing or logging student marks/community values, and leaving the server immediately able to serve subsequent valid requests.
+  - Authored `tests/smoke/hosting-readiness.test.ts` verifying clean process startup without API keys or database dependencies, 200 OK health across core routes, 404 handling, and controlled HTTP 413 handling across both configured payload boundaries (8192B on `/m5-guidance` and `/personal`; 4096B on `/journey`) with zero log leakage.
 
 ---
 
@@ -76,15 +76,19 @@ All five planned tasks (M6-T01 through M6-T05) have been executed, automated tes
 | **Test Suite Coverage** | Complete automated test suite | 372 / 372 PASS | **PASS** |
 | **Mobile Layout Audit** | Real Chrome at 320px, 360px, 390px, 768px, 1280px | 0 horizontal overflow | **PASS** |
 | **Touch Targets** | Bounding box on mobile viewports | $\ge 34\text{px} - 44\text{px}$ | **PASS** |
-| **Student Privacy Invariant** | ZERO student marks in GET URLs or links | 100% compliant | **PASS** |
+| **Student Privacy Invariant** | ZERO student marks in GET URLs, links, or server logs | 100% compliant | **PASS** |
 | **Truth in Guidance** | No prediction, auto-lock, or ranking claims | 100% compliant | **PASS** |
-| **Bilingual Parity** | 100% Tamil & English parity across all views | 100% compliant | **PASS** |
-| **Hosting Readiness** | Self-contained, zero-secret, bounded payload server | Verified via smoke tests | **PASS** |
+| **Bilingual Parity** | Tamil & English parity including Tamil print worksheet | 100% compliant | **PASS** |
+| **Hosting Readiness** | Self-contained server; controlled 413 on oversized POSTs | Verified via smoke tests | **PASS** |
+| **Repository Hygiene** | `git diff --check` clean | 0 whitespace issues | **PASS** |
+| **Real-Student Validation** | Observed sessions with actual students | `NOT_RUN` | **NOT_RUN** |
 
 ---
 
 ## 4. Conclusion & Next Steps
 
-Milestone M6 is **COMPLETE**, verified, and integrated into `main`. The product now provides an uninterrupted, student-centered experience from zero-knowledge branch exploration and exact cutoff calculation to 55-college historical comparison, manual choice ordering, ink-friendly export, and official TNEA submission guidance.
+Milestone M6 technical closeout and HOLD resolution are **COMPLETE** (`M6_TECHNICAL_CLOSEOUT = COMPLETE`).
 
-The project is ready for owner review and deployment staging.
+- **M6 Owner Acceptance:** `M6_OWNER_ACCEPTANCE = PENDING` — M6 is technically ready for owner closeout review and separate acceptance decision.
+- **M7 Authorization:** `M7_AUTHORIZATION = NOT_AUTHORIZED` (`PILOT_READINESS = NOT_APPROVED`) — M7 is ready for separate owner authorization review only after M6 owner acceptance; M7 is not automatically authorized and has not been started.
+- **Real-Student Validation:** `REAL_STUDENT_VALIDATION = NOT_RUN` — engineering tests and automated browser audits do not constitute real-student validation.

@@ -61,14 +61,89 @@ function withDemoNavigation(page) {
   ).replace('action="/guidance"', 'action="/demo/guidance"');
 }
 
-function send(response, status, html) {
-  response.writeHead(status, { "content-type": "text/html; charset=utf-8" });
+class PayloadTooLargeError extends Error {
+  constructor() {
+    super("Request is too large");
+    this.name = "PayloadTooLargeError";
+  }
+}
+
+const MAX_DRAIN_OVERAGE_BYTES = 65536;
+
+function readBoundedBody(request, maxBytes) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    let total = 0;
+    let exceeded = false;
+    let settled = false;
+
+    const finishReject = (err) => {
+      if (settled) return;
+      settled = true;
+      reject(err);
+    };
+
+    const finishResolve = (text) => {
+      if (settled) return;
+      settled = true;
+      resolve(text);
+    };
+
+    request.on("data", (chunk) => {
+      total += chunk.length;
+      if (total > maxBytes) {
+        if (!exceeded) {
+          exceeded = true;
+          chunks.length = 0;
+        }
+        if (total > maxBytes + MAX_DRAIN_OVERAGE_BYTES) {
+          request.pause();
+          finishReject(new PayloadTooLargeError());
+        }
+        return;
+      }
+      chunks.push(chunk);
+    });
+
+    request.on("end", () => {
+      if (exceeded) {
+        finishReject(new PayloadTooLargeError());
+        return;
+      }
+      finishResolve(Buffer.concat(chunks).toString("utf8"));
+    });
+
+    request.on("error", (err) => finishReject(err));
+  });
+}
+
+function send(response, status, html, extraHeaders = {}) {
+  if (response.headersSent) return;
+  response.writeHead(status, { "content-type": "text/html; charset=utf-8", ...extraHeaders });
   response.end(html);
 }
 
+function sendPayloadTooLarge(response, language) {
+  const isEn = language === "en";
+  const title = isEn ? "Request Too Large" : "கோரிக்கை அளவு அதிகமாக உள்ளது";
+  const body = isEn
+    ? "The submitted request exceeds the allowed size limit. Please return and submit standard form values."
+    : "சமர்ப்பிக்கப்பட்ட கோரிக்கை அனுமதிக்கப்பட்ட அளவை விட அதிகமாக உள்ளது. தயவுசெய்து மீண்டும் சென்று சாதாரண படிவத் தகவல்களை மட்டும் சமர்ப்பிக்கவும்.";
+  const backLabel = isEn ? "Return to Home" : "முகப்புப் பக்கத்திற்குத் திரும்பு";
+  const backHref = isEn ? "/?lang=en" : "/";
+  send(
+    response,
+    413,
+    `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title></head><body><main><h1>${title}</h1><p>${body}</p><p><a href="${backHref}">${backLabel}</a></p></main></body></html>`,
+    { connection: "close" },
+  );
+}
+
 const server = createServer(async (request, response) => {
+  let language = "ta";
+  try {
   const url = new URL(request.url ?? "/", "http://localhost");
-  const language = url.searchParams.get("lang") === "en" ? "en" : "ta";
+  language = url.searchParams.get("lang") === "en" ? "en" : "ta";
   const entry = entryStateFromUrl(url);
   if (request.method === "GET" && url.pathname === "/journey/questions") {
     const page = renderQuestionCollection(questions, url.searchParams.get("id"), url.searchParams.get("evidence"), language, url.searchParams.get("topic"));
@@ -78,14 +153,8 @@ const server = createServer(async (request, response) => {
   // Milestone M5 Internal Review Preview (Isolated from public /colleges route)
   if (url.pathname === "/m5-guidance") {
     if (request.method === "POST") {
-      const chunks = [];
-      let total = 0;
-      for await (const chunk of request) {
-        total += chunk.length;
-        if (total > 8192) throw new Error("Request is too large");
-        chunks.push(chunk);
-      }
-      const values = new URLSearchParams(Buffer.concat(chunks).toString("utf8"));
+      const body = await readBoundedBody(request, 8192);
+      const values = new URLSearchParams(body);
       const rawCutoff = values.get("cutoff");
       const studentCutoff = rawCutoff !== null && rawCutoff.trim() !== "" ? Number(rawCutoff) : null;
       const quota = values.get("quota") === "GOVT_SCHOOL_7_5" ? "GOVT_SCHOOL_7_5" : "GENERAL_ACADEMIC";
@@ -127,14 +196,8 @@ const server = createServer(async (request, response) => {
   if (request.method === "POST" && url.pathname === "/journey") {
     let validatedState = null;
     try {
-      const chunks = [];
-      let total = 0;
-      for await (const chunk of request) {
-        total += chunk.length;
-        if (total > 4096) throw new Error("Request is too large");
-        chunks.push(chunk);
-      }
-      const values = new URLSearchParams(Buffer.concat(chunks).toString("utf8"));
+      const body = await readBoundedBody(request, 4096);
+      const values = new URLSearchParams(body);
       const state = parseJourneyState(values.get("state") ?? "");
       validatedState = state;
       const navigate = values.get("navigate");
@@ -146,7 +209,11 @@ const server = createServer(async (request, response) => {
         : values.get("retry") === "1" ? retryUnknown(state)
         : answerJourneyQuestion(state, values.get("unknown") === "1" ? "unknown" : values.get("answer") ?? "");
       send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, next, undefined, presentation, language, { ownerPreview: ownerDirectory !== null }));
-    } catch {
+    } catch (err) {
+      if (err instanceof PayloadTooLargeError) {
+        sendPayloadTooLarge(response, language);
+        return;
+      }
       const field = validatedState ? nextJourneyQuestion(validatedState) : null;
       const copyIndex = language === "en" ? 1 : 0;
       const instruction = field === "improvement_year" ? CHECK_COPY.yearError[copyIndex]
@@ -178,9 +245,7 @@ const server = createServer(async (request, response) => {
     return;
   }
   if (request.method === "POST" && url.pathname === "/personal") {
-    const chunks = [];
-    for await (const chunk of request) chunks.push(chunk);
-    const body = Buffer.concat(chunks).toString("utf8");
+    const body = await readBoundedBody(request, 8192);
     const values = Object.fromEntries(new URLSearchParams(body));
     const lang = url.searchParams.get("lang") === "en" ? "en" : "ta";
     const postEntry = { route: "personal", language: lang };
@@ -194,9 +259,8 @@ const server = createServer(async (request, response) => {
     return;
   }
   if (request.method === "POST" && (url.pathname === "/guidance" || url.pathname === "/demo/guidance")) {
-    const chunks = [];
-    for await (const chunk of request) chunks.push(chunk);
-    const values = Object.fromEntries(new URLSearchParams(Buffer.concat(chunks).toString("utf8")));
+    const body = await readBoundedBody(request, 8192);
+    const values = Object.fromEntries(new URLSearchParams(body));
     const snapshot = runtime.snapshots.snapshots()[0];
     const template = blankReferenceRequest({ snapshot_id: snapshot.snapshot_id, snapshot_stage: snapshot.stage });
     const form = guidanceRequestFromFormValues(values, template);
@@ -207,6 +271,13 @@ const server = createServer(async (request, response) => {
     return;
   }
   send(response, 404, "<!doctype html><title>Not found</title><h1>Not found</h1>");
+  } catch (err) {
+    if (err instanceof PayloadTooLargeError) {
+      sendPayloadTooLarge(response, language);
+      return;
+    }
+    send(response, 500, "<!doctype html><title>Error</title><h1>Unable to process request</h1>");
+  }
 });
 
 const port = Number(process.env.PORT ?? 3000);

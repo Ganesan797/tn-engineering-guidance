@@ -155,6 +155,32 @@ test("M6-T02 Choice List Print & Export: Ink-friendly @media print stylesheet, p
   // 6. Privacy Invariant: Zero student marks, rank, or community categories
   assert.ok(!html.includes("cutoff="), "Shortlist view must not contain cutoff in any link");
   assert.ok(!html.includes("community="), "Shortlist view must not contain community in any link");
+
+  // 7. Tamil Print View Parity: Print header contains Tamil prose with zero untranslated English sentences
+  const htmlTa = renderM5GuidancePage(new URLSearchParams({
+    tab: "shortlist",
+    shortlist: "2006~EC,1~CS",
+    lang: "ta",
+  }));
+  const printHeaderMatch = htmlTa.match(/<div class="print-header print-only">([\s\S]*?)<\/div>/);
+  assert.ok(printHeaderMatch, "Tamil shortlist must render print-header block");
+  const taPrintHeader = printHeaderMatch[1];
+  assert.ok(
+    taPrintHeader.includes("தமிழ்நாடு பொறியியல் சேர்க்கை (TNEA) — மாணவர் விருப்ப முன்னுரிமைப் பணித்தாள்"),
+    "Tamil print header must display Tamil worksheet title"
+  );
+  assert.ok(
+    taPrintHeader.includes("அதிகாரப்பூர்வ TNEA விருப்பப் பதிவு முன்னுரிமைப் பணித்தாள் — கணிப்பு அல்லாத குறிப்புப் படிவம்"),
+    "Tamil print header must display Tamil non-predictive reference subtitle"
+  );
+  assert.ok(
+    !taPrintHeader.includes("Student Choice Preference Worksheet"),
+    "Tamil print header must not contain untranslated English worksheet sentence"
+  );
+  assert.ok(
+    !taPrintHeader.includes("Official TNEA Choice Entry"),
+    "Tamil print header must not contain untranslated English subtitle"
+  );
 });
 
 test("M6-T03 Acronym & Search Polish: Students can instantly search by college acronyms (CEG, MIT, GCT, PSG, CIT, etc.)", () => {
