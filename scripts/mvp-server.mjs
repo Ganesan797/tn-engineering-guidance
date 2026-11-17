@@ -210,9 +210,12 @@ const server = createServer(async (request, response) => {
 });
 
 const port = Number(process.env.PORT ?? 3000);
-server.listen(port, "127.0.0.1", () => {
+const host = process.env.HOST ?? (process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1");
+server.listen(port, host, () => {
   const programmes = runtime.registry.programmes();
-  console.log(`TN Engineering Guidance MVP: http://127.0.0.1:${server.address().port}`);
+  const addr = server.address();
+  const actualPort = typeof addr === "object" && addr ? addr.port : port;
+  console.log(`TN Engineering Guidance MVP: http://127.0.0.1:${actualPort}`);
   console.log(`Loaded ${runtime.registry.colleges().length} colleges, ${programmes.length} programmes, ${programmes.filter(({ branch_id }) => branch_id !== null).length} canonical mappings.`);
   console.log("Seat snapshot contains no published vacancy facts; vacancy remains UNKNOWN_OR_UNPUBLISHED.");
 });
