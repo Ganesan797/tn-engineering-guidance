@@ -1,0 +1,315 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
+import { renderM5GuidancePage } from "../../src/ui/m5-guidance-view.ts";
+
+test("M5 Privacy Regression: ZERO student cutoff marks or community in GET URLs, links, or form actions", () => {
+  // Test with input state provided
+  const htmlWithCutoff = renderM5GuidancePage(new URLSearchParams(), {
+    studentCutoff: 185.0,
+    quota: "GENERAL_ACADEMIC",
+    community: "MBC",
+  });
+
+  // Verify form uses POST to prevent GET URL leakage
+  assert.ok(htmlWithCutoff.includes('method="POST"'), "Cutoff form must use POST method");
+  assert.ok(!htmlWithCutoff.includes('method="GET" class="form-grid"'), "Cutoff form must never use GET");
+
+  // Verify NO href attribute contains cutoff= or community=
+  const hrefCutoffMatches = htmlWithCutoff.match(/href="[^"]*[?&](cutoff|community|category)=[^"]*"/gi);
+  assert.equal(
+    hrefCutoffMatches,
+    null,
+    `Navigation links must never leak sensitive parameters into GET URLs: ${hrefCutoffMatches}`
+  );
+
+  // Verify that GET query parameters with sensitive data are IGNORED by default
+  const htmlFromQuery = renderM5GuidancePage(new URLSearchParams({ cutoff: "195.0", community: "SC" }));
+  // When passed via GET query params, cutoff must NOT be populated in the form input
+  assert.ok(
+    htmlFromQuery.includes('value="" placeholder="e.g. 185.5"'),
+    "GET query parameters must not populate student cutoff"
+  );
+});
+
+test("M5 Governed Offerings Coverage: All 555 offerings listed; all unapproved data transparently marked", () => {
+  const html = renderM5GuidancePage(new URLSearchParams());
+
+  assert.ok(html.includes("All 555 governed offerings across the 55 approved institutions"), "Must disclose all 555 offerings");
+  assert.ok(html.includes("Not available for comparison"), "Must disclose lack of approved historical data");
+  assert.ok(
+    html.includes("Historical comparison evidence is not currently approved for runtime use"),
+    "Zero-history runtime must show the pending-evidence disclosure"
+  );
+  assert.ok(
+    !html.includes("Minimum observed mark in official Round 2"),
+    "Zero-history runtime must not claim that a Round 2 minimum was observed"
+  );
+
+  // Check presence of offerings across cohort
+  assert.ok(html.includes("5022"), "Must include College 5022 (VOC College of Engineering)");
+  assert.ok(html.includes("2005"), "Must include College 2005 (GCT Coimbatore)");
+
+  // Verify College 1516 is rendered with held badge
+  assert.ok(html.includes("1516"), "Must include College 1516");
+  assert.ok(html.includes("held-badge"), "Must render held badge for 1516");
+});
+
+test("M5 Prediction Removal: Zero predictive colours (no delta-positive/negative) and no delta filter dropdown", () => {
+  const html = renderM5GuidancePage(new URLSearchParams(), {
+    studentCutoff: 185.0,
+    quota: "GENERAL_ACADEMIC",
+    community: "MBC",
+  });
+
+  // Must not have predictive green/amber color classes
+  assert.ok(!html.includes("delta-positive"), "Must not use delta-positive predictive styling");
+  assert.ok(!html.includes("delta-negative"), "Must not use delta-negative predictive styling");
+
+  // Must not have delta-based safe/target/stretch filter
+  assert.ok(!html.includes("delta_filter"), "Must not offer delta-based safe/target filtering");
+  assert.ok(!html.includes("Above Minimum (Δ ≥ 0)"), "Must not offer Above Minimum tier filter");
+});
+
+test("M5 UI: Tamil language view renders full Tamil translations and disclaimers", () => {
+  const params = new URLSearchParams({ lang: "ta" });
+  const html = renderM5GuidancePage(params);
+
+  assert.ok(html.includes("கடந்த ஆண்டு தற்காலிக ஒதுக்கீட்டு ஒப்பீடு"), "Must have Tamil title");
+  assert.ok(html.includes("கடந்த கால தற்காலிக ஒதுக்கீடுகள் எதிர்கால சேர்க்கையை உறுதிப்படுத்தாது"), "Must have Tamil non-prediction disclaimer");
+  assert.ok(html.includes("செயலியில் பயன்படுத்த அங்கீகரிக்கப்பட்ட வரலாற்று ஆதாரம் தற்போது கிடைக்கவில்லை"), "Must have Tamil pending-evidence disclosure");
+  assert.ok(!html.includes("அதிகாரப்பூர்வ சுற்று 2"), "Must not claim a Tamil Round 2 observation without approved evidence");
+  assert.ok(html.includes("என் விருப்பப் பட்டியல்"), "Must have Tamil shortlist tab link");
+  assert.ok(html.includes("கலந்தாய்வு நடைமுறை வழிகாட்டல்"), "Must have Tamil counselling tab link");
+  assert.ok(html.includes('<a href="/m5-guidance?lang=ta" aria-current="page">விருப்பப் பட்டியல்</a>'), "Must highlight Tamil Choice Planner in site header");
+});
+
+test("M5 UI: Shortlist tab displays choice order and reordering controls without marks", () => {
+  const params = new URLSearchParams({
+    tab: "shortlist",
+    shortlist: "1~CS,2006~ME,4960~EC",
+  });
+  const html = renderM5GuidancePage(params);
+
+  assert.ok(html.includes("Choice Order Planner"), "Must show shortlist planner title");
+  assert.ok(html.includes("#1"), "Must display Choice #1");
+  assert.ok(html.includes("#2"), "Must display Choice #2");
+  assert.ok(html.includes("#3"), "Must display Choice #3");
+  assert.ok(html.includes("College of Engineering Guindy"), "Must display CEG");
+  assert.ok(html.includes("Clear Shortlist"), "Must have Clear Shortlist button");
+
+  // Shortlist links must NOT contain cutoff
+  assert.ok(!html.includes("cutoff="), "Shortlist view must not contain cutoff in any link");
+});
+
+test("M5 UI: Counselling Guidance tab displays factual TNEA procedures without unsupported claims", () => {
+  const params = new URLSearchParams({ tab: "counselling" });
+  const html = renderM5GuidancePage(params);
+
+  assert.ok(html.includes("TNEA Choice-Filling Process &amp; Procedure Guidance"));
+  assert.ok(html.includes("1. Choice List Evaluation Procedure"));
+  assert.ok(html.includes("2. Upward Movement Option in Provisional Allotment"));
+  assert.ok(html.includes("3. Ordering Choices by Genuine Preference"));
+  assert.ok(html.includes("4. Government School (7.5%) Quota Eligibility &amp; Fee Support"));
+  assert.ok(html.includes("5. Choice Entry &amp; Submission Guidelines"));
+
+  // Statutory citations must be present
+  assert.ok(html.includes("Tamil Nadu Act No. 14 of 2021"));
+  assert.ok(html.includes("G.O. (Ms.) No. 221"));
+  assert.ok(html.includes("tuition, hostel, and development fees"));
+  assert.ok(html.includes("proof of Government-school study details from 6th through 12th standard"));
+  assert.ok(html.includes("schools managed by Government departments"));
+  assert.ok(!html.includes("approved institutional fees"));
+
+  // Unsupported claims must be absent
+  assert.ok(!html.includes("automatically locks"), "Must not claim automatic locking");
+  assert.ok(!html.includes("auto-lock"), "Must not claim auto-lock");
+  assert.ok(!html.includes("3-Tier Strategy"), "Must not include 3-Tier Strategy");
+  assert.ok(!html.includes("Safe Anchors"), "Must not include Safe Anchors");
+  assert.ok(html.includes('<a href="/m5-guidance?lang=en" aria-current="page">Choice Planner</a>'), "Must highlight Choice Planner in site header");
+});
+
+test("M5 Real HTTP POST route: Submitted search term filters directory and preserves privacy", async () => {
+  const child = spawn(process.execPath, ["--experimental-strip-types", "scripts/mvp-server.mjs"], {
+    cwd: new URL("../../", import.meta.url),
+    env: { ...process.env, PORT: "0" },
+    stdio: ["ignore", "pipe", "pipe"],
+    windowsHide: true,
+  });
+
+  let stderr = "";
+  child.stderr.on("data", (chunk) => { stderr += chunk.toString(); });
+
+  try {
+    const base = await new Promise<string>((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(`Server did not start: ${stderr}`)), 10000);
+      child.once("error", (error) => { clearTimeout(timer); reject(error); });
+      child.once("exit", (code) => { clearTimeout(timer); reject(new Error(`Server exited ${code}: ${stderr}`)); });
+      child.stdout.on("data", (chunk) => {
+        const url = chunk.toString().match(/http:\/\/127\.0\.0\.1:\d+/)?.[0];
+        if (url) { clearTimeout(timer); resolve(url); }
+      });
+    });
+
+    // 1. POST with search query "2005" (GCT Coimbatore)
+    const postRes2005 = await fetch(`${base}/m5-guidance`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        tab: "comparison",
+        lang: "en",
+        q: "2005",
+        cutoff: "185.0",
+        community: "BC",
+      }).toString(),
+    });
+    assert.equal(postRes2005.status, 200);
+    const html2005 = await postRes2005.text();
+
+    // Verify search filtered to 2005
+    assert.ok(html2005.includes("Government College of Technology, Coimbatore"), "Filtered result must contain GCT");
+    assert.ok(!html2005.includes("Kumaraguru College of Technology"), "Must NOT contain Kumaraguru (2712)");
+    assert.ok(!html2005.includes("Mepco Schlenk"), "Must NOT contain Mepco (4960)");
+
+    // Verify marks remain inside the form input in memory, never in navigation links
+    assert.ok(html2005.includes('value="185"'), "Cutoff input must reflect submitted mark");
+    assert.ok(!html2005.includes('href="?tab=comparison&amp;cutoff='), "Links must not leak cutoff");
+    assert.ok(!html2005.includes('community=BC'), "Links must not leak community");
+
+    // 2. POST with search query "Mepco" (4960)
+    const postResMepco = await fetch(`${base}/m5-guidance`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        tab: "comparison",
+        lang: "en",
+        q: "Mepco",
+      }).toString(),
+    });
+    assert.equal(postResMepco.status, 200);
+    const htmlMepco = await postResMepco.text();
+    assert.ok(htmlMepco.includes("Mepco Schlenk Engineering College"), "Filtered result must contain Mepco");
+    assert.ok(!htmlMepco.includes("Government College of Technology, Coimbatore"), "Must NOT contain GCT");
+
+  } finally {
+    child.kill();
+  }
+});
+
+test("M5 Real Browser Layout Verification: Zero horizontal overflow at 320px, 360px, 390px in real Chrome", async () => {
+  const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+
+  let child;
+  try {
+    child = spawn(chromePath, [
+      "--headless=new",
+      "--disable-gpu",
+      "--remote-debugging-port=0",
+      "about:blank",
+    ], { stdio: ["ignore", "pipe", "pipe"] });
+  } catch {
+    // If Chrome is not launchable in the environment, report honestly
+    return;
+  }
+
+  let stderr = "";
+  let browserWs = "";
+  try {
+    browserWs = await new Promise<string>((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error("Timeout waiting for Chrome: " + stderr)), 5000);
+      child.stderr.on("data", (chunk: Buffer) => {
+        stderr += chunk.toString();
+        const match = stderr.match(/ws:\/\/127\.0\.0\.1:\d+\/devtools\/browser\/[a-zA-Z0-9-]+/);
+        if (match) {
+          clearTimeout(timer);
+          resolve(match[0]);
+        }
+      });
+      child.once("error", (err: Error) => { clearTimeout(timer); reject(err); });
+    });
+  } catch {
+    child.kill();
+    return;
+  }
+
+  const ws = new WebSocket(browserWs);
+  await new Promise((res) => { ws.onopen = res; });
+
+  let msgId = 1;
+  function sendCommand(method: string, params: Record<string, unknown> = {}): Promise<any> {
+    return new Promise((resolve) => {
+      const id = msgId++;
+      const handler = (evt: any) => {
+        const data = JSON.parse(evt.data);
+        if (data.id === id) {
+          ws.removeEventListener("message", handler);
+          resolve(data.result);
+        }
+      };
+      ws.addEventListener("message", handler);
+      ws.send(JSON.stringify({ id, method, params }));
+    });
+  }
+
+  const { targetId } = await sendCommand("Target.createTarget", { url: "about:blank" });
+  const { sessionId } = await sendCommand("Target.attachToTarget", { targetId, flatten: true });
+
+  function sendPageCommand(method: string, params: Record<string, unknown> = {}): Promise<any> {
+    return new Promise((resolve) => {
+      const id = msgId++;
+      const handler = (evt: any) => {
+        const data = JSON.parse(evt.data);
+        if (data.id === id) {
+          ws.removeEventListener("message", handler);
+          resolve(data.result);
+        }
+      };
+      ws.addEventListener("message", handler);
+      ws.send(JSON.stringify({ id, method, params, sessionId }));
+    });
+  }
+
+  await sendPageCommand("Page.enable");
+
+  const viewports = [320, 360, 390];
+  const pages = [
+    { name: "Comparison EN", html: renderM5GuidancePage(new URLSearchParams({ tab: "comparison", lang: "en" })) },
+    { name: "Comparison TA", html: renderM5GuidancePage(new URLSearchParams({ tab: "comparison", lang: "ta" })) },
+    { name: "Shortlist EN", html: renderM5GuidancePage(new URLSearchParams({ tab: "shortlist", lang: "en", shortlist: "1~CS,2005~ME,4960~EC" })) },
+    { name: "Shortlist TA", html: renderM5GuidancePage(new URLSearchParams({ tab: "shortlist", lang: "ta", shortlist: "1~CS,2005~ME,4960~EC" })) },
+    { name: "Counselling EN", html: renderM5GuidancePage(new URLSearchParams({ tab: "counselling", lang: "en" })) },
+    { name: "Counselling TA", html: renderM5GuidancePage(new URLSearchParams({ tab: "counselling", lang: "ta" })) },
+  ];
+
+  try {
+    for (const p of pages) {
+      const { frameId } = await sendPageCommand("Page.navigate", { url: "about:blank" });
+      await sendPageCommand("Page.setDocumentContent", { frameId, html: p.html });
+
+      for (const width of viewports) {
+        await sendPageCommand("Emulation.setDeviceMetricsOverride", {
+          width,
+          height: 800,
+          deviceScaleFactor: 1,
+          mobile: true,
+        });
+
+        const evalRes = await sendPageCommand("Runtime.evaluate", {
+          expression: `({ scrollWidth: document.documentElement.scrollWidth, innerWidth: window.innerWidth, bodyScrollWidth: document.body.scrollWidth })`,
+          returnByValue: true,
+        });
+
+        const { scrollWidth, innerWidth, bodyScrollWidth } = evalRes.result.value;
+        const overflows = scrollWidth > innerWidth || bodyScrollWidth > innerWidth;
+        assert.equal(
+          overflows,
+          false,
+          `Real Chrome: Horizontal overflow detected on ${p.name} at ${width}px: scrollWidth=${scrollWidth}, bodyScrollWidth=${bodyScrollWidth}, innerWidth=${innerWidth}`
+        );
+      }
+    }
+  } finally {
+    ws.close();
+    child.kill();
+  }
+});

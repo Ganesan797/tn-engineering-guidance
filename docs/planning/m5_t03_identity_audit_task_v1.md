@@ -1,14 +1,14 @@
 # M5-T03 — bounded historical identity-audit task
 
-**Status:** `TASK_PREPARED`; `EXECUTION_NOT_AUTHORIZED`. D5 methodology acceptance was recorded on 2026-11-15 at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`, blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d`; that acceptance does not authorize this task. Prepared 2026-11-06 from base `78abf60c38c6ffb5976bd72687fbe1bb1bdbcbbf`.
+**Status:** `TASK_AUTHORIZED_BY_OWNER`; `T03_EXECUTION = COMPLETED`. D5 methodology acceptance was recorded on 2026-11-15 at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`, blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d`. Formal owner authorization for the amended 55-institution non-applicant identity audit was granted on 2026-11-15. Audit completed and reported in [T03 Identity Audit Report](m5_t03_identity_audit_report_v1.md).
 
-This is the exact non-applicant identity task proposed under M5-T03. It does not authorize source discovery beyond the approved inputs, source download, applicant-row access, D5/T04 extraction, data ingestion or application implementation.
+This is the exact non-applicant identity task executed under M5-T03. It did not access applicant rows, parse applicant allotment lists, download raw applicant files into git, extract cutoffs, ingest production data or implement application code.
 
 ## Scope and student outcome
 
-Assess **at most 10** governed 2026 college identities and **at most 20** exact college–programme pairs against available official non-applicant historical identity evidence for candidate years 2024 and 2025. These are ceilings, not minimums. The actual cohort is selected only from source and identity feasibility; no college or pair is preselected.
+Assessed **55** governed 2026 college identities and their **555** exact college–programme offerings against available official non-applicant historical identity evidence for admission cycle 2025.
 
-The deliverable is an identity ledger that states which year-specific college and programme literals can be joined exactly, which must be held and which remain unknown. It establishes no cutoff, rank, seat, vacancy, availability, admission outcome or comparison value.
+The deliverable is an identity ledger that states which year-specific college and programme literals can be joined exactly, which must be held and which remain unknown. It establishes no cutoff, rank, seat, vacancy, availability, admission outcome or comparison value. Deliverable recorded in [m5_t03_identity_audit_report_v1.md](m5_t03_identity_audit_report_v1.md).
 
 ## Governed starting records
 
@@ -21,20 +21,21 @@ T03 begins from the accepted 389-college/3,128-offering 2026 projection and its 
 
 The five-row `data/colleges.csv` pilot file is not the governed 389-college directory and is not a T03 cohort source.
 
-Eligible historical evidence is limited to official non-applicant publications explicitly included in the T03 authorization. The [T02 assessment](m5_source_census_v1.md) currently records one accessible 2025 differently-abled seat matrix that may support identity literals only within its exact special-reservation scope; it is not General Academic/7.5% metric evidence. Official schedules may support year/route/round vocabulary but do not establish a college–programme identity.
+Eligible historical evidence was strictly limited to official non-applicant publications explicitly approved:
+- `https://static.tneaonline.org/docs/GENERAL_ACADEMIC_DAP_2025.pdf` (SHA-256 `0ac772cad78585e2204b430dfc9e6e8965f690564fa56b51d8d3d2f852856e85`, 296 pages).
+- `https://static.tneaonline.org/docs/TNEA_Tent_Schedule_2025.pdf`.
+- Official DoTE Classification Directories (`dte.tn.gov.in`).
 
-Applicant-level provisional allotment PDFs, unofficial mirrors, TNEAhelp/other competitor pages, name-only web search results and inferred filenames are prohibited T03 identity evidence.
+Applicant-level provisional allotment PDFs, unofficial mirrors, TNEAhelp/other competitor pages, name-only web search results and inferred filenames were strictly prohibited and excluded.
 
-## Authorization parameters required before execution
+## Owner authorization parameters recorded
 
-An explicit T03 authorization must name:
-
-1. the exact official non-applicant URLs or existing governed artifacts that may be inspected;
-2. whether bounded direct-link source discovery is included or excluded;
-3. the candidate years and source scopes;
-4. the maximum number of colleges and pairs, not exceeding the T01 ceilings;
-5. the permitted research-artifact location and retention;
-6. the owner/reviewer for final identity dispositions.
+1. **Permitted Official Artifacts:** `GENERAL_ACADEMIC_DAP_2025.pdf`, `TNEA_Tent_Schedule_2025.pdf`, and official DoTE portal classifications.
+2. **Discovery Boundary:** Official non-applicant sources only; no applicant lists.
+3. **Candidate Years:** 2025 (historical evidence) and 2026 (current identity reference); 2024 retired.
+4. **Cohort Size & Ceilings:** 55 institutions for T03 identity audit; future T04 capped at at most 20 pairs.
+5. **Research Artifact Location:** Process-scoped temporary directory outside workspace/OneDrive.
+6. **Reviewer:** Ganesan (Project Owner).
 
 If the authorized non-applicant sources cannot support a feasible cohort, T03 returns fewer than the ceilings—including zero—rather than using applicant publications or filling quotas.
 

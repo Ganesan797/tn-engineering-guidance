@@ -8,13 +8,15 @@ The current M4 authority is the [Option A owner decision](../review-evidence/m4-
 
 The guided journey remains primary; governed Q&A is optional exploration. M2, M3 and M4 retain their recorded bounded acceptance. `REAL_STUDENT_VALIDATION = NOT_RUN`, pilot readiness is not approved, M5 is in planning reconciliation, Gemini remains paused and future conversational work remains separate from the frozen roadmap.
 
-## Milestone M5 Planning Records (Bounded Planning State)
+## Milestone M5 Planning & Identity Records
 
 - [M5-T01 input provenance and privacy contract](planning/m5_contract_spec_v1.md) — ACCEPTED
 - [M5-T02 bounded official-source assessment](planning/m5_source_census_v1.md) — ACCEPTED (authorized at commit `9a6fd5c`, accepted at commit `51bb945bb4b2b591ba528b5b7885ffec9583e9bb`)
 - [M5-D5 derived provisional-allotment minimum methodology](planning/m5_derived_methodology_spec_v1.md) — ACCEPTED (exact blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d` at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`; administrative acceptance recorded at commit `9c9ec585562c0f1e3917093034b15acb080221ba`)
-- [M5 revised cohort and T03 amendment proposal](planning/m5_revised_cohort_and_t03_amendment_proposal_v1.md) — PENDING owner approval
-- [M5-T03 bounded historical identity-audit task](planning/m5_t03_identity_audit_task_v1.md) — PREPARED; execution NOT_AUTHORIZED
+- [M5 revised cohort and T03 amendment proposal](planning/m5_revised_cohort_and_t03_amendment_proposal_v1.md) — ACCEPTED (Option 3: 55 institutions, 2025/2026 scope, dual ceilings, privacy incident closed)
+- [M5-T03 bounded historical identity-audit task](planning/m5_t03_identity_audit_task_v1.md) — AUTHORIZED BY OWNER
+- [M5-T03 55-institution non-applicant identity audit report](planning/m5_t03_identity_audit_report_v1.md) — COMPLETED (54 SUPPORTED_EXACT, 1 HELD_NEEDS_REVIEW, 555 offerings)
+- [M5-T04 clean-room extraction feasibility report](planning/m5_t04_extraction_report_v1.md) — COMPLETED (123 D5 research candidates, 20 feasibility pairs, 0 applicant data)
 - [M5 decision support execution proposal](planning/m5_decision_support_proposal_v1.md) — Planning proposal
 
 ## Content to review

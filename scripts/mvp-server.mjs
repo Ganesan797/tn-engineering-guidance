@@ -1,5 +1,6 @@
 import { renderGovernedPilot } from "../src/ui/m4-governed-pilot.ts";
 import { renderM4Exploration } from "../src/ui/m4-exploration.ts";
+import { renderM5GuidancePage } from "../src/ui/m5-guidance-view.ts";
 import { CHECK_COPY } from "../src/ui/journey-copy.ts";
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
@@ -73,6 +74,38 @@ const server = createServer(async (request, response) => {
     const page = renderQuestionCollection(questions, url.searchParams.get("id"), url.searchParams.get("evidence"), language, url.searchParams.get("topic"));
     send(response, page.status, page.html);
     return;
+  }
+  // Milestone M5 Internal Review Preview (Isolated from public /colleges route)
+  if (url.pathname === "/m5-guidance") {
+    if (request.method === "POST") {
+      const chunks = [];
+      let total = 0;
+      for await (const chunk of request) {
+        total += chunk.length;
+        if (total > 8192) throw new Error("Request is too large");
+        chunks.push(chunk);
+      }
+      const values = new URLSearchParams(Buffer.concat(chunks).toString("utf8"));
+      const rawCutoff = values.get("cutoff");
+      const studentCutoff = rawCutoff !== null && rawCutoff.trim() !== "" ? Number(rawCutoff) : null;
+      const quota = values.get("quota") === "GOVT_SCHOOL_7_5" ? "GOVT_SCHOOL_7_5" : "GENERAL_ACADEMIC";
+      const community = values.get("community") || "OC";
+
+      // Non-sensitive directory filtering parameters from POST body
+      const effectiveParams = new URLSearchParams(url.searchParams);
+      for (const key of ["q", "type", "tab", "lang", "shortlist"]) {
+        const val = values.get(key);
+        if (val !== null) effectiveParams.set(key, val);
+      }
+
+      send(response, 200, renderM5GuidancePage(effectiveParams, { studentCutoff, quota, community }));
+      return;
+    }
+    if (request.method === "GET") {
+      // Sensitive student cutoff and community are NEVER read from GET query params
+      send(response, 200, renderM5GuidancePage(url.searchParams));
+      return;
+    }
   }
   // Local, opt-in owner review only; no request parameter supplies approvals.
   if (request.method === "GET" && url.pathname === "/colleges" && publicDirectory) {

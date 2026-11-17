@@ -1,20 +1,21 @@
 # M5 — Revised Bounded Pilot Cohort and T03 Scope Amendment Proposal
 
-**Status:** `PLANNING_PROPOSAL_PREPARED`; `OWNER_REVIEW_PENDING`.
+**Status:** `PROPOSAL_ACCEPTED_BY_OWNER` on 2026-11-15.
 **Task Authorization & Governance State:**
 - `M5_T01 = ACCEPTED` ([M5-T01 Contract](m5_contract_spec_v1.md), commit `b332c61`)
 - `M5_T02 = ACCEPTED` ([M5-T02 Source Assessment](m5_source_census_v1.md); authorized at commit `9a6fd5c`, accepted at commit `51bb945bb4b2b591ba528b5b7885ffec9583e9bb`)
 - `M5_D5 = ACCEPTED` ([Accepted D5 Methodology Specification](m5_derived_methodology_spec_v1.md), exact blob `3b885d3f3b05cbedbcbf9741ed72ad402abf321d` at commit `74351fcb51ac1ec699d436c1a5ae7093fda43ce4`; administrative acceptance recorded at `9c9ec585562c0f1e3917093034b15acb080221ba`)
-- `REVISED_COHORT = PENDING_OWNER_APPROVAL`
-- `YEAR_AMENDMENT = PENDING_OWNER_APPROVAL`
-- `T03_EXECUTION = NOT_AUTHORIZED` (Prior execution on rejected branch is unaccepted historical audit evidence only)
-- `T04_EXECUTION = NOT_AUTHORIZED` (Prior extraction on rejected branch was unauthorized and violated D5 scratch rules; not accepted)
-- `GATE_A_STATUS = PENDING`
-- `T05_T12_APPLICATION = NOT_AUTHORIZED` (All application code on rejected branch is frozen and isolated; not merged)
+- `REVISED_COHORT = ACCEPTED_55_INSTITUTIONS` (Option 3 accepted by owner on 2026-11-15: 11 Govt + 5 Univ Depts + 3 Govt Aided + 16 Constituent + 20 SFC)
+- `YEAR_AMENDMENT = ACCEPTED_2025_2026` (2024 retired; 2025 historical evidence and 2026 identity reference accepted by owner)
+- `SELF_FINANCING_SLATE = ACCEPTED_20_INSTITUTIONS` (High student preference autonomous slate approved by owner)
+- `CEILING_AMENDMENT = ACCEPTED` (Level A ceiling: up to 55 institutions for T03 identity audit; Level B ceiling: strictly capped at at most 20 exact pairs for initial T04 extraction)
+- `PRIVACY_INCIDENT = CLOSED` (OneDrive cloud verification completed clean by owner; zero residual sync copies)
+- `T03_EXECUTION = COMPLETED` ([T03 Identity Audit Report](m5_t03_identity_audit_report_v1.md))
+- `T04_EXECUTION = NOT_AUTHORIZED` (Awaiting explicit owner Gate A review and authorization)
+- `GATE_A_STATUS = PENDING_OWNER_DECISION`
+- `T05_T12_APPLICATION = NOT_AUTHORIZED` (All application code remains frozen and unauthorized)
 - `M5_RELEASE = NOT_AUTHORIZED`
-- `PRIVACY_INCIDENT = OPEN/PARTIALLY_CONTAINED`
-- `COHORT_IDENTITY_STATUS = NEEDS_REVIEW` (All proposed cross-year identities require explicit owner verification)
-- `SELF_FINANCING_SLATE = PENDING_REVISION` (Awaiting explicit owner selection under objective criteria)
+- `COHORT_IDENTITY_STATUS = AUDITED_54_SUPPORTED_1_HELD` (College 1516 held on booklet intake data)
 
 **Date:** 2026-11-15
 **Base Commit:** `f3c83d6499302bd49d8a33d4d067437e86cfba61` on `origin/main`
@@ -156,48 +157,46 @@ All 23 counts are now 100% synchronized with the immutable 2026 governed baselin
 
 ---
 
-## 4. Proposed 20 Self-Financing Institutions (Candidate Slate: PENDING_REVISION)
+## 4. Accepted 20 Self-Financing Institutions (High Student Preference Slate)
 
-### 4.1 Objective & Reproducible Selection Criteria
-To eliminate subjective quality tiers, commercial ranking bias, or unsupported prestige classifications, the candidate slate is governed by transparent, reproducible operational criteria:
+### 4.1 Selection Criteria & Governance Rationale
+Under the owner's explicit decision on 2026-11-15, the candidate Self-Financing College (SFC) slate reflects established high student preference in TNEA single-window counselling (e.g. Kumaraguru KCT, Mepco Schlenk, PSG iTech, REC, SVCE, CIT, SKCET, etc.):
 1. **Candidate Universe:** All 380 Self-Financing colleges present in the governed 2026 directory candidates dataset (`college-candidates.csv`).
 2. **Exclusion Criteria:** Any institution subject to unresolved identity-join holds (explicitly excluding held codes `1133`, `1301`, `1424`, `2345`, `2776`, `3815`).
-3. **Partition & Group Definitions:**
-   - **Group A (10 colleges):** Multidisciplinary Autonomous institutions (`autonomous_status = 'Yes'`), testing high offering breadth (14 to 20 programmes) across major urban and industrial clusters.
-   - **Group B (10 colleges):** Non-Autonomous affiliating institutions (`autonomous_status = 'No'`) following standard Anna University centralized curricula across semi-urban, rural, or coastal catchment areas (plus 1 regional coastal autonomous institution to ensure geographic balance).
-4. **Deterministic Selection & Tie-Breaking Order:**
-   - Primary: Partition into Group A (Autonomous) and Group B (Affiliating).
-   - Secondary: Geographic distribution requiring representation across 11 distinct districts (Northern Metropolitan, Western Industrial, Salem/Namakkal Corridor, Central Delta, and Southern Coastal zones).
-   - Tertiary (Tie-Breaking): Higher offering breadth in 2026 pre-special reservation seat matrix, followed by ascending numerical college code.
-5. **Slate Governance Status:** Marked **`PENDING_REVISION`** for formal owner confirmation. The owner may accept, adjust, or replace colleges on this slate before any identity audit is authorized.
+3. **Autonomy & Governance Model:** All 20 selected institutions are autonomous (`autonomous_status = 'Yes'`), operating academic flexibility and curricular specializations.
+4. **Geographic Distribution:** Covers major educational and industrial demand clusters:
+   - **Northern / Chennai Metropolitan & Industrial Corridor (10 colleges):** Tiruvallur, Chennai, Kanchipuram, Chengalpattu.
+   - **Western / Coimbatore, Erode, Salem, Namakkal Corridor (8 colleges):** Established engineering institutions.
+   - **Southern Educational Hubs (2 colleges):** Madurai and Sivakasi/Virudhunagar.
+5. **Slate Governance Status:** Marked **`ACCEPTED_BY_OWNER`** on 2026-11-15.
 
-### 4.2 Group A: Autonomous Multidisciplinary Institutions (10 Colleges — Proposed Slate)
-| Code | Official Name Literal | District | Autonomy | 2026 Offerings | Historical Identity Status | Geographic Cluster & Selection Characteristics |
+### 4.2 Northern & Chennai Metropolitan Cluster (10 Colleges — Accepted)
+| Code | Official Name Literal | District | Autonomy | 2026 Offerings | Historical Identity Status | Selection & Regional Characteristics |
 | :---: | :--- | :--- | :---: | :---: | :---: | :--- |
-| **1211** | Rajalakshmi Engineering College (Autonomous), Thandalam, Sriperumpudur Taluk, Kancheepuram District 602105 | KANCHIPURAM | Yes | 19 | `NEEDS_REVIEW` | High offering breadth (19 programmes); Northern Sriperumbudur industrial belt. |
-| **1304** | Easwari Engineering College (Autonomous), Ramapuram, Chennai 600089 | CHENNAI | Yes | 15 | `NEEDS_REVIEW` | Urban metropolitan autonomous institution (Chennai). 15 offerings. |
-| **1399** | Chennai Institute of Technology (Autonomous), Puduper Village, Nandambakkam Post, Kundrathur, Chennai 600069 | KANCHIPURAM | Yes | 14 | `NEEDS_REVIEW` | Multidisciplinary autonomous engineering campus (West Chennai catchment area). 14 offerings. |
-| **1419** | Sri Sai Ram Enginering College (Autonomous), West Tambaram, Chennai 600044 | KANCHIPURAM | Yes | 15 | `NEEDS_REVIEW` | Autonomous multidisciplinary campus (Tambaram corridor). 15 offerings. |
-| **2607** | K S Rangasamy College of Technology (Autonomous), Tiruchengode, Namakkal District 637215 | NAMAKKAL | Yes | 14 | `NEEDS_REVIEW` | Central-West educational cluster in Namakkal district. 14 offerings. |
-| **2618** | Sona College of Technology (Autonomous), Suramangalam Post, Salem District 636005 | SALEM | Yes | 18 | `NEEDS_REVIEW` | Autonomous engineering institution in Salem industrial corridor. 18 offerings. |
-| **2707** | Erode Sengunthar Engineering College (Autonomous), Thudupathi Post, Erode District 638057 | ERODE | Yes | 20 | `NEEDS_REVIEW` | Highest offering breadth (20 programmes) in Erode district. |
-| **2711** | Kongu Engineering College (Autonomous), Perundurai, Erode District 638052 | ERODE | Yes | 14 | `NEEDS_REVIEW` | Established Western Zone autonomous engineering campus. 14 offerings. |
-| **2712** | Kumaraguru College of Technology (Autonomous), Chinnavedampatti Post, Coimbatore District 641006 | COIMBATORE | Yes | 14 | `NEEDS_REVIEW` | Coimbatore tech and industrial cluster autonomous college. 14 offerings. |
-| **4917** | Sethu Institute of Technology (Autonomous), Kariapatti Post, Virudhunagar District 626115 | VIRUDHUNAGAR | Yes | 16 | `NEEDS_REVIEW` | Southern Zone multidisciplinary autonomous college. 16 offerings. |
+| **1113** | R M K Engineering College (Autonomous), Kavaraipettai, Gummidipoondi, Thiruvallur District 601206 | TIRUVALLUR | Yes | 11 | `SUPPORTED_EXACT` | High student preference autonomous campus; northern Tiruvallur/Chennai corridor. 11 offerings. |
+| **1120** | Velammal Engineering College (Autonomous), Ambattur-Redhills Road, Chennai 600066 | CHENNAI | Yes | 10 | `SUPPORTED_EXACT` | High student preference autonomous institution; Chennai urban industrial zone. 10 offerings. |
+| **1211** | Rajalakshmi Engineering College (Autonomous), Thandalam, Sriperumpudur Taluk, Kancheepuram District 602105 | KANCHIPURAM | Yes | 19 | `SUPPORTED_EXACT` | High offering breadth (19 programmes); Sriperumbudur industrial corridor. |
+| **1219** | Sri Venkateswara College of Engineering (Autonomous), Post Bag No.1, Chennai-Bengaluru High Road, Pennalur, Irungattukottai S.O., Sriperumbudur Taluk, Kancheepuram District 602105 | KANCHIPURAM | Yes | 11 | `SUPPORTED_EXACT` | Established high-preference autonomous institution (SVCE). 11 offerings. |
+| **1304** | Easwari Engineering College (Autonomous), Ramapuram, Chennai 600089 | CHENNAI | Yes | 15 | `SUPPORTED_EXACT` | Urban metropolitan autonomous institution (Ramapuram/Chennai). 15 offerings. |
+| **1317** | St. Josephs College of Engineering (Autonomous), Old Mahabalipuram Road (OMR), Chennai 600 119 | CHENNAI | Yes | 14 | `SUPPORTED_EXACT` | High-preference autonomous campus on OMR IT corridor. 14 offerings. |
+| **1399** | Chennai Institute of Technology (Autonomous), Puduper Village, Nandambakkam Post, Kundrathur, Chennai 600069 | KANCHIPURAM | Yes | 14 | `SUPPORTED_EXACT` | Multidisciplinary autonomous engineering campus (CIT Chennai). 14 offerings. |
+| **1419** | Sri Sai Ram Enginering College (Autonomous), West Tambaram, Chennai 600044 | KANCHIPURAM | Yes | 15 | `SUPPORTED_EXACT` | Autonomous multidisciplinary campus (West Tambaram corridor). 15 offerings. |
+| **1422** | SRM Valliammai Engineering College (Autonomous), Kattankulathur, Chennai 603203 | CHENGALPATTU | Yes | 11 | `SUPPORTED_EXACT` | Autonomous engineering institution in Kattankulathur education hub. 11 offerings. |
+| **1450** | Loyola ICAM College of Engineering and Technology (Autonomous), Loyola College Campus, Nungambakkam, Chennai 600034 | CHENNAI | Yes | 6 | `SUPPORTED_EXACT` | High-preference autonomous institution in central Chennai (LICET). 6 offerings. |
 
-### 4.3 Group B: Non-Autonomous Affiliating & Regional Institutions (10 Colleges — Proposed Slate)
-| Code | Official Name Literal | District | Autonomy | 2026 Offerings | Historical Identity Status | Geographic Cluster & Selection Characteristics |
+### 4.3 Western, Central & Southern Clusters (10 Colleges — Accepted)
+| Code | Official Name Literal | District | Autonomy | 2026 Offerings | Historical Identity Status | Selection & Regional Characteristics |
 | :---: | :--- | :--- | :---: | :---: | :---: | :--- |
-| **1106** | Jaya Engineering College, Thirunindravur, Chennai 602024 | TIRUVALLUR | No | 13 | `NEEDS_REVIEW` | Non-autonomous affiliating model; North-West peri-urban Tiruvallur catchment. |
-| **1217** | Sree Sastha Institute of Engineering and Technology, Chembarambakkam, Chennai 600103 | TIRUVALLUR | No | 14 | `NEEDS_REVIEW` | High non-autonomous offering breadth (14 programmes); Western corridor. |
-| **1407** | G K M College of Engineering and Technology, Alappakkam-Mappedu Road, Chennai 600063 | CHENGALPATTU | No | 10 | `NEEDS_REVIEW` | Non-autonomous suburban Chengalpattu institution. 10 offerings. |
-| **1434** | Surya Group of Institutions, GST Road, Vikravandi Village, Villupuram District 605652 | VILUPPURAM | No | 10 | `NEEDS_REVIEW` | Rural/semi-urban non-autonomous college on southern highway corridor. 10 offerings. |
-| **1509** | Meenakshi College of Engineering, Vembuliamman Koil Street, K K Nagar (West), Chennai 600078 | CHENNAI | No | 11 | `NEEDS_REVIEW` | Urban non-autonomous affiliating engineering college. 11 offerings. |
-| **2721** | Tamilnadu College of Engineering, Karumathampatti Post, Coimbatore District 641659 | COIMBATORE | No | 9 | `NEEDS_REVIEW` | Non-autonomous engineering college in Coimbatore rural catchment area. 9 offerings. |
-| **3810** | MAM College of Engineering, Siruganur, Tiruchirappalli District 621105 | TIRUCHIRAPPALLI | No | 10 | `NEEDS_REVIEW` | Central Delta zone non-autonomous affiliating institution. 10 offerings. |
-| **3820** | Trichy Engineering College, Konalai, Tiruchirappalli District 621132 | TIRUCHIRAPPALLI | No | 10 | `NEEDS_REVIEW` | Semi-urban Tiruchirappalli non-autonomous campus. 10 offerings. |
-| **4978** | Udaya School of Engineering, Ammandivilai Post, Kanyakumari District 629204 | KANNIYAKUMARI | No | 12 | `NEEDS_REVIEW` | Deep south coastal non-autonomous engineering college. 12 offerings. |
-| **5907** | Mohamed Sathak Engineering College (Autonomous), Kilakarai, Ramanathapuram District 623806 | RAMANATHAPURAM | Yes | 14 | `NEEDS_REVIEW` | Regional autonomous institution in coastal/minority catchment area. 14 offerings. |
+| **2377** | PSG Institute of Technology and Applied Research(Autonomous), Avinashi Road, Neelambur, Coimbatore 641062 | COIMBATORE | Yes | 10 | `SUPPORTED_EXACT` | High-preference autonomous institution in Coimbatore (PSG iTech). 10 offerings. |
+| **2607** | K S Rangasamy College of Technology (Autonomous), Tiruchengode, Namakkal District 637215 | NAMAKKAL | Yes | 14 | `SUPPORTED_EXACT` | Central-West educational cluster in Namakkal district. 14 offerings. |
+| **2618** | Sona College of Technology (Autonomous), Suramangalam Post, Salem District 636005 | SALEM | Yes | 18 | `SUPPORTED_EXACT` | Autonomous engineering institution in Salem industrial corridor. 18 offerings. |
+| **2702** | Bannari Amman Institute of Technology (Autonomous), Sathyamanagalam, Erode District 638401 | ERODE | Yes | 10 | `SUPPORTED_EXACT` | Western Zone autonomous campus (BIT Sathy). 10 offerings. |
+| **2711** | Kongu Engineering College (Autonomous), Perundurai, Erode District 638052 | ERODE | Yes | 14 | `SUPPORTED_EXACT` | Established Western Zone autonomous engineering campus (Perundurai). 14 offerings. |
+| **2712** | Kumaraguru College of Technology (Autonomous), Chinnavedampatti Post, Coimbatore District 641006 | COIMBATORE | Yes | 14 | `SUPPORTED_EXACT` | High student preference autonomous college in Coimbatore (KCT). 14 offerings. |
+| **2718** | Sri Krishna College of Enginering and Technology (Autonomous) , Kuniamuthur, Coimbatore District 641008 | COIMBATORE | Yes | 12 | `SUPPORTED_EXACT` | High student preference autonomous college in Coimbatore (SKCET). 12 offerings. |
+| **2719** | Sri Ramakrishna Engineering College (Autonomous), Vattamalaipalayam, Coimbatore District 641022 | COIMBATORE | Yes | 12 | `SUPPORTED_EXACT` | Established autonomous engineering campus in Coimbatore (SREC). 12 offerings. |
+| **4960** | Mepco Schlenk Engineering College (Autonomous), Sivakasi, Virudhunagar District 626005 | VIRUDHUNAGAR | Yes | 9 | `SUPPORTED_EXACT` | High student preference autonomous institution in Southern zone (Mepco Sivakasi). 9 offerings. |
+| **5986** | Velammal College of Engineering and Technology (Autonomous), Madurai District 625009 | MADURAI | Yes | 9 | `SUPPORTED_EXACT` | High student preference autonomous engineering college in Madurai. 9 offerings. |
 
 ---
 
@@ -295,27 +294,24 @@ A prior unauthorized execution placed temporary extraction files in `<workspace>
 - **Cloud Residual Risk:** **`OPEN / PENDING`** (`PRIVACY_INCIDENT = OPEN/PARTIALLY_CONTAINED`). It remains unknown whether OneDrive synchronized the temporary scratch files to Microsoft cloud storage prior to local deletion, whether cloud version history retains copies, or whether cloud recycle bins contain residual copies. Privacy incident closure requires separate verification evidence.
 
 **Owner-Operated Cloud Verification & Purge Checklist:**
-1. [ ] **Check OneDrive Sync Status:** Confirm OneDrive desktop client status is "Up to date" and that no sync activity is pending.
-2. [ ] **Inspect OneDrive Web Recycle Bin:** Navigate to OneDrive on the web (`https://onedrive.live.com` or organization portal) $\rightarrow$ Recycle Bin. Check for any folders named `scratch` or `m5-t04-transient`.
-3. [ ] **Purge First-Stage Recycle Bin:** If found, delete the items from the recycle bin.
-4. [ ] **Check Second-Stage Recycle Bin:** Navigate to the bottom of the Recycle Bin page to "Second-stage recycle bin" and permanently purge any detected copies.
-5. [ ] **Version History Check:** Confirm that no parent folders retain version snapshots containing the temporary artifacts.
-6. [ ] **Formal Closure:** Once verified and purged, record `PRIVACY_INCIDENT = CLOSED` in the project governance ledger. (Until owner verification is complete, status remains `OPEN/PARTIALLY_CONTAINED`).
+1. [x] **Check OneDrive Sync Status:** Confirm OneDrive desktop client status is "Up to date" and that no sync activity is pending.
+2. [x] **Inspect OneDrive Web Recycle Bin:** Navigate to OneDrive on the web (`https://onedrive.live.com` or organization portal) $\rightarrow$ Recycle Bin. Check for any folders named `scratch` or `m5-t04-transient`.
+3. [x] **Purge First-Stage Recycle Bin:** Verified clean / zero items detected.
+4. [x] **Check Second-Stage Recycle Bin:** Verified clean / zero items detected.
+5. [x] **Version History Check:** Confirmed no version snapshots retain temporary artifacts.
+6. [x] **Formal Closure:** Verified and recorded `PRIVACY_INCIDENT = CLOSED` in governance ledger by owner decision on 2026-11-15.
 
 ---
 
-## 10. Specific Owner Approvals Needed Before Execution
+## 10. Recorded Owner Approvals (2026-11-15)
 
-Before any execution begins, the owner must formally review and decide on:
-1. **Cohort Scope Decision:** Confirm whether the candidate cohort shall be:
-   - Option 1: Core 53 institutions (11 Govt, 3 AU Depts, 3 Govt Aided, 16 Constituent, 20 SFC).
-   - Option 2: 54 institutions (Core 53 + Code 3 SAP Anna University).
-   - Option 3: 55 institutions (Core 53 + Code 3 SAP + Code 5 Annamalai University).
-2. **Self-Financing Institution Slate:** Approve, amend, or revise the proposed 20 college codes and their Group A / Group B partition.
-3. **Year Scope Amendment:** Formally approve amending the T01 candidate-year scope to 2025/2026.
-4. **Ceiling Amendment:** Formally approve amending the T03 identity-audit ceiling to the revised cohort (up to 55 institutions) while capping initial extraction feasibility at 20 pairs.
-5. **T03 Execution Authorization:** Explicitly authorize or withhold authorization for running the non-applicant identity audit.
-6. **Privacy Incident Verification:** Execute the owner cloud verification checklist and report status.
+The owner formally reviewed and recorded the following decisions:
+1. **Cohort Scope Decision:** **Option 3 (55 institutions)** APPROVED (11 Govt, 5 Univ Depts, 3 Govt Aided, 16 Constituent, 20 SFC).
+2. **Self-Financing Institution Slate:** **20 High Student Preference Autonomous Colleges** APPROVED (Codes: 1113, 1120, 1211, 1219, 1304, 1317, 1399, 1419, 1422, 1450, 2377, 2607, 2618, 2702, 2711, 2712, 2718, 2719, 4960, 5986).
+3. **Year Scope Amendment:** **2025/2026 Scope** APPROVED (Candidate year 2024 retired; 2025 historical evidence and 2026 identity reference adopted).
+4. **Ceiling Amendment:** **Dual Ceilings** APPROVED (Level A ceiling: 55 institutions for T03 identity; Level B extraction ceiling strictly capped at at most 20 exact pairs for initial T04 feasibility).
+5. **Privacy Incident Verification:** **OneDrive Verification CLEAN**; `PRIVACY_INCIDENT = CLOSED`.
+6. **T03 Execution Authorization:** **T03 AUTHORIZED**; non-applicant identity audit executed and documented in [T03 Identity Audit Report](m5_t03_identity_audit_report_v1.md).
 
 ---
 
@@ -325,16 +321,17 @@ Before any execution begins, the owner must formally review and decide on:
 T01 = ACCEPTED
 T02 = ACCEPTED
 D5 = ACCEPTED (blob 3b885d3)
-REVISED_COHORT = PENDING_OWNER_APPROVAL
-YEAR_AMENDMENT = PENDING_OWNER_APPROVAL
-T03_EXECUTION = NOT_AUTHORIZED
+REVISED_COHORT = ACCEPTED_55_INSTITUTIONS
+YEAR_AMENDMENT = ACCEPTED_2025_2026
+SELF_FINANCING_SLATE = ACCEPTED_20_INSTITUTIONS
+CEILING_AMENDMENT = ACCEPTED
+PRIVACY_INCIDENT = CLOSED
+T03_EXECUTION = COMPLETED
 T04_EXECUTION = NOT_AUTHORIZED
-GATE_A = PENDING
+GATE_A = PENDING_OWNER_DECISION
 T05_T12_APPLICATION = NOT_AUTHORIZED
 M5_RELEASE = NOT_AUTHORIZED
-PRIVACY_INCIDENT = OPEN/PARTIALLY_CONTAINED
-COHORT_IDENTITY_STATUS = NEEDS_REVIEW
-SELF_FINANCING_SLATE = PENDING_REVISION
+COHORT_IDENTITY_STATUS = AUDITED_54_SUPPORTED_1_HELD
 ```
 
-**Next Single Action:** Focused Codex verification of corrected reconciliation.
+**Next Single Action:** Owner formal review and decision on Gate A (authorizing or withholding T04 clean-room extraction feasibility testing).

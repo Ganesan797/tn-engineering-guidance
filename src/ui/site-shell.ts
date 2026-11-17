@@ -20,7 +20,7 @@ export const SITE_SHELL_CSS = `
 
 export function renderSiteHeader(
   language: "ta" | "en",
-  current: "home" | "journey" | "study" | "colleges" | "review",
+  current: "home" | "journey" | "study" | "colleges" | "review" | "planner",
   languageControl: string,
   context?: "owner" | "synthetic",
 ): string {
@@ -30,6 +30,7 @@ export function renderSiteHeader(
     [en ? "Guidance" : "வழிகாட்டல்", `/journey?step=awareness&lang=${language}`, "journey"],
     [en ? "Study" : "படிப்பு", `/journey?step=study&lang=${language}`, "study"],
     [en ? "Colleges" : "கல்லூரிகள்", `/colleges?lang=${language}`, "colleges"],
+    [en ? "Choice Planner" : "விருப்பப் பட்டியல்", `/m5-guidance?lang=${language}`, "planner"],
   ];
   const label = en ? "Main navigation" : "முதன்மை வழிசெலுத்தல்";
   const contextLabel = context === "owner" ? (en ? "Internal owner preview" : "உள்நிலை உரிமையாளர் ஆய்வு")
