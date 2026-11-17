@@ -347,6 +347,9 @@ test("Fix 2 & P0-A/P1-B/P1-C: Cutoff calculator provides marks privacy, stale cl
   assert.ok(calcTa.includes("உங்கள் TNEA Cutoff மதிப்பெண்"));
   assert.ok(calcTa.includes("கணக்கீட்டு முறை: இது கணிதம் (100) + இயற்பியல் (50) + வேதியியல் (50) ஆகியவற்றின் அடிப்படையில் 200-க்குக் கணக்கிடப்பட்ட Cutoff மதிப்பெண் மட்டுமே."));
   assert.match(calcTa, /www\.tneaonline\.org/);
+  assert.ok(calcTa.includes('<form method="POST" action="/m5-guidance?lang=ta" style="margin:0;display:inline">'));
+  assert.ok(calcTa.includes('<input type="hidden" name="cutoff" value="185.5">'));
+  assert.ok(calcTa.includes("2025 கட்-ஆஃப் ஒப்பீடு &amp; முன்னுரிமைத் திட்டம் →"));
   assert.ok(calcTa.includes('href="/colleges?view=colleges&amp;lang=ta"'));
   assert.ok(calcTa.includes('href="/counselling?lang=ta"'));
 
@@ -359,6 +362,9 @@ test("Fix 2 & P0-A/P1-B/P1-C: Cutoff calculator provides marks privacy, stale cl
   assert.ok(calcEn.includes("This is the composite academic cutoff score calculated out of 200 from your subject marks (Maths 100, Physics 50, Chemistry 50)."));
   assert.ok(calcEn.includes("A cutoff score is not an admission guarantee or an official rank."));
   assert.match(calcEn, /www\.tneaonline\.org/);
+  assert.ok(calcEn.includes('<form method="POST" action="/m5-guidance?lang=en" style="margin:0;display:inline">'));
+  assert.ok(calcEn.includes('<input type="hidden" name="cutoff" value="190">'));
+  assert.ok(calcEn.includes("Compare with 2025 Cutoffs &amp; Plan Choices →"));
   assert.ok(calcEn.includes('href="/colleges?view=colleges&amp;lang=en"'));
   assert.ok(calcEn.includes('href="/counselling?lang=en"'));
   assert.ok(!calcEn.includes('href="/personal/reference?lang=en"'));

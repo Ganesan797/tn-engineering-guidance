@@ -318,6 +318,82 @@ test("M5 UI: Counselling Guidance tab displays factual TNEA procedures without u
   assert.ok(html.includes('<a href="/m5-guidance?lang=en" aria-current="page">Choice Planner</a>'), "Must highlight Choice Planner in site header");
 });
 
+test("M6-T01 Unified Student Navigation & Journey Consolidation: Shortlist pill, next step transition card, and counselling bottom navigation", () => {
+  // 1. Comparison Tab: Shortlist Summary Pill appears when shortlist has items
+  const htmlCompWithShortlist = renderM5GuidancePage(new URLSearchParams({
+    tab: "comparison",
+    lang: "en",
+    shortlist: "1~CS,2006~ME",
+  }));
+  assert.ok(htmlCompWithShortlist.includes("shortlist-summary-pill"), "Must render shortlist summary pill when items are shortlisted");
+  assert.ok(htmlCompWithShortlist.includes("Selected Choices: 2"), "Must show choice count in pill");
+  assert.ok(htmlCompWithShortlist.includes("Go to Choice Order Planner →"), "Must link to Choice Planner");
+  assert.ok(htmlCompWithShortlist.includes('href="?tab=shortlist&amp;lang=en&amp;shortlist=1~CS,2006~ME"'), "Pill must preserve shortlist state in link");
+
+  // Comparison Tab: Pill does not appear when shortlist is empty
+  const htmlCompEmpty = renderM5GuidancePage(new URLSearchParams({ tab: "comparison", lang: "en" }));
+  assert.ok(!htmlCompEmpty.includes("shortlist-summary-pill"), "Empty shortlist must not show summary pill");
+
+  // Comparison Tab in Tamil
+  const htmlCompTa = renderM5GuidancePage(new URLSearchParams({
+    tab: "comparison",
+    lang: "ta",
+    shortlist: "1~CS,2006~ME",
+  }));
+  assert.ok(htmlCompTa.includes("தேர்ந்தெடுக்கப்பட்ட விருப்பங்கள்: 2"), "Tamil summary pill must display Tamil text");
+  assert.ok(htmlCompTa.includes("விருப்பப் பட்டியல் வரிசைக்குச் செல் →"), "Tamil button text");
+
+  // 2. Shortlist Tab: Next Step Transition Card to Counselling Guidance
+  const htmlShortlistWithItems = renderM5GuidancePage(new URLSearchParams({
+    tab: "shortlist",
+    lang: "en",
+    shortlist: "1~CS,2006~ME",
+  }));
+  assert.ok(htmlShortlistWithItems.includes("next-step-card"), "Must render Next Step transition card on shortlist");
+  assert.ok(htmlShortlistWithItems.includes("Next Step: Understand Official TNEA Allocation &amp; Upward Movement"), "Card heading");
+  assert.ok(htmlShortlistWithItems.includes('href="?tab=counselling&amp;lang=en&amp;shortlist=1~CS,2006~ME"'), "Card must link to counselling tab with shortlist state");
+  assert.ok(htmlShortlistWithItems.includes("Read Counselling Procedures &amp; Rules →"), "Card CTA button");
+
+  // Shortlist Tab: Next Step card does NOT appear when shortlist is empty
+  const htmlShortlistEmpty = renderM5GuidancePage(new URLSearchParams({ tab: "shortlist", lang: "en" }));
+  assert.ok(!htmlShortlistEmpty.includes("next-step-card"), "Empty shortlist must not show next step card");
+
+  // Shortlist Tab in Tamil
+  const htmlShortlistTa = renderM5GuidancePage(new URLSearchParams({
+    tab: "shortlist",
+    lang: "ta",
+    shortlist: "1~CS,2006~ME",
+  }));
+  assert.ok(htmlShortlistTa.includes("அடுத்த படி: TNEA கலந்தாய்வு ஒதுக்கீட்டு விதிகளை அறிதல்"), "Tamil heading in Next Step card");
+  assert.ok(htmlShortlistTa.includes("கலந்தாய்வு நடைமுறைகள் &amp; விதிகளைப் படிக்க →"), "Tamil CTA button in Next Step card");
+
+  // 3. Counselling Guidance Tab: Bottom Navigation Actions
+  const htmlCounselling = renderM5GuidancePage(new URLSearchParams({
+    tab: "counselling",
+    lang: "en",
+    shortlist: "1~CS,2006~ME",
+  }));
+  assert.ok(htmlCounselling.includes("counselling-bottom-actions"), "Must render bottom navigation actions on counselling tab");
+  assert.ok(htmlCounselling.includes('href="?tab=shortlist&amp;lang=en&amp;shortlist=1~CS,2006~ME"'), "Must link back to shortlist");
+  assert.ok(htmlCounselling.includes("← Back to My Shortlist"), "Back button label");
+  assert.ok(htmlCounselling.includes('href="?tab=comparison&amp;lang=en&amp;shortlist=1~CS,2006~ME"'), "Must link to college comparison");
+  assert.ok(htmlCounselling.includes("Browse More Colleges"), "Browse colleges label");
+  assert.ok(htmlCounselling.includes('href="/personal?lang=en"'), "Must link to cutoff calculator");
+  assert.ok(htmlCounselling.includes("Cutoff Calculator"), "Cutoff calculator label");
+  assert.ok(htmlCounselling.includes('href="https://www.tneaonline.org/"'), "Must link to official TNEA portal");
+
+  // Counselling Guidance Tab in Tamil
+  const htmlCounsellingTa = renderM5GuidancePage(new URLSearchParams({
+    tab: "counselling",
+    lang: "ta",
+    shortlist: "1~CS,2006~ME",
+  }));
+  assert.ok(htmlCounsellingTa.includes("← என் விருப்பப் பட்டியலுக்குத் திரும்பு"), "Tamil back button label");
+  assert.ok(htmlCounsellingTa.includes("கூடுதல் கல்லூரிகளைப் பார்வையிட"), "Tamil browse colleges label");
+  assert.ok(htmlCounsellingTa.includes("கட்-ஆஃப் கணக்கீடு"), "Tamil cutoff calculator label");
+  assert.ok(htmlCounsellingTa.includes("அதிகாரப்பூர்வ TNEA தளம் ↗"), "Tamil official TNEA portal label");
+});
+
 test("M5 Real HTTP POST route: Submitted search term filters directory and preserves privacy", async () => {
   const child = spawn(process.execPath, ["--experimental-strip-types", "scripts/mvp-server.mjs"], {
     cwd: new URL("../../", import.meta.url),

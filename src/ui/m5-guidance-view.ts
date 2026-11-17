@@ -500,7 +500,7 @@ export function renderM5GuidancePage(
 
     ${
       activeTab === "counselling"
-        ? renderCounsellingTab(guidance)
+        ? renderCounsellingTab(guidance, lang, rawShortlist)
         : activeTab === "shortlist"
         ? renderShortlistTab(shortIds, lang)
         : renderComparisonTab(
@@ -623,6 +623,21 @@ function renderComparisonTab(
           )}
         </p>
       </aside>
+
+      ${
+        shortIds.length > 0
+          ? `
+      <div class="shortlist-summary-pill screen-only" style="margin: 0.75rem 0 1rem; padding: 0.75rem 1rem; background: #e6fffa; border: 1.5px solid #81e6d9; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <span>
+          <strong>${t(`தேர்ந்தெடுக்கப்பட்ட விருப்பங்கள்: ${shortIds.length}`, `Selected Choices: ${shortIds.length}`)}</strong>
+          · ${t("விருப்பங்களை வரிசைப்படுத்தவும் அச்சிடவும் தயார்.", "Ready to organize and print your preference order.")}
+        </span>
+        <a class="btn-action btn-primary" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
+          ${t("விருப்பப் பட்டியல் வரிசைக்குச் செல் →", "Go to Choice Order Planner →")}
+        </a>
+      </div>`
+          : ""
+      }
 
       <div class="table-responsive">
         <table class="comparison-table" role="table" aria-label="College Cutoff Comparison Table">
@@ -885,11 +900,26 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
           </details>
         </div>
       </section>
+
+      <div class="next-step-card screen-only" style="margin-top: 1.75rem; padding: 1.25rem; background: #ebf8ff; border: 1.5px solid #bee3f8; border-radius: 8px;">
+        <h3 style="margin: 0 0 0.5rem; color: #2b6cb0;">${t("அடுத்த படி: TNEA கலந்தாய்வு ஒதுக்கீட்டு விதிகளை அறிதல்", "Next Step: Understand Official TNEA Allocation &amp; Upward Movement")}</h3>
+        <p style="margin: 0 0 1rem; color: #2d3748; font-size: 0.95rem; line-height: 1.5;">
+          ${t("உங்கள் விருப்பப் பட்டியலை இறுதி செய்தவுடன், TNEA ஒற்றைச் சாளரக் கலந்தாய்வு முறை எவ்வாறு செயல்படுகிறது என்பதையும், மேல்நோக்கிய நகர்வு (Upward Movement) விதிகள் எவ்வாறு உங்கள் விருப்பம் #1-ஐப் பாதுகாக்கின்றன என்பதையும் அறிந்துகொள்ளுங்கள்.", "Once your preference order is set, learn how single-window counselling evaluates choices sequentially from Choice #1 downwards and how upward movement allows you to reach higher preferences without risk.")}
+        </p>
+        <a class="btn-action btn-primary" href="?tab=counselling&amp;lang=${lang}&amp;shortlist=${esc(shortIds.join(","))}">
+          ${t("கலந்தாய்வு நடைமுறைகள் &amp; விதிகளைப் படிக்க →", "Read Counselling Procedures &amp; Rules →")}
+        </a>
+      </div>
     </section>
   `;
 }
 
-function renderCounsellingTab(guidance: ReturnType<typeof getCounsellingGuidance>): string {
+function renderCounsellingTab(
+  guidance: ReturnType<typeof getCounsellingGuidance>,
+  lang: SupportedLanguage = "en",
+  rawShortlist: string = ""
+): string {
+  const t = (taStr: string, enStr: string) => (lang === "ta" ? taStr : enStr);
   return `
     <section>
       <h2>${esc(guidance.title)}</h2>
@@ -905,6 +935,21 @@ function renderCounsellingTab(guidance: ReturnType<typeof getCounsellingGuidance
       `
         )
         .join("")}
+
+      <div class="counselling-bottom-actions screen-only" style="margin-top: 2rem; padding: 1.25rem; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;">
+        <a class="btn-action btn-primary" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
+          ${t("← என் விருப்பப் பட்டியலுக்குத் திரும்பு", "← Back to My Shortlist")}
+        </a>
+        <a class="btn-action" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
+          ${t("கூடுதல் கல்லூரிகளைப் பார்வையிட", "Browse More Colleges")}
+        </a>
+        <a class="btn-action" href="/personal?lang=${lang}">
+          ${t("கட்-ஆஃப் கணக்கீடு", "Cutoff Calculator")}
+        </a>
+        <a class="btn-action" href="https://www.tneaonline.org/" target="_blank" rel="noopener">
+          ${t("அதிகாரப்பூர்வ TNEA தளம் ↗", "Official TNEA Portal ↗")}
+        </a>
+      </div>
     </section>
   `;
 }

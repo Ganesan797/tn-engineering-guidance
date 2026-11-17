@@ -115,6 +115,12 @@ export function renderStudentEntryPage(
     <p class="source-ref"><small>${ta ? "2026 TNEA சேர்க்கை நடைமுறைகளின்படி" : "Applicable to TNEA 2026 Admissions"} (${ta ? "அதிகாரப்பூர்வ தளம்: " : "Official portal: "}<a href="https://www.tneaonline.org/" target="_blank" rel="noopener">www.tneaonline.org</a>)</small></p>
   </div>
   <div class="calc-next-actions">
+    ${calculatedCutoff !== null ? `
+    <form method="POST" action="/m5-guidance?lang=${language}" style="margin:0;display:inline">
+      <input type="hidden" name="cutoff" value="${calculatedCutoff}">
+      <input type="hidden" name="tab" value="comparison">
+      <button type="submit" class="action">${ta ? "2025 கட்-ஆஃப் ஒப்பீடு &amp; முன்னுரிமைத் திட்டம் →" : "Compare with 2025 Cutoffs &amp; Plan Choices →"}</button>
+    </form>` : ""}
     <a class="action" href="/m5-guidance?lang=${language}">${ta ? "விருப்பப் பட்டியல் &amp; முன்னுரிமைத் திட்டம் →" : "Choice Order Planner &amp; Shortlist →"}</a>
     <a class="action secondary" href="/colleges?view=colleges&amp;lang=${language}">${ta ? "கல்லூரிகள் மற்றும் படிப்புகளைப் பார்க்க →" : "Explore colleges and programmes →"}</a>
     <a class="action secondary" href="/counselling?lang=${language}">${ta ? "கலந்தாய்வு நடைமுறைகள் மற்றும் விதிகள் →" : "TNEA Counselling procedures &amp; guidance →"}</a>
