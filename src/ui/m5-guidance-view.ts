@@ -3,11 +3,15 @@ import {
   compareOffering,
   getComparisonCopy,
   getCounsellingGuidance,
+  formatShortlistPlainText,
+  formatShortlistCsv,
+  createShortlistItem,
   type AllotmentRound,
   type CommunityCategory,
   type ComparisonResult,
   type GovernedOffering,
   type QuotaStream,
+  type ShortlistState,
   type SupportedLanguage,
 } from "../m5/index.ts";
 import { renderSiteHeader, SITE_SHELL_CSS } from "./site-shell.ts";
@@ -319,6 +323,76 @@ export function renderM5GuidancePage(
       .comparison-table th, .comparison-table td { padding: 0.45rem 0.3rem; font-size: 0.8rem; }
       .btn-action { padding: 0.35rem 0.5rem; }
     }
+    .print-only { display: none !important; }
+    .screen-only { display: block; }
+    th.screen-only, td.screen-only { display: table-cell; }
+
+    @media print {
+      body, html {
+        background: #fff !important;
+        color: #000 !important;
+        font-family: Arial, -apple-system, sans-serif !important;
+        font-size: 10pt !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .site-header, .site-footer, .nav-tabs, .form-grid, .truth-banner, .btn-action, .shortlist-actions, .screen-only, .lang-switch, header, .export-container {
+        display: none !important;
+      }
+      .m5-container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+      }
+      .print-only {
+        display: block !important;
+      }
+      th.print-only, td.print-only {
+        display: table-cell !important;
+      }
+      .print-header {
+        display: block !important;
+        margin-bottom: 14pt !important;
+        border-bottom: 2pt solid #000 !important;
+        padding-bottom: 6pt !important;
+      }
+      .print-header h1 {
+        font-size: 14pt !important;
+        font-weight: bold !important;
+        margin: 0 0 4pt 0 !important;
+        color: #000 !important;
+      }
+      .print-header p {
+        font-size: 9.5pt !important;
+        color: #333 !important;
+        margin: 0 !important;
+      }
+      .table-responsive {
+        border: none !important;
+        overflow: visible !important;
+        margin: 0 !important;
+      }
+      .shortlist-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        font-size: 9pt !important;
+      }
+      .shortlist-table th, .shortlist-table td {
+        border: 1pt solid #333 !important;
+        padding: 5pt 6pt !important;
+        color: #000 !important;
+        text-align: left !important;
+        word-break: normal !important;
+      }
+      .shortlist-table th {
+        background-color: #f2f2f2 !important;
+        font-weight: bold !important;
+      }
+      .shortlist-table tr {
+        page-break-inside: avoid !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -580,28 +654,62 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
     `;
   }
 
+  const items = shortIds.map((id, index) => {
+    const [cCode, pCode] = id.split("~");
+    const meta = COHORT_55_METADATA[cCode];
+    const name = meta ? meta.name : `College ${cCode}`;
+    const govOff = HISTORICAL_OBSERVATIONS.getGovernedOffering(cCode, pCode);
+    const progName = govOff ? govOff.programmeName : pCode;
+    return createShortlistItem(cCode, name, pCode, progName, index + 1);
+  });
+
+  const shortlistState: ShortlistState = { items };
+  const plainTextExport = formatShortlistPlainText(shortlistState);
+  const csvExport = formatShortlistCsv(shortlistState);
+
   return `
     <section>
-      <h2>${t("விருப்பப் பட்டியல் வரிசை (Choice Order Planner)", "Choice Order Planner")}</h2>
-      <p>${t("மாணவர்கள் தங்கள் விருப்பங்களை உண்மையான முன்னுரிமைப்படி வரிசைப்படுத்துகின்றனர். மாற்று விருப்பத்தில் இடம் ஒதுக்கப்பட்டால், மேலே காலியிடங்கள் ஏற்படும் பட்சத்தில் விருப்பம் #1-ஐ நோக்கிய மேல்நோக்கிய நகர்வு சாத்தியமாகும்.", "Candidates organize their preference list according to their genuine priorities. If an allotment is made for a lower preference, upward movement allows movement toward Choice #1 if higher-preference vacancies arise.")}</p>
+      <div class="print-header print-only">
+        <h1>${esc(t("தமிழ்நாடு பொறியியல் சேர்க்கை (TNEA) — மாணவர் விருப்ப முன்னுரிமைப் பணித்தாள்", "Tamil Nadu Engineering Admissions (TNEA) — Student Choice Preference Worksheet"))}</h1>
+        <p>${esc(t("Tamil Nadu Engineering Admissions (TNEA) — Student Choice Preference Worksheet", "Official TNEA Choice Entry Preference Worksheet — Non-predictive Reference"))}</p>
+        <p style="margin-top: 4pt; font-size: 8.5pt; color: #555;">${esc(t("அதிகாரப்பூர்வ TNEA கலந்தாய்வு இணையதளத்தில் வரிசைப்படி பதிவு செய்வதற்கான சரிபார்ப்புப் படிவம்.", "Student-controlled preference worksheet organized according to genuine priority for official TNEA online choice filling."))}</p>
+      </div>
+
+      <div class="screen-only">
+        <h2>${t("விருப்பப் பட்டியல் வரிசை (Choice Order Planner)", "Choice Order Planner")}</h2>
+        <p>${t("மாணவர்கள் தங்கள் விருப்பங்களை உண்மையான முன்னுரிமைப்படி வரிசைப்படுத்துகின்றனர். மாற்று விருப்பத்தில் இடம் ஒதுக்கப்பட்டால், மேலே காலியிடங்கள் ஏற்படும் பட்சத்தில் விருப்பம் #1-ஐ நோக்கிய மேல்நோக்கிய நகர்வு சாத்தியமாகும்.", "Candidates organize their preference list according to their genuine priorities. If an allotment is made for a lower preference, upward movement allows movement toward Choice #1 if higher-preference vacancies arise.")}</p>
+
+        <div style="margin-bottom: 1.25rem; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button type="button" class="btn-action btn-primary" onclick="window.print()" title="${t("அச்சுப் படிவம் / PDF பதிவிறக்கு", "Print Worksheet / Save as PDF")}">
+              ${t("🖨️ அச்சிடு / PDF சேமி", "🖨️ Print / Save PDF")}
+            </button>
+          </div>
+          <div>
+            <a class="btn-action" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=" style="color: #c53030;">
+              ${t("பட்டியலை அழி", "Clear Shortlist")}
+            </a>
+          </div>
+        </div>
+      </div>
 
       <div class="table-responsive">
-        <table class="comparison-table" role="table" aria-label="Shortlist reordering table">
+        <table class="comparison-table shortlist-table" role="table" aria-label="Shortlist reordering table">
           <thead>
             <tr>
-              <th scope="col">${t("வரிசை", "Choice Order")}</th>
-              <th scope="col">${t("கல்லூரி &amp; கிளை", "College &amp; Programme")}</th>
-              <th scope="col">${t("நடவடிக்கை", "Actions")}</th>
+              <th scope="col" style="width: 70px;">${t("வரிசை", "Choice Order")}</th>
+              <th scope="col" class="screen-only">${t("கல்லூரி &amp; கிளை", "College &amp; Programme")}</th>
+              <th scope="col" class="print-only">${t("கல்லூரி குறியீடு", "College Code")}</th>
+              <th scope="col" class="print-only">${t("கல்லூரி பெயர்", "College Name")}</th>
+              <th scope="col" class="print-only">${t("கிளை குறியீடு", "Branch Code")}</th>
+              <th scope="col" class="print-only">${t("கிளை பெயர்", "Branch Name")}</th>
+              <th scope="col" class="screen-only" style="width: 140px;">${t("நடவடிக்கை", "Actions")}</th>
             </tr>
           </thead>
           <tbody>
-            ${shortIds
-              .map((id, index) => {
-                const [cCode, pCode] = id.split("~");
-                const meta = COHORT_55_METADATA[cCode];
-                const name = meta ? meta.name : `College ${cCode}`;
-                const govOff = HISTORICAL_OBSERVATIONS.getGovernedOffering(cCode, pCode);
-                const progName = govOff ? govOff.programmeName : pCode;
+            ${items
+              .map((item, index) => {
+                const id = `${item.collegeCode}~${item.programmeCode}`;
 
                 // Move up ID swap
                 const upList = [...shortIds];
@@ -624,12 +732,16 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
 
                 return `
                   <tr>
-                    <td><strong>#${index + 1}</strong></td>
-                    <td>
-                      <strong>${esc(name)}</strong> (${esc(cCode)})<br>
-                      <span>${t("கிளை:", "Branch:")} <strong>${esc(pCode)}</strong> · ${esc(progName)}</span>
+                    <td><strong>#${item.order}</strong></td>
+                    <td class="screen-only">
+                      <strong>${esc(item.collegeName)}</strong> (${esc(item.collegeCode)})<br>
+                      <span>${t("கிளை:", "Branch:")} <strong>${esc(item.programmeCode)}</strong> · ${esc(item.programmeName)}</span>
                     </td>
-                    <td>
+                    <td class="print-only"><strong>${esc(item.collegeCode)}</strong></td>
+                    <td class="print-only">${esc(item.collegeName)}</td>
+                    <td class="print-only"><strong>${esc(item.programmeCode)}</strong></td>
+                    <td class="print-only">${esc(item.programmeName)}</td>
+                    <td class="screen-only">
                       <div class="shortlist-actions">
                         ${
                           index > 0
@@ -652,11 +764,44 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
         </table>
       </div>
 
-      <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-        <a class="btn-action" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=">
-          ${t("பட்டியலை அழி", "Clear Shortlist")}
-        </a>
-      </div>
+      <section class="screen-only export-container" style="margin-top: 1.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem;">
+        <h3 style="margin-top: 0; font-size: 1.05rem; color: #2d3748; display: flex; align-items: center; gap: 0.5rem;">
+          <span>📋</span> ${t("விருப்பப் பட்டியல் நகல் &amp; ஏற்றுமதி (TNEA போர்ட்டலுக்காக)", "Choice List Copy &amp; Export (For Official TNEA Portal)")}
+        </h3>
+        <p style="font-size: 0.875rem; color: #4a5568; margin-bottom: 1rem; line-height: 1.5;">
+          ${t(
+            "அதிகாரப்பூர்வ TNEA கலந்தாய்வு இணையதளத்தில் விருப்பங்களை வரிசைப்படி பதிவு செய்ய இந்த உரையை நகலெடுத்துக் கொள்ளலாம்.",
+            "Copy your finalized ordered choices as plain text or CSV format for reference when filling choices in the official TNEA counselling portal."
+          )}
+        </p>
+
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+          <button type="button" class="btn-action" onclick="navigator.clipboard?.writeText(document.getElementById('export-text').value); alert('${t("உரை கிளிப்போர்டில் நகலெடுக்கப்பட்டது!", "Plain text copied to clipboard!")}')">
+            ${t("📋 எளிய உரையை நகலெடு", "📋 Copy Plain Text")}
+          </button>
+          <button type="button" class="btn-action" onclick="navigator.clipboard?.writeText(document.getElementById('export-csv').value); alert('${t("CSV கிளிப்போர்டில் நகலெடுக்கப்பட்டது!", "CSV copied to clipboard!")}')">
+            ${t("📊 CSV நகலெடு", "📊 Copy CSV")}
+          </button>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div>
+            <label for="export-text" style="font-size: 0.825rem; font-weight: 600; color: #4a5568; display: block; margin-bottom: 0.25rem;">
+              ${t("எளிய உரை வடிவம் (Plain Text):", "Plain Text Format:")}
+            </label>
+            <textarea id="export-text" readonly rows="6" style="width: 100%; max-width: 100%; box-sizing: border-box; font-family: monospace, Consolas, sans-serif; font-size: 0.85rem; padding: 0.6rem; border: 1px solid #cbd5e0; border-radius: 4px; background: #fff; line-height: 1.4; resize: vertical;">${esc(plainTextExport)}</textarea>
+          </div>
+
+          <details>
+            <summary style="font-size: 0.85rem; font-weight: 600; color: #2b6cb0; cursor: pointer; padding: 0.25rem 0;">
+              ${t("📊 அட்டவணை வடிவம் (CSV) பார்க்க", "📊 View Tabular CSV Format")}
+            </summary>
+            <div style="margin-top: 0.5rem;">
+              <textarea id="export-csv" readonly rows="5" style="width: 100%; max-width: 100%; box-sizing: border-box; font-family: monospace, Consolas, sans-serif; font-size: 0.85rem; padding: 0.6rem; border: 1px solid #cbd5e0; border-radius: 4px; background: #fff; line-height: 1.4; resize: vertical;">${esc(csvExport)}</textarea>
+            </div>
+          </details>
+        </div>
+      </section>
     </section>
   `;
 }

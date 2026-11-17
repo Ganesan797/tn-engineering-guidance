@@ -7,6 +7,8 @@ import {
   moveDown,
   clearShortlist,
   formatShortlistSummary,
+  formatShortlistPlainText,
+  formatShortlistCsv,
   EMPTY_SHORTLIST,
   getCounsellingGuidance,
 } from "../../src/m5/index.ts";
@@ -82,6 +84,40 @@ test("M5 Shortlist Removal & Summary Export: Re-indexes remaining items cleanly"
   list = clearShortlist();
   assert.equal(list.items.length, 0);
   assert.equal(formatShortlistSummary(list), "Shortlist is empty.");
+});
+
+test("M6-T02 Choice List Print & Export Formats: Plain text & CSV export contain zero student marks", () => {
+  let list = EMPTY_SHORTLIST;
+  list = addToShortlist(list, "2006", "PSG College of Technology", "EC", "Electronics and Communication Engineering");
+  list = addToShortlist(list, "1", "College of Engineering Guindy (CEG)", "CS", "Computer Science and Engineering");
+
+  // 1. Plain text export
+  const plainText = formatShortlistPlainText(list);
+  assert.ok(plainText.includes("Tamil Nadu Engineering Admissions (TNEA) — Student Choice Preference Worksheet"));
+  assert.ok(plainText.includes("Choice #1: [College 2006] PSG College of Technology"));
+  assert.ok(plainText.includes("Branch: [EC] Electronics and Communication Engineering"));
+  assert.ok(plainText.includes("Choice #2: [College 1] College of Engineering Guindy (CEG)"));
+  assert.ok(plainText.includes("Branch: [CS] Computer Science and Engineering"));
+
+  // Verify zero private marks/community/rank in plain text
+  assert.ok(!plainText.includes("cutoff"));
+  assert.ok(!plainText.includes("community"));
+  assert.ok(!plainText.includes("rank"));
+
+  // 2. CSV export
+  const csv = formatShortlistCsv(list);
+  assert.ok(csv.startsWith("Choice,College Code,College Name,Branch Code,Branch Name"));
+  assert.ok(csv.includes('1,"2006","PSG College of Technology","EC","Electronics and Communication Engineering"'));
+  assert.ok(csv.includes('2,"1","College of Engineering Guindy (CEG)","CS","Computer Science and Engineering"'));
+
+  // Verify zero private marks/community/rank in CSV
+  assert.ok(!csv.includes("cutoff"));
+  assert.ok(!csv.includes("community"));
+  assert.ok(!csv.includes("rank"));
+
+  // 3. Empty list handling
+  assert.equal(formatShortlistPlainText(EMPTY_SHORTLIST), "Shortlist is empty.");
+  assert.equal(formatShortlistCsv(EMPTY_SHORTLIST), "Choice,College Code,College Name,Branch Code,Branch Name");
 });
 
 test("M5 Privacy Invariant: Shortlist contains zero applicant marks or private identifiers", () => {

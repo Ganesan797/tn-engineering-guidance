@@ -121,3 +121,39 @@ export function formatShortlistSummary(state: ShortlistState): string {
 
   return [header, divider, ...rows].join("\n");
 }
+
+/**
+ * Format shortlist as ink-friendly plain text for official TNEA portal reference.
+ * Zero private student marks, ranks, or community categories.
+ */
+export function formatShortlistPlainText(state: ShortlistState): string {
+  if (state.items.length === 0) return "Shortlist is empty.";
+
+  const lines: string[] = [
+    "Tamil Nadu Engineering Admissions (TNEA) — Student Choice Preference Worksheet",
+    "================================================================================",
+    "",
+  ];
+  for (const item of state.items) {
+    lines.push(`Choice #${item.order}: [College ${item.collegeCode}] ${item.collegeName}`);
+    lines.push(`           Branch: [${item.programmeCode}] ${item.programmeName}`);
+    lines.push("");
+  }
+  return lines.join("\n").trim();
+}
+
+/**
+ * Format shortlist as CSV for spreadsheet import or TNEA bulk copy.
+ * Zero private student marks, ranks, or community categories.
+ */
+export function formatShortlistCsv(state: ShortlistState): string {
+  if (state.items.length === 0) return "Choice,College Code,College Name,Branch Code,Branch Name";
+
+  const header = "Choice,College Code,College Name,Branch Code,Branch Name";
+  const rows = state.items.map((item) => {
+    const safeCol = item.collegeName.replace(/"/g, '""');
+    const safeProg = item.programmeName.replace(/"/g, '""');
+    return `${item.order},"${item.collegeCode}","${safeCol}","${item.programmeCode}","${safeProg}"`;
+  });
+  return [header, ...rows].join("\n");
+}

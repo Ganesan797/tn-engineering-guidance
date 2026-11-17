@@ -26,6 +26,7 @@
 - `T12_OWNER_SCENARIOS = ACCEPTED` (All 10 owner scenarios walk and pass with factual, non-predictive assertions; `REAL_STUDENT_VALIDATION = NOT_RUN`)
 - `M5_TECHNICAL_CLOSEOUT = COMPLETE` ([M5 Technical Closeout Report](docs/planning/m5_technical_closeout_report_v1.md))
 - `M5_FULL_ACCEPTANCE = ACCEPTED` (Comprehensive decision support with verified 2025 historical provisional allotment minimums accepted)
+- `M6_T02_PRINT_AND_EXPORT = COMPLETE` (Ink-friendly `@media print` stylesheet, official print header, print button, and copyable plain text & CSV choice worksheet export areas on Choice Order Planner tab `?tab=shortlist`; 0 student marks or categories; 11/11 focused tests PASS; real Chrome mobile overflow PASS at 320/360/390px; full test suite PASS)
 - `M6_T03_ACRONYM_SEARCH_POLISH = COMPLETE` (Added acronym aliases [CEG, MIT, GCT, PSG, CIT, TCE, KCT, Mepco, SVCE, REC, RMK, LICET, etc.] to `COHORT_55_METADATA` for all 55 colleges and expanded branch search aliases [cse, ece, eee, mech, civil, aids, aiml, it, biotech, etc.] in `src/ui/m5-guidance-view.ts`; 10/10 focused tests PASS; full test suite PASS)
 - `MERGE_STATUS = MERGED_TO_MAIN`
 - `PUBLICATION = NOT_AUTHORIZED`

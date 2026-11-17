@@ -110,6 +110,53 @@ test("M5 UI: Shortlist tab displays choice order and reordering controls without
   assert.ok(!html.includes("cutoff="), "Shortlist view must not contain cutoff in any link");
 });
 
+test("M6-T02 Choice List Print & Export: Ink-friendly @media print stylesheet, print header, print button, and export text/CSV options", () => {
+  const params = new URLSearchParams({
+    tab: "shortlist",
+    shortlist: "2006~EC,1~CS,4960~ME",
+    lang: "en",
+  });
+  const html = renderM5GuidancePage(params);
+
+  // 1. Clean print header
+  assert.ok(
+    html.includes("Tamil Nadu Engineering Admissions (TNEA) — Student Choice Preference Worksheet"),
+    "Must include official clean print worksheet header"
+  );
+  assert.ok(html.includes("print-header print-only"), "Print header must have print-header and print-only classes");
+
+  // 2. Ink-friendly print stylesheet rules
+  assert.ok(html.includes("@media print"), "Must include @media print stylesheet");
+  assert.ok(html.includes(".print-only { display: none !important; }"), "print-only must be hidden by default on screen");
+  assert.ok(html.includes(".shortlist-actions"), "Shortlist actions must be defined for hiding in print");
+
+  // 3. Print button with window.print()
+  assert.ok(html.includes('onclick="window.print()"'), "Must have print button invoking window.print()");
+  assert.ok(html.includes("Print / Save PDF"), "Must have Print / Save PDF label");
+
+  // 4. Print table columns (Choice Order, College Code, College Name, Branch Code, Branch Name)
+  assert.ok(html.includes("College Code"), "Print table must have College Code column");
+  assert.ok(html.includes("College Name"), "Print table must have College Name column");
+  assert.ok(html.includes("Branch Code"), "Print table must have Branch Code column");
+  assert.ok(html.includes("Branch Name"), "Print table must have Branch Name column");
+
+  // 5. Copyable / Exportable Text Option (Plain text and CSV)
+  assert.ok(html.includes('id="export-text"'), "Must have export plain text textarea");
+  assert.ok(html.includes('id="export-csv"'), "Must have export CSV textarea");
+  assert.ok(html.includes("Copy Plain Text"), "Must have Copy Plain Text button");
+  assert.ok(html.includes("Copy CSV"), "Must have Copy CSV button");
+
+  // Verify textarea contents contain choices in order
+  assert.ok(html.includes("Choice #1: [College 2006] PSG College of Technology"), "Plain text must contain Choice #1");
+  assert.ok(html.includes("Branch: [EC]"), "Plain text must contain Branch EC");
+  assert.ok(html.includes("Choice #2: [College 1] College of Engineering Guindy (CEG)"), "Plain text must contain Choice #2");
+  assert.ok(html.includes('1,&quot;2006&quot;,&quot;PSG College of Technology, Peelamedu, Coimbatore&quot;,&quot;EC&quot;'), "CSV textarea must contain row 1");
+
+  // 6. Privacy Invariant: Zero student marks, rank, or community categories
+  assert.ok(!html.includes("cutoff="), "Shortlist view must not contain cutoff in any link");
+  assert.ok(!html.includes("community="), "Shortlist view must not contain community in any link");
+});
+
 test("M6-T03 Acronym & Search Polish: Students can instantly search by college acronyms (CEG, MIT, GCT, PSG, CIT, etc.)", () => {
   // Test "CEG" matches College 1
   const htmlCeg = renderM5GuidancePage(new URLSearchParams({ q: "CEG" }));
