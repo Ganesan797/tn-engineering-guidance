@@ -110,6 +110,60 @@ test("M5 UI: Shortlist tab displays choice order and reordering controls without
   assert.ok(!html.includes("cutoff="), "Shortlist view must not contain cutoff in any link");
 });
 
+test("M6-T03 Acronym & Search Polish: Students can instantly search by college acronyms (CEG, MIT, GCT, PSG, CIT, etc.)", () => {
+  // Test "CEG" matches College 1
+  const htmlCeg = renderM5GuidancePage(new URLSearchParams({ q: "CEG" }));
+  assert.ok(htmlCeg.includes("College of Engineering Guindy (CEG)"));
+  assert.ok(!htmlCeg.includes("Government College of Technology, Coimbatore"));
+
+  // Test "MIT" matches College 4
+  const htmlMit = renderM5GuidancePage(new URLSearchParams({ q: "MIT" }));
+  assert.ok(htmlMit.includes("Madras Institute of Technology (MIT)"));
+
+  // Test "GCT" matches College 2005
+  const htmlGct = renderM5GuidancePage(new URLSearchParams({ q: "GCT" }));
+  assert.ok(htmlGct.includes("Government College of Technology, Coimbatore"));
+
+  // Test "PSG" matches College 2006 and 2377
+  const htmlPsg = renderM5GuidancePage(new URLSearchParams({ q: "PSG" }));
+  assert.ok(htmlPsg.includes("PSG College of Technology"));
+  assert.ok(htmlPsg.includes("PSG Institute of Technology and Applied Research"));
+
+  // Test "CIT" matches College 2007 and 1399
+  const htmlCit = renderM5GuidancePage(new URLSearchParams({ q: "CIT" }));
+  assert.ok(htmlCit.includes("Coimbatore Institute of Technology"));
+  assert.ok(htmlCit.includes("Chennai Institute of Technology"));
+
+  // Test "TCE" matches College 5008
+  const htmlTce = renderM5GuidancePage(new URLSearchParams({ q: "TCE" }));
+  assert.ok(htmlTce.includes("Thiagarajar College of Engineering"));
+
+  // Test "KCT" matches College 2712
+  const htmlKct = renderM5GuidancePage(new URLSearchParams({ q: "KCT" }));
+  assert.ok(htmlKct.includes("Kumaraguru College of Technology"));
+
+  // Test "Mepco" matches College 4960
+  const htmlMepco = renderM5GuidancePage(new URLSearchParams({ q: "Mepco" }));
+  assert.ok(htmlMepco.includes("Mepco Schlenk Engineering College"));
+
+  // Test "SVCE" matches College 1219
+  const htmlSvce = renderM5GuidancePage(new URLSearchParams({ q: "SVCE" }));
+  assert.ok(htmlSvce.includes("Sri Venkateswara College of Engineering"));
+
+  // Test "REC" matches College 1211
+  const htmlRec = renderM5GuidancePage(new URLSearchParams({ q: "REC" }));
+  assert.ok(htmlRec.includes("Rajalakshmi Engineering College"));
+
+  // Test "LICET" matches College 1450
+  const htmlLicet = renderM5GuidancePage(new URLSearchParams({ q: "LICET" }));
+  assert.ok(htmlLicet.includes("Loyola-ICAM College of Engineering and Technology (LICET)"));
+
+  // Test acronym + branch combination: "CEG CSE" matches CEG CS but not CEG ME
+  const htmlCegCse = renderM5GuidancePage(new URLSearchParams({ q: "CEG CSE" }));
+  assert.ok(htmlCegCse.includes("College of Engineering Guindy (CEG)"));
+  assert.ok(htmlCegCse.includes("COMPUTER SCIENCE AND ENGINEERING"));
+});
+
 test("M5 UI: Counselling Guidance tab displays factual TNEA procedures without unsupported claims", () => {
   const params = new URLSearchParams({ tab: "counselling" });
   const html = renderM5GuidancePage(params);

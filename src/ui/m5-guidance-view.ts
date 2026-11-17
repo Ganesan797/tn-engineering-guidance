@@ -21,75 +21,123 @@ const esc = (v: string) =>
     .replaceAll("'", "&#39;");
 
 // College cohort metadata for the 55 approved institutions
-interface CollegeMeta {
+export interface CollegeMeta {
   code: string;
   name: string;
   type: "GOVERNMENT" | "UNIVERSITY" | "AIDED" | "CONSTITUENT" | "SFC";
   district: string;
+  aliases: readonly string[];
 }
 
-const COHORT_55_METADATA: Record<string, CollegeMeta> = {
+export const COHORT_55_METADATA: Record<string, CollegeMeta> = {
   // 11 Govt
-  "1516": { code: "1516", name: "Thanthai Periyar Government Institute of Technology, Vellore", type: "GOVERNMENT", district: "Vellore" },
-  "2005": { code: "2005", name: "Government College of Technology, Coimbatore", type: "GOVERNMENT", district: "Coimbatore" },
-  "2369": { code: "2369", name: "Government College of Engineering, Dharmapuri", type: "GOVERNMENT", district: "Dharmapuri" },
-  "2603": { code: "2603", name: "Government College of Engineering, Salem", type: "GOVERNMENT", district: "Salem" },
-  "2615": { code: "2615", name: "Government College of Engineering, Srirangam, Tiruchirappalli", type: "GOVERNMENT", district: "Tiruchirappalli" },
-  "2709": { code: "2709", name: "Government College of Engineering, Erode (IRTT)", type: "GOVERNMENT", district: "Erode" },
-  "3464": { code: "3464", name: "Government College of Engineering, Thanjavur", type: "GOVERNMENT", district: "Thanjavur" },
-  "3465": { code: "3465", name: "Government College of Engineering, Gandharvakottai", type: "GOVERNMENT", district: "Pudukkottai" },
-  "4974": { code: "4974", name: "Government College of Engineering, Tirunelveli", type: "GOVERNMENT", district: "Tirunelveli" },
-  "5009": { code: "5009", name: "Government College of Engineering, Bodinayakkanur", type: "GOVERNMENT", district: "Theni" },
-  "5901": { code: "5901", name: "Alagappa Chettiar Government College of Engineering and Technology, Karaikudi", type: "GOVERNMENT", district: "Sivaganga" },
+  "1516": { code: "1516", name: "Thanthai Periyar Government Institute of Technology, Vellore", type: "GOVERNMENT", district: "Vellore", aliases: ["TPGIT", "TPGIT Vellore"] },
+  "2005": { code: "2005", name: "Government College of Technology, Coimbatore", type: "GOVERNMENT", district: "Coimbatore", aliases: ["GCT", "GCT Coimbatore"] },
+  "2369": { code: "2369", name: "Government College of Engineering, Dharmapuri", type: "GOVERNMENT", district: "Dharmapuri", aliases: ["GCED", "GCE Dharmapuri"] },
+  "2603": { code: "2603", name: "Government College of Engineering, Salem", type: "GOVERNMENT", district: "Salem", aliases: ["GCES", "GCE Salem"] },
+  "2615": { code: "2615", name: "Government College of Engineering, Srirangam, Tiruchirappalli", type: "GOVERNMENT", district: "Tiruchirappalli", aliases: ["GCE Srirangam", "GCE Trichy", "GCET"] },
+  "2709": { code: "2709", name: "Government College of Engineering, Erode (IRTT)", type: "GOVERNMENT", district: "Erode", aliases: ["IRTT", "GCE Erode", "IRT Tech"] },
+  "3464": { code: "3464", name: "Government College of Engineering, Thanjavur", type: "GOVERNMENT", district: "Thanjavur", aliases: ["GCET", "GCE Thanjavur"] },
+  "3465": { code: "3465", name: "Government College of Engineering, Gandharvakottai", type: "GOVERNMENT", district: "Pudukkottai", aliases: ["GCE Gandharvakottai", "GCE Pudukkottai"] },
+  "4974": { code: "4974", name: "Government College of Engineering, Tirunelveli", type: "GOVERNMENT", district: "Tirunelveli", aliases: ["GCETLY", "GCE Tirunelveli", "GCE Nellai"] },
+  "5009": { code: "5009", name: "Government College of Engineering, Bodinayakkanur", type: "GOVERNMENT", district: "Theni", aliases: ["GCE Bodinayakkanur", "GCE Bodi", "GCE Theni"] },
+  "5901": { code: "5901", name: "Alagappa Chettiar Government College of Engineering and Technology, Karaikudi", type: "GOVERNMENT", district: "Sivaganga", aliases: ["ACGCET", "ACCET", "ACCET Karaikudi"] },
   // 5 Univ Depts
-  "1": { code: "1", name: "College of Engineering Guindy (CEG), Anna University, Chennai", type: "UNIVERSITY", district: "Chennai" },
-  "2": { code: "2", name: "Alagappa College of Technology (ACT), Anna University, Chennai", type: "UNIVERSITY", district: "Chennai" },
-  "3": { code: "3", name: "School of Architecture and Planning (SAP), Anna University, Chennai", type: "UNIVERSITY", district: "Chennai" },
-  "4": { code: "4", name: "Madras Institute of Technology (MIT), Anna University, Chromepet", type: "UNIVERSITY", district: "Chengalpattu" },
-  "5": { code: "5", name: "Faculty of Engineering & Technology, Annamalai University, Chidambaram", type: "UNIVERSITY", district: "Cuddalore" },
+  "1": { code: "1", name: "College of Engineering Guindy (CEG), Anna University, Chennai", type: "UNIVERSITY", district: "Chennai", aliases: ["CEG", "CEG Guindy", "Anna University Guindy"] },
+  "2": { code: "2", name: "Alagappa College of Technology (ACT), Anna University, Chennai", type: "UNIVERSITY", district: "Chennai", aliases: ["ACT", "ACTech", "AC Tech"] },
+  "3": { code: "3", name: "School of Architecture and Planning (SAP), Anna University, Chennai", type: "UNIVERSITY", district: "Chennai", aliases: ["SAP", "SAP Chennai"] },
+  "4": { code: "4", name: "Madras Institute of Technology (MIT), Anna University, Chromepet", type: "UNIVERSITY", district: "Chengalpattu", aliases: ["MIT", "MIT Chromepet", "MIT Chennai"] },
+  "5": { code: "5", name: "Faculty of Engineering & Technology, Annamalai University, Chidambaram", type: "UNIVERSITY", district: "Cuddalore", aliases: ["FEAT", "FEAT Annamalai", "Annamalai University"] },
   // 3 Govt Aided
-  "2006": { code: "2006", name: "PSG College of Technology, Peelamedu, Coimbatore", type: "AIDED", district: "Coimbatore" },
-  "2007": { code: "2007", name: "Coimbatore Institute of Technology, Civil Aerodrome Post, Coimbatore", type: "AIDED", district: "Coimbatore" },
-  "5008": { code: "5008", name: "Thiagarajar College of Engineering, Madurai", type: "AIDED", district: "Madurai" },
+  "2006": { code: "2006", name: "PSG College of Technology, Peelamedu, Coimbatore", type: "AIDED", district: "Coimbatore", aliases: ["PSG", "PSG Tech", "PSGCT"] },
+  "2007": { code: "2007", name: "Coimbatore Institute of Technology, Civil Aerodrome Post, Coimbatore", type: "AIDED", district: "Coimbatore", aliases: ["CIT", "CIT Coimbatore"] },
+  "5008": { code: "5008", name: "Thiagarajar College of Engineering, Madurai", type: "AIDED", district: "Madurai", aliases: ["TCE", "TCE Madurai", "Thiagarajar"] },
   // 16 Constituent
-  "1013": { code: "1013", name: "University College of Engineering, Villupuram", type: "CONSTITUENT", district: "Villupuram" },
-  "1014": { code: "1014", name: "University College of Engineering, Tindivanam", type: "CONSTITUENT", district: "Villupuram" },
-  "1015": { code: "1015", name: "University College of Engineering, Arni", type: "CONSTITUENT", district: "Tiruvannamalai" },
-  "1026": { code: "1026", name: "University College of Engineering, Kancheepuram", type: "CONSTITUENT", district: "Kancheepuram" },
-  "2025": { code: "2025", name: "Anna University Regional Campus, Coimbatore", type: "CONSTITUENT", district: "Coimbatore" },
-  "3011": { code: "3011", name: "University College of Engineering, Tiruchirappalli (BIT Campus)", type: "CONSTITUENT", district: "Tiruchirappalli" },
-  "3016": { code: "3016", name: "University College of Engineering, Ariyalur", type: "CONSTITUENT", district: "Ariyalur" },
-  "3018": { code: "3018", name: "University College of Engineering, Nagercoil", type: "CONSTITUENT", district: "Kanyakumari" },
-  "3019": { code: "3019", name: "University College of Engineering, Panruti", type: "CONSTITUENT", district: "Cuddalore" },
-  "3021": { code: "3021", name: "University College of Engineering, Pattukkottai", type: "CONSTITUENT", district: "Thanjavur" },
-  "4020": { code: "4020", name: "Anna University Regional Campus, Tirunelveli", type: "CONSTITUENT", district: "Tirunelveli" },
-  "4023": { code: "4023", name: "University College of Engineering, Ramanathapuram", type: "CONSTITUENT", district: "Ramanathapuram" },
-  "4024": { code: "4024", name: "University College of Engineering, Dindigul", type: "CONSTITUENT", district: "Dindigul" },
-  "5010": { code: "5010", name: "Anna University Regional Campus, Madurai", type: "CONSTITUENT", district: "Madurai" },
-  "5017": { code: "5017", name: "University College of Engineering, Thirukkuvalai", type: "CONSTITUENT", district: "Nagapattinam" },
-  "5022": { code: "5022", name: "University College of Engineering, Thoothukudi", type: "CONSTITUENT", district: "Thoothukudi" },
+  "1013": { code: "1013", name: "University College of Engineering, Villupuram", type: "CONSTITUENT", district: "Villupuram", aliases: ["UCEV", "UCE Villupuram"] },
+  "1014": { code: "1014", name: "University College of Engineering, Tindivanam", type: "CONSTITUENT", district: "Villupuram", aliases: ["UCET", "UCE Tindivanam"] },
+  "1015": { code: "1015", name: "University College of Engineering, Arni", type: "CONSTITUENT", district: "Tiruvannamalai", aliases: ["UCEA", "UCE Arni"] },
+  "1026": { code: "1026", name: "University College of Engineering, Kancheepuram", type: "CONSTITUENT", district: "Kancheepuram", aliases: ["UCEK", "UCE Kancheepuram", "UCE Kanchi"] },
+  "2025": { code: "2025", name: "Anna University Regional Campus, Coimbatore", type: "CONSTITUENT", district: "Coimbatore", aliases: ["AURCC", "AURC Coimbatore"] },
+  "3011": { code: "3011", name: "University College of Engineering, Tiruchirappalli (BIT Campus)", type: "CONSTITUENT", district: "Tiruchirappalli", aliases: ["BIT", "BIT Campus", "UCE Trichy"] },
+  "3016": { code: "3016", name: "University College of Engineering, Ariyalur", type: "CONSTITUENT", district: "Ariyalur", aliases: ["UCE Ariyalur"] },
+  "3018": { code: "3018", name: "University College of Engineering, Nagercoil", type: "CONSTITUENT", district: "Kanyakumari", aliases: ["UCEN", "UCE Nagercoil"] },
+  "3019": { code: "3019", name: "University College of Engineering, Panruti", type: "CONSTITUENT", district: "Cuddalore", aliases: ["UCE Panruti"] },
+  "3021": { code: "3021", name: "University College of Engineering, Pattukkottai", type: "CONSTITUENT", district: "Thanjavur", aliases: ["UCE Pattukkottai"] },
+  "4020": { code: "4020", name: "Anna University Regional Campus, Tirunelveli", type: "CONSTITUENT", district: "Tirunelveli", aliases: ["AURCT", "AURC Tirunelveli"] },
+  "4023": { code: "4023", name: "University College of Engineering, Ramanathapuram", type: "CONSTITUENT", district: "Ramanathapuram", aliases: ["UCER", "UCE Ramanathapuram", "UCE Ramnad"] },
+  "4024": { code: "4024", name: "University College of Engineering, Dindigul", type: "CONSTITUENT", district: "Dindigul", aliases: ["UCED", "UCE Dindigul"] },
+  "5010": { code: "5010", name: "Anna University Regional Campus, Madurai", type: "CONSTITUENT", district: "Madurai", aliases: ["AURCM", "AURC Madurai"] },
+  "5017": { code: "5017", name: "University College of Engineering, Thirukkuvalai", type: "CONSTITUENT", district: "Nagapattinam", aliases: ["UCE Thirukkuvalai"] },
+  "5022": { code: "5022", name: "University College of Engineering, Thoothukudi", type: "CONSTITUENT", district: "Thoothukudi", aliases: ["UCE Thoothukudi", "UCE Tuticorin"] },
   // 20 SFC
-  "1113": { code: "1113", name: "R.M.K. Engineering College, Gummidipoondi, Tiruvallur", type: "SFC", district: "Tiruvallur" },
-  "1120": { code: "1120", name: "Velammal Engineering College, Ambattur, Chennai", type: "SFC", district: "Chennai" },
-  "1211": { code: "1211", name: "Rajalakshmi Engineering College, Thandalam, Sriperumbudur", type: "SFC", district: "Kancheepuram" },
-  "1219": { code: "1219", name: "Sri Venkateswara College of Engineering, Pennalur, Sriperumbudur", type: "SFC", district: "Kancheepuram" },
-  "1304": { code: "1304", name: "Easwari Engineering College, Ramapuram, Chennai", type: "SFC", district: "Chennai" },
-  "1317": { code: "1317", name: "St. Joseph's College of Engineering, OMR, Chennai", type: "SFC", district: "Chennai" },
-  "1399": { code: "1399", name: "Chennai Institute of Technology, Kundrathur, Chennai", type: "SFC", district: "Chennai" },
-  "1419": { code: "1419", name: "Sri Sai Ram Engineering College, West Tambaram, Chennai", type: "SFC", district: "Kancheepuram" },
-  "1422": { code: "1422", name: "SRM Valliammai Engineering College, Kattankulathur", type: "SFC", district: "Chengalpattu" },
-  "1450": { code: "1450", name: "Loyola-ICAM College of Engineering and Technology (LICET), Chennai", type: "SFC", district: "Chennai" },
-  "2377": { code: "2377", name: "PSG Institute of Technology and Applied Research, Neelambur, Coimbatore", type: "SFC", district: "Coimbatore" },
-  "2607": { code: "2607", name: "K.S. Rangasamy College of Technology, Tiruchengode, Namakkal", type: "SFC", district: "Namakkal" },
-  "2618": { code: "2618", name: "Sona College of Technology, Suramangalam, Salem", type: "SFC", district: "Salem" },
-  "2702": { code: "2702", name: "Bannari Amman Institute of Technology, Sathyamangalam, Erode", type: "SFC", district: "Erode" },
-  "2711": { code: "2711", name: "Kongu Engineering College, Perundurai, Erode", type: "SFC", district: "Erode" },
-  "2712": { code: "2712", name: "Kumaraguru College of Technology, Chinnavedampatti, Coimbatore", type: "SFC", district: "Coimbatore" },
-  "2718": { code: "2718", name: "Sri Krishna College of Engineering and Technology, Kuniamuthur, Coimbatore", type: "SFC", district: "Coimbatore" },
-  "2719": { code: "2719", name: "Sri Ramakrishna Engineering College, Vattamalaipalayam, Coimbatore", type: "SFC", district: "Coimbatore" },
-  "4960": { code: "4960", name: "Mepco Schlenk Engineering College, Sivakasi, Virudhunagar", type: "SFC", district: "Virudhunagar" },
-  "5986": { code: "5986", name: "Velammal College of Engineering and Technology, Madurai", type: "SFC", district: "Madurai" },
+  "1113": { code: "1113", name: "R.M.K. Engineering College, Gummidipoondi, Tiruvallur", type: "SFC", district: "Tiruvallur", aliases: ["RMK", "RMKEC"] },
+  "1120": { code: "1120", name: "Velammal Engineering College, Ambattur, Chennai", type: "SFC", district: "Chennai", aliases: ["VEC", "VEC Chennai"] },
+  "1211": { code: "1211", name: "Rajalakshmi Engineering College, Thandalam, Sriperumbudur", type: "SFC", district: "Kancheepuram", aliases: ["REC", "REC Chennai", "Rajalakshmi"] },
+  "1219": { code: "1219", name: "Sri Venkateswara College of Engineering, Pennalur, Sriperumbudur", type: "SFC", district: "Kancheepuram", aliases: ["SVCE", "SVCE Sriperumbudur"] },
+  "1304": { code: "1304", name: "Easwari Engineering College, Ramapuram, Chennai", type: "SFC", district: "Chennai", aliases: ["EEC", "Easwari"] },
+  "1317": { code: "1317", name: "St. Joseph's College of Engineering, OMR, Chennai", type: "SFC", district: "Chennai", aliases: ["SJCE", "St Josephs", "St Joseph"] },
+  "1399": { code: "1399", name: "Chennai Institute of Technology, Kundrathur, Chennai", type: "SFC", district: "Chennai", aliases: ["CIT", "CIT Chennai", "CIT Kundrathur"] },
+  "1419": { code: "1419", name: "Sri Sai Ram Engineering College, West Tambaram, Chennai", type: "SFC", district: "Kancheepuram", aliases: ["SEC", "Sairam", "Sai Ram"] },
+  "1422": { code: "1422", name: "SRM Valliammai Engineering College, Kattankulathur", type: "SFC", district: "Chengalpattu", aliases: ["SRMVEC", "Valliammai"] },
+  "1450": { code: "1450", name: "Loyola-ICAM College of Engineering and Technology (LICET), Chennai", type: "SFC", district: "Chennai", aliases: ["LICET", "Loyola ICAM", "Loyola"] },
+  "2377": { code: "2377", name: "PSG Institute of Technology and Applied Research, Neelambur, Coimbatore", type: "SFC", district: "Coimbatore", aliases: ["PSG", "PSG iTech", "PSGITECH", "PSG IT"] },
+  "2607": { code: "2607", name: "K.S. Rangasamy College of Technology, Tiruchengode, Namakkal", type: "SFC", district: "Namakkal", aliases: ["KSRCT", "KSR"] },
+  "2618": { code: "2618", name: "Sona College of Technology, Suramangalam, Salem", type: "SFC", district: "Salem", aliases: ["SCT", "Sona"] },
+  "2702": { code: "2702", name: "Bannari Amman Institute of Technology, Sathyamangalam, Erode", type: "SFC", district: "Erode", aliases: ["BIT", "BIT Sathy", "Bannari", "BAIT"] },
+  "2711": { code: "2711", name: "Kongu Engineering College, Perundurai, Erode", type: "SFC", district: "Erode", aliases: ["KEC", "Kongu"] },
+  "2712": { code: "2712", name: "Kumaraguru College of Technology, Chinnavedampatti, Coimbatore", type: "SFC", district: "Coimbatore", aliases: ["KCT", "Kumaraguru"] },
+  "2718": { code: "2718", name: "Sri Krishna College of Engineering and Technology, Kuniamuthur, Coimbatore", type: "SFC", district: "Coimbatore", aliases: ["SKCET", "Krishna"] },
+  "2719": { code: "2719", name: "Sri Ramakrishna Engineering College, Vattamalaipalayam, Coimbatore", type: "SFC", district: "Coimbatore", aliases: ["SREC", "Ramakrishna"] },
+  "4960": { code: "4960", name: "Mepco Schlenk Engineering College, Sivakasi, Virudhunagar", type: "SFC", district: "Virudhunagar", aliases: ["Mepco", "MSEC"] },
+  "5986": { code: "5986", name: "Velammal College of Engineering and Technology, Madurai", type: "SFC", district: "Madurai", aliases: ["VCET", "VCET Madurai"] },
 };
+
+export const SEARCH_ALIASES: Record<string, string> = {
+  engg: "engineering",
+  eng: "engineering",
+  inst: "institute",
+  univ: "university",
+  dept: "department",
+  col: "college",
+  cse: "computer science",
+  ece: "electronics and communication",
+  eee: "electrical and electronics",
+  mech: "mechanical",
+  civil: "civil",
+  aids: "artificial intelligence",
+  aiml: "machine learning",
+  ai: "artificial intelligence",
+  ml: "machine learning",
+  ds: "data science",
+  it: "information technology",
+  biotech: "biotechnology",
+  bme: "biomedical",
+  aero: "aeronautical",
+  auto: "automobile",
+  govt: "government",
+};
+
+export function matchesOfferingSearch(
+  college: CollegeMeta,
+  off: GovernedOffering,
+  query: string
+): boolean {
+  if (!query) return true;
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+
+  const aliasStr = (college.aliases ?? []).join(" ");
+  const directText = `${college.code} ${college.name} ${aliasStr} ${off.programmeCode} ${off.programmeName} ${college.district}`.toLowerCase();
+  if (directText.includes(q)) return true;
+
+  const rawTokens = q.split(/[\s,+/]+/).filter(Boolean);
+  if (rawTokens.length > 0) {
+    const normalizedTokens = rawTokens.map((tok) => SEARCH_ALIASES[tok] || tok);
+    if (normalizedTokens.every((tok) => directText.includes(tok))) return true;
+  }
+
+  return false;
+}
 
 export interface M5GuidanceRenderOptions {
   studentCutoff?: number | null;
@@ -153,14 +201,14 @@ export function renderM5GuidancePage(
       name: `College ${off.collegeCode}`,
       type: "GOVERNMENT",
       district: "Tamil Nadu",
+      aliases: [],
     };
 
     // Filter by type
     if (typeFilter !== "all" && college.type !== typeFilter) continue;
 
     // Filter by search query
-    const searchText = `${college.code} ${college.name} ${off.programmeCode} ${off.programmeName} ${college.district}`.toLowerCase();
-    if (query && !searchText.includes(query)) continue;
+    if (query && !matchesOfferingSearch(college, off, query)) continue;
 
     const result = compareOffering({
       studentCutoff,
