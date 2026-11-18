@@ -146,7 +146,7 @@ const server = createServer(async (request, response) => {
   language = url.searchParams.get("lang") === "en" ? "en" : "ta";
   const entry = entryStateFromUrl(url);
   if (request.method === "GET" && url.pathname === "/journey/questions") {
-    const page = renderQuestionCollection(questions, url.searchParams.get("id"), url.searchParams.get("evidence"), language, url.searchParams.get("topic"));
+    const page = renderQuestionCollection(questions, url.searchParams.get("id"), url.searchParams.get("evidence"), language, url.searchParams.get("topic"), url.searchParams.get("review") === "1");
     send(response, page.status, page.html);
     return;
   }
@@ -158,11 +158,12 @@ const server = createServer(async (request, response) => {
       const rawCutoff = values.get("cutoff");
       const studentCutoff = rawCutoff !== null && rawCutoff.trim() !== "" ? Number(rawCutoff) : null;
       const quota = values.get("quota") === "GOVT_SCHOOL_7_5" ? "GOVT_SCHOOL_7_5" : "GENERAL_ACADEMIC";
-      const community = values.get("community") || "OC";
+      const rawCommunity = values.get("community");
+      const communitySelected = values.get("community_selected") === "1" || (rawCommunity !== null && rawCommunity.trim() !== "");
+      const community = rawCommunity || "OC";
       const rawRound = values.get("round");
-      const round = rawRound && ["ROUND_1", "ROUND_2", "ROUND_3"].includes(rawRound)
-        ? rawRound
-        : (quota === "GOVT_SCHOOL_7_5" ? "ROUND_1" : "ROUND_2");
+      const validRounds = quota === "GOVT_SCHOOL_7_5" ? ["ROUND_1", "ROUND_2"] : ["ROUND_2", "ROUND_3"];
+      const round = rawRound && validRounds.includes(rawRound) ? rawRound : validRounds[0];
 
       // Non-sensitive directory filtering parameters from POST body
       const effectiveParams = new URLSearchParams(url.searchParams);
@@ -171,7 +172,7 @@ const server = createServer(async (request, response) => {
         if (val !== null) effectiveParams.set(key, val);
       }
 
-      send(response, 200, renderM5GuidancePage(effectiveParams, { studentCutoff, quota, community, round }));
+      send(response, 200, renderM5GuidancePage(effectiveParams, { studentCutoff, quota, community, round, communitySelected }));
       return;
     }
     if (request.method === "GET") {
@@ -190,7 +191,7 @@ const server = createServer(async (request, response) => {
     const step = url.searchParams.get("step");
     if (step === "explore") { send(response, 200, renderM4Exploration(url.searchParams)); return; }
     const page = step === "study" || step === "compare" || step === "route" || step === "prepare" || step === "check" ? step : "awareness";
-    send(response, 200, renderM2Journey(page, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY, undefined, presentation, language, { ownerPreview: ownerDirectory !== null }));
+    send(response, 200, renderM2Journey(page, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, EMPTY_JOURNEY, undefined, presentation, language, { ownerPreview: ownerDirectory !== null, review: url.searchParams.get("review") === "1" }));
     return;
   }
   if (request.method === "POST" && url.pathname === "/journey") {
@@ -200,15 +201,16 @@ const server = createServer(async (request, response) => {
       const values = new URLSearchParams(body);
       const state = parseJourneyState(values.get("state") ?? "");
       validatedState = state;
+      const reviewMode = url.searchParams.get("review") === "1";
       const navigate = values.get("navigate");
       if (navigate === "awareness" || navigate === "study" || navigate === "compare" || navigate === "route" || navigate === "prepare" || navigate === "check") {
-        send(response, 200, renderM2Journey(navigate, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, state, undefined, presentation, language, { ownerPreview: ownerDirectory !== null }));
+        send(response, 200, renderM2Journey(navigate, awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, state, undefined, presentation, language, { ownerPreview: ownerDirectory !== null, review: reviewMode }));
         return;
       }
       const next = values.has("edit") ? editJourneyAnswer(state, values.get("edit"))
         : values.get("retry") === "1" ? retryUnknown(state)
         : answerJourneyQuestion(state, values.get("unknown") === "1" ? "unknown" : values.get("answer") ?? "");
-      send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, next, undefined, presentation, language, { ownerPreview: ownerDirectory !== null }));
+      send(response, 200, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, next, undefined, presentation, language, { ownerPreview: ownerDirectory !== null, review: reviewMode }));
     } catch (err) {
       if (err instanceof PayloadTooLargeError) {
         sendPayloadTooLarge(response, language);
@@ -221,7 +223,7 @@ const server = createServer(async (request, response) => {
         : CHECK_COPY.choiceError[copyIndex];
       send(response, 400, renderM2Journey("check", awareness, reviewedAdmissionBatch, reviewedAwarenessBatch, runtime, validatedState ?? EMPTY_JOURNEY,
         validatedState ? `${instruction} ${CHECK_COPY.errorHelp[copyIndex]}`
-          : CHECK_COPY.lostAnswers[copyIndex], presentation, language, { ownerPreview: ownerDirectory !== null }));
+          : CHECK_COPY.lostAnswers[copyIndex], presentation, language, { ownerPreview: ownerDirectory !== null, review: url.searchParams.get("review") === "1" }));
     }
     return;
   }

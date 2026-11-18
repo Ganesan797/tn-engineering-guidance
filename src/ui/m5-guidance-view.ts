@@ -252,6 +252,7 @@ export interface M5GuidanceRenderOptions {
   quota?: QuotaStream;
   community?: CommunityCategory;
   round?: AllotmentRound;
+  communitySelected?: boolean;
 }
 
 export function renderM5GuidancePage(
@@ -281,6 +282,8 @@ export function renderM5GuidancePage(
     ["OC", "BC", "BCM", "MBC", "SC", "SCA", "ST"].includes(inputState.community)
       ? (inputState.community as CommunityCategory)
       : "OC";
+
+  const communitySelected = inputState.communitySelected ?? inputState.community !== undefined;
 
   const round: AllotmentRound =
     inputState.round && ["ROUND_1", "ROUND_2", "ROUND_3"].includes(inputState.round)
@@ -350,14 +353,20 @@ export function renderM5GuidancePage(
   const t = (taStr: string, enStr: string) => (lang === "ta" ? taStr : enStr);
 
   // Language toggle parameters (strictly non-sensitive navigation parameters only)
-  const langToggleParams = new URLSearchParams();
-  langToggleParams.set("tab", activeTab);
-  langToggleParams.set("lang", lang === "en" ? "ta" : "en");
-  if (query) langToggleParams.set("q", query);
-  if (typeFilter !== "all") langToggleParams.set("type", typeFilter);
-  if (rawShortlist) langToggleParams.set("shortlist", rawShortlist);
+  const makeLangUrl = (target: SupportedLanguage) => {
+    const p = new URLSearchParams();
+    p.set("tab", activeTab);
+    p.set("lang", target);
+    if (query) p.set("q", query);
+    if (typeFilter !== "all") p.set("type", typeFilter);
+    if (rawShortlist) p.set("shortlist", rawShortlist);
+    return `?${p.toString()}`;
+  };
 
-  const langControl = `<a class="lang-switch" href="?${langToggleParams.toString()}">${lang === "en" ? "தமிழ்" : "English"}</a>`;
+  const langControl =
+    lang === "ta"
+      ? `<span lang="ta" aria-current="page">தமிழ்</span><a class="lang-switch" lang="en" href="${esc(makeLangUrl("en"))}">English</a>`
+      : `<a class="lang-switch" lang="ta" href="${esc(makeLangUrl("ta"))}">தமிழ்</a><span lang="en" aria-current="page">English</span>`;
 
   return `<!DOCTYPE html>
 <html lang="${lang}">
@@ -510,6 +519,7 @@ export function renderM5GuidancePage(
             quota,
             community,
             round,
+            communitySelected,
             query,
             typeFilter,
             evaluatedRows,
@@ -529,6 +539,7 @@ function renderComparisonTab(
   quota: QuotaStream,
   community: CommunityCategory,
   round: AllotmentRound,
+  communitySelected: boolean,
   query: string,
   typeFilter: string,
   rows: Array<{ college: CollegeMeta; offering: GovernedOffering; result: ComparisonResult }>,
@@ -550,21 +561,45 @@ function renderComparisonTab(
   const historicalDisclosure = approvedHistoricalResult?.round
     ? copy.formatDisclosure(approvedHistoricalResult.round)
     : t(
-        "செயலியில் பயன்படுத்த அங்கீகரிக்கப்பட்ட வரலாற்று ஆதாரம் தற்போது கிடைக்கவில்லை. கண்டறியப்பட்ட குறைந்தபட்ச மதிப்பெண் அல்லது சுற்று-குறிப்பிட்ட முடிவு எதுவும் காட்டப்படவில்லை.",
-        "Historical comparison evidence is not currently approved for runtime use. No observed minimum or round-specific result is displayed."
+        "தேர்ந்தெடுத்த ஒதுக்கீடு / பிரிவு / சுற்றிற்கு இந்தப் பட்டியலில் அங்கீகரிக்கப்பட்ட 2025 வரலாற்றுத் தரவு கிடைக்கவில்லை. தரவு இல்லாமை கல்லூரி அல்லது படிப்பு இல்லை என்பதைக் குறிக்காது.",
+        "No approved 2025 historical observation is available for the currently displayed offerings under the selected quota, community, and round. Missing historical data does not mean the college or branch is unavailable."
       );
+  const availableCount = rows.filter(
+    (r) => r.result.status === "AVAILABLE" || r.result.status === "STUDENT_CUTOFF_MISSING"
+  ).length;
 
   return `
     <section>
+      <p class="scope-note screen-only" style="margin: 0 0 0.85rem; padding: 0.65rem 0.9rem; background: #f8fafc; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.88rem; color: #2d3748; line-height: 1.5;">
+        ${t(
+          `<strong>வரம்பு:</strong> இந்தப் பக்கத்தில் 2025 வரலாற்றுத் தரவு ஒப்பீட்டிற்கு அங்கீகரிக்கப்பட்ட <strong>55 கல்லூரிகள் (555 படிப்புகள்)</strong> உள்ளன. தமிழ்நாட்டின் முழு 389 கல்லூரிகள் பட்டியலை மதிப்பெண் இன்றி ஆராய <a href="/colleges?lang=ta">கல்லூரிகள் பட்டியலைப் பார்க்கவும்</a>.`,
+          `<strong>Dataset scope:</strong> This comparison workspace covers the <strong>55 approved colleges (555 offerings)</strong> with governed 2025 historical evidence. To browse the broader 389-college 2026 TNEA listing without marks, visit the <a href="/colleges?lang=en">Colleges Directory</a>.`
+        )}
+      </p>
+
+      ${
+        studentCutoff !== null && !communitySelected
+          ? `
+      <aside class="community-prompt screen-only" role="status" style="margin: 0 0 1rem; padding: 0.9rem 1rem; background: #fffbeb; border: 1.5px solid #d69e2e; border-radius: 8px; color: #744210; font-size: 0.92rem; line-height: 1.55;">
+        <strong>${t("அடுத்த படி: உங்கள் இட ஒதுக்கீட்டுப் பிரிவைத் (Community) தேர்ந்தெடுங்கள்", "Next Step: Select Your Reservation Community Category")}</strong><br>
+        ${t(
+          `உங்கள் கட்-ஆஃப் (<strong>${studentCutoff}</strong>) பாதுகாப்பாகக் கொண்டுவரப்பட்டது (இணைய முகவரியில் சேமிக்கப்படவில்லை). கீழே உங்கள் உண்மையான இட ஒதுக்கீட்டுப் பிரிவு (OC / BC / BCM / MBC / SC / SCA / ST) மற்றும் ஒதுக்கீட்டைத் (பொதுக் கல்வி அல்லது 7.5% அரசுப் பள்ளி) தேர்ந்தெடுத்து <strong>'தேடு &amp; ஒப்பிடு'</strong> என்பதை அழுத்தவும்.`,
+          `Your cutoff (<strong>${studentCutoff}</strong>) was transferred safely in memory (not stored in the URL). Select your applicable Reservation Community Category (OC / BC / BCM / MBC / SC / SCA / ST) and Admission Quota below, then click <strong>'Search &amp; Compare'</strong>.`
+        )}
+      </aside>`
+          : ""
+      }
+
       <!-- Form method is POST to prevent sensitive student marks from appearing in GET query strings or browser history -->
       <form method="POST" action="/m5-guidance" class="form-grid" role="search" aria-label="Cutoff comparison form">
         <input type="hidden" name="tab" value="comparison">
         <input type="hidden" name="lang" value="${lang}">
         <input type="hidden" name="shortlist" value="${esc(rawShortlist)}">
+        <input type="hidden" name="community_selected" value="1">
 
         <div class="form-group">
           <label for="cutoff-input">${esc(copy.studentCutoffLabel)} (0–200)</label>
-          <input id="cutoff-input" type="number" step="0.25" min="0" max="200" name="cutoff" value="${studentCutoff !== null ? studentCutoff : ""}" placeholder="e.g. 185.5">
+          <input id="cutoff-input" type="number" step="0.25" min="0" max="200" name="cutoff" value="${studentCutoff !== null ? studentCutoff : ""}" placeholder="${t("எ.கா. 185.5", "e.g. 185.5")}">
         </div>
 
         <div class="form-group">
@@ -603,14 +638,44 @@ function renderComparisonTab(
         </div>
 
         <div class="form-group">
-          <label for="search-input">${t("தேடல் (கல்லூரி / கிளை)", "Search (College / Branch)")}</label>
-          <input id="search-input" type="text" name="q" value="${esc(query)}" placeholder="e.g. GCT, PSG, CSE, ME">
+          <label for="search-input">${t("தேடல் (கல்லூரி / கிளை / மாவட்டம்)", "Search (College / Branch / District)")}</label>
+          <input id="search-input" type="text" name="q" value="${esc(query)}" placeholder="${t("எ.கா. CEG, PSG ECE, CSE, கோவை", "e.g. CEG, PSG ECE, CSE, Coimbatore")}">
+          <small style="font-size: 0.78rem; color: #4a5568;">${t("சுருக்கப்பெயர் (CEG, PSG, GCT), கிளை (CSE, ECE), அல்லது மாவட்டம் (கோவை, சென்னை) கொண்டு தேடலாம்.", "Try college acronyms (CEG, PSG, GCT), branches (CSE, ECE), or districts (Coimbatore, Chennai).")}</small>
         </div>
 
         <div class="form-group" style="align-self: flex-end;">
-          <button type="submit" class="btn-action btn-primary" style="width: 100%;">${t("கணக்கிடு (தற்காலிக தரவு)", "Calculate (Non-persistent)")}</button>
+          <button type="submit" class="btn-action btn-primary" style="width: 100%;">${t("தேடு &amp; ஒப்பிடு", "Search &amp; Compare")}</button>
+          <small style="font-size: 0.75rem; color: #4a5568; text-align: center;">${t("தற்காலிக கணக்கீடு · மதிப்பெண்கள் சேமிக்கப்படாது", "In-memory only · Marks are never saved")}</small>
         </div>
       </form>
+
+      <details class="community-guide screen-only" style="margin: 0 0 1rem; padding: 0.65rem 0.9rem; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 0.875rem; color: #2d3748;">
+        <summary style="cursor: pointer; font-weight: 600; color: #2b6cb0; padding: 0.2rem 0;">${t("இட ஒதுக்கீட்டுப் பிரிவுகள் (OC / BC / MBC / SC / ST) — எளிய விளக்கம்", "Reservation Community Categories (OC / BC / MBC / SC / ST) — Quick Guide")}</summary>
+        <ul style="margin: 0.5rem 0 0.25rem; padding-left: 1.2rem; line-height: 1.55;">
+          <li><strong>OC</strong> — ${t("பொதுப் பிரிவு (Open Competition): அனைத்து வகுப்பினரும் தகுதியின் அடிப்படையில் போட்டியிடக்கூடிய பொது இடங்கள்.", "Open Competition: Open merit pool available to all eligible candidates regardless of community.")}</li>
+          <li><strong>BC / BCM</strong> — ${t("பிற்படுத்தப்பட்டோர் (Backward Class) மற்றும் பிற்படுத்தப்பட்ட முஸ்லிம் (BC Muslim).", "Backward Class (BC) and Backward Class Muslim (BCM).")}</li>
+          <li><strong>MBC</strong> — ${t("மிகவும் பிற்படுத்தப்பட்டோர் மற்றும் சீர்மரபினர் (MBC / DNC).", "Most Backward Class and Denotified Communities (MBC / DNC).")}</li>
+          <li><strong>SC / SCA / ST</strong> — ${t("ஆதிதிராவிடர் (SC), அருந்ததியர் (SCA) மற்றும் பழங்குடியினர் (ST).", "Scheduled Caste (SC), Scheduled Caste Arunthathiyar (SCA), and Scheduled Tribe (ST).")}</li>
+        </ul>
+        <p style="margin: 0.35rem 0 0; font-size: 0.82rem; color: #4a5568;">${t("உங்கள் சாதிச் சான்றிதழின்படி பொருந்தும் பிரிவை நீங்களே தேர்ந்தெடுங்கள்; தளம் தானாகப் பிரிவைக் கணிக்காது.", "Select the category that matches your official certificate; this tool never infers your category.")}</p>
+      </details>
+
+      <div class="active-context-strip" role="status" style="margin: 0 0 1rem; padding: 0.75rem 1rem; background: #edf2f7; border-left: 4px solid #2b6cb0; border-radius: 4px; font-size: 0.88rem; color: #1a202c; line-height: 1.5;">
+        <div>
+          <strong>${t("தற்போதைய ஒப்பீட்டு அமைப்பு:", "Current Comparison Context:")}</strong>
+          2025 · ${esc(copy.quotaName(quota))} · <strong>${esc(copy.communityName(community))}</strong> · ${esc(copy.roundName(round))}
+          ${query ? ` · ${t("தேடல்:", "Search:")} <strong>${esc(query)}</strong>` : ""}
+          (${t(`${rows.length} படிப்புகளில் ${availableCount} படிப்புகளுக்கு 2025 தரவு உள்ளது`, `${availableCount} of ${rows.length} shown offerings have 2025 data`)})
+        </div>
+        ${
+          quota === "GENERAL_ACADEMIC"
+            ? `<p style="margin: 0.4rem 0 0; font-size: 0.84rem; color: #2d3748;">${t(
+                "<strong>முக்கியக் குறிப்பு (சுற்று 1 தரவு இல்லை):</strong> பொதுக் கல்விப் பிரிவுக்கு 2025 அதிகாரப்பூர்வ <strong>சுற்று 2</strong> மற்றும் <strong>சுற்று 3</strong> வெளியீடுகள் மட்டுமே இங்கு அங்கீகரிக்கப்பட்டுள்ளன. CEG, PSG போன்ற முன்னணி கல்லூரிகளில் சுற்று 1-லேயே நிரம்பிய இடங்களுக்கு 'ஒப்பீட்டிற்கு கிடைக்கவில்லை' என்று காட்டப்படும் — இதன் பொருள் அந்தக் கல்லூரி அல்லது படிப்பு இல்லை என்பதல்ல. உங்கள் பிரிவு (எ.கா. BC, MBC, SC) அல்லது 7.5% ஒதுக்கீட்டைத் தேர்ந்தெடுத்துப் பார்க்கவும்.",
+                "<strong>Coverage note (No Round 1 for General Academic):</strong> Only official 2025 <strong>Round 2</strong> and <strong>Round 3</strong> publications are approved here for General Academic. Offerings filled during Round 1 (such as top OC seats at CEG or PSG) appear as 'Not available for comparison' — this does NOT mean the college or branch is unavailable."
+              )}</p>`
+            : ""
+        }
+      </div>
 
       <aside class="truth-banner" aria-label="Official truth-in-guidance disclosures">
         <p><strong>${t("அதிகாரப்பூர்வ வெளிப்படைத்தன்மை அறிவிப்பு:", "Official Truth-in-Guidance Disclosure:")}</strong></p>
@@ -639,6 +704,13 @@ function renderComparisonTab(
           : ""
       }
 
+      <p class="screen-only" style="margin: 0.25rem 0 0.5rem; font-size: 0.83rem; color: #4a5568;">
+        ${t(
+          "'+ சேர்' என்பதை அழுத்துவது ஒரு விருப்பத்தை உங்கள் தனிப்பட்ட விருப்பப் பட்டியலில் சேர்க்கும் (இது தளத்தின் பரிந்துரை அல்ல; 'என் விருப்பப் பட்டியல்' பகுதியில் நீங்களே வரிசையை மாற்றலாம்).",
+          "Clicking '+ Add' adds an option to your personal shortlist workspace (not a system recommendation; you manually set the final preference order in 'My Shortlist')."
+        )}
+      </p>
+
       <div class="table-responsive">
         <table class="comparison-table" role="table" aria-label="College Cutoff Comparison Table">
           <thead>
@@ -647,7 +719,7 @@ function renderComparisonTab(
               <th scope="col">${esc(copy.historicalMinLabel)}</th>
               <th scope="col">${esc(copy.deltaLabel)}</th>
               <th scope="col">${t("அதிகாரப்பூர்வ ஆதாரம்", "Official Source")}</th>
-              <th scope="col">${t("விருப்பப் பட்டியல்", "Shortlist")}</th>
+              <th scope="col">${t("விருப்பப் பட்டியல் (கைமுறை வரிசை)", "Shortlist (Manual Order)")}</th>
             </tr>
           </thead>
           <tbody>
@@ -658,7 +730,15 @@ function renderComparisonTab(
                     .map((r) => {
                       const id = `${r.college.code}~${r.offering.programmeCode}`;
                       const isShortlisted = shortIds.includes(id);
-                      return renderOfferingRow(r, copy, isShortlisted, lang, rawShortlist);
+                      return renderOfferingRow(r, copy, isShortlisted, lang, rawShortlist, {
+                        studentCutoff,
+                        quota,
+                        community,
+                        round,
+                        communitySelected,
+                        query,
+                        typeFilter,
+                      });
                     })
                     .join("")
             }
@@ -674,7 +754,16 @@ function renderOfferingRow(
   copy: ReturnType<typeof getComparisonCopy>,
   isShortlisted: boolean,
   lang: SupportedLanguage,
-  rawShortlist: string
+  rawShortlist: string,
+  sessionState: {
+    studentCutoff: number | null;
+    quota: QuotaStream;
+    community: CommunityCategory;
+    round: AllotmentRound;
+    communitySelected: boolean;
+    query: string;
+    typeFilter: string;
+  }
 ): string {
   const { college, offering, result } = row;
   const id = `${college.code}~${offering.programmeCode}`;
@@ -688,13 +777,26 @@ function renderOfferingRow(
   } else if (result.status === "STUDENT_CUTOFF_MISSING") {
     deltaHtml = `<span class="neutral-badge">${esc(copy.missingCutoffPrompt)}</span>`;
   } else if (result.delta !== null) {
-    deltaHtml = `<span class="delta-badge">${esc(copy.formatDelta(result.delta))}</span>`;
+    deltaHtml = `<span class="delta-badge">${esc(copy.formatDelta(result.delta))}</span><small class="delta-caution" style="display: block; margin-top: 3px; font-size: 0.75rem; color: #4a5568; line-height: 1.35;">${t("கடந்த ஆண்டு கணக்கீடு மட்டுமே — சேர்க்கை உத்தரவாதமோ கணிப்போ அல்ல", "Past arithmetic only — not a guarantee or prediction")}</small>`;
   }
 
-  // Toggle shortlist action URL — strictly non-sensitive parameters only (tab, lang, shortlist)
+  // Toggle shortlist action via privacy-preserving POST form so cutoff/community/search remain intact in memory without appearing in GET URLs
   const nextShortlist = isShortlisted
     ? shortIdsWithout(rawShortlist, id)
     : shortIdsWith(rawShortlist, id);
+
+  const sourceLabel = result.isHeld
+    ? t(
+        "2026 கல்லூரி கையேடு பக். 160 — '(முந்தைய ஆண்டு தரவு)' குறிப்பு; உறுதிப்படுத்தல் நிலுவையில்",
+        "Booklet p. 160 '(Previous year data)' hold"
+      )
+    : result.status === "NO_HISTORICAL_DATA"
+    ? t("அங்கீகரிக்கப்பட்ட வரலாற்றுத் தரவு இல்லை", "No approved historical data available")
+    : result.locator
+    ? lang === "ta" && result.round
+      ? `2025 TNEA அதிகாரப்பூர்வ ${copy.roundName(result.round)} — ${copy.quotaName(sessionState.quota)} (${result.locator})`
+      : `${result.sourceTitle ?? ""} (${result.locator})`
+    : "—";
 
   return `
     <tr>
@@ -716,24 +818,26 @@ function renderOfferingRow(
         ${deltaHtml}
       </td>
       <td>
-        <span class="footnote">
-          ${
-            result.isHeld
-              ? esc("Booklet p. 160 '(Previous year data)' hold")
-              : result.status === "NO_HISTORICAL_DATA"
-              ? esc(t("அங்கீகரிக்கப்பட்ட வரலாற்றுத் தரவு இல்லை", "No approved historical data available"))
-              : result.locator
-              ? `${esc(result.sourceTitle ?? "")} (${esc(result.locator)})`
-              : "—"
-          }
-        </span>
+        <span class="footnote">${esc(sourceLabel)}</span>
       </td>
       <td>
-        <a class="btn-action ${isShortlisted ? "" : "btn-primary"}"
-           href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(nextShortlist)}"
-           aria-label="${isShortlisted ? t("பட்டியலிலிருந்து நீக்கு", "Remove from shortlist") : t("பட்டியலில் சேர்", "Add to shortlist")}">
-          ${isShortlisted ? t("சேர்க்கப்பட்டது ✓", "Saved ✓") : t("+ சேர்", "+ Add")}
-        </a>
+        <form method="POST" action="/m5-guidance" class="shortlist-toggle-form" style="margin: 0;">
+          <input type="hidden" name="tab" value="comparison">
+          <input type="hidden" name="lang" value="${lang}">
+          <input type="hidden" name="shortlist" value="${esc(nextShortlist)}">
+          <input type="hidden" name="q" value="${esc(sessionState.query)}">
+          <input type="hidden" name="type" value="${esc(sessionState.typeFilter)}">
+          <input type="hidden" name="quota" value="${sessionState.quota}">
+          <input type="hidden" name="community" value="${sessionState.community}">
+          <input type="hidden" name="round" value="${sessionState.round}">
+          <input type="hidden" name="community_selected" value="${sessionState.communitySelected ? "1" : "0"}">
+          ${sessionState.studentCutoff !== null ? `<input type="hidden" name="cutoff" value="${sessionState.studentCutoff}">` : ""}
+          <button type="submit"
+             class="btn-action ${isShortlisted ? "" : "btn-primary"}"
+             aria-label="${isShortlisted ? t("விருப்பப் பட்டியலிலிருந்து நீக்கு", "Remove from shortlist") : t("விருப்பப் பட்டியலில் சேர் (கைமுறை வரிசைப்படுத்தல்)", "Add to manual shortlist")}">
+            ${isShortlisted ? t("சேர்க்கப்பட்டது ✓", "Saved ✓") : t("+ சேர்", "+ Add")}
+          </button>
+        </form>
       </td>
     </tr>
   `;
@@ -762,8 +866,8 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
   });
 
   const shortlistState: ShortlistState = { items };
-  const plainTextExport = formatShortlistPlainText(shortlistState);
-  const csvExport = formatShortlistCsv(shortlistState);
+  const plainTextExport = formatShortlistPlainText(shortlistState, lang);
+  const csvExport = formatShortlistCsv(shortlistState, lang);
 
   return `
     <section>
@@ -924,21 +1028,32 @@ function renderCounsellingTab(
     <section>
       <h2>${esc(guidance.title)}</h2>
       <p>${esc(guidance.subtitle)}</p>
+      <p class="screen-only" style="margin: 0 0 1rem; padding: 0.75rem 1rem; background: #ebf8ff; border-left: 4px solid #3182ce; border-radius: 4px; font-size: 0.9rem; color: #2d3748; line-height: 1.5;">
+        ${t(
+          `இது விருப்பப் பட்டியல் தயாரிப்பிற்கான சுருக்க வழிகாட்டி. TFC அறிக்கை சமர்ப்பித்தல், Accept vs Decline விதிகள், முதல் பட்டதாரி மற்றும் PMSS கட்டணச் சலுகைகளின் முழு விவரங்களுக்கு <a href="/counselling?lang=ta">முழு TNEA கலந்தாய்வு வழிகாட்டியைப் பார்க்கவும் →</a>.`,
+          `This tab summarizes choice-filling and allotment rules alongside your shortlist. For complete procedural details (Accept vs. Decline, TFC reporting, First Graduate, and PMSS fee concessions), open the <a href="/counselling?lang=en">Full TNEA Counselling Guide →</a>.`
+        )}
+      </p>
 
       ${guidance.sections
         .map(
-          (sec) => `
-        <article style="background: #fff; padding: 1.25rem; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 1.25rem;">
-          <h3 style="color: #2b6cb0; margin-top: 0;">${esc(sec.title)}</h3>
-          ${sec.content.map((p) => `<p style="line-height: 1.6; color: #4a5568;">${esc(p)}</p>`).join("")}
-        </article>
+          (sec, idx) => `
+        <details ${idx < 2 ? "open" : ""} style="background: #fff; padding: 1rem 1.25rem; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 0.9rem;">
+          <summary style="color: #2b6cb0; font-weight: 700; font-size: 1.05rem; cursor: pointer; padding: 0.2rem 0;">${esc(sec.title)}</summary>
+          <div style="margin-top: 0.65rem;">
+            ${sec.content.map((p) => `<p style="line-height: 1.6; color: #4a5568; margin: 0.5rem 0;">${esc(p)}</p>`).join("")}
+          </div>
+        </details>
       `
         )
         .join("")}
 
-      <div class="counselling-bottom-actions screen-only" style="margin-top: 2rem; padding: 1.25rem; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;">
+      <div class="counselling-bottom-actions screen-only" style="margin-top: 1.5rem; padding: 1.25rem; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;">
         <a class="btn-action btn-primary" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
           ${t("← என் விருப்பப் பட்டியலுக்குத் திரும்பு", "← Back to My Shortlist")}
+        </a>
+        <a class="btn-action" href="/counselling?lang=${lang}">
+          ${t("முழு கலந்தாய்வு விதிகள் →", "Full Counselling Guide →")}
         </a>
         <a class="btn-action" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
           ${t("கூடுதல் கல்லூரிகளைப் பார்வையிட", "Browse More Colleges")}

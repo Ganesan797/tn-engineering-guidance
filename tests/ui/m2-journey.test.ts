@@ -163,8 +163,11 @@ test("lateral entry is informational and cutoff explanation preserves the result
 
 test("diploma route and preparation copy keep first-year scope and conditional documents", () => {
   for (const [language, index] of [["ta", 0], ["en", 1]] as const) {
+    const compare = renderM2Journey("compare", pack, reviewed, awarenessReviewed, runtime(), EMPTY_JOURNEY, undefined, {}, language);
     const route = renderM2Journey("route", pack, reviewed, awarenessReviewed, runtime(), EMPTY_JOURNEY, undefined, {}, language);
     const prepare = renderM2Journey("prepare", pack, reviewed, awarenessReviewed, runtime(), EMPTY_JOURNEY, undefined, {}, language);
+    assert.match(compare, language === "ta" ? /கல்லூரி vs\. துறை vs\. இருப்பிடம்/ : /College vs\. branch vs\. location/);
+    assert.match(route, language === "ta" ? /தமிழ்நாடு பொறியியல் கல்லூரி வகைகள்/ : /Types of engineering colleges in Tamil Nadu/);
     assert.ok(route.includes(PREPARATION_COPY.diploma[index]));
     assert.match(route, /id=Q060/);
     for (const key of ["first", "second", "conditional"] as const) assert.ok(prepare.includes(PREPARATION_COPY[key][index]));
@@ -252,15 +255,18 @@ test("informed student can enter the optional check directly", () => {
   assert.doesNotMatch(check, /data-content-id="AW-01"/);
 });
 
-test("personal-check copy explains the benefit before scope and provides matching English review text", () => {
-  const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime());
+test("personal-check copy explains the benefit before scope and provides matching English review text only in review mode", () => {
+  const studentHtml = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime());
+  assert.ok(studentHtml.indexOf(CHECK_COPY.benefit[0]) < studentHtml.indexOf(CHECK_COPY.scope[0]));
+  assert.doesNotMatch(studentHtml, /English — wording for review|மனித மதிப்பாய்வு இன்னும் முடிவடையவில்லை|செயற்கை எடுத்துக்காட்டுகள்/);
+  const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), EMPTY_JOURNEY, undefined, {}, "ta", { review: true });
   assert.ok(html.indexOf(CHECK_COPY.benefit[0]) < html.indexOf(CHECK_COPY.scope[0]));
   assert.ok(html.includes(CHECK_COPY.scope[1]));
   assert.equal(CHECK_COPY_REVIEW, "CANDIDATE_PENDING_OWNER_REVIEW");
   let state = EMPTY_JOURNEY;
   for (const answer of ["2026", "academic", "yes", "2006", "86", "78", "81"]) {
     const field = nextJourneyQuestion(state)!;
-    const page = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
+    const page = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state, undefined, {}, "ta", { review: true });
     assert.ok(page.includes(CHECK_QUESTIONS_EN[field]));
     assert.match(page, /name="unknown" value="1"/);
     assert.match(page, /action="\/journey" method="post"/);
@@ -303,12 +309,14 @@ test("English next directions reuse canonical route and preparation content", ()
 
 test("later questions show the answer first and keep extra explanation optional", () => {
   const state = answerJourneyQuestion(EMPTY_JOURNEY, "2026");
-  const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
-  assert.doesNotMatch(html, new RegExp(CHECK_COPY.benefit[0]));
-  assert.ok(html.indexOf("<fieldset") < html.indexOf('id="answer-help"'));
-  assert.match(html, /<details><summary>மேலும் விளக்கம்<\/summary>/);
-  assert.match(html, /மதிப்பெண் சான்றிதழைப் பாருங்கள்/);
-  assert.match(html, /More explanation|English — wording for review/);
+  const studentHtml = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
+  assert.doesNotMatch(studentHtml, new RegExp(CHECK_COPY.benefit[0]));
+  assert.ok(studentHtml.indexOf("<fieldset") < studentHtml.indexOf('id="answer-help"'));
+  assert.match(studentHtml, /<details><summary>மேலும் விளக்கம்<\/summary>/);
+  assert.match(studentHtml, /மதிப்பெண் சான்றிதழைப் பாருங்கள்/);
+  assert.doesNotMatch(studentHtml, /English — wording for review/);
+  const reviewHtml = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state, undefined, {}, "ta", { review: true });
+  assert.match(reviewHtml, /More explanation|English — wording for review/);
 });
 
 test("candidate question help explains stream, improvement and 100/50/50 cutoff weighting", () => {
@@ -320,9 +328,10 @@ test("candidate question help explains stream, improvement and 100/50/50 cutoff 
     [["2026", "academic", "no", "86", "78"], CHECK_COPY.chemistryWhy],
   ] as const) {
     const state = answers.reduce(answerJourneyQuestion, EMPTY_JOURNEY);
-    const html = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
-    assert.ok(html.includes(help[0]));
-    assert.ok(html.includes(help[1]));
+    const studentHtml = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state);
+    assert.ok(studentHtml.includes(help[0]));
+    const reviewHtml = renderM2Journey("check", pack, reviewed, awarenessReviewed, runtime(), state, undefined, {}, "ta", { review: true });
+    assert.ok(reviewHtml.includes(help[1]));
   }
   assert.match(CHECK_COPY.mathsWhy[1], /full mathematics mark/);
   assert.match(CHECK_COPY.physicsWhy[1], /Half the physics mark/);

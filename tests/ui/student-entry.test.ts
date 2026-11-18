@@ -64,7 +64,8 @@ test("direct routes expose available actions and the reference language limitati
   assert.match(personal, /href="\/journey\?step=check&amp;lang=en"/);
   assert.doesNotMatch(personal, /href="\/personal\/reference\?lang=en"/);
   const counselling = renderStudentEntryPage({ route: "counselling", language: "en" }, pack);
-  assert.match(counselling, /choice-preparation experience is not ready yet/);
+  assert.doesNotMatch(counselling, /choice-preparation experience is not ready yet/);
+  assert.match(counselling, /Choice Order Planner|\/m5-guidance/);
   assert.match(counselling, /href="\/personal\?lang=en"/);
   assert.match(counselling, /href="\/beginner\?lang=en"/);
   assert.doesNotMatch(counselling, /disabled|<form/);

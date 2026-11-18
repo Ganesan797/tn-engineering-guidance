@@ -126,8 +126,28 @@ export function formatShortlistSummary(state: ShortlistState): string {
  * Format shortlist as ink-friendly plain text for official TNEA portal reference.
  * Zero private student marks, ranks, or community categories.
  */
-export function formatShortlistPlainText(state: ShortlistState): string {
-  if (state.items.length === 0) return "Shortlist is empty.";
+export function formatShortlistPlainText(
+  state: ShortlistState,
+  lang: "en" | "ta" = "en"
+): string {
+  if (state.items.length === 0) {
+    return lang === "ta" ? "விருப்பப் பட்டியல் காலியாக உள்ளது." : "Shortlist is empty.";
+  }
+
+  if (lang === "ta") {
+    const lines: string[] = [
+      "தமிழ்நாடு பொறியியல் சேர்க்கை (TNEA) — மாணவர் விருப்ப முன்னுரிமைப் பணித்தாள்",
+      "குறிப்பு: மதிப்பெண்கள் சேர்க்கப்படவில்லை; அதிகாரப்பூர்வ TNEA இணையதள விருப்பப் பதிவிற்கான சரிபார்ப்புப் பட்டியல்.",
+      "================================================================================",
+      "",
+    ];
+    for (const item of state.items) {
+      lines.push(`விருப்பம் #${item.order}: [கல்லூரி குறியீடு: ${item.collegeCode}] ${item.collegeName}`);
+      lines.push(`             கிளை: [${item.programmeCode}] ${item.programmeName}`);
+      lines.push("");
+    }
+    return lines.join("\n").trim();
+  }
 
   const lines: string[] = [
     "Tamil Nadu Engineering Admissions (TNEA) — Student Choice Preference Worksheet",
@@ -146,10 +166,16 @@ export function formatShortlistPlainText(state: ShortlistState): string {
  * Format shortlist as CSV for spreadsheet import or TNEA bulk copy.
  * Zero private student marks, ranks, or community categories.
  */
-export function formatShortlistCsv(state: ShortlistState): string {
-  if (state.items.length === 0) return "Choice,College Code,College Name,Branch Code,Branch Name";
+export function formatShortlistCsv(
+  state: ShortlistState,
+  lang: "en" | "ta" = "en"
+): string {
+  const header =
+    lang === "ta"
+      ? "வரிசை (Choice),கல்லூரி குறியீடு (College Code),கல்லூரி பெயர் (College Name),கிளை குறியீடு (Branch Code),கிளை பெயர் (Branch Name)"
+      : "Choice,College Code,College Name,Branch Code,Branch Name";
+  if (state.items.length === 0) return header;
 
-  const header = "Choice,College Code,College Name,Branch Code,Branch Name";
   const rows = state.items.map((item) => {
     const safeCol = item.collegeName.replace(/"/g, '""');
     const safeProg = item.programmeName.replace(/"/g, '""');
