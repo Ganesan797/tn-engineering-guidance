@@ -1,18 +1,19 @@
 # Milestone M7 — Student Validation Contract (V1)
 
-- **Document Status:** `READY_FOR_OWNER_ACCEPTANCE`
-- **Version:** `V1.1` (Post-Independent-Review Corrections Applied)
+- **Document Status:** `ACCEPTED` (`M7_CONTRACT_ACCEPTANCE = ACCEPTED`, Owner Decision 2026-11-18 at `45f49eb26c64db7768d38cb2dd7dac0cf2825c30`)
+- **Version:** `V1.1` (Accepted Validation Contract)
 - **Date:** `2026-11-18`
-- **Authoritative Product Baseline:** `MAIN_SHA = 44d7ee78e47cc2887127dd2cfd55c4b63fa153ab` (synchronized `main` and `origin/main`)
+- **Authoritative Product Baseline:** `MAIN_SHA = 44d7ee78e47cc2887127dd2cfd55c4b63fa153ab`
 - **Current Control State (Preserved Unchanged):**
   - `M6_OWNER_ACCEPTANCE = ACCEPTED`
-  - `M7_AUTHORIZATION = NOT_AUTHORIZED`
+  - `M7_CONTRACT_ACCEPTANCE = ACCEPTED`
+  - `M7_EXECUTION_AUTHORIZATION = NOT_AUTHORIZED` (`M7_AUTHORIZATION = NOT_AUTHORIZED`)
   - `REAL_STUDENT_VALIDATION = NOT_RUN`
   - `PUBLICATION = NOT_AUTHORIZED`
   - `ONEDRIVE_PRIVACY_STATUS = OPEN`
   - `LIVE_LLM_GATE = PARTIAL` (`GEMINI = PAUSED`)
 
-> **Governance Notice:** This contract is `READY_FOR_OWNER_ACCEPTANCE` as a planning/validation specification only. Approving or accepting this contract is a separate decision from authorizing Milestone M7 execution (`M7_AUTHORIZATION = NOT_AUTHORIZED`). Participant execution requires a later explicit owner authorization. Neither this contract nor its acceptance authorizes implementation changes, hosting expenditure, or public launch, and `REAL_STUDENT_VALIDATION = NOT_RUN` must remain unchanged until real student observations actually occur.
+> **Governance Notice:** This validation contract has been accepted by the Project Owner (`M7_CONTRACT_ACCEPTANCE = ACCEPTED`, 2026-11-18) as a planning/validation specification only. Contract acceptance does **not** authorize Milestone M7 execution (`M7_EXECUTION_AUTHORIZATION = NOT_AUTHORIZED`). Participant execution requires a separate later explicit owner authorization. Neither this contract nor its acceptance authorizes implementation changes, hosting expenditure, or public launch, and `REAL_STUDENT_VALIDATION = NOT_RUN` remains unchanged until real student observations actually occur.
 
 ---
 
@@ -319,8 +320,8 @@ Every finding from M7 sessions follows a disciplined triage path enforcing **`NO
 
 | Boundary | Binding Rule During M7 |
 | --- | --- |
-| **Control State Preservation** | `M6_OWNER_ACCEPTANCE = ACCEPTED`; `M7_AUTHORIZATION = NOT_AUTHORIZED`; `REAL_STUDENT_VALIDATION = NOT_RUN`; `PUBLICATION = NOT_AUTHORIZED`. |
-| **Two-Step Authorization Separation** | Accepting this contract (`READY_FOR_OWNER_ACCEPTANCE`) approves the validation design only. Participant execution remains `M7_AUTHORIZATION = NOT_AUTHORIZED` and requires a separate, later explicit owner authorization. |
+| **Control State Preservation** | `M6_OWNER_ACCEPTANCE = ACCEPTED`; `M7_CONTRACT_ACCEPTANCE = ACCEPTED`; `M7_EXECUTION_AUTHORIZATION = NOT_AUTHORIZED` (`M7_AUTHORIZATION = NOT_AUTHORIZED`); `REAL_STUDENT_VALIDATION = NOT_RUN`; `PUBLICATION = NOT_AUTHORIZED`. |
+| **Two-Step Authorization Separation** | Contract acceptance (`M7_CONTRACT_ACCEPTANCE = ACCEPTED`) approves the validation design only. Participant execution remains `M7_EXECUTION_AUTHORIZATION = NOT_AUTHORIZED` and requires a separate, later explicit owner authorization. |
 | **Engineering vs. Student Evidence** | `ENGINEERING_VERIFIED` (372/372 tests, Chrome audits, typecheck) is never conflated with `STUDENT_OBSERVED`. `REAL_STUDENT_VALIDATION = NOT_RUN` persists until real observations actually occur. |
 | **Deterministic Authority** | Eligibility, cutoff formula, historical observations, and statutory 7.5% rules remain rule-based and evidence-backed; student observations cannot invent or override facts. |
 | **Participant Protection (Minors)** | Under-18 participants require prior guardian/parent consent plus student assent; participation is strictly voluntary and stoppable at any time; no unnecessary personal data collected. |
@@ -332,23 +333,23 @@ Every finding from M7 sessions follows a disciplined triage path enforcing **`NO
 
 ## 14. Owner Decision Gate
 
-This contract is **`READY_FOR_OWNER_ACCEPTANCE`**. Milestone M7 execution remains **`NOT_AUTHORIZED`** (`M7_AUTHORIZATION = NOT_AUTHORIZED`) until Project Owner (**Ganesan**) completes **two separate explicit decisions**:
+Gate 1 contract acceptance is **COMPLETE** (`M7_CONTRACT_ACCEPTANCE = ACCEPTED`, 2026-11-18). Milestone M7 execution remains **`NOT_AUTHORIZED`** (`M7_EXECUTION_AUTHORIZATION = NOT_AUTHORIZED`) until Project Owner (**Ganesan**) issues a separate Gate 2 authorization decision:
 
-### Gate 1 — Separate Contract Acceptance Decision
+### Gate 1 — Separate Contract Acceptance Decision (Completed 2026-11-18)
 ```text
-M7_CONTRACT_ACCEPTANCE      = PENDING_OWNER_DECISION (APPROVED / REVISE_REQUESTED)
-M7_AUTHORIZATION            = NOT_AUTHORIZED (contract acceptance alone does NOT authorize execution)
+M7_CONTRACT_ACCEPTANCE      = ACCEPTED (Owner Decision, 2026-11-18, reviewed commit 45f49eb26c64db7768d38cb2dd7dac0cf2825c30)
+M7_EXECUTION_AUTHORIZATION  = NOT_AUTHORIZED (contract acceptance alone does NOT authorize execution)
 ```
 
-### Gate 2 — Separate Later M7 Execution Authorization Decision
+### Gate 2 — Separate Later M7 Execution Authorization Decision (Pending)
 ```text
 PILOT_ACCESS_METHOD         = <local private device / authenticated tunnel / separately approved private staging>
 PILOT_COST_CAP              = USD 0 (or explicit owner-approved cap)
 PILOT_COHORT_PLAN           = <e.g., 5–8 participants, staged Wave 1 (2–3) + Wave 2 (3–5); descriptive only>
 BASELINE_SHA_AUTHORIZED     = 44d7ee78e47cc2887127dd2cfd55c4b63fa153ab
-M7_AUTHORIZATION            = NOT_AUTHORIZED (change to AUTHORIZED only by separate explicit owner decision)
+M7_EXECUTION_AUTHORIZATION  = NOT_AUTHORIZED (change to AUTHORIZED only by separate explicit owner decision)
 REAL_STUDENT_VALIDATION     = NOT_RUN (unchanged until real observations actually happen)
 PUBLICATION                 = NOT_AUTHORIZED
 ```
 
-**Next Action:** Owner reviews [m7_student_validation_contract_v1.md](m7_student_validation_contract_v1.md) for Gate 1 contract acceptance. Participant sessions must not start until a separate explicit Gate 2 `M7_AUTHORIZATION` decision is recorded.
+**Next Action:** Participant sessions must not start until a separate explicit Gate 2 `M7_EXECUTION_AUTHORIZATION` decision (including private access method, cost cap, and cohort plan) is recorded by the Owner.
