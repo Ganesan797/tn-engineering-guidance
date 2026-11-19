@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { renderM5GuidancePage } from "../../src/ui/m5-guidance-view.ts";
+import { compareOffering } from "../../src/m5/comparison-engine.ts";
 
 test("M5 Privacy Regression: ZERO student cutoff marks or community in GET URLs, links, or form actions", () => {
   // Test with input state provided
@@ -32,19 +33,22 @@ test("M5 Privacy Regression: ZERO student cutoff marks or community in GET URLs,
   );
 });
 
-test("M5 Governed Offerings Coverage: All 555 offerings listed; all unapproved data transparently marked", () => {
+test("M5 Governed Offerings Coverage: All 1,249 offerings listed; all unapproved data transparently marked", () => {
   const html = renderM5GuidancePage(new URLSearchParams());
 
-  assert.ok(html.includes("All 555 governed offerings across the 55 approved institutions"), "Must disclose all 555 offerings");
+  assert.ok(html.includes("All 1,249 governed offerings across the 121 approved institutions"), "Must disclose all 1,249 offerings");
   assert.ok(html.includes("Not available for comparison"), "Must disclose lack of approved historical data for offerings without observations");
   assert.ok(
     html.includes("Minimum observed mark in official Round 2"),
     "Approved runtime displays the Round 2 disclosure"
   );
 
-  // Check presence of offerings across cohort
+  // Check presence of offerings across benchmark and expanded autonomous cohort
   assert.ok(html.includes("5022"), "Must include College 5022 (VOC College of Engineering)");
   assert.ok(html.includes("2005"), "Must include College 2005 (GCT Coimbatore)");
+  assert.ok(html.includes("1216"), "Must include College 1216 (Rajalakshmi Engineering College)");
+  assert.ok(html.includes("2764"), "Must include College 2764 (Bannari Amman Institute of Technology)");
+  assert.ok(html.includes("5910"), "Must include College 5910 (Mepco Schlenk / autonomous addition)");
 
   // Verify College 1516 is rendered with held badge
   assert.ok(html.includes("1516"), "Must include College 1516");
@@ -85,11 +89,47 @@ test("M5 Historical Calculation: Calculates arithmetic delta and displays offici
     quota: "GENERAL_ACADEMIC",
     community: "BC",
     round: "ROUND_2",
+    year: 2025,
   });
 
   assert.ok(html.includes("+3.50 vs observed minimum"), "Must calculate arithmetic delta 180.0 - 176.5 = +3.50");
   assert.ok(html.includes("176.50"), "Must display observed minimum 176.50");
   assert.ok(html.includes("ROUND 2 - GENERAL ACADEMIC"), "Must cite official publication");
+});
+
+test("M5 2026 Active Comparison: Calculates arithmetic delta for expanded autonomous college (Saveetha 1216)", () => {
+  const html = renderM5GuidancePage(new URLSearchParams({ q: "1216" }), {
+    studentCutoff: 190.0,
+    quota: "GENERAL_ACADEMIC",
+    community: "OC",
+    round: "ROUND_1",
+    year: 2026,
+  });
+
+  assert.ok(html.includes("1216"), "Must render Saveetha");
+  assert.ok(html.includes("Saveetha Engineering College"), "Must include Saveetha name");
+  assert.ok(!html.includes('class="neutral-badge">Not available for comparison'), "Must be active in 2026 comparison");
+  assert.ok(html.includes("vs observed minimum"), "Must display arithmetic delta");
+});
+
+test("M5 Governed Offering Filter: Ungoverned historical pairs fail closed and are excluded from keyIndex", () => {
+  const ungovernedPairs = ["1301~AM", "1301~DA", "1322~MZ", "3813~AD", "3813~ME"];
+  for (const pair of ungovernedPairs) {
+    const [collegeCode, programmeCode] = pair.split("~");
+    const res = compareOffering({
+      studentCutoff: 180.0,
+      year: 2026,
+      stage: "PROVISIONAL_ALLOTMENT",
+      round: "ROUND_2",
+      quota: "GENERAL_ACADEMIC",
+      community: "OC",
+      collegeCode,
+      programmeCode,
+      metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK",
+    });
+    assert.equal(res.status, "NO_HISTORICAL_DATA", `Pair ${pair} must fail closed`);
+    assert.equal(res.evidenceSemantics, "NOT_AVAILABLE_FOR_COMPARISON");
+  }
 });
 
 test("M5 UI: Shortlist tab displays choice order and reordering controls without marks", () => {
@@ -603,4 +643,41 @@ test("M5 Real Browser Layout Verification: Zero horizontal overflow at 320px, 36
     ws.close();
     child.kill();
   }
+});
+
+test("M5 Filters: District and Branch dropdowns filter offerings cleanly and preserve state", () => {
+  const htmlCombined = renderM5GuidancePage(
+    new URLSearchParams({ district: "Chennai", branch: "EI", lang: "en" }),
+    {
+      studentCutoff: 180.0,
+      quota: "GENERAL_ACADEMIC",
+      community: "BC",
+      round: "ROUND_1",
+      communitySelected: true,
+    }
+  );
+
+  // Dropdowns present with selected values
+  assert.ok(htmlCombined.includes('id="district-select"'), "Must render District dropdown");
+  assert.ok(htmlCombined.includes('id="branch-select"'), "Must render Branch dropdown");
+  assert.ok(htmlCombined.includes('value="Chennai" selected'), "Must preserve selected District");
+  assert.ok(htmlCombined.includes('value="EI" selected'), "Must preserve selected Branch");
+
+  // Compact result count pill and clear filters link
+  assert.ok(htmlCombined.includes("results-count-pill"), "Must display compact result count pill");
+  assert.ok(htmlCombined.includes("Clear Filters"), "Must show Clear Filters link when filters are active");
+
+  // Exact Chennai + EI matches only (Velammal 1120 is Chennai EI; PSG 2006 is Coimbatore)
+  assert.ok(htmlCombined.includes("Velammal Engineering College"), "Must include Chennai EI offering (1120)");
+  assert.ok(!htmlCombined.includes("PSG College of Technology"), "Must exclude non-Chennai colleges");
+  assert.ok(!htmlCombined.includes('<span class="branch-pill">CS</span>'), "Must exclude non-EI branches");
+
+  // Compact row elements & filter preservation in shortlist POST form and language switch
+  assert.ok(htmlCombined.includes('<span class="branch-pill">EI</span>'), "Must render crisp branch code pill");
+  assert.ok(htmlCombined.includes('<span class="district-tag">· Chennai</span>'), "Must render district tag");
+  assert.ok(htmlCombined.includes('<input type="hidden" name="district" value="Chennai">'), "Must preserve district in shortlist form");
+  assert.ok(htmlCombined.includes('<input type="hidden" name="branch" value="EI">'), "Must preserve branch in shortlist form");
+  assert.ok(htmlCombined.includes("district=Chennai"), "Language switch link must preserve non-sensitive district filter");
+  assert.ok(htmlCombined.includes("branch=EI"), "Language switch link must preserve non-sensitive branch filter");
+  assert.ok(!htmlCombined.includes("cutoff=180"), "Must never leak student cutoff into GET URLs");
 });

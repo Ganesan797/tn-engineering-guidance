@@ -4,24 +4,48 @@ import {
   HISTORICAL_OBSERVATIONS,
   compareOffering,
   createSyntheticRepository,
+  createResearchCandidateRepository,
   getComparisonCopy,
   type DerivedHistoricalObservation,
 } from "../../src/m5/index.ts";
 
-test("M5 Runtime Historical Data: Verified 4,332 D5 candidates loaded at runtime (Gate A Cleared)", () => {
-  // Verify that the runtime repository contains exactly 4,332 verified observations
+test("M5 Runtime Historical Data: Verified 17,676 observations across 121 institutions loaded at runtime (Gate A Cleared)", () => {
+  // Verify that the runtime repository contains exactly 17,676 verified observations (21 ungoverned pairs held fail-closed)
   const allObs = HISTORICAL_OBSERVATIONS.getAll();
-  assert.equal(allObs.length, 4332, "Must contain exactly 4,332 verified Gate A observations");
+  assert.equal(allObs.length, 17676, "Must contain exactly 17,676 verified Gate A observations (21 ungoverned pairs held)");
 
-  // All 555 governed options must remain discoverable
+  // 21 ungoverned candidate observations rejected from keyIndex
+  assert.equal(HISTORICAL_OBSERVATIONS.getRejectedConflicts().length, 21, "Must reject exactly 21 ungoverned observations");
+
+  // All 1,249 governed options must remain discoverable
   const offerings = HISTORICAL_OBSERVATIONS.getAllGovernedOfferings();
-  assert.equal(offerings.length, 555, "Must contain exactly 555 governed offerings across 55 colleges");
+  assert.equal(offerings.length, 1249, "Must contain exactly 1,249 governed offerings across 121 colleges");
 
-  // Counts accounting: 536 with observed allotments in evaluated rounds, 19 without allotments
+  // Cross-year accounting: all 1,249 offerings have historical observations
   const counts = HISTORICAL_OBSERVATIONS.getOfferingsCount();
-  assert.equal(counts.total, 555);
-  assert.equal(counts.withHistory, 536, "Approved historical data available must be 536 offerings");
-  assert.equal(counts.missingHistory, 19);
+  assert.equal(counts.total, 1249);
+  assert.equal(counts.withHistory, 1249, "Cross-year historical data available must be 1,249 offerings");
+  assert.equal(counts.missingHistory, 0);
+
+  // Active 2025 comparison coverage accounting: 536/1,249 offerings (covering benchmark 55 cohort)
+  const counts2025 = HISTORICAL_OBSERVATIONS.getOfferingsCount({ year: 2025 });
+  assert.equal(counts2025.total, 1249);
+  assert.equal(counts2025.withHistory, 536, "Active 2025 comparison coverage must be 536 offerings");
+  assert.equal(counts2025.missingHistory, 713);
+
+  // Active 2026 comparison coverage accounting: 1,249/1,249 offerings (100% complete across 121 colleges)
+  const counts2026 = HISTORICAL_OBSERVATIONS.getOfferingsCount({ year: 2026 });
+  assert.equal(counts2026.total, 1249);
+  assert.equal(counts2026.withHistory, 1249, "Active 2026 comparison coverage must be 1,249 offerings");
+  assert.equal(counts2026.missingHistory, 0);
+
+  // Cohort 55 subset check within the runtime repository
+  assert.equal(HISTORICAL_OBSERVATIONS.getAll("55").length, 10640);
+  assert.equal(HISTORICAL_OBSERVATIONS.getAllGovernedOfferings("55").length, 555);
+  const counts55 = HISTORICAL_OBSERVATIONS.getOfferingsCount("55");
+  assert.equal(counts55.total, 555);
+  assert.equal(counts55.withHistory, 555);
+  assert.equal(counts55.missingHistory, 0);
 
   // In runtime application, calling without explicit round fails closed (no implicit round selection)
   const runtimeResNoRound = compareOffering({
@@ -56,6 +80,25 @@ test("M5 Runtime Historical Data: Verified 4,332 D5 candidates loaded at runtime
   assert.equal(runtimeResWithRound.delta, 8.5); // 185.0 - 176.5 = +8.5
   assert.equal(runtimeResWithRound.allotmentCount, 16);
   assert.ok(runtimeResWithRound.locator?.includes("Document 'ROUND 2 - GENERAL ACADEMIC"));
+});
+
+test("M5 Research Candidates and Runtime Reconciliation: 121 institutions and 17,676 observations", () => {
+  const researchRepo121 = createResearchCandidateRepository("121");
+  assert.equal(researchRepo121.getAll().length, 17676, "Candidate repo loads 17,676 observations across 2025/2026 runs");
+  assert.equal(researchRepo121.getAllGovernedOfferings().length, 1249, "Candidate repo covers 1,249 offerings across 121 institutions");
+
+  const counts121 = researchRepo121.getOfferingsCount();
+  assert.equal(counts121.total, 1249);
+  assert.equal(counts121.withHistory, 1249);
+  assert.equal(counts121.missingHistory, 0);
+
+  // Cohort 55 subset in research candidate repo
+  assert.equal(researchRepo121.getAll("55").length, 10640);
+  assert.equal(researchRepo121.getAllGovernedOfferings("55").length, 555);
+
+  // Runtime singleton matches Gate A approved 121-institution cohort
+  assert.equal(HISTORICAL_OBSERVATIONS.getAll().length, 17676, "Production runtime singleton contains 17,676 observations");
+  assert.equal(HISTORICAL_OBSERVATIONS.getAllGovernedOfferings().length, 1249, "Production runtime singleton covers 1,249 offerings");
 });
 
 test("M5 Synthetic Comparison Engine: Exact Evidence Matching & Arithmetic Delta", () => {

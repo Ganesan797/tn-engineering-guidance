@@ -50,6 +50,33 @@ export function compareOffering(
     };
   }
 
+  // 2. Strict Governed Offering Membership:
+  // If offering does not belong to the approved governed catalogue, fail closed.
+  if (!repository.getGovernedOffering(collegeCode, programmeCode)) {
+    return {
+      status: "NO_HISTORICAL_DATA",
+      evidenceSemantics: "NOT_AVAILABLE_FOR_COMPARISON",
+      studentCutoff: studentCutoff ?? null,
+      historicalMin: null,
+      delta: null,
+      metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK",
+      officialClosingValue: null,
+      officialClosingValueStatus: "NOT_ESTABLISHED_BY_D5",
+      year: year ?? null,
+      stage: stage ?? null,
+      round: round ?? null,
+      quota,
+      community,
+      collegeCode,
+      programmeCode,
+      allotmentCount: null,
+      sourceTitle: null,
+      locator: null,
+      isHeld: false,
+      holdNotice: null,
+    };
+  }
+
   // 2. Strict evidence identifier requirements & fail closed:
   // If year, stage, round, or metricType are absent, fail closed without implicit round selection.
   if (!year || !stage || !round || !metricType) {

@@ -162,17 +162,20 @@ const server = createServer(async (request, response) => {
       const communitySelected = values.get("community_selected") === "1" || (rawCommunity !== null && rawCommunity.trim() !== "");
       const community = rawCommunity || "OC";
       const rawRound = values.get("round");
-      const validRounds = quota === "GOVT_SCHOOL_7_5" ? ["ROUND_1", "ROUND_2"] : ["ROUND_2", "ROUND_3"];
-      const round = rawRound && validRounds.includes(rawRound) ? rawRound : validRounds[0];
+      const round = rawRound && ["ROUND_1", "ROUND_2", "ROUND_3"].includes(rawRound)
+        ? rawRound
+        : (quota === "GOVT_SCHOOL_7_5" ? "ROUND_1" : "ROUND_2");
+      const rawYear = values.get("year");
+      const year = rawYear === "2025" ? 2025 : 2026;
 
       // Non-sensitive directory filtering parameters from POST body
       const effectiveParams = new URLSearchParams(url.searchParams);
-      for (const key of ["q", "type", "tab", "lang", "shortlist", "round"]) {
+      for (const key of ["q", "type", "district", "branch", "tab", "lang", "shortlist", "round", "year", "only_available"]) {
         const val = values.get(key);
         if (val !== null) effectiveParams.set(key, val);
       }
 
-      send(response, 200, renderM5GuidancePage(effectiveParams, { studentCutoff, quota, community, round, communitySelected }));
+      send(response, 200, renderM5GuidancePage(effectiveParams, { studentCutoff, quota, community, round, communitySelected, year }));
       return;
     }
     if (request.method === "GET") {

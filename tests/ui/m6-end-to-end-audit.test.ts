@@ -235,8 +235,9 @@ test("M6-T04: Real Browser & Mobile Layout Audit across 320px, 360px, 390px, 768
 });
 
 test("M7_PREP: H1, H3, H4, H5, M1-M7, L1-L3 student-facing readiness regressions", () => {
-  // H1 + M2 + M3 + M4 + L1 + L2 + L3 on /m5-guidance
+  // H1 + M2 + M3 + M4 + L1 + L2 + L3 on /m5-guidance (tested against 2025 benchmark)
   const arrivalTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta", tab: "comparison" }), {
+    year: 2025,
     studentCutoff: 185.5,
     quota: "GENERAL_ACADEMIC",
     community: "OC",

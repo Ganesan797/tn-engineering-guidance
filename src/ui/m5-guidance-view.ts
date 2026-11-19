@@ -24,76 +24,49 @@ const esc = (v: string) =>
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 
-// College cohort metadata for the 55 approved institutions
-export interface CollegeMeta {
-  code: string;
-  name: string;
-  type: "GOVERNMENT" | "UNIVERSITY" | "AIDED" | "CONSTITUENT" | "SFC";
-  district: string;
-  aliases: readonly string[];
+function formatBranchDropdownLabel(name: string): string {
+  const KEEP_UPPER = new Set(["SS", "AI", "ML", "VLSI", "AR/VR", "IT", "IOT"]);
+  const LOWER_WORDS = new Set(["and", "of", "in", "for", "&"]);
+  return name
+    .toLowerCase()
+    .split(/(\s+|\(|\))/)
+    .map((part, idx) => {
+      if (!part || /^\s+$/.test(part) || part === "(" || part === ")") return part;
+      const upper = part.toUpperCase();
+      if (KEEP_UPPER.has(upper)) return upper;
+      if (idx > 0 && LOWER_WORDS.has(part)) return part;
+      return part.charAt(0).toUpperCase() + part.slice(1);
+    })
+    .join("");
 }
 
-export const COHORT_55_METADATA: Record<string, CollegeMeta> = {
-  // 11 Govt
-  "1516": { code: "1516", name: "Thanthai Periyar Government Institute of Technology, Vellore", type: "GOVERNMENT", district: "Vellore", aliases: ["TPGIT", "TPGIT Vellore"] },
-  "2005": { code: "2005", name: "Government College of Technology, Coimbatore", type: "GOVERNMENT", district: "Coimbatore", aliases: ["GCT", "GCT Coimbatore"] },
-  "2369": { code: "2369", name: "Government College of Engineering, Dharmapuri", type: "GOVERNMENT", district: "Dharmapuri", aliases: ["GCED", "GCE Dharmapuri"] },
-  "2603": { code: "2603", name: "Government College of Engineering, Salem", type: "GOVERNMENT", district: "Salem", aliases: ["GCES", "GCE Salem"] },
-  "2615": { code: "2615", name: "Government College of Engineering, Srirangam, Tiruchirappalli", type: "GOVERNMENT", district: "Tiruchirappalli", aliases: ["GCE Srirangam", "GCE Trichy", "GCET"] },
-  "2709": { code: "2709", name: "Government College of Engineering, Erode (IRTT)", type: "GOVERNMENT", district: "Erode", aliases: ["IRTT", "GCE Erode", "IRT Tech"] },
-  "3464": { code: "3464", name: "Government College of Engineering, Thanjavur", type: "GOVERNMENT", district: "Thanjavur", aliases: ["GCET", "GCE Thanjavur"] },
-  "3465": { code: "3465", name: "Government College of Engineering, Gandharvakottai", type: "GOVERNMENT", district: "Pudukkottai", aliases: ["GCE Gandharvakottai", "GCE Pudukkottai"] },
-  "4974": { code: "4974", name: "Government College of Engineering, Tirunelveli", type: "GOVERNMENT", district: "Tirunelveli", aliases: ["GCETLY", "GCE Tirunelveli", "GCE Nellai"] },
-  "5009": { code: "5009", name: "Government College of Engineering, Bodinayakkanur", type: "GOVERNMENT", district: "Theni", aliases: ["GCE Bodinayakkanur", "GCE Bodi", "GCE Theni"] },
-  "5901": { code: "5901", name: "Alagappa Chettiar Government College of Engineering and Technology, Karaikudi", type: "GOVERNMENT", district: "Sivaganga", aliases: ["ACGCET", "ACCET", "ACCET Karaikudi"] },
-  // 5 Univ Depts
-  "1": { code: "1", name: "College of Engineering Guindy (CEG), Anna University, Chennai", type: "UNIVERSITY", district: "Chennai", aliases: ["CEG", "CEG Guindy", "Anna University Guindy"] },
-  "2": { code: "2", name: "Alagappa College of Technology (ACT), Anna University, Chennai", type: "UNIVERSITY", district: "Chennai", aliases: ["ACT", "ACTech", "AC Tech"] },
-  "3": { code: "3", name: "School of Architecture and Planning (SAP), Anna University, Chennai", type: "UNIVERSITY", district: "Chennai", aliases: ["SAP", "SAP Chennai"] },
-  "4": { code: "4", name: "Madras Institute of Technology (MIT), Anna University, Chromepet", type: "UNIVERSITY", district: "Chengalpattu", aliases: ["MIT", "MIT Chromepet", "MIT Chennai"] },
-  "5": { code: "5", name: "Faculty of Engineering & Technology, Annamalai University, Chidambaram", type: "UNIVERSITY", district: "Cuddalore", aliases: ["FEAT", "FEAT Annamalai", "Annamalai University"] },
-  // 3 Govt Aided
-  "2006": { code: "2006", name: "PSG College of Technology, Peelamedu, Coimbatore", type: "AIDED", district: "Coimbatore", aliases: ["PSG", "PSG Tech", "PSGCT"] },
-  "2007": { code: "2007", name: "Coimbatore Institute of Technology, Civil Aerodrome Post, Coimbatore", type: "AIDED", district: "Coimbatore", aliases: ["CIT", "CIT Coimbatore"] },
-  "5008": { code: "5008", name: "Thiagarajar College of Engineering, Madurai", type: "AIDED", district: "Madurai", aliases: ["TCE", "TCE Madurai", "Thiagarajar"] },
-  // 16 Constituent
-  "1013": { code: "1013", name: "University College of Engineering, Villupuram", type: "CONSTITUENT", district: "Villupuram", aliases: ["UCEV", "UCE Villupuram"] },
-  "1014": { code: "1014", name: "University College of Engineering, Tindivanam", type: "CONSTITUENT", district: "Villupuram", aliases: ["UCET", "UCE Tindivanam"] },
-  "1015": { code: "1015", name: "University College of Engineering, Arni", type: "CONSTITUENT", district: "Tiruvannamalai", aliases: ["UCEA", "UCE Arni"] },
-  "1026": { code: "1026", name: "University College of Engineering, Kancheepuram", type: "CONSTITUENT", district: "Kancheepuram", aliases: ["UCEK", "UCE Kancheepuram", "UCE Kanchi"] },
-  "2025": { code: "2025", name: "Anna University Regional Campus, Coimbatore", type: "CONSTITUENT", district: "Coimbatore", aliases: ["AURCC", "AURC Coimbatore"] },
-  "3011": { code: "3011", name: "University College of Engineering, Tiruchirappalli (BIT Campus)", type: "CONSTITUENT", district: "Tiruchirappalli", aliases: ["BIT", "BIT Campus", "BIT Trichy", "UCE Trichy", "UCE Tiruchirappalli"] },
-  "3016": { code: "3016", name: "University College of Engineering, Ariyalur", type: "CONSTITUENT", district: "Ariyalur", aliases: ["UCE Ariyalur"] },
-  "3018": { code: "3018", name: "University College of Engineering, Nagercoil", type: "CONSTITUENT", district: "Kanyakumari", aliases: ["UCEN", "UCE Nagercoil"] },
-  "3019": { code: "3019", name: "University College of Engineering, Panruti", type: "CONSTITUENT", district: "Cuddalore", aliases: ["UCE Panruti"] },
-  "3021": { code: "3021", name: "University College of Engineering, Pattukkottai", type: "CONSTITUENT", district: "Thanjavur", aliases: ["UCE Pattukkottai"] },
-  "4020": { code: "4020", name: "Anna University Regional Campus, Tirunelveli", type: "CONSTITUENT", district: "Tirunelveli", aliases: ["AURCT", "AURC Tirunelveli"] },
-  "4023": { code: "4023", name: "University College of Engineering, Ramanathapuram", type: "CONSTITUENT", district: "Ramanathapuram", aliases: ["UCER", "UCE Ramanathapuram", "UCE Ramnad"] },
-  "4024": { code: "4024", name: "University College of Engineering, Dindigul", type: "CONSTITUENT", district: "Dindigul", aliases: ["UCED", "UCE Dindigul"] },
-  "5010": { code: "5010", name: "Anna University Regional Campus, Madurai", type: "CONSTITUENT", district: "Madurai", aliases: ["AURCM", "AURC Madurai"] },
-  "5017": { code: "5017", name: "University College of Engineering, Thirukkuvalai", type: "CONSTITUENT", district: "Nagapattinam", aliases: ["UCE Thirukkuvalai"] },
-  "5022": { code: "5022", name: "University College of Engineering, Thoothukudi", type: "CONSTITUENT", district: "Thoothukudi", aliases: ["UCE Thoothukudi", "UCE Tuticorin", "VOC", "VOC College", "VOC Thoothukudi", "VOC Tuticorin"] },
-  // 20 SFC
-  "1113": { code: "1113", name: "R.M.K. Engineering College, Gummidipoondi, Tiruvallur", type: "SFC", district: "Tiruvallur", aliases: ["RMK", "RMKEC"] },
-  "1120": { code: "1120", name: "Velammal Engineering College, Ambattur, Chennai", type: "SFC", district: "Chennai", aliases: ["VEC", "VEC Chennai"] },
-  "1211": { code: "1211", name: "Rajalakshmi Engineering College, Thandalam, Sriperumbudur", type: "SFC", district: "Kancheepuram", aliases: ["REC", "REC Chennai", "Rajalakshmi"] },
-  "1219": { code: "1219", name: "Sri Venkateswara College of Engineering, Pennalur, Sriperumbudur", type: "SFC", district: "Kancheepuram", aliases: ["SVCE", "SVCE Sriperumbudur"] },
-  "1304": { code: "1304", name: "Easwari Engineering College, Ramapuram, Chennai", type: "SFC", district: "Chennai", aliases: ["EEC", "Easwari"] },
-  "1317": { code: "1317", name: "St. Joseph's College of Engineering, OMR, Chennai", type: "SFC", district: "Chennai", aliases: ["SJCE", "St Josephs", "St Joseph"] },
-  "1399": { code: "1399", name: "Chennai Institute of Technology, Kundrathur, Chennai", type: "SFC", district: "Chennai", aliases: ["CIT", "CIT Chennai", "CIT Kundrathur"] },
-  "1419": { code: "1419", name: "Sri Sai Ram Engineering College, West Tambaram, Chennai", type: "SFC", district: "Kancheepuram", aliases: ["SEC", "SSREC", "Sairam", "Sai Ram", "Sri Sai Ram"] },
-  "1422": { code: "1422", name: "SRM Valliammai Engineering College, Kattankulathur", type: "SFC", district: "Chengalpattu", aliases: ["SRMVEC", "Valliammai"] },
-  "1450": { code: "1450", name: "Loyola-ICAM College of Engineering and Technology (LICET), Chennai", type: "SFC", district: "Chennai", aliases: ["LICET", "Loyola ICAM", "Loyola"] },
-  "2377": { code: "2377", name: "PSG Institute of Technology and Applied Research, Neelambur, Coimbatore", type: "SFC", district: "Coimbatore", aliases: ["PSG", "PSG iTech", "PSGITECH", "PSG IT"] },
-  "2607": { code: "2607", name: "K.S. Rangasamy College of Technology, Tiruchengode, Namakkal", type: "SFC", district: "Namakkal", aliases: ["KSRCT", "KSR"] },
-  "2618": { code: "2618", name: "Sona College of Technology, Suramangalam, Salem", type: "SFC", district: "Salem", aliases: ["SCT", "Sona"] },
-  "2702": { code: "2702", name: "Bannari Amman Institute of Technology, Sathyamangalam, Erode", type: "SFC", district: "Erode", aliases: ["BIT", "BIT Sathy", "Bannari", "BAIT"] },
-  "2711": { code: "2711", name: "Kongu Engineering College, Perundurai, Erode", type: "SFC", district: "Erode", aliases: ["KEC", "Kongu"] },
-  "2712": { code: "2712", name: "Kumaraguru College of Technology, Chinnavedampatti, Coimbatore", type: "SFC", district: "Coimbatore", aliases: ["KCT", "Kumaraguru"] },
-  "2718": { code: "2718", name: "Sri Krishna College of Engineering and Technology, Kuniamuthur, Coimbatore", type: "SFC", district: "Coimbatore", aliases: ["SKCET", "Krishna"] },
-  "2719": { code: "2719", name: "Sri Ramakrishna Engineering College, Vattamalaipalayam, Coimbatore", type: "SFC", district: "Coimbatore", aliases: ["SREC", "Ramakrishna"] },
-  "4960": { code: "4960", name: "Mepco Schlenk Engineering College, Sivakasi, Virudhunagar", type: "SFC", district: "Virudhunagar", aliases: ["Mepco", "MSEC"] },
-  "5986": { code: "5986", name: "Velammal College of Engineering and Technology, Madurai", type: "SFC", district: "Madurai", aliases: ["VCET", "VCET Madurai"] },
+// College cohort metadata for approved institutions
+import {
+  type CollegeMeta,
+  COHORT_55_METADATA,
+  COHORT_66_ADDITIONS_METADATA,
+  COHORT_65_ADDITIONS_METADATA,
+  COHORT_121_METADATA,
+  COHORT_120_METADATA,
+  COHORT_55_CODES,
+  COHORT_66_ADDITIONS_CODES,
+  COHORT_65_ADDITIONS_CODES,
+  COHORT_121_CODES,
+  COHORT_120_CODES,
+} from "../m5/cohort-metadata.ts";
+
+export {
+  type CollegeMeta,
+  COHORT_55_METADATA,
+  COHORT_66_ADDITIONS_METADATA,
+  COHORT_65_ADDITIONS_METADATA,
+  COHORT_121_METADATA,
+  COHORT_120_METADATA,
+  COHORT_55_CODES,
+  COHORT_66_ADDITIONS_CODES,
+  COHORT_65_ADDITIONS_CODES,
+  COHORT_121_CODES,
+  COHORT_120_CODES,
 };
 
 export const SEARCH_ALIASES: Record<string, string> = {
@@ -253,6 +226,7 @@ export interface M5GuidanceRenderOptions {
   community?: CommunityCategory;
   round?: AllotmentRound;
   communitySelected?: boolean;
+  year?: number;
 }
 
 export function renderM5GuidancePage(
@@ -292,12 +266,38 @@ export function renderM5GuidancePage(
       ? "ROUND_1"
       : "ROUND_2";
 
+  const year: number =
+    inputState.year === 2025 || params.get("year") === "2025"
+      ? 2025
+      : 2026;
+
   // Non-sensitive navigation / search filters from URL
   const query = (params.get("q") ?? "").trim().toLowerCase();
   const typeFilter = params.get("type") ?? "all";
+  const districtFilter = (params.get("district") ?? "").trim();
+  const branchFilter = (params.get("branch") ?? "").trim().toUpperCase();
+  const onlyAvailable = params.get("only_available") === "1";
 
-  // Load ALL 555 governed offerings
+  // Load ALL 1,249 governed offerings across 121 approved institutions
   const governedOfferings = HISTORICAL_OBSERVATIONS.getAllGovernedOfferings();
+
+  // Build deterministic, sorted filter options from governed metadata
+  const allDistricts = Array.from(
+    new Set(Object.values(COHORT_121_METADATA).map((c) => c.district))
+  ).sort((a, b) => a.localeCompare(b));
+
+  const branchMap = new Map<string, string>();
+  for (const off of governedOfferings) {
+    if (!branchMap.has(off.programmeCode)) {
+      branchMap.set(off.programmeCode, off.programmeName);
+    }
+  }
+  const allBranches = Array.from(branchMap.entries())
+    .map(([code, name]) => ({ code, name }))
+    .sort((a, b) => {
+      const n = a.name.localeCompare(b.name);
+      return n !== 0 ? n : a.code.localeCompare(b.code);
+    });
 
   // Evaluate comparison for each offering
   const evaluatedRows: Array<{
@@ -307,7 +307,7 @@ export function renderM5GuidancePage(
   }> = [];
 
   for (const off of governedOfferings) {
-    const college = COHORT_55_METADATA[off.collegeCode] ?? {
+    const college = COHORT_121_METADATA[off.collegeCode] ?? {
       code: off.collegeCode,
       name: `College ${off.collegeCode}`,
       type: "GOVERNMENT",
@@ -318,12 +318,18 @@ export function renderM5GuidancePage(
     // Filter by type
     if (typeFilter !== "all" && college.type !== typeFilter) continue;
 
+    // Filter by district
+    if (districtFilter && college.district.toLowerCase() !== districtFilter.toLowerCase()) continue;
+
+    // Filter by exact governed branch code
+    if (branchFilter && off.programmeCode.toUpperCase() !== branchFilter) continue;
+
     // Filter by search query
     if (query && !matchesOfferingSearch(college, off, query)) continue;
 
     const result = compareOffering({
       studentCutoff,
-      year: 2025,
+      year,
       stage: "PROVISIONAL_ALLOTMENT",
       round,
       quota,
@@ -332,6 +338,11 @@ export function renderM5GuidancePage(
       programmeCode: off.programmeCode,
       metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK",
     });
+
+    // Optional filter: show only offerings that have historical data
+    if (onlyAvailable && result.status !== "AVAILABLE" && result.status !== "STUDENT_CUTOFF_MISSING") {
+      continue;
+    }
 
     evaluatedRows.push({
       college,
@@ -359,6 +370,9 @@ export function renderM5GuidancePage(
     p.set("lang", target);
     if (query) p.set("q", query);
     if (typeFilter !== "all") p.set("type", typeFilter);
+    if (districtFilter) p.set("district", districtFilter);
+    if (branchFilter) p.set("branch", branchFilter);
+    if (onlyAvailable) p.set("only_available", "1");
     if (rawShortlist) p.set("shortlist", rawShortlist);
     return `?${p.toString()}`;
   };
@@ -378,42 +392,59 @@ export function renderM5GuidancePage(
     ${SITE_SHELL_CSS}
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; width: 100%; max-width: 100vw; overflow-x: hidden; }
-    .m5-container { max-width: 1100px; margin: 0 auto; padding: 1rem; width: 100%; overflow-x: hidden; }
+    .m5-container { max-width: 1200px; margin: 0 auto; padding: 1.25rem; width: 100%; overflow-x: hidden; }
     @media (max-width: 480px) {
-      .m5-container { padding: 0.5rem; }
+      .m5-container { padding: 0.65rem; }
     }
-    .nav-tabs { display: flex; gap: 0.35rem; margin-bottom: 1.25rem; border-bottom: 2px solid #e2e8f0; flex-wrap: wrap; }
-    .nav-tab { padding: 0.6rem 0.75rem; font-weight: 600; text-decoration: none; color: #4a5568; border-bottom: 3px solid transparent; min-height: 44px; display: inline-flex; align-items: center; font-size: 0.875rem; line-height: 1.3; }
+    .nav-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 2px solid #e2e8f0; flex-wrap: wrap; }
+    .nav-tab { padding: 0.7rem 0.9rem; font-weight: 600; text-decoration: none; color: #4a5568; border-bottom: 3px solid transparent; min-height: 44px; display: inline-flex; align-items: center; font-size: 0.95rem; line-height: 1.35; }
     .nav-tab.active { color: #2b6cb0; border-bottom-color: #2b6cb0; }
-    .form-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; background: #f7fafc; padding: 0.875rem; border-radius: 8px; margin-bottom: 1.25rem; border: 1px solid #e2e8f0; width: 100%; }
+    .form-grid { display: grid; grid-template-columns: 1fr; gap: 0.85rem; background: #f7fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1.25rem; border: 1px solid #cbd5e0; width: 100%; }
     @media (min-width: 640px) {
       .form-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); padding: 1.25rem; gap: 1rem; }
     }
-    .form-group { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
-    .form-group label { font-size: 0.875rem; font-weight: 600; color: #2d3748; }
-    .form-group input, .form-group select { padding: 0.5rem 0.6rem; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 0.95rem; min-height: 44px; width: 100%; max-width: 100%; }
-    .truth-banner { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 0.875rem; border-radius: 4px; margin-bottom: 1.25rem; font-size: 0.875rem; color: #2b6cb0; word-break: break-word; }
-    .truth-banner p { margin: 0.25rem 0; }
-    .table-responsive { width: 100%; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 1rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 6px; background: #fff; }
-    .comparison-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
-    .comparison-table th, .comparison-table td { padding: 0.6rem 0.5rem; text-align: left; border-bottom: 1px solid #e2e8f0; word-break: break-word; }
-    .comparison-table th { background: #edf2f7; font-weight: 700; font-size: 0.825rem; color: #4a5568; }
-    .delta-badge { display: inline-block; padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: 600; font-size: 0.85rem; background: #edf2f7; color: #2d3748; }
-    .held-badge { background: #fed7d7; color: #742a2a; padding: 0.25rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.8rem; display: inline-block; }
-    .neutral-badge { background: #edf2f7; color: #4a5568; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; display: inline-block; }
-    .btn-action { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0.4rem 0.75rem; border: 1px solid #cbd5e0; background: #fff; border-radius: 4px; cursor: pointer; text-decoration: none; color: #2d3748; font-weight: 600; font-size: 0.875rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
+    .form-group label { font-size: 0.925rem; font-weight: 600; color: #2d3748; }
+    .form-group input, .form-group select { padding: 0.6rem 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 1rem; min-height: 46px; width: 100%; max-width: 100%; }
+    .truth-banner { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 1rem; border-radius: 6px; margin-bottom: 1.25rem; font-size: 0.925rem; color: #2b6cb0; word-break: break-word; line-height: 1.55; }
+    .truth-banner p { margin: 0.3rem 0; }
+    .table-responsive { width: 100%; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 0.75rem; margin-bottom: 1rem; border: 1px solid #cbd5e0; border-radius: 8px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .comparison-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; line-height: 1.45; }
+    .comparison-table th, .comparison-table td { padding: 0.7rem 0.75rem; text-align: left; border-bottom: 1px solid #edf2f7; word-break: break-word; vertical-align: middle; }
+    .comparison-table tbody tr:hover { background: #f8fafc; }
+    .comparison-table th { background: #f1f5f9; font-weight: 700; font-size: 0.875rem; color: #334155; border-bottom: 2px solid #cbd5e0; }
+    .results-meta-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0 0.5rem; }
+    .results-count-pill { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; background: #ebf8ff; border: 1px solid #bee3f8; color: #2b6cb0; border-radius: 999px; font-weight: 700; font-size: 0.875rem; }
+    .college-title { font-weight: 700; color: #1a202c; display: inline; }
+    .college-code { color: #64748b; font-weight: 600; font-size: 0.875rem; }
+    .offering-subrow { display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.25rem; font-size: 0.85rem; color: #475569; }
+    .branch-pill { display: inline-block; padding: 0.1rem 0.45rem; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 4px; font-weight: 700; font-size: 0.8rem; color: #1e293b; letter-spacing: 0.02em; }
+    .district-tag { display: inline-block; color: #64748b; font-size: 0.82rem; }
+    .cutoff-value { font-size: 1.05rem; font-weight: 700; color: #0f172a; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .source-details { font-size: 0.8rem; color: #475569; }
+    .source-details summary { cursor: pointer; color: #2b6cb0; font-weight: 600; list-style: none; display: inline-flex; align-items: center; gap: 0.25rem; }
+    .source-details summary::-webkit-details-marker { display: none; }
+    .source-details summary::after { content: " ▾"; font-size: 0.75rem; }
+    .source-details[open] summary::after { content: " ▴"; }
+    .source-details-body { margin-top: 0.25rem; font-size: 0.78rem; color: #64748b; line-height: 1.35; }
+    .delta-badge { display: inline-block; padding: 0.2rem 0.55rem; border-radius: 4px; font-weight: 700; font-size: 0.875rem; background: #edf2f7; color: #1e293b; font-variant-numeric: tabular-nums; word-break: normal; overflow-wrap: normal; hyphens: manual; }
+    .held-badge { background: #fed7d7; color: #742a2a; padding: 0.25rem 0.55rem; border-radius: 4px; font-weight: 700; font-size: 0.82rem; display: inline-block; }
+    .neutral-badge { background: #f1f5f9; color: #475569; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.82rem; display: inline-block; }
+    .btn-action { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0.4rem 0.75rem; border: 1px solid #cbd5e0; background: #fff; border-radius: 6px; cursor: pointer; text-decoration: none; color: #2d3748; font-weight: 600; font-size: 0.875rem; white-space: nowrap; }
     .btn-action:hover { background: #edf2f7; }
     .btn-primary { background: #3182ce; color: #fff; border-color: #3182ce; }
     .btn-primary:hover { background: #2b6cb0; }
-    .footnote { font-size: 0.8rem; color: #718096; margin-top: 0.35rem; }
-    .shortlist-badge { background: #48bb78; color: #fff; padding: 0.15rem 0.45rem; border-radius: 12px; font-size: 0.75rem; margin-left: 0.4rem; }
-    .shortlist-actions { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+    .footnote { font-size: 0.82rem; color: #64748b; }
+    .shortlist-badge { background: #48bb78; color: #fff; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.8rem; margin-left: 0.4rem; }
+    .shortlist-actions { display: flex; gap: 0.35rem; flex-wrap: wrap; }
     @media (max-width: 768px) {
       .comparison-table th:nth-child(4), .comparison-table td:nth-child(4) { display: none; }
     }
     @media (max-width: 480px) {
-      .comparison-table th, .comparison-table td { padding: 0.45rem 0.3rem; font-size: 0.8rem; }
-      .btn-action { padding: 0.35rem 0.5rem; }
+      .comparison-table th, .comparison-table td { padding: 0.5rem 0.35rem; font-size: 0.82rem; }
+      .btn-action { padding: 0.35rem 0.5rem; font-size: 0.8rem; min-height: 38px; min-width: 38px; }
+      .delta-badge { font-size: 0.76rem; padding: 0.15rem 0.35rem; line-height: 1.25; }
+      .delta-caution { display: none; }
     }
     .print-only { display: none !important; }
     .screen-only { display: block; }
@@ -492,7 +523,13 @@ export function renderM5GuidancePage(
   <main class="m5-container">
     <header>
       <h1>${esc(copy.title)}</h1>
-      <p>${esc(copy.nonPredictionDisclaimer)}</p>
+      <p style="font-size: 1.05rem; color: #1e293b; margin: 0.35rem 0 0.45rem; line-height: 1.55; font-weight: 500;">
+        ${t(
+          "வணக்கம்! உங்கள் கட்-ஆஃப் மதிப்பெண்ணை 2025 TNEA அதிகாரப்பூர்வ ஒதுக்கீடுகளுடன் எளிதாக ஒப்பிட்டு, மாவட்ட வாரியாக கல்லூரிகளை ஆராய்ந்து உங்களுக்கான விருப்பப் பட்டியலைத் திட்டமிடுங்கள்.",
+          "Welcome! Compare your marks with governed 2025 official provisional allotments, explore colleges across Tamil Nadu, and organize a balanced choice list for your counselling journey."
+        )}
+      </p>
+      <p style="font-size: 0.88rem; color: #475569; margin: 0 0 0.5rem; line-height: 1.5;">${esc(copy.nonPredictionDisclaimer)}</p>
     </header>
 
     <nav class="nav-tabs" aria-label="Milestone M5 Views">
@@ -520,11 +557,18 @@ export function renderM5GuidancePage(
             community,
             round,
             communitySelected,
+            year,
             query,
             typeFilter,
+            districtFilter,
+            branchFilter,
+            allDistricts,
+            allBranches,
+            onlyAvailable,
             evaluatedRows,
             shortIds,
-            rawShortlist
+            rawShortlist,
+            governedOfferings.length
           )
     }
   </main>
@@ -540,13 +584,22 @@ function renderComparisonTab(
   community: CommunityCategory,
   round: AllotmentRound,
   communitySelected: boolean,
+  year: number,
   query: string,
   typeFilter: string,
+  districtFilter: string,
+  branchFilter: string,
+  allDistricts: string[],
+  allBranches: Array<{ code: string; name: string }>,
+  onlyAvailable: boolean,
   rows: Array<{ college: CollegeMeta; offering: GovernedOffering; result: ComparisonResult }>,
   shortIds: string[],
-  rawShortlist: string
+  rawShortlist: string,
+  totalOfferingsCount: number
 ): string {
   const t = (taStr: string, enStr: string) => (lang === "ta" ? taStr : enStr);
+  const totalOfferings = totalOfferingsCount;
+  const totalOfferingsFormatted = totalOfferings.toLocaleString("en-US");
   const approvedHistoricalResult = rows
     .map((row) => row.result)
     .find(
@@ -561,8 +614,8 @@ function renderComparisonTab(
   const historicalDisclosure = approvedHistoricalResult?.round
     ? copy.formatDisclosure(approvedHistoricalResult.round)
     : t(
-        "தேர்ந்தெடுத்த ஒதுக்கீடு / பிரிவு / சுற்றிற்கு இந்தப் பட்டியலில் அங்கீகரிக்கப்பட்ட 2025 வரலாற்றுத் தரவு கிடைக்கவில்லை. தரவு இல்லாமை கல்லூரி அல்லது படிப்பு இல்லை என்பதைக் குறிக்காது.",
-        "No approved 2025 historical observation is available for the currently displayed offerings under the selected quota, community, and round. Missing historical data does not mean the college or branch is unavailable."
+        `தேர்ந்தெடுத்த ஒதுக்கீடு / பிரிவு / சுற்றிற்கு இந்தப் பட்டியலில் அங்கீகரிக்கப்பட்ட ${year} வரலாற்றுத் தரவு கிடைக்கவில்லை. தரவு இல்லாமை கல்லூரி அல்லது படிப்பு இல்லை என்பதைக் குறிக்காது.`,
+        `No approved ${year} historical observation is available for the currently displayed offerings under the selected quota, community, and round. Missing historical data does not mean the college or branch is unavailable.`
       );
   const availableCount = rows.filter(
     (r) => r.result.status === "AVAILABLE" || r.result.status === "STUDENT_CUTOFF_MISSING"
@@ -570,10 +623,10 @@ function renderComparisonTab(
 
   return `
     <section>
-      <p class="scope-note screen-only" style="margin: 0 0 0.85rem; padding: 0.65rem 0.9rem; background: #f8fafc; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.88rem; color: #2d3748; line-height: 1.5;">
+      <p class="scope-note screen-only" style="margin: 0 0 0.85rem; padding: 0.75rem 1rem; background: #f8fafc; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.925rem; color: #2d3748; line-height: 1.55;">
         ${t(
-          `<strong>வரம்பு:</strong> இந்தப் பக்கத்தில் 2025 வரலாற்றுத் தரவு ஒப்பீட்டிற்கு அங்கீகரிக்கப்பட்ட <strong>55 கல்லூரிகள் (555 படிப்புகள்)</strong> உள்ளன. தமிழ்நாட்டின் முழு 389 கல்லூரிகள் பட்டியலை மதிப்பெண் இன்றி ஆராய <a href="/colleges?lang=ta">கல்லூரிகள் பட்டியலைப் பார்க்கவும்</a>.`,
-          `<strong>Dataset scope:</strong> This comparison workspace covers the <strong>55 approved colleges (555 offerings)</strong> with governed 2025 historical evidence. To browse the broader 389-college 2026 TNEA listing without marks, visit the <a href="/colleges?lang=en">Colleges Directory</a>.`
+          `<strong>வரம்பு:</strong> இந்தப் பக்கத்தில் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு ஒப்பீட்டிற்கு அங்கீகரிக்கப்பட்ட <strong>121 கல்லூரிகள் (1,249 படிப்புகள்)</strong> (அடிப்படை 55 கல்லூரிகள் உட்பட) உள்ளன. தமிழ்நாட்டின் முழு 389 கல்லூரிகள் பட்டியலை மதிப்பெண் இன்றி ஆராய <a href="/colleges?lang=ta">கல்லூரிகள் பட்டியலைப் பார்க்கவும்</a>.`,
+          `<strong>Dataset scope:</strong> This comparison workspace covers the <strong>121 approved colleges (1,249 offerings)</strong> (including the 55 approved institutions from the benchmark cohort) with governed official provisional allotment evidence. To browse the broader 389-college 2026 TNEA listing without marks, visit the <a href="/colleges?lang=en">Colleges Directory</a>.`
         )}
       </p>
 
@@ -625,10 +678,7 @@ function renderComparisonTab(
         <div class="form-group">
           <label for="round-select">${esc(copy.roundLabel)}</label>
           <select id="round-select" name="round">
-            ${(quota === "GOVT_SCHOOL_7_5"
-              ? (["ROUND_1", "ROUND_2"] as AllotmentRound[])
-              : (["ROUND_2", "ROUND_3"] as AllotmentRound[])
-            )
+            ${(["ROUND_1", "ROUND_2", "ROUND_3"] as AllotmentRound[])
               .map(
                 (r) =>
                   `<option value="${r}" ${round === r ? "selected" : ""}>${esc(copy.roundName(r))}</option>`
@@ -638,53 +688,239 @@ function renderComparisonTab(
         </div>
 
         <div class="form-group">
-          <label for="search-input">${t("தேடல் (கல்லூரி / கிளை / மாவட்டம்)", "Search (College / Branch / District)")}</label>
-          <input id="search-input" type="text" name="q" value="${esc(query)}" placeholder="${t("எ.கா. CEG, PSG ECE, CSE, கோவை", "e.g. CEG, PSG ECE, CSE, Coimbatore")}">
-          <small style="font-size: 0.78rem; color: #4a5568;">${t("சுருக்கப்பெயர் (CEG, PSG, GCT), கிளை (CSE, ECE), அல்லது மாவட்டம் (கோவை, சென்னை) கொண்டு தேடலாம்.", "Try college acronyms (CEG, PSG, GCT), branches (CSE, ECE), or districts (Coimbatore, Chennai).")}</small>
+          <label for="year-select">${t("கலந்தாய்வு ஆண்டு (Year)", "Counselling Year")}</label>
+          <select id="year-select" name="year">
+            <option value="2026" ${year === 2026 ? "selected" : ""}>${t("2026 (121 கல்லூரிகள்)", "2026 (121 Colleges)")}</option>
+            <option value="2025" ${year === 2025 ? "selected" : ""}>${t("2025 (55 கல்லூரிகள்)", "2025 (55 Colleges)")}</option>
+          </select>
         </div>
 
-        <div class="form-group" style="align-self: flex-end;">
-          <button type="submit" class="btn-action btn-primary" style="width: 100%;">${t("தேடு &amp; ஒப்பிடு", "Search &amp; Compare")}</button>
-          <small style="font-size: 0.75rem; color: #4a5568; text-align: center;">${t("தற்காலிக கணக்கீடு · மதிப்பெண்கள் சேமிக்கப்படாது", "In-memory only · Marks are never saved")}</small>
+        <div class="form-group">
+          <label for="district-select">${t("மாவட்டம்", "District")}</label>
+          <select id="district-select" name="district">
+            <option value="" ${!districtFilter ? "selected" : ""}>${t("அனைத்து மாவட்டங்கள்", "All Districts")}</option>
+            ${allDistricts
+              .map(
+                (d) =>
+                  `<option value="${esc(d)}" ${districtFilter.toLowerCase() === d.toLowerCase() ? "selected" : ""}>${esc(d)}</option>`
+              )
+              .join("")}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="branch-select">${t("துறை / கிளை", "Branch / Department")}</label>
+          <select id="branch-select" name="branch">
+            <option value="" ${!branchFilter ? "selected" : ""}>${t("அனைத்து கிளைகள்", "All Branches")}</option>
+            ${allBranches
+              .map(
+                (b) =>
+                  `<option value="${esc(b.code)}" ${branchFilter === b.code ? "selected" : ""}>${esc(formatBranchDropdownLabel(b.name))} (${esc(b.code)})</option>`
+              )
+              .join("")}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="search-input">${t("தேடல் (கல்லூரி / கிளை / மாவட்டம்)", "Search (College / Branch / District)")}</label>
+          <input id="search-input" type="text" name="q" value="${esc(query)}" placeholder="${t("எ.கா. CEG, PSG ECE, CSE, கோவை", "e.g. CEG, PSG ECE, CSE, Coimbatore")}">
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1; margin: 0.1rem 0 0.2rem; display: flex; flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+          <label style="display: inline-flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.92rem; font-weight: 600; color: #2d3748;">
+            <input type="checkbox" name="only_available" value="1" ${onlyAvailable ? "checked" : ""} style="width: 1.15rem; height: 1.15rem; min-height: 0; cursor: pointer;">
+            <span>${t("கட்-ஆஃப் தரவு உள்ள படிப்புகளை மட்டும் காட்டு", "Show only offerings with available cutoff data")}</span>
+          </label>
+          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            ${
+              districtFilter || branchFilter || query || onlyAvailable
+                ? `<a class="btn-action" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">${t("வடிகட்டிகளை நீக்கு", "Clear Filters")}</a>`
+                : ""
+            }
+            <button type="submit" class="btn-action btn-primary" style="padding: 0.5rem 1.25rem; font-size: 0.95rem;">${t("தேடு &amp; ஒப்பிடு", "Search &amp; Compare")}</button>
+          </div>
         </div>
       </form>
 
-      <details class="community-guide screen-only" style="margin: 0 0 1rem; padding: 0.65rem 0.9rem; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 0.875rem; color: #2d3748;">
+      <details class="community-guide screen-only" style="margin: 0 0 0.75rem; padding: 0.75rem 1rem; background: #fff; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.9rem; color: #2d3748;">
         <summary style="cursor: pointer; font-weight: 600; color: #2b6cb0; padding: 0.2rem 0;">${t("இட ஒதுக்கீட்டுப் பிரிவுகள் (OC / BC / MBC / SC / ST) — எளிய விளக்கம்", "Reservation Community Categories (OC / BC / MBC / SC / ST) — Quick Guide")}</summary>
-        <ul style="margin: 0.5rem 0 0.25rem; padding-left: 1.2rem; line-height: 1.55;">
+        <ul style="margin: 0.5rem 0 0.25rem; padding-left: 1.2rem; line-height: 1.6;">
           <li><strong>OC</strong> — ${t("பொதுப் பிரிவு (Open Competition): அனைத்து வகுப்பினரும் தகுதியின் அடிப்படையில் போட்டியிடக்கூடிய பொது இடங்கள்.", "Open Competition: Open merit pool available to all eligible candidates regardless of community.")}</li>
           <li><strong>BC / BCM</strong> — ${t("பிற்படுத்தப்பட்டோர் (Backward Class) மற்றும் பிற்படுத்தப்பட்ட முஸ்லிம் (BC Muslim).", "Backward Class (BC) and Backward Class Muslim (BCM).")}</li>
           <li><strong>MBC</strong> — ${t("மிகவும் பிற்படுத்தப்பட்டோர் மற்றும் சீர்மரபினர் (MBC / DNC).", "Most Backward Class and Denotified Communities (MBC / DNC).")}</li>
           <li><strong>SC / SCA / ST</strong> — ${t("ஆதிதிராவிடர் (SC), அருந்ததியர் (SCA) மற்றும் பழங்குடியினர் (ST).", "Scheduled Caste (SC), Scheduled Caste Arunthathiyar (SCA), and Scheduled Tribe (ST).")}</li>
         </ul>
-        <p style="margin: 0.35rem 0 0; font-size: 0.82rem; color: #4a5568;">${t("உங்கள் சாதிச் சான்றிதழின்படி பொருந்தும் பிரிவை நீங்களே தேர்ந்தெடுங்கள்; தளம் தானாகப் பிரிவைக் கணிக்காது.", "Select the category that matches your official certificate; this tool never infers your category.")}</p>
+        <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: #4a5568;">${t("உங்கள் சாதிச் சான்றிதழின்படி பொருந்தும் பிரிவை நீங்களே தேர்ந்தெடுங்கள்; தளம் தானாகப் பிரிவைக் கணிக்காது.", "Select the category that matches your official certificate; this tool never infers your category.")}</p>
       </details>
 
-      <div class="active-context-strip" role="status" style="margin: 0 0 1rem; padding: 0.75rem 1rem; background: #edf2f7; border-left: 4px solid #2b6cb0; border-radius: 4px; font-size: 0.88rem; color: #1a202c; line-height: 1.5;">
+      <details class="delta-guide screen-only" style="margin: 0 0 1rem; padding: 0.85rem 1rem; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; font-size: 0.9rem; color: #14532d; line-height: 1.6;">
+        <summary style="cursor: pointer; font-weight: 700; color: #15803d; padding: 0.2rem 0; font-size: 0.95rem;">
+          ${t("💡 கட்-ஆஃப் ஒப்பீட்டு வேறுபாடு (Δ) கணக்கீடு மற்றும் விருப்பப் பட்டியல் அமைக்கும் முறை", "💡 How Comparison Delta (Δ) Works & Practical Guide for Structuring Your Choice List")}
+        </summary>
+        <div style="margin-top: 0.65rem; border-top: 1px solid #bbf7d0; padding-top: 0.65rem;">
+          <p style="margin: 0 0 0.5rem;">
+            <strong>${t("கணக்கிடும் முறை:", "Calculation Method:")}</strong>
+            <code style="background: #dcfce7; padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 700; color: #166534;">${t("உங்கள் கட்-ஆஃப் மதிப்பெண் − கண்டறியப்பட்ட தற்காலிக குறைந்தபட்ச மதிப்பெண் = ஒப்பீட்டு வேறுபாடு (Δ)", "Your Cutoff Mark − Observed Provisional Allotment Minimum Mark = Comparison Delta (Δ)")}</code>
+          </p>
+          <ul style="margin: 0.35rem 0 0.65rem; padding-left: 1.2rem;">
+            <li>
+              <strong>${t("கூடுதல் மதிப்பெண் (+):", "Positive (+) Difference:")}</strong>
+              ${t(
+                "உதாரணமாக, <strong>+3.00</strong> — முந்தைய ஆண்டு தற்காலிக ஒதுக்கீட்டில் இந்த இடத்திற்கு ஒதுக்கப்பட்ட மிகக் குறைந்த மதிப்பெண்ணை விட உங்கள் கட்-ஆஃப் 3.00 மதிப்பெண்கள் அதிகம்.",
+                "e.g., <strong>+3.00</strong> — Your cutoff mark is 3.00 marks higher than the lowest score allotted for this offering in the past provisional allotment."
+              )}
+            </li>
+            <li>
+              <strong>${t("குறைவான மதிப்பெண் (−):", "Negative (−) Difference:")}</strong>
+              ${t(
+                "உதாரணமாக, <strong>-3.00</strong> — முந்தைய ஆண்டு தற்காலிக ஒதுக்கீட்டில் இந்த இடத்திற்கு ஒதுக்கப்பட்ட மிகக் குறைந்த மதிப்பெண்ணை விட உங்கள் கட்-ஆஃப் 3.00 மதிப்பெண்கள் குறைவு.",
+                "e.g., <strong>-3.00</strong> — Your cutoff mark is 3.00 marks lower than the lowest score allotted for this offering in the past provisional allotment."
+              )}
+            </li>
+            <li>
+              <strong>${t("பூஜ்ஜியம் (0.00):", "Zero (0.00):")}</strong>
+              ${t("முந்தைய ஆண்டு தற்காலிக ஒதுக்கீட்டில் கண்டறியப்பட்ட குறைந்தபட்ச மதிப்பெண்ணிற்குச் சமம்.", "Exact match with the past provisional allotment observed minimum mark.")}
+            </li>
+          </ul>
+
+          <div style="background: #ffffff; padding: 0.75rem 0.9rem; border: 1px solid #bbf7d0; border-radius: 6px; margin-top: 0.5rem;">
+            <strong style="color: #15803d; display: block; margin-bottom: 0.35rem;">
+              ${t("🎯 TNEA விருப்பப் பட்டியலை (Choice List) வரிசைப்படுத்தும் வழிமுறை:", "🎯 Structuring Your TNEA Choice List Preference Order:")}
+            </strong>
+            <p style="margin: 0 0 0.45rem; font-size: 0.88rem; color: #1f2937;">
+              <strong>${t("உங்கள் விருப்பங்களை உண்மையான முன்னுரிமைப்படி வரிசை எண் 1, 2, 3... என அமைப்பது பாதுகாப்பானது.", "Organizing your choices according to your genuine priority order (#1, #2, #3...) carries zero disadvantage.")}</strong><br>
+              ${t(
+                "TNEA கலந்தாய்வு கணினி உங்கள் விருப்பங்களை மேலிருந்து கீழாக மட்டுமே வரிசையாகப் பார்க்கும். முதல் விருப்பத்தில் இடம் கிடைக்காவிட்டால், அடுத்த விருப்பத்தை எந்தப் பாதிப்பும் இன்றி தானாகவே பரிசீலிக்கும். தற்காலிக ஒதுக்கீட்டிற்குப் பிறகு நீங்கள் 'மேல்நோக்கிய நகர்வு' (Upward Movement) கோரினால், கணினி எப்போதுமே உங்கள் தற்போதைய ஒதுக்கீட்டை விட மேலே உள்ள விருப்பங்களை (#1 நோக்கி) மட்டுமே முன்னுரிமைப்படுத்தும். எனவே விருப்பங்களை உங்கள் உண்மையான விருப்ப வரிசைப்படி அச்சமின்றி வரிசைப்படுத்துங்கள்.",
+                "The TNEA single-window allocation algorithm processes choices strictly sequentially from Choice #1 downwards. If you are not eligible for Choice #1, the system automatically evaluates Choice #2 with zero penalty. Furthermore, Upward Movement after tentative allotment strictly seeks vacancies in choices placed above your current allotment (moving toward Choice #1). Therefore, candidates should order choices purely by their genuine personal preferences."
+              )}
+            </p>
+          </div>
+        </div>
+      </details>
+
+      <details class="rounds-guide screen-only" style="margin: 0 0 1rem; padding: 0.85rem 1rem; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; color: #1e293b; line-height: 1.6;">
+        <summary style="cursor: pointer; font-weight: 700; color: #1e40af; padding: 0.2rem 0; font-size: 0.95rem;">
+          ${t("🏛️ TNEA கலந்தாய்வு சுற்றுகள் (Round 1, 2, 3) &amp; நடைமுறை நிலைகள் — அதிகாரப்பூர்வ விளக்கம்", "🏛️ TNEA Counselling Rounds Architecture (Round 1, 2, 3) &amp; Allotment Stages — Official Guide")}
+        </summary>
+        <div style="margin-top: 0.65rem; border-top: 1px solid #e2e8f0; padding-top: 0.65rem;">
+          <p style="margin: 0 0 0.5rem; font-size: 0.88rem; color: #334155;">
+            ${t(
+              "TNEA ஒற்றைச் சாளரப் பொறியியல் கலந்தாய்வு பொதுத் தரவரிசை (General Merit Rank) மற்றும் 200-க்கு கணக்கிடப்படும் கட்-ஆஃப் மதிப்பெண்களின் அடிப்படையில் 3 தொடர்ச்சியான சுற்றுகளாக நடத்தப்படுகிறது.",
+              "TNEA single-window engineering counselling is conducted across 3 sequential rounds based strictly on candidate General Merit Rank and aggregate cut-off score (out of 200)."
+            )}
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.65rem; margin: 0.5rem 0 0.85rem;">
+            <div style="background: #ffffff; border: 1px solid #bfdbfe; border-left: 3px solid #2563eb; padding: 0.65rem 0.8rem; border-radius: 6px;">
+              <strong style="color: #1d4ed8; display: block; font-size: 0.9rem; margin-bottom: 0.2rem;">
+                ${t("சுற்று 1 (Round 1)", "Round 1")}
+              </strong>
+              <div style="font-size: 0.83rem; color: #475569; line-height: 1.45;">
+                <strong>${t("தரவரிசை:", "Rank:")}</strong> 1 - ~24,000<br>
+                <strong>${t("கட்-ஆஃப்:", "Cut-off:")}</strong> 200.00 - ~179.00<br>
+                <span>${t("தொடக்க சுற்றுக்குத் தகுதிபெற்ற தரவரிசைப் பிரிவு. முதல் சுற்றில் இட ஒதுக்கீடுகள் தொடங்குகின்றன.", "Initial qualifying rank band. Allotments begin in the first counselling round.")}</span>
+              </div>
+            </div>
+
+            <div style="background: #ffffff; border: 1px solid #bfdbfe; border-left: 3px solid #2563eb; padding: 0.65rem 0.8rem; border-radius: 6px;">
+              <strong style="color: #1d4ed8; display: block; font-size: 0.9rem; margin-bottom: 0.2rem;">
+                ${t("சுற்று 2 (Round 2)", "Round 2")}
+              </strong>
+              <div style="font-size: 0.83rem; color: #475569; line-height: 1.45;">
+                <strong>${t("தரவரிசை:", "Rank:")}</strong> ~24,001 - ~75,000<br>
+                <strong>${t("கட்-ஆஃப்:", "Cut-off:")}</strong> ~178.99 - ~145.00<br>
+                <span>${t("நடுத்தர மதிப்பெண் பெற்ற மாணவர்கள். அரசு உதவிபெறும் மற்றும் தன்னாட்சி கல்லூரிகளில் பரவலான ஒதுக்கீடுகள்.", "Mid rankers. Allotments across autonomous SFCs and govt-aided institutions.")}</span>
+              </div>
+            </div>
+
+            <div style="background: #ffffff; border: 1px solid #bfdbfe; border-left: 3px solid #2563eb; padding: 0.65rem 0.8rem; border-radius: 6px;">
+              <strong style="color: #1d4ed8; display: block; font-size: 0.9rem; margin-bottom: 0.2rem;">
+                ${t("சுற்று 3 (Round 3)", "Round 3")}
+              </strong>
+              <div style="font-size: 0.83rem; color: #475569; line-height: 1.45;">
+                <strong>${t("தரவரிசை:", "Rank:")}</strong> ${t("~75,001 முதல் கடைசி வரை", "~75,001 to qualifying rank")}<br>
+                <strong>${t("கட்-ஆஃப்:", "Cut-off:")}</strong> ~144.99 - ~77.50<br>
+                <span>${t("தகுதிபெற்ற பிற மாணவர்கள். உறுப்புக் கல்லூரிகள் மற்றும் பிற கல்லூரிகளில் இடங்கள்.", "Qualifying rankers. Regional constituent colleges and remaining seats.")}</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: #ffffff; padding: 0.75rem 0.9rem; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 0.65rem;">
+            <strong style="color: #0f172a; display: block; margin-bottom: 0.35rem; font-size: 0.88rem;">
+              ${t("🔄 ஒவ்வொரு சுற்றிலும் உள்ள 4 தொடர் நிலைகள்:", "🔄 4 Sequential Stages of Every Counselling Round:")}
+            </strong>
+            <ol style="margin: 0.25rem 0 0; padding-left: 1.2rem; font-size: 0.85rem; color: #334155; line-height: 1.55;">
+              <li><strong>${t("1. விருப்பப் பதிவு (Choice Filling — 3 நாட்கள்):", "1. Choice Filling (3 Days):")}</strong> ${t("உங்கள் சுற்றில் உள்ள அனைத்துக் கல்லூரிகளையும் விருப்ப வரிசைப்படி (Choice 1, 2, 3...) வரம்பற்ற அளவில் சேர்க்கலாம். குறிப்பிட்ட காலக்கெடுவுக்குள் லாக் செய்ய வேண்டும்.", "Candidates add unlimited college-programme choices ordered by preference (#1, #2, #3...) and lock before the deadline.")}</li>
+              <li><strong>${t("2. தற்காலிக ஒதுக்கீடு (Tentative Allotment — 4-ஆம் நாள் காலை 10 மணி):", "2. Tentative Allotment (Day 4, 10 AM):")}</strong> ${t("கணினி உங்கள் விருப்பப் பட்டியலை மேலிருந்து கீழாகப் பார்த்து, உங்கள் தரவரிசை மற்றும் வகுப்பிற்கு உகந்த மிக உயர்ந்த முன்னுரிமை இடத்தை ஒதுக்கும்.", "Computer algorithm evaluates your choices sequentially from #1 downwards, allotting the highest preference where an eligible seat is open.")}</li>
+              <li><strong>${t("3. தற்காலிக உறுதிப்படுத்தல் &amp; மேல்நோக்கிய நகர்வு (Confirmation — 2 நாட்கள்):", "3. Tentative Confirmation (2 Days):")}</strong>
+                ${t(
+                  "கிடைத்த இடத்தை ஏற்று கல்லூரியில் சேரலாம் (Accept &amp; Join), அல்லது அந்த இடத்தை தக்கவைத்துக்கொண்டு Choice #1-ஐ நோக்கி மேலே முன்னேறக் கோரலாம் (Accept &amp; Upward — TFC உதவி மையத்திற்குச் சென்று சரிபார்ப்பு அவசியம்). இடத்தை நிராகரித்து மேலே மட்டும் முன்னேறக் கோரலாம் (Decline &amp; Upward), அல்லது அடுத்த சுற்றுக்குச் செல்லலாம் (Decline &amp; Next Round).",
+                  "Options include Accept &amp; Join (confirm seat), Accept &amp; Upward (hold seat and request upward movement toward Choice #1 via mandatory TFC reporting), Decline &amp; Upward (relinquish seat, seek upward choices only), or Decline &amp; Next Round."
+                )}
+              </li>
+              <li><strong>${t("4. இறுதி ஒதுக்கீடு (Final Allotment):", "4. Final Provisional Allotment:")}</strong> ${t("மேல்நோக்கிய நகர்வு கணக்கிடப்பட்டு இறுதி ஒதுக்கீட்டுக் கடிதம் வெளியிடப்படும். காலியிடங்கள் அடுத்த சுற்றுக்கு மாற்றப்படும்.", "Upward movements are finalized using vacated seats, and final allotment orders are released. Unfilled seats roll over to the next round.")}</li>
+            </ol>
+          </div>
+
+          <div style="background: #eff6ff; padding: 0.65rem 0.85rem; border-left: 3px solid #3b82f6; border-radius: 4px; font-size: 0.84rem; color: #1e3a8a;">
+            <strong>${t("📌 2025 கலந்தாய்வு தரவு பற்றிய குறிப்பு:", "📌 Note on 2025 Historical Data:")}</strong><br>
+            ${t(
+              "2025-ஆம் ஆண்டின் கலந்தாய்வில், பொதுக் கல்விப் பிரிவிற்கு அதிகாரப்பூர்வமாக சுற்று 2 மற்றும் சுற்று 3 வெளியீடுகளும், 7.5% அரசுப் பள்ளி ஒதுக்கீட்டிற்கு சுற்று 1 மற்றும் சுற்று 2 வெளியீடுகளும் மட்டுமே கிடைத்தன (பொதுக் கல்வி சுற்று 1 மற்றும் 7.5% ஒதுக்கீட்டு சுற்று 3 வெளியிடப்படவில்லை). மற்ற சுற்றுகளின் தரவைப் பார்க்க மேலே உள்ள 'சுற்று' தேர்வைப் பயன்படுத்தவும்.",
+              "For the 2025 admission cycle, official provisional allotment publications were released for General Academic (Round 2 and Round 3) and 7.5% Government School Quota (Round 1 and Round 2). General Academic Round 1 and 7.5% Quota Round 3 publications were not released. Use the 'Round' selector above to inspect benchmarks across available rounds."
+            )}
+          </div>
+        </div>
+      </details>
+
+      <div class="active-context-strip" role="status" style="margin: 0 0 1rem; padding: 0.8rem 1rem; background: #edf2f7; border-left: 4px solid #2b6cb0; border-radius: 4px; font-size: 0.9rem; color: #1a202c; line-height: 1.5;">
         <div>
-          <strong>${t("தற்போதைய ஒப்பீட்டு அமைப்பு:", "Current Comparison Context:")}</strong>
-          2025 · ${esc(copy.quotaName(quota))} · <strong>${esc(copy.communityName(community))}</strong> · ${esc(copy.roundName(round))}
+          <strong>${t("தற்போது தேர்ந்தெடுத்துள்ள விவரம்:", "Current Comparison Context:")}</strong>
+          ${year} · ${esc(copy.quotaName(quota))} · <strong>${esc(copy.communityName(community))}</strong> · ${esc(copy.roundName(round))}
+          ${districtFilter ? ` · ${t("மாவட்டம்:", "District:")} <strong>${esc(districtFilter)}</strong>` : ""}
+          ${branchFilter ? ` · ${t("கிளை:", "Branch:")} <strong>${esc(branchFilter)}</strong>` : ""}
           ${query ? ` · ${t("தேடல்:", "Search:")} <strong>${esc(query)}</strong>` : ""}
-          (${t(`${rows.length} படிப்புகளில் ${availableCount} படிப்புகளுக்கு 2025 தரவு உள்ளது`, `${availableCount} of ${rows.length} shown offerings have 2025 data`)})
+          ${onlyAvailable ? ` · <strong>${t("கட்-ஆஃப் உள்ளவை மட்டும்", "Only available")}</strong>` : ""}
+          (${
+            rows.length === totalOfferings
+              ? t(
+                  `மொத்தமுள்ள ${totalOfferingsFormatted} படிப்புகளில், ${esc(copy.roundName(round))}-ல் ${availableCount} படிப்புகளில் இடங்கள் ஒதுக்கப்பட்டுள்ளன`,
+                  `${availableCount} of ${totalOfferingsFormatted} total offerings were allotted in ${esc(copy.roundName(round))}`
+                )
+              : t(
+                  `காட்டப்படும் ${rows.length} படிப்புகளில், ${esc(copy.roundName(round))}-ல் ${availableCount} படிப்புகளில் இடங்கள் ஒதுக்கப்பட்டுள்ளன`,
+                  `${availableCount} of ${rows.length} shown offerings were allotted in ${esc(copy.roundName(round))}`
+                )
+          })
         </div>
         ${
-          quota === "GENERAL_ACADEMIC"
+          year === 2025
+            ? `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
+                "<strong>2025 வரம்புத் தகவல்:</strong> 2025-ஆம் ஆண்டின் வரலாற்றுத் தரவு 55 அடிப்படை கல்லூரிகளுக்கு (536 படிப்புகள்) மட்டுமே பொருந்தும். புதிதாக சேர்க்கப்பட்ட தன்னாட்சி கல்லூரிகளுக்கான ஒதுக்கீட்டுத் தரவைப் பார்க்க மேலே உள்ள 'கலந்தாய்வு ஆண்டு' தேர்வில் <strong>2026</strong>-ஐத் தேர்ந்தெடுக்கவும்.",
+                "<strong>2025 Scope Note:</strong> 2025 historical allotments are available for the 55 benchmark colleges (536 offerings). Newly added autonomous institutions only have 2026 data; select <strong>2026</strong> above to inspect complete 121-college coverage."
+              )}</p>`
+            : `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
+                "<strong>2026 முழு வரம்பு:</strong> 2026-ஆம் ஆண்டின் தற்காலிக ஒதுக்கீட்டுத் தரவு 121 கல்லூரிகளுக்கும் (1,249 படிப்புகள்) முழுமையாகக் கிடைக்கிறது.",
+                "<strong>2026 Complete Scope:</strong> 2026 provisional allotment data is active across all 121 approved colleges (1,249 offerings)."
+              )}</p>`
+        }
+        ${
+          year === 2025 && quota === "GENERAL_ACADEMIC"
             ? `<p style="margin: 0.4rem 0 0; font-size: 0.84rem; color: #2d3748;">${t(
-                "<strong>முக்கியக் குறிப்பு (சுற்று 1 தரவு இல்லை):</strong> பொதுக் கல்விப் பிரிவுக்கு 2025 அதிகாரப்பூர்வ <strong>சுற்று 2</strong> மற்றும் <strong>சுற்று 3</strong> வெளியீடுகள் மட்டுமே இங்கு அங்கீகரிக்கப்பட்டுள்ளன. CEG, PSG போன்ற முன்னணி கல்லூரிகளில் சுற்று 1-லேயே நிரம்பிய இடங்களுக்கு 'ஒப்பீட்டிற்கு கிடைக்கவில்லை' என்று காட்டப்படும் — இதன் பொருள் அந்தக் கல்லூரி அல்லது படிப்பு இல்லை என்பதல்ல. உங்கள் பிரிவு (எ.கா. BC, MBC, SC) அல்லது 7.5% ஒதுக்கீட்டைத் தேர்ந்தெடுத்துப் பார்க்கவும்.",
-                "<strong>Coverage note (No Round 1 for General Academic):</strong> Only official 2025 <strong>Round 2</strong> and <strong>Round 3</strong> publications are approved here for General Academic. Offerings filled during Round 1 (such as top OC seats at CEG or PSG) appear as 'Not available for comparison' — this does NOT mean the college or branch is unavailable."
+                "<strong>முக்கியக் குறிப்பு (சுற்று 1 தரவு இல்லை):</strong> பொதுக் கல்விப் பிரிவுக்கு 2025 அதிகாரப்பூர்வ <strong>சுற்று 2</strong> மற்றும் <strong>சுற்று 3</strong> வெளியீடுகள் மட்டுமே இங்கு அங்கீகரிக்கப்பட்டுள்ளன. சுற்று 1-லேயே அனைத்து இடங்களும் நிரம்பிய படிப்புகளுக்கு 'ஒப்பீட்டிற்கு கிடைக்கவில்லை' என்று காட்டப்படும் — இதன் பொருள் அந்தக் கல்லூரி அல்லது படிப்பு இல்லை என்பதல்ல. உங்கள் பிரிவு (எ.கா. BC, MBC, SC) அல்லது 7.5% ஒதுக்கீட்டைத் தேர்ந்தெடுத்துப் பார்க்கவும்.",
+                "<strong>Coverage note (No Round 1 for General Academic):</strong> Only official 2025 <strong>Round 2</strong> and <strong>Round 3</strong> publications are approved here for General Academic. Offerings where all seats were filled during Round 1 appear as 'Not available for comparison' — this does NOT mean the college or branch is unavailable."
               )}</p>`
             : ""
         }
       </div>
 
       <aside class="truth-banner" aria-label="Official truth-in-guidance disclosures">
-        <p><strong>${t("அதிகாரப்பூர்வ வெளிப்படைத்தன்மை அறிவிப்பு:", "Official Truth-in-Guidance Disclosure:")}</strong></p>
+        <p><strong>${t("முக்கியக் குறிப்பு — அதிகாரப்பூர்வ வெளிப்படைத்தன்மை அறிவிப்பு:", "Important Note — Official Truth-in-Guidance Disclosure:")}</strong></p>
         <p>${esc(historicalDisclosure)}</p>
         <p>${esc(copy.nonPredictionDisclaimer)}</p>
-        <p style="font-size: 0.85rem; color: #4a5568;">
+        <p style="font-size: 0.86rem; color: #4a5568;">
           ${t(
-            "அங்கீகரிக்கப்பட்ட 55 கல்லூரிகளில் உள்ள 555 படிப்புகளும் கீழே பட்டியலிடப்பட்டுள்ளன. அங்கீகரிக்கப்பட்ட வரலாற்றுத் தரவு இல்லாத போது அவை 'ஒப்பீட்டிற்கு கிடைக்கவில்லை' என்று வெளிப்படையாகக் குறிக்கப்பட்டுள்ளன.",
-            "All 555 governed offerings across the 55 approved institutions are listed below. Where approved historical evidence is absent, offerings are transparently shown as 'Not available for comparison'."
+            `அங்கீகரிக்கப்பட்ட 121 கல்லூரிகளில் (அடிப்படை 55 கல்லூரிகள் உட்பட) உள்ள ${totalOfferingsFormatted} படிப்புகளும் கீழே பட்டியலிடப்பட்டுள்ளன. முந்தைய ஆண்டு அதிகாரப்பூர்வத் தரவு இல்லாத படிப்புகளுக்கு மட்டும் 'ஒப்பீட்டிற்குத் தரவு இல்லை' என்று தெளிவாகக் குறிக்கப்பட்டுள்ளது.`,
+            `All ${totalOfferingsFormatted} governed offerings across the 121 approved institutions (including all 55 approved institutions from the benchmark cohort) are listed below. Where approved historical evidence is absent, offerings are transparently shown as 'Not available for comparison'.`
           )}
         </p>
       </aside>
@@ -704,12 +940,18 @@ function renderComparisonTab(
           : ""
       }
 
-      <p class="screen-only" style="margin: 0.25rem 0 0.5rem; font-size: 0.83rem; color: #4a5568;">
-        ${t(
-          "'+ சேர்' என்பதை அழுத்துவது ஒரு விருப்பத்தை உங்கள் தனிப்பட்ட விருப்பப் பட்டியலில் சேர்க்கும் (இது தளத்தின் பரிந்துரை அல்ல; 'என் விருப்பப் பட்டியல்' பகுதியில் நீங்களே வரிசையை மாற்றலாம்).",
-          "Clicking '+ Add' adds an option to your personal shortlist workspace (not a system recommendation; you manually set the final preference order in 'My Shortlist')."
-        )}
-      </p>
+      <div class="results-meta-bar screen-only">
+        <span class="results-count-pill">
+          ${t(`${rows.length} முடிவுகள்`, `${rows.length} results`)}
+        </span>
+        <span style="font-size: 0.84rem; color: #4a5568;">
+          ${t(
+            "விருப்பமான படிப்பின் அருகே உள்ள '+ சேர்' பட்டனை அழுத்தி உங்கள் தனிப்பட்ட விருப்பப் பட்டியலில் சேர்க்கலாம் (இது தளத்தின் பரிந்துரை அல்ல; 'என் விருப்பப் பட்டியல்' பகுதியில் நீங்களே வரிசையை மாற்றலாம்).",
+            "Found a course you like? Click '+ Add' to save it to your personal shortlist (not a system recommendation; you manually set the final preference order in 'My Shortlist')."
+          )}
+        </span>
+      </div>
+      </div>
 
       <div class="table-responsive">
         <table class="comparison-table" role="table" aria-label="College Cutoff Comparison Table">
@@ -719,7 +961,7 @@ function renderComparisonTab(
               <th scope="col">${esc(copy.historicalMinLabel)}</th>
               <th scope="col">${esc(copy.deltaLabel)}</th>
               <th scope="col">${t("அதிகாரப்பூர்வ ஆதாரம்", "Official Source")}</th>
-              <th scope="col">${t("விருப்பப் பட்டியல் (கைமுறை வரிசை)", "Shortlist (Manual Order)")}</th>
+              <th scope="col">${t("விருப்பப் பட்டியல்", "Shortlist")}</th>
             </tr>
           </thead>
           <tbody>
@@ -736,8 +978,12 @@ function renderComparisonTab(
                         community,
                         round,
                         communitySelected,
+                        year,
                         query,
                         typeFilter,
+                        districtFilter,
+                        branchFilter,
+                        onlyAvailable,
                       });
                     })
                     .join("")
@@ -761,8 +1007,12 @@ function renderOfferingRow(
     community: CommunityCategory;
     round: AllotmentRound;
     communitySelected: boolean;
+    year: number;
     query: string;
     typeFilter: string;
+    districtFilter: string;
+    branchFilter: string;
+    onlyAvailable: boolean;
   }
 ): string {
   const { college, offering, result } = row;
@@ -775,9 +1025,9 @@ function renderOfferingRow(
   } else if (result.status === "NO_HISTORICAL_DATA") {
     deltaHtml = `<span class="neutral-badge">${esc(copy.noDataNotice)}</span>`;
   } else if (result.status === "STUDENT_CUTOFF_MISSING") {
-    deltaHtml = `<span class="neutral-badge">${esc(copy.missingCutoffPrompt)}</span>`;
+    deltaHtml = `<span class="neutral-badge">${t("கட்-ஆஃப் உள்ளிடவும்", "Enter cutoff")}</span>`;
   } else if (result.delta !== null) {
-    deltaHtml = `<span class="delta-badge">${esc(copy.formatDelta(result.delta))}</span><small class="delta-caution" style="display: block; margin-top: 3px; font-size: 0.75rem; color: #4a5568; line-height: 1.35;">${t("கடந்த ஆண்டு கணக்கீடு மட்டுமே — சேர்க்கை உத்தரவாதமோ கணிப்போ அல்ல", "Past arithmetic only — not a guarantee or prediction")}</small>`;
+    deltaHtml = `<span class="delta-badge">${esc(copy.formatDelta(result.delta))}</span><small class="delta-caution" style="display: block; margin-top: 2px; font-size: 0.72rem; color: #64748b; line-height: 1.3;">${t("கடந்த ஆண்டு வரலாற்றுப் பதிவு மட்டுமே — சேர்க்கை உத்தரவாதமோ கணிப்போ அல்ல", "Past historical benchmark only — not a guarantee or prediction")}</small>`;
   }
 
   // Toggle shortlist action via privacy-preserving POST form so cutoff/community/search remain intact in memory without appearing in GET URLs
@@ -785,40 +1035,51 @@ function renderOfferingRow(
     ? shortIdsWithout(rawShortlist, id)
     : shortIdsWith(rawShortlist, id);
 
-  const sourceLabel = result.isHeld
-    ? t(
-        "2026 கல்லூரி கையேடு பக். 160 — '(முந்தைய ஆண்டு தரவு)' குறிப்பு; உறுதிப்படுத்தல் நிலுவையில்",
+  let sourceHtml = "—";
+  if (result.isHeld) {
+    sourceHtml = `<span class="footnote">${esc(
+      t(
+        "2026 கல்லூரி கையேடு பக். 160 — உறுதிப்படுத்தல் நிலுவையில்",
         "Booklet p. 160 '(Previous year data)' hold"
       )
-    : result.status === "NO_HISTORICAL_DATA"
-    ? t("அங்கீகரிக்கப்பட்ட வரலாற்றுத் தரவு இல்லை", "No approved historical data available")
-    : result.locator
-    ? lang === "ta" && result.round
-      ? `2025 TNEA அதிகாரப்பூர்வ ${copy.roundName(result.round)} — ${copy.quotaName(sessionState.quota)} (${result.locator})`
-      : `${result.sourceTitle ?? ""} (${result.locator})`
-    : "—";
+    )}</span>`;
+  } else if (result.status === "NO_HISTORICAL_DATA") {
+    sourceHtml = `<span class="footnote">${esc(t("தரவு இல்லை", "No data"))}</span>`;
+  } else if (result.locator) {
+    const fullCitation =
+      lang === "ta" && result.round
+        ? `${result.year ?? 2026} TNEA அதிகாரப்பூர்வ ${copy.roundName(result.round)} — ${copy.quotaName(sessionState.quota)} (${result.locator})`
+        : `${result.sourceTitle ?? ""} (${result.locator})`;
+    const shortTag = result.round
+      ? `${result.year ?? 2026} · ${copy.roundName(result.round)}`
+      : `${result.year ?? 2026}`;
+    sourceHtml = `<details class="source-details"><summary>${esc(shortTag)}</summary><div class="source-details-body">${esc(fullCitation)}</div></details>`;
+  }
 
   return `
     <tr>
       <td>
-        <strong>${esc(college.name)}</strong> (${esc(college.code)})
-        <br>
-        <span>${t("கிளை:", "Branch:")} <strong>${esc(offering.programmeCode)}</strong> · ${esc(offering.programmeName)}</span>
+        <span class="college-title">${esc(college.name)}</span> <span class="college-code">(${esc(college.code)})</span>
+        <div class="offering-subrow">
+          <span class="branch-pill">${esc(offering.programmeCode)}</span>
+          <span>${esc(offering.programmeName)}</span>
+          <span class="district-tag">· ${esc(college.district)}</span>
+        </div>
       </td>
       <td>
-        ${
+        <span class="cutoff-value">${
           result.isHeld
             ? "—"
             : result.historicalMin !== null
-            ? `<strong>${result.historicalMin.toFixed(2)}</strong>`
+            ? result.historicalMin.toFixed(2)
             : "—"
-        }
+        }</span>
       </td>
       <td>
         ${deltaHtml}
       </td>
       <td>
-        <span class="footnote">${esc(sourceLabel)}</span>
+        ${sourceHtml}
       </td>
       <td>
         <form method="POST" action="/m5-guidance" class="shortlist-toggle-form" style="margin: 0;">
@@ -827,9 +1088,13 @@ function renderOfferingRow(
           <input type="hidden" name="shortlist" value="${esc(nextShortlist)}">
           <input type="hidden" name="q" value="${esc(sessionState.query)}">
           <input type="hidden" name="type" value="${esc(sessionState.typeFilter)}">
+          <input type="hidden" name="district" value="${esc(sessionState.districtFilter)}">
+          <input type="hidden" name="branch" value="${esc(sessionState.branchFilter)}">
+          ${sessionState.onlyAvailable ? `<input type="hidden" name="only_available" value="1">` : ""}
           <input type="hidden" name="quota" value="${sessionState.quota}">
           <input type="hidden" name="community" value="${sessionState.community}">
           <input type="hidden" name="round" value="${sessionState.round}">
+          <input type="hidden" name="year" value="${sessionState.year}">
           <input type="hidden" name="community_selected" value="${sessionState.communitySelected ? "1" : "0"}">
           ${sessionState.studentCutoff !== null ? `<input type="hidden" name="cutoff" value="${sessionState.studentCutoff}">` : ""}
           <button type="submit"
@@ -858,7 +1123,7 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
 
   const items = shortIds.map((id, index) => {
     const [cCode, pCode] = id.split("~");
-    const meta = COHORT_55_METADATA[cCode];
+    const meta = COHORT_55_METADATA[cCode] || COHORT_120_METADATA[cCode];
     const name = meta ? meta.name : `College ${cCode}`;
     const govOff = HISTORICAL_OBSERVATIONS.getGovernedOffering(cCode, pCode);
     const progName = govOff ? govOff.programmeName : pCode;

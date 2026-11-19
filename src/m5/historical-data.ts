@@ -4,6 +4,8 @@
 import { readFileSync } from "node:fs";
 // @ts-expect-error Node built-in types are not installed in this offline project.
 import { fileURLToPath } from "node:url";
+// @ts-expect-error Node built-in types are not installed in this offline project.
+import { createHash } from "node:crypto";
 import type {
   AllotmentRound,
   AllotmentStage,
@@ -38,22 +40,24 @@ export function buildOfferingKey(collegeCode: string, programmeCode: string): st
 export const COLLEGE_1516_HOLD_NOTICE =
   "Booklet carries '(Previous year data)' header; requires current-year official intake confirmation.";
 
-export const COHORT_55_CODES: readonly string[] = Object.freeze([
-  // 11 Govt
-  "1516", "2005", "2369", "2603", "2615", "2709", "3464", "3465", "4974", "5009", "5901",
-  // 5 Univ Depts
-  "1", "2", "3", "4", "5",
-  // 3 Govt Aided
-  "2006", "2007", "5008",
-  // 16 Constituent
-  "1013", "1014", "1015", "1026", "2025", "3011", "3016", "3018", "3019", "3021",
-  "4020", "4023", "4024", "5010", "5017", "5022",
-  // 20 SFC
-  "1113", "1120", "1211", "1219", "1304", "1317", "1399", "1419", "1422", "1450",
-  "2377", "2607", "2618", "2702", "2711", "2712", "2718", "2719", "4960", "5986",
-]);
+export {
+  COHORT_55_CODES,
+  COHORT_66_ADDITIONS_CODES,
+  COHORT_65_ADDITIONS_CODES,
+  COHORT_121_CODES,
+  COHORT_120_CODES,
+} from "./cohort-metadata.ts";
+import {
+  COHORT_55_CODES,
+  COHORT_121_CODES,
+} from "./cohort-metadata.ts";
 
 const COHORT_55_SET = new Set(COHORT_55_CODES);
+const COHORT_121_SET = new Set(COHORT_121_CODES);
+
+export interface HistoricalRepositoryOptions {
+  cohortCodes?: readonly string[];
+}
 
 export class HistoricalRepository {
   private readonly observations: DerivedHistoricalObservation[] = [];
@@ -68,14 +72,16 @@ export class HistoricalRepository {
     reason: string;
   }> = [];
 
-  constructor(initialObservations: DerivedHistoricalObservation[] = []) {
-    // Zero unverified research candidates are loaded at runtime.
-    // Historical comparison remains unavailable until data receives explicit Gate A and production-use approval.
-    for (const obs of initialObservations) {
-      this.registerObservation(obs);
-    }
+  constructor(
+    initialObservations: DerivedHistoricalObservation[] = [],
+    options?: HistoricalRepositoryOptions
+  ) {
+    const allowedCodes = options?.cohortCodes
+      ? new Set(options.cohortCodes)
+      : COHORT_121_SET;
 
-    // Load complete governed offerings for the 55 colleges from offering-candidates.csv
+    // Load complete governed offerings for the cohort from offering-candidates.csv FIRST
+    // so governed offering membership is established before observations are registered.
     const offeringsMap = new Map<string, GovernedOffering>();
     try {
       const csvUrl = new URL(
@@ -92,7 +98,7 @@ export class HistoricalRepository {
         const programmeCode = parts[1]?.trim();
         const programmeName = parts[2]?.trim() ?? "";
 
-        if (collegeCode && programmeCode && COHORT_55_SET.has(collegeCode)) {
+        if (collegeCode && programmeCode && allowedCodes.has(collegeCode)) {
           const offKey = buildOfferingKey(collegeCode, programmeCode);
           if (!offeringsMap.has(offKey)) {
             const hasData = this.offeringIndex.has(offKey);
@@ -115,6 +121,21 @@ export class HistoricalRepository {
       return c !== 0 ? c : a.programmeCode.localeCompare(b.programmeCode);
     });
 
+    for (const off of this.governedOfferings) {
+      this.governedOfferingIndex.set(buildOfferingKey(off.collegeCode, off.programmeCode), off);
+    }
+
+    // Register initial observations against established governed offering catalogue
+    for (const obs of initialObservations) {
+      this.registerObservation(obs);
+    }
+
+    // Update hasHistoricalData flag on governed offerings immutably
+    this.governedOfferings = this.governedOfferings.map((off) => ({
+      ...off,
+      hasHistoricalData: this.offeringIndex.has(buildOfferingKey(off.collegeCode, off.programmeCode)),
+    }));
+    this.governedOfferingIndex.clear();
     for (const off of this.governedOfferings) {
       this.governedOfferingIndex.set(buildOfferingKey(off.collegeCode, off.programmeCode), off);
     }
@@ -155,6 +176,24 @@ export class HistoricalRepository {
       obs.metricType
     );
 
+    // Strict Governed Offering Membership:
+    // If the observation's collegeCode and programmeCode are not in the governed offering catalogue,
+    // reject/fail-closed so ungoverned historical pairs never enter keyIndex or comparison.
+    const offKey = buildOfferingKey(obs.collegeCode, obs.programmeCode);
+    if (this.governedOfferings.length > 0 && !this.governedOfferingIndex.has(offKey)) {
+      this.rejectedConflicts.push({
+        key,
+        existing: obs,
+        incoming: obs,
+        reason: "UNGOVERNED_OFFERING_REJECTED",
+      });
+      return {
+        success: false,
+        rejected: true,
+        reason: "UNGOVERNED_OFFERING_REJECTED",
+      };
+    }
+
     const existing = this.keyIndex.get(key);
     if (existing) {
       // Reject conflicting duplicates rather than silently overwriting them
@@ -186,7 +225,6 @@ export class HistoricalRepository {
     this.keyIndex.set(key, obs);
     this.observations.push(obs);
 
-    const offKey = buildOfferingKey(obs.collegeCode, obs.programmeCode);
     const existingOff = this.offeringIndex.get(offKey);
     if (existingOff) {
       existingOff.push(obs);
@@ -216,11 +254,17 @@ export class HistoricalRepository {
     return this.rejectedConflicts.map((c) => ({ key: c.key, reason: c.reason }));
   }
 
-  public getAll(): readonly DerivedHistoricalObservation[] {
+  public getAll(cohort?: "55" | "120" | "ALL"): readonly DerivedHistoricalObservation[] {
+    if (cohort === "55") {
+      return this.observations.filter((obs) => COHORT_55_SET.has(obs.collegeCode));
+    }
     return this.observations;
   }
 
-  public getAllGovernedOfferings(): readonly GovernedOffering[] {
+  public getAllGovernedOfferings(cohort?: "55" | "120" | "ALL"): readonly GovernedOffering[] {
+    if (cohort === "55") {
+      return this.governedOfferings.filter((off) => COHORT_55_SET.has(off.collegeCode));
+    }
     return this.governedOfferings;
   }
 
@@ -228,15 +272,24 @@ export class HistoricalRepository {
     return this.governedOfferingIndex.get(buildOfferingKey(collegeCode, programmeCode));
   }
 
-  public hasHistoricalObservations(collegeCode: string, programmeCode: string): boolean {
-    return this.offeringIndex.has(buildOfferingKey(collegeCode, programmeCode));
+  public hasHistoricalObservations(collegeCode: string, programmeCode: string, year?: number): boolean {
+    const list = this.offeringIndex.get(buildOfferingKey(collegeCode, programmeCode));
+    if (!list || list.length === 0) return false;
+    if (year === undefined) return true;
+    return list.some((obs) => obs.year === year);
   }
 
-  public getOfferingsCount(): { total: number; withHistory: number; missingHistory: number } {
-    const total = this.governedOfferings.length;
+  public getOfferingsCount(
+    cohortOrOptions?: "55" | "120" | "ALL" | { cohort?: "55" | "120" | "ALL"; year?: number }
+  ): { total: number; withHistory: number; missingHistory: number } {
+    const opts = typeof cohortOrOptions === "object" ? cohortOrOptions : { cohort: cohortOrOptions };
+    const list = opts.cohort === "55"
+      ? this.governedOfferings.filter((off) => COHORT_55_SET.has(off.collegeCode))
+      : this.governedOfferings;
+    const total = list.length;
     let withHistory = 0;
-    for (const off of this.governedOfferings) {
-      if (this.hasHistoricalObservations(off.collegeCode, off.programmeCode)) withHistory++;
+    for (const off of list) {
+      if (this.hasHistoricalObservations(off.collegeCode, off.programmeCode, opts.year)) withHistory++;
     }
     return {
       total,
@@ -286,50 +339,171 @@ interface RawCandidateRecord {
   extraction_status: string;
 }
 
-export function loadVerifiedHistoricalObservations(): DerivedHistoricalObservation[] {
-  try {
-    const candidatesUrl = new URL(
-      "../../experiments/m5-derived-minimum-candidates/run-2025-cohort-55/candidates.json",
-      import.meta.url
-    );
-    const filePath = fileURLToPath(candidatesUrl);
-    const raw = readFileSync(filePath, "utf-8");
-    const records = JSON.parse(raw) as RawCandidateRecord[];
-    return records.map((r) => {
-      const quota = mapRouteLiteral(r.source_route_literal);
-      const round = mapRoundLiteral(r.source_round_literal);
-      const category = r.source_allotted_category_literal as CommunityCategory;
-      const isHeld = r.source_college_code_literal === "1516" || r.extraction_status === "HELD_NEEDS_REVIEW";
-      return {
-        candidateId: r.research_candidate_id,
-        year: parseInt(r.source_year_literal, 10),
-        stage: "PROVISIONAL_ALLOTMENT" as const,
-        sourceTitle: r.source_title_literal,
-        round,
-        quota,
-        collegeCode: r.source_college_code_literal,
-        programmeCode: r.source_programme_code_literal,
-        allottedCategory: category,
-        metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK" as const,
-        derivedMinimumMark: r.derived_minimum_mark,
-        allotmentCount: r.allotment_count_in_bucket,
-        locator: r.nonpersonal_source_locator,
-        isHeld,
-        holdNotice: isHeld ? COLLEGE_1516_HOLD_NOTICE : null,
-      };
-    });
-  } catch (err) {
-    console.error("Warning: Failed to load verified candidates.json:", err);
-    return [];
-  }
+export interface GateAApprovedDatasetSpec {
+  relPath: string;
+  sha256: string;
+  recordCount: number;
+  year: number;
+  cohort: "55" | "66";
 }
 
-// Runtime singleton: Gate A verified historical observations loaded.
+export const GATE_A_121_APPROVED_DATASETS: readonly GateAApprovedDatasetSpec[] = Object.freeze([
+  {
+    relPath: "../../experiments/m5-derived-minimum-candidates/run-2025-cohort-55/candidates.json",
+    sha256: "1c6659838e848eaaf636a7c4ca70d895243ac9f32d6fe16eff94a092a2bb74c7",
+    recordCount: 4332,
+    year: 2025,
+    cohort: "55",
+  },
+  {
+    relPath: "../../experiments/m5-derived-minimum-candidates/run-2026-cohort-55/candidates.json",
+    sha256: "7e328a4644085c48372ff93739248d3c729189f49ed14e48812df72033467e84",
+    recordCount: 6308,
+    year: 2026,
+    cohort: "55",
+  },
+  {
+    relPath: "../../experiments/m5-derived-minimum-candidates/run-2026-cohort-65-additions/candidates.json",
+    sha256: "a1bc06bcf0cdf50e3b68ee827fa7d668763704419007d8562eed03761b61cced",
+    recordCount: 7057,
+    year: 2026,
+    cohort: "66",
+  },
+]);
+
+export function loadVerifiedHistoricalObservations(): DerivedHistoricalObservation[] {
+  // Gate A Approved Observations: SHA-256 validated across 121 colleges (2025 baseline + 2026 runs)
+  const result: DerivedHistoricalObservation[] = [];
+
+  for (const spec of GATE_A_121_APPROVED_DATASETS) {
+    try {
+      const candidateUrl = new URL(spec.relPath, import.meta.url);
+      const filePath = fileURLToPath(candidateUrl);
+      const fileBuffer = readFileSync(filePath);
+
+      // Verify cryptographic SHA-256 digest against approved Gate A ledger
+      const computedHash = createHash("sha256").update(fileBuffer).digest("hex");
+      if (computedHash !== spec.sha256) {
+        throw new Error(
+          `Security Exception: SHA-256 mismatch for ${spec.relPath}. Expected ${spec.sha256}, got ${computedHash}. Loading aborted.`
+        );
+      }
+
+      const raw = fileBuffer.toString("utf-8");
+      const records = JSON.parse(raw) as RawCandidateRecord[];
+      if (records.length !== spec.recordCount) {
+        throw new Error(
+          `Security Exception: Record count mismatch for ${spec.relPath}. Expected ${spec.recordCount}, got ${records.length}.`
+        );
+      }
+
+      for (const r of records) {
+        const quota = mapRouteLiteral(r.source_route_literal);
+        const round = mapRoundLiteral(r.source_round_literal);
+        const category = r.source_allotted_category_literal as CommunityCategory;
+        const isHeld = r.source_college_code_literal === "1516" || r.extraction_status === "HELD_NEEDS_REVIEW";
+        result.push({
+          candidateId: r.research_candidate_id,
+          year: parseInt(r.source_year_literal, 10),
+          stage: "PROVISIONAL_ALLOTMENT" as const,
+          sourceTitle: r.source_title_literal,
+          round,
+          quota,
+          collegeCode: r.source_college_code_literal,
+          programmeCode: r.source_programme_code_literal,
+          allottedCategory: category,
+          metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK" as const,
+          derivedMinimumMark: r.derived_minimum_mark,
+          allotmentCount: r.allotment_count_in_bucket,
+          locator: r.nonpersonal_source_locator,
+          isHeld,
+          holdNotice: isHeld ? COLLEGE_1516_HOLD_NOTICE : null,
+        });
+      }
+    } catch (err) {
+      console.error(`Warning: Failed to load Gate A verified candidates from ${spec.relPath}:`, err);
+      throw err;
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Research Candidate Loader (Gate A Approval Pending):
+ * Explicitly separated from the production runtime singleton.
+ * Loads 2026 provisional allotment research candidates for evaluation and future Gate A audits.
+ */
+export function loadResearchCandidateObservations(
+  scope: "2026-COHORT-55" | "2026-COHORT-66" | "ALL-2026" = "ALL-2026"
+): DerivedHistoricalObservation[] {
+  const result: DerivedHistoricalObservation[] = [];
+  const candidatePaths =
+    scope === "2026-COHORT-55"
+      ? ["../../experiments/m5-derived-minimum-candidates/run-2026-cohort-55/candidates.json"]
+      : scope === "2026-COHORT-66"
+      ? ["../../experiments/m5-derived-minimum-candidates/run-2026-cohort-65-additions/candidates.json"]
+      : [
+          "../../experiments/m5-derived-minimum-candidates/run-2026-cohort-55/candidates.json",
+          "../../experiments/m5-derived-minimum-candidates/run-2026-cohort-65-additions/candidates.json",
+        ];
+
+  for (const relPath of candidatePaths) {
+    try {
+      const candidatesUrl = new URL(relPath, import.meta.url);
+      const filePath = fileURLToPath(candidatesUrl);
+      const raw = readFileSync(filePath, "utf-8");
+      const records = JSON.parse(raw) as RawCandidateRecord[];
+      for (const r of records) {
+        const quota = mapRouteLiteral(r.source_route_literal);
+        const round = mapRoundLiteral(r.source_round_literal);
+        const category = r.source_allotted_category_literal as CommunityCategory;
+        const isHeld = r.source_college_code_literal === "1516" || r.extraction_status === "HELD_NEEDS_REVIEW";
+        result.push({
+          candidateId: r.research_candidate_id,
+          year: parseInt(r.source_year_literal, 10),
+          stage: "PROVISIONAL_ALLOTMENT" as const,
+          sourceTitle: r.source_title_literal,
+          round,
+          quota,
+          collegeCode: r.source_college_code_literal,
+          programmeCode: r.source_programme_code_literal,
+          allottedCategory: category,
+          metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK" as const,
+          derivedMinimumMark: r.derived_minimum_mark,
+          allotmentCount: r.allotment_count_in_bucket,
+          locator: r.nonpersonal_source_locator,
+          isHeld,
+          holdNotice: isHeld ? COLLEGE_1516_HOLD_NOTICE : null,
+        });
+      }
+    } catch (err) {
+      console.error(`Warning: Failed to load research candidates from ${relPath}:`, err);
+    }
+  }
+
+  return result;
+}
+
+export function createResearchCandidateRepository(
+  cohort: "55" | "121" = "121"
+): HistoricalRepository {
+  const candidateObs = [
+    ...loadVerifiedHistoricalObservations(),
+    ...loadResearchCandidateObservations("ALL-2026"),
+  ];
+  return new HistoricalRepository(candidateObs, {
+    cohortCodes: cohort === "55" ? COHORT_55_CODES : COHORT_121_CODES,
+  });
+}
+
+// Runtime singleton: Gate A verified historical observations loaded (55 colleges, 2025 baseline).
 export const HISTORICAL_OBSERVATIONS = new HistoricalRepository(loadVerifiedHistoricalObservations());
 
 // Factory helper for tests using synthetic fixtures only
 export function createSyntheticRepository(
-  fixtures: DerivedHistoricalObservation[] = []
+  fixtures: DerivedHistoricalObservation[] = [],
+  options?: HistoricalRepositoryOptions
 ): HistoricalRepository {
-  return new HistoricalRepository(fixtures);
+  return new HistoricalRepository(fixtures, options);
 }
