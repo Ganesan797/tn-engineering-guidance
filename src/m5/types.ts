@@ -6,6 +6,7 @@
 export type QuotaStream = "GENERAL_ACADEMIC" | "GOVT_SCHOOL_7_5";
 
 export type AllotmentRound = "ROUND_1" | "ROUND_2" | "ROUND_3";
+export type AllotmentRoundOrAll = AllotmentRound | "ALL";
 
 export type CommunityCategory = "OC" | "BC" | "BCM" | "MBC" | "SC" | "SCA" | "ST";
 
@@ -64,7 +65,7 @@ export interface ComparisonRequest {
   readonly studentCutoff?: number | null;
   readonly year?: number;
   readonly stage?: AllotmentStage;
-  readonly round?: AllotmentRound;
+  readonly round?: AllotmentRoundOrAll;
   readonly quota: QuotaStream;
   readonly community: CommunityCategory;
   readonly collegeCode: string;
@@ -94,6 +95,9 @@ export interface ComparisonResult {
   readonly locator: string | null;
   readonly isHeld: boolean;
   readonly holdNotice: string | null;
+  readonly otherRound?: AllotmentRound | null;
+  readonly otherRoundMark?: number | null;
+  readonly otherRoundAction?: "FILLED_IN_EARLIER_ROUND" | "ALLOTTED_IN_LATER_ROUND" | null;
 }
 
 export interface ShortlistItem {

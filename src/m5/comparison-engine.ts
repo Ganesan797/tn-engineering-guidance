@@ -2,6 +2,7 @@ import { HISTORICAL_OBSERVATIONS, HistoricalRepository } from "./historical-data
 import type {
   ComparisonRequest,
   ComparisonResult,
+  DerivedHistoricalObservation,
 } from "./types.ts";
 
 /**
@@ -37,7 +38,7 @@ export function compareOffering(
       officialClosingValueStatus: "NOT_ESTABLISHED_BY_D5",
       year: year ?? null,
       stage: stage ?? null,
-      round: round ?? null,
+      round: round === "ALL" ? null : (round ?? null),
       quota,
       community,
       collegeCode,
@@ -64,7 +65,7 @@ export function compareOffering(
       officialClosingValueStatus: "NOT_ESTABLISHED_BY_D5",
       year: year ?? null,
       stage: stage ?? null,
-      round: round ?? null,
+      round: round === "ALL" ? null : (round ?? null),
       quota,
       community,
       collegeCode,
@@ -91,7 +92,7 @@ export function compareOffering(
       officialClosingValueStatus: "NOT_ESTABLISHED_BY_D5",
       year: year ?? null,
       stage: stage ?? null,
-      round: round ?? null,
+      round: round === "ALL" ? null : (round ?? null),
       quota,
       community,
       collegeCode,
@@ -104,19 +105,49 @@ export function compareOffering(
     };
   }
 
-  // 3. Exact matching in repository (quota isolated, category exact)
-  const observation = repository.getExactObservation({
-    year,
-    stage,
-    round,
-    quota,
-    collegeCode,
-    programmeCode,
-    allottedCategory: community,
-    metricType,
-  });
+  // 3. Exact or closing round matching in repository (quota isolated, category exact)
+  let observation: DerivedHistoricalObservation | undefined;
+  let otherRoundObs: DerivedHistoricalObservation | undefined;
+
+  if (round === "ALL") {
+    observation = repository.getClosingObservation({
+      year,
+      quota,
+      community,
+      collegeCode,
+      programmeCode,
+    });
+  } else {
+    observation = repository.getExactObservation({
+      year,
+      stage,
+      round,
+      quota,
+      collegeCode,
+      programmeCode,
+      allottedCategory: community,
+      metricType,
+    });
+
+    if (!observation) {
+      otherRoundObs = repository.getOtherRoundObservation({
+        year,
+        quota,
+        community,
+        collegeCode,
+        programmeCode,
+        excludedRound: round,
+      });
+    }
+  }
 
   if (!observation) {
+    const otherRoundAction = otherRoundObs && round !== "ALL"
+      ? otherRoundObs.round < round
+        ? ("FILLED_IN_EARLIER_ROUND" as const)
+        : ("ALLOTTED_IN_LATER_ROUND" as const)
+      : null;
+
     return {
       status: "NO_HISTORICAL_DATA",
       evidenceSemantics: "NOT_AVAILABLE_FOR_COMPARISON",
@@ -128,7 +159,7 @@ export function compareOffering(
       officialClosingValueStatus: "NOT_ESTABLISHED_BY_D5",
       year,
       stage,
-      round,
+      round: round === "ALL" ? null : round,
       quota,
       community,
       collegeCode,
@@ -138,6 +169,9 @@ export function compareOffering(
       locator: null,
       isHeld: false,
       holdNotice: null,
+      otherRound: otherRoundObs?.round ?? null,
+      otherRoundMark: otherRoundObs?.derivedMinimumMark ?? null,
+      otherRoundAction,
     };
   }
 

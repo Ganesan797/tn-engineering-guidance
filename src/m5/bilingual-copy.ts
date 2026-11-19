@@ -1,4 +1,4 @@
-import type { AllotmentRound, CommunityCategory, QuotaStream } from "./types.ts";
+import type { AllotmentRound, AllotmentRoundOrAll, CommunityCategory, QuotaStream } from "./types.ts";
 
 export type SupportedLanguage = "en" | "ta";
 
@@ -14,11 +14,11 @@ export interface ComparisonCopyText {
   readonly missingCutoffPrompt: string;
   readonly noDataNotice: string;
   readonly heldNotice: string;
-  readonly formatDisclosure: (round: AllotmentRound) => string;
+  readonly formatDisclosure: (round: AllotmentRoundOrAll) => string;
   readonly formatDelta: (delta: number) => string;
   readonly quotaName: (quota: QuotaStream) => string;
   readonly communityName: (category: CommunityCategory) => string;
-  readonly roundName: (round: AllotmentRound) => string;
+  readonly roundName: (round: AllotmentRoundOrAll) => string;
 }
 
 const ROUND_NUMBER_MAP: Record<AllotmentRound, string> = {
@@ -43,7 +43,10 @@ const EN_COPY: ComparisonCopyText = {
     "Not available for comparison (No approved historical data available).",
   heldNotice:
     "Held: Booklet carries '(Previous year data)' header; requires current-year official intake confirmation.",
-  formatDisclosure: (round: AllotmentRound) => {
+  formatDisclosure: (round: AllotmentRoundOrAll) => {
+    if (round === "ALL") {
+      return "Final observed minimum mark across official provisional allotment rounds (Round 1, Round 2, and Round 3). Upward movement and subsequent non-reporting not reflected.";
+    }
     const num = ROUND_NUMBER_MAP[round] ?? round;
     return `Minimum observed mark in official Round ${num} provisional allotment publication. Upward movement and subsequent non-reporting not reflected.`;
   },
@@ -79,8 +82,9 @@ const EN_COPY: ComparisonCopyText = {
         return "Scheduled Tribe (ST)";
     }
   },
-  roundName: (round: AllotmentRound) => {
-    return `Round ${ROUND_NUMBER_MAP[round]}`;
+  roundName: (round: AllotmentRoundOrAll) => {
+    if (round === "ALL") return "All Rounds (Final Closing Cutoff)";
+    return `Round ${ROUND_NUMBER_MAP[round] ?? round}`;
   },
 };
 
@@ -100,7 +104,10 @@ const TA_COPY: ComparisonCopyText = {
     "ஒப்பீட்டிற்கு கிடைக்கவில்லை (அங்கீகரிக்கப்பட்ட வரலாற்றுத் தரவு கிடைக்கவில்லை).",
   heldNotice:
     "நிறுத்திவைக்கப்பட்டுள்ளது: கல்லூரி கையேட்டில் '(முந்தைய ஆண்டு தரவு)' என்ற குறிப்பு உள்ளது; நடப்பு ஆண்டு அதிகாரப்பூர்வ சேர்க்கை உறுதிப்படுத்தல் தேவை.",
-  formatDisclosure: (round: AllotmentRound) => {
+  formatDisclosure: (round: AllotmentRoundOrAll) => {
+    if (round === "ALL") {
+      return "அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டு சுற்றுகளில் (சுற்று 1, 2, 3) காணப்பட்ட இறுதி குறைந்தபட்ச மதிப்பெண். மேல்நோக்கிய நகர்வு மற்றும் பின்னர் சேராமை ஆகியவை இதில் பிரதிபலிக்கவில்லை.";
+    }
     const num = ROUND_NUMBER_MAP[round] ?? round;
     return `அதிகாரப்பூர்வ சுற்று ${num} தற்காலிக ஒதுக்கீட்டு வெளியீட்டில் காணப்பட்ட குறைந்தபட்ச மதிப்பெண். மேல்நோக்கிய நகர்வு மற்றும் பின்னர் சேராமை ஆகியவை இதில் பிரதிபலிக்கவில்லை.`;
   },
@@ -136,8 +143,9 @@ const TA_COPY: ComparisonCopyText = {
         return "பழங்குடியினர் (ST)";
     }
   },
-  roundName: (round: AllotmentRound) => {
-    return `சுற்று ${ROUND_NUMBER_MAP[round]}`;
+  roundName: (round: AllotmentRoundOrAll) => {
+    if (round === "ALL") return "அனைத்து சுற்றுகளும் (இறுதி ஒதுக்கீடு)";
+    return `சுற்று ${ROUND_NUMBER_MAP[round] ?? round}`;
   },
 };
 

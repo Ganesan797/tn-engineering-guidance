@@ -770,3 +770,72 @@ test("M5 Feedback #4: Cool educational styling, college type badges, and header 
   assert.ok(html.includes("type-gov"), "Must render type-gov style class");
   assert.ok(html.includes("cutoff-subtext"), "Must render round and year subtext under cutoff mark");
 });
+
+test("M5 Feedback #5: All Rounds closing cutoffs, cross-round intelligence, and modern typography", () => {
+  // A. All Rounds Mode (round="ALL"): CEG CS (199.50, Round 1) and Adhiparasakthi CS (102.50, Round 3) appear with actual cutoffs
+  const htmlAll = renderM5GuidancePage(
+    new URLSearchParams({ branch: "CS", lang: "en" }),
+    {
+      studentCutoff: 198.0,
+      quota: "GENERAL_ACADEMIC",
+      community: "BC",
+      round: "ALL",
+      year: 2026,
+      communitySelected: true,
+    }
+  );
+
+  // Both colleges have real closing marks rendered in the same table
+  assert.ok(htmlAll.includes("199.00"), "Must show CEG CS closing cutoff 199.00");
+  assert.ok(htmlAll.includes("102.50"), "Must show Adhiparasakthi CS closing cutoff 102.50");
+  assert.ok(htmlAll.includes("All Rounds (Final Closing Cutoff)"), "Must show All Rounds option in dropdown");
+  assert.ok(htmlAll.includes('value="ALL" selected'), "Must keep ALL option selected");
+  assert.ok(htmlAll.includes("Round 1 · 2026"), "Must show Round 1 source for CEG");
+  assert.ok(htmlAll.includes("Round 3 · 2026"), "Must show Round 3 source for Adhiparasakthi");
+
+  // B. Cross-Round Intelligence in specific round (Round 1 + query for Adhiparasakthi 1401)
+  const htmlR1Query = renderM5GuidancePage(
+    new URLSearchParams({ q: "1401", lang: "en" }),
+    {
+      studentCutoff: 198.0,
+      quota: "GENERAL_ACADEMIC",
+      community: "BC",
+      round: "ROUND_1",
+      year: 2026,
+      communitySelected: true,
+    }
+  );
+
+  // Informative cross-round badge instead of generic 'not available'
+  assert.ok(
+    htmlR1Query.includes("No Round 1 allotment (Round 3 closing: 102.50)"),
+    "Must display informative cross-round badge explaining why offering has no Round 1 cutoff"
+  );
+  assert.ok(
+    htmlR1Query.includes("Round 3: 102.50"),
+    "Must render other round cutoff subtext under the dash"
+  );
+
+  // C. Tamil translation of cross-round intelligence badge
+  const htmlR1QueryTa = renderM5GuidancePage(
+    new URLSearchParams({ q: "1401", lang: "ta" }),
+    {
+      studentCutoff: 198.0,
+      quota: "GENERAL_ACADEMIC",
+      community: "BC",
+      round: "ROUND_1",
+      year: 2026,
+      communitySelected: true,
+    }
+  );
+  assert.ok(
+    htmlR1QueryTa.includes("சுற்று 1-ல் ஒதுக்கீடு இல்லை (சுற்று 3-ல் முடிந்தது: 102.50)"),
+    "Must render Tamil cross-round intelligence badge"
+  );
+
+  // D. Modern typography and Google Fonts in HTML
+  assert.ok(htmlAll.includes("fonts.googleapis.com"), "Must include Google Fonts preconnect");
+  assert.ok(htmlAll.includes("Plus+Jakarta+Sans"), "Must include Plus Jakarta Sans font link");
+  assert.ok(htmlAll.includes("Noto+Sans+Tamil"), "Must include Noto Sans Tamil font link");
+  assert.ok(htmlAll.includes('"Plus Jakarta Sans", "Inter"'), "Must apply modern font stack in CSS");
+});

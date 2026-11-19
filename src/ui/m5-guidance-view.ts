@@ -7,6 +7,7 @@ import {
   formatShortlistCsv,
   createShortlistItem,
   type AllotmentRound,
+  type AllotmentRoundOrAll,
   type CommunityCategory,
   type ComparisonResult,
   type GovernedOffering,
@@ -224,7 +225,7 @@ export interface M5GuidanceRenderOptions {
   studentCutoff?: number | null;
   quota?: QuotaStream;
   community?: CommunityCategory;
-  round?: AllotmentRound;
+  round?: AllotmentRoundOrAll;
   communitySelected?: boolean;
   year?: number;
 }
@@ -259,9 +260,12 @@ export function renderM5GuidancePage(
 
   const communitySelected = inputState.communitySelected ?? inputState.community !== undefined;
 
-  const round: AllotmentRound =
-    inputState.round && ["ROUND_1", "ROUND_2", "ROUND_3"].includes(inputState.round)
-      ? (inputState.round as AllotmentRound)
+  const rawRound = inputState.round ?? params.get("round");
+  const round: AllotmentRoundOrAll =
+    rawRound === "ALL"
+      ? "ALL"
+      : rawRound && ["ROUND_1", "ROUND_2", "ROUND_3"].includes(rawRound)
+      ? (rawRound as AllotmentRound)
       : quota === "GOVT_SCHOOL_7_5"
       ? "ROUND_1"
       : "ROUND_2";
@@ -277,6 +281,7 @@ export function renderM5GuidancePage(
   const districtFilter = (params.get("district") ?? "").trim();
   const branchFilter = (params.get("branch") ?? "").trim().toUpperCase();
   const onlyAvailable = params.get("only_available") === "1";
+  const showAllOfferings = params.get("show_all") === "1";
   const sortOption = params.get("sort") ?? "cutoff_desc";
 
   // Load ALL 1,249 governed offerings across 121 approved institutions
@@ -439,12 +444,15 @@ export function renderM5GuidancePage(
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${esc(copy.title)} | TN Engineering Guidance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     ${SITE_SHELL_CSS}
     *, *::before, *::after { box-sizing: border-box; }
     html, body {
       margin: 0; padding: 0; width: 100%; max-width: 100vw; overflow-x: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, sans-serif;
+      font-family: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Tamil", "Mukta Malar", "Nirmala UI", sans-serif;
       background: #f8fafc; color: #0f172a; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
     }
     .m5-container { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1.25rem; width: 100%; overflow-x: hidden; }
@@ -686,7 +694,7 @@ function renderComparisonTab(
   studentCutoff: number | null,
   quota: QuotaStream,
   community: CommunityCategory,
-  round: AllotmentRound,
+  round: AllotmentRoundOrAll,
   communitySelected: boolean,
   year: number,
   query: string,
@@ -785,6 +793,7 @@ function renderComparisonTab(
           <div class="form-group">
             <label for="round-select">${esc(copy.roundLabel)}</label>
             <select id="round-select" name="round">
+              <option value="ALL" ${round === "ALL" ? "selected" : ""}>${esc(copy.roundName("ALL"))}</option>
               ${(["ROUND_1", "ROUND_2", "ROUND_3"] as AllotmentRound[])
                 .map(
                   (r) =>
@@ -1143,7 +1152,7 @@ function renderOfferingRow(
     studentCutoff: number | null;
     quota: QuotaStream;
     community: CommunityCategory;
-    round: AllotmentRound;
+    round: AllotmentRoundOrAll;
     communitySelected: boolean;
     year: number;
     query: string;
@@ -1178,7 +1187,23 @@ function renderOfferingRow(
   if (result.isHeld) {
     deltaHtml = `<span class="held-badge">${esc(copy.heldNotice)}</span>`;
   } else if (result.status === "NO_HISTORICAL_DATA") {
-    deltaHtml = `<span class="neutral-badge">${esc(copy.noDataNotice)}</span>`;
+    if (result.otherRound && result.otherRoundAction === "ALLOTTED_IN_LATER_ROUND") {
+      deltaHtml = `<span class="neutral-badge" style="background: #f8fafc; border-left: 3px solid #3b82f6;">${esc(
+        t(
+          `${copy.roundName(sessionState.round)}-ல் ஒதுக்கீடு இல்லை (${copy.roundName(result.otherRound)}-ல் முடிந்தது: ${result.otherRoundMark?.toFixed(2)})`,
+          `No ${copy.roundName(sessionState.round)} allotment (${copy.roundName(result.otherRound)} closing: ${result.otherRoundMark?.toFixed(2)})`
+        )
+      )}</span>`;
+    } else if (result.otherRound && result.otherRoundAction === "FILLED_IN_EARLIER_ROUND") {
+      deltaHtml = `<span class="neutral-badge" style="background: #f8fafc; border-left: 3px solid #f59e0b;">${esc(
+        t(
+          `${copy.roundName(sessionState.round)}-க்கு முன் முடிந்தது (${copy.roundName(result.otherRound)}-ல் முடிந்தது: ${result.otherRoundMark?.toFixed(2)})`,
+          `Filled before ${copy.roundName(sessionState.round)} (${copy.roundName(result.otherRound)} closing: ${result.otherRoundMark?.toFixed(2)})`
+        )
+      )}</span>`;
+    } else {
+      deltaHtml = `<span class="neutral-badge">${esc(copy.noDataNotice)}</span>`;
+    }
   } else if (result.status === "STUDENT_CUTOFF_MISSING") {
     deltaHtml = `<span class="neutral-badge">${t("கட்-ஆஃப் உள்ளிடவும்", "Enter cutoff")}</span>`;
   } else if (result.delta !== null) {
@@ -1199,7 +1224,11 @@ function renderOfferingRow(
       )
     )}</span>`;
   } else if (result.status === "NO_HISTORICAL_DATA") {
-    sourceHtml = `<span class="footnote">${esc(t("தரவு இல்லை", "No data"))}</span>`;
+    if (result.otherRound) {
+      sourceHtml = `<span class="footnote">${esc(copy.roundName(result.otherRound))}</span>`;
+    } else {
+      sourceHtml = `<span class="footnote">${esc(t("தரவு இல்லை", "No data"))}</span>`;
+    }
   } else if (result.locator) {
     const fullCitation =
       lang === "ta" && result.round
@@ -1233,6 +1262,8 @@ function renderOfferingRow(
         ${
           !result.isHeld && result.historicalMin !== null && result.round
             ? `<span class="cutoff-subtext">${esc(copy.roundName(result.round))} · ${result.year ?? 2026}</span>`
+            : !result.isHeld && result.otherRound && result.otherRoundMark !== null && result.otherRoundMark !== undefined
+            ? `<span class="cutoff-subtext" style="color: #64748b;">${esc(copy.roundName(result.otherRound))}: ${result.otherRoundMark.toFixed(2)}</span>`
             : ""
         }
       </td>

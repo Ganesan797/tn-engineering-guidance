@@ -250,6 +250,52 @@ export class HistoricalRepository {
     );
   }
 
+  public getClosingObservation(params: {
+    year: number;
+    quota: QuotaStream;
+    community: CommunityCategory;
+    collegeCode: string;
+    programmeCode: string;
+  }): DerivedHistoricalObservation | undefined {
+    const list = this.offeringIndex.get(buildOfferingKey(params.collegeCode, params.programmeCode));
+    if (!list || list.length === 0) return undefined;
+    const matches = list.filter(
+      (obs) =>
+        obs.year === params.year &&
+        obs.quota === params.quota &&
+        obs.allottedCategory === params.community &&
+        obs.stage === "PROVISIONAL_ALLOTMENT"
+    );
+    if (matches.length === 0) return undefined;
+    return matches.reduce((prev, curr) =>
+      curr.derivedMinimumMark < prev.derivedMinimumMark ? curr : prev
+    );
+  }
+
+  public getOtherRoundObservation(params: {
+    year: number;
+    quota: QuotaStream;
+    community: CommunityCategory;
+    collegeCode: string;
+    programmeCode: string;
+    excludedRound: AllotmentRound;
+  }): DerivedHistoricalObservation | undefined {
+    const list = this.offeringIndex.get(buildOfferingKey(params.collegeCode, params.programmeCode));
+    if (!list || list.length === 0) return undefined;
+    const matches = list.filter(
+      (obs) =>
+        obs.year === params.year &&
+        obs.quota === params.quota &&
+        obs.allottedCategory === params.community &&
+        obs.stage === "PROVISIONAL_ALLOTMENT" &&
+        obs.round !== params.excludedRound
+    );
+    if (matches.length === 0) return undefined;
+    return matches.reduce((prev, curr) =>
+      curr.derivedMinimumMark < prev.derivedMinimumMark ? curr : prev
+    );
+  }
+
   public getRejectedConflicts(): readonly { key: string; reason: string }[] {
     return this.rejectedConflicts.map((c) => ({ key: c.key, reason: c.reason }));
   }
