@@ -277,6 +277,7 @@ export function renderM5GuidancePage(
   const districtFilter = (params.get("district") ?? "").trim();
   const branchFilter = (params.get("branch") ?? "").trim().toUpperCase();
   const onlyAvailable = params.get("only_available") === "1";
+  const sortOption = params.get("sort") ?? "cutoff_desc";
 
   // Load ALL 1,249 governed offerings across 121 approved institutions
   const governedOfferings = HISTORICAL_OBSERVATIONS.getAllGovernedOfferings();
@@ -351,8 +352,57 @@ export function renderM5GuidancePage(
     });
   }
 
-  // Neutral default sort: alphabetical by college name, then branch code
+  // Intuitive, student-centered sorting:
+  // Default 'cutoff_desc' (Cutoff High to Low):
+  // 1. Offerings with approved historical cutoff data appear FIRST, sorted by observed minimum mark descending.
+  // 2. Tie-breaker: college name A-Z, then programme code.
+  // 3. Offerings without historical cutoff data appear at the bottom, sorted by college name A-Z.
   evaluatedRows.sort((a, b) => {
+    if (sortOption === "cutoff_asc") {
+      const aHas = a.result.historicalMin !== null;
+      const bHas = b.result.historicalMin !== null;
+      if (aHas && !bHas) return -1;
+      if (!aHas && bHas) return 1;
+      if (aHas && bHas) {
+        const diff = a.result.historicalMin! - b.result.historicalMin!;
+        if (diff !== 0) return diff;
+      }
+      const c = a.college.name.localeCompare(b.college.name);
+      return c !== 0 ? c : a.offering.programmeCode.localeCompare(b.offering.programmeCode);
+    }
+
+    if (sortOption === "delta_closest" && studentCutoff !== null) {
+      const aHas = a.result.delta !== null;
+      const bHas = b.result.delta !== null;
+      if (aHas && !bHas) return -1;
+      if (!aHas && bHas) return 1;
+      if (aHas && bHas) {
+        const diff = Math.abs(a.result.delta!) - Math.abs(b.result.delta!);
+        if (diff !== 0) return diff;
+      }
+      const c = a.college.name.localeCompare(b.college.name);
+      return c !== 0 ? c : a.offering.programmeCode.localeCompare(b.offering.programmeCode);
+    }
+
+    if (sortOption === "college_name") {
+      const c = a.college.name.localeCompare(b.college.name);
+      return c !== 0 ? c : a.offering.programmeCode.localeCompare(b.offering.programmeCode);
+    }
+
+    if (sortOption === "college_code") {
+      const c = a.college.code.localeCompare(b.college.code, undefined, { numeric: true });
+      return c !== 0 ? c : a.offering.programmeCode.localeCompare(b.offering.programmeCode);
+    }
+
+    // Default: 'cutoff_desc' (Highest Cutoffs First)
+    const aHas = a.result.historicalMin !== null;
+    const bHas = b.result.historicalMin !== null;
+    if (aHas && !bHas) return -1;
+    if (!aHas && bHas) return 1;
+    if (aHas && bHas) {
+      const diff = b.result.historicalMin! - a.result.historicalMin!;
+      if (diff !== 0) return diff;
+    }
     const c = a.college.name.localeCompare(b.college.name);
     return c !== 0 ? c : a.offering.programmeCode.localeCompare(b.offering.programmeCode);
   });
@@ -372,6 +422,7 @@ export function renderM5GuidancePage(
     if (typeFilter !== "all") p.set("type", typeFilter);
     if (districtFilter) p.set("district", districtFilter);
     if (branchFilter) p.set("branch", branchFilter);
+    if (sortOption !== "cutoff_desc") p.set("sort", sortOption);
     if (onlyAvailable) p.set("only_available", "1");
     if (rawShortlist) p.set("shortlist", rawShortlist);
     return `?${p.toString()}`;
@@ -391,51 +442,103 @@ export function renderM5GuidancePage(
   <style>
     ${SITE_SHELL_CSS}
     *, *::before, *::after { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; width: 100%; max-width: 100vw; overflow-x: hidden; }
-    .m5-container { max-width: 1200px; margin: 0 auto; padding: 1.25rem; width: 100%; overflow-x: hidden; }
-    @media (max-width: 480px) {
-      .m5-container { padding: 0.65rem; }
+    html, body {
+      margin: 0; padding: 0; width: 100%; max-width: 100vw; overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, sans-serif;
+      background: #f8fafc; color: #0f172a; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
     }
-    .nav-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 2px solid #e2e8f0; flex-wrap: wrap; }
-    .nav-tab { padding: 0.7rem 0.9rem; font-weight: 600; text-decoration: none; color: #4a5568; border-bottom: 3px solid transparent; min-height: 44px; display: inline-flex; align-items: center; font-size: 0.95rem; line-height: 1.35; }
-    .nav-tab.active { color: #2b6cb0; border-bottom-color: #2b6cb0; }
-    .form-grid { display: grid; grid-template-columns: 1fr; gap: 0.85rem; background: #f7fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1.25rem; border: 1px solid #cbd5e0; width: 100%; }
+    .m5-container { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1.25rem; width: 100%; overflow-x: hidden; }
+    @media (max-width: 640px) {
+      .m5-container { padding: 0.75rem; }
+    }
+    .m5-header-card {
+      background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .m5-header-card h1 { margin: 0 0 0.35rem; font-size: 1.7rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
+    .nav-tabs {
+      display: inline-flex; background: #e2e8f0; padding: 0.3rem; border-radius: 10px; gap: 0.25rem; margin-bottom: 1.25rem; border: none; flex-wrap: wrap; width: 100%;
+    }
+    .nav-tab {
+      padding: 0.65rem 1.15rem; font-weight: 600; text-decoration: none; color: #475569; border-radius: 8px; border: none; min-height: 44px; display: inline-flex; align-items: center; font-size: 0.93rem; line-height: 1.35; transition: all 0.15s ease;
+    }
+    .nav-tab:hover { color: #0f172a; background: rgba(255, 255, 255, 0.6); }
+    .nav-tab.active { background: #ffffff; color: #1d4ed8; font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .form-grid {
+      display: flex; flex-direction: column; gap: 1rem; background: #ffffff; padding: 1.25rem 1.5rem; border-radius: 12px; margin-bottom: 1.25rem; border: 1px solid #e2e8f0; width: 100%; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .form-tier { display: grid; gap: 0.85rem 1rem; width: 100%; }
+    .form-tier-1 { grid-template-columns: 1fr; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem; }
+    .form-tier-2 { grid-template-columns: 1fr; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem; }
+    .form-tier-3 { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; }
     @media (min-width: 640px) {
-      .form-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); padding: 1.25rem; gap: 1rem; }
+      .form-tier-1 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+      .form-tier-2 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
     }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
-    .form-group label { font-size: 0.925rem; font-weight: 600; color: #2d3748; }
-    .form-group input, .form-group select { padding: 0.6rem 0.75rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 1rem; min-height: 46px; width: 100%; max-width: 100%; }
-    .truth-banner { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 1rem; border-radius: 6px; margin-bottom: 1.25rem; font-size: 0.925rem; color: #2b6cb0; word-break: break-word; line-height: 1.55; }
+    @media (max-width: 768px) {
+      .form-tier-3 { flex-direction: column; align-items: stretch; }
+      .form-tier-3 > div { margin-left: 0 !important; padding-top: 0 !important; }
+    }
+    .form-group { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+    .form-group label { font-size: 0.8rem; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.03em; }
+    .form-group input, .form-group select {
+      padding: 0.6rem 0.75rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; min-height: 44px; width: 100%; max-width: 100%; background: #ffffff; color: #0f172a; transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: #2563eb; outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .truth-banner {
+      background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #2563eb; padding: 1rem 1.25rem; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.9rem; color: #1e3a8a; word-break: break-word; line-height: 1.55;
+    }
     .truth-banner p { margin: 0.3rem 0; }
-    .table-responsive { width: 100%; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 0.75rem; margin-bottom: 1rem; border: 1px solid #cbd5e0; border-radius: 8px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-    .comparison-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; line-height: 1.45; }
-    .comparison-table th, .comparison-table td { padding: 0.7rem 0.75rem; text-align: left; border-bottom: 1px solid #edf2f7; word-break: break-word; vertical-align: middle; }
+    .table-responsive {
+      width: 100%; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 0.75rem; margin-bottom: 1.25rem; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+    }
+    .comparison-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; line-height: 1.45; }
+    .comparison-table th {
+      background: #f8fafc; font-weight: 700; font-size: 0.8rem; color: #475569; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.9rem 1rem; border-bottom: 2px solid #e2e8f0;
+    }
+    .comparison-table td {
+      padding: 0.95rem 1rem; text-align: left; border-bottom: 1px solid #f1f5f9; word-break: break-word; vertical-align: middle;
+    }
     .comparison-table tbody tr:hover { background: #f8fafc; }
-    .comparison-table th { background: #f1f5f9; font-weight: 700; font-size: 0.875rem; color: #334155; border-bottom: 2px solid #cbd5e0; }
     .results-meta-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0 0.5rem; }
-    .results-count-pill { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; background: #ebf8ff; border: 1px solid #bee3f8; color: #2b6cb0; border-radius: 999px; font-weight: 700; font-size: 0.875rem; }
-    .college-title { font-weight: 700; color: #1a202c; display: inline; }
-    .college-code { color: #64748b; font-weight: 600; font-size: 0.875rem; }
-    .offering-subrow { display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.25rem; font-size: 0.85rem; color: #475569; }
-    .branch-pill { display: inline-block; padding: 0.1rem 0.45rem; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 4px; font-weight: 700; font-size: 0.8rem; color: #1e293b; letter-spacing: 0.02em; }
-    .district-tag { display: inline-block; color: #64748b; font-size: 0.82rem; }
-    .cutoff-value { font-size: 1.05rem; font-weight: 700; color: #0f172a; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .results-count-pill {
+      display: inline-flex; align-items: center; padding: 0.3rem 0.85rem; background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; border-radius: 999px; font-weight: 700; font-size: 0.86rem;
+    }
+    .college-title { font-weight: 700; color: #0f172a; font-size: 0.98rem; line-height: 1.35; display: inline; }
+    .college-code { color: #64748b; font-weight: 600; font-size: 0.85rem; }
+    .type-pill {
+      display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 0.12rem 0.45rem; border-radius: 4px; letter-spacing: 0.02em; vertical-align: middle; margin-left: 0.35rem;
+    }
+    .type-gov { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+    .type-aided { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .type-univ { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
+    .type-constituent { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
+    .type-sfc { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+    .offering-subrow { display: flex; align-items: center; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.35rem; font-size: 0.86rem; color: #475569; }
+    .branch-pill { display: inline-block; padding: 0.15rem 0.5rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; font-weight: 700; font-size: 0.8rem; color: #1d4ed8; letter-spacing: 0.02em; }
+    .district-tag { display: inline-block; color: #64748b; font-size: 0.82rem; font-weight: 500; }
+    .cutoff-value { font-size: 1.18rem; font-weight: 800; color: #0f172a; font-variant-numeric: tabular-nums; white-space: nowrap; display: block; }
+    .cutoff-subtext { font-size: 0.72rem; color: #64748b; font-weight: 500; display: block; margin-top: 2px; }
     .source-details { font-size: 0.8rem; color: #475569; }
-    .source-details summary { cursor: pointer; color: #2b6cb0; font-weight: 600; list-style: none; display: inline-flex; align-items: center; gap: 0.25rem; }
+    .source-details summary { cursor: pointer; color: #2563eb; font-weight: 600; list-style: none; display: inline-flex; align-items: center; gap: 0.25rem; }
     .source-details summary::-webkit-details-marker { display: none; }
     .source-details summary::after { content: " ▾"; font-size: 0.75rem; }
     .source-details[open] summary::after { content: " ▴"; }
     .source-details-body { margin-top: 0.25rem; font-size: 0.78rem; color: #64748b; line-height: 1.35; }
-    .delta-badge { display: inline-block; padding: 0.2rem 0.55rem; border-radius: 4px; font-weight: 700; font-size: 0.875rem; background: #edf2f7; color: #1e293b; font-variant-numeric: tabular-nums; word-break: normal; overflow-wrap: normal; hyphens: manual; }
-    .held-badge { background: #fed7d7; color: #742a2a; padding: 0.25rem 0.55rem; border-radius: 4px; font-weight: 700; font-size: 0.82rem; display: inline-block; }
-    .neutral-badge { background: #f1f5f9; color: #475569; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.82rem; display: inline-block; }
-    .btn-action { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 0.4rem 0.75rem; border: 1px solid #cbd5e0; background: #fff; border-radius: 6px; cursor: pointer; text-decoration: none; color: #2d3748; font-weight: 600; font-size: 0.875rem; white-space: nowrap; }
-    .btn-action:hover { background: #edf2f7; }
-    .btn-primary { background: #3182ce; color: #fff; border-color: #3182ce; }
-    .btn-primary:hover { background: #2b6cb0; }
+    .delta-badge {
+      display: inline-block; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 700; font-size: 0.88rem; background: #f1f5f9; border: 1px solid #e2e8f0; color: #1e293b; font-variant-numeric: tabular-nums; word-break: normal; overflow-wrap: normal; hyphens: manual;
+    }
+    .held-badge { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; padding: 0.25rem 0.55rem; border-radius: 6px; font-weight: 700; font-size: 0.82rem; display: inline-block; }
+    .neutral-badge { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.82rem; display: inline-block; }
+    .btn-action {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 42px; min-width: 42px; padding: 0.45rem 0.95rem; border: 1.5px solid #cbd5e1; background: #ffffff; border-radius: 8px; cursor: pointer; text-decoration: none; color: #334155; font-weight: 600; font-size: 0.88rem; white-space: nowrap; transition: all 0.15s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .btn-action:hover { background: #f8fafc; border-color: #94a3b8; }
+    .btn-primary { background: #2563eb; color: #ffffff; border-color: #2563eb; box-shadow: 0 1px 3px rgba(37,99,235,0.25); }
+    .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
     .footnote { font-size: 0.82rem; color: #64748b; }
-    .shortlist-badge { background: #48bb78; color: #fff; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.8rem; margin-left: 0.4rem; }
+    .shortlist-badge { background: #10b981; color: #ffffff; padding: 0.15rem 0.55rem; border-radius: 12px; font-size: 0.78rem; font-weight: 700; margin-left: 0.4rem; }
     .shortlist-actions { display: flex; gap: 0.35rem; flex-wrap: wrap; }
     @media (max-width: 768px) {
       .comparison-table th:nth-child(4), .comparison-table td:nth-child(4) { display: none; }
@@ -521,15 +624,15 @@ export function renderM5GuidancePage(
 <body>
   ${renderSiteHeader(lang, "planner", langControl)}
   <main class="m5-container">
-    <header>
+    <header class="m5-header-card">
       <h1>${esc(copy.title)}</h1>
-      <p style="font-size: 1.05rem; color: #1e293b; margin: 0.35rem 0 0.45rem; line-height: 1.55; font-weight: 500;">
+      <p style="font-size: 1.02rem; color: #334155; margin: 0.35rem 0 0.45rem; line-height: 1.55; font-weight: 500;">
         ${t(
-          "வணக்கம்! உங்கள் கட்-ஆஃப் மதிப்பெண்ணை 2025 TNEA அதிகாரப்பூர்வ ஒதுக்கீடுகளுடன் எளிதாக ஒப்பிட்டு, மாவட்ட வாரியாக கல்லூரிகளை ஆராய்ந்து உங்களுக்கான விருப்பப் பட்டியலைத் திட்டமிடுங்கள்.",
-          "Welcome! Compare your marks with governed 2025 official provisional allotments, explore colleges across Tamil Nadu, and organize a balanced choice list for your counselling journey."
+          "வணக்கம்! உங்கள் கட்-ஆஃப் மதிப்பெண்ணை TNEA அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீடுகளுடன் எளிதாக ஒப்பிட்டு, மாவட்ட வாரியாக கல்லூரிகளை ஆராய்ந்து உங்களுக்கான விருப்பப் பட்டியலைத் திட்டமிடுங்கள்.",
+          "Welcome! Compare your marks with governed TNEA official provisional allotments, explore colleges across Tamil Nadu, and organize a balanced choice list for your counselling journey."
         )}
       </p>
-      <p style="font-size: 0.88rem; color: #475569; margin: 0 0 0.5rem; line-height: 1.5;">${esc(copy.nonPredictionDisclaimer)}</p>
+      <p style="font-size: 0.88rem; color: #64748b; margin: 0; line-height: 1.5;">${esc(copy.nonPredictionDisclaimer)}</p>
     </header>
 
     <nav class="nav-tabs" aria-label="Milestone M5 Views">
@@ -565,6 +668,7 @@ export function renderM5GuidancePage(
             allDistricts,
             allBranches,
             onlyAvailable,
+            sortOption,
             evaluatedRows,
             shortIds,
             rawShortlist,
@@ -592,6 +696,7 @@ function renderComparisonTab(
   allDistricts: string[],
   allBranches: Array<{ code: string; name: string }>,
   onlyAvailable: boolean,
+  sortOption: string,
   rows: Array<{ college: CollegeMeta; offering: GovernedOffering; result: ComparisonResult }>,
   shortIds: string[],
   rawShortlist: string,
@@ -623,10 +728,10 @@ function renderComparisonTab(
 
   return `
     <section>
-      <p class="scope-note screen-only" style="margin: 0 0 0.85rem; padding: 0.75rem 1rem; background: #f8fafc; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.925rem; color: #2d3748; line-height: 1.55;">
+      <p class="scope-note screen-only" style="margin: 0 0 1rem; padding: 0.85rem 1.15rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.92rem; color: #334155; line-height: 1.55; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
         ${t(
-          `<strong>வரம்பு:</strong> இந்தப் பக்கத்தில் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு ஒப்பீட்டிற்கு அங்கீகரிக்கப்பட்ட <strong>121 கல்லூரிகள் (1,249 படிப்புகள்)</strong> (அடிப்படை 55 கல்லூரிகள் உட்பட) உள்ளன. தமிழ்நாட்டின் முழு 389 கல்லூரிகள் பட்டியலை மதிப்பெண் இன்றி ஆராய <a href="/colleges?lang=ta">கல்லூரிகள் பட்டியலைப் பார்க்கவும்</a>.`,
-          `<strong>Dataset scope:</strong> This comparison workspace covers the <strong>121 approved colleges (1,249 offerings)</strong> (including the 55 approved institutions from the benchmark cohort) with governed official provisional allotment evidence. To browse the broader 389-college 2026 TNEA listing without marks, visit the <a href="/colleges?lang=en">Colleges Directory</a>.`
+          `<strong>வரம்பு:</strong> இந்தப் பக்கத்தில் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு ஒப்பீட்டிற்கு அங்கீகரிக்கப்பட்ட <strong>121 கல்லூரிகள் (1,249 படிப்புகள்)</strong> உள்ளன. தமிழ்நாட்டின் முழு 389 கல்லூரிகள் பட்டியலை மதிப்பெண் இன்றி ஆராய <a href="/colleges?lang=ta" style="color: #2563eb; font-weight: 600; text-decoration: underline;">கல்லூரிகள் பட்டியலைப் பார்க்கவும்</a>.`,
+          `<strong>Dataset scope:</strong> This comparison workspace covers the <strong>121 approved colleges (1,249 offerings)</strong> with governed official provisional allotment evidence. To browse the broader 389-college 2026 TNEA listing without marks, visit the <a href="/colleges?lang=en" style="color: #2563eb; font-weight: 600; text-decoration: underline;">Colleges Directory</a>.`
         )}
       </p>
 
@@ -650,94 +755,127 @@ function renderComparisonTab(
         <input type="hidden" name="shortlist" value="${esc(rawShortlist)}">
         <input type="hidden" name="community_selected" value="1">
 
-        <div class="form-group">
-          <label for="cutoff-input">${esc(copy.studentCutoffLabel)} (0–200)</label>
-          <input id="cutoff-input" type="number" step="0.25" min="0" max="200" name="cutoff" value="${studentCutoff !== null ? studentCutoff : ""}" placeholder="${t("எ.கா. 185.5", "e.g. 185.5")}">
+        <!-- Tier 1: Admission Parameters (Cutoff, Quota, Category, Round, Year) -->
+        <div class="form-tier form-tier-1">
+          <div class="form-group">
+            <label for="cutoff-input">${esc(copy.studentCutoffLabel)} (0–200)</label>
+            <input id="cutoff-input" type="number" step="0.25" min="0" max="200" name="cutoff" value="${studentCutoff !== null ? studentCutoff : ""}" placeholder="${t("எ.கா. 185.5", "e.g. 185.5")}">
+          </div>
+
+          <div class="form-group">
+            <label for="quota-select">${esc(copy.quotaLabel)}</label>
+            <select id="quota-select" name="quota">
+              <option value="GENERAL_ACADEMIC" ${quota === "GENERAL_ACADEMIC" ? "selected" : ""}>${esc(copy.quotaName("GENERAL_ACADEMIC"))}</option>
+              <option value="GOVT_SCHOOL_7_5" ${quota === "GOVT_SCHOOL_7_5" ? "selected" : ""}>${esc(copy.quotaName("GOVT_SCHOOL_7_5"))}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="community-select">${esc(copy.communityLabel)}</label>
+            <select id="community-select" name="community">
+              ${(["OC", "BC", "BCM", "MBC", "SC", "SCA", "ST"] as CommunityCategory[])
+                .map(
+                  (cat) =>
+                    `<option value="${cat}" ${community === cat ? "selected" : ""}>${esc(copy.communityName(cat))}</option>`
+                )
+                .join("")}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="round-select">${esc(copy.roundLabel)}</label>
+            <select id="round-select" name="round">
+              ${(["ROUND_1", "ROUND_2", "ROUND_3"] as AllotmentRound[])
+                .map(
+                  (r) =>
+                    `<option value="${r}" ${round === r ? "selected" : ""}>${esc(copy.roundName(r))}</option>`
+                )
+                .join("")}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="year-select">${t("கலந்தாய்வு ஆண்டு (Year)", "Counselling Year")}</label>
+            <select id="year-select" name="year">
+              <option value="2026" ${year === 2026 ? "selected" : ""}>${t("2026 (121 கல்லூரிகள்)", "2026 (121 Colleges)")}</option>
+              <option value="2025" ${year === 2025 ? "selected" : ""}>${t("2025 (55 கல்லூரிகள்)", "2025 (55 Colleges)")}</option>
+            </select>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="quota-select">${esc(copy.quotaLabel)}</label>
-          <select id="quota-select" name="quota">
-            <option value="GENERAL_ACADEMIC" ${quota === "GENERAL_ACADEMIC" ? "selected" : ""}>${esc(copy.quotaName("GENERAL_ACADEMIC"))}</option>
-            <option value="GOVT_SCHOOL_7_5" ${quota === "GOVT_SCHOOL_7_5" ? "selected" : ""}>${esc(copy.quotaName("GOVT_SCHOOL_7_5"))}</option>
-          </select>
+        <!-- Tier 2: Search & Classification Filters (College Type, District, Branch, Search) -->
+        <div class="form-tier form-tier-2">
+          <div class="form-group">
+            <label for="type-select">${t("கல்லூரி வகை", "College Type")}</label>
+            <select id="type-select" name="type">
+              <option value="all" ${typeFilter === "all" ? "selected" : ""}>${t("அனைத்து கல்லூரி வகைகள்", "All College Types")}</option>
+              <option value="GOVERNMENT" ${typeFilter === "GOVERNMENT" ? "selected" : ""}>${t("அரசுப் பொறியியல் கல்லூரிகள் (11)", "Government Engineering Colleges (11)")}</option>
+              <option value="AIDED" ${typeFilter === "AIDED" ? "selected" : ""}>${t("அரசு உதவிபெறும் கல்லூரிகள் (3)", "Govt. Aided Engineering Colleges (3)")}</option>
+              <option value="UNIVERSITY" ${typeFilter === "UNIVERSITY" ? "selected" : ""}>${t("அண்ணா / அண்ணாமலைப் பல்கலைக்கழகத் துறைகள் (5)", "University Departments (Anna / Annamalai) (5)")}</option>
+              <option value="CONSTITUENT" ${typeFilter === "CONSTITUENT" ? "selected" : ""}>${t("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள் (16)", "Anna Univ. Constituent Colleges (16)")}</option>
+              <option value="SFC" ${typeFilter === "SFC" ? "selected" : ""}>${t("சுயநிதிப் பொறியியல் கல்லூரிகள் — தன்னாட்சி (86)", "Self-Financing Engineering Colleges — Autonomous (86)")}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="district-select">${t("மாவட்டம்", "District")}</label>
+            <select id="district-select" name="district">
+              <option value="" ${!districtFilter ? "selected" : ""}>${t("அனைத்து மாவட்டங்கள்", "All Districts")}</option>
+              ${allDistricts
+                .map(
+                  (d) =>
+                    `<option value="${esc(d)}" ${districtFilter.toLowerCase() === d.toLowerCase() ? "selected" : ""}>${esc(d)}</option>`
+                )
+                .join("")}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="branch-select">${t("துறை / கிளை", "Branch / Department")}</label>
+            <select id="branch-select" name="branch">
+              <option value="" ${!branchFilter ? "selected" : ""}>${t("அனைத்து கிளைகள்", "All Branches")}</option>
+              ${allBranches
+                .map(
+                  (b) =>
+                    `<option value="${esc(b.code)}" ${branchFilter === b.code ? "selected" : ""}>${esc(formatBranchDropdownLabel(b.name))} (${esc(b.code)})</option>`
+                )
+                .join("")}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="search-input">${t("தேடல் (கல்லூரி / கிளை / மாவட்டம்)", "Search (College / Branch / District)")}</label>
+            <input id="search-input" type="text" name="q" value="${esc(query)}" placeholder="${t("எ.கா. CEG, PSG, CIT, CSE, கோவை", "e.g. CEG, PSG, CIT, CSE, Coimbatore")}">
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="community-select">${esc(copy.communityLabel)}</label>
-          <select id="community-select" name="community">
-            ${(["OC", "BC", "BCM", "MBC", "SC", "SCA", "ST"] as CommunityCategory[])
-              .map(
-                (cat) =>
-                  `<option value="${cat}" ${community === cat ? "selected" : ""}>${esc(copy.communityName(cat))}</option>`
-              )
-              .join("")}
-          </select>
-        </div>
+        <!-- Tier 3: Results Display Controls & Actions (Sort By, Available Filter, Buttons) -->
+        <div class="form-tier form-tier-3">
+          <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div class="form-group" style="min-width: 230px;">
+              <label for="sort-select">${t("வரிசைப்படுத்து", "Sort By")}</label>
+              <select id="sort-select" name="sort">
+                <option value="cutoff_desc" ${sortOption === "cutoff_desc" ? "selected" : ""}>${t("கட்-ஆஃப்: உயர்வு முதல் குறைவு (பரிந்துரை)", "Cutoff: High to Low (Default)")}</option>
+                <option value="cutoff_asc" ${sortOption === "cutoff_asc" ? "selected" : ""}>${t("கட்-ஆஃப்: குறைவு முதல் உயர்வு", "Cutoff: Low to High")}</option>
+                ${studentCutoff !== null ? `<option value="delta_closest" ${sortOption === "delta_closest" ? "selected" : ""}>${t("என் மதிப்பெண்ணிற்கு மிக நெருக்கமானவை", "Closest to My Cutoff")}</option>` : ""}
+                <option value="college_name" ${sortOption === "college_name" ? "selected" : ""}>${t("கல்லூரி பெயர் (A-Z)", "College Name (A-Z)")}</option>
+                <option value="college_code" ${sortOption === "college_code" ? "selected" : ""}>${t("கல்லூரி குறியீடு எண்", "College Code")}</option>
+              </select>
+            </div>
 
-        <div class="form-group">
-          <label for="round-select">${esc(copy.roundLabel)}</label>
-          <select id="round-select" name="round">
-            ${(["ROUND_1", "ROUND_2", "ROUND_3"] as AllotmentRound[])
-              .map(
-                (r) =>
-                  `<option value="${r}" ${round === r ? "selected" : ""}>${esc(copy.roundName(r))}</option>`
-              )
-              .join("")}
-          </select>
-        </div>
+            <label style="display: inline-flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #334155; padding-top: 1.25rem;">
+              <input type="checkbox" name="only_available" value="1" ${onlyAvailable ? "checked" : ""} style="width: 1.15rem; height: 1.15rem; min-height: 0; cursor: pointer;">
+              <span>${t("கட்-ஆஃப் தரவு உள்ள படிப்புகளை மட்டும் காட்டு", "Show only offerings with available cutoff data")}</span>
+            </label>
+          </div>
 
-        <div class="form-group">
-          <label for="year-select">${t("கலந்தாய்வு ஆண்டு (Year)", "Counselling Year")}</label>
-          <select id="year-select" name="year">
-            <option value="2026" ${year === 2026 ? "selected" : ""}>${t("2026 (121 கல்லூரிகள்)", "2026 (121 Colleges)")}</option>
-            <option value="2025" ${year === 2025 ? "selected" : ""}>${t("2025 (55 கல்லூரிகள்)", "2025 (55 Colleges)")}</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="district-select">${t("மாவட்டம்", "District")}</label>
-          <select id="district-select" name="district">
-            <option value="" ${!districtFilter ? "selected" : ""}>${t("அனைத்து மாவட்டங்கள்", "All Districts")}</option>
-            ${allDistricts
-              .map(
-                (d) =>
-                  `<option value="${esc(d)}" ${districtFilter.toLowerCase() === d.toLowerCase() ? "selected" : ""}>${esc(d)}</option>`
-              )
-              .join("")}
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="branch-select">${t("துறை / கிளை", "Branch / Department")}</label>
-          <select id="branch-select" name="branch">
-            <option value="" ${!branchFilter ? "selected" : ""}>${t("அனைத்து கிளைகள்", "All Branches")}</option>
-            ${allBranches
-              .map(
-                (b) =>
-                  `<option value="${esc(b.code)}" ${branchFilter === b.code ? "selected" : ""}>${esc(formatBranchDropdownLabel(b.name))} (${esc(b.code)})</option>`
-              )
-              .join("")}
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="search-input">${t("தேடல் (கல்லூரி / கிளை / மாவட்டம்)", "Search (College / Branch / District)")}</label>
-          <input id="search-input" type="text" name="q" value="${esc(query)}" placeholder="${t("எ.கா. CEG, PSG ECE, CSE, கோவை", "e.g. CEG, PSG ECE, CSE, Coimbatore")}">
-        </div>
-
-        <div class="form-group" style="grid-column: 1 / -1; margin: 0.1rem 0 0.2rem; display: flex; flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
-          <label style="display: inline-flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.92rem; font-weight: 600; color: #2d3748;">
-            <input type="checkbox" name="only_available" value="1" ${onlyAvailable ? "checked" : ""} style="width: 1.15rem; height: 1.15rem; min-height: 0; cursor: pointer;">
-            <span>${t("கட்-ஆஃப் தரவு உள்ள படிப்புகளை மட்டும் காட்டு", "Show only offerings with available cutoff data")}</span>
-          </label>
-          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; padding-top: 1.25rem;">
             ${
-              districtFilter || branchFilter || query || onlyAvailable
+              districtFilter || branchFilter || query || typeFilter !== "all" || onlyAvailable || sortOption !== "cutoff_desc"
                 ? `<a class="btn-action" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">${t("வடிகட்டிகளை நீக்கு", "Clear Filters")}</a>`
                 : ""
             }
-            <button type="submit" class="btn-action btn-primary" style="padding: 0.5rem 1.25rem; font-size: 0.95rem;">${t("தேடு &amp; ஒப்பிடு", "Search &amp; Compare")}</button>
+            <button type="submit" class="btn-action btn-primary" style="padding: 0.6rem 1.4rem; font-size: 0.95rem;">${t("தேடு &amp; ஒப்பிடு", "Search &amp; Compare")}</button>
           </div>
         </div>
       </form>
@@ -919,8 +1057,8 @@ function renderComparisonTab(
         <p>${esc(copy.nonPredictionDisclaimer)}</p>
         <p style="font-size: 0.86rem; color: #4a5568;">
           ${t(
-            `அங்கீகரிக்கப்பட்ட 121 கல்லூரிகளில் (அடிப்படை 55 கல்லூரிகள் உட்பட) உள்ள ${totalOfferingsFormatted} படிப்புகளும் கீழே பட்டியலிடப்பட்டுள்ளன. முந்தைய ஆண்டு அதிகாரப்பூர்வத் தரவு இல்லாத படிப்புகளுக்கு மட்டும் 'ஒப்பீட்டிற்குத் தரவு இல்லை' என்று தெளிவாகக் குறிக்கப்பட்டுள்ளது.`,
-            `All ${totalOfferingsFormatted} governed offerings across the 121 approved institutions (including all 55 approved institutions from the benchmark cohort) are listed below. Where approved historical evidence is absent, offerings are transparently shown as 'Not available for comparison'.`
+            `அங்கீகரிக்கப்பட்ட 121 கல்லூரிகளில் உள்ள ${totalOfferingsFormatted} படிப்புகளும் கீழே பட்டியலிடப்பட்டுள்ளன. முந்தைய ஆண்டு அதிகாரப்பூர்வத் தரவு இல்லாத படிப்புகளுக்கு மட்டும் 'ஒப்பீட்டிற்குத் தரவு இல்லை' என்று தெளிவாகக் குறிக்கப்பட்டுள்ளது.`,
+            `All ${totalOfferingsFormatted} governed offerings across the 121 approved institutions are listed below. Where approved historical evidence is absent, offerings are transparently shown as 'Not available for comparison'.`
           )}
         </p>
       </aside>
@@ -951,14 +1089,13 @@ function renderComparisonTab(
           )}
         </span>
       </div>
-      </div>
 
       <div class="table-responsive">
         <table class="comparison-table" role="table" aria-label="College Cutoff Comparison Table">
           <thead>
             <tr>
               <th scope="col">${t("கல்லூரி &amp; கிளை", "College &amp; Programme")}</th>
-              <th scope="col">${esc(copy.historicalMinLabel)}</th>
+              <th scope="col">${esc(t(`கண்டறியப்பட்ட குறைந்தபட்ச மதிப்பெண் (${year})`, `Observed Minimum Mark (${year})`))}</th>
               <th scope="col">${esc(copy.deltaLabel)}</th>
               <th scope="col">${t("அதிகாரப்பூர்வ ஆதாரம்", "Official Source")}</th>
               <th scope="col">${t("விருப்பப் பட்டியல்", "Shortlist")}</th>
@@ -984,6 +1121,7 @@ function renderComparisonTab(
                         districtFilter,
                         branchFilter,
                         onlyAvailable,
+                        sortOption,
                       });
                     })
                     .join("")
@@ -1013,11 +1151,28 @@ function renderOfferingRow(
     districtFilter: string;
     branchFilter: string;
     onlyAvailable: boolean;
+    sortOption: string;
   }
 ): string {
   const { college, offering, result } = row;
   const id = `${college.code}~${offering.programmeCode}`;
   const t = (taStr: string, enStr: string) => (lang === "ta" ? taStr : enStr);
+
+  const typeBadgeClass: Record<string, string> = {
+    GOVERNMENT: "type-gov",
+    AIDED: "type-aided",
+    UNIVERSITY: "type-univ",
+    CONSTITUENT: "type-constituent",
+    SFC: "type-sfc",
+  };
+  const typeBadgeLabel: Record<string, { ta: string; en: string }> = {
+    GOVERNMENT: { ta: "அரசு", en: "Govt" },
+    AIDED: { ta: "அரசு உதவி", en: "Govt Aided" },
+    UNIVERSITY: { ta: "பல்கலைக்கழகம்", en: "Univ Dept" },
+    CONSTITUENT: { ta: "உறுப்புக் கல்லூரி", en: "Constituent" },
+    SFC: { ta: "தன்னாட்சி", en: "Autonomous SFC" },
+  };
+  const colType = college.type || "SFC";
 
   let deltaHtml = "";
   if (result.isHeld) {
@@ -1060,6 +1215,7 @@ function renderOfferingRow(
     <tr>
       <td>
         <span class="college-title">${esc(college.name)}</span> <span class="college-code">(${esc(college.code)})</span>
+        <span class="type-pill ${typeBadgeClass[colType] || "type-sfc"}">${esc(t(typeBadgeLabel[colType]?.ta || colType, typeBadgeLabel[colType]?.en || colType))}</span>
         <div class="offering-subrow">
           <span class="branch-pill">${esc(offering.programmeCode)}</span>
           <span>${esc(offering.programmeName)}</span>
@@ -1074,6 +1230,11 @@ function renderOfferingRow(
             ? result.historicalMin.toFixed(2)
             : "—"
         }</span>
+        ${
+          !result.isHeld && result.historicalMin !== null && result.round
+            ? `<span class="cutoff-subtext">${esc(copy.roundName(result.round))} · ${result.year ?? 2026}</span>`
+            : ""
+        }
       </td>
       <td>
         ${deltaHtml}
@@ -1090,6 +1251,7 @@ function renderOfferingRow(
           <input type="hidden" name="type" value="${esc(sessionState.typeFilter)}">
           <input type="hidden" name="district" value="${esc(sessionState.districtFilter)}">
           <input type="hidden" name="branch" value="${esc(sessionState.branchFilter)}">
+          <input type="hidden" name="sort" value="${esc(sessionState.sortOption)}">
           ${sessionState.onlyAvailable ? `<input type="hidden" name="only_available" value="1">` : ""}
           <input type="hidden" name="quota" value="${sessionState.quota}">
           <input type="hidden" name="community" value="${sessionState.community}">

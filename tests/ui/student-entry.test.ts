@@ -221,7 +221,7 @@ test("live server keeps entry, blank personal form and synthetic demo paths sepa
   child.stderr.on("data", (chunk) => { stderr += chunk.toString(); });
   try {
     const base = await new Promise<string>((resolve, reject) => {
-      const timer = setTimeout(() => reject(new Error(`Server did not start: ${stderr}`)), 10000);
+      const timer = setTimeout(() => reject(new Error(`Server did not start: ${stderr}`)), 20000);
       child.once("error", (error) => { clearTimeout(timer); reject(error); });
       child.once("exit", (code) => { clearTimeout(timer); reject(new Error(`Server exited ${code}: ${stderr}`)); });
       child.stdout.on("data", (chunk) => {

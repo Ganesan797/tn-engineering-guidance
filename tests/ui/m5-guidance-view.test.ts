@@ -681,3 +681,92 @@ test("M5 Filters: District and Branch dropdowns filter offerings cleanly and pre
   assert.ok(htmlCombined.includes("branch=EI"), "Language switch link must preserve non-sensitive branch filter");
   assert.ok(!htmlCombined.includes("cutoff=180"), "Must never leak student cutoff into GET URLs");
 });
+
+test("M5 Feedback #1: Jargon copy '(அடிப்படை 55 கல்லூரிகள் உட்பட)' is absent from Tamil and English views", () => {
+  const htmlTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
+  const htmlEn = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
+
+  assert.ok(!htmlTa.includes("அடிப்படை 55 கல்லூரிகள் உட்பட"), "Must remove Tamil milestone jargon from scope note");
+  assert.ok(!htmlTa.includes("55 கல்லூரிகள் உட்பட"), "Must remove 55 colleges phrase from truth banner");
+  assert.ok(
+    !htmlEn.includes("including all 55 approved institutions from the benchmark cohort"),
+    "Must remove English benchmark cohort copy from truth banner"
+  );
+  assert.ok(
+    !htmlEn.includes("including the 55 approved institutions from the benchmark cohort"),
+    "Must remove English benchmark cohort copy from scope note"
+  );
+});
+
+test("M5 Feedback #2 & #3: College Type filter and intelligent cutoff descending sorting", () => {
+  // A. College Type filter for GOVERNMENT
+  const htmlGov = renderM5GuidancePage(new URLSearchParams({ type: "GOVERNMENT", lang: "en" }));
+  assert.ok(htmlGov.includes('id="type-select"'), "Must render College Type dropdown");
+  assert.ok(htmlGov.includes('value="GOVERNMENT" selected'), "Must select GOVERNMENT");
+  assert.ok(htmlGov.includes("Government College of Technology, Coimbatore"), "Must include GCT (2005)");
+  assert.ok(htmlGov.includes("Alagappa Chettiar Government College"), "Must include ACGCET (5901)");
+  assert.ok(!htmlGov.includes("PSG College of Technology"), "Must exclude Government-Aided colleges");
+  assert.ok(!htmlGov.includes("Saveetha Engineering College"), "Must exclude Autonomous SFCs");
+
+  // B. College Type filter for AIDED
+  const htmlAided = renderM5GuidancePage(new URLSearchParams({ type: "AIDED", lang: "en" }));
+  assert.ok(htmlAided.includes("PSG College of Technology"), "Must include PSG Tech (2006)");
+  assert.ok(htmlAided.includes("Coimbatore Institute of Technology"), "Must include CIT (2007)");
+  assert.ok(htmlAided.includes("Thiagarajar College of Engineering"), "Must include TCE (5008)");
+  assert.ok(!htmlAided.includes("College of Engineering Guindy"), "Must exclude University Departments");
+
+  // C. Intelligent Default Sorting (cutoff_desc)
+  const htmlSorted = renderM5GuidancePage(
+    new URLSearchParams({ branch: "CS", lang: "en" }),
+    {
+      studentCutoff: 198.0,
+      quota: "GENERAL_ACADEMIC",
+      community: "BC",
+      round: "ROUND_1",
+      year: 2026,
+      communitySelected: true,
+    }
+  );
+
+  // College of Engineering Guindy (CEG CS cutoff 199.50) must appear before lower cutoffs
+  const cegIdx = htmlSorted.indexOf("College of Engineering Guindy");
+  const actIdx = htmlSorted.indexOf("Alagappa Chettiar Government College");
+  assert.ok(cegIdx !== -1, "Must contain CEG CS");
+  if (actIdx !== -1) {
+    assert.ok(cegIdx < actIdx, "CEG (199.50) must appear before Alagappa Chettiar (184.50)");
+  }
+
+  // Offerings with data must appear BEFORE offerings without data in table body
+  const tbody = htmlSorted.slice(htmlSorted.indexOf("<tbody>"));
+  const cegInTbody = tbody.indexOf("College of Engineering Guindy");
+  const noDataInTbody = tbody.indexOf('class="neutral-badge">Not available for comparison');
+  if (noDataInTbody !== -1) {
+    assert.ok(cegInTbody < noDataInTbody, "Available cutoff offering (CEG) must appear before offerings with missing data");
+  }
+
+  // D. Sort option dropdown presence and shortlist form persistence
+  assert.ok(htmlSorted.includes('id="sort-select"'), "Must render Sort By dropdown");
+  assert.ok(htmlSorted.includes('<input type="hidden" name="sort" value="cutoff_desc">'), "Must preserve sort in shortlist form");
+});
+
+test("M5 Feedback #4: Cool educational styling, college type badges, and header card", () => {
+  const html = renderM5GuidancePage(
+    new URLSearchParams({ lang: "ta" }),
+    {
+      studentCutoff: 198.0,
+      quota: "GENERAL_ACADEMIC",
+      community: "BC",
+      round: "ROUND_1",
+      year: 2026,
+      communitySelected: true,
+    }
+  );
+
+  assert.ok(html.includes('class="m5-header-card"'), "Must use elevated header card container");
+  assert.ok(html.includes("form-tier form-tier-1"), "Must use structured form-tier-1");
+  assert.ok(html.includes("form-tier form-tier-2"), "Must use structured form-tier-2");
+  assert.ok(html.includes("form-tier form-tier-3"), "Must use structured form-tier-3");
+  assert.ok(html.includes("type-pill"), "Must render college type badge pills");
+  assert.ok(html.includes("type-gov"), "Must render type-gov style class");
+  assert.ok(html.includes("cutoff-subtext"), "Must render round and year subtext under cutoff mark");
+});

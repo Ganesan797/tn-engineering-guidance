@@ -69,7 +69,7 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     assert.equal(m5Res.status, 200, "M5 guidance route should return 200 OK");
     const m5Html = await m5Res.text();
     assert.ok(m5Html.includes("College Cutoff Comparison Table"), "M5 page should render comparison directory");
-    assert.ok(m5Html.includes("55 approved institutions"), "M5 page should cite approved 55 institutions");
+    assert.ok(m5Html.includes("121 approved colleges"), "M5 page should cite approved 121 colleges");
 
     // C. Cutoff Calculator POST route (/personal)
     const calcRes = await fetch(`${base}/personal?lang=en`, {
