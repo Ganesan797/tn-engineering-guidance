@@ -497,7 +497,7 @@ export function createResearchCandidateRepository(
   });
 }
 
-// Runtime singleton: Gate A verified historical observations loaded (55 colleges, 2025 baseline).
+// Runtime singleton: Gate A verified historical observations loaded (121 institutions, 2025 benchmark and 2026 expansion datasets).
 export const HISTORICAL_OBSERVATIONS = new HistoricalRepository(loadVerifiedHistoricalObservations());
 
 // Factory helper for tests using synthetic fixtures only
