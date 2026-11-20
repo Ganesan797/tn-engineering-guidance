@@ -45,7 +45,7 @@ const EN_COPY: ComparisonCopyText = {
     "Held: Booklet carries '(Previous year data)' header; requires current-year official intake confirmation.",
   formatDisclosure: (round: AllotmentRoundOrAll) => {
     if (round === "ALL") {
-      return "Final observed minimum mark across official provisional allotment rounds (Round 1, Round 2, and Round 3). Upward movement and subsequent non-reporting not reflected.";
+      return "Lowest observed provisional allotment mark across available official rounds (Round 1, Round 2, and Round 3). Upward movement and subsequent non-reporting not reflected. This is an observed historical benchmark, not an official closing cutoff.";
     }
     const num = ROUND_NUMBER_MAP[round] ?? round;
     return `Minimum observed mark in official Round ${num} provisional allotment publication. Upward movement and subsequent non-reporting not reflected.`;
@@ -83,7 +83,7 @@ const EN_COPY: ComparisonCopyText = {
     }
   },
   roundName: (round: AllotmentRoundOrAll) => {
-    if (round === "ALL") return "All Rounds (Final Closing Cutoff)";
+    if (round === "ALL") return "All Available Rounds (Lowest Observed Mark)";
     return `Round ${ROUND_NUMBER_MAP[round] ?? round}`;
   },
 };
@@ -106,7 +106,7 @@ const TA_COPY: ComparisonCopyText = {
     "நிறுத்திவைக்கப்பட்டுள்ளது: கல்லூரி கையேட்டில் '(முந்தைய ஆண்டு தரவு)' என்ற குறிப்பு உள்ளது; நடப்பு ஆண்டு அதிகாரப்பூர்வ சேர்க்கை உறுதிப்படுத்தல் தேவை.",
   formatDisclosure: (round: AllotmentRoundOrAll) => {
     if (round === "ALL") {
-      return "அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டு சுற்றுகளில் (சுற்று 1, 2, 3) காணப்பட்ட இறுதி குறைந்தபட்ச மதிப்பெண். மேல்நோக்கிய நகர்வு மற்றும் பின்னர் சேராமை ஆகியவை இதில் பிரதிபலிக்கவில்லை.";
+      return "கிடைக்கக்கூடிய அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டு சுற்றுகளில் (சுற்று 1, 2, 3) கண்டறியப்பட்ட மிகக் குறைந்தபட்ச மதிப்பெண். மேல்நோக்கிய நகர்வு மற்றும் பின்னர் சேராமை ஆகியவை இதில் பிரதிபலிக்கவில்லை. இது ஒரு வரலாற்றுப் பதிவு மட்டுமே, அதிகாரப்பூர்வ இறுதி முடிவு மதிப்பெண் அல்ல.";
     }
     const num = ROUND_NUMBER_MAP[round] ?? round;
     return `அதிகாரப்பூர்வ சுற்று ${num} தற்காலிக ஒதுக்கீட்டு வெளியீட்டில் காணப்பட்ட குறைந்தபட்ச மதிப்பெண். மேல்நோக்கிய நகர்வு மற்றும் பின்னர் சேராமை ஆகியவை இதில் பிரதிபலிக்கவில்லை.`;
@@ -144,7 +144,7 @@ const TA_COPY: ComparisonCopyText = {
     }
   },
   roundName: (round: AllotmentRoundOrAll) => {
-    if (round === "ALL") return "அனைத்து சுற்றுகளும் (இறுதி ஒதுக்கீடு)";
+    if (round === "ALL") return "அனைத்து கிடைக்கக்கூடிய சுற்றுகளும் (குறைந்தபட்ச தற்காலிக மதிப்பெண்)";
     return `சுற்று ${ROUND_NUMBER_MAP[round] ?? round}`;
   },
 };

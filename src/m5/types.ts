@@ -97,7 +97,7 @@ export interface ComparisonResult {
   readonly holdNotice: string | null;
   readonly otherRound?: AllotmentRound | null;
   readonly otherRoundMark?: number | null;
-  readonly otherRoundAction?: "FILLED_IN_EARLIER_ROUND" | "ALLOTTED_IN_LATER_ROUND" | null;
+  readonly otherRoundLocator?: string | null;
 }
 
 export interface ShortlistItem {

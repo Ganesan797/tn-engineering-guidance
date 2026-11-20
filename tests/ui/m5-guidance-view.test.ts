@@ -715,8 +715,8 @@ test("M5 Feedback #2 & #3: College Type filter and intelligent cutoff descending
   assert.ok(htmlAided.includes("Thiagarajar College of Engineering"), "Must include TCE (5008)");
   assert.ok(!htmlAided.includes("College of Engineering Guindy"), "Must exclude University Departments");
 
-  // C. Intelligent Default Sorting (cutoff_desc)
-  const htmlSorted = renderM5GuidancePage(
+  // C. Neutral Default Sorting (college_name) & Explicit Numerical Sorting (cutoff_desc)
+  const htmlDefault = renderM5GuidancePage(
     new URLSearchParams({ branch: "CS", lang: "en" }),
     {
       studentCutoff: 198.0,
@@ -728,20 +728,31 @@ test("M5 Feedback #2 & #3: College Type filter and intelligent cutoff descending
     }
   );
 
-  // College of Engineering Guindy (CEG CS cutoff 199.50) must appear before lower cutoffs
-  const cegIdx = htmlSorted.indexOf("College of Engineering Guindy");
-  const actIdx = htmlSorted.indexOf("Alagappa Chettiar Government College");
-  assert.ok(cegIdx !== -1, "Must contain CEG CS");
-  if (actIdx !== -1) {
-    assert.ok(cegIdx < actIdx, "CEG (199.50) must appear before Alagappa Chettiar (184.50)");
-  }
+  // Default sorting must be neutral alphabetical by College Name (A-Z)
+  const actDefaultIdx = htmlDefault.indexOf("Alagappa Chettiar Government College");
+  const cegDefaultIdx = htmlDefault.indexOf("College of Engineering Guindy");
+  assert.ok(actDefaultIdx !== -1 && cegDefaultIdx !== -1, "Must contain both colleges");
+  assert.ok(actDefaultIdx < cegDefaultIdx, "Alagappa Chettiar (A) must appear before CEG (C) in neutral default sort");
+  assert.ok(htmlDefault.includes('value="college_name" selected'), "Must select college_name by default");
 
-  // Offerings with data must appear BEFORE offerings without data in table body
-  const tbody = htmlSorted.slice(htmlSorted.indexOf("<tbody>"));
-  const cegInTbody = tbody.indexOf("College of Engineering Guindy");
-  const noDataInTbody = tbody.indexOf('class="neutral-badge">Not available for comparison');
-  if (noDataInTbody !== -1) {
-    assert.ok(cegInTbody < noDataInTbody, "Available cutoff offering (CEG) must appear before offerings with missing data");
+  // Explicit Numerical Sorting: Cutoff High to Low
+  const htmlSorted = renderM5GuidancePage(
+    new URLSearchParams({ branch: "CS", sort: "cutoff_desc", lang: "en" }),
+    {
+      studentCutoff: 198.0,
+      quota: "GENERAL_ACADEMIC",
+      community: "BC",
+      round: "ROUND_1",
+      year: 2026,
+      communitySelected: true,
+    }
+  );
+
+  const cegSortedIdx = htmlSorted.indexOf("College of Engineering Guindy");
+  const actSortedIdx = htmlSorted.indexOf("Alagappa Chettiar Government College");
+  assert.ok(cegSortedIdx !== -1, "Must contain CEG CS");
+  if (actSortedIdx !== -1) {
+    assert.ok(cegSortedIdx < actSortedIdx, "In numerical sort, CEG (199.00) must appear before Alagappa Chettiar (184.50)");
   }
 
   // D. Sort option dropdown presence and shortlist form persistence
@@ -785,15 +796,17 @@ test("M5 Feedback #5: All Rounds closing cutoffs, cross-round intelligence, and 
     }
   );
 
-  // Both colleges have real closing marks rendered in the same table
+  // Both colleges have real lowest observed marks rendered in the same table
   assert.ok(htmlAll.includes("199.00"), "Must show CEG CS closing cutoff 199.00");
   assert.ok(htmlAll.includes("102.50"), "Must show Adhiparasakthi CS closing cutoff 102.50");
-  assert.ok(htmlAll.includes("All Rounds (Final Closing Cutoff)"), "Must show All Rounds option in dropdown");
+  assert.ok(htmlAll.includes("All Available Rounds (Lowest Observed Mark)"), "Must show All Available Rounds option in dropdown");
   assert.ok(htmlAll.includes('value="ALL" selected'), "Must keep ALL option selected");
   assert.ok(htmlAll.includes("Round 1 · 2026"), "Must show Round 1 source for CEG");
   assert.ok(htmlAll.includes("Round 3 · 2026"), "Must show Round 3 source for Adhiparasakthi");
+  assert.ok(!htmlAll.includes("Final Closing Cutoff"), "Must not use misleading Final Closing Cutoff terminology");
+  assert.ok(htmlAll.includes("Lowest observed provisional allotment mark across available official rounds"), "Must render factual lowest observed disclosure");
 
-  // B. Cross-Round Intelligence in specific round (Round 1 + query for Adhiparasakthi 1401)
+  // B. Cross-Round Record in specific round (Round 1 + query for Adhiparasakthi 1401)
   const htmlR1Query = renderM5GuidancePage(
     new URLSearchParams({ q: "1401", lang: "en" }),
     {
@@ -806,14 +819,26 @@ test("M5 Feedback #5: All Rounds closing cutoffs, cross-round intelligence, and 
     }
   );
 
-  // Informative cross-round badge instead of generic 'not available'
+  // Factual cross-round record notice instead of unsupported inferences like "No Round 1 allotment" or "Filled before"
   assert.ok(
-    htmlR1Query.includes("No Round 1 allotment (Round 3 closing: 102.50)"),
-    "Must display informative cross-round badge explaining why offering has no Round 1 cutoff"
+    htmlR1Query.includes("No comparable record available for this round; a record exists in Round 3 (102.50)"),
+    "Must display factual cross-round record statement"
+  );
+  assert.ok(
+    !htmlR1Query.includes("No Round 1 allotment"),
+    "Must not claim 'No allotment' without official closure/vacancy publication"
+  );
+  assert.ok(
+    !htmlR1Query.includes("Filled before"),
+    "Must not claim 'Filled before' without official vacancy publication"
   );
   assert.ok(
     htmlR1Query.includes("Round 3: 102.50"),
     "Must render other round cutoff subtext under the dash"
+  );
+  assert.ok(
+    htmlR1Query.includes("pp. 277-990"),
+    "Must include source locator in details element for other round record"
   );
 
   // C. Tamil translation of cross-round intelligence badge
@@ -829,8 +854,16 @@ test("M5 Feedback #5: All Rounds closing cutoffs, cross-round intelligence, and 
     }
   );
   assert.ok(
-    htmlR1QueryTa.includes("சுற்று 1-ல் ஒதுக்கீடு இல்லை (சுற்று 3-ல் முடிந்தது: 102.50)"),
-    "Must render Tamil cross-round intelligence badge"
+    htmlR1QueryTa.includes("இந்த சுற்றுக்கான ஒப்பீட்டுப் பதிவு கிடைக்கவில்லை; சுற்று 3-ல் பதிவு உள்ளது (102.50)"),
+    "Must render Tamil factual cross-round record statement"
+  );
+  assert.ok(
+    !htmlR1QueryTa.includes("ஒதுக்கீடு இல்லை"),
+    "Tamil copy must not claim 'ஒதுக்கீடு இல்லை' (No allotment)"
+  );
+  assert.ok(
+    !htmlR1QueryTa.includes("முடிந்தது"),
+    "Tamil copy must not claim 'முடிந்தது' (Filled/Closed)"
   );
 
   // D. Modern typography and Google Fonts in HTML

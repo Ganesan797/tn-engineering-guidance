@@ -282,7 +282,7 @@ export function renderM5GuidancePage(
   const branchFilter = (params.get("branch") ?? "").trim().toUpperCase();
   const onlyAvailable = params.get("only_available") === "1";
   const showAllOfferings = params.get("show_all") === "1";
-  const sortOption = params.get("sort") ?? "cutoff_desc";
+  const sortOption = params.get("sort") ?? "college_name";
 
   // Load ALL 1,249 governed offerings across 121 approved institutions
   const governedOfferings = HISTORICAL_OBSERVATIONS.getAllGovernedOfferings();
@@ -357,12 +357,29 @@ export function renderM5GuidancePage(
     });
   }
 
-  // Intuitive, student-centered sorting:
-  // Default 'cutoff_desc' (Cutoff High to Low):
-  // 1. Offerings with approved historical cutoff data appear FIRST, sorted by observed minimum mark descending.
-  // 2. Tie-breaker: college name A-Z, then programme code.
-  // 3. Offerings without historical cutoff data appear at the bottom, sorted by college name A-Z.
+  // Neutral ordering by default:
+  // Default 'college_name': Alphabetical by College Name (A-Z), breaking ties by programme code.
+  // Students can explicitly select numerical historical sorting (High to Low or Low to High) or College Code.
+  // Numerical sorting strictly reflects mathematical order of historical observations without recommendation or suitability implications.
   evaluatedRows.sort((a, b) => {
+    if (sortOption === "college_code") {
+      const c = a.college.code.localeCompare(b.college.code, undefined, { numeric: true });
+      return c !== 0 ? c : a.offering.programmeCode.localeCompare(b.offering.programmeCode);
+    }
+
+    if (sortOption === "cutoff_desc") {
+      const aHas = a.result.historicalMin !== null;
+      const bHas = b.result.historicalMin !== null;
+      if (aHas && !bHas) return -1;
+      if (!aHas && bHas) return 1;
+      if (aHas && bHas) {
+        const diff = b.result.historicalMin! - a.result.historicalMin!;
+        if (diff !== 0) return diff;
+      }
+      const c = a.college.name.localeCompare(b.college.name);
+      return c !== 0 ? c : a.offering.programmeCode.localeCompare(b.offering.programmeCode);
+    }
+
     if (sortOption === "cutoff_asc") {
       const aHas = a.result.historicalMin !== null;
       const bHas = b.result.historicalMin !== null;
@@ -376,38 +393,7 @@ export function renderM5GuidancePage(
       return c !== 0 ? c : a.offering.programmeCode.localeCompare(b.offering.programmeCode);
     }
 
-    if (sortOption === "delta_closest" && studentCutoff !== null) {
-      const aHas = a.result.delta !== null;
-      const bHas = b.result.delta !== null;
-      if (aHas && !bHas) return -1;
-      if (!aHas && bHas) return 1;
-      if (aHas && bHas) {
-        const diff = Math.abs(a.result.delta!) - Math.abs(b.result.delta!);
-        if (diff !== 0) return diff;
-      }
-      const c = a.college.name.localeCompare(b.college.name);
-      return c !== 0 ? c : a.offering.programmeCode.localeCompare(b.offering.programmeCode);
-    }
-
-    if (sortOption === "college_name") {
-      const c = a.college.name.localeCompare(b.college.name);
-      return c !== 0 ? c : a.offering.programmeCode.localeCompare(b.offering.programmeCode);
-    }
-
-    if (sortOption === "college_code") {
-      const c = a.college.code.localeCompare(b.college.code, undefined, { numeric: true });
-      return c !== 0 ? c : a.offering.programmeCode.localeCompare(b.offering.programmeCode);
-    }
-
-    // Default: 'cutoff_desc' (Highest Cutoffs First)
-    const aHas = a.result.historicalMin !== null;
-    const bHas = b.result.historicalMin !== null;
-    if (aHas && !bHas) return -1;
-    if (!aHas && bHas) return 1;
-    if (aHas && bHas) {
-      const diff = b.result.historicalMin! - a.result.historicalMin!;
-      if (diff !== 0) return diff;
-    }
+    // Default: 'college_name' (Alphabetical by College Name, then Programme Code)
     const c = a.college.name.localeCompare(b.college.name);
     return c !== 0 ? c : a.offering.programmeCode.localeCompare(b.offering.programmeCode);
   });
@@ -427,7 +413,7 @@ export function renderM5GuidancePage(
     if (typeFilter !== "all") p.set("type", typeFilter);
     if (districtFilter) p.set("district", districtFilter);
     if (branchFilter) p.set("branch", branchFilter);
-    if (sortOption !== "cutoff_desc") p.set("sort", sortOption);
+    if (sortOption !== "college_name") p.set("sort", sortOption);
     if (onlyAvailable) p.set("only_available", "1");
     if (rawShortlist) p.set("shortlist", rawShortlist);
     return `?${p.toString()}`;
@@ -724,8 +710,8 @@ function renderComparisonTab(
         result.sourceTitle !== null &&
         result.locator !== null
     );
-  const historicalDisclosure = approvedHistoricalResult?.round
-    ? copy.formatDisclosure(approvedHistoricalResult.round)
+  const historicalDisclosure = approvedHistoricalResult
+    ? copy.formatDisclosure(round)
     : t(
         `தேர்ந்தெடுத்த ஒதுக்கீடு / பிரிவு / சுற்றிற்கு இந்தப் பட்டியலில் அங்கீகரிக்கப்பட்ட ${year} வரலாற்றுத் தரவு கிடைக்கவில்லை. தரவு இல்லாமை கல்லூரி அல்லது படிப்பு இல்லை என்பதைக் குறிக்காது.`,
         `No approved ${year} historical observation is available for the currently displayed offerings under the selected quota, community, and round. Missing historical data does not mean the college or branch is unavailable.`
@@ -861,15 +847,17 @@ function renderComparisonTab(
         <!-- Tier 3: Results Display Controls & Actions (Sort By, Available Filter, Buttons) -->
         <div class="form-tier form-tier-3">
           <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-            <div class="form-group" style="min-width: 230px;">
+            <div class="form-group" style="min-width: 250px;">
               <label for="sort-select">${t("வரிசைப்படுத்து", "Sort By")}</label>
               <select id="sort-select" name="sort">
-                <option value="cutoff_desc" ${sortOption === "cutoff_desc" ? "selected" : ""}>${t("கட்-ஆஃப்: உயர்வு முதல் குறைவு (பரிந்துரை)", "Cutoff: High to Low (Default)")}</option>
-                <option value="cutoff_asc" ${sortOption === "cutoff_asc" ? "selected" : ""}>${t("கட்-ஆஃப்: குறைவு முதல் உயர்வு", "Cutoff: Low to High")}</option>
-                ${studentCutoff !== null ? `<option value="delta_closest" ${sortOption === "delta_closest" ? "selected" : ""}>${t("என் மதிப்பெண்ணிற்கு மிக நெருக்கமானவை", "Closest to My Cutoff")}</option>` : ""}
-                <option value="college_name" ${sortOption === "college_name" ? "selected" : ""}>${t("கல்லூரி பெயர் (A-Z)", "College Name (A-Z)")}</option>
+                <option value="college_name" ${sortOption === "college_name" ? "selected" : ""}>${t("கல்லூரி பெயர் (A-Z) (இயல்புநிலை)", "College Name (A-Z) (Default)")}</option>
                 <option value="college_code" ${sortOption === "college_code" ? "selected" : ""}>${t("கல்லூரி குறியீடு எண்", "College Code")}</option>
+                <option value="cutoff_desc" ${sortOption === "cutoff_desc" ? "selected" : ""}>${t("வரலாற்று குறைந்தபட்ச மதிப்பெண்: அதிகபட்சம் முதல் (எண் வரிசை)", "Historical Minimum Mark: High to Low (Numerical)")}</option>
+                <option value="cutoff_asc" ${sortOption === "cutoff_asc" ? "selected" : ""}>${t("வரலாற்று குறைந்தபட்ச மதிப்பெண்: குறைந்தபட்சம் முதல் (எண் வரிசை)", "Historical Minimum Mark: Low to High (Numerical)")}</option>
               </select>
+              <small style="font-size: 0.76rem; color: #64748b; line-height: 1.35; margin-top: 2px;">
+                ${t("வரலாற்று மதிப்பெண் வரிசைப்படுத்துதல் ஒரு கணித எண் வரிசை மட்டுமே; இது எந்தவித பரிந்துரையோ பொருத்தப்பாட்டையோ குறிக்காது.", "Historical mark sorting is strictly a numerical ordering of past observations; it implies no recommendation or suitability.")}
+              </small>
             </div>
 
             <label style="display: inline-flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #334155; padding-top: 1.25rem;">
@@ -880,7 +868,7 @@ function renderComparisonTab(
 
           <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; padding-top: 1.25rem;">
             ${
-              districtFilter || branchFilter || query || typeFilter !== "all" || onlyAvailable || sortOption !== "cutoff_desc"
+              districtFilter || branchFilter || query || typeFilter !== "all" || onlyAvailable || sortOption !== "college_name"
                 ? `<a class="btn-action" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">${t("வடிகட்டிகளை நீக்கு", "Clear Filters")}</a>`
                 : ""
             }
@@ -1187,18 +1175,11 @@ function renderOfferingRow(
   if (result.isHeld) {
     deltaHtml = `<span class="held-badge">${esc(copy.heldNotice)}</span>`;
   } else if (result.status === "NO_HISTORICAL_DATA") {
-    if (result.otherRound && result.otherRoundAction === "ALLOTTED_IN_LATER_ROUND") {
-      deltaHtml = `<span class="neutral-badge" style="background: #f8fafc; border-left: 3px solid #3b82f6;">${esc(
+    if (result.otherRound && result.otherRoundMark !== null && result.otherRoundMark !== undefined) {
+      deltaHtml = `<span class="neutral-badge" style="background: #f8fafc; border-left: 3px solid #64748b;">${esc(
         t(
-          `${copy.roundName(sessionState.round)}-ல் ஒதுக்கீடு இல்லை (${copy.roundName(result.otherRound)}-ல் முடிந்தது: ${result.otherRoundMark?.toFixed(2)})`,
-          `No ${copy.roundName(sessionState.round)} allotment (${copy.roundName(result.otherRound)} closing: ${result.otherRoundMark?.toFixed(2)})`
-        )
-      )}</span>`;
-    } else if (result.otherRound && result.otherRoundAction === "FILLED_IN_EARLIER_ROUND") {
-      deltaHtml = `<span class="neutral-badge" style="background: #f8fafc; border-left: 3px solid #f59e0b;">${esc(
-        t(
-          `${copy.roundName(sessionState.round)}-க்கு முன் முடிந்தது (${copy.roundName(result.otherRound)}-ல் முடிந்தது: ${result.otherRoundMark?.toFixed(2)})`,
-          `Filled before ${copy.roundName(sessionState.round)} (${copy.roundName(result.otherRound)} closing: ${result.otherRoundMark?.toFixed(2)})`
+          `இந்த சுற்றுக்கான ஒப்பீட்டுப் பதிவு கிடைக்கவில்லை; ${copy.roundName(result.otherRound)}-ல் பதிவு உள்ளது (${result.otherRoundMark.toFixed(2)})`,
+          `No comparable record available for this round; a record exists in ${copy.roundName(result.otherRound)} (${result.otherRoundMark.toFixed(2)})`
         )
       )}</span>`;
     } else {
@@ -1224,7 +1205,9 @@ function renderOfferingRow(
       )
     )}</span>`;
   } else if (result.status === "NO_HISTORICAL_DATA") {
-    if (result.otherRound) {
+    if (result.otherRound && result.otherRoundLocator) {
+      sourceHtml = `<details class="source-details"><summary>${esc(copy.roundName(result.otherRound))}</summary><div class="source-details-body">${esc(result.otherRoundLocator)}</div></details>`;
+    } else if (result.otherRound) {
       sourceHtml = `<span class="footnote">${esc(copy.roundName(result.otherRound))}</span>`;
     } else {
       sourceHtml = `<span class="footnote">${esc(t("தரவு இல்லை", "No data"))}</span>`;

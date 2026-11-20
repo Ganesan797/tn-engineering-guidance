@@ -250,7 +250,13 @@ export class HistoricalRepository {
     );
   }
 
-  public getClosingObservation(params: {
+  /**
+   * Selects the observation with the lowest observed provisional allotment minimum mark
+   * across available rounds for the requested year, quota, and community.
+   * Note: This selects the lowest observed provisional mark among ingested rounds, which is
+   * not necessarily the final round or an official closing value.
+   */
+  public getLowestObservedRoundObservation(params: {
     year: number;
     quota: QuotaStream;
     community: CommunityCategory;
@@ -270,6 +276,16 @@ export class HistoricalRepository {
     return matches.reduce((prev, curr) =>
       curr.derivedMinimumMark < prev.derivedMinimumMark ? curr : prev
     );
+  }
+
+  public getClosingObservation(params: {
+    year: number;
+    quota: QuotaStream;
+    community: CommunityCategory;
+    collegeCode: string;
+    programmeCode: string;
+  }): DerivedHistoricalObservation | undefined {
+    return this.getLowestObservedRoundObservation(params);
   }
 
   public getOtherRoundObservation(params: {

@@ -142,12 +142,6 @@ export function compareOffering(
   }
 
   if (!observation) {
-    const otherRoundAction = otherRoundObs && round !== "ALL"
-      ? otherRoundObs.round < round
-        ? ("FILLED_IN_EARLIER_ROUND" as const)
-        : ("ALLOTTED_IN_LATER_ROUND" as const)
-      : null;
-
     return {
       status: "NO_HISTORICAL_DATA",
       evidenceSemantics: "NOT_AVAILABLE_FOR_COMPARISON",
@@ -171,7 +165,7 @@ export function compareOffering(
       holdNotice: null,
       otherRound: otherRoundObs?.round ?? null,
       otherRoundMark: otherRoundObs?.derivedMinimumMark ?? null,
-      otherRoundAction,
+      otherRoundLocator: otherRoundObs?.locator ?? null,
     };
   }
 
