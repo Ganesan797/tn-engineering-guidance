@@ -36,6 +36,9 @@ test("source-only listings keep identity, district, scope and profile holds inde
 
 test("both browse paths, filters, empty states, comparison and bilingual pending copy", () => {
   const home=render("lang=en"); assert.match(home,/No marks are required/);
+  assert.ok(home.includes("fonts.googleapis.com"), "Colleges directory must include Google Fonts preconnect");
+  assert.ok(home.includes("Plus+Jakarta+Sans"), "Colleges directory must include Plus Jakarta Sans");
+  assert.ok(home.includes("Noto+Sans+Tamil"), "Colleges directory must include Noto Sans Tamil");
   const branches=render("lang=en&view=branches"); assert.match(branches,/COMPUTER SCIENCE AND ENGINEERING/);
   assert.match(render("lang=en&view=branch&branch=CS"),/Imagine building a hospital appointment app/);
   assert.match(render("lang=ta&view=branch&branch=CS"),/ஒரு மருத்துவமனை முன்பதிவுச் செயலியை/);

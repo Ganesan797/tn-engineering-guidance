@@ -194,6 +194,9 @@ test("prepared question titles hide internal IDs while preserving canonical link
 test("zero-knowledge Tamil path offers engineering and branch awareness before TNEA or marks", () => {
   const start = renderM2Journey("awareness", pack, reviewed, awarenessReviewed, runtime());
   assert.match(start, /<html lang="ta"/);
+  assert.ok(start.includes("fonts.googleapis.com"), "Guidance journey must include Google Fonts preconnect");
+  assert.ok(start.includes("Plus+Jakarta+Sans"), "Guidance journey must include Plus Jakarta Sans");
+  assert.ok(start.includes("Noto+Sans+Tamil"), "Guidance journey must include Noto Sans Tamil");
   assert.match(start, /data-content-id="AW-01"/);
   assert.match(start, /மதிப்பெண்கள் அல்லது கல்லூரி விவரங்கள் இன்றி/);
   assert.match(start, /data-content-id="A01"/);

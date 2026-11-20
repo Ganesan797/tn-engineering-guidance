@@ -15,7 +15,7 @@ import {
   type ShortlistState,
   type SupportedLanguage,
 } from "../m5/index.ts";
-import { renderSiteHeader, SITE_SHELL_CSS } from "./site-shell.ts";
+import { renderSiteHeader, SITE_SHELL_CSS, GOOGLE_FONTS_HTML, SHARED_FONT_FAMILY } from "./site-shell.ts";
 
 const esc = (v: string) =>
   v
@@ -430,15 +430,13 @@ export function renderM5GuidancePage(
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${esc(copy.title)} | TN Engineering Guidance</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  ${GOOGLE_FONTS_HTML}
   <style>
     ${SITE_SHELL_CSS}
     *, *::before, *::after { box-sizing: border-box; }
     html, body {
       margin: 0; padding: 0; width: 100%; max-width: 100vw; overflow-x: hidden;
-      font-family: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Tamil", "Mukta Malar", "Nirmala UI", sans-serif;
+      font-family: ${SHARED_FONT_FAMILY};
       background: #f8fafc; color: #0f172a; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
     }
     .m5-container { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1.25rem; width: 100%; overflow-x: hidden; }

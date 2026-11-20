@@ -1,7 +1,12 @@
 // Shared presentation shell for the existing guided and review-only routes.
 // Navigation deliberately contains no link to the internal or synthetic preview.
+
+export const GOOGLE_FONTS_HTML = `<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700;800&display=swap" rel="stylesheet">`;
+
+export const SHARED_FONT_FAMILY = `"Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Tamil", "Mukta Malar", "Nirmala UI", sans-serif`;
+
 export const SITE_SHELL_CSS = `
-.site-header{background:#fff;border-bottom:1px solid #e2e8f0;font-family:"Plus Jakarta Sans","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans Tamil","Mukta Malar","Nirmala UI",sans-serif}
+.site-header{background:#fff;border-bottom:1px solid #e2e8f0;font-family:${SHARED_FONT_FAMILY}}
 .site-header-inner{max-width:1280px;margin:auto;padding:12px 20px;display:flex;align-items:center;gap:16px 28px;flex-wrap:wrap}
 .site-brand{font-weight:800;color:#0f172a;text-decoration:none;line-height:1.35;min-height:44px;display:inline-flex;align-items:center;font-size:1.05rem;letter-spacing:-0.015em}
 .site-nav{display:flex;gap:4px 8px;flex-wrap:wrap;align-items:center;flex:1}

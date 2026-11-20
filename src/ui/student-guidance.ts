@@ -17,6 +17,7 @@ import {
   resolveStudentMessage,
   toStudentGuidanceSemanticView,
 } from "../student-semantics/index.ts";
+import { GOOGLE_FONTS_HTML } from "./site-shell.ts";
 
 export type GuidanceJsonBoundary = (
   requestJson: string,
@@ -329,7 +330,7 @@ export function bindStudentGuidanceForm(
 export function renderStudentGuidancePage(
   state: StudentGuidancePageState,
 ): string {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>TN Engineering Guidance</title><style>
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />${GOOGLE_FONTS_HTML}<title>TN Engineering Guidance</title><style>
 :root{font-family:"Plus Jakarta Sans","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans Tamil","Mukta Malar","Nirmala UI",sans-serif;color:#0f172a;background:#f8fafc}body{margin:0}.page{max-width:70rem;margin:auto;padding:1.5rem}form,section,.choice,details{background:white;border:1px solid #e2e8f0;border-radius:.75rem;padding:1.25rem;margin-block:1.25rem;box-shadow:0 1px 3px rgba(0,0,0,0.03)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.8rem}.field{display:flex;flex-direction:column;gap:.35rem}label,legend{font-weight:700;font-size:0.9rem;color:#334155}input,select,button{font:inherit;padding:.65rem .85rem;min-height:2.75rem;border-radius:.5rem;border:1.5px solid #cbd5e1}button{cursor:pointer;background:#2563eb;color:white;border:0;font-weight:700;transition:background .15s}button:hover{background:#1d4ed8}.status h2,.error h2{margin-top:0}.error{border-color:#f87171;background:#fef2f2}.choice h3{margin-top:0}small{color:#64748b}@media(max-width:35rem){.page{padding:.75rem}form,section,.choice,details{padding:.85rem}.grid{grid-template-columns:1fr}}
 </style></head><body><main class="page"><h1>TN Engineering Guidance</h1>${awarenessContent()}<p>Enter what you know. Leave unknown answers as “Unknown / unanswered”.</p><form id="guidance-form" method="post" action="/guidance">${profileForm(state.form.profile)}${preferencesForm(state.form)}${counsellingForm(state.form)}
 <input type="hidden" name="eligibility_request.academic_merit_cutoff_requested" value="${escapeHtml(state.form.eligibility_request.academic_merit_cutoff_requested)}" />

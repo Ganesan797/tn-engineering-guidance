@@ -26,6 +26,9 @@ const context = { snapshot_id: "CONFIGURED_EVIDENCE", snapshot_stage: null };
 test("home offers a distinct starting choice and three intents without duplicating awareness", () => {
   for (const language of ["en", "ta"] as const) {
     const html = renderStudentEntryPage({ route: "home", language }, pack);
+    assert.ok(html.includes("fonts.googleapis.com"), "Home must include Google Fonts preconnect");
+    assert.ok(html.includes("Plus+Jakarta+Sans"), "Home must include Plus Jakarta Sans");
+    assert.ok(html.includes("Noto+Sans+Tamil"), "Home must include Noto Sans Tamil");
     for (const route of ["personal", "counselling"] as const) {
       assert.ok(html.includes(entryHref(route, language))); assert.ok(html.includes(`/colleges?lang=${language}`));
     }
