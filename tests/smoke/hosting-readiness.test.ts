@@ -54,6 +54,7 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     const homeRes = await fetch(`${base}/`);
     assert.equal(homeRes.status, 200, "Home route should return 200 OK");
     assert.equal(homeRes.headers.get("content-type"), "text/html; charset=utf-8");
+    assert.equal(homeRes.headers.get("x-robots-tag"), "noindex, nofollow", "Home route must send noindex, nofollow");
     const homeHtml = await homeRes.text();
     assert.ok(homeHtml.includes("பொறியியல்") || homeHtml.includes("TN Engineering Guidance"), "Home should include Tamil app title");
     assert.ok(homeHtml.includes("/m5-guidance"), "Home should link to M5 guidance");
@@ -96,6 +97,7 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     // E. 404 Route Handling
     const notFoundRes = await fetch(`${base}/unknown-route-${Date.now()}`);
     assert.equal(notFoundRes.status, 404, "Unknown route should return 404 Not Found");
+    assert.equal(notFoundRes.headers.get("x-robots-tag"), "noindex, nofollow", "404 route must send noindex, nofollow");
 
     // 3. Security & Stability: Oversized POST handling on BOTH payload limits without crashing server
     // Boundary A: POST /m5-guidance (8192-byte limit)

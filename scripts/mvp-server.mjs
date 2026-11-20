@@ -119,7 +119,11 @@ function readBoundedBody(request, maxBytes) {
 
 function send(response, status, html, extraHeaders = {}) {
   if (response.headersSent) return;
-  response.writeHead(status, { "content-type": "text/html; charset=utf-8", ...extraHeaders });
+  response.writeHead(status, {
+    "content-type": "text/html; charset=utf-8",
+    "x-robots-tag": "noindex, nofollow",
+    ...extraHeaders,
+  });
   response.end(html);
 }
 
