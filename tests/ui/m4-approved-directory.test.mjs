@@ -375,4 +375,14 @@ test("stage 4 marks-free college exploration supports official DOTE categories, 
   // 5. Category badges on result cards
   assert.ok(htmlEn.includes('class="badge type-univ"'), "Must show university department badge on CEG");
   assert.ok(htmlEn.includes('class="badge type-sfc"'), "Must show self-financing badge on Easwari");
+
+  // 6. Simple student guidance without confusing 55-college or 2025 cutoff wording
+  assert.ok(!htmlEn.includes("55 colleges"), "Must not mention confusing 55 colleges split in scope banner");
+  assert.ok(!htmlTa.includes("55 கல்லூரிகள்"), "Must not mention confusing 55 colleges split in Tamil scope banner");
+  assert.ok(htmlEn.includes("Explore colleges without cutoff marks"), "Must provide simple marks-free guidance");
+  assert.ok(htmlTa.includes("மதிப்பெண்கள் இன்றி கல்லூரிகளை ஆராயலாம்"), "Must provide simple marks-free guidance in Tamil");
+
+  // 7. Neutral DOTE guidance without highlighting aided or any institutions
+  assert.ok(!htmlEn.includes("premier"), "Must not highlight aided or any institutions as premier");
+  assert.ok(!htmlTa.includes("புகழ்பெற்ற"), "Must not highlight aided or any institutions as புகழ்பெற்ற");
 });
