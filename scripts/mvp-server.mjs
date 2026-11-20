@@ -162,7 +162,9 @@ const server = createServer(async (request, response) => {
       const communitySelected = values.get("community_selected") === "1" || (rawCommunity !== null && rawCommunity.trim() !== "");
       const community = rawCommunity || "OC";
       const rawRound = values.get("round");
-      const round = rawRound && ["ROUND_1", "ROUND_2", "ROUND_3"].includes(rawRound)
+      const round = rawRound === "ALL"
+        ? "ALL"
+        : rawRound && ["ROUND_1", "ROUND_2", "ROUND_3"].includes(rawRound)
         ? rawRound
         : (quota === "GOVT_SCHOOL_7_5" ? "ROUND_1" : "ROUND_2");
       const rawYear = values.get("year");
