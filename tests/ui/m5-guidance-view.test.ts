@@ -872,3 +872,64 @@ test("M5 Feedback #5: All Rounds closing cutoffs, cross-round intelligence, and 
   assert.ok(htmlAll.includes("Noto+Sans+Tamil"), "Must include Noto Sans Tamil font link");
   assert.ok(htmlAll.includes('"Plus Jakarta Sans", "Inter"'), "Must apply modern font stack in CSS");
 });
+
+test("M5 DOTE Classification & College Selection: Exact categories from dte.tn.gov.in, college-select dropdown, and district filtering", () => {
+  // 1. Initial page load renders DOTE categories and college-select dropdown
+  const html = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
+
+  // Official DOTE category options in type-select
+  assert.ok(html.includes('id="type-select"'), "Must render type-select");
+  assert.ok(html.includes("Government Engineering Colleges (11)"), "Must include Government Engineering Colleges (11)");
+  assert.ok(html.includes("Government Aided Engineering Colleges (3)"), "Must include Government Aided Engineering Colleges (3)");
+  assert.ok(html.includes("Anna University Department Colleges (4)"), "Must include Anna University Department Colleges (4)");
+  assert.ok(html.includes("Annamalai University (1)"), "Must include Annamalai University (1)");
+  assert.ok(html.includes("Anna University Constituent Colleges (16)"), "Must include Anna University Constituent Colleges (16)");
+  assert.ok(html.includes("Self Financing Engineering Colleges — Autonomous (86)"), "Must include Self Financing Engineering Colleges (86)");
+
+  // College Selection dropdown with optgroup
+  assert.ok(html.includes('id="college-select"'), "Must render college-select dropdown");
+  assert.ok(html.includes('<optgroup label="Government Engineering Colleges (11)">'), "Must group Govt colleges in optgroup");
+  assert.ok(html.includes('<optgroup label="Government Aided Engineering Colleges (3)">'), "Must group Aided colleges in optgroup");
+  assert.ok(html.includes('<optgroup label="Anna University Department Colleges (4)">'), "Must group Anna Univ Dept colleges in optgroup");
+  assert.ok(html.includes('<optgroup label="Annamalai University (1)">'), "Must group Annamalai Univ in optgroup");
+  assert.ok(html.includes('<optgroup label="Anna University Constituent Colleges (16)">'), "Must group Constituent colleges in optgroup");
+  assert.ok(html.includes('<optgroup label="Self Financing Engineering Colleges (District-wise) (86)">'), "Must group SFC colleges in optgroup");
+
+  // DOTE Guide card with dte.tn.gov.in reference
+  assert.ok(html.includes("dte.tn.gov.in"), "Must reference official DOTE website");
+  assert.ok(html.includes("Directorate of Technical Education (DOTE) College Classification"), "Must explain DOTE classification");
+
+  // 2. Tamil language parity
+  const htmlTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
+  assert.ok(htmlTa.includes("அரசுப் பொறியியல் கல்லூரிகள் (11)"), "Must have Tamil Govt label");
+  assert.ok(htmlTa.includes("அரசு உதவிபெறும் பொறியியல் கல்லூரிகள் (3)"), "Must have Tamil Aided label");
+  assert.ok(htmlTa.includes("அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள் (4)"), "Must have Tamil Anna Univ Dept label");
+  assert.ok(htmlTa.includes("அண்ணாமலைப் பல்கலைக்கழகம் (1)"), "Must have Tamil Annamalai label");
+  assert.ok(htmlTa.includes("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள் (16)"), "Must have Tamil Constituent label");
+  assert.ok(htmlTa.includes("சுயநிதிப் பொறியியல் கல்லூரிகள் — தன்னாட்சி (86)"), "Must have Tamil SFC label");
+  assert.ok(htmlTa.includes("தமிழ்நாடு தொழில்நுட்பக் கல்வி இயக்ககம் (DOTE) கல்லூரி வகைப்பாடுகள்"), "Must have Tamil DOTE guide");
+
+  // 3. College selection filter: selecting college="2005" (GCT) narrows table to GCT only
+  const htmlGct = renderM5GuidancePage(new URLSearchParams({ college: "2005", lang: "en" }));
+  assert.ok(htmlGct.includes('value="2005" selected'), "Must select GCT in college-select dropdown");
+  assert.ok(htmlGct.includes("Government College of Technology, Coimbatore"), "Must contain GCT offerings");
+  assert.ok(!htmlGct.includes("Alagappa Chettiar Government College"), "Must exclude other colleges when college is selected");
+  assert.ok(htmlGct.includes('<input type="hidden" name="college" value="2005">'), "Must preserve college in shortlist form");
+
+  // 4. District and Type filtering narrows college-select dropdown
+  const htmlCbeAided = renderM5GuidancePage(new URLSearchParams({ district: "Coimbatore", type: "AIDED", lang: "en" }));
+  assert.ok(htmlCbeAided.includes("PSG Tech, Coimbatore"), "Must include PSG Tech in Coimbatore Aided");
+  assert.ok(htmlCbeAided.includes("CIT, Coimbatore"), "Must include CIT in Coimbatore Aided");
+  assert.ok(!htmlCbeAided.includes("TCE, Madurai"), "Must exclude TCE Madurai from Coimbatore district");
+
+  // 5. DOTE category badges on table rows
+  const htmlOfferings = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
+  assert.ok(htmlOfferings.includes('class="type-pill type-univ"'), "Must render type-univ badge");
+  assert.ok(htmlOfferings.includes('class="type-pill type-gov"'), "Must render type-gov badge");
+  assert.ok(htmlOfferings.includes('class="type-pill type-aided"'), "Must render type-aided badge");
+  assert.ok(htmlOfferings.includes('class="type-pill type-constituent"'), "Must render type-constituent badge");
+  assert.ok(htmlOfferings.includes('class="type-pill type-sfc"'), "Must render type-sfc badge");
+  assert.ok(htmlOfferings.includes("Anna University Department College"), "Must render Anna Univ Dept badge text");
+  assert.ok(htmlOfferings.includes("Government Engineering College"), "Must render Govt badge text");
+  assert.ok(htmlOfferings.includes("Government Aided Engineering College"), "Must render Govt Aided badge text");
+});

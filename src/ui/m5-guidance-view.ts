@@ -230,6 +230,101 @@ export interface M5GuidanceRenderOptions {
   year?: number;
 }
 
+export function getCollegeDoteCategory(college: CollegeMeta): {
+  key: string;
+  nameEn: string;
+  nameTa: string;
+  badgeClass: string;
+} {
+  if (college.code === "5") {
+    return {
+      key: "ANNAMALAI",
+      nameEn: "Annamalai University",
+      nameTa: "அண்ணாமலைப் பல்கலைக்கழகம்",
+      badgeClass: "type-annamalai",
+    };
+  }
+  if (["1", "2", "3", "4"].includes(college.code)) {
+    return {
+      key: "ANNA_UNIV_DEPT",
+      nameEn: "Anna University Department College",
+      nameTa: "அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரி",
+      badgeClass: "type-univ",
+    };
+  }
+  if (college.type === "GOVERNMENT") {
+    return {
+      key: "GOVERNMENT",
+      nameEn: "Government Engineering College",
+      nameTa: "அரசுப் பொறியியல் கல்லூரி",
+      badgeClass: "type-gov",
+    };
+  }
+  if (college.type === "AIDED") {
+    return {
+      key: "AIDED",
+      nameEn: "Government Aided Engineering College",
+      nameTa: "அரசு உதவிபெறும் பொறியியல் கல்லூரி",
+      badgeClass: "type-aided",
+    };
+  }
+  if (college.type === "CONSTITUENT") {
+    return {
+      key: "CONSTITUENT",
+      nameEn: "Anna University Constituent College",
+      nameTa: "அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரி",
+      badgeClass: "type-constituent",
+    };
+  }
+  return {
+    key: "SFC",
+    nameEn: "Self Financing Engineering College",
+    nameTa: "சுயநிதிப் பொறியியல் கல்லூரி",
+    badgeClass: "type-sfc",
+  };
+}
+
+function formatCollegeDropdownLabel(c: CollegeMeta): string {
+  if (c.code === "1") return "CEG (Anna University, Guindy)";
+  if (c.code === "2") return "ACTech (Anna University, Chennai)";
+  if (c.code === "3") return "SAP (Anna University, Chennai)";
+  if (c.code === "4") return "MIT (Anna University, Chromepet)";
+  if (c.code === "5") return "FEAT (Annamalai University, Chidambaram)";
+  if (c.code === "5901") return "ACGCET (Govt. Engg. College, Karaikudi)";
+  if (c.code === "2005") return "GCT (Govt. College of Technology, Coimbatore)";
+  if (c.code === "2006") return "PSG Tech, Coimbatore";
+  if (c.code === "2007") return "CIT, Coimbatore";
+  if (c.code === "5008") return "TCE, Madurai";
+  return c.name.replace(/\bGovernment\b/g, "Govt.");
+}
+
+function renderCollegeOptions(colleges: CollegeMeta[], selectedCode: string, lang: SupportedLanguage): string {
+  const t = (ta: string, en: string) => (lang === "ta" ? ta : en);
+
+  // Exact DOTE categories from Directorate of Technical Education (https://dte.tn.gov.in/)
+  const doteCategories = [
+    { key: "GOVERNMENT", ta: "அரசுப் பொறியியல் கல்லூரிகள்", en: "Government Engineering Colleges" },
+    { key: "AIDED", ta: "அரசு உதவிபெறும் பொறியியல் கல்லூரிகள்", en: "Government Aided Engineering Colleges" },
+    { key: "ANNA_UNIV_DEPT", ta: "அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள்", en: "Anna University Department Colleges" },
+    { key: "ANNAMALAI", ta: "அண்ணாமலைப் பல்கலைக்கழகம்", en: "Annamalai University" },
+    { key: "CONSTITUENT", ta: "அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள்", en: "Anna University Constituent Colleges" },
+    { key: "SFC", ta: "சுயநிதிப் பொறியியல் கல்லூரிகள் (மாவட்ட வாரியாக)", en: "Self Financing Engineering Colleges (District-wise)" },
+  ];
+
+  let html = "";
+  for (const cat of doteCategories) {
+    const list = colleges.filter((c) => getCollegeDoteCategory(c).key === cat.key);
+    if (list.length === 0) continue;
+    html += `<optgroup label="${esc(t(cat.ta, cat.en))} (${list.length})">`;
+    for (const c of list) {
+      const displayName = formatCollegeDropdownLabel(c);
+      html += `<option value="${esc(c.code)}" ${selectedCode === c.code ? "selected" : ""}>[${esc(c.code)}] ${esc(displayName)} — ${esc(c.district)}</option>`;
+    }
+    html += `</optgroup>`;
+  }
+  return html;
+}
+
 export function renderM5GuidancePage(
   params: URLSearchParams,
   inputState: M5GuidanceRenderOptions = {}
@@ -279,6 +374,7 @@ export function renderM5GuidancePage(
   const query = (params.get("q") ?? "").trim().toLowerCase();
   const typeFilter = params.get("type") ?? "all";
   const districtFilter = (params.get("district") ?? "").trim();
+  const collegeFilter = (params.get("college") ?? "").trim();
   const branchFilter = (params.get("branch") ?? "").trim().toUpperCase();
   const onlyAvailable = params.get("only_available") === "1";
   const showAllOfferings = params.get("show_all") === "1";
@@ -286,6 +382,36 @@ export function renderM5GuidancePage(
 
   // Load ALL 1,249 governed offerings across 121 approved institutions
   const governedOfferings = HISTORICAL_OBSERVATIONS.getAllGovernedOfferings();
+
+  // All 121 colleges sorted by name
+  const allColleges = Object.values(COHORT_121_METADATA).sort((a, b) => {
+    const n = a.name.localeCompare(b.name);
+    return n !== 0 ? n : a.code.localeCompare(b.code);
+  });
+
+  // Filtered colleges for college-select dropdown based on active type, district, branch, and query filters
+  const filteredColleges = allColleges.filter((c) => {
+    if (typeFilter !== "all") {
+      const doteCat = getCollegeDoteCategory(c).key;
+      if (typeFilter === "UNIVERSITY") {
+        if (doteCat !== "ANNA_UNIV_DEPT" && doteCat !== "ANNAMALAI") return false;
+      } else if (doteCat !== typeFilter) {
+        return false;
+      }
+    }
+    if (districtFilter && c.district.toLowerCase() !== districtFilter.toLowerCase()) return false;
+    if (branchFilter) {
+      const colOfferings = governedOfferings.filter((o) => o.collegeCode === c.code);
+      const hasBranch = colOfferings.some((o) => o.programmeCode.toUpperCase() === branchFilter);
+      if (!hasBranch) return false;
+    }
+    if (query) {
+      const colOfferings = governedOfferings.filter((o) => o.collegeCode === c.code);
+      const matches = colOfferings.some((o) => matchesOfferingSearch(c, o, query));
+      if (!matches) return false;
+    }
+    return true;
+  });
 
   // Build deterministic, sorted filter options from governed metadata
   const allDistricts = Array.from(
@@ -321,11 +447,21 @@ export function renderM5GuidancePage(
       aliases: [],
     };
 
-    // Filter by type
-    if (typeFilter !== "all" && college.type !== typeFilter) continue;
+    // Filter by type (aligned with official DOTE categories from https://dte.tn.gov.in/)
+    if (typeFilter !== "all") {
+      const doteCat = getCollegeDoteCategory(college).key;
+      if (typeFilter === "UNIVERSITY") {
+        if (doteCat !== "ANNA_UNIV_DEPT" && doteCat !== "ANNAMALAI") continue;
+      } else if (doteCat !== typeFilter) {
+        continue;
+      }
+    }
 
     // Filter by district
     if (districtFilter && college.district.toLowerCase() !== districtFilter.toLowerCase()) continue;
+
+    // Filter by specific college
+    if (collegeFilter && collegeFilter !== "all" && off.collegeCode !== collegeFilter) continue;
 
     // Filter by exact governed branch code
     if (branchFilter && off.programmeCode.toUpperCase() !== branchFilter) continue;
@@ -412,6 +548,7 @@ export function renderM5GuidancePage(
     if (query) p.set("q", query);
     if (typeFilter !== "all") p.set("type", typeFilter);
     if (districtFilter) p.set("district", districtFilter);
+    if (collegeFilter && collegeFilter !== "all") p.set("college", collegeFilter);
     if (branchFilter) p.set("branch", branchFilter);
     if (sortOption !== "college_name") p.set("sort", sortOption);
     if (onlyAvailable) p.set("only_available", "1");
@@ -507,6 +644,7 @@ export function renderM5GuidancePage(
     .type-univ { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
     .type-constituent { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
     .type-sfc { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+    .type-annamalai { background: #fdf2f8; color: #9d174d; border: 1px solid #fbcfe8; }
     .offering-subrow { display: flex; align-items: center; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.35rem; font-size: 0.86rem; color: #475569; }
     .branch-pill { display: inline-block; padding: 0.15rem 0.5rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; font-weight: 700; font-size: 0.8rem; color: #1d4ed8; letter-spacing: 0.02em; }
     .district-tag { display: inline-block; color: #64748b; font-size: 0.82rem; font-weight: 500; }
@@ -656,8 +794,10 @@ export function renderM5GuidancePage(
             query,
             typeFilter,
             districtFilter,
+            collegeFilter,
             branchFilter,
             allDistricts,
+            filteredColleges,
             allBranches,
             onlyAvailable,
             sortOption,
@@ -684,8 +824,10 @@ function renderComparisonTab(
   query: string,
   typeFilter: string,
   districtFilter: string,
+  collegeFilter: string,
   branchFilter: string,
   allDistricts: string[],
+  filteredColleges: CollegeMeta[],
   allBranches: Array<{ code: string; name: string }>,
   onlyAvailable: boolean,
   sortOption: string,
@@ -796,17 +938,18 @@ function renderComparisonTab(
           </div>
         </div>
 
-        <!-- Tier 2: Search & Classification Filters (College Type, District, Branch, Search) -->
+        <!-- Tier 2: Search & Classification Filters (College Type, District, College, Branch, Search) -->
         <div class="form-tier form-tier-2">
           <div class="form-group">
-            <label for="type-select">${t("கல்லூரி வகை", "College Type")}</label>
+            <label for="type-select">${t("கல்லூரி வகை (DOTE வகைப்பாடு)", "College Category (DOTE Classification)")}</label>
             <select id="type-select" name="type">
-              <option value="all" ${typeFilter === "all" ? "selected" : ""}>${t("அனைத்து கல்லூரி வகைகள்", "All College Types")}</option>
+              <option value="all" ${typeFilter === "all" ? "selected" : ""}>${t("அனைத்து வகைகள் (DOTE வகைப்பாடு)", "All Categories (DOTE Classification)")}</option>
               <option value="GOVERNMENT" ${typeFilter === "GOVERNMENT" ? "selected" : ""}>${t("அரசுப் பொறியியல் கல்லூரிகள் (11)", "Government Engineering Colleges (11)")}</option>
-              <option value="AIDED" ${typeFilter === "AIDED" ? "selected" : ""}>${t("அரசு உதவிபெறும் கல்லூரிகள் (3)", "Govt. Aided Engineering Colleges (3)")}</option>
-              <option value="UNIVERSITY" ${typeFilter === "UNIVERSITY" ? "selected" : ""}>${t("அண்ணா / அண்ணாமலைப் பல்கலைக்கழகத் துறைகள் (5)", "University Departments (Anna / Annamalai) (5)")}</option>
-              <option value="CONSTITUENT" ${typeFilter === "CONSTITUENT" ? "selected" : ""}>${t("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள் (16)", "Anna Univ. Constituent Colleges (16)")}</option>
-              <option value="SFC" ${typeFilter === "SFC" ? "selected" : ""}>${t("சுயநிதிப் பொறியியல் கல்லூரிகள் — தன்னாட்சி (86)", "Self-Financing Engineering Colleges — Autonomous (86)")}</option>
+              <option value="AIDED" ${typeFilter === "AIDED" ? "selected" : ""}>${t("அரசு உதவிபெறும் பொறியியல் கல்லூரிகள் (3)", "Government Aided Engineering Colleges (3)")}</option>
+              <option value="ANNA_UNIV_DEPT" ${typeFilter === "ANNA_UNIV_DEPT" ? "selected" : ""}>${t("அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள் (4)", "Anna University Department Colleges (4)")}</option>
+              <option value="ANNAMALAI" ${typeFilter === "ANNAMALAI" ? "selected" : ""}>${t("அண்ணாமலைப் பல்கலைக்கழகம் (1)", "Annamalai University (1)")}</option>
+              <option value="CONSTITUENT" ${typeFilter === "CONSTITUENT" ? "selected" : ""}>${t("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள் (16)", "Anna University Constituent Colleges (16)")}</option>
+              <option value="SFC" ${typeFilter === "SFC" ? "selected" : ""}>${t("சுயநிதிப் பொறியியல் கல்லூரிகள் — தன்னாட்சி (86)", "Self Financing Engineering Colleges — Autonomous (86)")}</option>
             </select>
           </div>
 
@@ -820,6 +963,14 @@ function renderComparisonTab(
                     `<option value="${esc(d)}" ${districtFilter.toLowerCase() === d.toLowerCase() ? "selected" : ""}>${esc(d)}</option>`
                 )
                 .join("")}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="college-select">${t("குறிப்பிட்ட கல்லூரித் தேர்வு", "Select Specific College")}</label>
+            <select id="college-select" name="college">
+              <option value="" ${!collegeFilter || collegeFilter === "all" ? "selected" : ""}>${t(`அனைத்துக் கல்லூரிகள் (${filteredColleges.length})`, `All Colleges (${filteredColleges.length})`)}</option>
+              ${renderCollegeOptions(filteredColleges, collegeFilter, lang)}
             </select>
           </div>
 
@@ -866,7 +1017,7 @@ function renderComparisonTab(
 
           <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; padding-top: 1.25rem;">
             ${
-              districtFilter || branchFilter || query || typeFilter !== "all" || onlyAvailable || sortOption !== "college_name"
+              districtFilter || branchFilter || query || typeFilter !== "all" || (collegeFilter && collegeFilter !== "all") || onlyAvailable || sortOption !== "college_name"
                 ? `<a class="btn-action" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">${t("வடிகட்டிகளை நீக்கு", "Clear Filters")}</a>`
                 : ""
             }
@@ -874,6 +1025,29 @@ function renderComparisonTab(
           </div>
         </div>
       </form>
+
+      <details class="dote-guide screen-only" style="margin: 0 0 1rem; padding: 0.85rem 1rem; background: #f0fdfa; border: 1.5px solid #99f6e4; border-radius: 8px; font-size: 0.9rem; color: #134e4a; line-height: 1.6;">
+        <summary style="cursor: pointer; font-weight: 700; color: #0f766e; padding: 0.2rem 0; font-size: 0.95rem;">
+          ${t("🏛️ தமிழ்நாடு தொழில்நுட்பக் கல்வி இயக்ககம் (DOTE) கல்லூரி வகைப்பாடுகள் — அதிகாரப்பூர்வ வழிகாட்டி", "🏛️ Directorate of Technical Education (DOTE) College Classification — Official Guide")}
+        </summary>
+        <div style="margin-top: 0.65rem; border-top: 1px solid #ccfbf1; padding-top: 0.65rem;">
+          <p style="margin: 0 0 0.5rem; font-size: 0.88rem;">
+            ${t(
+              "தொழில்நுட்பக் கல்வி இயக்ககத்தின் (<a href=\"https://dte.tn.gov.in/\" target=\"_blank\" rel=\"noopener\" style=\"color: #0f766e; text-decoration: underline; font-weight: 600;\">dte.tn.gov.in</a>) அதிகாரப்பூர்வ வகைப்பாட்டின்படி, தமிழ்நாட்டில் உள்ள பொறியியல் கல்லூரிகள் பின்வருமாறு பிரிக்கப்பட்டுள்ளன:",
+              "According to the official Directorate of Technical Education (<a href=\"https://dte.tn.gov.in/\" target=\"_blank\" rel=\"noopener\" style=\"color: #0f766e; text-decoration: underline; font-weight: 600;\">dte.tn.gov.in</a>) classification, Tamil Nadu engineering colleges are categorized as follows:"
+            )}
+          </p>
+          <ul style="margin: 0.35rem 0 0.5rem; padding-left: 1.2rem; line-height: 1.65; font-size: 0.88rem;">
+            <li><strong>${t("அரசுப் பொறியியல் கல்லூரிகள் (Government Engineering Colleges — 11)", "Government Engineering Colleges (11)")}:</strong> ${t("அரசால் முழுமையாக நிர்வகிக்கப்படும் 11 அரசுப் பொறியியல் கல்லூரிகள்.", "11 fully state-governed institutions.")}</li>
+            <li><strong>${t("அரசு உதவிபெறும் பொறியியல் கல்லூரிகள் (Government Aided Engineering Colleges — 3)", "Government Aided Engineering Colleges (3)")}:</strong> ${t("அரசு நிதி உதவிபெறும் 3 பொறியியல் கல்லூரிகள் (PSG Tech 2006, CIT 2007, TCE 5008).", "3 state-aided engineering institutions (PSG Tech 2006, CIT 2007, TCE 5008).")}</li>
+            <li><strong>${t("அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள் (Anna University Department Colleges — 4)", "Anna University Department Colleges (4)")}:</strong> ${t("அண்ணா பல்கலைக்கழகத்தின் நேரடி துறைக் கல்லூரிகள் (CEG 1, ACT 2, SAP 3, MIT 4).", "Anna University department institutions (CEG 1, ACT 2, SAP 3, MIT 4).")}</li>
+            <li><strong>${t("அண்ணாமலைப் பல்கலைக்கழகம் (Annamalai University — 1)", "Annamalai University (1)")}:</strong> ${t("சிதம்பரத்தில் உள்ள அண்ணாமலைப் பல்கலைக்கழக பொறியியல் மற்றும் தொழில்நுட்பப் புலம் (குறியீடு 5).", "Faculty of Engineering & Technology, Annamalai University (Code 5).")}</li>
+            <li><strong>${t("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள் (Anna University Constituent Colleges — 16)", "Anna University Constituent Colleges (16)")}:</strong> ${t("மண்டல வளாகங்கள் மற்றும் உறுப்புக் கல்லூரிகள் (UCEs).", "Regional campuses and University Colleges of Engineering (UCEs).")}</li>
+            <li><strong>${t("மத்திய அரசு பொறியியல் கல்லூரிகள் (Central Government Colleges)", "Central Government Colleges")}:</strong> ${t("மத்திய அரசால் நிர்வகிக்கப்படும் நிறுவனங்கள் (நேரடி சேர்க்கை).", "Centrally funded institutions (central admissions).")}</li>
+            <li><strong>${t("சுயநிதிப் பொறியியல் கல்லூரிகள் (Self Financing Engineering Colleges — 86 தன்னாட்சி)", "Self Financing Engineering Colleges (86 Autonomous)")}:</strong> ${t("தமிழ்நாட்டின் 29 மாவட்டங்களில் அமைந்துள்ள தன்னாட்சி பெற்ற சுயநிதிப் பொறியியல் கல்லூரிகள் (மாவட்டம் வாரியாகப் பிரிக்கப்பட்டுள்ளது).", "Autonomous private engineering institutions across 29 districts in Tamil Nadu (district-wise).")}</li>
+          </ul>
+        </div>
+      </details>
 
       <details class="community-guide screen-only" style="margin: 0 0 0.75rem; padding: 0.75rem 1rem; background: #fff; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.9rem; color: #2d3748;">
         <summary style="cursor: pointer; font-weight: 600; color: #2b6cb0; padding: 0.2rem 0;">${t("இட ஒதுக்கீட்டுப் பிரிவுகள் (OC / BC / MBC / SC / ST) — எளிய விளக்கம்", "Reservation Community Categories (OC / BC / MBC / SC / ST) — Quick Guide")}</summary>
@@ -1114,6 +1288,7 @@ function renderComparisonTab(
                         query,
                         typeFilter,
                         districtFilter,
+                        collegeFilter,
                         branchFilter,
                         onlyAvailable,
                         sortOption,
@@ -1144,6 +1319,7 @@ function renderOfferingRow(
     query: string;
     typeFilter: string;
     districtFilter: string;
+    collegeFilter: string;
     branchFilter: string;
     onlyAvailable: boolean;
     sortOption: string;
@@ -1152,22 +1328,7 @@ function renderOfferingRow(
   const { college, offering, result } = row;
   const id = `${college.code}~${offering.programmeCode}`;
   const t = (taStr: string, enStr: string) => (lang === "ta" ? taStr : enStr);
-
-  const typeBadgeClass: Record<string, string> = {
-    GOVERNMENT: "type-gov",
-    AIDED: "type-aided",
-    UNIVERSITY: "type-univ",
-    CONSTITUENT: "type-constituent",
-    SFC: "type-sfc",
-  };
-  const typeBadgeLabel: Record<string, { ta: string; en: string }> = {
-    GOVERNMENT: { ta: "அரசு", en: "Govt" },
-    AIDED: { ta: "அரசு உதவி", en: "Govt Aided" },
-    UNIVERSITY: { ta: "பல்கலைக்கழகம்", en: "Univ Dept" },
-    CONSTITUENT: { ta: "உறுப்புக் கல்லூரி", en: "Constituent" },
-    SFC: { ta: "தன்னாட்சி", en: "Autonomous SFC" },
-  };
-  const colType = college.type || "SFC";
+  const doteCat = getCollegeDoteCategory(college);
 
   let deltaHtml = "";
   if (result.isHeld) {
@@ -1225,7 +1386,7 @@ function renderOfferingRow(
     <tr>
       <td>
         <span class="college-title">${esc(college.name)}</span> <span class="college-code">(${esc(college.code)})</span>
-        <span class="type-pill ${typeBadgeClass[colType] || "type-sfc"}">${esc(t(typeBadgeLabel[colType]?.ta || colType, typeBadgeLabel[colType]?.en || colType))}</span>
+        <span class="type-pill ${doteCat.badgeClass}">${esc(t(doteCat.nameTa, doteCat.nameEn))}</span>
         <div class="offering-subrow">
           <span class="branch-pill">${esc(offering.programmeCode)}</span>
           <span>${esc(offering.programmeName)}</span>
@@ -1262,6 +1423,7 @@ function renderOfferingRow(
           <input type="hidden" name="q" value="${esc(sessionState.query)}">
           <input type="hidden" name="type" value="${esc(sessionState.typeFilter)}">
           <input type="hidden" name="district" value="${esc(sessionState.districtFilter)}">
+          <input type="hidden" name="college" value="${esc(sessionState.collegeFilter)}">
           <input type="hidden" name="branch" value="${esc(sessionState.branchFilter)}">
           <input type="hidden" name="sort" value="${esc(sessionState.sortOption)}">
           ${sessionState.onlyAvailable ? `<input type="hidden" name="only_available" value="1">` : ""}

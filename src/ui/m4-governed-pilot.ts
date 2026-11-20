@@ -53,8 +53,8 @@ function matchesSearch(text: string, entityName: string, query: string): boolean
 const esc = (v: string) => v.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
 // Base route resolved dynamically per request context
 const types: Record<string,readonly [string,string]> = {
- GOVERNMENT:["அரசு","Government"], AIDED:["அரசு உதவி பெறும்","Government-aided"],
- PRIVATE:["தனியார் / சுயநிதி","Private / self-financing"], UNIVERSITY:["பல்கலைக்கழகம் / உறுப்புக் கல்லூரி","University / constituent"],
+ GOVERNMENT:["அரசுப் பொறியியல் கல்லூரி","Government Engineering College"], AIDED:["அரசு உதவிபெறும் பொறியியல் கல்லூரி","Government Aided Engineering College"],
+ PRIVATE:["சுயநிதிப் பொறியியல் கல்லூரி","Self Financing Engineering College"], UNIVERSITY:["பல்கலைக்கழகத் துறை / உறுப்புக் கல்லூரி","University Department / Constituent College"],
 };
 type PilotView = ReturnType<typeof buildGovernedPilotView>;
 type OwnerDirectoryView = Omit<PilotView, "items"> & { items: (Omit<PilotView["items"][number], "profileId"> & { profileId: string | null; metadata?: {field:string;value:string;year:string;url:string;printedPage:string;pdfPage:string}[]; fieldEvidence?: {field:string;url:string;year:string;printedPage:string;pdfPage:string}[] })[] };

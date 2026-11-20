@@ -172,7 +172,7 @@ const server = createServer(async (request, response) => {
 
       // Non-sensitive directory filtering parameters from POST body
       const effectiveParams = new URLSearchParams(url.searchParams);
-      for (const key of ["q", "type", "district", "branch", "tab", "lang", "shortlist", "round", "year", "only_available", "sort"]) {
+      for (const key of ["q", "type", "district", "college", "branch", "tab", "lang", "shortlist", "round", "year", "only_available", "sort"]) {
         const val = values.get(key);
         if (val !== null) effectiveParams.set(key, val);
       }
