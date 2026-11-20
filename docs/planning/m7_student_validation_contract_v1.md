@@ -4,16 +4,16 @@
 - **Version:** `V1.1` (Accepted Validation Contract)
 - **Date:** `2026-11-18`
 - **Authoritative Product Baseline:** `MAIN_SHA = 44d7ee78e47cc2887127dd2cfd55c4b63fa153ab`
-- **Current Control State (Preserved Unchanged):**
+- **Current Control State:**
   - `M6_OWNER_ACCEPTANCE = ACCEPTED`
   - `M7_CONTRACT_ACCEPTANCE = ACCEPTED`
-  - `M7_EXECUTION_AUTHORIZATION = NOT_AUTHORIZED` (`M7_AUTHORIZATION = NOT_AUTHORIZED`)
+  - `M7_EXECUTION_AUTHORIZATION = AUTHORIZED_RENDER_PILOT` (Owner Gate 2 Decision, 2026-11-20: Render Free Tier, Singapore, USD 0, Chennai & TN Aspirants, 14-day window, unindexed `noindex, nofollow`)
   - `REAL_STUDENT_VALIDATION = NOT_RUN`
   - `PUBLICATION = NOT_AUTHORIZED`
   - `ONEDRIVE_PRIVACY_STATUS = OPEN`
   - `LIVE_LLM_GATE = PARTIAL` (`GEMINI = PAUSED`)
 
-> **Governance Notice:** This validation contract has been accepted by the Project Owner (`M7_CONTRACT_ACCEPTANCE = ACCEPTED`, 2026-11-18) as a planning/validation specification only. Contract acceptance does **not** authorize Milestone M7 execution (`M7_EXECUTION_AUTHORIZATION = NOT_AUTHORIZED`). Participant execution requires a separate later explicit owner authorization. Neither this contract nor its acceptance authorizes implementation changes, hosting expenditure, or public launch, and `REAL_STUDENT_VALIDATION = NOT_RUN` remains unchanged until real student observations actually occur.
+> **Governance Notice:** This validation contract has been accepted by the Project Owner (`M7_CONTRACT_ACCEPTANCE = ACCEPTED`, 2026-11-18) and Milestone M7 formative pilot execution has been authorized via Owner Gate 2 (`M7_EXECUTION_AUTHORIZATION = AUTHORIZED_RENDER_PILOT`, 2026-11-20) for temporary unindexed private hosting on Render (Singapore region, USD 0, 14-day retention). Neither this authorization nor the pilot permits open public publication (`PUBLICATION = NOT_AUTHORIZED`), and `REAL_STUDENT_VALIDATION = NOT_RUN` remains unchanged until real student observation sessions actually occur.
 
 ---
 
@@ -341,15 +341,16 @@ M7_CONTRACT_ACCEPTANCE      = ACCEPTED (Owner Decision, 2026-11-18, reviewed com
 M7_EXECUTION_AUTHORIZATION  = NOT_AUTHORIZED (contract acceptance alone does NOT authorize execution)
 ```
 
-### Gate 2 — Separate Later M7 Execution Authorization Decision (Pending)
+### Gate 2 — Owner M7 Execution Authorization Decision (Recorded 2026-11-20)
 ```text
-PILOT_ACCESS_METHOD         = <local private device / authenticated tunnel / separately approved private staging>
-PILOT_COST_CAP              = USD 0 (or explicit owner-approved cap)
-PILOT_COHORT_PLAN           = <e.g., 5–8 participants, staged Wave 1 (2–3) + Wave 2 (3–5); descriptive only>
-BASELINE_SHA_AUTHORIZED     = 44d7ee78e47cc2887127dd2cfd55c4b63fa153ab
-M7_EXECUTION_AUTHORIZATION  = NOT_AUTHORIZED (change to AUTHORIZED only by separate explicit owner decision)
+PILOT_ACCESS_METHOD         = RENDER_FREE_WEB_SERVICE (Singapore region, unindexed with X-Robots-Tag: noindex, nofollow, invite-only URL)
+PILOT_COST_CAP              = USD 0 (Render Free Web Service Tier)
+PILOT_COHORT_PLAN           = Chennai & Tamil Nadu engineering admission aspirants (2–5 formative pilot participants; descriptive only)
+PILOT_RETENTION_WINDOW      = 14 days (teardown immediately upon pilot completion)
+BASELINE_SHA_AUTHORIZED     = 16d06571c057064297d050f97e31997092f9c63d
+M7_EXECUTION_AUTHORIZATION  = AUTHORIZED_RENDER_PILOT (Owner Gate 2 Decision 2026-11-20)
 REAL_STUDENT_VALIDATION     = NOT_RUN (unchanged until real observations actually happen)
-PUBLICATION                 = NOT_AUTHORIZED
+PUBLICATION                 = NOT_AUTHORIZED (private formative pilot only)
 ```
 
-**Next Action:** Participant sessions must not start until a separate explicit Gate 2 `M7_EXECUTION_AUTHORIZATION` decision (including private access method, cost cap, and cohort plan) is recorded by the Owner.
+**Next Action:** Proceed with Render service setup (Step C) and mobile smoke test (Step D) before participant observation sessions.
