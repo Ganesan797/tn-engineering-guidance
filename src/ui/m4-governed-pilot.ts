@@ -2,6 +2,8 @@ import { buildGovernedPilotView, GOVERNED_PILOT, type PilotInput } from "../m4/g
 import { APPROVED_FAMILY_MAPPINGS, buildReleasedFamilies, type ReviewedFamilyMapping } from "../m4/family-mapping.ts";
 import { APPROVED_BRANCH_COPY, isReleasedBranchCopy } from "../m4/branch-copy.ts";
 import { renderSiteHeader, SITE_SHELL_CSS, GOOGLE_FONTS_HTML, SHARED_FONT_FAMILY } from "./site-shell.ts";
+import { COHORT_121_METADATA } from "../m5/cohort-metadata.ts";
+import { getCollegeDoteCategory } from "./m5-guidance-view.ts";
 
 
 const SEARCH_ALIASES: Record<string, string> = {
@@ -53,9 +55,106 @@ function matchesSearch(text: string, entityName: string, query: string): boolean
 const esc = (v: string) => v.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
 // Base route resolved dynamically per request context
 const types: Record<string,readonly [string,string]> = {
- GOVERNMENT:["அரசுப் பொறியியல் கல்லூரி","Government Engineering College"], AIDED:["அரசு உதவிபெறும் பொறியியல் கல்லூரி","Government Aided Engineering College"],
- PRIVATE:["சுயநிதிப் பொறியியல் கல்லூரி","Self Financing Engineering College"], UNIVERSITY:["பல்கலைக்கழகத் துறை / உறுப்புக் கல்லூரி","University Department / Constituent College"],
+ GOVERNMENT:["அரசுப் பொறியியல் கல்லூரி","Government Engineering College"],
+ AIDED:["அரசு உதவிபெறும் பொறியியல் கல்லூரி","Government Aided Engineering College"],
+ PRIVATE:["சுயநிதிப் பொறியியல் கல்லூரி","Self Financing Engineering College"],
+ UNIVERSITY:["பல்கலைக்கழகத் துறை / உறுப்புக் கல்லூரி","University Department / Constituent College"],
+ ANNA_UNIV_DEPT:["அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரி","Anna University Department College"],
+ ANNAMALAI:["அண்ணாமலைப் பல்கலைக்கழகம்","Annamalai University"],
+ CONSTITUENT:["அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரி","Anna University Constituent College"],
+ CENTRAL_GOVT:["மத்திய அரசு பொறியியல் கல்லூரி","Central Government College"],
+ SFC:["சுயநிதிப் பொறியியல் கல்லூரி","Self Financing Engineering College"],
 };
+
+function getDoteCategoryForItem(i: { college: string; type: string | null }): {
+  key: string;
+  nameEn: string;
+  nameTa: string;
+  badgeClass: string;
+} {
+  const meta = COHORT_121_METADATA[i.college];
+  if (meta) {
+    return getCollegeDoteCategory(meta);
+  }
+  if (i.college === "5") {
+    return {
+      key: "ANNAMALAI",
+      nameEn: "Annamalai University",
+      nameTa: "அண்ணாமலைப் பல்கலைக்கழகம்",
+      badgeClass: "type-annamalai",
+    };
+  }
+  if (["1", "2", "3", "4"].includes(i.college)) {
+    return {
+      key: "ANNA_UNIV_DEPT",
+      nameEn: "Anna University Department College",
+      nameTa: "அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரி",
+      badgeClass: "type-univ",
+    };
+  }
+  if (i.type === "GOVERNMENT") {
+    return {
+      key: "GOVERNMENT",
+      nameEn: "Government Engineering College",
+      nameTa: "அரசுப் பொறியியல் கல்லூரி",
+      badgeClass: "type-gov",
+    };
+  }
+  if (i.type === "AIDED") {
+    return {
+      key: "AIDED",
+      nameEn: "Government Aided Engineering College",
+      nameTa: "அரசு உதவிபெறும் பொறியியல் கல்லூரி",
+      badgeClass: "type-aided",
+    };
+  }
+  if (i.type === "CONSTITUENT") {
+    return {
+      key: "CONSTITUENT",
+      nameEn: "Anna University Constituent College",
+      nameTa: "அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரி",
+      badgeClass: "type-constituent",
+    };
+  }
+  if (i.type === "PRIVATE" || i.type === "SFC") {
+    return {
+      key: "SFC",
+      nameEn: "Self Financing Engineering College",
+      nameTa: "சுயநிதிப் பொறியியல் கல்லூரி",
+      badgeClass: "type-sfc",
+    };
+  }
+  if (i.type === "UNIVERSITY") {
+    return {
+      key: "CONSTITUENT",
+      nameEn: "Anna University Constituent College",
+      nameTa: "அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரி",
+      badgeClass: "type-constituent",
+    };
+  }
+  return {
+    key: "SFC",
+    nameEn: "Self Financing Engineering College",
+    nameTa: "சுயநிதிப் பொறியியல் கல்லூரி",
+    badgeClass: "type-sfc",
+  };
+}
+
+function formatCollegeDropdownLabel(code: string, rawName: string): string {
+  if (code === "1") return "CEG (Anna University, Guindy)";
+  if (code === "2") return "ACTech (Anna University, Chennai)";
+  if (code === "3") return "SAP (Anna University, Chennai)";
+  if (code === "4") return "MIT (Anna University, Chromepet)";
+  if (code === "5") return "FEAT (Annamalai University, Chidambaram)";
+  if (code === "5901") return "ACGCET (Govt. Engg. College, Karaikudi)";
+  if (code === "2005") return "GCT (Govt. College of Technology, Coimbatore)";
+  if (code === "2006") return "PSG Tech, Coimbatore";
+  if (code === "2007") return "CIT, Coimbatore";
+  if (code === "5008") return "TCE, Madurai";
+  const meta = COHORT_121_METADATA[code];
+  if (meta) return meta.name.replace(/\bGovernment\b/g, "Govt.");
+  return rawName.replace(/\bGovernment\b/g, "Govt.");
+}
 type PilotView = ReturnType<typeof buildGovernedPilotView>;
 type OwnerDirectoryView = Omit<PilotView, "items"> & { items: (Omit<PilotView["items"][number], "profileId"> & { profileId: string | null; metadata?: {field:string;value:string;year:string;url:string;printedPage:string;pdfPage:string}[]; fieldEvidence?: {field:string;url:string;year:string;printedPage:string;pdfPage:string}[] })[] };
 
@@ -86,7 +185,32 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
  const sourceText=(i:(typeof items)[number])=>t(`${i.source.year} பொதுக் கல்விப் பிரிவு; சிறப்புப் பிரிவு கலந்தாய்வுக்கு முந்தைய நிலை.`,`${i.source.year} General Academic; before special-reservation counselling.`);
  const limit=t("இந்தப் பட்டியல் அந்த ஆண்டின் ஒரு நிலையை மட்டும் காட்டுகிறது; இன்றைய கிடைப்பையோ சேர்க்கையையோ உறுதிப்படுத்தாது.","This listing records a stage in the stated year; it does not confirm current availability or admission.");
  const blank=`<p role="status">${isColleges ? t("இந்தத் தேர்வுக்குப் பொருந்தும் கல்லூரிகள் அல்லது படிப்புகள் இல்லை. அனைத்தையும் பார்க்கவும் அல்லது அதிகாரப்பூர்வத் தகவலைச் சரிபார்க்கவும்.","No colleges or programmes match this selection. Show all or check official TNEA information.") : t("இந்த வரையறுக்கப்பட்ட ஆய்வில் காட்ட ஒப்புதல் பெற்ற பதிவு இல்லை. அனைத்தையும் பாருங்கள் அல்லது அதிகாரப்பூர்வத் தகவலைச் சரிபார்க்கவும்.","No display-approved records for this selection in the bounded pilot. Show all or check official information.")}</p>`;
- const matching=items.filter(i => (!branch || i.programme===branch) && (!district || i.district===district) && (!type || i.type===type) && matchesSearch((i.collegeName+" "+i.college+" "+i.programmeName+" "+i.programme+(i.district ? " "+i.district : "")).toLowerCase(), i.collegeName, search));
+ const matching=items.filter(i => {
+  if (branch && i.programme !== branch) return false;
+  if (college && college !== "all" && i.college !== college) return false;
+  if (district) {
+   const itemDist = (i.district ?? (usesApprovedDirectory ? COHORT_121_METADATA[i.college]?.district ?? "" : "")).toLowerCase();
+   if (!itemDist || itemDist !== district.toLowerCase()) return false;
+  }
+  if (type) {
+   const itemType = i.type;
+   const cat = getDoteCategoryForItem(i).key;
+   const hasVerifiedType = (usesApprovedDirectory && !!COHORT_121_METADATA[i.college]) || !!i.type;
+   if (!hasVerifiedType) return false;
+   const isMatch = (
+    type === itemType ||
+    type === cat ||
+    (type === "PRIVATE" && (itemType === "PRIVATE" || cat === "SFC")) ||
+    (type === "SFC" && (itemType === "PRIVATE" || cat === "SFC")) ||
+    (type === "UNIVERSITY" && (itemType === "UNIVERSITY" || cat === "ANNA_UNIV_DEPT" || cat === "CONSTITUENT" || cat === "ANNAMALAI"))
+   );
+   if (!isMatch) return false;
+  }
+  const meta = usesApprovedDirectory ? COHORT_121_METADATA[i.college] : undefined;
+  const distText = i.district ?? meta?.district ?? "";
+  const aliasText = (meta?.aliases ?? []).join(" ");
+  return matchesSearch((i.collegeName+" "+i.college+" "+i.programmeName+" "+i.programme+(distText?" "+distText:"")+(aliasText?" "+aliasText:"")).toLowerCase(), i.collegeName, search);
+ });
  const grouped = new Map<string,typeof items>();
  for(const i of matching) { const group=grouped.get(i.college); if(group)group.push(i);else grouped.set(i.college,[i]); }
  const groups=[...grouped.values()], pageSize=15, requestedPage=Number(params.get("page") ?? "1");
@@ -96,8 +220,81 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
  const programmeLabels = [...new Map(items.map(i=>[i.programme,i.programmeName])).entries()];
  const releasedFamilies=buildReleasedFamilies(items,familyRegistry);
  const branchMatches=programmeLabels.filter(([code,name])=>matchesSearch((`${code} ${name}`).toLowerCase(), name, branchSearch));
- const districtLabels = [...new Set(items.map(i=>i.district).filter((v):v is string=>!!v))];
- const typeLabels = [...new Set(items.map(i=>i.type).filter((v):v is string=>!!v && !!types[v]))];
+ const districtLabels = (usesApprovedDirectory
+  ? [
+     ...new Set([
+      ...items.map(i=>i.district).filter((v):v is string=>!!v),
+      ...Object.values(COHORT_121_METADATA).map(m=>m.district).filter(Boolean),
+     ]),
+    ]
+  : [...new Set(items.map(i=>i.district).filter((v):v is string=>!!v))]
+ ).sort((a,b)=>a.localeCompare(b));
+ const doteCategoryKeys = ["GOVERNMENT", "AIDED", "ANNA_UNIV_DEPT", "ANNAMALAI", "CONSTITUENT", "CENTRAL_GOVT", "SFC"];
+ const typeLabels = [
+  ...new Set([
+   ...items.map(i=>i.type).filter((v):v is string=>!!v && !!types[v]),
+   ...doteCategoryKeys,
+   "PRIVATE",
+   "UNIVERSITY",
+  ]),
+ ];
+ const renderDirectoryCollegeOptions = () => {
+  const doteCategories = [
+   { key: "GOVERNMENT", ta: "அரசுப் பொறியியல் கல்லூரிகள்", en: "Government Engineering Colleges" },
+   { key: "AIDED", ta: "அரசு உதவிபெறும் பொறியியல் கல்லூரிகள்", en: "Government Aided Engineering Colleges" },
+   { key: "ANNA_UNIV_DEPT", ta: "அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள்", en: "Anna University Department Colleges" },
+   { key: "ANNAMALAI", ta: "அண்ணாமலைப் பல்கலைக்கழகம்", en: "Annamalai University" },
+   { key: "CONSTITUENT", ta: "அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள்", en: "Anna University Constituent Colleges" },
+   { key: "CENTRAL_GOVT", ta: "மத்திய அரசு பொறியியல் கல்லூரிகள்", en: "Central Government Colleges" },
+   { key: "SFC", ta: "சுயநிதிப் பொறியியல் கல்லூரிகள்", en: "Self Financing Engineering Colleges" },
+  ];
+  const uniqueCols = new Map<string, { code: string; name: string; district: string; catKey: string }>();
+  for (const i of items) {
+   if (!uniqueCols.has(i.college)) {
+    const meta = COHORT_121_METADATA[i.college];
+    const dist = i.district ?? meta?.district ?? "";
+    const cat = getDoteCategoryForItem(i).key;
+    uniqueCols.set(i.college, {
+     code: i.college,
+     name: formatCollegeDropdownLabel(i.college, i.collegeName),
+     district: dist,
+     catKey: cat,
+    });
+   }
+  }
+  const collegesList = [...uniqueCols.values()].filter(c => {
+   if (district && c.district.toLowerCase() !== district.toLowerCase()) return false;
+   if (type) {
+    const isMatch = (
+     type === c.catKey ||
+     (type === "PRIVATE" && c.catKey === "SFC") ||
+     (type === "SFC" && c.catKey === "SFC") ||
+     (type === "UNIVERSITY" && (c.catKey === "ANNA_UNIV_DEPT" || c.catKey === "CONSTITUENT" || c.catKey === "ANNAMALAI"))
+    );
+    if (!isMatch) return false;
+   }
+   return true;
+  });
+  let html = `<option value="">${t("அனைத்துக் கல்லூரிகள் / குறிப்பிட்ட கல்லூரியைத் தேர்வு செய்க", "All Colleges / Select a College")}</option>`;
+  for (const cat of doteCategories) {
+   const list = collegesList.filter(c => c.catKey === cat.key);
+   if (list.length === 0) continue;
+   html += `<optgroup label="${esc(t(cat.ta, cat.en))} (${list.length})">`;
+   for (const c of list) {
+    html += `<option value="${esc(c.code)}"${college === c.code ? " selected" : ""}>[${esc(c.code)}] ${esc(c.name)}${c.district ? ` — ${esc(c.district)}` : ""}</option>`;
+   }
+   html += `</optgroup>`;
+  }
+  const otherList = collegesList.filter(c => !doteCategories.some(cat => cat.key === c.catKey));
+  if (otherList.length > 0) {
+   html += `<optgroup label="${esc(t("இதர கல்லூரிகள்", "Other Listed Colleges"))} (${otherList.length})">`;
+   for (const c of otherList) {
+    html += `<option value="${esc(c.code)}"${college === c.code ? " selected" : ""}>[${esc(c.code)}] ${esc(c.name)}${c.district ? ` — ${esc(c.district)}` : ""}</option>`;
+   }
+   html += `</optgroup>`;
+  }
+  return html;
+ };
  const facts=(i:(typeof items)[number])=>`<p>${[[t("கல்லூரிக் குறியீடு","College code"),i.college],...(i.district?[[t("மாவட்டம்","District"),i.district]]:[]),...(i.type&&types[i.type]?[[t("வகை","Type"),typeName(i.type)]]:[])].map(([label,value])=>`${esc(label!)}: ${esc(value!)}`).join(" · ")}</p>`;
  // Detail pages reuse the eligible projection without enriching records.
  const textLink=(values:Record<string,string>,label:string,keepContext=true)=>`<a class="text-link" href="${esc(query(values,keepContext))}">${esc(label)}</a>`;
@@ -129,7 +326,10 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
  const sparseMetaNote = sparseMeta
   ? `<p class="supporting filter-note">${t("குறிப்பு: தற்போது சில கல்லூரிகளுக்கு மட்டுமே மாவட்டம் மற்றும் வகை அதிகாரப்பூர்வமாகச் சரிபார்க்கப்பட்டுள்ளன. எல்லா 389 கல்லூரிகளையும் எளிதாகக் கண்டறிய மேலே உள்ள பெயர் அல்லது குறியீடு தேடலைப் பயன்படுத்துங்கள்.","Note: District and college type are currently verified for only a small subset of colleges. Use the name or code search box above to find any of the 389 listed colleges.")}</p>`
   : "";
- const filterForm=()=>`<form method="get" action="${route}" class="card filters">${hidden("lang",lang)}${hidden("view","colleges")}${branch?hidden("branch",branch):""}${validPicks.map(p=>hidden("pick",p)).join("")}<div class="filter-search"><label for="college-search">${t("கல்லூரி / படிப்பு தேடல்","Search college or programme")}</label><div class="search-row"><input id="college-search" name="q" type="search" value="${esc(search)}" placeholder="${t("எ.கா. CEG, PSG, GCT, CSE","e.g. CEG, PSG, GCT, CSE")}"><button>${t("தேடு","Search")}</button></div></div><details class="more-filters"${district||type?" open":""}><summary>${filterSummary}${district||type?` · ${esc([district,type?typeName(type):""].filter(Boolean).join(" · "))}`:""}</summary>${sparseMetaNote}<div class="filter-grid"><div><label for="district-filter">${t("மாவட்டம்","District")}</label><select id="district-filter" name="district"><option value="">${t("அனைத்து மாவட்டங்கள்","All districts")}</option>${districtLabels.map(d=>`<option value="${esc(d)}"${d===district?" selected":""}>${esc(d)}</option>`).join("")}</select></div><div><label for="type-filter">${t("கல்லூரி வகை","College type")}</label><select id="type-filter" name="type"><option value="">${t("அனைத்து வகைகள்","All types")}</option>${typeLabels.map(k=>`<option value="${esc(k)}"${k===type?" selected":""}>${esc(typeName(k))}</option>`).join("")}</select></div></div><button>${t("வடிகட்டிகளைப் பயன்படுத்து","Apply filters")}</button></details>${search||district||type?clearFilters():""}</form>`;
+ const collegeDropdown = usesApprovedDirectory
+  ? `<div class="filter-full"><label for="college-select">${t("குறிப்பிட்ட கல்லூரி (DOTE வகை வாரியாக)","Specific college (by DOTE Category)")}</label><select id="college-select" name="college">${renderDirectoryCollegeOptions()}</select></div>`
+  : "";
+ const filterForm=()=>`<form method="get" action="${route}" class="card filters">${hidden("lang",lang)}${hidden("view","colleges")}${branch?hidden("branch",branch):""}${validPicks.map(p=>hidden("pick",p)).join("")}<div class="filter-search"><label for="college-search">${t("கல்லூரி / படிப்பு தேடல்","Search college or programme")}</label><div class="search-row"><input id="college-search" name="q" type="search" value="${esc(search)}" placeholder="${t("எ.கா. CEG, PSG, GCT, CSE","e.g. CEG, PSG, GCT, CSE")}"><button>${t("தேடு","Search")}</button></div></div><details class="more-filters"${district||type||college?" open":""}><summary>${filterSummary}${district||type||college?` · ${esc([district,type?typeName(type):"",college?`[${college}]`:""].filter(Boolean).join(" · "))}`:""}</summary>${sparseMetaNote}<div class="filter-grid"><div><label for="type-filter">${t("கல்லூரி வகை (DOTE வகைப்பாடு)","College category (DOTE Classification)")}</label><select id="type-filter" name="type"><option value="">${t("அனைத்து வகைகள் (DOTE வகைப்பாடு)","All Categories (DOTE Classification)")}</option><option value="GOVERNMENT"${type==="GOVERNMENT"?" selected":""}>${t("அரசுப் பொறியியல் கல்லூரிகள்","Government Engineering Colleges")}</option><option value="AIDED"${type==="AIDED"?" selected":""}>${t("அரசு உதவிபெறும் பொறியியல் கல்லூரிகள்","Government Aided Engineering Colleges")}</option><option value="ANNA_UNIV_DEPT"${type==="ANNA_UNIV_DEPT"?" selected":""}>${t("அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள்","Anna University Department Colleges")}</option><option value="ANNAMALAI"${type==="ANNAMALAI"?" selected":""}>${t("அண்ணாமலைப் பல்கலைக்கழகம்","Annamalai University")}</option><option value="CONSTITUENT"${type==="CONSTITUENT"?" selected":""}>${t("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள்","Anna University Constituent Colleges")}</option><option value="CENTRAL_GOVT"${type==="CENTRAL_GOVT"?" selected":""}>${t("மத்திய அரசு பொறியியல் கல்லூரிகள்","Central Government Colleges")}</option><option value="SFC"${type==="SFC"||type==="PRIVATE"?" selected":""}>${t("சுயநிதிப் பொறியியல் கல்லூரிகள்","Self Financing Engineering Colleges")}</option>${type==="UNIVERSITY"?`<option value="UNIVERSITY" selected>${t("பல்கலைக்கழகத் துறை / உறுப்புக் கல்லூரி","University Department / Constituent College")}</option>`:""}${type==="PRIVATE"?`<option value="PRIVATE" selected>${t("சுயநிதிப் பொறியியல் கல்லூரி","Self Financing Engineering College")}</option>`:""}</select></div><div><label for="district-filter">${t("மாவட்டம்","District")}</label><select id="district-filter" name="district"><option value="">${t("அனைத்து மாவட்டங்கள்","All districts")}</option>${districtLabels.map(d=>`<option value="${esc(d)}"${d.toLowerCase()===district.toLowerCase()?" selected":""}>${esc(d)}</option>`).join("")}</select></div>${collegeDropdown}</div><button>${t("வடிகட்டிகளைப் பயன்படுத்து","Apply filters")}</button></details>${search||district||type||college?clearFilters():""}</form>`;
  const releasedProfileIds = new Set([
   ...items.filter(i=>i.profile).map(i=>i.programme),
   ...(usesApprovedDirectory ? APPROVED_BRANCH_COPY.filter(isReleasedBranchCopy).map(p=>p.id) : []),
@@ -147,17 +347,23 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
  const scopeBanner = isColleges
   ? `<div class="card scope-banner"><p><strong>${t("இந்தப் பட்டியலும் விருப்பப் பட்டியல் பக்கமும் — வித்தியாசம்:","How this directory differs from the Choice Planner:")}</strong> ${t(`இங்கு 2026 TNEA மூலப் பட்டியலில் உள்ள ${totalCollegesCount} கல்லூரிகளையும் மதிப்பெண்கள் இல்லாமல் ஆராயலாம். கடந்த ஆண்டு (2025) கட்-ஆஃப் ஒப்பீடும் விருப்பப் பட்டியல் தயாரிப்பும் சரிபார்க்கப்பட்ட 55 கல்லூரிகளுக்கான `,"Explore all " + totalCollegesCount + " colleges from the 2026 TNEA source listing without marks. Historical 2025 cutoff comparison and the Choice Planner (covering 55 historically verified colleges) are on the ")}<a href="/m5-guidance?lang=${lang}">${t("விருப்பப் பட்டியல் பக்கத்தில்","Choice Planner page")}</a>${t(" உள்ளது. ஒரு கல்லூரிக்கு 2025 கட்-ஆஃப் ஒப்பீடு இல்லாவிட்டாலும், அந்தக் கல்லூரி 2026 பட்டியலில் இல்லை என்று அர்த்தமல்ல.",". Missing 2025 cutoff comparison does not mean a college is unavailable in 2026.")}</p></div>`
   : "";
+ const doteOfficialGuide = isColleges
+  ? `<details class="card beginner-guide dote-guide"><summary>${t("தமிழ்நாடு தொழில்நுட்பக் கல்வி இயக்ககம் (DOTE) கல்லூரி வகைப்பாடு — அதிகாரப்பூர்வ வழிகாட்டி","Directorate of Technical Education (DOTE) College Categories — Official Guide")}</summary><p class="supporting">${t("தமிழ்நாடு தொழில்நுட்பக் கல்வி இயக்ககத்தின் (DOTE) அதிகாரப்பூர்வ வகைப்பாட்டின்படி கல்லூரிகள் கீழ்க்கண்ட பிரிவுகளாகப் பிரிக்கப்பட்டுள்ளன (ஆதாரம்: <a href=\"https://dte.tn.gov.in/\" target=\"_blank\" rel=\"noreferrer\">dte.tn.gov.in</a>):","As classified by the Directorate of Technical Education (DOTE), Government of Tamil Nadu (Source: <a href=\"https://dte.tn.gov.in/\" target=\"_blank\" rel=\"noreferrer\">dte.tn.gov.in</a>):")}</p><ul class="guide-list"><li><strong>${t("அரசுப் பொறியியல் கல்லூரிகள் (Government Engineering Colleges):","Government Engineering Colleges:")}</strong> ${t("தமிழக அரசால் நேரடியாக நடத்தப்படும் 11 பொறியியல் கல்லூரிகள் (எ.கா. GCT 2005, Bargur 2603, ACGCET 5901). குறைந்த கல்விக் கட்டணம்.","11 institutions run directly by the Government of Tamil Nadu (e.g. GCT 2005, Bargur 2603, ACGCET 5901). Lowest tuition fees.")}</li><li><strong>${t("அரசு உதவிபெறும் பொறியியல் கல்லூரிகள் (Government Aided Engineering Colleges):","Government Aided Engineering Colleges:")}</strong> ${t("அரசு மானியம் பெறும் 3 புகழ்பெற்ற கல்வி நிறுவனங்கள் (PSG Tech 2006, CIT 2007, TCE 5008). இவற்றில் அரசு உதவிபெறும் இடங்களும் சுயநிதிப் (SS) பிரிவுகளும் உள்ளன.","3 premier grant-in-aid institutions (PSG Tech 2006, CIT 2007, TCE 5008) offering both aided and self-supporting (SS) seats.")}</li><li><strong>${t("அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள் (Anna University Department Colleges):","Anna University Department Colleges:")}</strong> ${t("அண்ணா பல்கலைக்கழகத்தின் நேரடி 4 வளாகக் கல்லூரிகள் (CEG 1, ACTech 2, SAP 3, MIT 4).","4 direct university department campuses of Anna University (CEG 1, ACTech 2, SAP 3, MIT 4).")}</li><li><strong>${t("அண்ணாமலைப் பல்கலைக்கழகம் (Annamalai University):","Annamalai University:")}</strong> ${t("சிதம்பரத்தில் உள்ள அண்ணாமலைப் பல்கலைக்கழகப் பொறியியல் மற்றும் தொழில்நுட்பப் புலம் (FEAT 5).","Faculty of Engineering & Technology, Annamalai University, Chidambaram (FEAT 5).")}</li><li><strong>${t("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள் (Anna University Constituent Colleges):","Anna University Constituent Colleges:")}</strong> ${t("தமிழகத்தின் பல்வேறு மாவட்டங்களில் இயங்கும் அண்ணா பல்கலைக்கழகத்தின் 16 உறுப்புக் கல்லூரிகள் (UCE ஆரணி, திண்டிவனம், திருச்சி, திருக்குவளை, நாகர்கோவில் போன்றவை).","16 constituent engineering campuses of Anna University located across districts (UCE Arni, Tindivanam, Trichy, Thirukkuvalai, Nagercoil, etc.).")}</li><li><strong>${t("மத்திய அரசு பொறியியல் கல்லூரிகள் (Central Government Colleges):","Central Government Colleges:")}</strong> ${t("மத்திய அரசால் நிர்வகிக்கப்படும் நிறுவனங்கள் (CIPET, IIHT போன்றவை).","Centrally administered institutions (CIPET, IIHT, etc.).")}</li><li><strong>${t("சுயநிதிப் பொறியியல் கல்லூரிகள் (Self Financing Engineering Colleges):","Self Financing Engineering Colleges:")}</strong> ${t("தனியார் அறக்கட்டளைகளால் நிர்வகிக்கப்பட்டு அண்ணா பல்கலைக்கழகத்துடன் இணைக்கப்பட்ட கல்லூரிகள் (தன்னாட்சி / தன்னாட்சி அல்லாதவை). இவற்றில் TNEA அரசு ஒதுக்கீட்டு இடங்கள் உண்டு.","Colleges managed by private trusts affiliated with Anna University (Autonomous and Non-Autonomous), offering TNEA government quota seats.")}</li></ul><p class="supporting">${t("அனைத்து வகைப்பாடுகளும் மாணவர்களின் வெளிப்படையான புரிதலுக்காக மட்டுமே; எந்தக் கல்லூரியும் தானாகத் தரவரிசைப்படுத்தப்படவில்லை.","Classifications are for student informational clarity only; no college is ranked or recommended.")}</p></details>`
+  : "";
  const beginnerGuides = isColleges
-  ? `<details class="card beginner-guide"><summary>${t("கல்லூரி வகைகள்: அரசு, உதவி பெறும், சுயநிதி, தன்னாட்சி, (SS) — எளிய விளக்கம்","College types: Government, Aided, Self-Financing, Autonomous, and (SS) explained")}</summary><ul class="guide-list"><li><strong>${t("அரசு கல்லூரிகள் (Government):","Government colleges:")}</strong> ${t("தமிழ்நாடு அரசால் நடத்தப்படும் பொறியியல் கல்லூரிகள்.","Engineering colleges run directly by the Government of Tamil Nadu.")}</li><li><strong>${t("அரசு உதவி பெறும் கல்லூரிகள் (Government-aided):","Government-aided colleges:")}</strong> ${t("அரசு நிதியுதவி பெறும் சில படிப்புகளைக் கொண்ட நிறுவனங்கள். ஒரே கல்லூரியில் அரசு உதவி பெறும் படிப்புகளும் சுயநிதிப் (SS) படிப்புகளும் தனித்தனியாக இருக்கலாம்.","Institutions receiving government grant-in-aid for specific programmes. The same campus may offer aided and Self-Supporting (SS) programmes separately.")}</li><li><strong>${t("தனியார் / சுயநிதி கல்லூரிகள் (Private / Self-financing):","Private / self-financing colleges:")}</strong> ${t("தனியார் அறக்கட்டளைகளால் நடத்தப்படும் கல்லூரிகள்; இவற்றில் TNEA அரசு ஒதுக்கீடு இடங்களும் நிர்வாக ஒதுக்கீடு இடங்களும் இருக்கும்.","Colleges run by private trusts, offering both TNEA government-quota seats and management-quota seats.")}</li><li><strong>${t("பல்கலைக்கழக / உறுப்புக் கல்லூரிகள் (University / Constituent):","University / constituent colleges:")}</strong> ${t("அண்ணா பல்கலைக்கழக வளாகங்கள் மற்றும் உறுப்புப் பொறியியல் கல்லூரிகள்.","Anna University campuses and constituent engineering colleges.")}</li><li><strong>${t("தன்னாட்சி (Autonomous) vs இணைப்பு (Affiliated):","Autonomous vs. Affiliated:")}</strong> ${t("தன்னாட்சி கல்லூரிகள் தங்கள் பாடத்திட்டத்தையும் தேர்வுகளையும் பல்கலைக்கழக விதிகளுக்குள் அமைக்கும்; இணைப்பு கல்லூரிகள் அண்ணா பல்கலைக்கழகத்தின் பொதுப் பாடத்திட்டத்தையும் தேர்வுகளையும் பின்பற்றும்.","Autonomous colleges design their own curriculum and exams under university regulations; affiliated colleges follow Anna University's common curriculum and exams.")}</li><li><strong>${t("சுயநிதிப் பிரிவு (SS — Self-Supporting):","Self-Supporting (SS) programmes:")}</strong> ${t("அரசு / உதவி பெறும் / பல்கலைக்கழக வளாகங்களில் சுயநிதி முறையில் நடத்தப்படும் பாடப்பிரிவுகள். இவற்றின் கட்டணம் வழக்கமான அரசு உதவி பெறும் பிரிவிலிருந்து மாறுபடலாம்.","Programmes run on a self-supporting fee basis within government, aided, or university campuses. Fees may differ from regular aided programmes.")}</li></ul><p class="supporting">${t("கட்டணம், விடுதி மற்றும் வசதிகள் கல்லூரிக்கு கல்லூரி மாறுபடும் — அதிகாரப்பூர்வ TNEA மற்றும் கல்லூரி அறிவிப்பில் சரிபார்க்கவும். இங்கு எந்த வகையும் \"சிறந்தது\" என்று தரவரிசைப்படுத்தப்படவில்லை.","Fees, hostel, and facilities vary by institution — check official TNEA and college notices. No college type is ranked as \"best\" here.")}</p></details><details class="card beginner-guide"><summary>${t("கல்லூரி, பாடப்பிரிவு, இடம் — எப்படி ஒப்பிட்டு யோசிப்பது?","College, branch, or location — how to think through trade-offs")}</summary><p>${t("பல மாணவர்களும் பெற்றோர்களும் கேட்கும் கேள்வி: \"நல்ல கல்லூரியா, பிடித்த பாடப்பிரிவா, ஊருக்கு அருகிலா?\" இதற்கு ஒரே சரியான விடை இல்லை. கீழே உள்ளவற்றை குடும்பத்துடன் சேர்ந்து யோசியுங்கள்:","Many students and parents ask: \"Should I prioritize the college, the branch, or the location?\" There is no single right answer. Reflect together on:")}</p><ul class="guide-list"><li><strong>${t("ஆர்வமும் பாடப்பிரிவும்:","Interest & branch:")}</strong> ${t("அடுத்த 4 ஆண்டுகள் எந்தப் பாடங்களை ஆர்வத்துடன் படிக்க முடியும்?","Which subjects can you stay engaged with for the next 4 years?")}</li><li><strong>${t("கல்லூரியும் கற்றல் சூழலும்:","College & learning environment:")}</strong> ${t("பாடத்திட்டம், ஆய்வக வசதி, கற்றல் ஆதரவு ஆகியவற்றை அதிகாரப்பூர்வத் தகவல்களில் சரிபாருங்கள்.","Check official information on curriculum, labs, and learning support.")}</li><li><strong>${t("இடம், பயண தூரம் மற்றும் விடுதி:","Location, travel & hostel:")}</strong> ${t("தினசரி பயணம் செய்ய முடியுமா அல்லது விடுதியில் தங்க முடியுமா?","Is daily commute practical, or is hostel stay manageable?")}</li><li><strong>${t("கட்டணமும் குடும்பச் சூழலும்:","Fees & family constraints:")}</strong> ${t("கல்விக் கட்டணம், விடுதிக் கட்டணம், அரசு உதவித்தொகை (முதல் பட்டதாரி, PMSS, 7.5% போன்றவை) ஆகியவற்றைக் கணக்கில் கொள்ளுங்கள்.","Factor in tuition, hostel costs, and eligible government fee support (First Graduate, PMSS, 7.5%, etc.).")}</li><li><strong>${t("எதிர்காலத் திசை:","Future direction:")}</strong> ${t("வேலைவாய்ப்பு, மேற்படிப்பு அல்லது திறன் மேம்பாட்டுக்கு இந்தப் பிரிவு எப்படி உதவும்?","How does this field support your post-college work or further-study plans?")}</li></ul><p class="supporting">${t("இந்த வழிகாட்டி எந்தக் கல்லூரியையும் தானாகத் தேர்ந்தெடுக்காது; இறுதி முடிவும் விருப்ப வரிசையும் முழுமையாக உங்களுடையதே.","This guide never auto-ranks colleges; the final decision and preference order remain entirely yours.")}</p></details>`
+  ? doteOfficialGuide + `<details class="card beginner-guide"><summary>${t("கல்லூரி வகைகள்: அரசு, உதவி பெறும், சுயநிதி, தன்னாட்சி, (SS) — எளிய விளக்கம்","College types: Government, Aided, Self-Financing, Autonomous, and (SS) explained")}</summary><ul class="guide-list"><li><strong>${t("அரசு கல்லூரிகள் (Government):","Government colleges:")}</strong> ${t("தமிழ்நாடு அரசால் நடத்தப்படும் பொறியியல் கல்லூரிகள்.","Engineering colleges run directly by the Government of Tamil Nadu.")}</li><li><strong>${t("அரசு உதவி பெறும் கல்லூரிகள் (Government-aided):","Government-aided colleges:")}</strong> ${t("அரசு நிதியுதவி பெறும் சில படிப்புகளைக் கொண்ட நிறுவனங்கள். ஒரே கல்லூரியில் அரசு உதவி பெறும் படிப்புகளும் சுயநிதிப் (SS) படிப்புகளும் தனித்தனியாக இருக்கலாம்.","Institutions receiving government grant-in-aid for specific programmes. The same campus may offer aided and Self-Supporting (SS) programmes separately.")}</li><li><strong>${t("தனியார் / சுயநிதி கல்லூரிகள் (Private / Self-financing):","Private / self-financing colleges:")}</strong> ${t("தனியார் அறக்கட்டளைகளால் நடத்தப்படும் கல்லூரிகள்; இவற்றில் TNEA அரசு ஒதுக்கீடு இடங்களும் நிர்வாக ஒதுக்கீடு இடங்களும் இருக்கும்.","Colleges run by private trusts, offering both TNEA government-quota seats and management-quota seats.")}</li><li><strong>${t("பல்கலைக்கழக / உறுப்புக் கல்லூரிகள் (University / Constituent):","University / constituent colleges:")}</strong> ${t("அண்ணா பல்கலைக்கழக வளாகங்கள் மற்றும் உறுப்புப் பொறியியல் கல்லூரிகள்.","Anna University campuses and constituent engineering colleges.")}</li><li><strong>${t("தன்னாட்சி (Autonomous) vs இணைப்பு (Affiliated):","Autonomous vs. Affiliated:")}</strong> ${t("தன்னாட்சி கல்லூரிகள் தங்கள் பாடத்திட்டத்தையும் தேர்வுகளையும் பல்கலைக்கழக விதிகளுக்குள் அமைக்கும்; இணைப்பு கல்லூரிகள் அண்ணா பல்கலைக்கழகத்தின் பொதுப் பாடத்திட்டத்தையும் தேர்வுகளையும் பின்பற்றும்.","Autonomous colleges design their own curriculum and exams under university regulations; affiliated colleges follow Anna University's common curriculum and exams.")}</li><li><strong>${t("சுயநிதிப் பிரிவு (SS — Self-Supporting):","Self-Supporting (SS) programmes:")}</strong> ${t("அரசு / உதவி பெறும் / பல்கலைக்கழக வளாகங்களில் சுயநிதி முறையில் நடத்தப்படும் பாடப்பிரிவுகள். இவற்றின் கட்டணம் வழக்கமான அரசு உதவி பெறும் பிரிவிலிருந்து மாறுபடலாம்.","Programmes run on a self-supporting fee basis within government, aided, or university campuses. Fees may differ from regular aided programmes.")}</li></ul><p class="supporting">${t("கட்டணம், விடுதி மற்றும் வசதிகள் கல்லூரிக்கு கல்லூரி மாறுபடும் — அதிகாரப்பூர்வ TNEA மற்றும் கல்லூரி அறிவிப்பில் சரிபார்க்கவும். இங்கு எந்த வகையும் \"சிறந்தது\" என்று தரவரிசைப்படுத்தப்படவில்லை.","Fees, hostel, and facilities vary by institution — check official TNEA and college notices. No college type is ranked as \"best\" here.")}</p></details><details class="card beginner-guide"><summary>${t("கல்லூரி, பாடப்பிரிவு, இடம் — எப்படி ஒப்பிட்டு யோசிப்பது?","College, branch, or location — how to think through trade-offs")}</summary><p>${t("பல மாணவர்களும் பெற்றோர்களும் கேட்கும் கேள்வி: \"நல்ல கல்லூரியா, பிடித்த பாடப்பிரிவா, ஊருக்கு அருகிலா?\" இதற்கு ஒரே சரியான விடை இல்லை. கீழே உள்ளவற்றை குடும்பத்துடன் சேர்ந்து யோசியுங்கள்:","Many students and parents ask: \"Should I prioritize the college, the branch, or the location?\" There is no single right answer. Reflect together on:")}</p><ul class="guide-list"><li><strong>${t("ஆர்வமும் பாடப்பிரிவும்:","Interest & branch:")}</strong> ${t("அடுத்த 4 ஆண்டுகள் எந்தப் பாடங்களை ஆர்வத்துடன் படிக்க முடியும்?","Which subjects can you stay engaged with for the next 4 years?")}</li><li><strong>${t("கல்லூரியும் கற்றல் சூழலும்:","College & learning environment:")}</strong> ${t("பாடத்திட்டம், ஆய்வக வசதி, கற்றல் ஆதரவு ஆகியவற்றை அதிகாரப்பூர்வத் தகவல்களில் சரிபாருங்கள்.","Check official information on curriculum, labs, and learning support.")}</li><li><strong>${t("இடம், பயண தூரம் மற்றும் விடுதி:","Location, travel & hostel:")}</strong> ${t("தினசரி பயணம் செய்ய முடியுமா அல்லது விடுதியில் தங்க முடியுமா?","Is daily commute practical, or is hostel stay manageable?")}</li><li><strong>${t("கட்டணமும் குடும்பச் சூழலும்:","Fees & family constraints:")}</strong> ${t("கல்விக் கட்டணம், விடுதிக் கட்டணம், அரசு உதவித்தொகை (முதல் பட்டதாரி, PMSS, 7.5% போன்றவை) ஆகியவற்றைக் கணக்கில் கொள்ளுங்கள்.","Factor in tuition, hostel costs, and eligible government fee support (First Graduate, PMSS, 7.5%, etc.).")}</li><li><strong>${t("எதிர்காலத் திசை:","Future direction:")}</strong> ${t("வேலைவாய்ப்பு, மேற்படிப்பு அல்லது திறன் மேம்பாட்டுக்கு இந்தப் பிரிவு எப்படி உதவும்?","How does this field support your post-college work or further-study plans?")}</li></ul><p class="supporting">${t("இந்த வழிகாட்டி எந்தக் கல்லூரியையும் தானாகத் தேர்ந்தெடுக்காது; இறுதி முடிவும் விருப்ப வரிசையும் முழுமையாக உங்களுடையதே.","This guide never auto-ranks colleges; the final decision and preference order remain entirely yours.")}</p></details>`
   : "";
  const groupCard=(group:typeof items)=>{
   const first=group[0];
+  const doteCat = getDoteCategoryForItem(first);
+  const hasVerifiedCat = !!COHORT_121_METADATA[first.college] || !!first.type;
+  const doteBadge = hasVerifiedCat ? `<div class="card-badge-row"><span class="badge ${doteCat.badgeClass}">${esc(t(doteCat.nameTa, doteCat.nameEn))}</span></div>` : "";
   const options=group.map(i=>`<li>${esc(i.programmeName)} (${esc(i.programme)}) ${validPicks.includes(i.key)?`<strong>${t("தேர்ந்தெடுத்தது","Selected")}</strong>`:validPicks.length<3?link({view:"colleges"},t("ஒப்பீட்டில் சேர்","Add to comparison"),true,[...validPicks,i.key]):""}</li>`).join("");
   const compareChoice=group.length===1 ? validPicks.includes(first.key)
     ? `<p><strong>${t("ஒப்பிடத் தேர்ந்தெடுக்கப்பட்டது","Selected for comparison")}</strong></p>`
     : validPicks.length<3 ? link({view:"colleges"},t("ஒப்பீட்டில் சேர்","Add to comparison"),true,[...validPicks,first.key]) : ""
     : `<details><summary>${t("ஒப்பிட ஒரு படிப்பைத் தேர்ந்தெடு","Choose a programme to compare")}</summary><ul>${options}</ul></details>`;
-  return `<article class="card result-card"><h2>${esc(first.collegeName)}</h2>${facts(first)}<p>${group.length} ${t(group.length===1?"பொருந்தும் படிப்பு":"பொருந்தும் படிப்புகள்",group.length===1?"matching programme":"matching programmes")}${branch?`: ${esc(first.programmeName)} (${esc(first.programme)})`:""}</p><div class="result-actions">${link({view:"college",college:first.college},t("கல்லூரி மற்றும் படிப்புகளைப் பார்","View college and programmes"))}${compareChoice}</div></article>`;
+  return `<article class="card result-card"><h2>${esc(first.collegeName)}</h2>${doteBadge}${facts(first)}<p>${group.length} ${t(group.length===1?"பொருந்தும் படிப்பு":"பொருந்தும் படிப்புகள்",group.length===1?"matching programme":"matching programmes")}${branch?`: ${esc(first.programmeName)} (${esc(first.programme)})`:""}</p><div class="result-actions">${link({view:"college",college:first.college},t("கல்லூரி மற்றும் படிப்புகளைப் பார்","View college and programmes"))}${compareChoice}</div></article>`;
  };
  let body="";
  if(page==="home") {
@@ -245,5 +451,5 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
  if(params.has("page")&&Number.isInteger(requestedPage)&&requestedPage>0)swapped.set("page",String(requestedPage));for(const pick of validPicks)swapped.append("pick",pick);
  const notice=input.classification==="TEST_FIXTURE" ? t("செயற்கைச் சோதனை எடுத்துக்காட்டு.","Synthetic test example.") : isColleges ? t("2026 TNEA அதிகாரப்பூர்வ மூலப் பட்டியல் அடிப்படையில் சரிபார்க்கப்பட்டது. தற்போதைய காலி இடங்கள் (Vacancies) கலந்தாய்வின் போது அதிகாரப்பூர்வமாக வெளியிடப்படும்.","Verified against official 2026 TNEA listings. Actual vacancies will be officially published during counselling.") : t("உள்நிலை உரிமையாளர் ஆய்வு மட்டும். மாணவர் வெளியீடு அல்ல.","Internal owner review only. Not a student release.");
  const pageTitle=isColleges ? t("கல்லூரி மற்றும் பாடப்பிரிவு பட்டியல்","Colleges and Programmes Directory") : t("ஆய்வு","Pilot review");
- return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${GOOGLE_FONTS_HTML}<title>${pageTitle}</title><style>${SITE_SHELL_CSS}*{box-sizing:border-box}body{font:16px/1.65 ${SHARED_FONT_FAMILY};color:#172033;background:#f7f8fa;margin:0}main{max-width:1120px;margin:auto;padding:20px;overflow-wrap:anywhere}main>h1,main>p,main>.start-guidance,main>.unsure,main>.source-notice,main>.back-nav,main>.identity,main>.explanation,main>.college-glance,main>.reflection{max-width:76ch}.card,.compare-field{background:white;border:1px solid #d8dde6;border-radius:12px;margin:1rem 0;padding:1rem}h1{font-size:1.5rem}h2{font-size:1.15rem}h3{font-size:1.05rem}.action,button{display:inline-block;padding:.7rem;border:1px solid #174ea6;border-radius:8px;background:#fff;color:#174ea6;margin:.3rem .3rem .3rem 0;text-decoration:none}label{display:block;margin:.7rem 0}input,select{max-width:100%;font:inherit;padding:.4rem}input[type=checkbox]{width:1.2rem;height:1.2rem}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #174ea6;outline-offset:3px}.notice{background:#fff6e7;padding:1rem}.scope-banner{border-left:4px solid #174ea6;background:#f4f8ff}.scope-banner p{margin:0;font-size:.94rem}.beginner-guide summary,.branch-group summary,.source-note summary{min-height:44px;padding:.35rem 0;font-weight:700;cursor:pointer}.guide-list{padding-left:1.35rem;margin:.5rem 0}.guide-list li{margin:.45rem 0}.branch-tag{display:inline-block;font-size:.78rem;padding:2px 7px;border-radius:999px;background:#edf3fa;color:#174ea6;border:1px solid #c9d9ee;margin-left:.3rem;vertical-align:middle}.branch-tag-explained{background:#f0f6ec;color:#27532e;border-color:#c6dfc0}.typo-hint{font-size:.86rem;display:inline-block;margin-left:.3rem}.source-note{margin-top:1rem;padding-top:.6rem;border-top:1px solid #e4e8f0}.filter-note{font-size:.9rem;margin:.35rem 0 .6rem}.programmes{padding-left:1.4rem}.programmes li{padding:.6rem 0;border-bottom:1px solid #d8dde6}.compare-field h2{margin:0}.compare-field ol{margin:.4rem 0}.choice{margin:.7rem 0}summary{cursor:pointer}.identity h1{margin:.3rem 0 1rem;line-height:1.45}.eyebrow{color:#4a5870;font-size:.9rem;margin:0}.fact-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.25rem 0 0;padding-top:1rem;border-top:1px solid #d8dde6}.fact-grid dt{font-size:.9rem;color:#4a5870}.fact-grid dd{margin:.25rem 0 0;font-weight:600}.programme-code{margin:.7rem 0}.source-notice{padding:.8rem 1rem;border-left:3px solid #597495;background:#edf3fa}.programme-cards{list-style:none;padding:0}.programme-cards h3{margin:0;line-height:1.6}.text-link{display:inline-block;min-height:44px;padding:.5rem 0;color:#174ea6;text-underline-offset:3px}.back-nav{display:flex;flex-wrap:wrap;gap:.3rem 1.25rem}.breadcrumbs{display:flex;flex-wrap:wrap;align-items:center;gap:.2rem .5rem;margin:.35rem 0 1rem;font-size:.9rem;color:#4a5870}.breadcrumbs a{display:inline-flex;align-items:center;min-height:44px}.primary{background:#174ea6;color:#fff;font-weight:600;text-align:center}.next-step{margin:1.5rem 0}.supporting{color:#4a5870}.check-prompts{padding-left:1.4rem}.check-prompts li{margin:.8rem 0}.evidence summary{min-height:44px;padding:.35rem 0}html[lang=ta] body{line-height:1.85}html[lang=ta] h1{line-height:1.6}@media(max-width:480px){.fact-grid{grid-template-columns:1fr;gap:.8rem}.primary{display:block;width:100%;margin:.5rem 0}.identity h1{font-size:1.35rem}.back-nav{flex-direction:column;align-items:flex-start}main{overflow-wrap:break-word}}.college-metadata dt{color:#4a5870;font-size:.9rem}.college-metadata dd{margin:.2rem 0 1rem;overflow-wrap:anywhere}.college-metadata summary{min-height:44px}.journey-return{margin-top:2rem;padding-top:1rem;border-top:1px solid #d8dde6}</style><style>.filters{padding:.8rem 1rem}.filters label,.branch-search label{font-weight:600;margin:.2rem 0 .35rem}.search-row{display:flex;gap:.5rem;align-items:stretch}.search-row input{flex:1;min-width:0}.search-row button{margin:0;white-space:nowrap}.filters input,.filters select,.branch-search input,.filters button,.branch-search button{min-height:44px}.more-filters{margin-top:.6rem}.more-filters summary,.selected-list summary,.result-card summary{min-height:44px;padding:.4rem 0;cursor:pointer}.filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:.5rem 0}.filter-grid select{width:100%}.result-count{font-weight:700;margin:.5rem 0}.selection-bar{background:#edf3fa;border-radius:10px;padding:.6rem .8rem;margin:.6rem 0}.selection-bar .action{margin-left:.6rem}.selection-bar .supporting{display:block;font-size:.9rem}.selected-list ul{padding-left:1.2rem}.result-card{margin:.65rem 0;padding:.8rem 1rem}.result-card h2{margin:.1rem 0}.result-card p{margin:.4rem 0}.result-card .action{margin:.35rem .35rem .35rem 0}.result-card ul,.branch-list{padding-left:1.35rem}.result-card li{padding:.3rem 0}.active-branch{background:#edf3fa;padding:.6rem .8rem;border-radius:10px}.active-branch .action{display:inline-flex;align-items:center;min-height:44px;padding:.3rem .6rem;margin:0}.paging{display:flex;flex-wrap:wrap;gap:.5rem}.branch-list li{margin:.3rem 0}.branch-list .action{margin:.1rem 0}.notice{font-size:.92rem;margin:.4rem 0 1rem;padding:.65rem .8rem}.source-notice{margin:.7rem 0}.filters>a.action{font-size:.92rem}@media(max-width:480px){.filter-grid{grid-template-columns:1fr;gap:.4rem}.search-row input{width:100%}.search-row button{padding:.55rem}.filters{margin:.65rem 0}.result-card{margin:.5rem 0}.result-card .action{display:block;text-align:center}.selection-bar .action{display:block;margin:.35rem 0}.active-branch .action{display:inline-flex}.active-branch{font-size:.9rem;line-height:1.5}.result-count{font-size:.95rem}main{padding:12px}.card{padding:.8rem}}</style><style>.entry-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}.entry-card{margin:.4rem 0;display:flex;flex-direction:column}.entry-card h3{margin:.1rem 0}.entry-card p{margin:.35rem 0 auto}.entry-card .action{align-self:flex-start}.start-guidance{margin:1rem 0 1.5rem}.unsure summary{min-height:44px;padding:.4rem 0;font-weight:700}.unsure p{margin:.65rem 0}.compare-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;align-items:start}.compare-field{margin:.4rem 0;min-width:0}.compare-field h2{line-height:1.4;overflow-wrap:anywhere}.compare-programme{font-weight:700}.compare-field dl{margin:.5rem 0;border-top:1px solid #d8dde6}.compare-field dl div{padding:.55rem 0;border-bottom:1px solid #d8dde6}.compare-field dt{font-size:.9rem;color:#4a5870}.compare-field dd{margin:.1rem 0 0}.compare-field .evidence{margin:.5rem 0;padding:.5rem}.programme-college{font-weight:600;margin:.7rem 0}.college-glance h2{margin-top:0}.evidence a{display:inline-flex;align-items:center;min-height:44px}.reflection h2{margin-top:0}.next-step .primary{margin-bottom:.2rem}.explanation h2{margin:.1rem 0 .4rem}.explanation p{margin:.4rem 0}.explanation.next-step{margin:.75rem 0}@media(max-width:480px){.source-notice{font-size:.9rem;line-height:1.55;padding:.5rem .7rem}}@media(max-width:600px){.entry-grid,.compare-grid{grid-template-columns:1fr}.entry-card{margin:.2rem 0}.entry-card .action{align-self:stretch;text-align:center}.start-guidance .primary{display:block;width:100%}.compare-field{margin:.2rem 0}}@media(min-width:768px){.results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}.result-card{margin:0}.filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.filters{max-width:none}.compare-grid{gap:1rem}}@media(min-width:1080px){.results,.compare-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.filter-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:480px){main{padding:16px}}</style></head><body>${renderSiteHeader(lang, isColleges ? "colleges" : "review", en ? `<a lang="ta" href="${route}?${esc(swapped.toString())}">தமிழ்</a><span lang="en" aria-current="page">English</span>` : `<span lang="ta" aria-current="page">தமிழ்</span><a lang="en" href="${route}?${esc(swapped.toString())}">English</a>`, isColleges ? undefined : "owner")}<main><p class="notice">${notice}</p>${breadcrumbs}${body}<footer class="journey-return"><a class="text-link" href="/journey?step=awareness&amp;lang=${lang}">${t("வழிகாட்டலை முதலில் இருந்து தொடங்கு","Start the guided journey")}</a></footer></main></body></html>`;
+ return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${GOOGLE_FONTS_HTML}<title>${pageTitle}</title><style>${SITE_SHELL_CSS}*{box-sizing:border-box}body{font:16px/1.65 ${SHARED_FONT_FAMILY};color:#172033;background:#f7f8fa;margin:0}main{max-width:1120px;margin:auto;padding:20px;overflow-wrap:anywhere}main>h1,main>p,main>.start-guidance,main>.unsure,main>.source-notice,main>.back-nav,main>.identity,main>.explanation,main>.college-glance,main>.reflection{max-width:76ch}.card,.compare-field{background:white;border:1px solid #d8dde6;border-radius:12px;margin:1rem 0;padding:1rem}h1{font-size:1.5rem}h2{font-size:1.15rem}h3{font-size:1.05rem}.action,button{display:inline-block;padding:.7rem;border:1px solid #174ea6;border-radius:8px;background:#fff;color:#174ea6;margin:.3rem .3rem .3rem 0;text-decoration:none}label{display:block;margin:.7rem 0}input,select{max-width:100%;font:inherit;padding:.4rem}input[type=checkbox]{width:1.2rem;height:1.2rem}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #174ea6;outline-offset:3px}.notice{background:#fff6e7;padding:1rem}.scope-banner{border-left:4px solid #174ea6;background:#f4f8ff}.scope-banner p{margin:0;font-size:.94rem}.beginner-guide summary,.branch-group summary,.source-note summary{min-height:44px;padding:.35rem 0;font-weight:700;cursor:pointer}.guide-list{padding-left:1.35rem;margin:.5rem 0}.guide-list li{margin:.45rem 0}.branch-tag{display:inline-block;font-size:.78rem;padding:2px 7px;border-radius:999px;background:#edf3fa;color:#174ea6;border:1px solid #c9d9ee;margin-left:.3rem;vertical-align:middle}.branch-tag-explained{background:#f0f6ec;color:#27532e;border-color:#c6dfc0}.typo-hint{font-size:.86rem;display:inline-block;margin-left:.3rem}.source-note{margin-top:1rem;padding-top:.6rem;border-top:1px solid #e4e8f0}.filter-note{font-size:.9rem;margin:.35rem 0 .6rem}.programmes{padding-left:1.4rem}.programmes li{padding:.6rem 0;border-bottom:1px solid #d8dde6}.compare-field h2{margin:0}.compare-field ol{margin:.4rem 0}.choice{margin:.7rem 0}summary{cursor:pointer}.identity h1{margin:.3rem 0 1rem;line-height:1.45}.eyebrow{color:#4a5870;font-size:.9rem;margin:0}.fact-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.25rem 0 0;padding-top:1rem;border-top:1px solid #d8dde6}.fact-grid dt{font-size:.9rem;color:#4a5870}.fact-grid dd{margin:.25rem 0 0;font-weight:600}.programme-code{margin:.7rem 0}.source-notice{padding:.8rem 1rem;border-left:3px solid #597495;background:#edf3fa}.programme-cards{list-style:none;padding:0}.programme-cards h3{margin:0;line-height:1.6}.text-link{display:inline-block;min-height:44px;padding:.5rem 0;color:#174ea6;text-underline-offset:3px}.back-nav{display:flex;flex-wrap:wrap;gap:.3rem 1.25rem}.breadcrumbs{display:flex;flex-wrap:wrap;align-items:center;gap:.2rem .5rem;margin:.35rem 0 1rem;font-size:.9rem;color:#4a5870}.breadcrumbs a{display:inline-flex;align-items:center;min-height:44px}.primary{background:#174ea6;color:#fff;font-weight:600;text-align:center}.next-step{margin:1.5rem 0}.supporting{color:#4a5870}.check-prompts{padding-left:1.4rem}.check-prompts li{margin:.8rem 0}.evidence summary{min-height:44px;padding:.35rem 0}html[lang=ta] body{line-height:1.85}html[lang=ta] h1{line-height:1.6}@media(max-width:480px){.fact-grid{grid-template-columns:1fr;gap:.8rem}.primary{display:block;width:100%;margin:.5rem 0}.identity h1{font-size:1.35rem}.back-nav{flex-direction:column;align-items:flex-start}main{overflow-wrap:break-word}}.college-metadata dt{color:#4a5870;font-size:.9rem}.college-metadata dd{margin:.2rem 0 1rem;overflow-wrap:anywhere}.college-metadata summary{min-height:44px}.journey-return{margin-top:2rem;padding-top:1rem;border-top:1px solid #d8dde6}</style><style>.filters{padding:.8rem 1rem}.filters label,.branch-search label{font-weight:600;margin:.2rem 0 .35rem}.search-row{display:flex;gap:.5rem;align-items:stretch}.search-row input{flex:1;min-width:0}.search-row button{margin:0;white-space:nowrap}.filters input,.filters select,.branch-search input,.filters button,.branch-search button{min-height:44px}.more-filters{margin-top:.6rem}.more-filters summary,.selected-list summary,.result-card summary{min-height:44px;padding:.4rem 0;cursor:pointer}.filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:.5rem 0}.filter-grid select{width:100%}.filter-full{grid-column:1 / -1}.card-badge-row{margin:4px 0 8px}.badge{display:inline-flex;align-items:center;font-size:.78rem;font-weight:700;padding:3px 8px;border-radius:6px;letter-spacing:.02em}.type-gov{background:#ecfdf5;color:#047857;border:1px solid #a7f3d0}.type-aided{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}.type-univ{background:#faf5ff;color:#6d28d9;border:1px solid #ddd6fe}.type-annamalai{background:#fdf4ff;color:#86198f;border:1px solid #f0abfc}.type-constituent{background:#f0fdfa;color:#0f766e;border:1px solid #99f6e4}.type-sfc{background:#f8fafc;color:#475569;border:1px solid #cbd5e1}.result-count{font-weight:700;margin:.5rem 0}.selection-bar{background:#edf3fa;border-radius:10px;padding:.6rem .8rem;margin:.6rem 0}.selection-bar .action{margin-left:.6rem}.selection-bar .supporting{display:block;font-size:.9rem}.selected-list ul{padding-left:1.2rem}.result-card{margin:.65rem 0;padding:.8rem 1rem}.result-card h2{margin:.1rem 0}.result-card p{margin:.4rem 0}.result-card .action{margin:.35rem .35rem .35rem 0}.result-card ul,.branch-list{padding-left:1.35rem}.result-card li{padding:.3rem 0}.active-branch{background:#edf3fa;padding:.6rem .8rem;border-radius:10px}.active-branch .action{display:inline-flex;align-items:center;min-height:44px;padding:.3rem .6rem;margin:0}.paging{display:flex;flex-wrap:wrap;gap:.5rem}.branch-list li{margin:.3rem 0}.branch-list .action{margin:.1rem 0}.notice{font-size:.92rem;margin:.4rem 0 1rem;padding:.65rem .8rem}.source-notice{margin:.7rem 0}.filters>a.action{font-size:.92rem}@media(max-width:480px){.filter-grid{grid-template-columns:1fr;gap:.4rem}.search-row input{width:100%}.search-row button{padding:.55rem}.filters{margin:.65rem 0}.result-card{margin:.5rem 0}.result-card .action{display:block;text-align:center}.selection-bar .action{display:block;margin:.35rem 0}.active-branch .action{display:inline-flex}.active-branch{font-size:.9rem;line-height:1.5}.result-count{font-size:.95rem}main{padding:12px}.card{padding:.8rem}}</style><style>.entry-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}.entry-card{margin:.4rem 0;display:flex;flex-direction:column}.entry-card h3{margin:.1rem 0}.entry-card p{margin:.35rem 0 auto}.entry-card .action{align-self:flex-start}.start-guidance{margin:1rem 0 1.5rem}.unsure summary{min-height:44px;padding:.4rem 0;font-weight:700}.unsure p{margin:.65rem 0}.compare-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;align-items:start}.compare-field{margin:.4rem 0;min-width:0}.compare-field h2{line-height:1.4;overflow-wrap:anywhere}.compare-programme{font-weight:700}.compare-field dl{margin:.5rem 0;border-top:1px solid #d8dde6}.compare-field dl div{padding:.55rem 0;border-bottom:1px solid #d8dde6}.compare-field dt{font-size:.9rem;color:#4a5870}.compare-field dd{margin:.1rem 0 0}.compare-field .evidence{margin:.5rem 0;padding:.5rem}.programme-college{font-weight:600;margin:.7rem 0}.college-glance h2{margin-top:0}.evidence a{display:inline-flex;align-items:center;min-height:44px}.reflection h2{margin-top:0}.next-step .primary{margin-bottom:.2rem}.explanation h2{margin:.1rem 0 .4rem}.explanation p{margin:.4rem 0}.explanation.next-step{margin:.75rem 0}@media(max-width:480px){.source-notice{font-size:.9rem;line-height:1.55;padding:.5rem .7rem}}@media(max-width:600px){.entry-grid,.compare-grid{grid-template-columns:1fr}.entry-card{margin:.2rem 0}.entry-card .action{align-self:stretch;text-align:center}.start-guidance .primary{display:block;width:100%}.compare-field{margin:.2rem 0}}@media(min-width:768px){.results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}.result-card{margin:0}.filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.filters{max-width:none}.compare-grid{gap:1rem}}@media(min-width:1080px){.results,.compare-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.filter-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:480px){main{padding:16px}}</style></head><body>${renderSiteHeader(lang, isColleges ? "colleges" : "review", en ? `<a lang="ta" href="${route}?${esc(swapped.toString())}">தமிழ்</a><span lang="en" aria-current="page">English</span>` : `<span lang="ta" aria-current="page">தமிழ்</span><a lang="en" href="${route}?${esc(swapped.toString())}">English</a>`, isColleges ? undefined : "owner")}<main><p class="notice">${notice}</p>${breadcrumbs}${body}<footer class="journey-return"><a class="text-link" href="/journey?step=awareness&amp;lang=${lang}">${t("வழிகாட்டலை முதலில் இருந்து தொடங்கு","Start the guided journey")}</a></footer></main></body></html>`;
 }

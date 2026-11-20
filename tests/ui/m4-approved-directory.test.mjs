@@ -334,3 +334,45 @@ test("search supports college acronyms and multi-word tokens naturally", () => {
   const branchEce = render("lang=en&view=branches&bq=ece");
   assert.match(branchEce, /ELECTRONICS AND COMMUNICATION ENGINEERING/);
 });
+
+test("stage 4 marks-free college exploration supports official DOTE categories, district filtering, specific college dropdown, and badges", () => {
+  // 1. English Directory Page renders DOTE categories and College dropdown
+  const htmlEn = render("lang=en&view=colleges");
+  assert.ok(htmlEn.includes('id="type-filter"'), "Must have college category filter");
+  assert.ok(htmlEn.includes("Government Engineering Colleges"), "Must list DOTE Government colleges");
+  assert.ok(htmlEn.includes("Government Aided Engineering Colleges"), "Must list DOTE Aided colleges");
+  assert.ok(htmlEn.includes("Anna University Department Colleges"), "Must list DOTE Anna Univ Depts");
+  assert.ok(htmlEn.includes("Annamalai University"), "Must list DOTE Annamalai Univ");
+  assert.ok(htmlEn.includes("Anna University Constituent Colleges"), "Must list DOTE Constituent colleges");
+  assert.ok(htmlEn.includes("Self Financing Engineering Colleges"), "Must list DOTE Self-Financing colleges");
+  assert.ok(htmlEn.includes('id="district-filter"'), "Must have district filter");
+  assert.ok(htmlEn.includes('id="college-select"'), "Must have specific college select dropdown");
+  assert.ok(htmlEn.includes("dote-guide"), "Must have DOTE official guide card");
+  assert.ok(htmlEn.includes("https://dte.tn.gov.in/"), "Must link to official DOTE portal");
+
+  // 2. Tamil Directory Page renders localized DOTE categories and options
+  const htmlTa = render("lang=ta&view=colleges");
+  assert.ok(htmlTa.includes("அரசுப் பொறியியல் கல்லூரிகள்"), "Must list Tamil Government category");
+  assert.ok(htmlTa.includes("அரசு உதவிபெறும் பொறியியல் கல்லூரிகள்"), "Must list Tamil Aided category");
+  assert.ok(htmlTa.includes("அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள்"), "Must list Tamil Anna Univ Dept category");
+  assert.ok(htmlTa.includes("அண்ணாமலைப் பல்கலைக்கழகம்"), "Must list Tamil Annamalai category");
+  assert.ok(htmlTa.includes("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள்"), "Must list Tamil Constituent category");
+  assert.ok(htmlTa.includes("சுயநிதிப் பொறியியல் கல்லூரிகள்"), "Must list Tamil Self-Financing category");
+  assert.ok(htmlTa.includes("குறிப்பிட்ட கல்லூரி (DOTE வகை வாரியாக)"), "Must have Tamil college selection label");
+
+  // 3. Specific college selection filters results directly to that college
+  const gctOnly = render("lang=en&view=colleges&college=2005");
+  assert.match(gctOnly, /1 college · \d+ matching programmes/);
+  assert.ok(gctOnly.includes("<h2>Government College of Technology (Autonomous)</h2>"), "Must show GCT result card");
+  assert.ok(!gctOnly.includes("<h2>Easwari Engineering College"), "Must not show other colleges in result cards when specific college is selected");
+  assert.ok(gctOnly.includes('value="2005" selected'), "Must select GCT in dropdown");
+  assert.match(gctOnly, /Clear search and filters/);
+
+  // 4. District filtering works accurately
+  const cbeOnly = render("lang=en&view=colleges&district=COIMBATORE");
+  assert.ok(cbeOnly.includes("Government College of Technology"), "GCT is in Coimbatore");
+
+  // 5. Category badges on result cards
+  assert.ok(htmlEn.includes('class="badge type-univ"'), "Must show university department badge on CEG");
+  assert.ok(htmlEn.includes('class="badge type-sfc"'), "Must show self-financing badge on Easwari");
+});
