@@ -404,6 +404,7 @@ interface RawCandidateRecord {
 export interface GateAApprovedDatasetSpec {
   relPath: string;
   sha256: string;
+  sha256Lf: string;
   recordCount: number;
   year: number;
   cohort: "55" | "66";
@@ -413,6 +414,7 @@ export const GATE_A_121_APPROVED_DATASETS: readonly GateAApprovedDatasetSpec[] =
   {
     relPath: "../../experiments/m5-derived-minimum-candidates/run-2025-cohort-55/candidates.json",
     sha256: "1c6659838e848eaaf636a7c4ca70d895243ac9f32d6fe16eff94a092a2bb74c7",
+    sha256Lf: "1c6659838e848eaaf636a7c4ca70d895243ac9f32d6fe16eff94a092a2bb74c7",
     recordCount: 4332,
     year: 2025,
     cohort: "55",
@@ -420,6 +422,7 @@ export const GATE_A_121_APPROVED_DATASETS: readonly GateAApprovedDatasetSpec[] =
   {
     relPath: "../../experiments/m5-derived-minimum-candidates/run-2026-cohort-55/candidates.json",
     sha256: "7e328a4644085c48372ff93739248d3c729189f49ed14e48812df72033467e84",
+    sha256Lf: "f273ae8af0c53a0646d2b318bdca09090fe29b084938149a84aa42fe523f6f66",
     recordCount: 6308,
     year: 2026,
     cohort: "55",
@@ -427,6 +430,7 @@ export const GATE_A_121_APPROVED_DATASETS: readonly GateAApprovedDatasetSpec[] =
   {
     relPath: "../../experiments/m5-derived-minimum-candidates/run-2026-cohort-65-additions/candidates.json",
     sha256: "a1bc06bcf0cdf50e3b68ee827fa7d668763704419007d8562eed03761b61cced",
+    sha256Lf: "9899e40aba0c2380ca28c84efa90c2816e19d03a5132ab6055dd20575099d801",
     recordCount: 7057,
     year: 2026,
     cohort: "66",
@@ -442,16 +446,19 @@ export function loadVerifiedHistoricalObservations(): DerivedHistoricalObservati
       const candidateUrl = new URL(spec.relPath, import.meta.url);
       const filePath = fileURLToPath(candidateUrl);
       const fileBuffer = readFileSync(filePath);
+      const raw = fileBuffer.toString("utf-8");
 
-      // Verify cryptographic SHA-256 digest against approved Gate A ledger
-      const computedHash = createHash("sha256").update(fileBuffer).digest("hex");
-      if (computedHash !== spec.sha256) {
+      // Verify cryptographic SHA-256 digest against approved Gate A ledger.
+      // Normalize CRLF -> LF so Linux (LF) and Windows (CRLF) checkouts verify
+      // the exact canonical Git-stored bytes without platform-specific mismatches.
+      const normalizedBytes = new TextEncoder().encode(raw.replace(/\r\n/g, "\n"));
+      const computedHash = createHash("sha256").update(normalizedBytes).digest("hex");
+      if (computedHash !== spec.sha256Lf) {
         throw new Error(
-          `Security Exception: SHA-256 mismatch for ${spec.relPath}. Expected ${spec.sha256}, got ${computedHash}. Loading aborted.`
+          `Security Exception: SHA-256 mismatch for ${spec.relPath}. Expected ${spec.sha256Lf}, got ${computedHash}. Loading aborted.`
         );
       }
 
-      const raw = fileBuffer.toString("utf-8");
       const records = JSON.parse(raw) as RawCandidateRecord[];
       if (records.length !== spec.recordCount) {
         throw new Error(
