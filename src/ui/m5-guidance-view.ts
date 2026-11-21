@@ -6,6 +6,9 @@ import {
   formatShortlistPlainText,
   formatShortlistCsv,
   createShortlistItem,
+  moveToTop,
+  moveToBottom,
+  moveToPosition,
   type AllotmentRound,
   type AllotmentRoundOrAll,
   type CommunityCategory,
@@ -413,10 +416,21 @@ export function renderM5GuidancePage(
     return true;
   });
 
-  // Build deterministic, sorted filter options from governed metadata
-  const allDistricts = Array.from(
-    new Set(Object.values(COHORT_121_METADATA).map((c) => c.district))
-  ).sort((a, b) => a.localeCompare(b));
+  // Build deterministic, sorted filter options from governed metadata with presentation-layer casing normalization
+  const normalizeDistrictDisplay = (raw: string): string =>
+    raw
+      .trim()
+      .toLowerCase()
+      .replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
+  const districtMap = new Map<string, string>();
+  for (const c of Object.values(COHORT_121_METADATA)) {
+    const key = c.district.trim().toLowerCase();
+    if (!key) continue;
+    if (!districtMap.has(key)) {
+      districtMap.set(key, normalizeDistrictDisplay(c.district));
+    }
+  }
+  const allDistricts = Array.from(districtMap.values()).sort((a, b) => a.localeCompare(b));
 
   const branchMap = new Map<string, string>();
   for (const off of governedOfferings) {
@@ -833,19 +847,22 @@ export function renderM5GuidancePage(
       }
       .shortlist-actions {
         display: flex;
-        gap: 0.65rem;
+        flex-wrap: wrap;
+        gap: 0.35rem;
         width: 100%;
       }
       .shortlist-actions .btn-reorder {
-        flex: 1;
+        flex: 1 1 40px;
         min-height: 44px;
+        min-width: 40px;
+        padding: 0.3rem 0.4rem;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.15rem;
+        font-size: 1.05rem;
         font-weight: 750;
         border-radius: 8px;
-        background: #f8fafc;
+        background: #ffffff;
         border: 1.5px solid #cbd5e1;
       }
       .form-tier-3 {
@@ -1139,11 +1156,11 @@ function renderComparisonTab(
             <input type="hidden" name="branch" value="${esc(branchFilter)}">
             <input type="hidden" name="sort" value="${esc(sortOption)}">
             ${onlyAvailable ? `<input type="hidden" name="only_available" value="1">` : ""}
-            <button type="submit" name="page" value="${prevPage}" class="pagination-btn ${hasPrev ? "" : "disabled"}" ${hasPrev ? "" : "disabled"}>
+            <button type="submit" name="page" value="${prevPage}" aria-label="${t("முந்தைய பக்கம்", "Previous page")}" class="pagination-btn ${hasPrev ? "" : "disabled"}" ${hasPrev ? "" : "disabled"}>
               ← ${t("முந்தைய", "Prev")}
             </button>
             <span style="font-weight: 700; color: #1e293b; padding: 0 0.25rem;">${pagination.currentPage}</span>
-            <button type="submit" name="page" value="${nextPage}" class="pagination-btn ${hasNext ? "" : "disabled"}" ${hasNext ? "" : "disabled"}>
+            <button type="submit" name="page" value="${nextPage}" aria-label="${t("அடுத்த பக்கம்", "Next page")}" class="pagination-btn ${hasNext ? "" : "disabled"}" ${hasNext ? "" : "disabled"}>
               ${t("அடுத்த", "Next")} →
             </button>
           </form>
@@ -1177,14 +1194,14 @@ function renderComparisonTab(
           <div class="pagination-controls">
             ${
               hasPrev
-                ? `<a href="${esc(makePageUrl(prevPage))}" class="pagination-btn">← ${t("முந்தைய", "Prev")}</a>`
-                : `<span class="pagination-btn disabled">← ${t("முந்தைய", "Prev")}</span>`
+                ? `<a href="${esc(makePageUrl(prevPage))}" aria-label="${t("முந்தைய பக்கம்", "Previous page")}" class="pagination-btn">← ${t("முந்தைய", "Prev")}</a>`
+                : `<span class="pagination-btn disabled" aria-disabled="true">← ${t("முந்தைய", "Prev")}</span>`
             }
             <span style="font-weight: 700; color: #1e293b; padding: 0 0.25rem;">${pagination.currentPage}</span>
             ${
               hasNext
-                ? `<a href="${esc(makePageUrl(nextPage))}" class="pagination-btn">${t("அடுத்த", "Next")} →</a>`
-                : `<span class="pagination-btn disabled">${t("அடுத்த", "Next")} →</span>`
+                ? `<a href="${esc(makePageUrl(nextPage))}" aria-label="${t("அடுத்த பக்கம்", "Next page")}" class="pagination-btn">${t("அடுத்த", "Next")} →</a>`
+                : `<span class="pagination-btn disabled" aria-disabled="true">${t("அடுத்த", "Next")} →</span>`
             }
           </div>
         </div>
@@ -1359,17 +1376,17 @@ function renderComparisonTab(
             <label for="search-input" style="font-size: 0.88rem; font-weight: 700; color: #1e3a8a;">
               🔍 ${t("விரைவுத் தேடல் (கல்லூரிப் பெயர் / துறை / மாவட்டம் / குறியீடு எண்)", "Quick Search (College Name / Programme / District / Code)")}
             </label>
-            <input id="search-input" type="text" name="q" value="${esc(query)}" placeholder="${t("உதாரணமாக: CEG, PSG, CIT, CSE, கோவை, 1216", "e.g. CEG, PSG, CIT, CSE, Coimbatore, 1216")}">
+            <input id="search-input" type="text" name="q" aria-label="${t("விரைவுத் தேடல் (கல்லூரிப் பெயர் / துறை / மாவட்டம் / குறியீடு எண்)", "Quick Search (College Name / Programme / District / Code)")}" value="${esc(query)}" placeholder="${t("உதாரணமாக: CEG, PSG, CIT, CSE, கோவை, 1216", "e.g. CEG, PSG, CIT, CSE, Coimbatore, 1216")}">
           </div>
 
           <div class="form-group">
             <label for="cutoff-input">${esc(copy.studentCutoffLabel)} (0–200)</label>
-            <input id="cutoff-input" type="number" step="0.25" min="0" max="200" name="cutoff" value="${studentCutoff !== null ? studentCutoff : ""}" placeholder="${t("உதாரணமாக: 185.5", "e.g. 185.5")}">
+            <input id="cutoff-input" type="number" step="0.25" min="0" max="200" name="cutoff" aria-label="${esc(copy.studentCutoffLabel)} (0–200)" value="${studentCutoff !== null ? studentCutoff : ""}" placeholder="${t("உதாரணமாக: 185.5", "e.g. 185.5")}">
           </div>
 
           <div class="form-group">
             <label for="quota-select">${esc(copy.quotaLabel)}</label>
-            <select id="quota-select" name="quota">
+            <select id="quota-select" name="quota" aria-label="${esc(copy.quotaLabel)}" onchange="var w=document.getElementById('quota-75-warning');if(w)w.hidden=(this.value!=='GOVT_SCHOOL_7_5');">
               <option value="GENERAL_ACADEMIC" ${quota === "GENERAL_ACADEMIC" ? "selected" : ""}>${esc(copy.quotaName("GENERAL_ACADEMIC"))}</option>
               <option value="GOVT_SCHOOL_7_5" ${quota === "GOVT_SCHOOL_7_5" ? "selected" : ""}>${esc(copy.quotaName("GOVT_SCHOOL_7_5"))}</option>
             </select>
@@ -1377,7 +1394,7 @@ function renderComparisonTab(
 
           <div class="form-group">
             <label for="community-select">${esc(copy.communityLabel)}</label>
-            <select id="community-select" name="community">
+            <select id="community-select" name="community" aria-label="${esc(copy.communityLabel)}">
               ${(["OC", "BC", "BCM", "MBC", "SC", "SCA", "ST"] as CommunityCategory[])
                 .map(
                   (cat) =>
@@ -1389,7 +1406,7 @@ function renderComparisonTab(
 
           <div class="form-group">
             <label for="round-select">${esc(copy.roundLabel)}</label>
-            <select id="round-select" name="round">
+            <select id="round-select" name="round" aria-label="${esc(copy.roundLabel)}">
               <option value="ALL" ${round === "ALL" ? "selected" : ""}>${esc(copy.roundName("ALL"))}</option>
               ${(["ROUND_1", "ROUND_2", "ROUND_3"] as AllotmentRound[])
                 .map(
@@ -1402,97 +1419,97 @@ function renderComparisonTab(
 
           <div class="form-group">
             <label for="year-select">${t("கலந்தாய்வு ஆண்டு", "Counselling Year")}</label>
-            <select id="year-select" name="year">
-              <option value="2026" ${year === 2026 ? "selected" : ""}>${t("2026 (121 கல்லூரிகள்)", "2026 (121 Colleges)")}</option>
-              <option value="2025" ${year === 2025 ? "selected" : ""}>${t("2025 (55 கல்லூரிகள்)", "2025 (55 Colleges)")}</option>
+            <select id="year-select" name="year" aria-label="${t("கலந்தாய்வு ஆண்டு", "Counselling Year")}">
+              <option value="2026" ${year === 2026 ? "selected" : ""}>${t("2026 (121 கல்லூரிகள் · 1,249 படிப்புத் தரவுகள்)", "2026 (121 Colleges · 1,249 Offerings Data)")}</option>
+              <option value="2025" ${year === 2025 ? "selected" : ""}>${t("2025 (121 கல்லூரிகள் · 536 படிப்புத் தரவுகள்)", "2025 (121 Colleges · 536 Offerings Data)")}</option>
             </select>
+          </div>
+
+          <div id="quota-75-warning" class="quota-75-warning" role="note" ${quota === "GOVT_SCHOOL_7_5" ? "" : "hidden"} style="grid-column: 1 / -1; padding: 0.7rem 0.95rem; background: #fffbeb; border: 1.5px solid #f59e0b; border-left: 4px solid #d97706; border-radius: 6px; font-size: 0.86rem; color: #78350f; line-height: 1.5;">
+            ${t(
+              `<strong>7.5% ஒதுக்கீடு — ஒப்பீட்டுத் தேடலுக்கு மட்டுமே (தகுதி உறுதிப்படுத்தல் அல்ல):</strong> இங்கு 7.5% பிரிவைத் தேர்ந்தெடுப்பது கடந்த ஆண்டு கட்-ஆஃப் தரவுகளை ஒப்பிட்டுப் பார்க்க மட்டுமே; இது உங்களின் 7.5% இடஒதுக்கீட்டுத் தகுதியை உறுதிப்படுத்தாது. 6 முதல் 12-ஆம் வகுப்பு வரை தமிழ்நாடு அரசுப் பள்ளியில் படித்த விவரம் மற்றும் அதிகாரப்பூர்வ ஆவணச் சரிபார்ப்பின் (TFC) மூலமே உண்மையான தகுதி தீர்மானிக்கப்படும். <a href="/counselling?lang=ta" style="color: #92400e; font-weight: 700; text-decoration: underline;">7.5% தகுதி விதிகளைப் பார்க்க →</a>`,
+              `<strong>7.5% Quota — For Comparison &amp; Exploration Only (Not Proof of Eligibility):</strong> Selecting the 7.5% option here is for historical comparison and exploration only and does not establish or confirm your eligibility. Actual eligibility depends on continuous Std 6–12 Tamil Nadu Government school study and official document/rule verification through the TNEA process. <a href="/counselling?lang=en" style="color: #92400e; font-weight: 700; text-decoration: underline;">Check official 7.5% eligibility rules →</a>`
+            )}
           </div>
         </div>
 
-        <!-- Tier 2: Secondary Filters (Collapsed for phone cleanliness) -->
-        <details class="more-filters-accordion screen-only" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; background: #f8fafc;" ${
-          districtFilter || branchFilter || typeFilter !== "all" || (collegeFilter && collegeFilter !== "all") || onlyAvailable || sortOption !== "college_name" ? "open" : ""
-        }>
-          <summary style="cursor: pointer; font-weight: 700; color: #2563eb; font-size: 0.92rem; padding: 0.25rem 0;">
-            ${t("⚙️ கூடுதல் தேடல் விருப்பங்கள் &amp; வரிசைப்படுத்துதல் (கல்லூரி வகை, மாவட்டம், துறை)", "⚙️ More Filters &amp; Sorting (Category, District, Programme)")}
-          </summary>
-          <div style="margin-top: 0.85rem; display: flex; flex-direction: column; gap: 1rem;">
-            <div class="form-tier form-tier-2" style="border-bottom: none; padding-bottom: 0;">
-              <div class="form-group">
-                <label for="type-select">${t("கல்லூரி வகை (DOTE வகைப்பாடு)", "College Category (DOTE Classification)")}</label>
-                <select id="type-select" name="type">
-                  <option value="all" ${typeFilter === "all" ? "selected" : ""}>${t("அனைத்து வகைகள் (DOTE வகைப்பாடு)", "All Categories (DOTE Classification)")}</option>
-                  <option value="GOVERNMENT" ${typeFilter === "GOVERNMENT" ? "selected" : ""}>${t("அரசுப் பொறியியல் கல்லூரிகள் (11)", "Government Engineering Colleges (11)")}</option>
-                  <option value="AIDED" ${typeFilter === "AIDED" ? "selected" : ""}>${t("அரசு உதவிபெறும் பொறியியல் கல்லூரிகள் (3)", "Government Aided Engineering Colleges (3)")}</option>
-                  <option value="ANNA_UNIV_DEPT" ${typeFilter === "ANNA_UNIV_DEPT" ? "selected" : ""}>${t("அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள் (4)", "Anna University Department Colleges (4)")}</option>
-                  <option value="ANNAMALAI" ${typeFilter === "ANNAMALAI" ? "selected" : ""}>${t("அண்ணாமலைப் பல்கலைக்கழகம் (1)", "Annamalai University (1)")}</option>
-                  <option value="CONSTITUENT" ${typeFilter === "CONSTITUENT" ? "selected" : ""}>${t("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள் (16)", "Anna University Constituent Colleges (16)")}</option>
-                  <option value="SFC" ${typeFilter === "SFC" ? "selected" : ""}>${t("சுயநிதிப் பொறியியல் கல்லூரிகள் — தன்னாட்சி (86)", "Self Financing Engineering Colleges — Autonomous (86)")}</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="district-select">${t("மாவட்டம்", "District")}</label>
-                <select id="district-select" name="district">
-                  <option value="" ${!districtFilter ? "selected" : ""}>${t("அனைத்து மாவட்டங்கள்", "All Districts")}</option>
-                  ${allDistricts
-                    .map(
-                      (d) =>
-                        `<option value="${esc(d)}" ${districtFilter.toLowerCase() === d.toLowerCase() ? "selected" : ""}>${esc(d)}</option>`
-                    )
-                    .join("")}
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="college-select">${t("குறிப்பிட்ட கல்லூரியைத் தேர்ந்தெடுக்க", "Select Specific College")}</label>
-                <select id="college-select" name="college">
-                  <option value="" ${!collegeFilter || collegeFilter === "all" ? "selected" : ""}>${t(`அனைத்துக் கல்லூரிகள் (${filteredColleges.length})`, `All Colleges (${filteredColleges.length})`)}</option>
-                  ${renderCollegeOptions(filteredColleges, collegeFilter, lang)}
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="branch-select">${t("துறை (Department / Branch)", "Branch / Department")}</label>
-                <select id="branch-select" name="branch">
-                  <option value="" ${!branchFilter ? "selected" : ""}>${t("அனைத்துத் துறைகள்", "All Programmes")}</option>
-                  ${allBranches
-                    .map(
-                      (b) =>
-                        `<option value="${esc(b.code)}" ${branchFilter === b.code ? "selected" : ""}>${esc(formatBranchDropdownLabel(b.name))} (${esc(b.code)})</option>`
-                    )
-                    .join("")}
-                </select>
-              </div>
+        <!-- Tier 2: Mandatory Filter & Sort Controls (Always Visible) -->
+        <div class="screen-only" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem 1rem; background: #f8fafc; display: flex; flex-direction: column; gap: 1rem;">
+          <div class="form-tier form-tier-2" style="border-bottom: none; padding-bottom: 0;">
+            <div class="form-group">
+              <label for="type-select">${t("கல்லூரி வகை (DOTE வகைப்பாடு)", "College Category (DOTE Classification)")}</label>
+              <select id="type-select" name="type" aria-label="${t("கல்லூரி வகை (DOTE வகைப்பாடு)", "College Category (DOTE Classification)")}">
+                <option value="all" ${typeFilter === "all" ? "selected" : ""}>${t("அனைத்து வகைகள் (DOTE வகைப்பாடு)", "All Categories (DOTE Classification)")}</option>
+                <option value="GOVERNMENT" ${typeFilter === "GOVERNMENT" ? "selected" : ""}>${t("அரசுப் பொறியியல் கல்லூரிகள் (11)", "Government Engineering Colleges (11)")}</option>
+                <option value="AIDED" ${typeFilter === "AIDED" ? "selected" : ""}>${t("அரசு உதவிபெறும் பொறியியல் கல்லூரிகள் (3)", "Government Aided Engineering Colleges (3)")}</option>
+                <option value="ANNA_UNIV_DEPT" ${typeFilter === "ANNA_UNIV_DEPT" ? "selected" : ""}>${t("அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள் (4)", "Anna University Department Colleges (4)")}</option>
+                <option value="ANNAMALAI" ${typeFilter === "ANNAMALAI" ? "selected" : ""}>${t("அண்ணாமலைப் பல்கலைக்கழகம் (1)", "Annamalai University (1)")}</option>
+                <option value="CONSTITUENT" ${typeFilter === "CONSTITUENT" ? "selected" : ""}>${t("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள் (16)", "Anna University Constituent Colleges (16)")}</option>
+                <option value="SFC" ${typeFilter === "SFC" ? "selected" : ""}>${t("சுயநிதிப் பொறியியல் கல்லூரிகள் — தன்னாட்சி (86)", "Self Financing Engineering Colleges — Autonomous (86)")}</option>
+              </select>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-              <div class="form-group" style="min-width: 250px;">
-                <label for="sort-select">${t("வரிசைப்படுத்து", "Sort By")}</label>
-                <select id="sort-select" name="sort">
-                  <option value="college_name" ${sortOption === "college_name" ? "selected" : ""}>${t("கல்லூரிப் பெயர் (A–Z)", "College Name (A-Z) (Default)")}</option>
-                  <option value="college_code" ${sortOption === "college_code" ? "selected" : ""}>${t("கல்லூரிக் குறியீடு எண்", "College Code")}</option>
-                  <option value="cutoff_desc" ${sortOption === "cutoff_desc" ? "selected" : ""}>${t("கடந்த ஆண்டு கட்-ஆஃப்: அதிகம் முதல் குறைவு வரை", "Historical Minimum Mark: High to Low (Numerical)")}</option>
-                  <option value="cutoff_asc" ${sortOption === "cutoff_asc" ? "selected" : ""}>${t("கடந்த ஆண்டு கட்-ஆஃப்: குறைவு முதல் அதிகம் வரை", "Historical Minimum Mark: Low to High (Numerical)")}</option>
-                </select>
-              </div>
+            <div class="form-group">
+              <label for="district-select">${t("மாவட்டம்", "District")}</label>
+              <select id="district-select" name="district" aria-label="${t("மாவட்டம்", "District")}">
+                <option value="" ${!districtFilter ? "selected" : ""}>${t("அனைத்து மாவட்டங்கள்", "All Districts")}</option>
+                ${allDistricts
+                  .map(
+                    (d) =>
+                      `<option value="${esc(d)}" ${districtFilter.toLowerCase() === d.toLowerCase() ? "selected" : ""}>${esc(d)}</option>`
+                  )
+                  .join("")}
+              </select>
+            </div>
 
-              <label style="display: inline-flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #334155; padding-top: 1.25rem;">
-                <input type="checkbox" name="only_available" value="1" ${onlyAvailable ? "checked" : ""} style="width: 1.15rem; height: 1.15rem; min-height: 0; cursor: pointer;">
-                <span>${t("கட்-ஆஃப் விவரம் உள்ள படிப்புகளை மட்டும் காட்டு", "Show only offerings with available cutoff data")}</span>
-              </label>
+            <div class="form-group">
+              <label for="college-select">${t("குறிப்பிட்ட கல்லூரியைத் தேர்ந்தெடுக்க", "Select Specific College")}</label>
+              <select id="college-select" name="college" aria-label="${t("குறிப்பிட்ட கல்லூரியைத் தேர்ந்தெடுக்க", "Select Specific College")}">
+                <option value="" ${!collegeFilter || collegeFilter === "all" ? "selected" : ""}>${t(`அனைத்துக் கல்லூரிகள் (${filteredColleges.length})`, `All Colleges (${filteredColleges.length})`)}</option>
+                ${renderCollegeOptions(filteredColleges, collegeFilter, lang)}
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="branch-select">${t("துறை (Department / Branch)", "Branch / Department")}</label>
+              <select id="branch-select" name="branch" aria-label="${t("துறை (Department / Branch)", "Branch / Department")}">
+                <option value="" ${!branchFilter ? "selected" : ""}>${t("அனைத்துத் துறைகள்", "All Programmes")}</option>
+                ${allBranches
+                  .map(
+                    (b) =>
+                      `<option value="${esc(b.code)}" ${branchFilter === b.code ? "selected" : ""}>${esc(formatBranchDropdownLabel(b.name))} (${esc(b.code)})</option>`
+                  )
+                  .join("")}
+              </select>
             </div>
           </div>
-        </details>
+
+          <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div class="form-group" style="min-width: 250px;">
+              <label for="sort-select">${t("வரிசைப்படுத்து", "Sort By")}</label>
+              <select id="sort-select" name="sort" aria-label="${t("வரிசைப்படுத்து", "Sort By")}">
+                <option value="college_name" ${sortOption === "college_name" ? "selected" : ""}>${t("கல்லூரிப் பெயர் (A–Z)", "College Name (A-Z) (Default)")}</option>
+                <option value="college_code" ${sortOption === "college_code" ? "selected" : ""}>${t("கல்லூரிக் குறியீடு எண்", "College Code")}</option>
+                <option value="cutoff_desc" ${sortOption === "cutoff_desc" ? "selected" : ""}>${t("கடந்த ஆண்டு கட்-ஆஃப்: அதிகம் முதல் குறைவு வரை", "Historical Minimum Mark: High to Low (Numerical)")}</option>
+                <option value="cutoff_asc" ${sortOption === "cutoff_asc" ? "selected" : ""}>${t("கடந்த ஆண்டு கட்-ஆஃப்: குறைவு முதல் அதிகம் வரை", "Historical Minimum Mark: Low to High (Numerical)")}</option>
+              </select>
+            </div>
+
+            <label for="only-available-check" style="display: inline-flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #334155; padding-top: 1.25rem;">
+              <input id="only-available-check" type="checkbox" name="only_available" value="1" aria-label="${t("கட்-ஆஃப் விவரம் உள்ள படிப்புகளை மட்டும் காட்டு", "Show only offerings with available cutoff data")}" ${onlyAvailable ? "checked" : ""} style="width: 1.15rem; height: 1.15rem; min-height: 0; cursor: pointer;">
+              <span>${t("கட்-ஆஃப் விவரம் உள்ள படிப்புகளை மட்டும் காட்டு", "Show only offerings with available cutoff data")}</span>
+            </label>
+          </div>
+        </div>
 
         <!-- Actions -->
         <div class="form-tier form-tier-3" style="display: flex; align-items: center; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.25rem;">
           ${
             districtFilter || branchFilter || query || typeFilter !== "all" || (collegeFilter && collegeFilter !== "all") || onlyAvailable || sortOption !== "college_name"
-              ? `<a class="btn-action" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">${t("தேர்வுகளை அழி", "Clear Filters")}</a>`
+              ? `<a class="btn-action" aria-label="${t("தேர்வுகளை அழி", "Clear Filters")}" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">${t("தேர்வுகளை அழி", "Clear Filters")}</a>`
               : ""
           }
-          <button type="submit" class="btn-action btn-primary" style="padding: 0.65rem 1.6rem; font-size: 0.95rem; font-weight: 700;">${t("தேடு &amp; ஒப்பிடு", "Search &amp; Compare")}</button>
+          <button type="submit" class="btn-action btn-primary" aria-label="${t("தேடு மற்றும் ஒப்பிடு", "Search and Compare")}" style="padding: 0.65rem 1.6rem; font-size: 0.95rem; font-weight: 700;">${t("தேடு &amp; ஒப்பிடு", "Search &amp; Compare")}</button>
         </div>
       </form>
 
@@ -1529,10 +1546,18 @@ function renderComparisonTab(
           })
         </div>
         ${
+          quota === "GOVT_SCHOOL_7_5"
+            ? `<p class="quota-75-context-reminder" role="note" style="margin: 0.4rem 0 0; padding: 0.45rem 0.65rem; background: #fffbeb; border-left: 3px solid #d97706; border-radius: 4px; font-size: 0.83rem; color: #78350f;">${t(
+                `<strong>7.5% தகுதி நினைவூட்டல்:</strong> இந்த ஒப்பீடு தகவல் அறிய மட்டுமே; இது 7.5% இடஒதுக்கீட்டுத் தகுதியை உறுதிப்படுத்தாது. அதிகாரப்பூர்வ TNEA ஆவணச் சரிபார்ப்பின்படியே தகுதி முடிவாகும் (<a href="/counselling?lang=ta" style="color: #92400e; font-weight: 700; text-decoration: underline;">7.5% விதிகளைப் பார்க்க</a>).`,
+                `<strong>7.5% Eligibility Reminder:</strong> This comparison view is for exploration only and does not establish 7.5% quota eligibility. Eligibility must be verified through official Std 6–12 government-school certificates and TNEA verification (<a href="/counselling?lang=en" style="color: #92400e; font-weight: 700; text-decoration: underline;">view 7.5% rules</a>).`
+              )}</p>`
+            : ""
+        }
+        ${
           year === 2025
             ? `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
-                "<strong>2025 வரம்புத் தகவல்:</strong> 2025-ஆம் ஆண்டின் வரலாற்றுத் தரவு 55 அடிப்படை கல்லூரிகளுக்கு (536 படிப்புகள்) மட்டுமே பொருந்தும். புதிதாக சேர்க்கப்பட்ட தன்னாட்சி கல்லூரிகளுக்கான ஒதுக்கீட்டுத் தரவைப் பார்க்க மேலே உள்ள 'கலந்தாய்வு ஆண்டு' தேர்வில் <strong>2026</strong>-ஐத் தேர்ந்தெடுக்கவும்.",
-                "<strong>2025 Scope Note:</strong> 2025 historical allotments are available for the 55 benchmark colleges (536 offerings). Newly added autonomous institutions only have 2026 data; select <strong>2026</strong> above to inspect complete 121-college coverage."
+                "<strong>2025 தரவு வரம்பு:</strong> இந்தப் பட்டியலில் உள்ள 121 கல்லூரிகளின் 1,249 படிப்புகளில், 536 படிப்புகளுக்கு 2025-ஆம் ஆண்டின் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு உள்ளது (மீதமுள்ள 713 படிப்புகளுக்கு 'ஒப்பீட்டிற்குத் தரவு இல்லை' எனக் காட்டப்படும்). அனைத்து 121 கல்லூரிகளின் 1,249 படிப்புகளுக்குமான முழு ஒதுக்கீட்டுத் தரவைப் பார்க்க மேலே உள்ள 'கலந்தாய்வு ஆண்டு' தேர்வில் <strong>2026</strong>-ஐத் தேர்ந்தெடுக்கவும்.",
+                "<strong>2025 Evidence Coverage:</strong> Across the 121 governed colleges (1,249 offerings), approved 2025 provisional allotment observations are available for 536 offerings (the remaining 713 offerings appear as 'Not available for comparison'). Select <strong>2026</strong> in 'Counselling Year' above to inspect complete data across all 121 colleges (1,249 offerings)."
               )}</p>`
             : `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
                 "<strong>2026 முழு வரம்பு:</strong> 2026-ஆம் ஆண்டின் தற்காலிக ஒதுக்கீட்டுத் தரவு 121 கல்லூரிகளுக்கும் (1,249 படிப்புகள்) முழுமையாகக் கிடைக்கிறது.",
@@ -1605,7 +1630,41 @@ function renderComparisonTab(
           <tbody>
             ${
               pageRows.length === 0
-                ? `<tr><td colspan="5" style="text-align: center; padding: 2rem;">${t("பொருந்தும் கல்லூரிகள் எதுவும் காணப்படவில்லை.", "No matching offerings found for this filter.")}</td></tr>`
+                ? `<tr><td colspan="5" style="text-align: center; padding: 1.75rem 1.25rem;">
+                    <div class="no-results-recovery" role="status" style="max-width: 640px; margin: 0 auto; text-align: left; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.25rem;">
+                      <h3 style="margin: 0 0 0.45rem; font-size: 1.05rem; color: #0f172a;">
+                        ${t("பொருந்தும் கல்லூரிகள் எதுவும் காணப்படவில்லை.", "No matching offerings found for this filter.")}
+                      </h3>
+                      <p style="margin: 0 0 0.75rem; font-size: 0.9rem; color: #334155; line-height: 1.55;">
+                        ${t(
+                          "உங்கள் தேடல் சொல் (Search), மாவட்டம் (District), கல்லூரி வகை (Category), குறிப்பிட்ட கல்லூரி (College) அல்லது துறைத் (Branch) தேர்வுகளை மாற்றி மீண்டும் முயற்சிக்கவும். உலாவியின் 'Back' பொத்தானை அழுத்தாமல் கீழே உள்ள மீட்டமைப்புப் பொத்தானை அழுத்தி அனைத்துக் கல்லூரிகளையும் பார்க்கலாம்.",
+                          "Try changing your search keyword, district, college category, specific college, or department filters above. You can reset all search filters below without using browser Back."
+                        )}
+                      </p>
+                      <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; align-items: center;">
+                        ${
+                          studentCutoff !== null
+                            ? `<form method="POST" action="/m5-guidance" style="margin: 0; display: inline;">
+                                <input type="hidden" name="tab" value="comparison">
+                                <input type="hidden" name="lang" value="${lang}">
+                                <input type="hidden" name="shortlist" value="${esc(rawShortlist)}">
+                                <input type="hidden" name="cutoff" value="${studentCutoff}">
+                                <input type="hidden" name="quota" value="${quota}">
+                                <input type="hidden" name="community" value="${community}">
+                                <input type="hidden" name="round" value="${round}">
+                                <input type="hidden" name="year" value="${year}">
+                                <input type="hidden" name="community_selected" value="${communitySelected ? "1" : "0"}">
+                                <button type="submit" class="btn-action btn-primary no-results-reset-btn" aria-label="${t("தேர்வுகளை அழித்து அனைத்துக் கல்லூரிகளையும் காட்டு", "Clear filters and show all colleges")}">
+                                  ${t("🔄 தேர்வுகளை அழி (அனைத்துக் கல்லூரிகளையும் காட்டு)", "🔄 Reset / Clear Filters (Show All Colleges)")}
+                                </button>
+                              </form>`
+                            : `<a class="btn-action btn-primary no-results-reset-btn" aria-label="${t("தேர்வுகளை அழித்து அனைத்துக் கல்லூரிகளையும் காட்டு", "Clear filters and show all colleges")}" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
+                                ${t("🔄 தேர்வுகளை அழி (அனைத்துக் கல்லூரிகளையும் காட்டு)", "🔄 Reset / Clear Filters (Show All Colleges)")}
+                              </a>`
+                        }
+                      </div>
+                    </div>
+                  </td></tr>`
                 : pageRows
                     .map((r) => {
                       const id = `${r.college.code}~${r.offering.programmeCode}`;
@@ -1838,10 +1897,10 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
           <li><strong>${t("வரிசை மிக முக்கியம்:", "Order matters:")}</strong> ${t("TNEA கணினி விருப்பம் #1-லிருந்து கீழ்நோக்கி வரிசையாக மட்டுமே பார்க்கும். 'மேல்நோக்கிய நகர்வு' (Upward Movement) எப்போதுமே #1-ஐ நோக்கி மட்டுமே உயர்த்தும் என்பதால், உங்களுக்கு மிகவும் பிடித்த கல்லூரிகளை மேலிருந்து கீழாக வரிசைப்படுத்துங்கள்.", "TNEA allocates strictly from Choice #1 downwards; upward movement only moves toward #1.")}</li>
         </ul>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid #f1f5f9;">
-          <button type="button" class="btn-action btn-primary" onclick="window.print()" title="${t("அச்சுப் படிவம் / PDF பதிவிறக்கு", "Print Worksheet / Save as PDF")}">
+          <button type="button" class="btn-action btn-primary" onclick="window.print()" aria-label="${t("அச்சுப் படிவம் அல்லது PDF ஆகச் சேமி", "Print Worksheet or Save as PDF")}" title="${t("அச்சுப் படிவம் / PDF பதிவிறக்கு", "Print Worksheet / Save as PDF")}">
             ${t("🖨️ அச்சிடு / PDF ஆகச் சேமி", "🖨️ Print / Save PDF")}
           </button>
-          <a class="btn-action" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=" style="color: #c53030;">
+          <a class="btn-action" aria-label="${t("விருப்பப் பட்டியலை முழுமையாக அழி", "Clear entire shortlist")}" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=" style="color: #c53030;">
             ${t("பட்டியலை அழி", "Clear Shortlist")}
           </a>
         </div>
@@ -1857,7 +1916,7 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
               <th scope="col" class="print-only">${t("கல்லூரி பெயர்", "College Name")}</th>
               <th scope="col" class="print-only">${t("பாடப்பிரிவு குறியீடு", "Branch Code")}</th>
               <th scope="col" class="print-only">${t("பாடப்பிரிவு பெயர்", "Branch Name")}</th>
-              <th scope="col" class="screen-only" style="width: 190px;">${t("வரிசை மாற்று", "Actions")}</th>
+              <th scope="col" class="screen-only" style="width: 280px;">${t("வரிசை மாற்று", "Actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -1881,6 +1940,22 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
                   downList[index] = tmp;
                 }
 
+                // Move to top / bottom / explicit position via manual shortlist engine helpers
+                const topState = moveToTop(shortlistState, id);
+                const topIds = topState.items.map((x) => `${x.collegeCode}~${x.programmeCode}`);
+                const bottomState = moveToBottom(shortlistState, id);
+                const bottomIds = bottomState.items.map((x) => `${x.collegeCode}~${x.programmeCode}`);
+
+                const positionOptions = items
+                  .map((_, targetIdx) => {
+                    const targetPos = targetIdx + 1;
+                    const posState = moveToPosition(shortlistState, id, targetPos);
+                    const posIds = posState.items.map((x) => `${x.collegeCode}~${x.programmeCode}`);
+                    const posHref = `?tab=shortlist&lang=${lang}&shortlist=${posIds.join(",")}`;
+                    return `<option value="${esc(posHref)}" ${targetPos === item.order ? "selected" : ""}>#${targetPos}</option>`;
+                  })
+                  .join("");
+
                 // Remove ID
                 const remList = shortIds.filter((x) => x !== id);
 
@@ -1896,18 +1971,34 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
                     <td class="print-only"><strong>${esc(item.programmeCode)}</strong></td>
                     <td class="print-only">${esc(item.programmeName)}</td>
                     <td class="screen-only">
-                      <div class="shortlist-actions">
+                      <div class="shortlist-actions" style="align-items: center;">
                         ${
                           index > 0
-                            ? `<a class="btn-action btn-reorder" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(upList.join(","))}" title="${t("மேலே நகர்த்து", "Move Up")}">↑</a>`
-                            : `<span class="btn-action btn-reorder" style="opacity: 0.35; cursor: not-allowed;">↑</span>`
+                            ? `<a class="btn-action btn-reorder" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(topIds.join(","))}" aria-label="${t(`விருப்பம் #${item.order}-ஐ முதல் இடத்திற்கு (#1) நகர்த்து`, `Move Choice #${item.order} to top (#1)`)}" title="${t("முதல் இடத்திற்கு (#1) நகர்த்து", "Move to Top (#1)")}">⇈</a>`
+                            : `<span class="btn-action btn-reorder" aria-disabled="true" style="opacity: 0.35; cursor: not-allowed;" title="${t("முதல் இடத்தில் உள்ளது", "Already at Top")}">⇈</span>`
+                        }
+                        ${
+                          index > 0
+                            ? `<a class="btn-action btn-reorder" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(upList.join(","))}" aria-label="${t(`விருப்பம் #${item.order}-ஐ மேலே நகர்த்து`, `Move Choice #${item.order} up`)}" title="${t("மேலே நகர்த்து", "Move Up")}">↑</a>`
+                            : `<span class="btn-action btn-reorder" aria-disabled="true" style="opacity: 0.35; cursor: not-allowed;">↑</span>`
                         }
                         ${
                           index < shortIds.length - 1
-                            ? `<a class="btn-action btn-reorder" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(downList.join(","))}" title="${t("கீழே நகர்த்து", "Move Down")}">↓</a>`
-                            : `<span class="btn-action btn-reorder" style="opacity: 0.35; cursor: not-allowed;">↓</span>`
+                            ? `<a class="btn-action btn-reorder" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(downList.join(","))}" aria-label="${t(`விருப்பம் #${item.order}-ஐ கீழே நகர்த்து`, `Move Choice #${item.order} down`)}" title="${t("கீழே நகர்த்து", "Move Down")}">↓</a>`
+                            : `<span class="btn-action btn-reorder" aria-disabled="true" style="opacity: 0.35; cursor: not-allowed;">↓</span>`
                         }
-                        <a class="btn-action btn-reorder" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(remList.join(","))}" title="${t("நீக்கு", "Remove")}" style="color: #dc2626;">✕</a>
+                        ${
+                          index < shortIds.length - 1
+                            ? `<a class="btn-action btn-reorder" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(bottomIds.join(","))}" aria-label="${t(`விருப்பம் #${item.order}-ஐ கடைசி இடத்திற்கு நகர்த்து`, `Move Choice #${item.order} to bottom`)}" title="${t("கடைசி இடத்திற்கு நகர்த்து", "Move to Bottom")}">⇊</a>`
+                            : `<span class="btn-action btn-reorder" aria-disabled="true" style="opacity: 0.35; cursor: not-allowed;" title="${t("கடைசி இடத்தில் உள்ளது", "Already at Bottom")}">⇊</span>`
+                        }
+                        <label for="pos-select-${item.order}" style="font-size: 0.75rem; font-weight: 600; color: #475569; display: inline-flex; align-items: center; gap: 2px; margin: 0;">
+                          <span class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">${t(`விருப்பம் #${item.order} வரிசை எண் மாற்று`, `Move Choice #${item.order} to position`)}</span>
+                          <select id="pos-select-${item.order}" class="position-jump-select" aria-label="${t(`விருப்பம் #${item.order} வரிசை எண் மாற்று`, `Move Choice #${item.order} to position`)}" title="${t("குறிப்பிட்ட வரிசை எண்ணுக்கு நகர்த்து", "Move directly to position")}" onchange="if(this.value)window.location.href=this.value" style="min-height: 44px; padding: 0.25rem 0.4rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-weight: 700; font-size: 0.85rem; background: #fff; color: #0f172a; cursor: pointer;">
+                            ${positionOptions}
+                          </select>
+                        </label>
+                        <a class="btn-action btn-reorder" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(remList.join(","))}" aria-label="${t(`விருப்பம் #${item.order}-ஐ நீக்கு`, `Remove Choice #${item.order}`)}" title="${t("நீக்கு", "Remove")}" style="color: #dc2626;">✕</a>
                       </div>
                     </td>
                   </tr>
@@ -1930,10 +2021,10 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
         </p>
 
         <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
-          <button type="button" class="btn-action" onclick="navigator.clipboard?.writeText(document.getElementById('export-text').value); alert('${t("உரை கிளிப்போர்டில் நகலெடுக்கப்பட்டது!", "Plain text copied to clipboard!")}')">
+          <button type="button" class="btn-action" aria-label="${t("விருப்பப் பட்டியலை உரை வடிவில் நகலெடு", "Copy choice list as plain text")}" title="${t("விருப்பப் பட்டியலை உரை வடிவில் நகலெடு", "Copy choice list as plain text")}" onclick="navigator.clipboard?.writeText(document.getElementById('export-text').value); alert('${t("உரை கிளிப்போர்டில் நகலெடுக்கப்பட்டது!", "Plain text copied to clipboard!")}')">
             ${t("📋 பட்டியலை நகலெடு (Text)", "📋 Copy Plain Text")}
           </button>
-          <button type="button" class="btn-action" onclick="navigator.clipboard?.writeText(document.getElementById('export-csv').value); alert('${t("CSV கிளிப்போர்டில் நகலெடுக்கப்பட்டது!", "CSV copied to clipboard!")}')">
+          <button type="button" class="btn-action" aria-label="${t("விருப்பப் பட்டியலை CSV வடிவில் நகலெடு", "Copy choice list as CSV")}" title="${t("விருப்பப் பட்டியலை CSV வடிவில் நகலெடு", "Copy choice list as CSV")}" onclick="navigator.clipboard?.writeText(document.getElementById('export-csv').value); alert('${t("CSV கிளிப்போர்டில் நகலெடுக்கப்பட்டது!", "CSV copied to clipboard!")}')">
             ${t("📊 CSV வடிவில் நகலெடு", "📊 Copy CSV")}
           </button>
         </div>
@@ -1943,7 +2034,7 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
             <label for="export-text" style="font-size: 0.825rem; font-weight: 600; color: #4a5568; display: block; margin-bottom: 0.25rem;">
               ${t("உரை வடிவம் (Plain Text):", "Plain Text Format:")}
             </label>
-            <textarea id="export-text" readonly rows="6" style="width: 100%; max-width: 100%; box-sizing: border-box; font-family: monospace, Consolas, sans-serif; font-size: 0.85rem; padding: 0.6rem; border: 1px solid #cbd5e0; border-radius: 4px; background: #fff; line-height: 1.4; resize: vertical;">${esc(plainTextExport)}</textarea>
+            <textarea id="export-text" aria-label="${t("விருப்பப் பட்டியல் உரை ஏற்றுமதி", "Choice list plain text export")}" readonly rows="6" style="width: 100%; max-width: 100%; box-sizing: border-box; font-family: monospace, Consolas, sans-serif; font-size: 0.85rem; padding: 0.6rem; border: 1px solid #cbd5e0; border-radius: 4px; background: #fff; line-height: 1.4; resize: vertical;">${esc(plainTextExport)}</textarea>
           </div>
 
           <details>
@@ -1951,7 +2042,10 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
               ${t("📊 அட்டவணை வடிவம் (CSV) பார்க்க", "📊 View Tabular CSV Format")}
             </summary>
             <div style="margin-top: 0.5rem;">
-              <textarea id="export-csv" readonly rows="5" style="width: 100%; max-width: 100%; box-sizing: border-box; font-family: monospace, Consolas, sans-serif; font-size: 0.85rem; padding: 0.6rem; border: 1px solid #cbd5e0; border-radius: 4px; background: #fff; line-height: 1.4; resize: vertical;">${esc(csvExport)}</textarea>
+              <label for="export-csv" style="font-size: 0.825rem; font-weight: 600; color: #4a5568; display: block; margin-bottom: 0.25rem;">
+                ${t("CSV அட்டவணை வடிவம்:", "CSV Format:")}
+              </label>
+              <textarea id="export-csv" aria-label="${t("விருப்பப் பட்டியல் CSV ஏற்றுமதி", "Choice list CSV export")}" readonly rows="5" style="width: 100%; max-width: 100%; box-sizing: border-box; font-family: monospace, Consolas, sans-serif; font-size: 0.85rem; padding: 0.6rem; border: 1px solid #cbd5e0; border-radius: 4px; background: #fff; line-height: 1.4; resize: vertical;">${esc(csvExport)}</textarea>
             </div>
           </details>
         </div>

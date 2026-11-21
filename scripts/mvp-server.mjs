@@ -1,28 +1,79 @@
-import { renderGovernedPilot } from "../src/ui/m4-governed-pilot.ts";
-import { renderM4Exploration } from "../src/ui/m4-exploration.ts";
-import { renderM5GuidancePage } from "../src/ui/m5-guidance-view.ts";
-import { CHECK_COPY } from "../src/ui/journey-copy.ts";
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
-import { loadApprovedDirectory } from "../src/m4/approved-directory-preview.mjs";
 
-import { createPilotRuntime } from "../src/application/pilot-runtime.ts";
-import { DEMO_SCENARIO_NAMES, demoScenario } from "../src/demo/scenarios.ts";
-import {
+// Suppress Node's ExperimentalWarning for Type Stripping when launched directly via --experimental-strip-types
+const originalEmitWarning = process.emitWarning.bind(process);
+process.emitWarning = (warning, ...args) => {
+  const type = typeof args[0] === "string" ? args[0] : (args[0]?.type ?? warning?.name);
+  if (type === "ExperimentalWarning" || String(warning).includes("Type Stripping is an experimental feature")) {
+    return;
+  }
+  return originalEmitWarning(warning, ...args);
+};
+
+const { renderGovernedPilot } = await import("../src/ui/m4-governed-pilot.ts");
+const { renderM4Exploration } = await import("../src/ui/m4-exploration.ts");
+const { renderM5GuidancePage } = await import("../src/ui/m5-guidance-view.ts");
+const { CHECK_COPY } = await import("../src/ui/journey-copy.ts");
+const { loadApprovedDirectory } = await import("../src/m4/approved-directory-preview.mjs");
+
+const { createPilotRuntime } = await import("../src/application/pilot-runtime.ts");
+const { DEMO_SCENARIO_NAMES, demoScenario } = await import("../src/demo/scenarios.ts");
+const {
   guidanceRequestFromFormValues,
   renderStudentGuidancePage,
   submitStudentGuidanceForm,
-} from "../src/ui/student-guidance.ts";
-import { entryStateFromUrl } from "../src/student-entry/routing.ts";
-import { renderStudentEntryPage, renderReferenceGuidancePage } from "../src/ui/student-entry.ts";
-import { blankReferenceRequest } from "../src/ui/reference-request.ts";
-import { parseAwarenessPack, applyApprovedTamilStudentCopy } from "../src/student-semantics/awareness.ts";
-import { answerJourneyQuestion, editJourneyAnswer, EMPTY_JOURNEY, nextJourneyQuestion, parseJourneyState, retryUnknown } from "../src/m2/journey.ts";
-import { parsePresentationSources } from "../src/student-semantics/provenance.ts";
-import { renderM2Journey } from "../src/ui/m2-journey.ts";
-import { loadQuestionCollection, renderQuestionCollection } from "../src/ui/explore-questions.ts";
+} = await import("../src/ui/student-guidance.ts");
+const { entryStateFromUrl } = await import("../src/student-entry/routing.ts");
+const { renderStudentEntryPage, renderReferenceGuidancePage } = await import("../src/ui/student-entry.ts");
+const { blankReferenceRequest } = await import("../src/ui/reference-request.ts");
+const { parseAwarenessPack, applyApprovedTamilStudentCopy } = await import("../src/student-semantics/awareness.ts");
+const { answerJourneyQuestion, editJourneyAnswer, EMPTY_JOURNEY, nextJourneyQuestion, parseJourneyState, retryUnknown } = await import("../src/m2/journey.ts");
+const { parsePresentationSources } = await import("../src/student-semantics/provenance.ts");
+const { renderM2Journey } = await import("../src/ui/m2-journey.ts");
+const { loadQuestionCollection, renderQuestionCollection } = await import("../src/ui/explore-questions.ts");
 
 const root = new URL("../", import.meta.url);
+const pkgJson = JSON.parse(readFileSync(new URL("package.json", root), "utf8"));
+
+function resolveDeployedGitCommit() {
+  const envCommit =
+    process.env.RENDER_GIT_COMMIT ||
+    process.env.GIT_COMMIT ||
+    process.env.COMMIT_SHA ||
+    process.env.SOURCE_VERSION;
+  if (envCommit && /^[0-9a-f]{7,40}$/i.test(envCommit.trim())) {
+    return { sha: envCommit.trim(), source: process.env.RENDER_GIT_COMMIT ? "RENDER_GIT_COMMIT" : "ENV_GIT_COMMIT" };
+  }
+  try {
+    const headRaw = readFileSync(new URL(".git/HEAD", root), "utf8").trim();
+    if (/^[0-9a-f]{40}$/i.test(headRaw)) {
+      return { sha: headRaw, source: "GIT_HEAD_DETACHED" };
+    }
+    const refMatch = headRaw.match(/^ref:\s*(.+)$/);
+    if (refMatch) {
+      const refPath = refMatch[1].trim();
+      try {
+        const refSha = readFileSync(new URL(`.git/${refPath}`, root), "utf8").trim();
+        if (/^[0-9a-f]{40}$/i.test(refSha)) {
+          return { sha: refSha, source: "GIT_REF_HEAD" };
+        }
+      } catch {
+        const packed = readFileSync(new URL(".git/packed-refs", root), "utf8");
+        for (const line of packed.split(/\r?\n/)) {
+          if (!line || line.startsWith("#") || line.startsWith("^")) continue;
+          const [sha, ref] = line.trim().split(/\s+/);
+          if (ref === refPath && /^[0-9a-f]{40}$/i.test(sha)) {
+            return { sha, source: "GIT_PACKED_REF" };
+          }
+        }
+      }
+    }
+  } catch {
+    // Fallback below if .git directory is absent
+  }
+  return { sha: "UNKNOWN", source: "UNAVAILABLE" };
+}
 // Explicitly enabled local review only; invalid approval bytes fail closed.
 const publicDirectory = loadApprovedDirectory();
 const ownerDirectory = process.env.M4_OWNER_REVIEW === "1" ? publicDirectory : null;
@@ -150,16 +201,18 @@ const server = createServer(async (request, response) => {
   language = url.searchParams.get("lang") === "en" ? "en" : "ta";
   const entry = entryStateFromUrl(url);
   if (request.method === "GET" && url.pathname === "/api/version") {
-    const gitCommit = process.env.RENDER_GIT_COMMIT || process.env.GIT_COMMIT || "41aee4623c1623d7e79f6e0f8c50dc8d314659d3";
+    const resolved = resolveDeployedGitCommit();
     const payload = JSON.stringify({
-      version: "0.1.0",
-      commit: gitCommit,
-      environment: process.env.RENDER ? "production" : "local",
-      mode: "PRE_M7_MOBILE_EXPERIENCE_ENRICHMENT",
+      version: pkgJson.version || "0.1.0",
+      commit: resolved.sha,
+      commitSource: resolved.source,
+      environment: process.env.RENDER ? "production" : (process.env.NODE_ENV || "local"),
+      mode: "FINAL_PRE_M7_SIMULATED_AUDIT_CORRECTIONS",
     });
     response.writeHead(200, {
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "no-cache",
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+      "x-robots-tag": "noindex, nofollow",
     });
     response.end(payload);
     return;

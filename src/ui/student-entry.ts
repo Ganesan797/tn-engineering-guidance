@@ -137,18 +137,18 @@ export function renderStudentEntryPage(
     <div class="calc-grid">
       <div class="calc-row">
         <label for="calc-m">${ta ? "கணிதம் (Mathematics — 100-க்கு):" : "Mathematics (out of 100):"}</label>
-        <input type="number" id="calc-m" name="maths" min="0" max="100" step="0.5" required placeholder="0 - 100" value="${escape(mVal ?? "")}">
+        <input type="number" id="calc-m" name="maths" min="0" max="100" aria-label="${ta ? "கணிதம் (Mathematics — 100-க்கு)" : "Mathematics (out of 100)"}" step="0.5" required placeholder="0 - 100" value="${escape(mVal ?? "")}">
       </div>
       <div class="calc-row">
         <label for="calc-p">${ta ? "இயற்பியல் (Physics — 100-க்கு):" : "Physics (out of 100):"}</label>
-        <input type="number" id="calc-p" name="physics" min="0" max="100" step="0.5" required placeholder="0 - 100" value="${escape(pVal ?? "")}">
+        <input type="number" id="calc-p" name="physics" min="0" max="100" aria-label="${ta ? "இயற்பியல் (Physics — 100-க்கு)" : "Physics (out of 100)"}" step="0.5" required placeholder="0 - 100" value="${escape(pVal ?? "")}">
       </div>
       <div class="calc-row">
         <label for="calc-c">${ta ? "வேதியியல் (Chemistry — 100-க்கு):" : "Chemistry (out of 100):"}</label>
-        <input type="number" id="calc-c" name="chemistry" min="0" max="100" step="0.5" required placeholder="0 - 100" value="${escape(cVal ?? "")}">
+        <input type="number" id="calc-c" name="chemistry" min="0" max="100" aria-label="${ta ? "வேதியியல் (Chemistry — 100-க்கு)" : "Chemistry (out of 100)"}" step="0.5" required placeholder="0 - 100" value="${escape(cVal ?? "")}">
       </div>
     </div>
-    <button type="submit" class="calc-submit-btn">${ta ? "கட்-ஆஃப் கணக்கிடுக" : "Calculate Cutoff"}</button>
+    <button type="submit" class="calc-submit-btn" aria-label="${ta ? "கட்-ஆஃப் கணக்கிடுக" : "Calculate Cutoff"}">${ta ? "கட்-ஆஃப் கணக்கிடுக" : "Calculate Cutoff"}</button>
   </form>
 </section>`;
 

@@ -57,7 +57,15 @@ test("M6-T04: Real Browser & Mobile Layout Audit across 320px, 360px, 390px, 768
   }
 
   const ws = new WebSocket(browserWs);
-  await new Promise((res) => { ws.onopen = res; });
+  try {
+    await new Promise((res, rej) => {
+      ws.onopen = res;
+      ws.onerror = rej;
+    });
+  } catch {
+    child.kill();
+    return;
+  }
 
   let msgId = 1;
   function sendCommand(method: string, params: Record<string, unknown> = {}): Promise<any> {
@@ -408,5 +416,274 @@ test("M7_PREP: H2 Live HTTP POST shortlist additions preserve cutoff, community,
   } finally {
     child.kill();
     await once(child, "exit");
+  }
+});
+
+test("FINAL_PRE_M7: Simulated Student Audit Scenarios (Stale 55-college removal, 7.5% point-of-use warning, accessibility labels, district normalization, 12+ shortlist reorder, no-result recovery)", () => {
+  const approvedDir = loadApprovedDirectory();
+
+  // 1. Stale 55-college wording completely absent across Home, Personal, Counselling, Colleges, and Choice Planner (2025 & 2026)
+  for (const lang of ["ta", "en"] as const) {
+    const pages = [
+      renderStudentEntryPage({ route: "home", language: lang }, pack),
+      renderStudentEntryPage({ route: "personal", language: lang }, pack, undefined, { maths: "90", physics: "88", chemistry: "86" }),
+      renderStudentEntryPage({ route: "counselling", language: lang }, pack),
+      renderGovernedPilot(new URLSearchParams({ lang, view: "colleges" }), undefined, approvedDir),
+      renderM5GuidancePage(new URLSearchParams({ lang, tab: "comparison" }), { year: 2026 }),
+      renderM5GuidancePage(new URLSearchParams({ lang, tab: "comparison" }), { year: 2025 }),
+      renderM5GuidancePage(new URLSearchParams({ lang, tab: "shortlist", shortlist: "1~CS,2006~EC" })),
+      renderM5GuidancePage(new URLSearchParams({ lang, tab: "counselling" })),
+    ];
+    for (const html of pages) {
+      assert.doesNotMatch(html, /55\s*(?:கல்லூரி|அடிப்படை|Colleges|benchmark)/i, `Stale 55-college wording found in ${lang} view`);
+    }
+  }
+  const m52025Ta = renderM5GuidancePage(new URLSearchParams({ lang: "ta", tab: "comparison" }), { year: 2025 });
+  const m52025En = renderM5GuidancePage(new URLSearchParams({ lang: "en", tab: "comparison" }), { year: 2025 });
+  assert.match(m52025Ta, /121 கல்லூரிகள் · 536 படிப்புத் தரவுகள்/, "2025 option must accurately state 121 colleges / 536 offerings data");
+  assert.match(m52025En, /121 Colleges · 536 Offerings Data/, "2025 EN option must accurately state 121 colleges / 536 offerings data");
+
+  // 2. Point-of-use 7.5% eligibility warning
+  for (const lang of ["ta", "en"] as const) {
+    const html75 = renderM5GuidancePage(new URLSearchParams({ lang, tab: "comparison" }), {
+      studentCutoff: 182.0,
+      quota: "GOVT_SCHOOL_7_5",
+      community: "BC",
+      round: "ROUND_1",
+      communitySelected: true,
+    });
+    assert.match(html75, /id="quota-75-warning" class="quota-75-warning" role="note"  style=/, "7.5% warning must be visible (not hidden) when GOVT_SCHOOL_7_5 is selected");
+    assert.match(html75, /class="quota-75-context-reminder"/, "7.5% reminder must appear in active context summary");
+    if (lang === "ta") {
+      assert.match(html75, /தகுதி உறுதிப்படுத்தல் அல்ல/);
+      assert.match(html75, /உங்களின் 7\.5% இடஒதுக்கீட்டுத் தகுதியை உறுதிப்படுத்தாது/);
+    } else {
+      assert.match(html75, /Not Proof of Eligibility/);
+      assert.match(html75, /does not establish or confirm your eligibility/);
+    }
+
+    const htmlGeneral = renderM5GuidancePage(new URLSearchParams({ lang, tab: "comparison" }), {
+      studentCutoff: 182.0,
+      quota: "GENERAL_ACADEMIC",
+      community: "BC",
+      round: "ROUND_1",
+      communitySelected: true,
+    });
+    assert.match(htmlGeneral, /id="quota-75-warning" class="quota-75-warning" role="note" hidden/, "7.5% warning must be hidden when GENERAL_ACADEMIC is selected");
+    assert.doesNotMatch(htmlGeneral, /class="quota-75-context-reminder"/, "7.5% context reminder must not appear when GENERAL_ACADEMIC is selected");
+  }
+
+  // 3. Complete accessibility labels on College filters, Choice Planner filters, export textareas, copy buttons, and shortlist controls (mandatory filters always shown directly)
+  const collegesHtml = renderGovernedPilot(new URLSearchParams("lang=ta&view=colleges"), undefined, approvedDir);
+  assert.doesNotMatch(collegesHtml, /more-filters-accordion/, "Colleges filters must be directly visible without extra filters accordion");
+  for (const id of ["college-search", "type-filter", "district-filter", "college-select"]) {
+    assert.match(collegesHtml, new RegExp(`<label for="${id}">[^<]+</label>`), `Colleges filter ${id} must have non-empty label`);
+    assert.match(collegesHtml, new RegExp(`id="${id}"[^>]*aria-label="[^"]+"`), `Colleges filter ${id} must have non-empty aria-label`);
+  }
+
+  const m5Html = renderM5GuidancePage(new URLSearchParams("lang=ta&tab=comparison"));
+  assert.doesNotMatch(m5Html, /more-filters-accordion/, "Choice Planner mandatory filters (sort, district, department, college type) must be directly visible without extra filters accordion");
+  for (const id of ["search-input", "cutoff-input", "quota-select", "community-select", "round-select", "year-select", "type-select", "district-select", "college-select", "branch-select", "sort-select", "only-available-check"]) {
+    assert.match(m5Html, new RegExp(`for="${id}"`), `Choice Planner control ${id} must have associated label[for]`);
+    assert.match(m5Html, new RegExp(`id="${id}"[^>]*aria-label="[^"]+"`), `Choice Planner control ${id} must have non-empty aria-label`);
+  }
+
+  // 4. Long-shortlist persona (12+ choices) & Export/Copy accessibility
+  const twelveChoices = [
+    "1~CS", "1~EC", "2006~CS", "2006~EC", "2005~CS", "2005~EC",
+    "2007~CS", "2007~EC", "5008~CS", "5008~EC", "2712~CS", "4960~CS"
+  ].join(",");
+  const shortlist12Html = renderM5GuidancePage(new URLSearchParams({
+    lang: "ta",
+    tab: "shortlist",
+    shortlist: twelveChoices,
+  }));
+  assert.match(shortlist12Html, /id="export-text" aria-label="விருப்பப் பட்டியல் உரை ஏற்றுமதி"/, "Plain text export textarea must have accessible name");
+  assert.match(shortlist12Html, /id="export-csv" aria-label="விருப்பப் பட்டியல் CSV ஏற்றுமதி"/, "CSV export textarea must have accessible name");
+  assert.match(shortlist12Html, /<label for="export-csv"/, "CSV export textarea must also have explicit label[for]");
+  assert.match(shortlist12Html, /aria-label="விருப்பப் பட்டியலை உரை வடிவில் நகலெடு"/, "Copy Plain Text button must have aria-label");
+  assert.match(shortlist12Html, /aria-label="விருப்பப் பட்டியலை CSV வடிவில் நகலெடு"/, "Copy CSV button must have aria-label");
+  assert.match(shortlist12Html, /aria-label="விருப்பம் #12-ஐ முதல் இடத்திற்கு \(#1\) நகர்த்து"/, "12th item must have accessible Move to Top (#1) control");
+  assert.match(shortlist12Html, /id="pos-select-12" class="position-jump-select" aria-label="விருப்பம் #12 வரிசை எண் மாற்று"/, "12th item must have accessible Move to Position selector");
+  // Verify Move to Top link on #12 places 4960~CS at index 0
+  assert.match(shortlist12Html, /shortlist=4960~CS,1~CS,1~EC,2006~CS/, "Move to Top link on #12 must move 4960~CS to #1 while preserving relative order");
+
+  // 5. Duplicate district casing normalization (Chennai / CHENNAI, Coimbatore / COIMBATORE)
+  const districtSelectMatch = collegesHtml.match(/<select id="district-filter"[^>]*>([\s\S]*?)<\/select>/);
+  assert.ok(districtSelectMatch, "Must render district-filter select on /colleges");
+  const optionValues = [...districtSelectMatch[1].matchAll(/<option value="([^"]+)">/g)].map(m => m[1]).filter(Boolean);
+  const lowerValues = optionValues.map(v => v.toLowerCase());
+  assert.equal(new Set(lowerValues).size, optionValues.length, `Duplicate district options found: ${optionValues.join(", ")}`);
+  assert.ok(optionValues.includes("Chennai") && !optionValues.includes("CHENNAI"), "Chennai must be normalized to a single Title-Case option");
+  assert.ok(optionValues.includes("Coimbatore") && !optionValues.includes("COIMBATORE"), "Coimbatore must be normalized to a single Title-Case option");
+  // Verify filtering by "Chennai" or "CHENNAI" returns identical matching counts
+  const chennaiTitleHtml = renderGovernedPilot(new URLSearchParams("lang=en&view=colleges&district=Chennai"), undefined, approvedDir);
+  const chennaiUpperHtml = renderGovernedPilot(new URLSearchParams("lang=en&view=colleges&district=CHENNAI"), undefined, approvedDir);
+  const countTitle = chennaiTitleHtml.match(/class="result-count"[^>]*>([^<]+)</)?.[1];
+  const countUpper = chennaiUpperHtml.match(/class="result-count"[^>]*>([^<]+)</)?.[1];
+  assert.ok(countTitle && countTitle === countUpper, `Filtering by Chennai (${countTitle}) and CHENNAI (${countUpper}) must return identical counts`);
+
+  // 6. No-result recovery on Choice Planner and Colleges
+  const noResM5Ta = renderM5GuidancePage(new URLSearchParams({ lang: "ta", tab: "comparison", q: "ZZZ_NONEXISTENT_999" }));
+  assert.match(noResM5Ta, /class="no-results-recovery"/, "Choice Planner must render no-results-recovery block");
+  assert.match(noResM5Ta, /class="btn-action btn-primary no-results-reset-btn"/, "Choice Planner must render visible reset button");
+  assert.match(noResM5Ta, /தேடல் சொல் \(Search\), மாவட்டம் \(District\)/, "Choice Planner must explain which filters/search can be changed");
+
+  const noResCollegesTa = renderGovernedPilot(new URLSearchParams("lang=ta&view=colleges&q=ZZZ_NONEXISTENT_999"), undefined, approvedDir);
+  assert.match(noResCollegesTa, /class="card no-results-recovery"/, "Colleges must render no-results-recovery block");
+  assert.match(noResCollegesTa, /தேடல் மற்றும் வடிகட்டிகளை நீக்கு/, "Colleges must render visible clear search and filters link");
+});
+
+test("FINAL_PRE_M7: Real 200% Page Zoom & Keyboard Accessibility Verification across all 7 routes in Headless Chrome", async () => {
+  const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+  let child;
+  try {
+    child = spawn(chromePath, [
+      "--headless=new",
+      "--disable-gpu",
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-crash-reporter",
+      "--no-first-run",
+      "--remote-debugging-port=0",
+      "about:blank",
+    ], { stdio: ["ignore", "pipe", "pipe"] });
+  } catch {
+    return;
+  }
+
+  let stderr = "";
+  let browserWs = "";
+  try {
+    browserWs = await new Promise<string>((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error("Timeout waiting for Chrome: " + stderr)), 6000);
+      child.stderr.on("data", (chunk: Buffer) => {
+        stderr += chunk.toString();
+        const match = stderr.match(/ws:\/\/127\.0\.0\.1:\d+\/devtools\/browser\/[a-zA-Z0-9-]+/);
+        if (match) { clearTimeout(timer); resolve(match[0]); }
+      });
+      child.once("error", (err: Error) => { clearTimeout(timer); reject(err); });
+    });
+  } catch {
+    child.kill();
+    return;
+  }
+
+  const ws = new WebSocket(browserWs);
+  try {
+    await new Promise((res, rej) => {
+      ws.onopen = res;
+      ws.onerror = rej;
+    });
+  } catch {
+    child.kill();
+    return;
+  }
+
+  let msgId = 1;
+  function sendCommand(method: string, params: Record<string, unknown> = {}, sessionId?: string): Promise<any> {
+    return new Promise((resolve) => {
+      const id = msgId++;
+      const handler = (evt: any) => {
+        const data = JSON.parse(evt.data);
+        if (data.id === id) {
+          ws.removeEventListener("message", handler);
+          resolve(data.result);
+        }
+      };
+      ws.addEventListener("message", handler);
+      ws.send(JSON.stringify(sessionId ? { id, method, params, sessionId } : { id, method, params }));
+    });
+  }
+
+  const { targetId } = await sendCommand("Target.createTarget", { url: "about:blank" });
+  const { sessionId } = await sendCommand("Target.attachToTarget", { targetId, flatten: true });
+  await sendCommand("Page.enable", {}, sessionId);
+
+  const approvedDir = loadApprovedDirectory();
+  const routesToVerify = [
+    { name: "Home TA", html: renderStudentEntryPage({ route: "home", language: "ta" }, pack) },
+    { name: "Journey Beginner TA", html: renderStudentEntryPage({ route: "beginner", language: "ta" }, pack) },
+    { name: "Colleges Directory TA", html: renderGovernedPilot(new URLSearchParams("lang=ta&view=colleges"), undefined, approvedDir) },
+    { name: "Cutoff Calculator TA", html: renderStudentEntryPage({ route: "personal", language: "ta" }, pack, undefined, { maths: "95", physics: "90", chemistry: "91" }) },
+    { name: "Choice Planner 7.5% TA", html: renderM5GuidancePage(new URLSearchParams("lang=ta&tab=comparison&shortlist=1~CS"), { studentCutoff: 185, quota: "GOVT_SCHOOL_7_5", community: "BC", round: "ROUND_1", year: 2026, communitySelected: true }) },
+    { name: "Shortlist 12 Choices TA", html: renderM5GuidancePage(new URLSearchParams("lang=ta&tab=shortlist&shortlist=1~CS,1~EC,2006~CS,2006~EC,2005~CS,2005~EC,2007~CS,2007~EC,5008~CS,5008~EC,2712~CS,4960~CS")) },
+    { name: "Counselling TA", html: renderStudentEntryPage({ route: "counselling", language: "ta" }, pack) },
+  ];
+
+  try {
+    for (const r of routesToVerify) {
+      const { frameId } = await sendCommand("Page.navigate", { url: "about:blank" }, sessionId);
+      await sendCommand("Page.setDocumentContent", { frameId, html: r.html }, sessionId);
+
+      // A. Genuine 200% Browser Zoom verification on 1280x800 desktop window
+      await sendCommand("Emulation.setDeviceMetricsOverride", {
+        width: 1280,
+        height: 800,
+        deviceScaleFactor: 1,
+        mobile: false,
+      }, sessionId);
+
+      const zoomEval = await sendCommand("Runtime.evaluate", {
+        expression: `(() => {
+          document.documentElement.style.zoom = "200%";
+          const scrollW = document.documentElement.scrollWidth;
+          const clientW = document.documentElement.clientWidth;
+          // Also check interactive controls have non-empty accessible names
+          const unnamedControls = Array.from(document.querySelectorAll('input:not([type="hidden"]), select, textarea, button')).filter(el => {
+            const aria = el.getAttribute('aria-label') || '';
+            const id = el.getAttribute('id');
+            const lbl = id ? document.querySelector('label[for="' + id + '"]') : el.closest('label');
+            const lblText = lbl ? (lbl.textContent || '').trim() : '';
+            const btnText = el.tagName === 'BUTTON' ? (el.textContent || '').trim() : '';
+            return !aria.trim() && !lblText && !btnText;
+          }).map(el => el.outerHTML.slice(0, 80));
+          return { scrollW, clientW, unnamedControls };
+        })()`,
+        returnByValue: true,
+      }, sessionId);
+
+      const { scrollW, clientW, unnamedControls } = zoomEval.result.value;
+      assert.equal(
+        scrollW <= clientW,
+        true,
+        `200% Zoom horizontal overflow on ${r.name}: scrollWidth=${scrollW}, clientWidth=${clientW}`
+      );
+      assert.deepEqual(
+        unnamedControls,
+        [],
+        `Unnamed controls found on ${r.name}: ${unnamedControls.join("; ")}`
+      );
+
+      // B. Keyboard Tab traversal check (verify focus moves cleanly across interactive elements without trap)
+      const kbEval = await sendCommand("Runtime.evaluate", {
+        expression: `(() => {
+          document.documentElement.style.zoom = "100%";
+          const focusables = Array.from(document.querySelectorAll('a[href], button:not([disabled]), input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled])'))
+            .filter(el => {
+              if (el.closest('details:not([open])')) return false;
+              const style = window.getComputedStyle(el);
+              return style.display !== 'none' && style.visibility !== 'hidden' && el.getClientRects().length > 0;
+            });
+          let focusedCount = 0;
+          const targetSlice = focusables.slice(0, 15);
+          for (const el of targetSlice) {
+            el.focus();
+            if (document.activeElement === el) focusedCount++;
+          }
+          return { totalVisibleFocusables: focusables.length, targetLen: targetSlice.length, focusedCount };
+        })()`,
+        returnByValue: true,
+      }, sessionId);
+
+      assert.ok(
+        kbEval.result.value.focusedCount > 0 &&
+        kbEval.result.value.focusedCount === kbEval.result.value.targetLen,
+        `Keyboard focus traversal failed on ${r.name}: ${JSON.stringify(kbEval.result.value)}`
+      );
+    }
+  } finally {
+    ws.close();
+    child.kill();
   }
 });

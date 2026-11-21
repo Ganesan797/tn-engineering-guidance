@@ -98,10 +98,11 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     const verRes = await fetch(`${base}/api/version`);
     assert.equal(verRes.status, 200, "Version route should return 200 OK");
     assert.equal(verRes.headers.get("content-type"), "application/json; charset=utf-8");
-    const verData = (await verRes.json()) as { version: string; commit: string; mode: string; environment: string };
+    const verData = (await verRes.json()) as { version: string; commit: string; commitSource?: string; mode: string; environment: string };
     assert.equal(verData.version, "0.1.0");
-    assert.equal(verData.mode, "PRE_M7_MOBILE_EXPERIENCE_ENRICHMENT");
-    assert.ok(typeof verData.commit === "string" && verData.commit.length > 0, "Commit SHA must be non-empty string");
+    assert.equal(verData.mode, "FINAL_PRE_M7_SIMULATED_AUDIT_CORRECTIONS");
+    assert.match(verData.commit, /^[0-9a-f]{40}$/i, "Commit SHA must be a real 40-character Git SHA");
+    assert.notEqual(verData.commit, "41aee4623c1623d7e79f6e0f8c50dc8d314659d3", "Must not return stale hardcoded SHA");
 
     // F. 404 Route Handling
     const notFoundRes = await fetch(`${base}/unknown-route-${Date.now()}`);
@@ -172,6 +173,7 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     for (const sensitive of ["197.75", "191.25", "185.5", "184.0", "MBC", "SCA"]) {
       assert.ok(!combinedLogs.includes(sensitive), `Server logs must never leak sensitive student value: ${sensitive}`);
     }
+    assert.ok(!stderr.includes("ExperimentalWarning"), `Server startup must not emit ExperimentalWarning to stderr: ${stderr}`);
   } finally {
     child.kill();
   }

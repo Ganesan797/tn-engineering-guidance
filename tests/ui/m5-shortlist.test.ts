@@ -5,6 +5,9 @@ import {
   removeFromShortlist,
   moveUp,
   moveDown,
+  moveToTop,
+  moveToBottom,
+  moveToPosition,
   clearShortlist,
   formatShortlistSummary,
   formatShortlistPlainText,
@@ -164,4 +167,36 @@ test("M5 Bilingual Counselling Guidance: Factual educational clarity on TNEA mec
   assert.ok(ta.sections[3].content.some((c) => c.includes("கல்விக் கட்டணம், விடுதிக் கட்டணம் மற்றும் மேம்பாட்டுக் கட்டணம்")));
   assert.ok(!JSON.stringify(ta).includes("3 அடுக்கு உத்தி"));
   assert.ok(!JSON.stringify(ta).includes("தானாகவே"));
+});
+
+test("FINAL_PRE_M7: Long shortlist (12+ choices) supports manual moveToTop, moveToBottom, and moveToPosition without auto-ranking", () => {
+  let list = EMPTY_SHORTLIST;
+  for (let i = 1; i <= 14; i++) {
+    list = addToShortlist(list, String(1000 + i), `College ${i}`, "CS", "Computer Science");
+  }
+  assert.equal(list.items.length, 14);
+  assert.equal(list.items[13].id, "1014~CS");
+  assert.equal(list.items[13].order, 14);
+
+  // Move Choice #14 directly to Top (#1) in a single manual action
+  list = moveToTop(list, "1014~CS");
+  assert.equal(list.items[0].id, "1014~CS");
+  assert.equal(list.items[0].order, 1);
+  assert.equal(list.items[1].id, "1001~CS");
+  assert.equal(list.items[1].order, 2);
+  assert.equal(list.items[13].id, "1013~CS");
+  assert.equal(list.items[13].order, 14);
+
+  // Move Choice #1 (1014~CS) directly to explicit student-selected position #7
+  list = moveToPosition(list, "1014~CS", 7);
+  assert.equal(list.items[6].id, "1014~CS");
+  assert.equal(list.items[6].order, 7);
+  assert.equal(list.items[0].id, "1001~CS");
+  assert.equal(list.items[0].order, 1);
+
+  // Move Choice #2 (1002~CS) directly to Bottom (#14)
+  list = moveToBottom(list, "1002~CS");
+  assert.equal(list.items[13].id, "1002~CS");
+  assert.equal(list.items[13].order, 14);
+  assert.ok(list.items.every((item, idx) => item.order === idx + 1), "Orders 1..14 must remain contiguous");
 });

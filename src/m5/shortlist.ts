@@ -101,6 +101,39 @@ export function moveDown(state: ShortlistState, itemId: string): ShortlistState 
   };
 }
 
+/**
+ * Explicitly move an item to a student-chosen 1-based position (1..N).
+ * Preserves relative order of all other items; zero automated ranking.
+ */
+export function moveToPosition(
+  state: ShortlistState,
+  itemId: string,
+  targetPosition: number
+): ShortlistState {
+  const idx = state.items.findIndex((item) => item.id === itemId);
+  if (idx < 0 || state.items.length <= 1) return state;
+
+  const clampedPos = Math.max(1, Math.min(state.items.length, Math.trunc(targetPosition)));
+  const targetIdx = clampedPos - 1;
+  if (idx === targetIdx) return state;
+
+  const items = [...state.items];
+  const [moved] = items.splice(idx, 1);
+  items.splice(targetIdx, 0, moved);
+
+  return {
+    items: items.map((item, i) => ({ ...item, order: i + 1 })),
+  };
+}
+
+export function moveToTop(state: ShortlistState, itemId: string): ShortlistState {
+  return moveToPosition(state, itemId, 1);
+}
+
+export function moveToBottom(state: ShortlistState, itemId: string): ShortlistState {
+  return moveToPosition(state, itemId, state.items.length);
+}
+
 export function clearShortlist(): ShortlistState {
   return EMPTY_SHORTLIST;
 }
