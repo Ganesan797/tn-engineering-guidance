@@ -608,8 +608,8 @@ export function renderM5GuidancePage(
     .form-tier-2 { grid-template-columns: 1fr; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem; }
     .form-tier-3 { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; }
     @media (min-width: 640px) {
-      .form-tier-1 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
-      .form-tier-2 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+      .form-tier-1 { grid-template-columns: repeat(auto-fit, minmax(225px, 1fr)); align-items: end; }
+      .form-tier-2 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); align-items: end; }
     }
     @media (max-width: 768px) {
       .form-tier-3 { flex-direction: column; align-items: stretch; }
@@ -680,7 +680,7 @@ export function renderM5GuidancePage(
     }
     .footnote { font-size: 0.82rem; color: #64748b; }
     .shortlist-badge { background: #10b981; color: #ffffff; padding: 0.15rem 0.55rem; border-radius: 12px; font-size: 0.78rem; font-weight: 700; margin-left: 0.4rem; }
-    .shortlist-actions { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+    .shortlist-actions { display: flex; gap: 0.45rem; flex-wrap: nowrap; }
     .pagination-bar {
       display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin: 0.75rem 0; padding: 0.75rem 1rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px;
     }
@@ -1857,7 +1857,7 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
               <th scope="col" class="print-only">${t("கல்லூரி பெயர்", "College Name")}</th>
               <th scope="col" class="print-only">${t("பாடப்பிரிவு குறியீடு", "Branch Code")}</th>
               <th scope="col" class="print-only">${t("பாடப்பிரிவு பெயர்", "Branch Name")}</th>
-              <th scope="col" class="screen-only" style="width: 150px;">${t("வரிசை மாற்று", "Actions")}</th>
+              <th scope="col" class="screen-only" style="width: 190px;">${t("வரிசை மாற்று", "Actions")}</th>
             </tr>
           </thead>
           <tbody>
