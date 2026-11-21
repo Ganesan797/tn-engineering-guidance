@@ -149,6 +149,21 @@ const server = createServer(async (request, response) => {
   const url = new URL(request.url ?? "/", "http://localhost");
   language = url.searchParams.get("lang") === "en" ? "en" : "ta";
   const entry = entryStateFromUrl(url);
+  if (request.method === "GET" && url.pathname === "/api/version") {
+    const gitCommit = process.env.RENDER_GIT_COMMIT || process.env.GIT_COMMIT || "41aee4623c1623d7e79f6e0f8c50dc8d314659d3";
+    const payload = JSON.stringify({
+      version: "0.1.0",
+      commit: gitCommit,
+      environment: process.env.RENDER ? "production" : "local",
+      mode: "PRE_M7_MOBILE_EXPERIENCE_ENRICHMENT",
+    });
+    response.writeHead(200, {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-cache",
+    });
+    response.end(payload);
+    return;
+  }
   if (request.method === "GET" && url.pathname === "/journey/questions") {
     const page = renderQuestionCollection(questions, url.searchParams.get("id"), url.searchParams.get("evidence"), language, url.searchParams.get("topic"), url.searchParams.get("review") === "1");
     send(response, page.status, page.html);
@@ -176,7 +191,7 @@ const server = createServer(async (request, response) => {
 
       // Non-sensitive directory filtering parameters from POST body
       const effectiveParams = new URLSearchParams(url.searchParams);
-      for (const key of ["q", "type", "district", "college", "branch", "tab", "lang", "shortlist", "round", "year", "only_available", "sort"]) {
+      for (const key of ["q", "type", "district", "college", "branch", "tab", "lang", "shortlist", "round", "year", "only_available", "sort", "page"]) {
         const val = values.get(key);
         if (val !== null) effectiveParams.set(key, val);
       }

@@ -94,7 +94,16 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     assert.ok(m5PostHtml.includes('value="185.5"'), "M5 page should reflect calculated cutoff in memory form");
     assert.ok(!m5PostHtml.includes('href="?tab=comparison&amp;cutoff='), "GET links must not leak cutoff");
 
-    // E. 404 Route Handling
+    // E. Version API route (GET /api/version - Section 19 Deployment Identity)
+    const verRes = await fetch(`${base}/api/version`);
+    assert.equal(verRes.status, 200, "Version route should return 200 OK");
+    assert.equal(verRes.headers.get("content-type"), "application/json; charset=utf-8");
+    const verData = (await verRes.json()) as { version: string; commit: string; mode: string; environment: string };
+    assert.equal(verData.version, "0.1.0");
+    assert.equal(verData.mode, "PRE_M7_MOBILE_EXPERIENCE_ENRICHMENT");
+    assert.ok(typeof verData.commit === "string" && verData.commit.length > 0, "Commit SHA must be non-empty string");
+
+    // F. 404 Route Handling
     const notFoundRes = await fetch(`${base}/unknown-route-${Date.now()}`);
     assert.equal(notFoundRes.status, 404, "Unknown route should return 404 Not Found");
     assert.equal(notFoundRes.headers.get("x-robots-tag"), "noindex, nofollow", "404 route must send noindex, nofollow");

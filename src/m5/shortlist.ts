@@ -143,7 +143,7 @@ export function formatShortlistPlainText(
     ];
     for (const item of state.items) {
       lines.push(`விருப்பம் #${item.order}: [கல்லூரி குறியீடு: ${item.collegeCode}] ${item.collegeName}`);
-      lines.push(`             கிளை: [${item.programmeCode}] ${item.programmeName}`);
+      lines.push(`             பாடப்பிரிவு: [${item.programmeCode}] ${item.programmeName}`);
       lines.push("");
     }
     return lines.join("\n").trim();
@@ -172,7 +172,7 @@ export function formatShortlistCsv(
 ): string {
   const header =
     lang === "ta"
-      ? "வரிசை (Choice),கல்லூரி குறியீடு (College Code),கல்லூரி பெயர் (College Name),கிளை குறியீடு (Branch Code),கிளை பெயர் (Branch Name)"
+      ? "வரிசை (Choice),கல்லூரி குறியீடு (College Code),கல்லூரி பெயர் (College Name),பாடப்பிரிவு குறியீடு (Branch Code),பாடப்பிரிவு பெயர் (Branch Name)"
       : "Choice,College Code,College Name,Branch Code,Branch Name";
   if (state.items.length === 0) return header;
 

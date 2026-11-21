@@ -933,3 +933,54 @@ test("M5 DOTE Classification & College Selection: Exact categories from dte.tn.g
   assert.ok(htmlOfferings.includes("Government Engineering College"), "Must render Govt badge text");
   assert.ok(htmlOfferings.includes("Government Aided Engineering College"), "Must render Govt Aided badge text");
 });
+
+test("Mobile Experience: Bounded pagination prevents rendering all 1,249 offerings on initial load and enables full reachability", () => {
+  // 1. Initial page load renders bounded window (50 offerings, not 1,249)
+  const htmlPage1 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
+  const rowsMatch1 = htmlPage1.match(/<tr/g) || [];
+  // 1 table header row + 50 data rows = 51 rows total
+  assert.ok(rowsMatch1.length <= 55, "Initial load must be bounded to pagination window, not full 1,249 offerings");
+  assert.ok(htmlPage1.includes("Page 1 of 25"), "Must show pagination metadata");
+  assert.ok(htmlPage1.includes("Next"), "Must offer Next page navigation");
+
+  // 2. Page 2 navigation
+  const htmlPage2 = renderM5GuidancePage(new URLSearchParams({ page: "2", lang: "en" }));
+  assert.ok(htmlPage2.includes("Page 2 of 25"), "Must render page 2 metadata");
+  assert.ok(htmlPage2.includes("Prev"), "Must offer Previous page navigation on page 2");
+
+  // 3. Shortlist toggle form preserves current page in hidden input
+  assert.ok(htmlPage2.includes('<input type="hidden" name="page" value="2">'), "Shortlist toggle must preserve active page");
+
+  // 4. Show all option remains reachable when explicitly requested
+  const htmlAll = renderM5GuidancePage(new URLSearchParams({ show_all: "1", lang: "en" }));
+  const rowsAll = htmlAll.match(/<tr/g) || [];
+  assert.ok(rowsAll.length > 1000, "All offerings must remain reachable via show_all=1");
+});
+
+test("Mobile Experience: Tamil terminology regression check ensures 'கிளை' is absent from student-facing UI", () => {
+  // A. Choice Planner comparison tab
+  const htmlTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
+  assert.ok(!htmlTa.includes("கிளை"), "Must not use 'கிளை' in student-facing comparison tab");
+  assert.ok(htmlTa.includes("அனைத்துப் பாடப்பிரிவுகள்"), "Must use 'அனைத்துப் பாடப்பிரிவுகள்'");
+  assert.ok(htmlTa.includes("பாடப்பிரிவு"), "Must use 'பாடப்பிரிவு' in labels and filters");
+  assert.ok(htmlTa.includes("கல்லூரி &amp; பாடப்பிரிவு"), "Must use 'கல்லூரி & பாடப்பிரிவு' in table header");
+
+  // B. Shortlist tab & exports
+  const htmlShortlist = renderM5GuidancePage(new URLSearchParams({
+    tab: "shortlist",
+    shortlist: "1~CS,2006~ME",
+    lang: "ta",
+  }));
+  assert.ok(!htmlShortlist.includes("கிளை"), "Must not use 'கிளை' anywhere in shortlist tab or exports");
+  assert.ok(htmlShortlist.includes("பாடப்பிரிவு குறியீடு"), "Must use 'பாடப்பிரிவு குறியீடு' in shortlist table header");
+  assert.ok(htmlShortlist.includes("பாடப்பிரிவு பெயர்"), "Must use 'பாடப்பிரிவு பெயர்' in shortlist table header");
+  assert.ok(htmlShortlist.includes("பாடப்பிரிவு: [CS]"), "Export plain text must use 'பாடப்பிரிவு:'");
+
+  // C. Counselling tab
+  const htmlCounselling = renderM5GuidancePage(new URLSearchParams({
+    tab: "counselling",
+    lang: "ta",
+  }));
+  assert.ok(!htmlCounselling.includes("கிளை"), "Counselling tab must not use 'கிளை'");
+  assert.ok(htmlCounselling.includes("துறை") || htmlCounselling.includes("பாடப்பிரிவு"), "Counselling tab must use 'துறை / பாடப்பிரிவு'");
+});
