@@ -691,13 +691,169 @@ export function renderM5GuidancePage(
     }
     .pagination-btn:hover:not(.disabled) { background: #eff6ff; border-color: #2563eb; color: #1d4ed8; }
     .pagination-btn.disabled { opacity: 0.45; cursor: not-allowed; background: #f1f5f9; border-color: #e2e8f0; color: #94a3b8; }
-    @media (max-width: 768px) {
-      .comparison-table th:nth-child(4), .comparison-table td:nth-child(4) { display: none; }
+    .context-chips-bar { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; margin: 0.75rem 0 1rem; }
+    .context-chips-label { font-size: 0.8rem; font-weight: 700; color: #475569; }
+    .context-chip { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.82rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 999px; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+    .context-chip strong { font-weight: 800; color: #1d4ed8; }
+
+    @media (max-width: 640px) {
+      .m5-container { padding: 0.5rem; }
+      .m5-header-card { padding: 1rem; }
+      .m5-header-card h1 { font-size: 1.35rem; }
+      .form-grid { padding: 1rem; gap: 0.75rem; }
+      .table-responsive {
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        overflow: visible;
+      }
+      .comparison-table thead, .shortlist-table thead {
+        display: none;
+      }
+      .comparison-table, .comparison-table tbody,
+      .shortlist-table, .shortlist-table tbody {
+        display: block;
+        width: 100%;
+      }
+      .comparison-table tr {
+        display: block;
+        width: 100%;
+        background: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 12px;
+        margin-bottom: 0.85rem;
+        padding: 0.95rem 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        box-sizing: border-box;
+      }
+      .comparison-table td {
+        display: block;
+        width: 100%;
+        padding: 0.35rem 0;
+        border: none;
+      }
+      .comparison-table td:first-child {
+        border-bottom: 1px solid #f1f5f9;
+        padding-bottom: 0.65rem;
+        margin-bottom: 0.4rem;
+      }
+      .comparison-table td:nth-child(2),
+      .comparison-table td:nth-child(3) {
+        display: inline-block;
+        width: 48%;
+        vertical-align: top;
+        padding: 0.35rem 0;
+        box-sizing: border-box;
+      }
+      .comparison-table td:nth-child(2)::before {
+        content: "குறைந்தபட்ச கட்-ஆஃப்: ";
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        margin-bottom: 2px;
+      }
+      html[lang="en"] .comparison-table td:nth-child(2)::before {
+        content: "Observed Min: ";
+      }
+      .comparison-table td:nth-child(3)::before {
+        content: "வேறுபாடு (Δ): ";
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        margin-bottom: 2px;
+      }
+      html[lang="en"] .comparison-table td:nth-child(3)::before {
+        content: "Comparison Δ: ";
+      }
+      .comparison-table td:nth-child(4) {
+        display: block !important;
+        font-size: 0.78rem;
+        color: #64748b;
+        padding: 0.4rem 0;
+        border-top: 1px dashed #f1f5f9;
+        margin-top: 0.35rem;
+      }
+      .comparison-table td:last-child {
+        display: block;
+        width: 100%;
+        padding-top: 0.65rem;
+        margin-top: 0.4rem;
+        border-top: 1px solid #f1f5f9;
+      }
+      .comparison-table td:last-child form {
+        width: 100%;
+      }
+      .comparison-table td:last-child .btn-action {
+        width: 100%;
+        min-height: 44px;
+        font-size: 0.92rem;
+        font-weight: 700;
+        justify-content: center;
+      }
+      /* Shortlist cards on mobile */
+      .shortlist-table tr {
+        display: block;
+        width: 100%;
+        background: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 12px;
+        margin-bottom: 0.85rem;
+        padding: 0.95rem 1rem;
+        box-sizing: border-box;
+      }
+      .shortlist-table td {
+        display: block;
+        width: 100%;
+        border: none;
+        padding: 0.25rem 0;
+      }
+      .shortlist-table td:first-child {
+        font-size: 1.15rem;
+        color: #1e40af;
+        font-weight: 800;
+        padding-bottom: 0.25rem;
+      }
+      .shortlist-table td:last-child {
+        padding-top: 0.65rem;
+        margin-top: 0.35rem;
+        border-top: 1px solid #f1f5f9;
+      }
+      .shortlist-actions {
+        display: flex;
+        gap: 0.65rem;
+        width: 100%;
+      }
+      .shortlist-actions .btn-reorder {
+        flex: 1;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.15rem;
+        font-weight: 750;
+        border-radius: 8px;
+        background: #f8fafc;
+        border: 1.5px solid #cbd5e1;
+      }
+      .form-tier-3 {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .form-tier-3 button.btn-primary {
+        width: 100%;
+        min-height: 48px;
+        font-size: 1rem;
+      }
     }
     @media (max-width: 480px) {
-      .comparison-table th, .comparison-table td { padding: 0.5rem 0.35rem; font-size: 0.82rem; }
-      .btn-action { padding: 0.35rem 0.55rem; font-size: 0.82rem; min-height: 44px; min-width: 44px; }
-      .delta-badge { font-size: 0.76rem; padding: 0.15rem 0.35rem; line-height: 1.25; }
+      .btn-action { padding: 0.45rem 0.65rem; font-size: 0.85rem; min-height: 44px; min-width: 44px; }
+      .delta-badge { font-size: 0.8rem; padding: 0.2rem 0.45rem; line-height: 1.3; }
       .delta-caution { display: none; }
     }
     .print-only { display: none !important; }
@@ -1327,6 +1483,18 @@ function renderComparisonTab(
       </form>
 
       <div class="active-context-strip" role="status" style="margin: 0 0 1rem; padding: 0.8rem 1rem; background: #edf2f7; border-left: 4px solid #2b6cb0; border-radius: 4px; font-size: 0.9rem; color: #1a202c; line-height: 1.5;">
+        <!-- Context Chips (Requirement 9) -->
+        <div class="context-chips-bar screen-only" aria-label="Active Context Chips" style="margin: 0 0 0.5rem;">
+          <span class="context-chips-label">${t("வடிகட்டி சில்லுகள்:", "Active Chips:")}</span>
+          ${studentCutoff !== null ? `<span class="context-chip">🎯 ${t("கட்-ஆஃப்:", "Cutoff:")} <strong>${studentCutoff.toFixed(2)}</strong></span>` : ""}
+          <span class="context-chip">📋 ${esc(copy.quotaName(quota))}</span>
+          <span class="context-chip">🏷️ ${esc(copy.communityName(community))}</span>
+          <span class="context-chip">🔄 ${esc(copy.roundName(round))}</span>
+          <span class="context-chip">📅 ${year}</span>
+          ${query ? `<span class="context-chip">🔍 "${esc(query)}"</span>` : ""}
+          ${districtFilter ? `<span class="context-chip">📍 ${esc(districtFilter)}</span>` : ""}
+          ${typeFilter !== "all" ? `<span class="context-chip">🏛️ ${esc(typeFilter)}</span>` : ""}
+        </div>
         <div>
           <strong>${t("தற்போது தேர்ந்தெடுத்துள்ள விவரம்:", "Current Comparison Context:")}</strong>
           ${year} · ${esc(copy.quotaName(quota))} · <strong>${esc(copy.communityName(community))}</strong> · ${esc(copy.roundName(round))}
@@ -1748,32 +1916,6 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
         </p>
 
         <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
-          <button type="button" class="btn-action" onclick="navigator.clipboard?.writeText(document.getElementById('export-text').value); alert('${t("உரை கிளிப்போர்டில் நகலெடுக்கப்பட்டது!", "Plain text copied to clipboard!")}')">
-            ${t("📋 எளிய உரையை நகலெடு", "📋 Copy Plain Text")}
-          </button>
-          <button type="button" class="btn-action" onclick="navigator.clipboard?.writeText(document.getElementById('export-csv').value); alert('${t("CSV கிளிப்போர்டில் நகலெடுக்கப்பட்டது!", "CSV copied to clipboard!")}')">
-            ${t("📊 CSV நகலெடு", "📊 Copy CSV")}
-          </button>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 1rem;">
-          <div>
-            <label for="export-text" style="font-size: 0.825rem; font-weight: 600; color: #4a5568; display: block; margin-bottom: 0.25rem;">
-              ${t("எளிய உரை வடிவம் (Plain Text):", "Plain Text Format:")}
-            </label>
-            <textarea id="export-text" readonly rows="6" style="width: 100%; max-width: 100%; box-sizing: border-box; font-family: monospace, Consolas, sans-serif; font-size: 0.85rem; padding: 0.6rem; border: 1px solid #cbd5e0; border-radius: 4px; background: #fff; line-height: 1.4; resize: vertical;">${esc(plainTextExport)}</textarea>
-          </div>
-
-          <details>
-            <summary style="font-size: 0.85rem; font-weight: 600; color: #2b6cb0; cursor: pointer; padding: 0.25rem 0;">
-              ${t("📊 அட்டவணை வடிவம் (CSV) பார்க்க", "📊 View Tabular CSV Format")}
-            </summary>
-            <div style="margin-top: 0.5rem;">
-              <textarea id="export-csv" readonly rows="5" style="width: 100%; max-width: 100%; box-sizing: border-box; font-family: monospace, Consolas, sans-serif; font-size: 0.85rem; padding: 0.6rem; border: 1px solid #cbd5e0; border-radius: 4px; background: #fff; line-height: 1.4; resize: vertical;">${esc(csvExport)}</textarea>
-            </div>
-          </details>
-        </div>
-      </details>
           <button type="button" class="btn-action" onclick="navigator.clipboard?.writeText(document.getElementById('export-text').value); alert('${t("உரை கிளிப்போர்டில் நகலெடுக்கப்பட்டது!", "Plain text copied to clipboard!")}')">
             ${t("📋 எளிய உரையை நகலெடு", "📋 Copy Plain Text")}
           </button>
