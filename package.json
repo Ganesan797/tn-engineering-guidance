@@ -8,6 +8,7 @@
     "typecheck": "tsc -p tsconfig.json",
     "experiment:live-llm": "node --disable-warning=ExperimentalWarning --experimental-strip-types experiments/track-a-rag/live-llm/run-live-gate.mjs",
     "evidence:live-llm": "node --disable-warning=ExperimentalWarning --experimental-strip-types experiments/track-a-rag/live-llm/review-evidence.mjs",
+    "start": "node --disable-warning=ExperimentalWarning --experimental-strip-types scripts/mvp-server.mjs",
     "start:mvp": "node --disable-warning=ExperimentalWarning --experimental-strip-types scripts/mvp-server.mjs"
   },
   "devDependencies": {

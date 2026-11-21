@@ -122,7 +122,7 @@ export function renderStudentEntryPage(
     <form method="POST" action="/m5-guidance?lang=${language}" style="margin:0;display:inline">
       <input type="hidden" name="cutoff" value="${calculatedCutoff}">
       <input type="hidden" name="tab" value="comparison">
-      <button type="submit" class="action">${ta ? "2025 கட்-ஆஃப் ஒப்பீடு &amp; முன்னுரிமைத் திட்டம் →" : "Compare with 2025 Cutoffs &amp; Plan Choices →"}</button>
+      <button type="submit" class="action">${ta ? "கட்-ஆஃப் ஒப்பீடு &amp; முன்னுரிமைத் திட்டம் →" : "Cutoff Comparison &amp; Plan Choices →"}</button>
     </form>` : `<a class="action" href="/m5-guidance?lang=${language}">${ta ? "மதிப்பெண் இன்றி கல்லூரிகளைப் பார்க்க →" : "Browse Colleges &amp; Choice Planner (No Marks) →"}</a>`}
     <a class="action secondary" href="/colleges?view=colleges&amp;lang=${language}">${ta ? "கல்லூரிகள் மற்றும் படிப்புகளைப் பார்க்க →" : "Explore colleges and programmes →"}</a>
     <a class="action secondary" href="/counselling?lang=${language}">${ta ? "கலந்தாய்வு நடைமுறைகள் மற்றும் விதிகள் →" : "TNEA Counselling procedures &amp; guidance →"}</a>

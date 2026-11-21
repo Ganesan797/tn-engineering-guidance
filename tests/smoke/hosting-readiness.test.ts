@@ -69,8 +69,16 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     const m5Res = await fetch(`${base}/m5-guidance?tab=comparison&lang=en`);
     assert.equal(m5Res.status, 200, "M5 guidance route should return 200 OK");
     const m5Html = await m5Res.text();
-    assert.ok(m5Html.includes("College Cutoff Comparison Table"), "M5 page should render comparison directory");
+    assert.ok(m5Html.includes("Cutoff comparison form"), "M5 landing page should render search form");
+    assert.ok(!m5Html.includes("College Cutoff Comparison Table"), "M5 landing page should not render college list by default");
     assert.ok(m5Html.includes("121 approved colleges"), "M5 page should cite approved 121 colleges");
+
+    // B2. M5 Search Results view (with searched=1)
+    const m5SearchRes = await fetch(`${base}/m5-guidance?tab=comparison&lang=en&searched=1`);
+    assert.equal(m5SearchRes.status, 200, "M5 search results route should return 200 OK");
+    const m5SearchHtml = await m5SearchRes.text();
+    assert.ok(m5SearchHtml.includes("College Cutoff Comparison Table"), "M5 search results should render comparison table");
+    assert.ok(m5SearchHtml.includes("Change search"), "M5 search results should offer Change search action");
 
     // C. Cutoff Calculator POST route (/personal)
     const calcRes = await fetch(`${base}/personal?lang=en`, {

@@ -231,6 +231,11 @@ export interface M5GuidanceRenderOptions {
   round?: AllotmentRoundOrAll;
   communitySelected?: boolean;
   year?: number;
+  searchQuery?: string;
+  districtFilter?: string;
+  branchFilter?: string;
+  typeFilter?: string;
+  collegeFilter?: string;
 }
 
 export function getCollegeDoteCategory(college: CollegeMeta): {
@@ -382,6 +387,34 @@ export function renderM5GuidancePage(
   const onlyAvailable = params.get("only_available") === "1";
   const showAllOfferings = params.get("show_all") === "1";
   const sortOption = params.get("sort") ?? "college_name";
+
+  const isEditingSearch = params.get("edit_search") === "1";
+  const hasExplicitSearch = params.get("searched") === "1";
+  const hasPage = params.get("page") !== null;
+  const hasShowAll = params.get("show_all") === "1";
+  const hasQuery = Boolean(params.get("q") || inputState?.searchQuery);
+  const hasDistrict = Boolean(params.get("district") || inputState?.districtFilter);
+  const hasBranch = Boolean(params.get("branch") || inputState?.branchFilter);
+  const hasType = Boolean((params.has("type") && params.get("type") !== "all") || (inputState?.typeFilter && inputState?.typeFilter !== "all"));
+  const hasCollege = Boolean((params.has("college") && params.get("college") !== "all") || (inputState?.collegeFilter && inputState?.collegeFilter !== "all"));
+  const hasOnlyAvailable = params.get("only_available") === "1";
+  const hasCustomSort = params.has("sort") && params.get("sort") !== "college_name";
+  const hasActiveCutoffSearch = studentCutoff !== null && communitySelected;
+
+  const hasSearched =
+    !isEditingSearch &&
+    !(studentCutoff !== null && !communitySelected) &&
+    (hasExplicitSearch ||
+      hasPage ||
+      hasShowAll ||
+      hasQuery ||
+      hasDistrict ||
+      hasBranch ||
+      hasType ||
+      hasCollege ||
+      hasOnlyAvailable ||
+      hasCustomSort ||
+      hasActiveCutoffSearch);
 
   // Load ALL 1,249 governed offerings across 121 approved institutions
   const governedOfferings = HISTORICAL_OBSERVATIONS.getAllGovernedOfferings();
@@ -582,6 +615,19 @@ export function renderM5GuidancePage(
     lang === "ta"
       ? `<span lang="ta" aria-current="page">தமிழ்</span><a class="lang-switch" lang="en" href="${esc(makeLangUrl("en"))}">English</a>`
       : `<a class="lang-switch" lang="ta" href="${esc(makeLangUrl("ta"))}">தமிழ்</a><span lang="en" aria-current="page">English</span>`;
+
+  const navTabsHtml = `
+    <nav class="nav-tabs" aria-label="Milestone M5 Views">
+      <a class="nav-tab ${activeTab === "comparison" ? "active" : ""}" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
+        ${t("கட்-ஆஃப் ஒப்பீடு &amp; கல்லூரித் தேடல்", "Cutoff Comparison &amp; Directory")}
+      </a>
+      <a class="nav-tab ${activeTab === "shortlist" ? "active" : ""}" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
+        ${t("என் விருப்பப் பட்டியல்", "My Shortlist")} <span class="shortlist-badge">${shortIds.length}</span>
+      </a>
+      <a class="nav-tab ${activeTab === "counselling" ? "active" : ""}" href="?tab=counselling&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
+        ${t("கலந்தாய்வு வழிகாட்டி", "Counselling Procedure Guidance")}
+      </a>
+    </nav>`;
 
   return `<!DOCTYPE html>
 <html lang="${lang}">
@@ -955,7 +1001,7 @@ export function renderM5GuidancePage(
 <body>
   ${renderSiteHeader(lang, "planner", langControl)}
   <main class="m5-container">
-    <header class="m5-header-card">
+    <header class="m5-header-card" ${hasSearched && activeTab === "comparison" ? 'style="display: none;"' : ""}>
       <h1>${esc(copy.title)}</h1>
       <p style="font-size: 0.95rem; color: #334155; margin: 0.25rem 0 0.5rem; line-height: 1.5; font-weight: 500;">
         ${t(
@@ -1012,17 +1058,7 @@ export function renderM5GuidancePage(
       </details>
     </header>
 
-    <nav class="nav-tabs" aria-label="Milestone M5 Views">
-      <a class="nav-tab ${activeTab === "comparison" ? "active" : ""}" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
-        ${t("கட்-ஆஃப் ஒப்பீடு &amp; கல்லூரித் தேடல்", "Cutoff Comparison &amp; Directory")}
-      </a>
-      <a class="nav-tab ${activeTab === "shortlist" ? "active" : ""}" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
-        ${t("என் விருப்பப் பட்டியல்", "My Shortlist")} <span class="shortlist-badge">${shortIds.length}</span>
-      </a>
-      <a class="nav-tab ${activeTab === "counselling" ? "active" : ""}" href="?tab=counselling&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
-        ${t("கலந்தாய்வு வழிகாட்டி", "Counselling Procedure Guidance")}
-      </a>
-    </nav>
+    ${navTabsHtml}
 
     ${
       activeTab === "counselling"
@@ -1057,7 +1093,8 @@ export function renderM5GuidancePage(
               totalPages,
               pageSize,
               totalItems: evaluatedRows.length,
-            }
+            },
+            hasSearched
           )
     }
   </main>
@@ -1093,7 +1130,8 @@ function renderComparisonTab(
     totalPages: number;
     pageSize: number;
     totalItems: number;
-  }
+  },
+  hasSearched: boolean = false
 ): string {
   const t = (taStr: string, enStr: string) => (lang === "ta" ? taStr : enStr);
   const totalOfferings = totalOfferingsCount;
@@ -1143,6 +1181,7 @@ function renderComparisonTab(
             <input type="hidden" name="tab" value="comparison">
             <input type="hidden" name="lang" value="${lang}">
             <input type="hidden" name="shortlist" value="${esc(rawShortlist)}">
+            <input type="hidden" name="searched" value="1">
             <input type="hidden" name="cutoff" value="${studentCutoff}">
             <input type="hidden" name="quota" value="${quota}">
             <input type="hidden" name="community" value="${community}">
@@ -1171,6 +1210,7 @@ function renderComparisonTab(
         const u = new URLSearchParams();
         u.set("tab", "comparison");
         u.set("lang", lang);
+        u.set("searched", "1");
         u.set("page", String(p));
         if (query) u.set("q", query);
         if (typeFilter !== "all") u.set("type", typeFilter);
@@ -1209,166 +1249,80 @@ function renderComparisonTab(
     }
   };
 
-  return `
-    <section>
-      <p class="scope-note screen-only" style="margin: 0 0 1rem; padding: 0.85rem 1.15rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.92rem; color: #334155; line-height: 1.55; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
-        ${t(
-          `<strong>தரவு விவரம்:</strong> இந்த ஒப்பீட்டுப் பக்கத்தில், கடந்த ஆண்டு அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவுகள் சரிபார்க்கப்பட்ட <strong>121 கல்லூரிகள் (1,249 படிப்புகள்)</strong> மட்டுமே உள்ளன (கல்லூரி 1516: <span class="held-badge">${esc(copy.heldNotice)}</span>). தமிழ்நாட்டின் மொத்தமுள்ள 389 கல்லூரிகளையும் கட்-ஆஃப் இன்றிப் பார்க்க <a href="/colleges?lang=ta" style="color: #2563eb; font-weight: 600; text-decoration: underline;">முழுக் கல்லூரிகள் பட்டியலைப் பார்க்கவும்</a>.`,
-          `<strong>Dataset scope:</strong> This comparison workspace covers the <strong>121 approved colleges (1,249 offerings)</strong> with governed official provisional allotment evidence (College 1516: <span class="held-badge">${esc(copy.heldNotice)}</span>). To browse the broader 389-college 2026 TNEA listing without marks, visit the <a href="/colleges?lang=en" style="color: #2563eb; font-weight: 600; text-decoration: underline;">Colleges Directory</a>.`
-        )}
-      </p>
-
-      ${
-        studentCutoff !== null && !communitySelected
-          ? `
-      <aside class="community-prompt screen-only" role="status" style="margin: 0 0 1rem; padding: 0.9rem 1rem; background: #fffbeb; border: 1.5px solid #d69e2e; border-radius: 8px; color: #744210; font-size: 0.92rem; line-height: 1.55;">
-        <strong>${t("அடுத்த படி: உங்கள் இட ஒதுக்கீட்டுப் பிரிவைத் (Community) தேர்ந்தெடுங்கள்", "Next Step: Select Your Reservation Community Category")}</strong><br>
-        ${t(
-          `உங்கள் கட்-ஆஃப் (<strong>${studentCutoff}</strong>) தானாகப் பதிவிடப்பட்டுள்ளது (இது இணைய முகவரியில் சேமிக்கப்படாது). கீழே உங்கள் சரியான இட ஒதுக்கீட்டுப் பிரிவு (OC / BC / BCM / MBC / SC / SCA / ST) மற்றும் சேர்க்கைப் பிரிவைத் (பொதுக் கல்வி அல்லது 7.5% அரசுப் பள்ளி) தேர்ந்தெடுத்து <strong>'தேடு &amp; ஒப்பிடு'</strong> என்பதைத் தேர்வு செய்யவும்.`,
-          `Your cutoff (<strong>${studentCutoff}</strong>) was transferred safely in memory (not stored in the URL). Select your applicable Reservation Community Category (OC / BC / BCM / MBC / SC / SCA / ST) and Admission Quota below, then click <strong>'Search &amp; Compare'</strong>.`
-        )}
-      </aside>`
-          : ""
-      }
-
-      <!-- Learn before comparing accordion -->
-      <details class="learn-before-comparing screen-only" style="margin: 0 0 1rem; padding: 0.85rem 1rem; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px;">
-        <summary style="cursor: pointer; font-weight: 700; color: #1e40af; font-size: 0.98rem; padding: 0.2rem 0;">
-          ${t("📖 ஒப்பிடும் முன் தெரிந்துகொள்ள வேண்டியவை (அதிகாரப்பூர்வ வழிகாட்டி &amp; குறிப்புகள்)", "📖 Learn Before Comparing (Official Guides, Rounds &amp; Disclosures)")}
-        </summary>
-        <div style="margin-top: 0.85rem; display: flex; flex-direction: column; gap: 0.85rem;">
-          <aside class="truth-banner" aria-label="Official truth-in-guidance disclosures">
-            <p><strong>${t("முக்கியக் குறிப்பு — அதிகாரப்பூர்வ வெளிப்படைத்தன்மை அறிவிப்பு:", "Important Note — Official Truth-in-Guidance Disclosure:")}</strong></p>
-            <p>${esc(historicalDisclosure)}</p>
-            <p>${esc(copy.nonPredictionDisclaimer)}</p>
-            <p style="font-size: 0.86rem; color: #4a5568;">
-              ${t(
-                `அங்கீகரிக்கப்பட்ட 121 கல்லூரிகளில் உள்ள ${totalOfferingsFormatted} படிப்புகளும் கீழே பட்டியலிடப்பட்டுள்ளன. முந்தைய ஆண்டு அதிகாரப்பூர்வத் தரவு இல்லாத படிப்புகளுக்கு மட்டும் 'ஒப்பீட்டிற்குத் தரவு இல்லை' என்று தெளிவாகக் குறிக்கப்பட்டுள்ளது.`,
-                `All ${totalOfferingsFormatted} governed offerings across the 121 approved institutions are listed below. Where approved historical evidence is absent, offerings are transparently shown as 'Not available for comparison'.`
-              )}
-            </p>
-          </aside>
-
-          <details class="dote-guide" style="padding: 0.75rem 0.9rem; background: #f0fdfa; border: 1.5px solid #99f6e4; border-radius: 8px; font-size: 0.9rem; color: #134e4a; line-height: 1.6;">
-            <summary style="cursor: pointer; font-weight: 700; color: #0f766e; padding: 0.2rem 0; font-size: 0.92rem;">
-              ${t("🏛️ தமிழ்நாடு தொழில்நுட்பக் கல்வி இயக்ககம் (DOTE) கல்லூரி வகைப்பாடுகள் — அதிகாரப்பூர்வ வழிகாட்டி", "🏛️ Directorate of Technical Education (DOTE) College Classification — Official Guide")}
-            </summary>
-            <div style="margin-top: 0.65rem; border-top: 1px solid #ccfbf1; padding-top: 0.65rem;">
-              <p style="margin: 0 0 0.5rem; font-size: 0.88rem;">
-                ${t(
-                  "தொழில்நுட்பக் கல்வி இயக்ககத்தின் (<a href=\"https://dte.tn.gov.in/\" target=\"_blank\" rel=\"noopener\" style=\"color: #0f766e; text-decoration: underline; font-weight: 600;\">dte.tn.gov.in</a>) அதிகாரப்பூர்வ வகைப்பாட்டின்படி, தமிழ்நாட்டில் உள்ள பொறியியல் கல்லூரிகள் பின்வருமாறு பிரிக்கப்பட்டுள்ளன:",
-                  "According to the official Directorate of Technical Education (<a href=\"https://dte.tn.gov.in/\" target=\"_blank\" rel=\"noopener\" style=\"color: #0f766e; text-decoration: underline; font-weight: 600;\">dte.tn.gov.in</a>) classification, Tamil Nadu engineering colleges are categorized as follows:"
-                )}
-              </p>
-              <ul style="margin: 0.35rem 0 0.5rem; padding-left: 1.2rem; line-height: 1.65; font-size: 0.88rem;">
-                <li><strong>${t("அரசுப் பொறியியல் கல்லூரிகள் (Government Engineering Colleges — 11)", "Government Engineering Colleges (11)")}:</strong> ${t("அரசால் முழுமையாக நிர்வகிக்கப்படும் 11 அரசுப் பொறியியல் கல்லூரிகள்.", "11 fully state-governed institutions.")}</li>
-                <li><strong>${t("அரசு உதவிபெறும் பொறியியல் கல்லூரிகள் (Government Aided Engineering Colleges — 3)", "Government Aided Engineering Colleges (3)")}:</strong> ${t("அரசு நிதி உதவிபெறும் 3 பொறியியல் கல்லூரிகள் (PSG Tech 2006, CIT 2007, TCE 5008).", "3 state-aided engineering institutions (PSG Tech 2006, CIT 2007, TCE 5008).")}</li>
-                <li><strong>${t("அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள் (Anna University Department Colleges — 4)", "Anna University Department Colleges (4)")}:</strong> ${t("அண்ணா பல்கலைக்கழகத்தின் நேரடி துறைக் கல்லூரிகள் (CEG 1, ACT 2, SAP 3, MIT 4).", "Anna University department institutions (CEG 1, ACT 2, SAP 3, MIT 4).")}</li>
-                <li><strong>${t("அண்ணாமலைப் பல்கலைக்கழகம் (Annamalai University — 1)", "Annamalai University (1)")}:</strong> ${t("சிதம்பரத்தில் உள்ள அண்ணாமலைப் பல்கலைக்கழக பொறியியல் மற்றும் தொழில்நுட்பப் புலம் (குறியீடு 5).", "Faculty of Engineering & Technology, Annamalai University (Code 5).")}</li>
-                <li><strong>${t("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள் (Anna University Constituent Colleges — 16)", "Anna University Constituent Colleges (16)")}:</strong> ${t("மண்டல வளாகங்கள் மற்றும் உறுப்புக் கல்லூரிகள் (UCEs).", "Regional campuses and University Colleges of Engineering (UCEs).")}</li>
-                <li><strong>${t("மத்திய அரசு பொறியியல் கல்லூரிகள் (Central Government Colleges)", "Central Government Colleges")}:</strong> ${t("மத்திய அரசால் நிர்வகிக்கப்படும் நிறுவனங்கள் (நேரடி சேர்க்கை).", "Centrally funded institutions (central admissions).")}</li>
-                <li><strong>${t("சுயநிதிப் பொறியியல் கல்லூரிகள் — தன்னாட்சி (86)", "Self Financing Engineering Colleges (86 Autonomous)")}:</strong> ${t("தமிழ்நாட்டின் 29 மாவட்டங்களில் அமைந்துள்ள தன்னாட்சி பெற்ற சுயநிதிப் பொறியியல் கல்லூரிகள் (மாவட்டம் வாரியாகப் பிரிக்கப்பட்டுள்ளது).", "Autonomous private engineering institutions across 29 districts in Tamil Nadu (district-wise).")}</li>
-              </ul>
-            </div>
-          </details>
-
-          <details class="community-guide" style="padding: 0.75rem 0.9rem; background: #fff; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.9rem; color: #2d3748;">
-            <summary style="cursor: pointer; font-weight: 600; color: #2b6cb0; padding: 0.2rem 0;">${t("இட ஒதுக்கீட்டுப் பிரிவுகள் (OC / BC / MBC / SC / ST) — எளிய விளக்கம்", "Reservation Community Categories (OC / BC / MBC / SC / ST) — Quick Guide")}</summary>
-            <ul style="margin: 0.5rem 0 0.25rem; padding-left: 1.2rem; line-height: 1.6;">
-              <li><strong>OC</strong> — ${t("பொதுப் பிரிவு (Open Competition): அனைத்து வகுப்பினரும் தகுதியின் அடிப்படையில் போட்டியிடக்கூடிய பொது இடங்கள்.", "Open Competition: Open merit pool available to all eligible candidates regardless of community.")}</li>
-              <li><strong>BC / BCM</strong> — ${t("பிற்படுத்தப்பட்டோர் (Backward Class) மற்றும் பிற்படுத்தப்பட்ட முஸ்லிம் (BC Muslim).", "Backward Class (BC) and Backward Class Muslim (BCM).")}</li>
-              <li><strong>MBC</strong> — ${t("மிகவும் பிற்படுத்தப்பட்டோர் மற்றும் சீர்மரபினர் (MBC / DNC).", "Most Backward Class and Denotified Communities (MBC / DNC).")}</li>
-              <li><strong>SC / SCA / ST</strong> — ${t("ஆதிதிராவிடர் (SC), அருந்ததியர் (SCA) மற்றும் பழங்குடியினர் (ST).", "Scheduled Caste (SC), Scheduled Caste Arunthathiyar (SCA), and Scheduled Tribe (ST).")}</li>
-            </ul>
-            <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: #4a5568;">${t("உங்கள் சாதிச் சான்றிதழின்படி பொருந்தும் பிரிவை நீங்களே தேர்ந்தெடுங்கள்; தளம் தானாகப் பிரிவைக் கணிக்காது.", "Select the category that matches your official certificate; this tool never infers your category.")}</p>
-          </details>
-
-          <details class="delta-guide" style="padding: 0.75rem 0.9rem; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; font-size: 0.9rem; color: #14532d; line-height: 1.6;">
-            <summary style="cursor: pointer; font-weight: 700; color: #15803d; padding: 0.2rem 0; font-size: 0.92rem;">
-              ${t("💡 கட்-ஆஃப் ஒப்பீட்டு வேறுபாடு (Δ) கணக்கீடு மற்றும் விருப்பப் பட்டியல் அமைக்கும் முறை", "💡 How Comparison Delta (Δ) Works & Practical Guide for Structuring Your Choice List")}
-            </summary>
-            <div style="margin-top: 0.65rem; border-top: 1px solid #bbf7d0; padding-top: 0.65rem;">
-              <p style="margin: 0 0 0.5rem;">
-                <strong>${t("கணக்கிடும் முறை:", "Calculation Method:")}</strong>
-                <code style="background: #dcfce7; padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 700; color: #166534;">${t("உங்கள் கட்-ஆஃப் மதிப்பெண் − கண்டறியப்பட்ட தற்காலிக குறைந்தபட்ச மதிப்பெண் = ஒப்பீட்டு வேறுபாடு (Δ)", "Your Cutoff Mark − Observed Provisional Allotment Minimum Mark = Comparison Delta (Δ)")}</code>
-              </p>
-              <ul style="margin: 0.35rem 0 0.65rem; padding-left: 1.2rem;">
-                <li>
-                  <strong>${t("கூடுதல் மதிப்பெண் (+):", "Positive (+) Difference:")}</strong>
-                  ${t(
-                    "உதாரணமாக, <strong>+3.00</strong> — முந்தைய ஆண்டு தற்காலிக ஒதுக்கீட்டில் இந்த இடத்திற்கு ஒதுக்கப்பட்ட மிகக் குறைந்த மதிப்பெண்ணை விட உங்கள் கட்-ஆஃப் 3.00 மதிப்பெண்கள் அதிகம்.",
-                    "e.g., <strong>+3.00</strong> — Your cutoff mark is 3.00 marks higher than the lowest score allotted for this offering in the past provisional allotment."
-                  )}
-                </li>
-                <li>
-                  <strong>${t("குறைவான மதிப்பெண் (−):", "Negative (−) Difference:")}</strong>
-                  ${t(
-                    "உதாரணமாக, <strong>-3.00</strong> — முந்தைய ஆண்டு தற்காலிக ஒதுக்கீட்டில் இந்த இடத்திற்கு ஒதுக்கப்பட்ட மிகக் குறைந்த மதிப்பெண்ணை விட உங்கள் கட்-ஆஃப் 3.00 மதிப்பெண்கள் குறைவு.",
-                    "e.g., <strong>-3.00</strong> — Your cutoff mark is 3.00 marks lower than the lowest score allotted for this offering in the past provisional allotment."
-                  )}
-                </li>
-                <li>
-                  <strong>${t("பூஜ்ஜியம் (0.00):", "Zero (0.00):")}</strong>
-                  ${t("முந்தைய ஆண்டு தற்காலிக ஒதுக்கீட்டில் கண்டறியப்பட்ட குறைந்தபட்ச மதிப்பெண்ணிற்குச் சமம்.", "Exact match with the past provisional allotment observed minimum mark.")}
-                </li>
-              </ul>
-            </div>
-          </details>
-
-          <details class="rounds-guide" style="padding: 0.75rem 0.9rem; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; color: #1e293b; line-height: 1.6;">
-            <summary style="cursor: pointer; font-weight: 700; color: #1e40af; padding: 0.2rem 0; font-size: 0.92rem;">
-              ${t("🏛️ TNEA கலந்தாய்வு சுற்றுகள் (Round 1, 2, 3) &amp; நடைமுறை நிலைகள் — அதிகாரப்பூர்வ விளக்கம்", "🏛️ TNEA Counselling Rounds Architecture (Round 1, 2, 3) &amp; Allotment Stages — Official Guide")}
-            </summary>
-            <div style="margin-top: 0.65rem; border-top: 1px solid #e2e8f0; padding-top: 0.65rem;">
-              <p style="margin: 0 0 0.5rem; font-size: 0.88rem; color: #334155;">
-                ${t(
-                  "TNEA ஒற்றைச் சாளரப் பொறியியல் கலந்தாய்வு பொதுத் தரவரிசை (General Merit Rank) மற்றும் 200-க்கு கணக்கிடப்படும் கட்-ஆஃப் மதிப்பெண்களின் அடிப்படையில் 3 தொடர்ச்சியான சுற்றுகளாக நடத்தப்படுகிறது.",
-                  "TNEA single-window engineering counselling is conducted across 3 sequential rounds based strictly on candidate General Merit Rank and aggregate cut-off score (out of 200)."
-                )}
-              </p>
-
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.65rem; margin: 0.5rem 0 0.85rem;">
-                <div style="background: #ffffff; border: 1px solid #bfdbfe; border-left: 3px solid #2563eb; padding: 0.65rem 0.8rem; border-radius: 6px;">
-                  <strong style="color: #1d4ed8; display: block; font-size: 0.9rem; margin-bottom: 0.2rem;">
-                    ${t("சுற்று 1 (Round 1)", "Round 1")}
-                  </strong>
-                  <div style="font-size: 0.83rem; color: #475569; line-height: 1.45;">
-                    <strong>${t("தரவரிசை:", "Rank:")}</strong> 1 - ~24,000<br>
-                    <strong>${t("கட்-ஆஃப்:", "Cut-off:")}</strong> 200.00 - ~179.00
-                  </div>
-                </div>
-
-                <div style="background: #ffffff; border: 1px solid #bfdbfe; border-left: 3px solid #2563eb; padding: 0.65rem 0.8rem; border-radius: 6px;">
-                  <strong style="color: #1d4ed8; display: block; font-size: 0.9rem; margin-bottom: 0.2rem;">
-                    ${t("சுற்று 2 (Round 2)", "Round 2")}
-                  </strong>
-                  <div style="font-size: 0.83rem; color: #475569; line-height: 1.45;">
-                    <strong>${t("தரவரிசை:", "Rank:")}</strong> ~24,001 - ~75,000<br>
-                    <strong>${t("கட்-ஆஃப்:", "Cut-off:")}</strong> ~178.99 - ~145.00
-                  </div>
-                </div>
-
-                <div style="background: #ffffff; border: 1px solid #bfdbfe; border-left: 3px solid #2563eb; padding: 0.65rem 0.8rem; border-radius: 6px;">
-                  <strong style="color: #1d4ed8; display: block; font-size: 0.9rem; margin-bottom: 0.2rem;">
-                    ${t("சுற்று 3 (Round 3)", "Round 3")}
-                  </strong>
-                  <div style="font-size: 0.83rem; color: #475569; line-height: 1.45;">
-                    <strong>${t("தரவரிசை:", "Rank:")}</strong> ${t("~75,001 முதல் கடைசி வரை", "~75,001 to qualifying rank")}<br>
-                    <strong>${t("கட்-ஆஃப்:", "Cut-off:")}</strong> ~144.99 - ~77.50
-                  </div>
-                </div>
-              </div>
-            </div>
-          </details>
+  const renderActiveContextStrip = () => `
+      <div class="active-context-strip" role="status" style="margin: 0 0 1rem; padding: 0.8rem 1rem; background: #edf2f7; border-left: 4px solid #2b6cb0; border-radius: 4px; font-size: 0.9rem; color: #1a202c; line-height: 1.5;">
+        <!-- Context Chips (Requirement 9) -->
+        <div class="context-chips-bar screen-only" aria-label="Active Context Chips" style="margin: 0 0 0.5rem;">
+          <span class="context-chips-label">${t("தேர்ந்தெடுத்த விவரங்கள்:", "Active Chips:")}</span>
+          ${studentCutoff !== null ? `<span class="context-chip">🎯 ${t("கட்-ஆஃப்:", "Cutoff:")} <strong>${studentCutoff.toFixed(2)}</strong></span>` : ""}
+          <span class="context-chip">📋 ${esc(copy.quotaName(quota))}</span>
+          <span class="context-chip">🏷️ ${esc(copy.communityName(community))}</span>
+          <span class="context-chip">🔄 ${esc(copy.roundName(round))}</span>
+          <span class="context-chip">📅 ${year}</span>
+          ${query ? `<span class="context-chip">🔍 "${esc(query)}"</span>` : ""}
+          ${districtFilter ? `<span class="context-chip">📍 ${esc(districtFilter)}</span>` : ""}
+          ${typeFilter !== "all" ? `<span class="context-chip">🏛️ ${esc(typeFilter)}</span>` : ""}
         </div>
-      </details>
+        <div>
+          <strong>${t("தற்போது தேர்ந்தெடுத்துள்ள விவரம்:", "Current Comparison Context:")}</strong>
+          ${year} · ${esc(copy.quotaName(quota))} · <strong>${esc(copy.communityName(community))}</strong> · ${esc(copy.roundName(round))}
+          ${districtFilter ? ` · ${t("மாவட்டம்:", "District:")} <strong>${esc(districtFilter)}</strong>` : ""}
+          ${branchFilter ? ` · ${t("பாடப்பிரிவு:", "Branch:")} <strong>${esc(branchFilter)}</strong>` : ""}
+          ${query ? ` · ${t("தேடல்:", "Search:")} <strong>${esc(query)}</strong>` : ""}
+          ${onlyAvailable ? ` · <strong>${t("கட்-ஆஃப் உள்ளவை மட்டும்", "Only available")}</strong>` : ""}
+          (${
+            rows.length === totalOfferings
+              ? t(
+                  `மொத்தமுள்ள ${totalOfferingsFormatted} படிப்புகளில், ${esc(copy.roundName(round))}-ல் ${availableCount} படிப்புகளில் இடங்கள் ஒதுக்கப்பட்டுள்ளன`,
+                  `${availableCount} of ${totalOfferingsFormatted} total offerings were allotted in ${esc(copy.roundName(round))}`
+                )
+              : t(
+                  `காட்டப்படும் ${rows.length} படிப்புகளில், ${esc(copy.roundName(round))}-ல் ${availableCount} படிப்புகளில் இடங்கள் ஒதுக்கப்பட்டுள்ளன`,
+                  `${availableCount} of ${rows.length} shown offerings were allotted in ${esc(copy.roundName(round))}`
+                )
+          })
+        </div>
+        ${
+          quota === "GOVT_SCHOOL_7_5"
+            ? `<p class="quota-75-context-reminder" role="note" style="margin: 0.4rem 0 0; padding: 0.45rem 0.65rem; background: #fffbeb; border-left: 3px solid #d97706; border-radius: 4px; font-size: 0.83rem; color: #78350f;">${t(
+                `<strong>7.5% தகுதி நினைவூட்டல்:</strong> இந்த ஒப்பீடு தகவல் அறிய மட்டுமே; இது 7.5% இடஒதுக்கீட்டுத் தகுதியை உறுதிப்படுத்தாது. அதிகாரப்பூர்வ TNEA ஆவணச் சரிபார்ப்பின்படியே தகுதி முடிவாகும் (<a href="/counselling?lang=ta" style="color: #92400e; font-weight: 700; text-decoration: underline;">7.5% விதிகளைப் பார்க்க</a>).`,
+                `<strong>7.5% Eligibility Reminder:</strong> This comparison view is for exploration only and does not establish 7.5% quota eligibility. Eligibility must be verified through official Std 6–12 government-school certificates and TNEA verification (<a href="/counselling?lang=en" style="color: #92400e; font-weight: 700; text-decoration: underline;">view 7.5% rules</a>).`
+              )}</p>`
+            : ""
+        }
+        ${
+          year === 2025
+            ? `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
+                "<strong>2025 தரவு வரம்பு:</strong> இந்தப் பட்டியலில் உள்ள 121 கல்லூரிகளின் 1,249 படிப்புகளில், 536 படிப்புகளுக்கு 2025-ஆம் ஆண்டின் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு உள்ளது (மீதமுள்ள 713 படிப்புகளுக்கு 'ஒப்பீட்டிற்குத் தரவு இல்லை' எனக் காட்டப்படும்). அனைத்து 121 கல்லூரிகளின் 1,249 படிப்புகளுக்குமான முழு ஒதுக்கீட்டுத் தரவைப் பார்க்க மேலே உள்ள 'கலந்தாய்வு ஆண்டு' தேர்வில் <strong>2026</strong>-ஐத் தேர்ந்தெடுக்கவும்.",
+                "<strong>2025 Evidence Coverage:</strong> Across the 121 governed colleges (1,249 offerings), approved 2025 provisional allotment observations are available for 536 offerings (the remaining 713 offerings appear as 'Not available for comparison'). Select <strong>2026</strong> in 'Counselling Year' above to inspect complete data across all 121 colleges (1,249 offerings)."
+              )}</p>`
+            : `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
+                "<strong>2026 முழு வரம்பு:</strong> 2026-ஆம் ஆண்டின் தற்காலிக ஒதுக்கீட்டுத் தரவு 121 கல்லூரிகளுக்கும் (1,249 படிப்புகள்) முழுமையாகக் கிடைக்கிறது.",
+                "<strong>2026 Complete Scope:</strong> 2026 provisional allotment data is active across all 121 approved colleges (1,249 offerings)."
+              )}</p>`
+        }
+        <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">
+          <strong>${t("அதிகாரப்பூர்வ வெளிப்படைத்தன்மை அறிவிப்பு:", "Official Truth-in-Guidance Disclosure:")}</strong> ${esc(historicalDisclosure)}
+        </p>
+        ${
+          year === 2025 && quota === "GENERAL_ACADEMIC"
+            ? `<p style="margin: 0.4rem 0 0; font-size: 0.84rem; color: #2d3748;">${t(
+                "<strong>முக்கியக் குறிப்பு (சுற்று 1 தரவு இல்லை):</strong> பொதுக் கல்விப் பிரிவுக்கு 2025 அதிகாரப்பூர்வ <strong>சுற்று 2</strong> மற்றும் <strong>சுற்று 3</strong> வெளியீடுகள் மட்டுமே இங்கு அங்கீகரிக்கப்பட்டுள்ளன. சுற்று 1-லேயே அனைத்து இடங்களும் நிரம்பிய படிப்புகளுக்கு 'ஒப்பீட்டிற்கு கிடைக்கவில்லை' என்று காட்டப்படும் — இதன் பொருள் அந்தக் கல்லூரி அல்லது படிப்பு இல்லை என்பதல்ல. உங்கள் பிரிவு (எ.கா. BC, MBC, SC) அல்லது 7.5% ஒதுக்கீட்டைத் தேர்ந்தெடுத்துப் பார்க்கவும்.",
+                "<strong>Coverage note (No Round 1 for General Academic):</strong> Only official 2025 <strong>Round 2</strong> and <strong>Round 3</strong> publications are approved here for General Academic. Offerings where all seats were filled during Round 1 appear as 'Not available for comparison' — this does NOT mean the college or branch is unavailable."
+              )}</p>`
+            : ""
+        }
+      </div>
+  `;
 
+  const renderSearchForm = () => `
       <!-- Form method is POST to prevent sensitive student marks from appearing in GET query strings or browser history -->
       <form method="POST" action="/m5-guidance" class="form-grid" role="search" aria-label="Cutoff comparison form">
         <input type="hidden" name="tab" value="comparison">
         <input type="hidden" name="lang" value="${lang}">
         <input type="hidden" name="shortlist" value="${esc(rawShortlist)}">
         <input type="hidden" name="community_selected" value="1">
+        <input type="hidden" name="searched" value="1">
 
         <!-- Tier 1: Primary Search & Essential Context -->
         <div class="form-tier form-tier-1">
@@ -1512,67 +1466,32 @@ function renderComparisonTab(
           <button type="submit" class="btn-action btn-primary" aria-label="${t("தேடு மற்றும் ஒப்பிடு", "Search and Compare")}" style="padding: 0.65rem 1.6rem; font-size: 0.95rem; font-weight: 700;">${t("தேடு &amp; ஒப்பிடு", "Search &amp; Compare")}</button>
         </div>
       </form>
+  `;
 
-      <div class="active-context-strip" role="status" style="margin: 0 0 1rem; padding: 0.8rem 1rem; background: #edf2f7; border-left: 4px solid #2b6cb0; border-radius: 4px; font-size: 0.9rem; color: #1a202c; line-height: 1.5;">
-        <!-- Context Chips (Requirement 9) -->
-        <div class="context-chips-bar screen-only" aria-label="Active Context Chips" style="margin: 0 0 0.5rem;">
-          <span class="context-chips-label">${t("தேர்ந்தெடுத்த விவரங்கள்:", "Active Chips:")}</span>
-          ${studentCutoff !== null ? `<span class="context-chip">🎯 ${t("கட்-ஆஃப்:", "Cutoff:")} <strong>${studentCutoff.toFixed(2)}</strong></span>` : ""}
-          <span class="context-chip">📋 ${esc(copy.quotaName(quota))}</span>
-          <span class="context-chip">🏷️ ${esc(copy.communityName(community))}</span>
-          <span class="context-chip">🔄 ${esc(copy.roundName(round))}</span>
-          <span class="context-chip">📅 ${year}</span>
-          ${query ? `<span class="context-chip">🔍 "${esc(query)}"</span>` : ""}
-          ${districtFilter ? `<span class="context-chip">📍 ${esc(districtFilter)}</span>` : ""}
-          ${typeFilter !== "all" ? `<span class="context-chip">🏛️ ${esc(typeFilter)}</span>` : ""}
-        </div>
-        <div>
-          <strong>${t("தற்போது தேர்ந்தெடுத்துள்ள விவரம்:", "Current Comparison Context:")}</strong>
-          ${year} · ${esc(copy.quotaName(quota))} · <strong>${esc(copy.communityName(community))}</strong> · ${esc(copy.roundName(round))}
-          ${districtFilter ? ` · ${t("மாவட்டம்:", "District:")} <strong>${esc(districtFilter)}</strong>` : ""}
-          ${branchFilter ? ` · ${t("பாடப்பிரிவு:", "Branch:")} <strong>${esc(branchFilter)}</strong>` : ""}
-          ${query ? ` · ${t("தேடல்:", "Search:")} <strong>${esc(query)}</strong>` : ""}
-          ${onlyAvailable ? ` · <strong>${t("கட்-ஆஃப் உள்ளவை மட்டும்", "Only available")}</strong>` : ""}
-          (${
-            rows.length === totalOfferings
-              ? t(
-                  `மொத்தமுள்ள ${totalOfferingsFormatted} படிப்புகளில், ${esc(copy.roundName(round))}-ல் ${availableCount} படிப்புகளில் இடங்கள் ஒதுக்கப்பட்டுள்ளன`,
-                  `${availableCount} of ${totalOfferingsFormatted} total offerings were allotted in ${esc(copy.roundName(round))}`
-                )
-              : t(
-                  `காட்டப்படும் ${rows.length} படிப்புகளில், ${esc(copy.roundName(round))}-ல் ${availableCount} படிப்புகளில் இடங்கள் ஒதுக்கப்பட்டுள்ளன`,
-                  `${availableCount} of ${rows.length} shown offerings were allotted in ${esc(copy.roundName(round))}`
-                )
-          })
-        </div>
-        ${
-          quota === "GOVT_SCHOOL_7_5"
-            ? `<p class="quota-75-context-reminder" role="note" style="margin: 0.4rem 0 0; padding: 0.45rem 0.65rem; background: #fffbeb; border-left: 3px solid #d97706; border-radius: 4px; font-size: 0.83rem; color: #78350f;">${t(
-                `<strong>7.5% தகுதி நினைவூட்டல்:</strong> இந்த ஒப்பீடு தகவல் அறிய மட்டுமே; இது 7.5% இடஒதுக்கீட்டுத் தகுதியை உறுதிப்படுத்தாது. அதிகாரப்பூர்வ TNEA ஆவணச் சரிபார்ப்பின்படியே தகுதி முடிவாகும் (<a href="/counselling?lang=ta" style="color: #92400e; font-weight: 700; text-decoration: underline;">7.5% விதிகளைப் பார்க்க</a>).`,
-                `<strong>7.5% Eligibility Reminder:</strong> This comparison view is for exploration only and does not establish 7.5% quota eligibility. Eligibility must be verified through official Std 6–12 government-school certificates and TNEA verification (<a href="/counselling?lang=en" style="color: #92400e; font-weight: 700; text-decoration: underline;">view 7.5% rules</a>).`
-              )}</p>`
-            : ""
-        }
-        ${
-          year === 2025
-            ? `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
-                "<strong>2025 தரவு வரம்பு:</strong> இந்தப் பட்டியலில் உள்ள 121 கல்லூரிகளின் 1,249 படிப்புகளில், 536 படிப்புகளுக்கு 2025-ஆம் ஆண்டின் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு உள்ளது (மீதமுள்ள 713 படிப்புகளுக்கு 'ஒப்பீட்டிற்குத் தரவு இல்லை' எனக் காட்டப்படும்). அனைத்து 121 கல்லூரிகளின் 1,249 படிப்புகளுக்குமான முழு ஒதுக்கீட்டுத் தரவைப் பார்க்க மேலே உள்ள 'கலந்தாய்வு ஆண்டு' தேர்வில் <strong>2026</strong>-ஐத் தேர்ந்தெடுக்கவும்.",
-                "<strong>2025 Evidence Coverage:</strong> Across the 121 governed colleges (1,249 offerings), approved 2025 provisional allotment observations are available for 536 offerings (the remaining 713 offerings appear as 'Not available for comparison'). Select <strong>2026</strong> in 'Counselling Year' above to inspect complete data across all 121 colleges (1,249 offerings)."
-              )}</p>`
-            : `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
-                "<strong>2026 முழு வரம்பு:</strong> 2026-ஆம் ஆண்டின் தற்காலிக ஒதுக்கீட்டுத் தரவு 121 கல்லூரிகளுக்கும் (1,249 படிப்புகள்) முழுமையாகக் கிடைக்கிறது.",
-                "<strong>2026 Complete Scope:</strong> 2026 provisional allotment data is active across all 121 approved colleges (1,249 offerings)."
-              )}</p>`
-        }
-        ${
-          year === 2025 && quota === "GENERAL_ACADEMIC"
-            ? `<p style="margin: 0.4rem 0 0; font-size: 0.84rem; color: #2d3748;">${t(
-                "<strong>முக்கியக் குறிப்பு (சுற்று 1 தரவு இல்லை):</strong> பொதுக் கல்விப் பிரிவுக்கு 2025 அதிகாரப்பூர்வ <strong>சுற்று 2</strong> மற்றும் <strong>சுற்று 3</strong> வெளியீடுகள் மட்டுமே இங்கு அங்கீகரிக்கப்பட்டுள்ளன. சுற்று 1-லேயே அனைத்து இடங்களும் நிரம்பிய படிப்புகளுக்கு 'ஒப்பீட்டிற்கு கிடைக்கவில்லை' என்று காட்டப்படும் — இதன் பொருள் அந்தக் கல்லூரி அல்லது படிப்பு இல்லை என்பதல்ல. உங்கள் பிரிவு (எ.கா. BC, MBC, SC) அல்லது 7.5% ஒதுக்கீட்டைத் தேர்ந்தெடுத்துப் பார்க்கவும்.",
-                "<strong>Coverage note (No Round 1 for General Academic):</strong> Only official 2025 <strong>Round 2</strong> and <strong>Round 3</strong> publications are approved here for General Academic. Offerings where all seats were filled during Round 1 appear as 'Not available for comparison' — this does NOT mean the college or branch is unavailable."
-              )}</p>`
-            : ""
-        }
-      </div>
+  if (!hasSearched) {
+    return `
+    <section>
+      <p class="scope-note screen-only" style="margin: 0 0 1rem; padding: 0.85rem 1.15rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.92rem; color: #334155; line-height: 1.55; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+        ${t(
+          `<strong>தரவு விவரம்:</strong> இந்த ஒப்பீட்டுப் பக்கத்தில், கடந்த ஆண்டு அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவுகள் சரிபார்க்கப்பட்ட <strong>121 கல்லூரிகள் (1,249 படிப்புகள்)</strong> மட்டுமே உள்ளன (கல்லூரி 1516: <span class="held-badge">${esc(copy.heldNotice)}</span>). தமிழ்நாட்டின் மொத்தமுள்ள 389 கல்லூரிகளையும் கட்-ஆஃப் இன்றிப் பார்க்க <a href="/colleges?lang=ta" style="color: #2563eb; font-weight: 600; text-decoration: underline;">முழுக் கல்லூரிகள் பட்டியலைப் பார்க்கவும்</a>.`,
+          `<strong>Dataset scope:</strong> This comparison workspace covers the <strong>121 approved colleges (1,249 offerings)</strong> with governed official provisional allotment evidence (College 1516: <span class="held-badge">${esc(copy.heldNotice)}</span>). To browse the broader 389-college 2026 TNEA listing without marks, visit the <a href="/colleges?lang=en" style="color: #2563eb; font-weight: 600; text-decoration: underline;">Colleges Directory</a>.`
+        )}
+      </p>
+
+      ${
+        studentCutoff !== null && !communitySelected
+          ? `
+      <aside class="community-prompt screen-only" role="status" style="margin: 0 0 1rem; padding: 0.9rem 1rem; background: #fffbeb; border: 1.5px solid #d69e2e; border-radius: 8px; color: #744210; font-size: 0.92rem; line-height: 1.55;">
+        <strong>${t("அடுத்த படி: உங்கள் இட ஒதுக்கீட்டுப் பிரிவைத் (Community) தேர்ந்தெடுங்கள்", "Next Step: Select Your Reservation Community Category")}</strong><br>
+        ${t(
+          `உங்கள் கட்-ஆஃப் (<strong>${studentCutoff}</strong>) தானாகப் பதிவிடப்பட்டுள்ளது (இது இணைய முகவரியில் சேமிக்கப்படாது). கீழே உங்கள் சரியான இட ஒதுக்கீட்டுப் பிரிவு (OC / BC / BCM / MBC / SC / SCA / ST) மற்றும் சேர்க்கைப் பிரிவைத் (பொதுக் கல்வி அல்லது 7.5% அரசுப் பள்ளி) தேர்ந்தெடுத்து <strong>'தேடு &amp; ஒப்பிடு'</strong> என்பதைத் தேர்வு செய்யவும்.`,
+          `Your cutoff (<strong>${studentCutoff}</strong>) was transferred safely in memory (not stored in the URL). Select your applicable Reservation Community Category (OC / BC / BCM / MBC / SC / SCA / ST) and Admission Quota below, then click <strong>'Search &amp; Compare'</strong>.`
+        )}
+      </aside>`
+          : ""
+      }
+
+      ${studentCutoff !== null ? renderActiveContextStrip() : ""}
 
       ${
         shortIds.length > 0
@@ -1589,32 +1508,195 @@ function renderComparisonTab(
           : ""
       }
 
-      <div class="results-meta-bar screen-only">
-        <span class="results-count-pill">
-          ${t(
-            `${rows.length} படிப்புகள் (பக்கம் ${pagination.currentPage} / ${pagination.totalPages})`,
-            `${rows.length} offerings (Page ${pagination.currentPage} of ${pagination.totalPages})`
-          )}
+      <!-- Learn before comparing accordion -->
+      <details class="learn-before-comparing screen-only" style="margin: 0 0 1rem; padding: 0.85rem 1rem; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px;">
+        <summary style="cursor: pointer; font-weight: 700; color: #1e40af; font-size: 0.98rem; padding: 0.2rem 0;">
+          ${t("📖 ஒப்பிடும் முன் தெரிந்துகொள்ள வேண்டியவை (அதிகாரப்பூர்வ வழிகாட்டி &amp; குறிப்புகள்)", "📖 Learn Before Comparing (Official Guides, Rounds &amp; Disclosures)")}
+        </summary>
+        <div style="margin-top: 0.85rem; display: flex; flex-direction: column; gap: 0.85rem;">
+          <aside class="truth-banner" aria-label="Official truth-in-guidance disclosures">
+            <p><strong>${t("முக்கியக் குறிப்பு — அதிகாரப்பூர்வ வெளிப்படைத்தன்மை அறிவிப்பு:", "Important Note — Official Truth-in-Guidance Disclosure:")}</strong></p>
+            <p>${esc(historicalDisclosure)}</p>
+            <p>${esc(copy.nonPredictionDisclaimer)}</p>
+            <p style="font-size: 0.86rem; color: #4a5568;">
+              ${t(
+                `அங்கீகரிக்கப்பட்ட 121 கல்லூரிகளில் உள்ள ${totalOfferingsFormatted} படிப்புகளும் கீழே பட்டியலிடப்பட்டுள்ளன. முந்தைய ஆண்டு அதிகாரப்பூர்வத் தரவு இல்லாத படிப்புகளுக்கு மட்டும் 'ஒப்பீட்டிற்குத் தரவு இல்லை' என்று தெளிவாகக் குறிக்கப்பட்டுள்ளது.`,
+                `All ${totalOfferingsFormatted} governed offerings across the 121 approved institutions are listed below. Where approved historical evidence is absent, offerings are transparently shown as 'Not available for comparison'.`
+              )}
+            </p>
+          </aside>
+
+          <details class="dote-guide" style="padding: 0.75rem 0.9rem; background: #f0fdfa; border: 1.5px solid #99f6e4; border-radius: 8px; font-size: 0.9rem; color: #134e4a; line-height: 1.6;">
+            <summary style="cursor: pointer; font-weight: 700; color: #0f766e; padding: 0.2rem 0; font-size: 0.92rem;">
+              ${t("🏛️ தமிழ்நாடு தொழில்நுட்பக் கல்வி இயக்ககம் (DOTE) கல்லூரி வகைப்பாடுகள் — அதிகாரப்பூர்வ வழிகாட்டி", "🏛️ Directorate of Technical Education (DOTE) College Classification — Official Guide")}
+            </summary>
+            <div style="margin-top: 0.65rem; border-top: 1px solid #ccfbf1; padding-top: 0.65rem;">
+              <p style="margin: 0 0 0.5rem; font-size: 0.88rem;">
+                ${t(
+                  "தொழில்நுட்பக் கல்வி இயக்ககத்தின் (<a href=\"https://dte.tn.gov.in/\" target=\"_blank\" rel=\"noopener\" style=\"color: #0f766e; text-decoration: underline; font-weight: 600;\">dte.tn.gov.in</a>) அதிகாரப்பூர்வ வகைப்பாட்டின்படி, தமிழ்நாட்டில் உள்ள பொறியியல் கல்லூரிகள் பின்வருமாறு பிரிக்கப்பட்டுள்ளன:",
+                  "According to the official Directorate of Technical Education (<a href=\"https://dte.tn.gov.in/\" target=\"_blank\" rel=\"noopener\" style=\"color: #0f766e; text-decoration: underline; font-weight: 600;\">dte.tn.gov.in</a>) classification, Tamil Nadu engineering colleges are categorized as follows:"
+                )}
+              </p>
+              <ul style="margin: 0.35rem 0 0.5rem; padding-left: 1.2rem; line-height: 1.65; font-size: 0.88rem;">
+                <li><strong>${t("அரசுப் பொறியியல் கல்லூரிகள் (Government Engineering Colleges — 11)", "Government Engineering Colleges (11)")}:</strong> ${t("அரசால் முழுமையாக நிர்வகிக்கப்படும் 11 அரசுப் பொறியியல் கல்லூரிகள்.", "11 fully state-governed institutions.")}</li>
+                <li><strong>${t("அரசு உதவிபெறும் பொறியியல் கல்லூரிகள் (Government Aided Engineering Colleges — 3)", "Government Aided Engineering Colleges (3)")}:</strong> ${t("அரசு நிதி உதவிபெறும் 3 பொறியியல் கல்லூரிகள் (PSG Tech 2006, CIT 2007, TCE 5008).", "3 state-aided engineering institutions (PSG Tech 2006, CIT 2007, TCE 5008).")}</li>
+                <li><strong>${t("அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள் (Anna University Department Colleges — 4)", "Anna University Department Colleges (4)")}:</strong> ${t("அண்ணா பல்கலைக்கழகத்தின் நேரடி துறைக் கல்லூரிகள் (CEG 1, ACT 2, SAP 3, MIT 4).", "Anna University department institutions (CEG 1, ACT 2, SAP 3, MIT 4).")}</li>
+                <li><strong>${t("அண்ணாமலைப் பல்கலைக்கழகம் (Annamalai University — 1)", "Annamalai University (1)")}:</strong> ${t("சிதம்பரத்தில் உள்ள அண்ணாமலைப் பல்கலைக்கழக பொறியியல் மற்றும் தொழில்நுட்பப் புலம் (குறியீடு 5).", "Faculty of Engineering & Technology, Annamalai University (Code 5).")}</li>
+                <li><strong>${t("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள் (Anna University Constituent Colleges — 16)", "Anna University Constituent Colleges (16)")}:</strong> ${t("மண்டல வளாகங்கள் மற்றும் உறுப்புக் கல்லூரிகள் (UCEs).", "Regional campuses and University Colleges of Engineering (UCEs).")}</li>
+                <li><strong>${t("மத்திய அரசு பொறியியல் கல்லூரிகள் (Central Government Colleges)", "Central Government Colleges")}:</strong> ${t("மத்திய அரசால் நிர்வகிக்கப்படும் நிறுவனங்கள் (நேரடி சேர்க்கை).", "Centrally funded institutions (central admissions).")}</li>
+                <li><strong>${t("சுயநிதிப் பொறியியல் கல்லூரிகள் — தன்னாட்சி (86)", "Self Financing Engineering Colleges (86 Autonomous)")}:</strong> ${t("தமிழ்நாட்டின் 29 மாவட்டங்களில் அமைந்துள்ள தன்னாட்சி பெற்ற சுயநிதிப் பொறியியல் கல்லூரிகள் (மாவட்டம் வாரியாகப் பிரிக்கப்பட்டுள்ளது).", "Autonomous private engineering institutions across 29 districts in Tamil Nadu (district-wise).")}</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="community-guide" style="padding: 0.75rem 0.9rem; background: #fff; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.9rem; color: #2d3748;">
+            <summary style="cursor: pointer; font-weight: 600; color: #2b6cb0; padding: 0.2rem 0;">${t("இட ஒதுக்கீட்டுப் பிரிவுகள் (OC / BC / MBC / SC / ST) — எளிய விளக்கம்", "Reservation Community Categories (OC / BC / MBC / SC / ST) — Quick Guide")}</summary>
+            <ul style="margin: 0.5rem 0 0.25rem; padding-left: 1.2rem; line-height: 1.6;">
+              <li><strong>OC</strong> — ${t("பொதுப் பிரிவு (Open Competition): அனைத்து வகுப்பினரும் தகுதியின் அடிப்படையில் போட்டியிடக்கூடிய பொது இடங்கள்.", "Open Competition: Open merit pool available to all eligible candidates regardless of community.")}</li>
+              <li><strong>BC / BCM</strong> — ${t("பிற்படுத்தப்பட்டோர் (Backward Class) மற்றும் பிற்படுத்தப்பட்ட முஸ்லிம் (BC Muslim).", "Backward Class (BC) and Backward Class Muslim (BCM).")}</li>
+              <li><strong>MBC</strong> — ${t("மிகவும் பிற்படுத்தப்பட்டோர் மற்றும் சீர்மரபினர் (MBC / DNC).", "Most Backward Class and Denotified Communities (MBC / DNC).")}</li>
+              <li><strong>SC / SCA / ST</strong> — ${t("ஆதிதிராவிடர் (SC), அருந்ததியர் (SCA) மற்றும் பழங்குடியினர் (ST).", "Scheduled Caste (SC), Scheduled Caste Arunthathiyar (SCA), and Scheduled Tribe (ST).")}</li>
+            </ul>
+            <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: #4a5568;">${t("உங்கள் சாதிச் சான்றிதழின்படி பொருந்தும் பிரிவை நீங்களே தேர்ந்தெடுங்கள்; தளம் தானாகப் பிரிவைக் கணிக்காது.", "Select the category that matches your official certificate; this tool never infers your category.")}</p>
+          </details>
+
+          <details class="delta-guide" style="padding: 0.75rem 0.9rem; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; font-size: 0.9rem; color: #14532d; line-height: 1.6;">
+            <summary style="cursor: pointer; font-weight: 700; color: #15803d; padding: 0.2rem 0; font-size: 0.92rem;">
+              ${t("💡 கட்-ஆஃப் ஒப்பீட்டு வேறுபாடு (Δ) கணக்கீடு மற்றும் விருப்பப் பட்டியல் அமைக்கும் முறை", "💡 How Comparison Delta (Δ) Works & Practical Guide for Structuring Your Choice List")}
+            </summary>
+            <div style="margin-top: 0.65rem; border-top: 1px solid #bbf7d0; padding-top: 0.65rem;">
+              <p style="margin: 0 0 0.5rem;">
+                <strong>${t("கணக்கிடும் முறை:", "Calculation Method:")}</strong>
+                <code style="background: #dcfce7; padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 700; color: #166534;">${t("உங்கள் கட்-ஆஃப் மதிப்பெண் − கண்டறியப்பட்ட தற்காலிக குறைந்தபட்ச மதிப்பெண் = ஒப்பீட்டு வேறுபாடு (Δ)", "Your Cutoff Mark − Observed Provisional Allotment Minimum Mark = Comparison Delta (Δ)")}</code>
+              </p>
+              <ul style="margin: 0.35rem 0 0.65rem; padding-left: 1.2rem;">
+                <li>
+                  <strong>${t("கூடுதல் மதிப்பெண் (+):", "Positive (+) Difference:")}</strong>
+                  ${t(
+                    "உதாரணமாக, <strong>+3.00</strong> — முந்தைய ஆண்டு தற்காலிக ஒதுக்கீட்டில் இந்த இடத்திற்கு ஒதுக்கப்பட்ட மிகக் குறைந்த மதிப்பெண்ணை விட உங்கள் கட்-ஆஃப் 3.00 மதிப்பெண்கள் அதிகம்.",
+                    "e.g., <strong>+3.00</strong> — Your cutoff mark is 3.00 marks higher than the lowest score allotted for this offering in the past provisional allotment."
+                  )}
+                </li>
+                <li>
+                  <strong>${t("குறைவான மதிப்பெண் (−):", "Negative (−) Difference:")}</strong>
+                  ${t(
+                    "உதாரணமாக, <strong>-3.00</strong> — முந்தைய ஆண்டு தற்காலிக ஒதுக்கீட்டில் இந்த இடத்திற்கு ஒதுக்கப்பட்ட மிகக் குறைந்த மதிப்பெண்ணை விட உங்கள் கட்-ஆஃப் 3.00 மதிப்பெண்கள் குறைவு.",
+                    "e.g., <strong>-3.00</strong> — Your cutoff mark is 3.00 marks lower than the lowest score allotted for this offering in the past provisional allotment."
+                  )}
+                </li>
+                <li>
+                  <strong>${t("பூஜ்ஜியம் (0.00):", "Zero (0.00):")}</strong>
+                  ${t("முந்தைய ஆண்டு தற்காலிக ஒதுக்கீட்டில் கண்டறியப்பட்ட குறைந்தபட்ச மதிப்பெண்ணிற்குச் சமம்.", "Exact match with the past provisional allotment observed minimum mark.")}
+                </li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="rounds-guide" style="padding: 0.75rem 0.9rem; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; color: #1e293b; line-height: 1.6;">
+            <summary style="cursor: pointer; font-weight: 700; color: #1e40af; padding: 0.2rem 0; font-size: 0.92rem;">
+              ${t("🏛️ TNEA கலந்தாய்வு சுற்றுகள் (Round 1, 2, 3) &amp; நடைமுறை நிலைகள் — அதிகாரப்பூர்வ விளக்கம்", "🏛️ TNEA Counselling Rounds Architecture (Round 1, 2, 3) &amp; Allotment Stages — Official Guide")}
+            </summary>
+            <div style="margin-top: 0.65rem; border-top: 1px solid #e2e8f0; padding-top: 0.65rem;">
+              <p style="margin: 0 0 0.5rem; font-size: 0.88rem; color: #334155;">
+                ${t(
+                  "TNEA ஒற்றைச் சாளரப் பொறியியல் கலந்தாய்வு பொதுத் தரவரிசை (General Merit Rank) மற்றும் 200-க்கு கணக்கிடப்படும் கட்-ஆஃப் மதிப்பெண்களின் அடிப்படையில் 3 தொடர்ச்சியான சுற்றுகளாக நடத்தப்படுகிறது.",
+                  "TNEA single-window engineering counselling is conducted across 3 sequential rounds based strictly on candidate General Merit Rank and aggregate cut-off score (out of 200)."
+                )}
+              </p>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.65rem; margin: 0.5rem 0 0.85rem;">
+                <div style="background: #ffffff; border: 1px solid #bfdbfe; border-left: 3px solid #2563eb; padding: 0.65rem 0.8rem; border-radius: 6px;">
+                  <strong style="color: #1d4ed8; display: block; font-size: 0.9rem; margin-bottom: 0.2rem;">
+                    ${t("சுற்று 1 (Round 1)", "Round 1")}
+                  </strong>
+                  <div style="font-size: 0.83rem; color: #475569; line-height: 1.45;">
+                    <strong>${t("தரவரிசை:", "Rank:")}</strong> 1 - ~24,000<br>
+                    <strong>${t("கட்-ஆஃப்:", "Cut-off:")}</strong> 200.00 - ~179.00
+                  </div>
+                </div>
+
+                <div style="background: #ffffff; border: 1px solid #bfdbfe; border-left: 3px solid #2563eb; padding: 0.65rem 0.8rem; border-radius: 6px;">
+                  <strong style="color: #1d4ed8; display: block; font-size: 0.9rem; margin-bottom: 0.2rem;">
+                    ${t("சுற்று 2 (Round 2)", "Round 2")}
+                  </strong>
+                  <div style="font-size: 0.83rem; color: #475569; line-height: 1.45;">
+                    <strong>${t("தரவரிசை:", "Rank:")}</strong> ~24,001 - ~75,000<br>
+                    <strong>${t("கட்-ஆஃப்:", "Cut-off:")}</strong> ~178.99 - ~145.00
+                  </div>
+                </div>
+
+                <div style="background: #ffffff; border: 1px solid #bfdbfe; border-left: 3px solid #2563eb; padding: 0.65rem 0.8rem; border-radius: 6px;">
+                  <strong style="color: #1d4ed8; display: block; font-size: 0.9rem; margin-bottom: 0.2rem;">
+                    ${t("சுற்று 3 (Round 3)", "Round 3")}
+                  </strong>
+                  <div style="font-size: 0.83rem; color: #475569; line-height: 1.45;">
+                    <strong>${t("தரவரிசை:", "Rank:")}</strong> ${t("~75,001 முதல் கடைசி வரை", "~75,001 to qualifying rank")}<br>
+                    <strong>${t("கட்-ஆஃப்:", "Cut-off:")}</strong> ~144.99 - ~77.50
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <p class="screen-only" style="margin: 0.25rem 0 0.75rem; font-size: 0.84rem; color: #4a5568;">
+        ${t(
+          "உங்களுக்குப் பிடித்த கல்லூரி மற்றும் துறையின் அருகே உள்ள '+ தேர்வு' என்பதை அழுத்தி உங்கள் விருப்பப் பட்டியலில் சேர்த்துக்கொள்ளலாம் (இது தளத்தின் பரிந்துரை அல்ல; 'என் விருப்பப் பட்டியல்' பகுதியில் நீங்களே வரிசையை மாற்றிக்கொள்ளலாம்).",
+          "Click '+ Add' to save an offering to your personal shortlist (not a system recommendation; you manually set preference order in 'My Shortlist')."
+        )}
+      </p>
+
+      ${renderSearchForm()}
+    </section>
+  `;
+  }
+
+  return `
+    <section>
+      <!-- Results action bar with collapsible "Change search / Edit filters" -->
+      <div class="results-search-summary screen-only" style="margin: 0 0 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; background: #ffffff;">
+        <details class="change-search-details" style="padding: 0;">
+          <summary style="cursor: pointer; padding: 0.75rem 1rem; font-weight: 700; color: #1e40af; font-size: 0.92rem; display: flex; justify-content: space-between; align-items: center;">
+            <span>🔍 ← ${t("வடிகட்டிகளை மாற்ற (தேடல் படிவம்)", "Change search / Edit filters")}</span>
+            <span class="results-count-pill" style="font-weight: 700;">
+              ${t(
+                `${rows.length} படிப்புகள் (பக்கம் ${pagination.currentPage} / ${pagination.totalPages})`,
+                `${rows.length} offerings (Page ${pagination.currentPage} of ${pagination.totalPages})`
+              )}
+            </span>
+          </summary>
+          <div style="padding: 0.75rem 1rem 1rem; border-top: 1px solid #e2e8f0;">
+            ${renderSearchForm()}
+          </div>
+        </details>
+      </div>
+
+      ${renderActiveContextStrip()}
+
+      ${
+        shortIds.length > 0
+          ? `
+      <div class="shortlist-summary-pill screen-only" style="margin: 0.75rem 0 1rem; padding: 0.75rem 1rem; background: #e6fffa; border: 1.5px solid #81e6d9; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <span>
+          <strong>${t(`தேர்ந்தெடுக்கப்பட்ட விருப்பங்கள்: ${shortIds.length}`, `Selected Choices: ${shortIds.length}`)}</strong>
+          · ${t("இவற்றை வரிசைப்படுத்தவும் அச்சிடவும் தயார்.", "Ready to organize and print your preference order.")}
         </span>
-        <span style="font-size: 0.84rem; color: #4a5568;">
+        <a class="btn-action btn-primary" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
+          ${t("விருப்பப் பட்டியலை வரிசைப்படுத்த →", "Go to Choice Order Planner →")}
+        </a>
+      </div>`
+          : ""
+      }
+
+      <div class="results-meta-bar screen-only" style="margin-bottom: 0.85rem;">
+        <span style="font-size: 0.86rem; color: #4a5568;">
           ${t(
             "உங்களுக்குப் பிடித்த கல்லூரி மற்றும் துறையின் அருகே உள்ள '+ தேர்வு' என்பதை அழுத்தி உங்கள் விருப்பப் பட்டியலில் சேர்த்துக்கொள்ளலாம் (இது தளத்தின் பரிந்துரை அல்ல; 'என் விருப்பப் பட்டியல்' பகுதியில் நீங்களே வரிசையை மாற்றிக்கொள்ளலாம்).",
             "Click '+ Add' to save an offering to your personal shortlist (not a system recommendation; you manually set preference order in 'My Shortlist')."
           )}
         </span>
       </div>
-
-      <!-- College category legend -->
-      <div class="category-legend screen-only" style="display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; margin: 0.5rem 0 0.85rem; font-size: 0.8rem;">
-        <span style="font-weight: 700; color: #475569;">${t("கல்லூரி வகைகள்:", "College Types:")}</span>
-        <span class="type-pill type-univ">${t("அண்ணா பல்கலைக்கழகத் துறை", "Anna University Department College")}</span>
-        <span class="type-pill type-gov">${t("அரசுப் பொறியியல் கல்லூரி", "Government Engineering College")}</span>
-        <span class="type-pill type-aided">${t("அரசு உதவிபெறும் கல்லூரி", "Government Aided Engineering College")}</span>
-        <span class="type-pill type-constituent">${t("அண்ணா பல்கலை உறுப்புக் கல்லூரி", "Anna University Constituent College")}</span>
-        <span class="type-pill type-sfc">${t("சுயநிதித் தன்னாட்சிக் கல்லூரி", "Self-Financing Autonomous College")}</span>
-      </div>
-
-      ${renderPaginationBar()}
 
       <div class="table-responsive">
         <table class="comparison-table" role="table" aria-label="College Cutoff Comparison Table">
@@ -1648,6 +1730,7 @@ function renderComparisonTab(
                                 <input type="hidden" name="tab" value="comparison">
                                 <input type="hidden" name="lang" value="${lang}">
                                 <input type="hidden" name="shortlist" value="${esc(rawShortlist)}">
+                                <input type="hidden" name="searched" value="1">
                                 <input type="hidden" name="cutoff" value="${studentCutoff}">
                                 <input type="hidden" name="quota" value="${quota}">
                                 <input type="hidden" name="community" value="${community}">
@@ -1658,7 +1741,7 @@ function renderComparisonTab(
                                   ${t("🔄 தேர்வுகளை அழி (அனைத்துக் கல்லூரிகளையும் காட்டு)", "🔄 Reset / Clear Filters (Show All Colleges)")}
                                 </button>
                               </form>`
-                            : `<a class="btn-action btn-primary no-results-reset-btn" aria-label="${t("தேர்வுகளை அழித்து அனைத்துக் கல்லூரிகளையும் காட்டு", "Clear filters and show all colleges")}" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
+                            : `<a class="btn-action btn-primary no-results-reset-btn" aria-label="${t("தேர்வுகளை அழித்து அனைத்துக் கல்லூரிகளையும் காட்டு", "Clear filters and show all colleges")}" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}&amp;searched=1">
                                 ${t("🔄 தேர்வுகளை அழி (அனைத்துக் கல்லூரிகளையும் காட்டு)", "🔄 Reset / Clear Filters (Show All Colleges)")}
                               </a>`
                         }
@@ -1830,6 +1913,7 @@ function renderOfferingRow(
           <input type="hidden" name="tab" value="comparison">
           <input type="hidden" name="lang" value="${lang}">
           <input type="hidden" name="shortlist" value="${esc(nextShortlist)}">
+          <input type="hidden" name="searched" value="1">
           <input type="hidden" name="q" value="${esc(sessionState.query)}">
           <input type="hidden" name="type" value="${esc(sessionState.typeFilter)}">
           <input type="hidden" name="district" value="${esc(sessionState.districtFilter)}">

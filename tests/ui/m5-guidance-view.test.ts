@@ -922,8 +922,8 @@ test("M5 DOTE Classification & College Selection: Exact categories from dte.tn.g
   assert.ok(htmlCbeAided.includes("CIT, Coimbatore"), "Must include CIT in Coimbatore Aided");
   assert.ok(!htmlCbeAided.includes("TCE, Madurai"), "Must exclude TCE Madurai from Coimbatore district");
 
-  // 5. DOTE category badges on table rows
-  const htmlOfferings = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
+  // 5. DOTE category badges on table rows (rendered when all offerings or filtered offerings are viewed)
+  const htmlOfferings = renderM5GuidancePage(new URLSearchParams({ lang: "en", show_all: "1" }));
   assert.ok(htmlOfferings.includes('class="type-pill type-univ"'), "Must render type-univ badge");
   assert.ok(htmlOfferings.includes('class="type-pill type-gov"'), "Must render type-gov badge");
   assert.ok(htmlOfferings.includes('class="type-pill type-aided"'), "Must render type-aided badge");
@@ -935,8 +935,8 @@ test("M5 DOTE Classification & College Selection: Exact categories from dte.tn.g
 });
 
 test("Mobile Experience: Bounded pagination prevents rendering all 1,249 offerings on initial load and enables full reachability", () => {
-  // 1. Initial page load renders bounded window (50 offerings, not 1,249)
-  const htmlPage1 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
+  // 1. Initial search results render bounded window (50 offerings, not 1,249)
+  const htmlPage1 = renderM5GuidancePage(new URLSearchParams({ lang: "en", searched: "1" }));
   const rowsMatch1 = htmlPage1.match(/<tr/g) || [];
   // 1 table header row + 50 data rows = 51 rows total
   assert.ok(rowsMatch1.length <= 55, "Initial load must be bounded to pagination window, not full 1,249 offerings");
@@ -958,12 +958,15 @@ test("Mobile Experience: Bounded pagination prevents rendering all 1,249 offerin
 });
 
 test("Mobile Experience: Tamil terminology regression check ensures 'கிளை' is absent from student-facing UI", () => {
-  // A. Choice Planner comparison tab
+  // A. Choice Planner comparison tab (form and search results table)
   const htmlTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
   assert.ok(!htmlTa.includes("கிளை"), "Must not use 'கிளை' in student-facing comparison tab");
   assert.ok(htmlTa.includes("அனைத்துத் துறைகள்"), "Must use 'அனைத்துத் துறைகள்'");
   assert.ok(htmlTa.includes("துறை"), "Must use 'துறை' in labels and filters");
-  assert.ok(htmlTa.includes("கல்லூரி &amp; துறை"), "Must use 'கல்லூரி & துறை' in table header");
+
+  const htmlTaResults = renderM5GuidancePage(new URLSearchParams({ lang: "ta", searched: "1" }));
+  assert.ok(!htmlTaResults.includes("கிளை"), "Must not use 'கிளை' in results view");
+  assert.ok(htmlTaResults.includes("கல்லூரி &amp; துறை"), "Must use 'கல்லூரி & துறை' in table header");
 
   // B. Shortlist tab & exports
   const htmlShortlist = renderM5GuidancePage(new URLSearchParams({
@@ -983,4 +986,38 @@ test("Mobile Experience: Tamil terminology regression check ensures 'கிள�
   }));
   assert.ok(!htmlCounselling.includes("கிளை"), "Counselling tab must not use 'கிளை'");
   assert.ok(htmlCounselling.includes("துறை") || htmlCounselling.includes("பாடப்பிரிவு"), "Counselling tab must use 'துறை / பாடப்பிரிவு'");
+});
+
+test("Choice Planner 2-Step Architecture: Landing shows only search form; results view shows clean colleges list with bottom pagination", () => {
+  // Step 1: Initial Landing (Snap 1)
+  const landingEn = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
+  assert.ok(landingEn.includes('class="form-grid"'), "Landing view must render search form");
+  assert.ok(!landingEn.includes('<table class="comparison-table"'), "Landing view must NOT render college table by default");
+  assert.ok(!landingEn.includes('class="category-legend'), "Category legend must not be rendered");
+
+  // Step 2: Search Results View (Snap 2)
+  const resultsEn = renderM5GuidancePage(new URLSearchParams({ lang: "en", searched: "1" }));
+  assert.ok(resultsEn.includes('<table class="comparison-table"'), "Results view must render college comparison table");
+  assert.ok(resultsEn.includes('class="change-search-details"'), "Results view must keep search form collapsed inside Change search drawer");
+  assert.ok(!resultsEn.includes('class="category-legend"'), "Results view must not render category legend row");
+  assert.ok(resultsEn.includes("Change search"), "Results view must offer 'Change search' control");
+  assert.ok(resultsEn.includes('<input type="hidden" name="searched" value="1">'), "Shortlist toggle forms must preserve searched=1");
+
+  // Verify only ONE pagination bar (bottom pagination only)
+  const paginationBars = resultsEn.match(/class="pagination-bar screen-only"/g) || [];
+  assert.equal(paginationBars.length, 1, "Results view must have only bottom pagination (no top pagination bar)");
+
+  // Step 3: 'Change search' returns to search form
+  const editSearchEn = renderM5GuidancePage(new URLSearchParams({ lang: "en", edit_search: "1", q: "CEG" }));
+  assert.ok(editSearchEn.includes('class="form-grid"'), "Edit search must display search form");
+  assert.ok(!editSearchEn.includes('<table class="comparison-table"'), "Edit search must hide results table");
+  assert.ok(editSearchEn.includes('value="ceg"'), "Edit search must preserve prior input values");
+
+  // Step 4: Tamil language parity
+  const landingTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
+  assert.ok(!landingTa.includes('<table class="comparison-table"'), "Tamil landing view must NOT render college table by default");
+
+  const resultsTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta", searched: "1" }));
+  assert.ok(resultsTa.includes('<table class="comparison-table"'), "Tamil results view must render college comparison table");
+  assert.ok(resultsTa.includes("வடிகட்டிகளை மாற்ற"), "Tamil results view must offer 'வடிகட்டிகளை மாற்ற' action");
 });
