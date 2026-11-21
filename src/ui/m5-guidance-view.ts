@@ -737,15 +737,15 @@ export function renderM5GuidancePage(
         padding-bottom: 0.65rem;
         margin-bottom: 0.4rem;
       }
-      .comparison-table td:nth-child(2),
-      .comparison-table td:nth-child(3) {
+      .comparison-table:not(.shortlist-table) td:nth-child(2),
+      .comparison-table:not(.shortlist-table) td:nth-child(3) {
         display: inline-block;
         width: 48%;
         vertical-align: top;
         padding: 0.35rem 0;
         box-sizing: border-box;
       }
-      .comparison-table td:nth-child(2)::before {
+      .comparison-table:not(.shortlist-table) td:nth-child(2)::before {
         content: "கடைசி கட்-ஆஃப்: ";
         display: block;
         font-size: 0.72rem;
@@ -755,10 +755,10 @@ export function renderM5GuidancePage(
         letter-spacing: 0.02em;
         margin-bottom: 2px;
       }
-      html[lang="en"] .comparison-table td:nth-child(2)::before {
+      html[lang="en"] .comparison-table:not(.shortlist-table) td:nth-child(2)::before {
         content: "Observed Min: ";
       }
-      .comparison-table td:nth-child(3)::before {
+      .comparison-table:not(.shortlist-table) td:nth-child(3)::before {
         content: "கட்-ஆஃப் வித்தியாசம் (Δ): ";
         display: block;
         font-size: 0.72rem;
@@ -768,10 +768,10 @@ export function renderM5GuidancePage(
         letter-spacing: 0.02em;
         margin-bottom: 2px;
       }
-      html[lang="en"] .comparison-table td:nth-child(3)::before {
+      html[lang="en"] .comparison-table:not(.shortlist-table) td:nth-child(3)::before {
         content: "Comparison Δ: ";
       }
-      .comparison-table td:nth-child(4) {
+      .comparison-table:not(.shortlist-table) td:nth-child(4) {
         display: block !important;
         font-size: 0.78rem;
         color: #64748b;
