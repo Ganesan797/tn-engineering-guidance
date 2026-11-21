@@ -698,9 +698,10 @@ export function renderM5GuidancePage(
 
     @media (max-width: 640px) {
       .m5-container { padding: 0.5rem; }
-      .m5-header-card { padding: 1rem; }
-      .m5-header-card h1 { font-size: 1.35rem; }
-      .form-grid { padding: 1rem; gap: 0.75rem; }
+      .m5-header-card { padding: 0.9rem 1rem; margin-bottom: 0.75rem; }
+      .m5-header-card h1 { font-size: 1.3rem; line-height: 1.35; }
+      .form-grid { padding: 0.9rem 1rem; gap: 0.7rem; }
+      .category-legend { display: none !important; }
       .table-responsive {
         border: none;
         background: transparent;
@@ -715,44 +716,45 @@ export function renderM5GuidancePage(
         display: block;
         width: 100%;
       }
-      .comparison-table tr {
+      .comparison-table:not(.shortlist-table) tr {
         display: block;
         width: 100%;
         background: #ffffff;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 12px;
-        margin-bottom: 0.85rem;
-        padding: 0.95rem 1rem;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 10px;
+        margin-bottom: 0.9rem;
+        padding: 0;
+        overflow: hidden;
         box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         box-sizing: border-box;
       }
-      .comparison-table td {
+      .comparison-table:not(.shortlist-table) td {
         display: block;
         width: 100%;
-        padding: 0.35rem 0;
+        padding: 0.6rem 1rem;
         border: none;
+        box-sizing: border-box;
       }
-      .comparison-table td:first-child {
-        border-bottom: 1px solid #f1f5f9;
-        padding-bottom: 0.65rem;
-        margin-bottom: 0.4rem;
+      .comparison-table:not(.shortlist-table) td:first-child {
+        background: #f8fafc;
+        border-bottom: 1px solid #cbd5e1;
+        padding: 0.85rem 1rem;
+        margin-bottom: 0;
       }
       .comparison-table:not(.shortlist-table) td:nth-child(2),
       .comparison-table:not(.shortlist-table) td:nth-child(3) {
-        display: inline-block;
-        width: 48%;
-        vertical-align: top;
-        padding: 0.35rem 0;
+        display: block;
+        width: 100%;
+        padding: 0.6rem 1rem;
+        border-bottom: 1px solid #f1f5f9;
         box-sizing: border-box;
       }
       .comparison-table:not(.shortlist-table) td:nth-child(2)::before {
         content: "கடைசி கட்-ஆஃப்: ";
         display: block;
-        font-size: 0.72rem;
+        font-size: 0.75rem;
         font-weight: 700;
-        color: #64748b;
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
+        color: #475569;
         margin-bottom: 2px;
       }
       html[lang="en"] .comparison-table:not(.shortlist-table) td:nth-child(2)::before {
@@ -761,68 +763,73 @@ export function renderM5GuidancePage(
       .comparison-table:not(.shortlist-table) td:nth-child(3)::before {
         content: "கட்-ஆஃப் வித்தியாசம் (Δ): ";
         display: block;
-        font-size: 0.72rem;
+        font-size: 0.75rem;
         font-weight: 700;
-        color: #64748b;
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
-        margin-bottom: 2px;
+        color: #475569;
+        margin-bottom: 4px;
       }
       html[lang="en"] .comparison-table:not(.shortlist-table) td:nth-child(3)::before {
         content: "Comparison Δ: ";
       }
       .comparison-table:not(.shortlist-table) td:nth-child(4) {
         display: block !important;
-        font-size: 0.78rem;
-        color: #64748b;
-        padding: 0.4rem 0;
-        border-top: 1px dashed #f1f5f9;
-        margin-top: 0.35rem;
+        font-size: 0.8rem;
+        color: #475569;
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid #f1f5f9;
+        margin-top: 0;
       }
-      .comparison-table td:last-child {
+      .comparison-table:not(.shortlist-table) td:last-child {
         display: block;
         width: 100%;
-        padding-top: 0.65rem;
-        margin-top: 0.4rem;
-        border-top: 1px solid #f1f5f9;
+        padding: 0.75rem 1rem;
+        margin-top: 0;
+        background: #ffffff;
+        border-top: none;
       }
-      .comparison-table td:last-child form {
+      .comparison-table:not(.shortlist-table) td:last-child form {
         width: 100%;
       }
-      .comparison-table td:last-child .btn-action {
+      .comparison-table:not(.shortlist-table) td:last-child .btn-action {
         width: 100%;
         min-height: 44px;
-        font-size: 0.92rem;
+        font-size: 0.94rem;
         font-weight: 700;
         justify-content: center;
       }
-      /* Shortlist cards on mobile */
+      /* Shortlist GOV.UK Summary Cards on mobile */
       .shortlist-table tr {
         display: block;
         width: 100%;
         background: #ffffff;
-        border: 1.5px solid #e2e8f0;
-        border-radius: 12px;
-        margin-bottom: 0.85rem;
-        padding: 0.95rem 1rem;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 10px;
+        margin-bottom: 0.9rem;
+        padding: 0;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         box-sizing: border-box;
       }
       .shortlist-table td {
         display: block;
         width: 100%;
         border: none;
-        padding: 0.25rem 0;
+        padding: 0.75rem 1rem;
+        box-sizing: border-box;
       }
       .shortlist-table td:first-child {
-        font-size: 1.15rem;
-        color: #1e40af;
+        background: #f1f5f9;
+        border-bottom: 1px solid #cbd5e1;
+        font-size: 1.05rem;
+        color: #0f2c59;
         font-weight: 800;
-        padding-bottom: 0.25rem;
+        padding: 0.55rem 1rem;
       }
       .shortlist-table td:last-child {
-        padding-top: 0.65rem;
-        margin-top: 0.35rem;
-        border-top: 1px solid #f1f5f9;
+        padding: 0.65rem 1rem;
+        margin-top: 0;
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
       }
       .shortlist-actions {
         display: flex;
@@ -933,52 +940,59 @@ export function renderM5GuidancePage(
   <main class="m5-container">
     <header class="m5-header-card">
       <h1>${esc(copy.title)}</h1>
-      <p style="font-size: 1.02rem; color: #334155; margin: 0.35rem 0 0.45rem; line-height: 1.55; font-weight: 500;">
+      <p style="font-size: 0.95rem; color: #334155; margin: 0.25rem 0 0.5rem; line-height: 1.5; font-weight: 500;">
         ${t(
-          "வணக்கம்! உங்கள் கட்-ஆஃப் மதிப்பெண்ணை TNEA அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீடுகளுடன் எளிதாக ஒப்பிட்டு, மாவட்ட வாரியாக கல்லூரிகளை ஆராய்ந்து உங்களுக்கான விருப்பப் பட்டியலைத் திட்டமிடுங்கள்.",
-          "Welcome! Compare your marks with governed TNEA official provisional allotments, explore colleges across Tamil Nadu, and organize a balanced choice list for your counselling journey."
+          "உங்கள் கட்-ஆஃப் மதிப்பெண்ணை TNEA அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீடுகளுடன் ஒப்பிட்டு, உங்களுக்கான விருப்பப் பட்டியலைத் திட்டமிடுங்கள்.",
+          "Compare your marks with governed TNEA official provisional allotments and organize a balanced choice list for your counselling journey."
         )}
       </p>
-      <p style="font-size: 0.88rem; color: #64748b; margin: 0 0 0.75rem; line-height: 1.5;">${esc(copy.nonPredictionDisclaimer)}</p>
+      <details class="gov-header-details" style="border-left: 3px solid #2563eb; padding-left: 0.75rem; margin-top: 0.4rem;">
+        <summary style="cursor: pointer; font-size: 0.88rem; font-weight: 700; color: #1d4ed8; padding: 0.2rem 0;">
+          ${t("முக்கியக் குறிப்பு: இந்த கட்-ஆஃப் ஒப்பீட்டை எப்படிப் புரிந்துகொள்வது?", "Important note: How to understand this historical cutoff comparison")}
+        </summary>
+        <div style="margin-top: 0.5rem;">
+          <p style="font-size: 0.85rem; color: #475569; margin: 0 0 0.65rem; line-height: 1.5;">${esc(copy.nonPredictionDisclaimer)}</p>
 
-      <!-- 3 Visible Guidance Points -->
-      <div class="guidance-points-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.75rem; margin: 0.85rem 0 0.65rem;">
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3px solid #2563eb; padding: 0.65rem 0.85rem; border-radius: 6px;">
-          <strong style="color: #1d4ed8; font-size: 0.88rem; display: block; margin-bottom: 0.2rem;">
-            ${t("1. வரலாற்றுத் தரவு மட்டுமே", "1. Historical Benchmarks Only")}
-          </strong>
-          <span style="font-size: 0.82rem; color: #475569; line-height: 1.45;">
-            ${t("கடந்த ஆண்டு தற்காலிக ஒதுக்கீட்டு குறைந்தபட்ச மதிப்பெண். இது எதிர்கால சேர்க்கைக்கான உத்தரவாதம் அல்ல.", "Past provisional allotment minimums — historical reference only, not a future admission guarantee.")}
-          </span>
-        </div>
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3px solid #2563eb; padding: 0.65rem 0.85rem; border-radius: 6px;">
-          <strong style="color: #1d4ed8; font-size: 0.88rem; display: block; margin-bottom: 0.2rem;">
-            ${t("2. கணிப்புகள் எதுவும் இல்லை", "2. Zero Admission Prediction")}
-          </strong>
-          <span style="font-size: 0.82rem; color: #475569; line-height: 1.45;">
-            ${t("Safe / Target / Dream லேபிள்கள் அல்லது வாய்ப்புக் கணிப்புகள் இல்லை. சுய விருப்பப்படி முடிவெடுங்கள்.", "No Safe / Target / Dream labels or speculative chances; evaluate every choice objectively.")}
-          </span>
-        </div>
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3px solid #2563eb; padding: 0.65rem 0.85rem; border-radius: 6px;">
-          <strong style="color: #1d4ed8; font-size: 0.88rem; display: block; margin-bottom: 0.2rem;">
-            ${t("3. மாணவரே வரிசையைத் தீர்மானிக்கிறார்", "3. Student Controls Preference Order")}
-          </strong>
-          <span style="font-size: 0.82rem; color: #475569; line-height: 1.45;">
-            ${t("TNEA விருப்பங்களை #1 முதல் கீழ்நோக்கிப் பரிசீலிக்கும். உண்மையான விருப்பப்படி அச்சமின்றி வரிசைப்படுத்துங்கள்.", "TNEA allocates strictly from Choice #1 downwards; order purely by your genuine preference.")}
-          </span>
-        </div>
-      </div>
+          <!-- 3 Visible Guidance Points -->
+          <div class="guidance-points-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.6rem; margin: 0.5rem 0;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3px solid #2563eb; padding: 0.55rem 0.75rem; border-radius: 6px;">
+              <strong style="color: #1d4ed8; font-size: 0.85rem; display: block; margin-bottom: 0.15rem;">
+                ${t("1. வரலாற்றுத் தரவு மட்டுமே", "1. Historical Benchmarks Only")}
+              </strong>
+              <span style="font-size: 0.8rem; color: #475569; line-height: 1.4;">
+                ${t("கடந்த ஆண்டு தற்காலிக ஒதுக்கீட்டு குறைந்தபட்ச மதிப்பெண். இது எதிர்கால சேர்க்கைக்கான உத்தரவாதம் அல்ல.", "Past provisional allotment minimums — historical reference only, not a future admission guarantee.")}
+              </span>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3px solid #2563eb; padding: 0.55rem 0.75rem; border-radius: 6px;">
+              <strong style="color: #1d4ed8; font-size: 0.85rem; display: block; margin-bottom: 0.15rem;">
+                ${t("2. கணிப்புகள் எதுவும் இல்லை", "2. Zero Admission Prediction")}
+              </strong>
+              <span style="font-size: 0.8rem; color: #475569; line-height: 1.4;">
+                ${t("Safe / Target / Dream லேபிள்கள் அல்லது வாய்ப்புக் கணிப்புகள் இல்லை. சுய விருப்பப்படி முடிவெடுங்கள்.", "No Safe / Target / Dream labels or speculative chances; evaluate every choice objectively.")}
+              </span>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 3px solid #2563eb; padding: 0.55rem 0.75rem; border-radius: 6px;">
+              <strong style="color: #1d4ed8; font-size: 0.85rem; display: block; margin-bottom: 0.15rem;">
+                ${t("3. மாணவரே வரிசையைத் தீர்மானிக்கிறார்", "3. Student Controls Preference Order")}
+              </strong>
+              <span style="font-size: 0.8rem; color: #475569; line-height: 1.4;">
+                ${t("TNEA விருப்பங்களை #1 முதல் கீழ்நோக்கிப் பரிசீலிக்கும். உண்மையான விருப்பப்படி அச்சமின்றி வரிசைப்படுத்துங்கள்.", "TNEA allocates strictly from Choice #1 downwards; order purely by your genuine preference.")}
+              </span>
+            </div>
+          </div>
 
-      <!-- Compact Process Strip -->
-      <div class="process-strip" style="display: flex; gap: 0.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0.5rem 0; margin-top: 0.25rem; font-size: 0.8rem; color: #64748b; scrollbar-width: none;">
-        <span style="white-space: nowrap; font-weight: 700; color: #1e293b;">${t("செயல்முறை:", "Flow:")}</span>
-        <span style="white-space: nowrap;">${t("1. புரிந்துகொள் →", "1. Learn →")}</span>
-        <span style="white-space: nowrap;">${t("2. கட்-ஆஃப் உள்ளீடு →", "2. Context →")}</span>
-        <span style="white-space: nowrap;">${t("3. ஒப்பிடு &amp; ஆராய் →", "3. Compare →")}</span>
-        <span style="white-space: nowrap;">${t("4. பட்டியலில் சேர் →", "4. Shortlist →")}</span>
-        <span style="white-space: nowrap;">${t("5. வரிசைப்படுத்து →", "5. Plan Order →")}</span>
-        <span style="white-space: nowrap;">${t("6. கலந்தாய்வு", "6. Counselling")}</span>
-      </div>
+          <!-- Compact Process Strip -->
+          <div class="process-strip" style="display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 0.35rem 0; font-size: 0.78rem; color: #64748b;">
+            <span style="white-space: nowrap; font-weight: 700; color: #1e293b;">${t("செயல்முறை:", "Flow:")}</span>
+            <span style="white-space: nowrap;">${t("1. புரிந்துகொள் →", "1. Learn →")}</span>
+            <span style="white-space: nowrap;">${t("2. கட்-ஆஃப் உள்ளீடு →", "2. Context →")}</span>
+            <span style="white-space: nowrap;">${t("3. ஒப்பிடு &amp; ஆராய் →", "3. Compare →")}</span>
+            <span style="white-space: nowrap;">${t("4. பட்டியலில் சேர் →", "4. Shortlist →")}</span>
+            <span style="white-space: nowrap;">${t("5. வரிசைப்படுத்து →", "5. Plan Order →")}</span>
+            <span style="white-space: nowrap;">${t("6. கலந்தாய்வு", "6. Counselling")}</span>
+          </div>
+        </div>
+      </details>
     </header>
 
     <nav class="nav-tabs" aria-label="Milestone M5 Views">
