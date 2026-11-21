@@ -369,9 +369,15 @@ export function renderM5GuidancePage(
       ? "ALL"
       : rawRound && ["ROUND_1", "ROUND_2", "ROUND_3"].includes(rawRound)
       ? (rawRound as AllotmentRound)
-      : quota === "GOVT_SCHOOL_7_5"
-      ? "ROUND_1"
-      : "ROUND_2";
+      : studentCutoff !== null
+      ? studentCutoff >= 179.0
+        ? "ROUND_1"
+        : studentCutoff >= 145.0
+        ? "ROUND_2"
+        : "ROUND_3"
+      : (inputState.year === 2025 || params.get("year") === "2025") && quota === "GENERAL_ACADEMIC"
+      ? "ROUND_2"
+      : "ROUND_1";
 
   const year: number =
     inputState.year === 2025 || params.get("year") === "2025"
@@ -1361,7 +1367,7 @@ function renderComparisonTab(
           <div class="form-group">
             <label for="round-select">${esc(copy.roundLabel)}</label>
             <select id="round-select" name="round" aria-label="${esc(copy.roundLabel)}">
-              <option value="ALL" ${round === "ALL" ? "selected" : ""}>${esc(copy.roundName("ALL"))}</option>
+              ${round === "ALL" ? `<option value="ALL" selected>${esc(copy.roundName("ALL"))}</option>` : ""}
               ${(["ROUND_1", "ROUND_2", "ROUND_3"] as AllotmentRound[])
                 .map(
                   (r) =>
@@ -1634,6 +1640,16 @@ function renderComparisonTab(
                     <strong>${t("கட்-ஆஃப்:", "Cut-off:")}</strong> ~144.99 - ~77.50
                   </div>
                 </div>
+              </div>
+
+              <div style="background: #eff6ff; border-left: 4px solid #2563eb; padding: 0.75rem 0.95rem; border-radius: 6px; font-size: 0.85rem; color: #1e3a8a; margin-top: 0.65rem; line-height: 1.55;">
+                <strong style="color: #1e40af; display: block; margin-bottom: 0.25rem;">
+                  📌 ${t("முக்கியக் குறிப்பு — கலந்தாய்வு சுற்றுகளும் கல்லூரிக் கட்-ஆஃப்களும்:", "Important Note — Counselling Rounds vs College Closing Cutoffs:")}
+                </strong>
+                ${t(
+                  "மேலே உள்ள கட்-ஆஃப் வரம்புகள் எந்த மாணவர் எந்தச் சுற்றில் கலந்தாய்வில் பங்கேற்க அழைக்கப்படுகிறார் என்பதற்கானவை (Student Eligibility Band). ஒவ்வொரு சுற்றிலும், ஒவ்வொரு கல்லூரி மற்றும் பாடப்பிரிவிற்கும் அந்தச் சுற்றுக்கான தனித்துவமான குறைந்தபட்ச சேர்க்கைக் கட்-ஆஃப் உண்டு. சுற்றுகளை ஒன்றாக இணைத்தால் தவறான புரிதல் ஏற்படும் என்பதால், உங்கள் மதிப்பெண்ணுக்குரிய சுற்றைத் தேர்ந்தெடுத்து அந்தச் சுற்றுக்கான உண்மையான கட்-ஆஃப்களை ஒப்பிடுவதே சரியானது.",
+                  "The cut-off ranges above determine which round of counselling a student is called for based on their 12th board marks (Student Eligibility Band). Within each round, every college and branch has its own distinct closing/minimum allotment mark. Combining rounds produces inaccurate comparisons; always select your assigned counselling round below to inspect meaningful, round-specific historical closing cutoffs."
+                )}
               </div>
             </div>
           </details>

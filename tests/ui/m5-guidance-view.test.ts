@@ -39,8 +39,8 @@ test("M5 Governed Offerings Coverage: All 1,249 offerings listed; all unapproved
   assert.ok(html.includes("All 1,249 governed offerings across the 121 approved institutions"), "Must disclose all 1,249 offerings");
   assert.ok(html.includes("Not available for comparison"), "Must disclose lack of approved historical data for offerings without observations");
   assert.ok(
-    html.includes("Minimum observed mark in official Round 2"),
-    "Approved runtime displays the Round 2 disclosure"
+    html.includes("Minimum observed mark in official Round 1"),
+    "Approved runtime displays the Round 1 disclosure by default"
   );
 
   // Check presence of offerings across benchmark and expanded autonomous cohort
@@ -77,7 +77,7 @@ test("M5 UI: Tamil language view renders full Tamil translations and disclaimers
 
   assert.ok(html.includes("கடந்த ஆண்டு கட்-ஆஃப் ஒப்பீடு (தற்காலிக ஒதுக்கீடு)"), "Must have Tamil title");
   assert.ok(html.includes("கடந்த கால தற்காலிக ஒதுக்கீடுகள் எதிர்கால சேர்க்கையை உறுதிப்படுத்தாது"), "Must have Tamil non-prediction disclaimer");
-  assert.ok(html.includes("அதிகாரப்பூர்வ சுற்று 2"), "Approved runtime displays Tamil Round 2 observation disclosure");
+  assert.ok(html.includes("அதிகாரப்பூர்வ சுற்று 1"), "Approved runtime displays Tamil Round 1 observation disclosure by default");
   assert.ok(html.includes("என் விருப்பப் பட்டியல்"), "Must have Tamil shortlist tab link");
   assert.ok(html.includes("கலந்தாய்வு வழிகாட்டி"), "Must have Tamil counselling tab link");
   assert.ok(html.includes('<a href="/m5-guidance?lang=ta" aria-current="page">விருப்பப் பட்டியல்</a>'), "Must highlight Tamil Choice Planner in site header");
@@ -1020,4 +1020,46 @@ test("Choice Planner 2-Step Architecture: Landing shows only search form; result
   const resultsTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta", searched: "1" }));
   assert.ok(resultsTa.includes('<table class="comparison-table"'), "Tamil results view must render college comparison table");
   assert.ok(resultsTa.includes("வடிகட்டிகளை மாற்ற"), "Tamil results view must offer 'வடிகட்டிகளை மாற்ற' action");
+});
+
+test("TNEA Counselling Rounds & Cutoff Intelligence: Auto-selection of round based on cutoff score & explicit round cutoffs", () => {
+  // 1. Cutoff >= 179.0 automatically defaults to Round 1
+  const htmlR1 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), {
+    studentCutoff: 185.5,
+    quota: "GENERAL_ACADEMIC",
+    community: "BC",
+    communitySelected: true,
+  });
+  assert.ok(htmlR1.includes('<option value="ROUND_1" selected>Round 1</option>'), "Cutoff 185.5 must auto-select Round 1");
+  assert.ok(htmlR1.includes("Minimum observed mark in official Round 1 provisional allotment publication"), "Must cite Round 1 in truth disclosure");
+
+  // 2. Cutoff between 145.0 and 178.99 automatically defaults to Round 2
+  const htmlR2 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), {
+    studentCutoff: 160.0,
+    quota: "GENERAL_ACADEMIC",
+    community: "BC",
+    communitySelected: true,
+  });
+  assert.ok(htmlR2.includes('<option value="ROUND_2" selected>Round 2</option>'), "Cutoff 160.0 must auto-select Round 2");
+  assert.ok(htmlR2.includes("Minimum observed mark in official Round 2 provisional allotment publication"), "Must cite Round 2 in truth disclosure");
+
+  // 3. Cutoff < 145.0 automatically defaults to Round 3
+  const htmlR3 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), {
+    studentCutoff: 120.0,
+    quota: "GENERAL_ACADEMIC",
+    community: "BC",
+    communitySelected: true,
+  });
+  assert.ok(htmlR3.includes('<option value="ROUND_3" selected>Round 3</option>'), "Cutoff 120.0 must auto-select Round 3");
+  assert.ok(htmlR3.includes("Minimum observed mark in official Round 3 provisional allotment publication"), "Must cite Round 3 in truth disclosure");
+
+  // 4. Default 2026 landing (no cutoff specified) defaults to Round 1, not Round 2
+  const htmlDefault = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
+  assert.ok(htmlDefault.includes('<option value="ROUND_1" selected>Round 1</option>'), "Default 2026 landing must default to Round 1");
+  assert.ok(!htmlDefault.includes('value="ALL"'), "Dropdown must not offer combined ALL option for standard navigation");
+
+  // 5. Guidance text explains Student Eligibility Band vs College Closing Cutoffs
+  assert.ok(htmlDefault.includes("Counselling Rounds vs College Closing Cutoffs"), "Must explain rounds vs closing cutoffs in English");
+  const htmlTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
+  assert.ok(htmlTa.includes("கலந்தாய்வு சுற்றுகளும் கல்லூரிக் கட்-ஆஃப்களும்"), "Must explain rounds vs closing cutoffs in Tamil");
 });
