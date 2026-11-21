@@ -75,11 +75,11 @@ test("M5 UI: Tamil language view renders full Tamil translations and disclaimers
   const params = new URLSearchParams({ lang: "ta" });
   const html = renderM5GuidancePage(params);
 
-  assert.ok(html.includes("கடந்த ஆண்டு தற்காலிக ஒதுக்கீட்டு ஒப்பீடு"), "Must have Tamil title");
+  assert.ok(html.includes("கடந்த ஆண்டு கட்-ஆஃப் ஒப்பீடு (தற்காலிக ஒதுக்கீடு)"), "Must have Tamil title");
   assert.ok(html.includes("கடந்த கால தற்காலிக ஒதுக்கீடுகள் எதிர்கால சேர்க்கையை உறுதிப்படுத்தாது"), "Must have Tamil non-prediction disclaimer");
   assert.ok(html.includes("அதிகாரப்பூர்வ சுற்று 2"), "Approved runtime displays Tamil Round 2 observation disclosure");
   assert.ok(html.includes("என் விருப்பப் பட்டியல்"), "Must have Tamil shortlist tab link");
-  assert.ok(html.includes("கலந்தாய்வு நடைமுறை வழிகாட்டல்"), "Must have Tamil counselling tab link");
+  assert.ok(html.includes("கலந்தாய்வு வழிகாட்டி"), "Must have Tamil counselling tab link");
   assert.ok(html.includes('<a href="/m5-guidance?lang=ta" aria-current="page">விருப்பப் பட்டியல்</a>'), "Must highlight Tamil Choice Planner in site header");
 });
 
@@ -407,7 +407,7 @@ test("M6-T01 Unified Student Navigation & Journey Consolidation: Shortlist pill,
     shortlist: "1~CS,2006~ME",
   }));
   assert.ok(htmlCompTa.includes("தேர்ந்தெடுக்கப்பட்ட விருப்பங்கள்: 2"), "Tamil summary pill must display Tamil text");
-  assert.ok(htmlCompTa.includes("விருப்பப் பட்டியல் வரிசைக்குச் செல் →"), "Tamil button text");
+  assert.ok(htmlCompTa.includes("விருப்பப் பட்டியலை வரிசைப்படுத்த →"), "Tamil button text");
 
   // 2. Shortlist Tab: Next Step Transition Card to Counselling Guidance
   const htmlShortlistWithItems = renderM5GuidancePage(new URLSearchParams({
@@ -854,7 +854,7 @@ test("M5 Feedback #5: All Rounds closing cutoffs, cross-round intelligence, and 
     }
   );
   assert.ok(
-    htmlR1QueryTa.includes("இந்த சுற்றுக்கான ஒப்பீட்டுப் பதிவு கிடைக்கவில்லை; சுற்று 3-ல் பதிவு உள்ளது (102.50)"),
+    htmlR1QueryTa.includes("இந்தச் சுற்றில் தரவு இல்லை; சுற்று 3-ல் கடைசி கட்-ஆஃப் உள்ளது (102.50)"),
     "Must render Tamil factual cross-round record statement"
   );
   assert.ok(
@@ -961,9 +961,9 @@ test("Mobile Experience: Tamil terminology regression check ensures 'கிள�
   // A. Choice Planner comparison tab
   const htmlTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
   assert.ok(!htmlTa.includes("கிளை"), "Must not use 'கிளை' in student-facing comparison tab");
-  assert.ok(htmlTa.includes("அனைத்துப் பாடப்பிரிவுகள்"), "Must use 'அனைத்துப் பாடப்பிரிவுகள்'");
-  assert.ok(htmlTa.includes("பாடப்பிரிவு"), "Must use 'பாடப்பிரிவு' in labels and filters");
-  assert.ok(htmlTa.includes("கல்லூரி &amp; பாடப்பிரிவு"), "Must use 'கல்லூரி & பாடப்பிரிவு' in table header");
+  assert.ok(htmlTa.includes("அனைத்துத் துறைகள்"), "Must use 'அனைத்துத் துறைகள்'");
+  assert.ok(htmlTa.includes("துறை"), "Must use 'துறை' in labels and filters");
+  assert.ok(htmlTa.includes("கல்லூரி &amp; துறை"), "Must use 'கல்லூரி & துறை' in table header");
 
   // B. Shortlist tab & exports
   const htmlShortlist = renderM5GuidancePage(new URLSearchParams({

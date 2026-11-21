@@ -365,7 +365,7 @@ test("Owner Scenario 10: Complete Tamil Journey — Bilingual Parity & Localized
   );
 
   // Must render Tamil title and disclosures
-  assert.ok(html.includes("கடந்த ஆண்டு தற்காலிக ஒதுக்கீட்டு ஒப்பீடு"));
+  assert.ok(html.includes("கடந்த ஆண்டு கட்-ஆஃப் ஒப்பீடு (தற்காலிக ஒதுக்கீடு)"));
   assert.ok(html.includes("பொதுக் கல்வி (General Academic)"));
   assert.ok(html.includes("மிகவும் பிற்படுத்தப்பட்டோர் (MBC)"));
   assert.ok(html.includes("அதிகாரப்பூர்வ வெளிப்படைத்தன்மை அறிவிப்பு:"));

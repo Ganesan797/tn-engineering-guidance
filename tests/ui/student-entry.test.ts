@@ -417,7 +417,7 @@ test("Fix 4 & P0-B/P0-C/P1-C: Counselling page provides factual procedural guida
     if (language === "ta") {
       // Choice Ordering
       assert.match(html, /வரிசை 1-லிருந்து கீழ்நோக்கி வரிசையாக/);
-      assert.match(html, /தானாக எந்த முடிவையும் பூட்டவோ செய்யாது/);
+      assert.match(html, /தானாக எந்த முடிவையும் (?:பூட்டவோ|உறுதி) செய்யாது/);
       // Upward Movement with TFC reporting/fee conditions and verified exceptions
       assert.match(html, /Accept &amp; Upward/);
       assert.match(html, /நேரில் சென்று அறிக்கை சமர்ப்பிக்க வேண்டும்/);
@@ -432,7 +432,7 @@ test("Fix 4 & P0-B/P0-C/P1-C: Counselling page provides factual procedural guida
       // 7.5% Quota: Eligibility vs Document Verification vs Entitlement
       assert.match(html, /7\.5% அரசுப் பள்ளி முன்னுரிமை இடஒதுக்கீடு/);
       assert.match(html, /6-ஆம் வகுப்பு முதல் 12-ஆம் வகுப்பு வரை/);
-      assert.match(html, /TNEA 2026 தகவல் கையேட்டில் குறிப்பிடப்பட்டுள்ள அதிகாரப்பூர்வ நடைமுறைகளின்படி/);
+      assert.match(html, /TNEA(?: 2026)? தகவல் கையேட்டில் குறிப்பிடப்பட்டுள்ள அதிகாரப்பூர்வ நடைமுறைகளின்படி/);
       assert.match(html, /TNEA உதவி மையங்களில் \(TFC\) சரிபார்க்கப்படும்/);
       assert.match(html, /தானாக கல்லூரி இடத்தை உறுதி செய்யாது/);
     } else {

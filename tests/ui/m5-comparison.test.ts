@@ -477,9 +477,9 @@ test("M5 Bilingual Copy & Truth-in-Guidance Disclosures: English and Tamil verba
   assert.equal(en.formatDelta(-3.5), "-3.50 vs observed minimum");
   assert.equal(en.formatDelta(0.0), "0.00 (exact match with observed minimum)");
 
-  assert.equal(ta.formatDelta(5.25), "+5.25 (கண்டறியப்பட்ட குறைந்தபட்சத்துடன் ஒப்பீடு)");
-  assert.equal(ta.formatDelta(-3.5), "-3.50 (கண்டறியப்பட்ட குறைந்தபட்சத்துடன் ஒப்பீடு)");
+  assert.equal(ta.formatDelta(5.25), "+5.25 (கடைசி கட்-ஆஃப்புடன் ஒப்பீடு)");
+  assert.equal(ta.formatDelta(-3.5), "-3.50 (கடைசி கட்-ஆஃப்புடன் ஒப்பீடு)");
 
   assert.ok(en.noDataNotice.includes("Not available for comparison"));
-  assert.ok(ta.noDataNotice.includes("ஒப்பீட்டிற்கு கிடைக்கவில்லை"));
+  assert.ok(ta.noDataNotice.includes("ஒப்பீட்டிற்குத் தரவு இல்லை"));
 });

@@ -746,7 +746,7 @@ export function renderM5GuidancePage(
         box-sizing: border-box;
       }
       .comparison-table td:nth-child(2)::before {
-        content: "குறைந்தபட்ச கட்-ஆஃப்: ";
+        content: "கடைசி கட்-ஆஃப்: ";
         display: block;
         font-size: 0.72rem;
         font-weight: 700;
@@ -759,7 +759,7 @@ export function renderM5GuidancePage(
         content: "Observed Min: ";
       }
       .comparison-table td:nth-child(3)::before {
-        content: "வேறுபாடு (Δ): ";
+        content: "கட்-ஆஃப் வித்தியாசம் (Δ): ";
         display: block;
         font-size: 0.72rem;
         font-weight: 700;
@@ -983,13 +983,13 @@ export function renderM5GuidancePage(
 
     <nav class="nav-tabs" aria-label="Milestone M5 Views">
       <a class="nav-tab ${activeTab === "comparison" ? "active" : ""}" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
-        ${t("கட்-ஆஃப் ஒப்பீடு &amp; கல்லூரிகள்", "Cutoff Comparison &amp; Directory")}
+        ${t("கட்-ஆஃப் ஒப்பீடு &amp; கல்லூரித் தேடல்", "Cutoff Comparison &amp; Directory")}
       </a>
       <a class="nav-tab ${activeTab === "shortlist" ? "active" : ""}" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
         ${t("என் விருப்பப் பட்டியல்", "My Shortlist")} <span class="shortlist-badge">${shortIds.length}</span>
       </a>
       <a class="nav-tab ${activeTab === "counselling" ? "active" : ""}" href="?tab=counselling&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
-        ${t("கலந்தாய்வு நடைமுறை வழிகாட்டல்", "Counselling Procedure Guidance")}
+        ${t("கலந்தாய்வு வழிகாட்டி", "Counselling Procedure Guidance")}
       </a>
     </nav>
 
@@ -1182,7 +1182,7 @@ function renderComparisonTab(
     <section>
       <p class="scope-note screen-only" style="margin: 0 0 1rem; padding: 0.85rem 1.15rem; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.92rem; color: #334155; line-height: 1.55; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
         ${t(
-          `<strong>வரம்பு:</strong> இந்தப் பக்கத்தில் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு ஒப்பீட்டிற்கு அங்கீகரிக்கப்பட்ட <strong>121 கல்லூரிகள் (1,249 படிப்புகள்)</strong> உள்ளன (கல்லூரி 1516: <span class="held-badge">${esc(copy.heldNotice)}</span>). தமிழ்நாட்டின் முழு 389 கல்லூரிகள் பட்டியலை மதிப்பெண் இன்றி ஆராய <a href="/colleges?lang=ta" style="color: #2563eb; font-weight: 600; text-decoration: underline;">கல்லூரிகள் பட்டியலைப் பார்க்கவும்</a>.`,
+          `<strong>தரவு விவரம்:</strong> இந்த ஒப்பீட்டுப் பக்கத்தில், கடந்த ஆண்டு அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவுகள் சரிபார்க்கப்பட்ட <strong>121 கல்லூரிகள் (1,249 படிப்புகள்)</strong> மட்டுமே உள்ளன (கல்லூரி 1516: <span class="held-badge">${esc(copy.heldNotice)}</span>). தமிழ்நாட்டின் மொத்தமுள்ள 389 கல்லூரிகளையும் கட்-ஆஃப் இன்றிப் பார்க்க <a href="/colleges?lang=ta" style="color: #2563eb; font-weight: 600; text-decoration: underline;">முழுக் கல்லூரிகள் பட்டியலைப் பார்க்கவும்</a>.`,
           `<strong>Dataset scope:</strong> This comparison workspace covers the <strong>121 approved colleges (1,249 offerings)</strong> with governed official provisional allotment evidence (College 1516: <span class="held-badge">${esc(copy.heldNotice)}</span>). To browse the broader 389-college 2026 TNEA listing without marks, visit the <a href="/colleges?lang=en" style="color: #2563eb; font-weight: 600; text-decoration: underline;">Colleges Directory</a>.`
         )}
       </p>
@@ -1193,7 +1193,7 @@ function renderComparisonTab(
       <aside class="community-prompt screen-only" role="status" style="margin: 0 0 1rem; padding: 0.9rem 1rem; background: #fffbeb; border: 1.5px solid #d69e2e; border-radius: 8px; color: #744210; font-size: 0.92rem; line-height: 1.55;">
         <strong>${t("அடுத்த படி: உங்கள் இட ஒதுக்கீட்டுப் பிரிவைத் (Community) தேர்ந்தெடுங்கள்", "Next Step: Select Your Reservation Community Category")}</strong><br>
         ${t(
-          `உங்கள் கட்-ஆஃப் (<strong>${studentCutoff}</strong>) பாதுகாப்பாகக் கொண்டுவரப்பட்டது (இணைய முகவரியில் சேமிக்கப்படவில்லை). கீழே உங்கள் உண்மையான இட ஒதுக்கீட்டுப் பிரிவு (OC / BC / BCM / MBC / SC / SCA / ST) மற்றும் ஒதுக்கீட்டைத் (பொதுக் கல்வி அல்லது 7.5% அரசுப் பள்ளி) தேர்ந்தெடுத்து <strong>'தேடு &amp; ஒப்பிடு'</strong> என்பதை அழுத்தவும்.`,
+          `உங்கள் கட்-ஆஃப் (<strong>${studentCutoff}</strong>) தானாகப் பதிவிடப்பட்டுள்ளது (இது இணைய முகவரியில் சேமிக்கப்படாது). கீழே உங்கள் சரியான இட ஒதுக்கீட்டுப் பிரிவு (OC / BC / BCM / MBC / SC / SCA / ST) மற்றும் சேர்க்கைப் பிரிவைத் (பொதுக் கல்வி அல்லது 7.5% அரசுப் பள்ளி) தேர்ந்தெடுத்து <strong>'தேடு &amp; ஒப்பிடு'</strong> என்பதைத் தேர்வு செய்யவும்.`,
           `Your cutoff (<strong>${studentCutoff}</strong>) was transferred safely in memory (not stored in the URL). Select your applicable Reservation Community Category (OC / BC / BCM / MBC / SC / SCA / ST) and Admission Quota below, then click <strong>'Search &amp; Compare'</strong>.`
         )}
       </aside>`
@@ -1203,7 +1203,7 @@ function renderComparisonTab(
       <!-- Learn before comparing accordion -->
       <details class="learn-before-comparing screen-only" style="margin: 0 0 1rem; padding: 0.85rem 1rem; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px;">
         <summary style="cursor: pointer; font-weight: 700; color: #1e40af; font-size: 0.98rem; padding: 0.2rem 0;">
-          ${t("📖 ஒப்பிடுவதற்கு முன் தெரிந்துகொள்ள வேண்டியவை (அதிகாரப்பூர்வ வழிகாட்டல் &amp; அறிவிப்புகள்)", "📖 Learn Before Comparing (Official Guides, Rounds &amp; Disclosures)")}
+          ${t("📖 ஒப்பிடும் முன் தெரிந்துகொள்ள வேண்டியவை (அதிகாரப்பூர்வ வழிகாட்டி &amp; குறிப்புகள்)", "📖 Learn Before Comparing (Official Guides, Rounds &amp; Disclosures)")}
         </summary>
         <div style="margin-top: 0.85rem; display: flex; flex-direction: column; gap: 0.85rem;">
           <aside class="truth-banner" aria-label="Official truth-in-guidance disclosures">
@@ -1343,14 +1343,14 @@ function renderComparisonTab(
         <div class="form-tier form-tier-1">
           <div class="form-group" style="grid-column: 1 / -1;">
             <label for="search-input" style="font-size: 0.88rem; font-weight: 700; color: #1e3a8a;">
-              🔍 ${t("விரைவுத் தேடல் (கல்லூரி பெயர் / பாடப்பிரிவு / மாவட்டம் / குறியீடு)", "Quick Search (College Name / Programme / District / Code)")}
+              🔍 ${t("விரைவுத் தேடல் (கல்லூரிப் பெயர் / துறை / மாவட்டம் / குறியீடு எண்)", "Quick Search (College Name / Programme / District / Code)")}
             </label>
-            <input id="search-input" type="text" name="q" value="${esc(query)}" placeholder="${t("எ.கா. CEG, PSG, CIT, CSE, கோவை, 1216", "e.g. CEG, PSG, CIT, CSE, Coimbatore, 1216")}">
+            <input id="search-input" type="text" name="q" value="${esc(query)}" placeholder="${t("உதாரணமாக: CEG, PSG, CIT, CSE, கோவை, 1216", "e.g. CEG, PSG, CIT, CSE, Coimbatore, 1216")}">
           </div>
 
           <div class="form-group">
             <label for="cutoff-input">${esc(copy.studentCutoffLabel)} (0–200)</label>
-            <input id="cutoff-input" type="number" step="0.25" min="0" max="200" name="cutoff" value="${studentCutoff !== null ? studentCutoff : ""}" placeholder="${t("எ.கா. 185.5", "e.g. 185.5")}">
+            <input id="cutoff-input" type="number" step="0.25" min="0" max="200" name="cutoff" value="${studentCutoff !== null ? studentCutoff : ""}" placeholder="${t("உதாரணமாக: 185.5", "e.g. 185.5")}">
           </div>
 
           <div class="form-group">
@@ -1387,7 +1387,7 @@ function renderComparisonTab(
           </div>
 
           <div class="form-group">
-            <label for="year-select">${t("கலந்தாய்வு ஆண்டு (Year)", "Counselling Year")}</label>
+            <label for="year-select">${t("கலந்தாய்வு ஆண்டு", "Counselling Year")}</label>
             <select id="year-select" name="year">
               <option value="2026" ${year === 2026 ? "selected" : ""}>${t("2026 (121 கல்லூரிகள்)", "2026 (121 Colleges)")}</option>
               <option value="2025" ${year === 2025 ? "selected" : ""}>${t("2025 (55 கல்லூரிகள்)", "2025 (55 Colleges)")}</option>
@@ -1400,7 +1400,7 @@ function renderComparisonTab(
           districtFilter || branchFilter || typeFilter !== "all" || (collegeFilter && collegeFilter !== "all") || onlyAvailable || sortOption !== "college_name" ? "open" : ""
         }>
           <summary style="cursor: pointer; font-weight: 700; color: #2563eb; font-size: 0.92rem; padding: 0.25rem 0;">
-            ${t("⚙️ கூடுதல் வடிகட்டிகள் &amp; வரிசைப்படுத்தல் (வகை, மாவட்டம், பாடப்பிரிவு)", "⚙️ More Filters &amp; Sorting (Category, District, Programme)")}
+            ${t("⚙️ கூடுதல் தேடல் விருப்பங்கள் &amp; வரிசைப்படுத்துதல் (கல்லூரி வகை, மாவட்டம், துறை)", "⚙️ More Filters &amp; Sorting (Category, District, Programme)")}
           </summary>
           <div style="margin-top: 0.85rem; display: flex; flex-direction: column; gap: 1rem;">
             <div class="form-tier form-tier-2" style="border-bottom: none; padding-bottom: 0;">
@@ -1431,7 +1431,7 @@ function renderComparisonTab(
               </div>
 
               <div class="form-group">
-                <label for="college-select">${t("குறிப்பிட்ட கல்லூரித் தேர்வு", "Select Specific College")}</label>
+                <label for="college-select">${t("குறிப்பிட்ட கல்லூரியைத் தேர்ந்தெடுக்க", "Select Specific College")}</label>
                 <select id="college-select" name="college">
                   <option value="" ${!collegeFilter || collegeFilter === "all" ? "selected" : ""}>${t(`அனைத்துக் கல்லூரிகள் (${filteredColleges.length})`, `All Colleges (${filteredColleges.length})`)}</option>
                   ${renderCollegeOptions(filteredColleges, collegeFilter, lang)}
@@ -1439,9 +1439,9 @@ function renderComparisonTab(
               </div>
 
               <div class="form-group">
-                <label for="branch-select">${t("பாடப்பிரிவு (Department / Branch)", "Branch / Department")}</label>
+                <label for="branch-select">${t("துறை (Department / Branch)", "Branch / Department")}</label>
                 <select id="branch-select" name="branch">
-                  <option value="" ${!branchFilter ? "selected" : ""}>${t("அனைத்துப் பாடப்பிரிவுகள்", "All Programmes")}</option>
+                  <option value="" ${!branchFilter ? "selected" : ""}>${t("அனைத்துத் துறைகள்", "All Programmes")}</option>
                   ${allBranches
                     .map(
                       (b) =>
@@ -1456,16 +1456,16 @@ function renderComparisonTab(
               <div class="form-group" style="min-width: 250px;">
                 <label for="sort-select">${t("வரிசைப்படுத்து", "Sort By")}</label>
                 <select id="sort-select" name="sort">
-                  <option value="college_name" ${sortOption === "college_name" ? "selected" : ""}>${t("கல்லூரி பெயர் (A-Z) (இயல்புநிலை)", "College Name (A-Z) (Default)")}</option>
-                  <option value="college_code" ${sortOption === "college_code" ? "selected" : ""}>${t("கல்லூரி குறியீடு எண்", "College Code")}</option>
-                  <option value="cutoff_desc" ${sortOption === "cutoff_desc" ? "selected" : ""}>${t("வரலாற்று குறைந்தபட்ச மதிப்பெண்: அதிகபட்சம் முதல் (எண் வரிசை)", "Historical Minimum Mark: High to Low (Numerical)")}</option>
-                  <option value="cutoff_asc" ${sortOption === "cutoff_asc" ? "selected" : ""}>${t("வரலாற்று குறைந்தபட்ச மதிப்பெண்: குறைந்தபட்சம் முதல் (எண் வரிசை)", "Historical Minimum Mark: Low to High (Numerical)")}</option>
+                  <option value="college_name" ${sortOption === "college_name" ? "selected" : ""}>${t("கல்லூரிப் பெயர் (A–Z)", "College Name (A-Z) (Default)")}</option>
+                  <option value="college_code" ${sortOption === "college_code" ? "selected" : ""}>${t("கல்லூரிக் குறியீடு எண்", "College Code")}</option>
+                  <option value="cutoff_desc" ${sortOption === "cutoff_desc" ? "selected" : ""}>${t("கடந்த ஆண்டு கட்-ஆஃப்: அதிகம் முதல் குறைவு வரை", "Historical Minimum Mark: High to Low (Numerical)")}</option>
+                  <option value="cutoff_asc" ${sortOption === "cutoff_asc" ? "selected" : ""}>${t("கடந்த ஆண்டு கட்-ஆஃப்: குறைவு முதல் அதிகம் வரை", "Historical Minimum Mark: Low to High (Numerical)")}</option>
                 </select>
               </div>
 
               <label style="display: inline-flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #334155; padding-top: 1.25rem;">
                 <input type="checkbox" name="only_available" value="1" ${onlyAvailable ? "checked" : ""} style="width: 1.15rem; height: 1.15rem; min-height: 0; cursor: pointer;">
-                <span>${t("கட்-ஆஃப் தரவு உள்ள படிப்புகளை மட்டும் காட்டு", "Show only offerings with available cutoff data")}</span>
+                <span>${t("கட்-ஆஃப் விவரம் உள்ள படிப்புகளை மட்டும் காட்டு", "Show only offerings with available cutoff data")}</span>
               </label>
             </div>
           </div>
@@ -1475,7 +1475,7 @@ function renderComparisonTab(
         <div class="form-tier form-tier-3" style="display: flex; align-items: center; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.25rem;">
           ${
             districtFilter || branchFilter || query || typeFilter !== "all" || (collegeFilter && collegeFilter !== "all") || onlyAvailable || sortOption !== "college_name"
-              ? `<a class="btn-action" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">${t("வடிகட்டிகளை நீக்கு", "Clear Filters")}</a>`
+              ? `<a class="btn-action" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">${t("தேர்வுகளை அழி", "Clear Filters")}</a>`
               : ""
           }
           <button type="submit" class="btn-action btn-primary" style="padding: 0.65rem 1.6rem; font-size: 0.95rem; font-weight: 700;">${t("தேடு &amp; ஒப்பிடு", "Search &amp; Compare")}</button>
@@ -1485,7 +1485,7 @@ function renderComparisonTab(
       <div class="active-context-strip" role="status" style="margin: 0 0 1rem; padding: 0.8rem 1rem; background: #edf2f7; border-left: 4px solid #2b6cb0; border-radius: 4px; font-size: 0.9rem; color: #1a202c; line-height: 1.5;">
         <!-- Context Chips (Requirement 9) -->
         <div class="context-chips-bar screen-only" aria-label="Active Context Chips" style="margin: 0 0 0.5rem;">
-          <span class="context-chips-label">${t("வடிகட்டி சில்லுகள்:", "Active Chips:")}</span>
+          <span class="context-chips-label">${t("தேர்ந்தெடுத்த விவரங்கள்:", "Active Chips:")}</span>
           ${studentCutoff !== null ? `<span class="context-chip">🎯 ${t("கட்-ஆஃப்:", "Cutoff:")} <strong>${studentCutoff.toFixed(2)}</strong></span>` : ""}
           <span class="context-chip">📋 ${esc(copy.quotaName(quota))}</span>
           <span class="context-chip">🏷️ ${esc(copy.communityName(community))}</span>
@@ -1541,10 +1541,10 @@ function renderComparisonTab(
       <div class="shortlist-summary-pill screen-only" style="margin: 0.75rem 0 1rem; padding: 0.75rem 1rem; background: #e6fffa; border: 1.5px solid #81e6d9; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
         <span>
           <strong>${t(`தேர்ந்தெடுக்கப்பட்ட விருப்பங்கள்: ${shortIds.length}`, `Selected Choices: ${shortIds.length}`)}</strong>
-          · ${t("விருப்பங்களை வரிசைப்படுத்தவும் அச்சிடவும் தயார்.", "Ready to organize and print your preference order.")}
+          · ${t("இவற்றை வரிசைப்படுத்தவும் அச்சிடவும் தயார்.", "Ready to organize and print your preference order.")}
         </span>
         <a class="btn-action btn-primary" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
-          ${t("விருப்பப் பட்டியல் வரிசைக்குச் செல் →", "Go to Choice Order Planner →")}
+          ${t("விருப்பப் பட்டியலை வரிசைப்படுத்த →", "Go to Choice Order Planner →")}
         </a>
       </div>`
           : ""
@@ -1559,7 +1559,7 @@ function renderComparisonTab(
         </span>
         <span style="font-size: 0.84rem; color: #4a5568;">
           ${t(
-            "விருப்பமான படிப்பின் அருகே உள்ள '+ சேர்' பட்டனை அழுத்தி உங்கள் சொந்த விருப்பப் பட்டியலில் சேர்க்கலாம் (இது தளத்தின் பரிந்துரை அல்ல; 'என் விருப்பப் பட்டியல்' பகுதியில் நீங்களே வரிசையை மாற்றலாம்).",
+            "உங்களுக்குப் பிடித்த கல்லூரி மற்றும் துறையின் அருகே உள்ள '+ தேர்வு' என்பதை அழுத்தி உங்கள் விருப்பப் பட்டியலில் சேர்த்துக்கொள்ளலாம் (இது தளத்தின் பரிந்துரை அல்ல; 'என் விருப்பப் பட்டியல்' பகுதியில் நீங்களே வரிசையை மாற்றிக்கொள்ளலாம்).",
             "Click '+ Add' to save an offering to your personal shortlist (not a system recommendation; you manually set preference order in 'My Shortlist')."
           )}
         </span>
@@ -1581,10 +1581,10 @@ function renderComparisonTab(
         <table class="comparison-table" role="table" aria-label="College Cutoff Comparison Table">
           <thead>
             <tr>
-              <th scope="col">${t("கல்லூரி &amp; பாடப்பிரிவு", "College &amp; Programme")}</th>
-              <th scope="col">${esc(t(`கண்டறியப்பட்ட குறைந்தபட்ச மதிப்பெண் (${year})`, `Observed Minimum Mark (${year})`))}</th>
+              <th scope="col">${t("கல்லூரி &amp; துறை", "College &amp; Programme")}</th>
+              <th scope="col">${esc(t(`கடைசி கட்-ஆஃப் (${year})`, `Observed Minimum Mark (${year})`))}</th>
               <th scope="col">${esc(copy.deltaLabel)}</th>
-              <th scope="col">${t("அதிகாரப்பூர்வ ஆதாரம்", "Official Source")}</th>
+              <th scope="col">${t("அதிகாரப்பூர்வ விவரம்", "Official Source")}</th>
               <th scope="col">${t("விருப்பப் பட்டியல்", "Shortlist")}</th>
             </tr>
           </thead>
@@ -1624,11 +1624,11 @@ function renderComparisonTab(
       <div class="comparison-bottom-cta screen-only" style="margin-top: 1.5rem; padding: 1.25rem; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 10px; display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
         <div>
           <strong style="color: #0f172a; font-size: 0.95rem; display: block;">${t("அடுத்த படி:", "Next Step:")}</strong>
-          <span style="color: #475569; font-size: 0.88rem;">${t("விருப்பங்களைச் சேர்த்தவுடன், முன்னுரிமைப் பட்டியலை வரிசைப்படுத்தவும் அச்சிடவும் செல்லவும்.", "Review your selected options, organize priority order, and export for counselling.")}</span>
+          <span style="color: #475569; font-size: 0.88rem;">${t("உங்களுக்கு விருப்பமான கல்லூரிகளைச் சேர்த்த பிறகு, அவற்றை முன்னுரிமைப்படி வரிசைப்படுத்தி அச்சிடலாம்.", "Review your selected options, organize priority order, and export for counselling.")}</span>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
           <a class="btn-action btn-primary" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
-            ${t("என் விருப்பப் பட்டியல் வரிசைக்குச் செல் →", "Go to Choice Order Planner →")}
+            ${t("என் விருப்பப் பட்டியலை வரிசைப்படுத்த →", "Go to Choice Order Planner →")}
           </a>
           <a class="btn-action" href="?tab=counselling&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">
             ${t("கலந்தாய்வு நடைமுறைகள் →", "Counselling Guidance →")}
@@ -1674,7 +1674,7 @@ function renderOfferingRow(
     if (result.otherRound && result.otherRoundMark !== null && result.otherRoundMark !== undefined) {
       deltaHtml = `<span class="neutral-badge" style="background: #f8fafc; border-left: 3px solid #64748b;">${esc(
         t(
-          `இந்த சுற்றுக்கான ஒப்பீட்டுப் பதிவு கிடைக்கவில்லை; ${copy.roundName(result.otherRound)}-ல் பதிவு உள்ளது (${result.otherRoundMark.toFixed(2)})`,
+          `இந்தச் சுற்றில் தரவு இல்லை; ${copy.roundName(result.otherRound)}-ல் கடைசி கட்-ஆஃப் உள்ளது (${result.otherRoundMark.toFixed(2)})`,
           `No comparable record available for this round; a record exists in ${copy.roundName(result.otherRound)} (${result.otherRoundMark.toFixed(2)})`
         )
       )}</span>`;
@@ -1684,7 +1684,7 @@ function renderOfferingRow(
   } else if (result.status === "STUDENT_CUTOFF_MISSING") {
     deltaHtml = `<span class="neutral-badge">${t("கட்-ஆஃப் உள்ளிடவும்", "Enter cutoff")}</span>`;
   } else if (result.delta !== null) {
-    deltaHtml = `<span class="delta-badge">${esc(copy.formatDelta(result.delta))}</span><small class="delta-caution" style="display: block; margin-top: 2px; font-size: 0.72rem; color: #64748b; line-height: 1.3;">${t("கடந்த ஆண்டு வரலாற்றுப் பதிவு மட்டுமே — சேர்க்கை உத்தரவாதமோ கணிப்போ அல்ல", "Past historical benchmark only — not a guarantee or prediction")}</small>`;
+    deltaHtml = `<span class="delta-badge">${esc(copy.formatDelta(result.delta))}</span><small class="delta-caution" style="display: block; margin-top: 2px; font-size: 0.72rem; color: #64748b; line-height: 1.3;">${t("கடந்த ஆண்டுத் தரவு மட்டுமே — சேர்க்கை உத்தரவாதமோ கணிப்போ அல்ல", "Past historical benchmark only — not a guarantee or prediction")}</small>`;
   }
 
   // Toggle shortlist action via privacy-preserving POST form so cutoff/community/search remain intact in memory without appearing in GET URLs
@@ -1774,7 +1774,7 @@ function renderOfferingRow(
           <button type="submit"
              class="btn-action ${isShortlisted ? "" : "btn-primary"}"
              aria-label="${isShortlisted ? t("விருப்பப் பட்டியலிலிருந்து நீக்கு", "Remove from shortlist") : t("விருப்பப் பட்டியலில் சேர் (கைமுறை வரிசைப்படுத்தல்)", "Add to manual shortlist")}">
-            ${isShortlisted ? t("சேர்க்கப்பட்டது ✓", "Saved ✓") : t("+ சேர்", "+ Add")}
+            ${isShortlisted ? t("சேர்க்கப்பட்டது ✓", "Saved ✓") : t("+ தேர்வு", "+ Add")}
           </button>
         </form>
       </td>
@@ -1789,8 +1789,8 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
     return `
       <section>
         <h2>${t("என் விருப்பப் பட்டியல்", "My Shortlist")}</h2>
-        <p>${t("உங்கள் விருப்பப்列表中 இதுவரை எந்தக் கல்லூரியும் சேர்க்கப்படவில்லை.", "Your shortlist is empty. Browse the comparison directory to add college-programme choices.")}</p>
-        <p><a class="btn-action btn-primary" href="?tab=comparison&amp;lang=${lang}">${t("கல்லூரிகளைப் பார்வையிடு", "Browse Colleges")}</a></p>
+        <p>${t("உங்கள் விருப்பப் பட்டியலில் இதுவரை எந்தக் கல்லூரியும் இல்லை. கட்-ஆஃப் ஒப்பீட்டுப் பக்கத்திற்குச் சென்று உங்களுக்குப் பிடித்த கல்லூரி மற்றும் துறைகளைத் தேர்வு செய்யலாம்.", "Your shortlist is empty. Browse the comparison directory to add college-programme choices.")}</p>
+        <p><a class="btn-action btn-primary" href="?tab=comparison&amp;lang=${lang}">${t("கல்லூரிகளைத் தேர்வு செய்ய →", "Browse Colleges")}</a></p>
       </section>
     `;
   }
@@ -1813,19 +1813,19 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
       <div class="print-header print-only">
         <h1>${esc(t("தமிழ்நாடு பொறியியல் சேர்க்கை (TNEA) — மாணவர் விருப்ப முன்னுரிமைப் பணித்தாள்", "Tamil Nadu Engineering Admissions (TNEA) — Student Choice Preference Worksheet"))}</h1>
         <p>${esc(t("அதிகாரப்பூர்வ TNEA விருப்பப் பதிவு முன்னுரிமைப் பணித்தாள் — கணிப்பு அல்லாத குறிப்புப் படிவம்", "Official TNEA Choice Entry Preference Worksheet — Non-predictive Reference"))}</p>
-        <p style="margin-top: 4pt; font-size: 8.5pt; color: #555;">${esc(t("அதிகாரப்பூர்வ TNEA கலந்தாய்வு இணையதளத்தில் வரிசைப்படி பதிவு செய்வதற்கான சரிபார்ப்புப் படிவம்.", "Student-controlled preference worksheet organized according to genuine priority for official TNEA online choice filling."))}</p>
+        <p style="margin-top: 4pt; font-size: 8.5pt; color: #555;">${esc(t("அதிகாரப்பூர்வ TNEA இணையதளத்தில் உங்கள் விருப்பங்களை வரிசைப்படி பதிவு செய்வதற்கான குறிப்புப் பட்டியல்.", "Student-controlled preference worksheet organized according to genuine priority for official TNEA online choice filling."))}</p>
       </div>
 
       <div class="screen-only" style="background: #ffffff; border: 1.5px solid #bfdbfe; border-left: 4px solid #2563eb; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;">
-        <h2 style="margin: 0 0 0.35rem; font-size: 1.25rem; color: #1e3a8a;">${t("விருப்பப் பட்டியல் வரிசை (Choice Order Planner)", "Your Working Choice Order (Choice Order Planner)")}</h2>
+        <h2 style="margin: 0 0 0.35rem; font-size: 1.25rem; color: #1e3a8a;">${t("என் விருப்பப் பட்டியல் வரிசை (Choice Order Planner)", "Your Working Choice Order (Choice Order Planner)")}</h2>
         <ul style="margin: 0.5rem 0 0.75rem; padding-left: 1.2rem; font-size: 0.9rem; color: #334155; line-height: 1.55;">
-          <li><strong>${t("பணித்தாள் மட்டுமே:", "Planning worksheet only:")}</strong> ${t("இது உங்களின் சொந்த திட்டமிடல் பணித்தாள் மட்டுமே; இது அதிகாரப்பூர்வ TNEA சமர்ப்பிப்பு அல்ல.", "This is a student planning worksheet, not an official TNEA online submission.")}</li>
-          <li><strong>${t("மாணவரே முடிவெடுக்கிறார்:", "Student controls order:")}</strong> ${t("விருப்பங்களின் வரிசையை நீங்களே முழுமையாகத் தீர்மானிக்கிறீர்கள். பரிந்துரைகள் எதுவும் இல்லை.", "You have full control over the preference order with zero automated ranking.")}</li>
-          <li><strong>${t("வரிசை முக்கியமானது:", "Order matters:")}</strong> ${t("TNEA கணினி விருப்பம் #1 முதல் மட்டுமே வரிசையாகப் பார்க்கும். மேலிருந்து கீழாக உண்மையான விருப்பப்படி வரிசைப்படுத்துங்கள்.", "TNEA allocates strictly from Choice #1 downwards; upward movement only moves toward #1.")}</li>
+          <li><strong>${t("திட்டமிடல் பட்டியல் மட்டுமே:", "Planning worksheet only:")}</strong> ${t("இது உங்களின் பயிற்சி மற்றும் திட்டமிடலுக்கான பட்டியல் மட்டுமே; அதிகாரப்பூர்வ TNEA இணையதளத்தில் நீங்களே விருப்பங்களைப் பதிவு செய்ய வேண்டும்.", "This is a student planning worksheet, not an official TNEA online submission.")}</li>
+          <li><strong>${t("வரிசை உங்கள் கையில்:", "Student controls order:")}</strong> ${t("விருப்பங்களின் வரிசையை நீங்களே முழுமையாகத் தீர்மானிக்கலாம். இந்தத் தளம் தானாக எந்த வரிசையையும் மாற்றாது.", "You have full control over the preference order with zero automated ranking.")}</li>
+          <li><strong>${t("வரிசை மிக முக்கியம்:", "Order matters:")}</strong> ${t("TNEA கணினி விருப்பம் #1-லிருந்து கீழ்நோக்கி வரிசையாக மட்டுமே பார்க்கும். 'மேல்நோக்கிய நகர்வு' (Upward Movement) எப்போதுமே #1-ஐ நோக்கி மட்டுமே உயர்த்தும் என்பதால், உங்களுக்கு மிகவும் பிடித்த கல்லூரிகளை மேலிருந்து கீழாக வரிசைப்படுத்துங்கள்.", "TNEA allocates strictly from Choice #1 downwards; upward movement only moves toward #1.")}</li>
         </ul>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid #f1f5f9;">
           <button type="button" class="btn-action btn-primary" onclick="window.print()" title="${t("அச்சுப் படிவம் / PDF பதிவிறக்கு", "Print Worksheet / Save as PDF")}">
-            ${t("🖨️ அச்சிடு / PDF சேமி", "🖨️ Print / Save PDF")}
+            ${t("🖨️ அச்சிடு / PDF ஆகச் சேமி", "🖨️ Print / Save PDF")}
           </button>
           <a class="btn-action" href="?tab=shortlist&amp;lang=${lang}&amp;shortlist=" style="color: #c53030;">
             ${t("பட்டியலை அழி", "Clear Shortlist")}
@@ -1838,12 +1838,12 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
           <thead>
             <tr>
               <th scope="col" style="width: 70px;">${t("வரிசை", "Choice Order")}</th>
-              <th scope="col" class="screen-only">${t("கல்லூரி &amp; பாடப்பிரிவு", "College &amp; Programme")}</th>
+              <th scope="col" class="screen-only">${t("கல்லூரி &amp; துறை", "College &amp; Programme")}</th>
               <th scope="col" class="print-only">${t("கல்லூரி குறியீடு", "College Code")}</th>
               <th scope="col" class="print-only">${t("கல்லூரி பெயர்", "College Name")}</th>
               <th scope="col" class="print-only">${t("பாடப்பிரிவு குறியீடு", "Branch Code")}</th>
               <th scope="col" class="print-only">${t("பாடப்பிரிவு பெயர்", "Branch Name")}</th>
-              <th scope="col" class="screen-only" style="width: 150px;">${t("நடவடிக்கை", "Actions")}</th>
+              <th scope="col" class="screen-only" style="width: 150px;">${t("வரிசை மாற்று", "Actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -1875,7 +1875,7 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
                     <td><strong>#${item.order}</strong></td>
                     <td class="screen-only">
                       <strong>${esc(item.collegeName)}</strong> (${esc(item.collegeCode)})<br>
-                      <span>${t("பாடப்பிரிவு:", "Programme:")} <strong>${esc(item.programmeCode)}</strong> · ${esc(item.programmeName)}</span>
+                      <span>${t("துறை:", "Programme:")} <strong>${esc(item.programmeCode)}</strong> · ${esc(item.programmeName)}</span>
                     </td>
                     <td class="print-only"><strong>${esc(item.collegeCode)}</strong></td>
                     <td class="print-only">${esc(item.collegeName)}</td>
@@ -1906,28 +1906,28 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
 
       <details class="screen-only export-details export-container" style="margin-top: 1.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem;">
         <summary style="font-size: 1.05rem; font-weight: 700; color: #1e3a8a; cursor: pointer; padding: 0.25rem 0;">
-          📋 ${t("விருப்பப் பட்டியல் நகல் &amp; ஏற்றுமதி (TNEA போர்ட்டலுக்காக)", "Choice List Copy &amp; Export (For Official TNEA Portal)")}
+          📋 ${t("விருப்பப் பட்டியலை நகலெடுக்க (TNEA இணையதளப் பதிவிற்கு)", "Choice List Copy &amp; Export (For Official TNEA Portal)")}
         </summary>
         <p style="font-size: 0.875rem; color: #4a5568; margin: 0.75rem 0 1rem; line-height: 1.5;">
           ${t(
-            "அதிகாரப்பூர்வ TNEA கலந்தாய்வு இணையதளத்தில் விருப்பங்களை வரிசைப்படி பதிவு செய்ய இந்த உரையை நகலெடுத்துக் கொள்ளலாம்.",
+            "அதிகாரப்பூர்வ TNEA இணையதளத்தில் விருப்பங்களைப் பிழையின்றி வரிசைப்படி பதிவு செய்ய, இந்தப் பட்டியலை நகலெடுத்து (Copy) வைத்துக்கொள்ளலாம்.",
             "Copy your finalized ordered choices as plain text or CSV format for reference when filling choices in the official TNEA counselling portal."
           )}
         </p>
 
         <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
           <button type="button" class="btn-action" onclick="navigator.clipboard?.writeText(document.getElementById('export-text').value); alert('${t("உரை கிளிப்போர்டில் நகலெடுக்கப்பட்டது!", "Plain text copied to clipboard!")}')">
-            ${t("📋 எளிய உரையை நகலெடு", "📋 Copy Plain Text")}
+            ${t("📋 பட்டியலை நகலெடு (Text)", "📋 Copy Plain Text")}
           </button>
           <button type="button" class="btn-action" onclick="navigator.clipboard?.writeText(document.getElementById('export-csv').value); alert('${t("CSV கிளிப்போர்டில் நகலெடுக்கப்பட்டது!", "CSV copied to clipboard!")}')">
-            ${t("📊 CSV நகலெடு", "📊 Copy CSV")}
+            ${t("📊 CSV வடிவில் நகலெடு", "📊 Copy CSV")}
           </button>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 1rem;">
           <div>
             <label for="export-text" style="font-size: 0.825rem; font-weight: 600; color: #4a5568; display: block; margin-bottom: 0.25rem;">
-              ${t("எளிய உரை வடிவம் (Plain Text):", "Plain Text Format:")}
+              ${t("உரை வடிவம் (Plain Text):", "Plain Text Format:")}
             </label>
             <textarea id="export-text" readonly rows="6" style="width: 100%; max-width: 100%; box-sizing: border-box; font-family: monospace, Consolas, sans-serif; font-size: 0.85rem; padding: 0.6rem; border: 1px solid #cbd5e0; border-radius: 4px; background: #fff; line-height: 1.4; resize: vertical;">${esc(plainTextExport)}</textarea>
           </div>
@@ -1946,7 +1946,7 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
       <div class="next-step-card screen-only" style="margin-top: 1.75rem; padding: 1.25rem; background: #ebf8ff; border: 1.5px solid #bee3f8; border-radius: 8px;">
         <h3 style="margin: 0 0 0.5rem; color: #2b6cb0;">${t("அடுத்த படி: TNEA கலந்தாய்வு ஒதுக்கீட்டு விதிகளை அறிதல்", "Next Step: Understand Official TNEA Allocation &amp; Upward Movement")}</h3>
         <p style="margin: 0 0 1rem; color: #2d3748; font-size: 0.95rem; line-height: 1.5;">
-          ${t("உங்கள் விருப்பப் பட்டியலை இறுதி செய்தவுடன், TNEA ஒற்றைச் சாளரக் கலந்தாய்வு முறை எவ்வாறு செயல்படுகிறது என்பதையும், மேல்நோக்கிய நகர்வு (Upward Movement) விதிகள் எவ்வாறு உங்கள் விருப்பம் #1-ஐப் பாதுகாக்கின்றன என்பதையும் அறிந்துகொள்ளுங்கள்.", "Once your preference order is set, learn how single-window counselling evaluates choices sequentially from Choice #1 downwards and how upward movement allows you to reach higher preferences without risk.")}
+          ${t("உங்கள் விருப்பப் பட்டியலை வரிசைப்படுத்திய பிறகு, TNEA கலந்தாய்வில் இட ஒதுக்கீடு எப்படி நடக்கிறது என்பதையும், 'மேல்நோக்கிய நகர்வு' (Upward Movement) விதிகளையும் தெளிவாகத் தெரிந்துகொள்ளுங்கள்.", "Once your preference order is set, learn how single-window counselling evaluates choices sequentially from Choice #1 downwards and how upward movement allows you to reach higher preferences without risk.")}
         </p>
         <a class="btn-action btn-primary" href="?tab=counselling&amp;lang=${lang}&amp;shortlist=${esc(shortIds.join(","))}">
           ${t("கலந்தாய்வு நடைமுறைகள் &amp; விதிகளைப் படிக்க →", "Read Counselling Procedures &amp; Rules →")}
