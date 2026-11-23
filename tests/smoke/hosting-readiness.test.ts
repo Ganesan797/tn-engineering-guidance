@@ -102,6 +102,16 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     assert.ok(m5PostHtml.includes('value="185.5"'), "M5 page should reflect calculated cutoff in memory form");
     assert.ok(!m5PostHtml.includes('href="?tab=comparison&amp;cutoff='), "GET links must not leak cutoff");
 
+    // D2. M5 Guidance POST search without cutoff (clicking 'Search & Compare' from landing form)
+    const m5SearchPostRes = await fetch(`${base}/m5-guidance?lang=en`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ tab: "comparison", searched: "1" }).toString(),
+    });
+    assert.equal(m5SearchPostRes.status, 200, "M5 Search POST should return 200 OK");
+    const m5SearchPostHtml = await m5SearchPostRes.text();
+    assert.ok(m5SearchPostHtml.includes("College Cutoff Comparison Table"), "M5 Search POST must render comparison table, not search form loop");
+
     // E. Version API route (GET /api/version - Section 19 Deployment Identity)
     const verRes = await fetch(`${base}/api/version`);
     assert.equal(verRes.status, 200, "Version route should return 200 OK");
