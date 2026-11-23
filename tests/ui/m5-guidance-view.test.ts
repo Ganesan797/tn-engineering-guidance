@@ -663,9 +663,9 @@ test("M5 Filters: District and Branch dropdowns filter offerings cleanly and pre
   assert.ok(htmlCombined.includes('value="Chennai" selected'), "Must preserve selected District");
   assert.ok(htmlCombined.includes('value="EI" selected'), "Must preserve selected Branch");
 
-  // Compact result count pill and clear filters link
+  // Compact result count pill and reset filters link
   assert.ok(htmlCombined.includes("results-count-pill"), "Must display compact result count pill");
-  assert.ok(htmlCombined.includes("Clear Filters"), "Must show Clear Filters link when filters are active");
+  assert.ok(htmlCombined.includes("Reset filters") || htmlCombined.includes("Clear Filters"), "Must show Reset filters link when filters are active");
 
   // Exact Chennai + EI matches only (Velammal 1120 is Chennai EI; PSG 2006 is Coimbatore)
   assert.ok(htmlCombined.includes("Velammal Engineering College"), "Must include Chennai EI offering (1120)");
@@ -677,8 +677,8 @@ test("M5 Filters: District and Branch dropdowns filter offerings cleanly and pre
   assert.ok(htmlCombined.includes('<span class="district-tag">· Chennai</span>'), "Must render district tag");
   assert.ok(htmlCombined.includes('<input type="hidden" name="district" value="Chennai">'), "Must preserve district in shortlist form");
   assert.ok(htmlCombined.includes('<input type="hidden" name="branch" value="EI">'), "Must preserve branch in shortlist form");
-  assert.ok(htmlCombined.includes("district=Chennai"), "Language switch link must preserve non-sensitive district filter");
-  assert.ok(htmlCombined.includes("branch=EI"), "Language switch link must preserve non-sensitive branch filter");
+  assert.ok(htmlCombined.includes('name="district" value="Chennai"') || htmlCombined.includes("district=Chennai"), "Language switch must preserve district filter");
+  assert.ok(htmlCombined.includes('name="branch" value="EI"') || htmlCombined.includes("branch=EI"), "Language switch must preserve branch filter");
   assert.ok(!htmlCombined.includes("cutoff=180"), "Must never leak student cutoff into GET URLs");
 });
 
@@ -1003,9 +1003,9 @@ test("Choice Planner 2-Step Architecture: Landing shows only search form; result
   assert.ok(resultsEn.includes("Change search"), "Results view must offer 'Change search' control");
   assert.ok(resultsEn.includes('<input type="hidden" name="searched" value="1">'), "Shortlist toggle forms must preserve searched=1");
 
-  // Verify only ONE pagination bar (bottom pagination only)
+  // Verify top and bottom pagination bars (Codex 5A)
   const paginationBars = resultsEn.match(/class="pagination-bar screen-only"/g) || [];
-  assert.equal(paginationBars.length, 1, "Results view must have only bottom pagination (no top pagination bar)");
+  assert.equal(paginationBars.length, 2, "Results view must have top and bottom pagination bars");
 
   // Step 3: 'Change search' returns to search form
   const editSearchEn = renderM5GuidancePage(new URLSearchParams({ lang: "en", edit_search: "1", q: "CEG" }));

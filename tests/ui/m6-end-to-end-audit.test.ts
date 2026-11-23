@@ -261,7 +261,7 @@ test("M7_PREP: H1, H3, H4, H5, M1-M7, L1-L3 student-facing readiness regressions
   assert.doesNotMatch(arrivalTa, /கணக்கிடு \(தற்காலிக தரவு\)/, "M3: Misleading old submit label must be removed");
   assert.match(arrivalTa, /class="community-guide\b/, "L2: Community code explainer (OC, BC, BCM, MBC, SC, SCA, ST) must be present");
   assert.match(arrivalTa, /இது தளத்தின் பரிந்துரை அல்ல/, "L3: Must explain + சேர் adds to manual shortlist without system recommendation");
-  assert.match(arrivalTa, /<span lang="ta" aria-current="page">தமிழ்<\/span><a class="lang-switch" lang="en"/, "L1: Consistent தமிழ் | English toggle");
+  assert.match(arrivalTa, /<span lang="ta" aria-current="page">தமிழ்<\/span>.*(lang-switch.*English)/s, "L1: Consistent தமிழ் | English toggle");
 
   const withDeltaTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta", tab: "comparison" }), {
     studentCutoff: 185.5,
@@ -386,7 +386,7 @@ test("M7_PREP: H2 Live HTTP POST shortlist additions preserve cutoff, community,
       assert.match(html, /value="185\.5"/, `Cutoff must remain 185.5 after adding ${key}`);
       assert.match(html, /<option value="BC" selected>/, `Community BC must remain selected after adding ${key}`);
       assert.match(html, /value="ceg"/i, `Search query CEG must remain active after adding ${key}`);
-      assert.match(html, /சேர்க்கப்பட்டது ✓/, `Added state must appear for ${key}`);
+      assert.match(html, /(?:✓\s*சேர்க்கப்பட்டது|சேர்க்கப்பட்டது\s*✓)/, `Added state must appear for ${key}`);
       // Verify NO sensitive parameters appear in any href attribute
       const hrefs = [...html.matchAll(/href="([^"]+)"/g)].map(m => m[1]);
       for (const href of hrefs) {

@@ -364,10 +364,11 @@ export function renderM5GuidancePage(
   const communitySelected = inputState.communitySelected ?? inputState.community !== undefined;
 
   const rawRound = inputState.round ?? params.get("round");
+  const roundExplicit = params.get("round_explicit") === "1" || (inputState as any).roundExplicit === true || Boolean(inputState.round);
   const round: AllotmentRoundOrAll =
     rawRound === "ALL"
       ? "ALL"
-      : rawRound && ["ROUND_1", "ROUND_2", "ROUND_3"].includes(rawRound)
+      : roundExplicit && rawRound && ["ROUND_1", "ROUND_2", "ROUND_3"].includes(rawRound)
       ? (rawRound as AllotmentRound)
       : studentCutoff !== null
       ? studentCutoff >= 179.0
@@ -375,6 +376,8 @@ export function renderM5GuidancePage(
         : studentCutoff >= 145.0
         ? "ROUND_2"
         : "ROUND_3"
+      : rawRound && ["ROUND_1", "ROUND_2", "ROUND_3"].includes(rawRound)
+      ? (rawRound as AllotmentRound)
       : (inputState.year === 2025 || params.get("year") === "2025") && quota === "GENERAL_ACADEMIC"
       ? "ROUND_2"
       : "ROUND_1";
@@ -617,10 +620,41 @@ export function renderM5GuidancePage(
     return `?${p.toString()}`;
   };
 
+  // Language toggle parameters:
+  // When active comparison context exists (studentCutoff, explicit community, or search),
+  // switch language using a privacy-safe POST form so sensitive context is never lost or leaked in GET URLs.
+  const hasPostContext = studentCutoff !== null || communitySelected || hasSearched;
+  const makeLangSwitch = (target: SupportedLanguage, label: string) => {
+    if (!hasPostContext) {
+      return `<a class="lang-switch" lang="${target}" href="${esc(makeLangUrl(target))}">${label}</a>`;
+    }
+    return `<form method="POST" action="/m5-guidance?lang=${target}" class="lang-switch-form" style="margin: 0; display: inline;">
+      <input type="hidden" name="tab" value="${esc(activeTab)}">
+      <input type="hidden" name="lang" value="${target}">
+      ${studentCutoff !== null ? `<input type="hidden" name="cutoff" value="${studentCutoff}">` : ""}
+      ${communitySelected ? `<input type="hidden" name="community_selected" value="1"><input type="hidden" name="community" value="${esc(community)}">` : ""}
+      <input type="hidden" name="quota" value="${esc(quota)}">
+      <input type="hidden" name="round" value="${esc(round)}">
+      ${roundExplicit ? `<input type="hidden" name="round_explicit" value="1">` : ""}
+      <input type="hidden" name="year" value="${year}">
+      ${query ? `<input type="hidden" name="q" value="${esc(query)}">` : ""}
+      ${typeFilter !== "all" ? `<input type="hidden" name="type" value="${esc(typeFilter)}">` : ""}
+      ${districtFilter ? `<input type="hidden" name="district" value="${esc(districtFilter)}">` : ""}
+      ${collegeFilter && collegeFilter !== "all" ? `<input type="hidden" name="college" value="${esc(collegeFilter)}">` : ""}
+      ${branchFilter ? `<input type="hidden" name="branch" value="${esc(branchFilter)}">` : ""}
+      ${sortOption !== "college_name" ? `<input type="hidden" name="sort" value="${esc(sortOption)}">` : ""}
+      ${onlyAvailable ? `<input type="hidden" name="only_available" value="1">` : ""}
+      ${safePage > 1 ? `<input type="hidden" name="page" value="${safePage}">` : ""}
+      ${hasSearched ? `<input type="hidden" name="searched" value="1">` : ""}
+      ${rawShortlist ? `<input type="hidden" name="shortlist" value="${esc(rawShortlist)}">` : ""}
+      <button type="submit" class="lang-switch" lang="${target}">${label}</button>
+    </form>`;
+  };
+
   const langControl =
     lang === "ta"
-      ? `<span lang="ta" aria-current="page">தமிழ்</span><a class="lang-switch" lang="en" href="${esc(makeLangUrl("en"))}">English</a>`
-      : `<a class="lang-switch" lang="ta" href="${esc(makeLangUrl("ta"))}">தமிழ்</a><span lang="en" aria-current="page">English</span>`;
+      ? `<span lang="ta" aria-current="page">தமிழ்</span>${makeLangSwitch("en", "English")}`
+      : `${makeLangSwitch("ta", "தமிழ்")}<span lang="en" aria-current="page">English</span>`;
 
   const navTabsHtml = `
     <nav class="nav-tabs" aria-label="Milestone M5 Views">
@@ -1100,7 +1134,8 @@ export function renderM5GuidancePage(
               pageSize,
               totalItems: evaluatedRows.length,
             },
-            hasSearched
+            hasSearched,
+            roundExplicit
           )
     }
   </main>
@@ -1137,7 +1172,8 @@ function renderComparisonTab(
     pageSize: number;
     totalItems: number;
   },
-  hasSearched: boolean = false
+  hasSearched: boolean = false,
+  roundExplicit: boolean = false
 ): string {
   const t = (taStr: string, enStr: string) => (lang === "ta" ? taStr : enStr);
   const totalOfferings = totalOfferingsCount;
@@ -1192,6 +1228,7 @@ function renderComparisonTab(
             <input type="hidden" name="quota" value="${quota}">
             <input type="hidden" name="community" value="${community}">
             <input type="hidden" name="round" value="${round}">
+            ${roundExplicit ? `<input type="hidden" name="round_explicit" value="1">` : ""}
             <input type="hidden" name="year" value="${year}">
             <input type="hidden" name="community_selected" value="${communitySelected ? "1" : "0"}">
             <input type="hidden" name="q" value="${esc(query)}">
@@ -1250,9 +1287,41 @@ function renderComparisonTab(
                 : `<span class="pagination-btn disabled" aria-disabled="true">${t("அடுத்த", "Next")} →</span>`
             }
           </div>
+          ${renderRoundGuidanceCallout()}
         </div>
       `;
     }
+  };
+
+  const renderRoundGuidanceCallout = () => {
+    if (studentCutoff === null) return "";
+    if (studentCutoff < 179.0 && round === "ROUND_1") {
+      return `
+        <div class="round-guidance-callout screen-only" style="margin: 0.75rem 0 1rem; padding: 0.85rem 1.15rem; background: #eff6ff; border: 1.5px solid #93c5fd; border-left: 4px solid #2563eb; border-radius: 8px; font-size: 0.88rem; color: #1e3a8a; line-height: 1.55;">
+          <strong style="color: #1e40af; display: block; margin-bottom: 0.25rem;">
+            ℹ️ ${t("வரலாற்றுத் தரவு விவரம் — கலந்தாய்வுச் சுற்று 1:", "Historical Evidence Coverage Notice — Round 1:")}
+          </strong>
+          ${t(
+            `உங்கள் கட்-ஆஃப் மதிப்பெண் <strong>${studentCutoff}</strong>. TNEA கலந்தாய்வில் சுற்று 1 வரலாற்றுத் தரவுகள் பெரும்பாலும் 179.00 முதல் 200.00 வரையிலான மதிப்பெண்களைக் கொண்ட மாணவர்களின் சேர்க்கையை மட்டுமே பிரதிபலிக்கின்றன. எனவே 179-க்குக் குறைவான மதிப்பெண்களுக்கு சுற்று 1-ல் குறைவான ஒப்பீட்டுத் தரவுகளே காணப்படலாம். இது வாய்ப்பு இல்லை என்பதைக் குறிக்காது. உங்கள் மதிப்பெண்ணுக்குரிய பிற சுற்றுகளின் உண்மையான வரலாற்றுத் தரவுகளைப் பார்க்க மேலே அல்லது கீழே உள்ள கலந்தாய்வுச் சுற்றுகளில் <strong>சுற்று 2 (~178.99–145)</strong> அல்லது <strong>சுற்று 3 (~144.99–77.50)</strong> என்பதைத் தேர்வு செய்து ஒப்பிடலாம். பிற சுற்றுகளைத் தேர்வு செய்வது வரலாற்றை அறிந்துகொள்வதற்கு மட்டுமே; இது சேர்க்கை உத்தரவாதம் அல்ல.`,
+            `You entered an academic cutoff of <strong>${studentCutoff}</strong>. In TNEA single-window counselling, Round 1 historical publications primarily reflect candidate allotments in the ~179.00–200.00 score band. For cutoffs below 179, Round 1 contains fewer comparable historical observations. This does not mean options are unavailable; you can select <strong>Round 2 (~178.99–145.00)</strong> or <strong>Round 3 (~144.99–77.50)</strong> in the Counselling Round filter to inspect historical allotments from those rounds. Inspecting another round is for educational exploration only and does not predict, imply, or guarantee admission.`
+          )}
+        </div>
+      `;
+    }
+    if (studentCutoff < 145.0 && round === "ROUND_2") {
+      return `
+        <div class="round-guidance-callout screen-only" style="margin: 0.75rem 0 1rem; padding: 0.85rem 1.15rem; background: #eff6ff; border: 1.5px solid #93c5fd; border-left: 4px solid #2563eb; border-radius: 8px; font-size: 0.88rem; color: #1e3a8a; line-height: 1.55;">
+          <strong style="color: #1e40af; display: block; margin-bottom: 0.25rem;">
+            ℹ️ ${t("வரலாற்றுத் தரவு விவரம் — கலந்தாய்வுச் சுற்று 2:", "Historical Evidence Coverage Notice — Round 2:")}
+          </strong>
+          ${t(
+            `உங்கள் கட்-ஆஃப் மதிப்பெண் <strong>${studentCutoff}</strong>. TNEA கலந்தாய்வில் சுற்று 2 வரலாற்றுத் தரவுகள் 145.00 முதல் ~178.99 வரையிலான மதிப்பெண்களைக் கொண்ட மாணவர்களின் சேர்க்கையை மட்டுமே குறிக்கின்றன. 145-க்குக் குறைவான மதிப்பெண்களுக்கு <strong>சுற்று 3 (~144.99–77.50)</strong> என்பதைத் தேர்வு செய்து அந்தச் சுற்றுக்கான உண்மையான வரலாற்றுத் தரவுகளை ஒப்பிடலாம்.`,
+            `You entered an academic cutoff of <strong>${studentCutoff}</strong>. In TNEA counselling, Round 2 historical publications reflect allotments in the ~145.00–178.99 score band. For cutoffs below 145, you can select <strong>Round 3 (~144.99–77.50)</strong> in the Counselling Round filter to inspect round-appropriate historical allotments.`
+          )}
+        </div>
+      `;
+    }
+    return "";
   };
 
   const renderActiveContextStrip = () => `
@@ -1366,7 +1435,8 @@ function renderComparisonTab(
 
           <div class="form-group">
             <label for="round-select">${esc(copy.roundLabel)}</label>
-            <select id="round-select" name="round" aria-label="${esc(copy.roundLabel)}">
+            <input type="hidden" name="round_explicit" id="round-explicit-input" value="${roundExplicit ? "1" : "0"}">
+            <select id="round-select" name="round" aria-label="${esc(copy.roundLabel)}" onchange="var el=document.getElementById('round-explicit-input'); if(el) el.value='1';">
               ${round === "ALL" ? `<option value="ALL" selected>${esc(copy.roundName("ALL"))}</option>` : ""}
               ${(["ROUND_1", "ROUND_2", "ROUND_3"] as AllotmentRound[])
                 .map(
@@ -1391,6 +1461,7 @@ function renderComparisonTab(
               `<strong>7.5% Quota — For Comparison &amp; Exploration Only (Not Proof of Eligibility):</strong> Selecting the 7.5% option here is for historical comparison and exploration only and does not establish or confirm your eligibility. Actual eligibility depends on continuous Std 6–12 Tamil Nadu Government school study and official document/rule verification through the TNEA process. <a href="/counselling?lang=en" style="color: #92400e; font-weight: 700; text-decoration: underline;">Check official 7.5% eligibility rules →</a>`
             )}
           </div>
+          ${renderRoundGuidanceCallout()}
         </div>
 
         <!-- Tier 2: Mandatory Filter & Sort Controls (Always Visible) -->
@@ -1455,21 +1526,19 @@ function renderComparisonTab(
               </select>
             </div>
 
-            <label for="only-available-check" style="display: inline-flex; align-items: center; gap: 0.55rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #334155; padding-top: 1.25rem;">
-              <input id="only-available-check" type="checkbox" name="only_available" value="1" aria-label="${t("கட்-ஆஃப் விவரம் உள்ள படிப்புகளை மட்டும் காட்டு", "Show only offerings with available cutoff data")}" ${onlyAvailable ? "checked" : ""} style="width: 1.15rem; height: 1.15rem; min-height: 0; cursor: pointer;">
+            <label for="only-available-check" style="display: inline-flex; align-items: center; gap: 0.65rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #334155; min-height: 44px; padding: 6px 4px; user-select: none;">
+              <input id="only-available-check" type="checkbox" name="only_available" value="1" aria-label="${t("கட்-ஆஃப் விவரம் உள்ள படிப்புகளை மட்டும் காட்டு", "Show only offerings with available cutoff data")}" ${onlyAvailable ? "checked" : ""} style="width: 20px; height: 20px; min-height: 20px; min-width: 20px; cursor: pointer; margin: 0; accent-color: #2563eb;">
               <span>${t("கட்-ஆஃப் விவரம் உள்ள படிப்புகளை மட்டும் காட்டு", "Show only offerings with available cutoff data")}</span>
             </label>
           </div>
         </div>
 
         <!-- Actions -->
-        <div class="form-tier form-tier-3" style="display: flex; align-items: center; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.25rem;">
-          ${
-            districtFilter || branchFilter || query || typeFilter !== "all" || (collegeFilter && collegeFilter !== "all") || onlyAvailable || sortOption !== "college_name"
-              ? `<a class="btn-action" aria-label="${t("தேர்வுகளை அழி", "Clear Filters")}" href="?tab=comparison&amp;lang=${lang}&amp;shortlist=${esc(rawShortlist)}">${t("தேர்வுகளை அழி", "Clear Filters")}</a>`
-              : ""
-          }
-          <button type="submit" class="btn-action btn-primary" aria-label="${t("தேடு மற்றும் ஒப்பிடு", "Search and Compare")}" style="padding: 0.65rem 1.6rem; font-size: 0.95rem; font-weight: 700;">${t("தேடு &amp; ஒப்பிடு", "Search &amp; Compare")}</button>
+        <div class="form-tier form-tier-3" style="display: flex; align-items: center; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem;">
+          <a class="btn-action" aria-label="${t("வடிகட்டிகளை மீட்டமை", "Reset filters")}" href="?tab=comparison&amp;lang=${lang}${rawShortlist ? `&amp;shortlist=${esc(rawShortlist)}` : ""}" style="padding: 0.65rem 1.2rem; font-size: 0.95rem; font-weight: 600; color: #475569; background: #f1f5f9; border: 1px solid #cbd5e1; text-decoration: none; border-radius: 6px; display: inline-flex; align-items: center; min-height: 44px;">
+            ${t("வடிகட்டிகளை மீட்டமை", "Reset filters")}
+          </a>
+          <button type="submit" class="btn-action btn-primary" aria-label="${t("தேடு மற்றும் ஒப்பிடு", "Search and Compare")}" style="padding: 0.65rem 1.6rem; font-size: 0.95rem; font-weight: 700; min-height: 44px;">${t("தேடு &amp; ஒப்பிடு", "Search &amp; Compare")}</button>
         </div>
       </form>
   `;
@@ -1689,6 +1758,7 @@ function renderComparisonTab(
       </div>
 
       ${renderActiveContextStrip()}
+      ${renderRoundGuidanceCallout()}
 
       ${
         shortIds.length > 0
@@ -1704,6 +1774,8 @@ function renderComparisonTab(
       </div>`
           : ""
       }
+
+      ${renderPaginationBar()}
 
       <div class="results-meta-bar screen-only" style="margin-bottom: 0.85rem;">
         <span style="font-size: 0.86rem; color: #4a5568;">
@@ -1783,6 +1855,7 @@ function renderComparisonTab(
                         onlyAvailable,
                         sortOption,
                         currentPage: pagination.currentPage,
+                        roundExplicit,
                       });
                     })
                     .join("")
@@ -1832,6 +1905,7 @@ function renderOfferingRow(
     onlyAvailable: boolean;
     sortOption: string;
     currentPage?: number;
+    roundExplicit?: boolean;
   }
 ): string {
   const { college, offering, result } = row;
@@ -1925,31 +1999,72 @@ function renderOfferingRow(
         ${sourceHtml}
       </td>
       <td>
-        <form method="POST" action="/m5-guidance" class="shortlist-toggle-form" style="margin: 0;">
-          <input type="hidden" name="tab" value="comparison">
-          <input type="hidden" name="lang" value="${lang}">
-          <input type="hidden" name="shortlist" value="${esc(nextShortlist)}">
-          <input type="hidden" name="searched" value="1">
-          <input type="hidden" name="q" value="${esc(sessionState.query)}">
-          <input type="hidden" name="type" value="${esc(sessionState.typeFilter)}">
-          <input type="hidden" name="district" value="${esc(sessionState.districtFilter)}">
-          <input type="hidden" name="college" value="${esc(sessionState.collegeFilter)}">
-          <input type="hidden" name="branch" value="${esc(sessionState.branchFilter)}">
-          <input type="hidden" name="sort" value="${esc(sessionState.sortOption)}">
-          ${sessionState.onlyAvailable ? `<input type="hidden" name="only_available" value="1">` : ""}
-          <input type="hidden" name="quota" value="${sessionState.quota}">
-          <input type="hidden" name="community" value="${sessionState.community}">
-          <input type="hidden" name="round" value="${sessionState.round}">
-          <input type="hidden" name="year" value="${sessionState.year}">
-          <input type="hidden" name="community_selected" value="${sessionState.communitySelected ? "1" : "0"}">
-          <input type="hidden" name="page" value="${sessionState.currentPage ?? 1}">
-          ${sessionState.studentCutoff !== null ? `<input type="hidden" name="cutoff" value="${sessionState.studentCutoff}">` : ""}
-          <button type="submit"
-             class="btn-action ${isShortlisted ? "" : "btn-primary"}"
-             aria-label="${isShortlisted ? t("விருப்பப் பட்டியலிலிருந்து நீக்கு", "Remove from shortlist") : t("விருப்பப் பட்டியலில் சேர் (கைமுறை வரிசைப்படுத்தல்)", "Add to manual shortlist")}">
-            ${isShortlisted ? t("சேர்க்கப்பட்டது ✓", "Saved ✓") : t("+ தேர்வு", "+ Add")}
-          </button>
-        </form>
+        ${
+          isShortlisted
+            ? `
+          <div style="display: inline-flex; flex-direction: column; gap: 4px; align-items: flex-end;">
+            <span class="shortlist-saved-badge" style="display: inline-flex; align-items: center; gap: 3px; font-size: 0.8rem; font-weight: 700; color: #047857; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 2px 8px; border-radius: 4px; white-space: nowrap;">
+              ✓ ${t("சேர்க்கப்பட்டது", "Saved")}
+            </span>
+            <form method="POST" action="/m5-guidance" class="shortlist-toggle-form" style="margin: 0;">
+              <input type="hidden" name="tab" value="comparison">
+              <input type="hidden" name="lang" value="${lang}">
+              <input type="hidden" name="shortlist" value="${esc(nextShortlist)}">
+              <input type="hidden" name="searched" value="1">
+              <input type="hidden" name="q" value="${esc(sessionState.query)}">
+              <input type="hidden" name="type" value="${esc(sessionState.typeFilter)}">
+              <input type="hidden" name="district" value="${esc(sessionState.districtFilter)}">
+              <input type="hidden" name="college" value="${esc(sessionState.collegeFilter)}">
+              <input type="hidden" name="branch" value="${esc(sessionState.branchFilter)}">
+              <input type="hidden" name="sort" value="${esc(sessionState.sortOption)}">
+              ${sessionState.onlyAvailable ? `<input type="hidden" name="only_available" value="1">` : ""}
+              <input type="hidden" name="quota" value="${sessionState.quota}">
+              <input type="hidden" name="community" value="${sessionState.community}">
+              <input type="hidden" name="round" value="${sessionState.round}">
+              ${sessionState.roundExplicit ? `<input type="hidden" name="round_explicit" value="1">` : ""}
+              <input type="hidden" name="year" value="${sessionState.year}">
+              <input type="hidden" name="community_selected" value="${sessionState.communitySelected ? "1" : "0"}">
+              <input type="hidden" name="page" value="${sessionState.currentPage ?? 1}">
+              ${sessionState.studentCutoff !== null ? `<input type="hidden" name="cutoff" value="${sessionState.studentCutoff}">` : ""}
+              <button type="submit"
+                 class="btn-action btn-remove-shortlist"
+                 style="font-size: 0.78rem; padding: 3px 8px; min-height: 32px; border: 1px solid #fca5a5; color: #b91c1c; background: #fff; cursor: pointer; border-radius: 4px; white-space: nowrap;"
+                 aria-label="${t("விருப்பப் பட்டியலிலிருந்து நீக்கு", "Remove from shortlist")}">
+                ${t("நீக்கு ✕", "Remove ✕")}
+              </button>
+            </form>
+          </div>
+        `
+            : `
+          <form method="POST" action="/m5-guidance" class="shortlist-toggle-form" style="margin: 0;">
+            <input type="hidden" name="tab" value="comparison">
+            <input type="hidden" name="lang" value="${lang}">
+            <input type="hidden" name="shortlist" value="${esc(nextShortlist)}">
+            <input type="hidden" name="searched" value="1">
+            <input type="hidden" name="q" value="${esc(sessionState.query)}">
+            <input type="hidden" name="type" value="${esc(sessionState.typeFilter)}">
+            <input type="hidden" name="district" value="${esc(sessionState.districtFilter)}">
+            <input type="hidden" name="college" value="${esc(sessionState.collegeFilter)}">
+            <input type="hidden" name="branch" value="${esc(sessionState.branchFilter)}">
+            <input type="hidden" name="sort" value="${esc(sessionState.sortOption)}">
+            ${sessionState.onlyAvailable ? `<input type="hidden" name="only_available" value="1">` : ""}
+            <input type="hidden" name="quota" value="${sessionState.quota}">
+            <input type="hidden" name="community" value="${sessionState.community}">
+            <input type="hidden" name="round" value="${sessionState.round}">
+            ${sessionState.roundExplicit ? `<input type="hidden" name="round_explicit" value="1">` : ""}
+            <input type="hidden" name="year" value="${sessionState.year}">
+            <input type="hidden" name="community_selected" value="${sessionState.communitySelected ? "1" : "0"}">
+            <input type="hidden" name="page" value="${sessionState.currentPage ?? 1}">
+            ${sessionState.studentCutoff !== null ? `<input type="hidden" name="cutoff" value="${sessionState.studentCutoff}">` : ""}
+            <button type="submit"
+               class="btn-action btn-primary"
+               style="white-space: nowrap; min-height: 36px; padding: 6px 12px;"
+               aria-label="${t("விருப்பப் பட்டியலில் சேர் (கைமுறை வரிசைப்படுத்தல்)", "Add to manual shortlist")}">
+              ${t("+ தேர்வு", "+ Add")}
+            </button>
+          </form>
+        `
+        }
       </td>
     </tr>
   `;
