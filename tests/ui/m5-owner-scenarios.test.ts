@@ -308,8 +308,8 @@ test("Owner Scenario 8: Zero Approved Runtime History — Offering Retained and 
   assert.equal(result.historicalMin, null);
   assert.equal(result.delta, null);
 
-  // In UI, 5022 IT must still be listed and shortlistable
-  const html = renderM5GuidancePage(new URLSearchParams({ q: "5022" }));
+  // In UI, 5022 IT must still be listed and shortlistable under 2025
+  const html = renderM5GuidancePage(new URLSearchParams({ q: "5022", year: "2025" }));
   assert.ok(html.includes("5022"));
   assert.ok(html.includes("IT"));
   assert.ok(html.includes("Not available for comparison"));

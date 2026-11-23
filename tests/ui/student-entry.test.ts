@@ -353,7 +353,7 @@ test("Fix 2 & P0-A/P1-B/P1-C: Cutoff calculator provides marks privacy, stale cl
   assert.match(calcTa, /www\.tneaonline\.org/);
   assert.ok(calcTa.includes('<form method="POST" action="/m5-guidance?lang=ta" style="margin:0;display:inline">'));
   assert.ok(calcTa.includes('<input type="hidden" name="cutoff" value="185.5">'));
-  assert.ok(calcTa.includes("2025 கட்-ஆஃப் ஒப்பீடு &amp; முன்னுரிமைத் திட்டம் →"));
+  assert.ok(calcTa.includes("கட்-ஆஃப் ஒப்பீடு &amp; முன்னுரிமைத் திட்டம் →"));
   assert.ok(calcTa.includes('href="/colleges?view=colleges&amp;lang=ta"'));
   assert.ok(calcTa.includes('href="/counselling?lang=ta"'));
 
@@ -368,7 +368,7 @@ test("Fix 2 & P0-A/P1-B/P1-C: Cutoff calculator provides marks privacy, stale cl
   assert.match(calcEn, /www\.tneaonline\.org/);
   assert.ok(calcEn.includes('<form method="POST" action="/m5-guidance?lang=en" style="margin:0;display:inline">'));
   assert.ok(calcEn.includes('<input type="hidden" name="cutoff" value="190">'));
-  assert.ok(calcEn.includes("Compare with 2025 Cutoffs &amp; Plan Choices →"));
+  assert.ok(calcEn.includes("Cutoff Comparison &amp; Plan Choices →"));
   assert.ok(calcEn.includes('href="/colleges?view=colleges&amp;lang=en"'));
   assert.ok(calcEn.includes('href="/counselling?lang=en"'));
   assert.ok(!calcEn.includes('href="/personal/reference?lang=en"'));
