@@ -18,7 +18,7 @@ import {
   type ShortlistState,
   type SupportedLanguage,
 } from "../m5/index.ts";
-import { renderSiteHeader, SITE_SHELL_CSS, GOOGLE_FONTS_HTML, SHARED_FONT_FAMILY } from "./site-shell.ts";
+import { renderSiteHeader, renderSiteBottomNav, renderIndependenceFooter, SITE_SHELL_CSS, GOOGLE_FONTS_HTML, SHARED_FONT_FAMILY } from "./site-shell.ts";
 
 const esc = (v: string) =>
   v
@@ -653,8 +653,8 @@ export function renderM5GuidancePage(
 
   const langControl =
     lang === "ta"
-      ? `<span lang="ta" aria-current="page">தமிழ்</span>${makeLangSwitch("en", "English")}`
-      : `${makeLangSwitch("ta", "தமிழ்")}<span lang="en" aria-current="page">English</span>`;
+      ? `<span lang="ta" aria-current="page">தமிழ்</span>${makeLangSwitch("en", '<span class="lang-long">English</span><span class="lang-short">EN</span>')}`
+      : `${makeLangSwitch("ta", "தமிழ்")}<span lang="en" aria-current="page"><span class="lang-long">English</span><span class="lang-short">EN</span></span>`;
 
   const navTabsHtml = `
     <nav class="nav-tabs" aria-label="Milestone M5 Views">
@@ -1054,6 +1054,26 @@ export function renderM5GuidancePage(
           ${t("முக்கியக் குறிப்பு: இந்த கட்-ஆஃப் ஒப்பீட்டை எப்படிப் புரிந்துகொள்வது?", "Important note: How to understand this historical cutoff comparison")}
         </summary>
         <div style="margin-top: 0.5rem;">
+          <div class="honest-evidence-card">
+            <div class="honest-evidence-icon" aria-hidden="true">
+              <svg width="38" height="38" viewBox="0 0 56 56" fill="none">
+                <rect x="8" y="10" width="30" height="34" rx="5" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2"/>
+                <path d="M8 15C8 12.2386 10.2386 10 13 10H33C35.7614 10 38 12.2386 38 15V19H8V15Z" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+                <rect x="15" y="7" width="3" height="6" rx="1.5" fill="#D97706"/>
+                <rect x="28" y="7" width="3" height="6" rx="1.5" fill="#D97706"/>
+                <line x1="38" y1="36" x2="48" y2="46" stroke="#0F766E" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="34" cy="32" r="11" fill="#E6F6F4" stroke="#0F766E" stroke-width="2.5"/>
+                <circle cx="34" cy="28.5" r="1.2" fill="#0F766E"/>
+                <path d="M34 31.5V36" stroke="#0F766E" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="honest-evidence-text">
+              ${t(
+                "“இது கடந்த ஆண்டு தற்காலிக ஒதுக்கீடு பதிவு மட்டுமே — சீட் உத்தரவாதம் அல்ல. உங்கள் உண்மையான விருப்ப வரிசையையே மேலே வைக்கவும்.”",
+                "“Observed past provisional allotment record only — not an admission guarantee. Order strictly by your genuine preference.”"
+              )}
+            </div>
+          </div>
           <p style="font-size: 0.85rem; color: #475569; margin: 0 0 0.65rem; line-height: 1.5;">${esc(copy.nonPredictionDisclaimer)}</p>
 
           <!-- 3 Visible Guidance Points -->
@@ -1139,6 +1159,8 @@ export function renderM5GuidancePage(
           )
     }
   </main>
+  ${renderIndependenceFooter(lang)}
+  ${renderSiteBottomNav(lang, activeTab === "shortlist" ? "shortlist" : activeTab === "comparison" && studentCutoff !== null ? "cutoff" : "shortlist", shortIds.length)}
 </body>
 </html>`;
 }
