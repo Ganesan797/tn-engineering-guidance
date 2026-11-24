@@ -99,23 +99,29 @@ async function main() {
   const targets = [
     // Mobile 360x800
     { name: "wave2_mobile_home_360", url: `http://127.0.0.1:${PORT}/?lang=ta`, width: 360, height: 800 },
+    { name: "wave2_mobile_journey_intro_360", url: `http://127.0.0.1:${PORT}/journey?step=awareness&lang=ta`, width: 360, height: 800 },
     { name: "wave2_mobile_flowchart_360", url: `http://127.0.0.1:${PORT}/journey?step=route&lang=ta`, width: 360, height: 800 },
     { name: "wave2_mobile_study_branches_360", url: `http://127.0.0.1:${PORT}/journey?step=study&lang=ta`, width: 360, height: 800 },
+    { name: "wave2_mobile_journey_prepare_360", url: `http://127.0.0.1:${PORT}/journey?step=prepare&lang=ta`, width: 360, height: 800 },
     { name: "wave2_mobile_personal_cutoff_360", url: `http://127.0.0.1:${PORT}/personal?lang=ta`, width: 360, height: 800 },
     { name: "wave2_mobile_colleges_360", url: `http://127.0.0.1:${PORT}/colleges?lang=ta`, width: 360, height: 800 },
     { name: "wave2_mobile_planner_360", url: `http://127.0.0.1:${PORT}/m5-guidance?lang=ta`, width: 360, height: 800 },
+    { name: "wave2_mobile_planner_results_360", url: `http://127.0.0.1:${PORT}/m5-guidance?tab=comparison&lang=ta&searched=1`, width: 360, height: 800 },
     { name: "wave2_mobile_shortlist_360", url: `http://127.0.0.1:${PORT}/m5-guidance?tab=shortlist&lang=ta`, width: 360, height: 800 },
 
     // Mobile 390x844
     { name: "wave2_mobile_home_390", url: `http://127.0.0.1:${PORT}/?lang=ta`, width: 390, height: 844 },
     { name: "wave2_mobile_flowchart_390", url: `http://127.0.0.1:${PORT}/journey?step=route&lang=ta`, width: 390, height: 844 },
     { name: "wave2_mobile_planner_390", url: `http://127.0.0.1:${PORT}/m5-guidance?lang=ta`, width: 390, height: 844 },
+    { name: "wave2_mobile_planner_results_390", url: `http://127.0.0.1:${PORT}/m5-guidance?tab=comparison&lang=ta&searched=1`, width: 390, height: 844 },
 
     // Desktop 1280x800
     { name: "wave2_desktop_home_1280", url: `http://127.0.0.1:${PORT}/?lang=ta`, width: 1280, height: 800 },
+    { name: "wave2_desktop_journey_1280", url: `http://127.0.0.1:${PORT}/journey?step=study&lang=ta`, width: 1280, height: 800 },
     { name: "wave2_desktop_flowchart_1280", url: `http://127.0.0.1:${PORT}/journey?step=route&lang=ta`, width: 1280, height: 800 },
     { name: "wave2_desktop_colleges_1280", url: `http://127.0.0.1:${PORT}/colleges?lang=ta`, width: 1280, height: 800 },
     { name: "wave2_desktop_planner_1280", url: `http://127.0.0.1:${PORT}/m5-guidance?lang=ta`, width: 1280, height: 800 },
+    { name: "wave2_desktop_planner_results_1280", url: `http://127.0.0.1:${PORT}/m5-guidance?tab=comparison&lang=ta&searched=1`, width: 1280, height: 800 },
   ];
 
   const auditReport = [];

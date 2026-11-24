@@ -758,6 +758,69 @@ export function renderM5GuidancePage(
     .district-tag { display: inline-block; color: #64748b; font-size: 0.82rem; font-weight: 500; }
     .cutoff-value { font-size: 1.18rem; font-weight: 800; color: #0f172a; font-variant-numeric: tabular-nums; white-space: nowrap; display: block; }
     .cutoff-subtext { font-size: 0.72rem; color: #64748b; font-weight: 500; display: block; margin-top: 2px; }
+    .college-group-header-block {
+      background: #f0fdfa;
+      border: 1px solid #ccfbf1;
+      border-radius: 8px;
+      padding: 0.65rem 0.85rem;
+      margin: -0.25rem -0.35rem 0.65rem -0.35rem;
+      box-shadow: 0 1px 2px rgba(15,118,110,0.04);
+    }
+    .college-group-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      align-items: center;
+      margin-bottom: 0.25rem;
+    }
+    .college-code-pill {
+      font-weight: 800;
+      font-size: 0.82rem;
+      padding: 2px 8px;
+      background: #0f766e;
+      color: #ffffff;
+      border-radius: 6px;
+    }
+    .college-group-name {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 750;
+      color: #0f172a;
+    }
+    .college-code-light {
+      font-weight: 600;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+    .college-courses-count-pill {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #0f766e;
+      background: #ccfbf1;
+      padding: 2px 8px;
+      border-radius: 9999px;
+    }
+    .offering-course-header {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+    .course-name-text {
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .offering-row.offering-first-in-group td {
+      border-top: 2px solid #0f766e;
+    }
+    .offering-row.offering-grouped:not(.offering-first-in-group) td:first-child {
+      padding-left: 1.5rem;
+      border-left: 3px solid #0f766e;
+    }
+    .offering-course-subsequent {
+      padding-left: 0.25rem;
+    }
     .source-details { font-size: 0.8rem; color: #475569; }
     .source-details summary { cursor: pointer; color: #2563eb; font-weight: 600; list-style: none; display: inline-flex; align-items: center; gap: 0.25rem; }
     .source-details summary::-webkit-details-marker { display: none; }
@@ -827,6 +890,56 @@ export function renderM5GuidancePage(
         overflow: hidden;
         box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         box-sizing: border-box;
+      }
+      .comparison-table .offering-row.offering-grouped {
+        display: block;
+        width: 100%;
+        background: #ffffff !important;
+        border-left: 1.5px solid #cbd5e1 !important;
+        border-right: 1.5px solid #cbd5e1 !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        border-top: none !important;
+        border-radius: 0 !important;
+        margin-bottom: 0 !important;
+        box-shadow: none !important;
+        box-sizing: border-box;
+      }
+      .comparison-table .offering-row.offering-first-in-group {
+        border-top: 1.5px solid #cbd5e1 !important;
+        border-radius: 12px 12px 0 0 !important;
+        margin-top: 1.25rem !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
+      }
+      .comparison-table .offering-row.offering-last-in-group {
+        border-bottom: 1.5px solid #cbd5e1 !important;
+        border-radius: 0 0 12px 12px !important;
+        margin-bottom: 1.25rem !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.04) !important;
+      }
+      .comparison-table .offering-row.offering-first-in-group.offering-last-in-group {
+        border-radius: 12px !important;
+      }
+      .comparison-table .offering-row.offering-grouped td:first-child {
+        background: #ffffff !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        padding: 0.75rem 1rem 0.5rem !important;
+        border-left: none !important;
+      }
+      .comparison-table .offering-row.offering-first-in-group td:first-child {
+        padding-top: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+      .comparison-table .college-group-header-block {
+        background: #f0fdfa !important;
+        border: none !important;
+        border-bottom: 2px solid #0f766e !important;
+        border-radius: 10px 10px 0 0 !important;
+        padding: 0.85rem 1rem !important;
+        margin: 0 0 0.65rem 0 !important;
+      }
+      .comparison-table .offering-row.offering-first-in-group .offering-course-lead {
+        padding: 0 1rem;
       }
       .comparison-table:not(.shortlist-table) td {
         display: block;
@@ -1802,8 +1915,8 @@ function renderComparisonTab(
       <div class="results-meta-bar screen-only" style="margin-bottom: 0.85rem;">
         <span style="font-size: 0.86rem; color: #4a5568;">
           ${t(
-            "உங்களுக்குப் பிடித்த கல்லூரி மற்றும் துறையின் அருகே உள்ள '+ தேர்வு' என்பதை அழுத்தி உங்கள் விருப்பப் பட்டியலில் சேர்த்துக்கொள்ளலாம் (இது தளத்தின் பரிந்துரை அல்ல; 'என் விருப்பப் பட்டியல்' பகுதியில் நீங்களே வரிசையை மாற்றிக்கொள்ளலாம்).",
-            "Click '+ Add' to save an offering to your personal shortlist (not a system recommendation; you manually set preference order in 'My Shortlist')."
+            "🏛️ கல்லூரிகள் வாரியாகப் படிப்புகள் தொகுக்கப்பட்டுள்ளன. உங்களுக்குப் பிடித்த கல்லூரியின் கீழ் உள்ள படிப்புகளை '+ விருப்பத்தில் சேர்' மூலம் பட்டியலில் சேர்க்கலாம்.",
+            "🏛️ Offerings are grouped by college. Inside each college card, click '+ Add' next to your preferred programmes to plan your choices."
           )}
         </span>
       </div>
@@ -1858,29 +1971,47 @@ function renderComparisonTab(
                       </div>
                     </div>
                   </td></tr>`
-                : pageRows
-                    .map((r) => {
-                      const id = `${r.college.code}~${r.offering.programmeCode}`;
-                      const isShortlisted = shortIds.includes(id);
-                      return renderOfferingRow(r, copy, isShortlisted, lang, rawShortlist, {
-                        studentCutoff,
-                        quota,
-                        community,
-                        round,
-                        communitySelected,
-                        year,
-                        query,
-                        typeFilter,
-                        districtFilter,
-                        collegeFilter,
-                        branchFilter,
-                        onlyAvailable,
-                        sortOption,
-                        currentPage: pagination.currentPage,
-                        roundExplicit,
-                      });
-                    })
-                    .join("")
+                : (() => {
+                    let lastCollegeCode: string | null = null;
+                    return pageRows
+                      .map((r, i) => {
+                        const isFirstInGroup = r.college.code !== lastCollegeCode;
+                        if (isFirstInGroup) {
+                          lastCollegeCode = r.college.code;
+                        }
+                        const isLastInGroup = i === pageRows.length - 1 || pageRows[i + 1].college.code !== r.college.code;
+                        const groupCount = pageRows.filter((row) => row.college.code === r.college.code).length;
+                        const id = `${r.college.code}~${r.offering.programmeCode}`;
+                        const isShortlisted = shortIds.includes(id);
+
+                        return renderOfferingRow(
+                          r,
+                          copy,
+                          isShortlisted,
+                          lang,
+                          rawShortlist,
+                          {
+                            studentCutoff,
+                            quota,
+                            community,
+                            round,
+                            communitySelected,
+                            year,
+                            query,
+                            typeFilter,
+                            districtFilter,
+                            collegeFilter,
+                            branchFilter,
+                            onlyAvailable,
+                            sortOption,
+                            currentPage: pagination.currentPage,
+                            roundExplicit,
+                          },
+                          { isGrouped: true, isFirstInGroup, isLastInGroup, groupCount }
+                        );
+                      })
+                      .join("");
+                  })()
             }
           </tbody>
         </table>
@@ -1928,9 +2059,14 @@ function renderOfferingRow(
     sortOption: string;
     currentPage?: number;
     roundExplicit?: boolean;
-  }
+  },
+  groupingOptions: { isGrouped?: boolean; isFirstInGroup?: boolean; isLastInGroup?: boolean; groupCount?: number } = {}
 ): string {
   const { college, offering, result } = row;
+  const isGrouped = groupingOptions.isGrouped === true;
+  const isFirstInGroup = groupingOptions.isFirstInGroup === true;
+  const isLastInGroup = groupingOptions.isLastInGroup === true;
+  const groupCount = groupingOptions.groupCount ?? 1;
   const id = `${college.code}~${offering.programmeCode}`;
   const t = (taStr: string, enStr: string) => (lang === "ta" ? taStr : enStr);
   const doteCat = getCollegeDoteCategory(college);
@@ -1987,16 +2123,46 @@ function renderOfferingRow(
     sourceHtml = `<details class="source-details"><summary>${esc(shortTag)}</summary><div class="source-details-body">${esc(fullCitation)}</div></details>`;
   }
 
-  return `
-    <tr>
-      <td>
-        <span class="college-title">${esc(college.name)}</span> <span class="college-code">(${esc(college.code)})</span>
-        <span class="type-pill ${doteCat.badgeClass}">${esc(t(doteCat.nameTa, doteCat.nameEn))}</span>
-        <div class="offering-subrow">
-          <span class="branch-pill">${esc(offering.programmeCode)}</span>
-          <span>${esc(offering.programmeName)}</span>
-          <span class="district-tag">· ${esc(college.district)}</span>
+  let firstColHtml = "";
+  if (isGrouped) {
+    const collegeHeaderHtml = isFirstInGroup
+      ? `
+        <div class="college-group-header-block">
+          <div class="college-group-badges">
+            <span class="college-code-pill">${esc(college.code)}</span>
+            <span class="type-pill ${doteCat.badgeClass}">${esc(t(doteCat.nameTa, doteCat.nameEn))}</span>
+            <span class="district-tag">· ${esc(college.district)}</span>
+            <span class="college-courses-count-pill">${t(`${groupCount} படிப்புகள் உள்ளன`, `${groupCount} courses available`)}</span>
+          </div>
+          <h3 class="college-group-name"><span class="college-title">${esc(college.name)}</span> <span class="college-code-light">(${esc(college.code)})</span></h3>
         </div>
+      `
+      : "";
+
+    firstColHtml = `
+      ${collegeHeaderHtml}
+      <div class="offering-course-header ${isFirstInGroup ? "offering-course-lead" : "offering-course-subsequent"}">
+        <span class="branch-pill">${esc(offering.programmeCode)}</span>
+        <strong class="course-name-text">${esc(offering.programmeName)}</strong>
+      </div>
+      <span class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">${esc(college.name)} (${esc(college.code)}) <span class="district-tag">· ${esc(college.district)}</span></span>
+    `;
+  } else {
+    firstColHtml = `
+      <span class="college-title">${esc(college.name)}</span> <span class="college-code">(${esc(college.code)})</span>
+      <span class="type-pill ${doteCat.badgeClass}">${esc(t(doteCat.nameTa, doteCat.nameEn))}</span>
+      <div class="offering-subrow">
+        <span class="branch-pill">${esc(offering.programmeCode)}</span>
+        <span>${esc(offering.programmeName)}</span>
+        <span class="district-tag">· ${esc(college.district)}</span>
+      </div>
+    `;
+  }
+
+  return `
+    <tr class="offering-row ${isGrouped ? "offering-grouped" : ""} ${isFirstInGroup ? "offering-first-in-group" : ""} ${isLastInGroup ? "offering-last-in-group" : ""}" data-college-code="${esc(college.code)}">
+      <td>
+        ${firstColHtml}
       </td>
       <td>
         <span class="cutoff-value">${
