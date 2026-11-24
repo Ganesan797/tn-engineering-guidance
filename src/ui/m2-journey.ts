@@ -80,7 +80,6 @@ function renderJourneyStepper(page: JourneyPage, language: "ta" | "en", state: J
   const currentIdx = stages.findIndex((s) => s.id === page);
   const isCheck = page === "check";
   const stepNum = isCheck ? 5 : (currentIdx >= 0 ? currentIdx + 1 : 1);
-  const progressPercent = isCheck ? 100 : Math.round((stepNum / 5) * 100);
 
   const stepBadge = isCheck
     ? (en ? "Deep-Dive Check" : "தகுதிச் சரிபார்ப்பு")
@@ -91,8 +90,8 @@ function renderJourneyStepper(page: JourneyPage, language: "ta" | "en", state: J
     : (stages[currentIdx] ? (en ? stages[currentIdx].title[1] : stages[currentIdx].title[0]) : "");
 
   const stepFraction = isCheck
-    ? (en ? "100% Completed" : "100% முடிந்தது")
-    : (en ? `${progressPercent}% Completed` : `${progressPercent}% முடிந்தது`);
+    ? (en ? "Step 5 / 5" : "படி 5 / 5")
+    : (en ? `Step ${stepNum} / 5` : `படி ${stepNum} / 5`);
 
   const hasState = Object.values(state).some((val) => val !== null);
 
@@ -118,9 +117,6 @@ function renderJourneyStepper(page: JourneyPage, language: "ta" | "en", state: J
           <span class="stepper-title-text">${stepTitle}</span>
         </div>
         <span class="stepper-count-tag">${stepFraction}</span>
-      </div>
-      <div class="stepper-progress-bar" role="progressbar" aria-valuenow="${progressPercent}" aria-valuemin="0" aria-valuemax="100" aria-label="${en ? "Overall progress" : "ஒட்டுமொத்த முன்னேற்றம்"}">
-        <div class="stepper-progress-fill" style="width: ${progressPercent}%;"></div>
       </div>
       <nav class="stepper-stages-nav" aria-label="${en ? "Guidance roadmap navigation" : "வழிகாட்டல் படிகள் வழிசெலுத்தல்"}">
         ${pillsHtml}

@@ -111,6 +111,11 @@ async function main() {
 
     // Mobile 390x844
     { name: "wave2_mobile_home_390", url: `http://127.0.0.1:${PORT}/?lang=ta`, width: 390, height: 844 },
+    { name: "wave2_mobile_home_en_390", url: `http://127.0.0.1:${PORT}/?lang=en`, width: 390, height: 844 },
+    { name: "wave2_mobile_stepper_harmonized_390", url: `http://127.0.0.1:${PORT}/journey?step=prepare&lang=ta`, width: 390, height: 844 },
+    { name: "wave2_mobile_snap1_college_view_390", url: `http://127.0.0.1:${PORT}/colleges?view=college&college=1&lang=ta`, width: 390, height: 844 },
+    { name: "wave2_mobile_snap3_branches_view_390", url: `http://127.0.0.1:${PORT}/colleges?view=branches&lang=ta`, width: 390, height: 844 },
+    { name: "wave2_mobile_snap5_colleges_list_390", url: `http://127.0.0.1:${PORT}/colleges?view=colleges&lang=ta`, width: 390, height: 844 },
     { name: "wave2_mobile_flowchart_390", url: `http://127.0.0.1:${PORT}/journey?step=route&lang=ta`, width: 390, height: 844 },
     { name: "wave2_mobile_planner_390", url: `http://127.0.0.1:${PORT}/m5-guidance?lang=ta`, width: 390, height: 844 },
     { name: "wave2_mobile_planner_results_390", url: `http://127.0.0.1:${PORT}/m5-guidance?tab=comparison&lang=ta&searched=1`, width: 390, height: 844 },

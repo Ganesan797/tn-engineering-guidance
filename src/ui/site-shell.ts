@@ -66,8 +66,8 @@ export const SITE_SHELL_CSS = `
   .site-language{margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;background:rgba(0,0,0,0.25);padding:2px;border-radius:9999px;border:1px solid rgba(255,255,255,0.25)}
   .site-language a,.site-language button,.site-language span{min-height:26px;padding:2px 8px;font-size:0.72rem;background:transparent;color:#e6fffa;border:none;border-radius:9999px;font-weight:600;text-decoration:none;box-sizing:border-box}
   .site-language [aria-current]{background:#ffffff !important;color:#0f766e !important;font-weight:800;border:none;box-shadow:0 1px 3px rgba(0,0,0,0.15)}
+  .site-language [aria-current] *{color:#0f766e !important}
   .site-nav{display:none !important}
-  .home-intro{display:none !important}
   .site-language .lang-long{display:none !important}
   .site-language .lang-short{display:inline-flex !important}
 }
