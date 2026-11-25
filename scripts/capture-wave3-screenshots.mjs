@@ -105,6 +105,8 @@ async function main() {
     // Desktop 1280x800
     { name: "wave3_desktop_colleges_landing_1280", url: `http://127.0.0.1:${PORT}/colleges?lang=ta`, width: 1280, height: 800 },
     { name: "wave3_desktop_colleges_searched_1280", url: `http://127.0.0.1:${PORT}/colleges?view=colleges&searched=1&lang=ta`, width: 1280, height: 800 },
+    { name: "wave3_desktop_colleges_filtered_1280", url: `http://127.0.0.1:${PORT}/colleges?view=colleges&q=CEG&lang=ta`, width: 1280, height: 800 },
+    { name: "wave3_desktop_journey_route_1280", url: `http://127.0.0.1:${PORT}/journey?step=route&lang=ta`, width: 1280, height: 800 },
   ];
 
   for (const t of targets) {

@@ -393,4 +393,12 @@ test("stage 4 marks-free college exploration supports official DOTE categories, 
   // 7. Neutral DOTE guidance without highlighting aided or any institutions
   assert.ok(!htmlEn.includes("premier"), "Must not highlight aided or any institutions as premier");
   assert.ok(!htmlTa.includes("புகழ்பெற்ற"), "Must not highlight aided or any institutions as புகழ்பெற்ற");
+
+  // 8. Empty search submission does not list colleges by default
+  const emptySearch = render("lang=en&view=colleges&searched=1");
+  assert.equal((emptySearch.match(/<article class="card result-card">/g) ?? []).length, 0, "Empty search submission must not list colleges by default");
+  assert.match(emptySearch, /No search criteria entered/);
+  const emptySearchTa = render("lang=ta&view=colleges&searched=1");
+  assert.equal((emptySearchTa.match(/<article class="card result-card">/g) ?? []).length, 0, "Tamil empty search submission must not list colleges by default");
+  assert.match(emptySearchTa, /தேடல் விவரங்கள் எதுவும் உள்ளிடப்படவில்லை/);
 });

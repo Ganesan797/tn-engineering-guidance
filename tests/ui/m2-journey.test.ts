@@ -557,3 +557,48 @@ test("editing preserves earlier answers and invalidates all dependent answers", 
   const unknown = ["2026", "academic", "no", "80", "unknown"].reduce(answerJourneyQuestion, EMPTY_JOURNEY);
   assert.equal(editJourneyAnswer(unknown, "physics").maths, 80);
 });
+
+test("statutory tie-breaker order, verified cohort college codes, nuanced B.E./B.Tech, and 7.5% G.O. 167 citations", () => {
+  const rt = runtime();
+  const routeEn = renderM2Journey("route", pack, reviewed, awarenessReviewed, rt, EMPTY_JOURNEY, undefined, {}, "en");
+  const routeTa = renderM2Journey("route", pack, reviewed, awarenessReviewed, rt, EMPTY_JOURNEY, undefined, {}, "ta");
+  const studyEn = renderM2Journey("study", pack, reviewed, awarenessReviewed, rt, EMPTY_JOURNEY, undefined, {}, "en");
+  const studyTa = renderM2Journey("study", pack, reviewed, awarenessReviewed, rt, EMPTY_JOURNEY, undefined, {}, "ta");
+
+  // Tie-breaker rules (§6(a)(ii))
+  assert.match(routeEn, /TNEA Information Brochure, §6\(a\)\(ii\)/);
+  assert.match(routeEn, /Percentage of marks in Mathematics/);
+  assert.match(routeEn, /Percentage of marks in Physics/);
+  assert.match(routeEn, /Percentage of marks in optional fourth subject/);
+  assert.match(routeEn, /Total percentage of marks in Class XII/);
+  assert.match(routeEn, /Date of Birth/);
+  assert.match(routeEn, /Random Number assigned by TNEA/);
+
+  assert.match(routeTa, /பிரிவு 6\(a\)\(ii\)/);
+  assert.match(routeTa, /நூற்றுக்கணக்கான ரேங்க் மாறும்/);
+  assert.doesNotMatch(routeTa, /ஆயிரக்கணக்கான ரேங்க் மாறும்/);
+
+  // Verified college codes in anti-confusion warning
+  assert.match(routeEn, /Loyola-ICAM - LICET \(1450\)/);
+  assert.doesNotMatch(routeEn, /Loyola-ICAM \(1128\)/);
+  assert.match(routeEn, /Meenakshi Sundararajan \(1309\)/);
+  assert.doesNotMatch(routeEn, /Meenakshi Sundararajan \(1304\)/);
+  assert.match(routeEn, /Easwari Engineering College \(1304\)/);
+  assert.match(routeEn, /R\.M\.K\. College of Engg &amp; Tech \(1128\)/);
+
+  assert.match(routeTa, /Loyola-ICAM - LICET \(1450\)/);
+  assert.match(routeTa, /Meenakshi Sundararajan \(1309\)/);
+  assert.match(routeTa, /Easwari Engineering College \(1304\)/);
+
+  // B.E. vs B.Tech nuanced disclosure
+  assert.match(studyEn, /Statutory degree framework/);
+  assert.match(studyEn, /check individual notification rules/);
+  assert.doesNotMatch(studyEn, /100% equal legal validity/);
+  assert.match(studyTa, /சட்டப்பூர்வ பட்டப்படிப்பு கட்டமைப்பு/);
+
+  // Flowchart 7.5% preference G.O. 167 citation & HM/CEO verification
+  assert.match(routeEn, /G\.O\. \(Ms\.\) No\. 167/);
+  assert.match(routeEn, /Bonafide Certificate issued by the Headmaster and countersigned by the Chief Educational Officer/);
+  assert.match(routeTa, /அரசாணை எண் 167/);
+  assert.match(routeTa, /முதன்மைக் கல்வி அலுவலர் \(CEO\)/);
+});

@@ -135,12 +135,12 @@ export function renderSiteHeader(
 
   const effectiveStep = stepOverride ?? current;
   const stepMeta: Record<string, { label: string; pct: string; width: string }> = {
-    home: { label: en ? "Step 1 / 4: TNEA Guide" : "படி 1 / 4: TNEA வழிகாட்டி", pct: "25%", width: "25%" },
-    journey: { label: en ? "Step 1 / 4: TNEA Guide" : "படி 1 / 4: TNEA வழிகாட்டி", pct: "25%", width: "25%" },
-    study: { label: en ? "Step 1 / 4: TNEA Guide" : "படி 1 / 4: TNEA வழிகாட்டி", pct: "25%", width: "25%" },
-    colleges: { label: en ? "Step 2 / 4: Colleges Directory" : "படி 2 / 4: கல்லூரிகள் பட்டியல்", pct: "50%", width: "50%" },
-    cutoff: { label: en ? "Step 3 / 4: Cutoff Calculator" : "படி 3 / 4: கட்-ஆஃப் கணக்கீடு", pct: "75%", width: "75%" },
-    planner: { label: en ? "Step 4 / 4: Choice Order Planner" : "படி 4 / 4: விருப்ப வரிசைப் பட்டியல்", pct: "100%", width: "100%" },
+    home: { label: en ? "Admissions Flow: Stage 1 / 4 • TNEA Guide" : "சேர்க்கைப் பாதை: நிலை 1 / 4 · வழிகாட்டி", pct: "25%", width: "25%" },
+    journey: { label: en ? "Admissions Flow: Stage 1 / 4 • TNEA Guide" : "சேர்க்கைப் பாதை: நிலை 1 / 4 · வழிகாட்டி", pct: "25%", width: "25%" },
+    study: { label: en ? "Admissions Flow: Stage 1 / 4 • TNEA Guide" : "சேர்க்கைப் பாதை: நிலை 1 / 4 · வழிகாட்டி", pct: "25%", width: "25%" },
+    colleges: { label: en ? "Admissions Flow: Stage 2 / 4 • Colleges Directory" : "சேர்க்கைப் பாதை: நிலை 2 / 4 · கல்லூரிகள் பட்டியல்", pct: "50%", width: "50%" },
+    cutoff: { label: en ? "Admissions Flow: Stage 3 / 4 • Cutoff Calculator" : "சேர்க்கைப் பாதை: நிலை 3 / 4 · கட்-ஆஃப் கணக்கீடு", pct: "75%", width: "75%" },
+    planner: { label: en ? "Admissions Flow: Stage 4 / 4 • Choice Order Planner" : "சேர்க்கைப் பாதை: நிலை 4 / 4 · விருப்பப் பட்டியல்", pct: "100%", width: "100%" },
     review: { label: en ? "Review Mode" : "ஆய்வுப் பகுதி", pct: "100%", width: "100%" },
   };
   const currentMeta = stepMeta[effectiveStep] ?? stepMeta.home;

@@ -1989,7 +1989,7 @@ function renderComparisonTab(
                           lastCollegeCode = r.college.code;
                         }
                         const isLastInGroup = i === pageRows.length - 1 || pageRows[i + 1].college.code !== r.college.code;
-                        const groupCount = pageRows.filter((row) => row.college.code === r.college.code).length;
+                        const groupCount = rows.filter((row) => row.college.code === r.college.code).length;
                         const id = `${r.college.code}~${r.offering.programmeCode}`;
                         const isShortlisted = shortIds.includes(id);
 
