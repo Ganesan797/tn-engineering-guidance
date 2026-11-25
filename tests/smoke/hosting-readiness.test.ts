@@ -65,15 +65,21 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     const homeEnHtml = await homeEnRes.text();
     assert.ok(homeEnHtml.includes("TN Engineering Guidance"), "Home EN should include English title");
 
-    // B. M5 Comparison route (GET /m5-guidance)
+    // B. M5 Comparison route (GET /m5-guidance) - Progressive disclosure renders options immediately
     const m5Res = await fetch(`${base}/m5-guidance?tab=comparison&lang=en`);
     assert.equal(m5Res.status, 200, "M5 guidance route should return 200 OK");
     const m5Html = await m5Res.text();
-    assert.ok(m5Html.includes("Cutoff comparison form"), "M5 landing page should render search form");
-    assert.ok(!m5Html.includes("College Cutoff Comparison Table"), "M5 landing page should not render college list by default");
+    assert.ok(m5Html.includes("College Cutoff Comparison Table"), "M5 landing page renders college list immediately under progressive disclosure");
     assert.ok(m5Html.includes("121 approved colleges"), "M5 page should cite approved 121 colleges");
 
-    // B2. M5 Search Results view (with searched=1)
+    // B2. M5 Edit Search view (with edit_search=1)
+    const m5EditRes = await fetch(`${base}/m5-guidance?tab=comparison&lang=en&edit_search=1`);
+    assert.equal(m5EditRes.status, 200, "M5 edit search route should return 200 OK");
+    const m5EditHtml = await m5EditRes.text();
+    assert.ok(m5EditHtml.includes("Cutoff comparison form"), "M5 edit search page should render search form");
+    assert.ok(!m5EditHtml.includes("College Cutoff Comparison Table"), "M5 edit search page should hide comparison table");
+
+    // B3. M5 Search Results view (with searched=1)
     const m5SearchRes = await fetch(`${base}/m5-guidance?tab=comparison&lang=en&searched=1`);
     assert.equal(m5SearchRes.status, 200, "M5 search results route should return 200 OK");
     const m5SearchHtml = await m5SearchRes.text();

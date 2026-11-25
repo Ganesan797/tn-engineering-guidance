@@ -117,8 +117,8 @@ test("Scenario B: Lower-cutoff beginner (110) receives deterministic round sync 
     }
   );
 
-  // Deterministically selects Round 3 for score 110 (< 145)
-  assert.ok(htmlAutoRound3.includes('value="ROUND_3" selected'));
+  // Under P1-A, cutoff no longer infers round; defaults to All published rounds (ALL)
+  assert.ok(htmlAutoRound3.includes('value="ALL" selected'));
 
   // If student manually overrides to inspect Round 1
   const htmlInspectRound1 = renderM5GuidancePage(

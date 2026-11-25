@@ -39,8 +39,9 @@ test("M5 Governed Offerings Coverage: All 1,249 offerings listed; all unapproved
   assert.ok(html.includes("All 1,249 governed offerings across the 121 approved institutions"), "Must disclose all 1,249 offerings");
   assert.ok(html.includes("Not available for comparison"), "Must disclose lack of approved historical data for offerings without observations");
   assert.ok(
-    html.includes("Minimum observed mark in official Round 1"),
-    "Approved runtime displays the Round 1 disclosure by default"
+    html.includes("Lowest observed provisional allotment mark across available official rounds") ||
+      html.includes("Minimum observed mark in official Round 1"),
+    "Approved runtime displays the historical disclosure by default"
   );
 
   // Check presence of offerings across benchmark and expanded autonomous cohort
@@ -77,7 +78,11 @@ test("M5 UI: Tamil language view renders full Tamil translations and disclaimers
 
   assert.ok(html.includes("கடந்த ஆண்டு கட்-ஆஃப் ஒப்பீடு (தற்காலிக ஒதுக்கீடு)"), "Must have Tamil title");
   assert.ok(html.includes("கடந்த கால தற்காலிக ஒதுக்கீடுகள் எதிர்கால சேர்க்கையை உறுதிப்படுத்தாது"), "Must have Tamil non-prediction disclaimer");
-  assert.ok(html.includes("அதிகாரப்பூர்வ சுற்று 1"), "Approved runtime displays Tamil Round 1 observation disclosure by default");
+  assert.ok(
+    html.includes("கிடைக்கக்கூடிய அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டு சுற்றுகளில்") ||
+    html.includes("அதிகாரப்பூர்வ சுற்று 1"),
+    "Approved runtime displays Tamil observation disclosure by default"
+  );
   assert.ok(html.includes("என் விருப்பப் பட்டியல்"), "Must have Tamil shortlist tab link");
   assert.ok(html.includes("கலந்தாய்வு வழிகாட்டி"), "Must have Tamil counselling tab link");
   assert.ok(html.includes('<a href="/m5-guidance?lang=ta" aria-current="page">விருப்பப் பட்டியல்</a>'), "Must highlight Tamil Choice Planner in site header");
@@ -988,17 +993,17 @@ test("Mobile Experience: Tamil terminology regression check ensures 'கிள�
   assert.ok(htmlCounselling.includes("துறை") || htmlCounselling.includes("பாடப்பிரிவு"), "Counselling tab must use 'துறை / பாடப்பிரிவு'");
 });
 
-test("Choice Planner 2-Step Architecture: Landing shows only search form; results view shows clean colleges list with bottom pagination", () => {
-  // Step 1: Initial Landing (Snap 1)
+test("Choice Planner Progressive Disclosure: Landing shows compact Level 1 search and immediate college options with bottom pagination", () => {
+  // Step 1: Initial Landing shows compact Level 1 surface AND immediate college options
   const landingEn = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
-  assert.ok(landingEn.includes('class="form-grid"'), "Landing view must render search form");
-  assert.ok(!landingEn.includes('<table class="comparison-table"'), "Landing view must NOT render college table by default");
+  assert.ok(landingEn.includes('class="m5-primary-surface'), "Landing view must render Level 1 primary surface");
+  assert.ok(landingEn.includes('<table class="comparison-table"'), "Landing view must render college options immediately under progressive disclosure");
   assert.ok(!landingEn.includes('class="category-legend'), "Category legend must not be rendered");
 
-  // Step 2: Search Results View (Snap 2)
+  // Step 2: Search Results View
   const resultsEn = renderM5GuidancePage(new URLSearchParams({ lang: "en", searched: "1" }));
   assert.ok(resultsEn.includes('<table class="comparison-table"'), "Results view must render college comparison table");
-  assert.ok(resultsEn.includes('class="change-search-details"'), "Results view must keep search form collapsed inside Change search drawer");
+  assert.ok(resultsEn.includes('class="change-search-details"'), "Results view must offer search form in Change search drawer");
   assert.ok(!resultsEn.includes('class="category-legend"'), "Results view must not render category legend row");
   assert.ok(resultsEn.includes("Change search"), "Results view must offer 'Change search' control");
   assert.ok(resultsEn.includes('<input type="hidden" name="searched" value="1">'), "Shortlist toggle forms must preserve searched=1");
@@ -1007,7 +1012,7 @@ test("Choice Planner 2-Step Architecture: Landing shows only search form; result
   const paginationBars = resultsEn.match(/class="pagination-bar screen-only"/g) || [];
   assert.equal(paginationBars.length, 2, "Results view must have top and bottom pagination bars");
 
-  // Step 3: 'Change search' returns to search form
+  // Step 3: 'Change search' (edit_search=1) returns to focused search form
   const editSearchEn = renderM5GuidancePage(new URLSearchParams({ lang: "en", edit_search: "1", q: "CEG" }));
   assert.ok(editSearchEn.includes('class="form-grid"'), "Edit search must display search form");
   assert.ok(!editSearchEn.includes('<table class="comparison-table"'), "Edit search must hide results table");
@@ -1015,51 +1020,116 @@ test("Choice Planner 2-Step Architecture: Landing shows only search form; result
 
   // Step 4: Tamil language parity
   const landingTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
-  assert.ok(!landingTa.includes('<table class="comparison-table"'), "Tamil landing view must NOT render college table by default");
+  assert.ok(landingTa.includes('<table class="comparison-table"'), "Tamil landing view renders options immediately");
+  assert.ok(landingTa.includes("உங்கள் விருப்பங்களைத் தேடுங்கள்"), "Tamil landing has Tamil task heading");
 
   const resultsTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta", searched: "1" }));
   assert.ok(resultsTa.includes('<table class="comparison-table"'), "Tamil results view must render college comparison table");
   assert.ok(resultsTa.includes("வடிகட்டிகளை மாற்ற"), "Tamil results view must offer 'வடிகட்டிகளை மாற்ற' action");
 });
 
-test("TNEA Counselling Rounds & Cutoff Intelligence: Auto-selection of round based on cutoff score & explicit round cutoffs", () => {
-  // 1. Cutoff >= 179.0 automatically defaults to Round 1
+test("TNEA Historical Evidence & Round Exploration: No cutoff-to-round inference, All Published Rounds default, explicit round selection", () => {
+  // 1. Cutoff >= 179.0 does NOT infer Round 1; it defaults to All published rounds (ALL)
   const htmlR1 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), {
     studentCutoff: 185.5,
     quota: "GENERAL_ACADEMIC",
     community: "BC",
     communitySelected: true,
   });
-  assert.ok(htmlR1.includes('<option value="ROUND_1" selected>Round 1</option>'), "Cutoff 185.5 must auto-select Round 1");
-  assert.ok(htmlR1.includes("Minimum observed mark in official Round 1 provisional allotment publication"), "Must cite Round 1 in truth disclosure");
+  assert.ok(htmlR1.includes('<option value="ALL" selected>'), "Cutoff 185.5 must default to All published rounds (no round inference)");
+  assert.ok(htmlR1.includes("All Available Rounds"), "Must display All Available Rounds in dropdown");
 
-  // 2. Cutoff between 145.0 and 178.99 automatically defaults to Round 2
+  // 2. Cutoff between 145.0 and 178.99 does NOT infer Round 2; it defaults to All published rounds (ALL)
   const htmlR2 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), {
     studentCutoff: 160.0,
     quota: "GENERAL_ACADEMIC",
     community: "BC",
     communitySelected: true,
   });
-  assert.ok(htmlR2.includes('<option value="ROUND_2" selected>Round 2</option>'), "Cutoff 160.0 must auto-select Round 2");
-  assert.ok(htmlR2.includes("Minimum observed mark in official Round 2 provisional allotment publication"), "Must cite Round 2 in truth disclosure");
+  assert.ok(htmlR2.includes('<option value="ALL" selected>'), "Cutoff 160.0 must default to All published rounds (no round inference)");
 
-  // 3. Cutoff < 145.0 automatically defaults to Round 3
+  // 3. Cutoff < 145.0 does NOT infer Round 3; it defaults to All published rounds (ALL)
   const htmlR3 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), {
     studentCutoff: 120.0,
     quota: "GENERAL_ACADEMIC",
     community: "BC",
     communitySelected: true,
   });
-  assert.ok(htmlR3.includes('<option value="ROUND_3" selected>Round 3</option>'), "Cutoff 120.0 must auto-select Round 3");
-  assert.ok(htmlR3.includes("Minimum observed mark in official Round 3 provisional allotment publication"), "Must cite Round 3 in truth disclosure");
+  assert.ok(htmlR3.includes('<option value="ALL" selected>'), "Cutoff 120.0 must default to All published rounds (no round inference)");
 
-  // 4. Default 2026 landing (no cutoff specified) defaults to Round 1, not Round 2
+  // 4. Default 2026 landing (no cutoff specified) defaults to All published rounds (ALL)
   const htmlDefault = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
-  assert.ok(htmlDefault.includes('<option value="ROUND_1" selected>Round 1</option>'), "Default 2026 landing must default to Round 1");
-  assert.ok(!htmlDefault.includes('value="ALL"'), "Dropdown must not offer combined ALL option for standard navigation");
+  assert.ok(htmlDefault.includes('<option value="ALL" selected>'), "Default 2026 landing must default to ALL");
 
-  // 5. Guidance text explains Student Eligibility Band vs College Closing Cutoffs
+  // 5. Explicit round selection works when student requests a specific round
+  const htmlExplicitR1 = renderM5GuidancePage(new URLSearchParams({ lang: "en", round: "ROUND_1", round_explicit: "1" }), {
+    studentCutoff: 185.5,
+    quota: "GENERAL_ACADEMIC",
+    community: "BC",
+    round: "ROUND_1",
+    roundExplicit: true,
+    communitySelected: true,
+  });
+  assert.ok(htmlExplicitR1.includes('<option value="ROUND_1" selected>Round 1</option>'), "Explicit Round 1 must be selected when requested");
+
+  // 6. Guidance text explains Student Eligibility Band vs College Closing Cutoffs
   assert.ok(htmlDefault.includes("Counselling Rounds vs College Closing Cutoffs"), "Must explain rounds vs closing cutoffs in English");
   const htmlTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
   assert.ok(htmlTa.includes("கலந்தாய்வு சுற்றுகளும் கல்லூரிக் கட்-ஆஃப்களும்"), "Must explain rounds vs closing cutoffs in Tamil");
+});
+
+test("Section 33 Regressions: Student-Centered Progressive Disclosure & Privacy Invariants", () => {
+  // 1. Cutoff no longer infers round
+  const rHigh = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), { studentCutoff: 198.5 });
+  const rLow = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), { studentCutoff: 95.0 });
+  assert.ok(rHigh.includes('value="ALL" selected'), "High cutoff defaults to ALL");
+  assert.ok(rLow.includes('value="ALL" selected'), "Low cutoff defaults to ALL");
+
+  // 2. No prediction-tier language
+  const html = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), { studentCutoff: 180.0, quota: "GENERAL_ACADEMIC", community: "BC", communitySelected: true });
+  assert.ok(!html.includes("aspirational"), "Must not contain aspirational tier");
+  assert.ok(!html.includes("safe fallback"), "Must not contain safe fallback tier");
+  assert.ok(!html.includes("admission chance"), "Must not contain admission chance");
+
+  // 3. All-published-round default
+  assert.ok(html.includes("All Available Rounds"), "Must default to all available rounds");
+
+  // 4. Secondary filters hidden from primary layout into filter sheet
+  assert.ok(html.includes('id="m5-filter-dialog" class="filter-sheet-modal"'), "Must provide secondary filter sheet dialog");
+  assert.ok(html.includes('class="m5-filter-trigger-btn"'), "Must provide filter trigger button");
+
+  // 5. Active chip removal preserves other state
+  const htmlWithChips = renderM5GuidancePage(new URLSearchParams({ lang: "en", q: "CEG", branch: "CS", district: "Chennai" }));
+  assert.ok(htmlWithChips.includes('class="active-chips-bar"'), "Must render active chips bar");
+  assert.ok(htmlWithChips.includes('🔍 "ceg"'), "Must render search chip");
+  assert.ok(htmlWithChips.includes('📚 CS'), "Must render branch chip");
+  assert.ok(htmlWithChips.includes('📍 Chennai'), "Must render district chip");
+
+  // 6. Shortlist add preserves scroll/context where testable
+  assert.ok(html.includes('class="shortlist-toggle-form"'), "Shortlist toggle forms exist");
+  assert.ok(html.includes('name="tab" value="comparison"'), "Toggle preserves comparison tab");
+
+  // 7. Sensitive values absent from GET URLs
+  const getHrefs = Array.from(html.matchAll(/href="([^"]+)"/g)).map(m => m[1]);
+  for (const h of getHrefs) {
+    if (h.startsWith("?") || h.startsWith("/m5-guidance")) {
+      assert.ok(!h.includes("cutoff="), "GET link must never contain cutoff: " + h);
+      assert.ok(!h.includes("community="), "GET link must never contain community: " + h);
+    }
+  }
+
+  // 8. Held/no-data/filtered-out states remain distinct
+  const heldHtml = renderM5GuidancePage(new URLSearchParams({ q: "1516", lang: "en" }));
+  assert.ok(heldHtml.includes("Booklet p. 160"), "Held college displays governance notice");
+
+  // 9. Branch switching preserves context
+  assert.ok(html.includes('class="branch-shortcuts-row"'), "Must render branch shortcuts row");
+  assert.ok(html.includes('CSE'), "Must include CSE shortcut");
+  assert.ok(html.includes('ECE'), "Must include ECE shortcut");
+
+  // 10. Tamil primary labels
+  const taHtml = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
+  assert.ok(taHtml.includes("உங்கள் விருப்பங்களைத் தேடுங்கள்"), "Must render Tamil task heading");
+  assert.ok(taHtml.includes("வடிகட்டிகள்"), "Must render Tamil filter button");
+  assert.ok(taHtml.includes("வரலாற்றுத் தரவு:"), "Must render Tamil evidence context strip");
 });
