@@ -133,8 +133,28 @@ const CSS = `${SITE_SHELL_CSS}*{box-sizing:border-box}body{margin:0;background:#
 .question-row-icon{font-size:1.2rem;flex-shrink:0}
 .question-row-text{flex:1;font-size:.95rem;font-weight:650;color:#0f2c59;line-height:1.45}
 .question-row-arrow{font-size:1.1rem;font-weight:700;color:#0f766e}
-.qa-answer-title{font-size:1.55rem;margin:0 0 1rem;color:#0f2c59;line-height:1.4}
-.qa-answer-body{font-size:1.02rem;line-height:1.75;color:#1e293b}
+.qa-answer-card{background:#ffffff;border:1.5px solid #e2e8f0;border-radius:14px;padding:1.4rem;margin:1.25rem 0;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.qa-direct-answer{font-size:1.05rem;line-height:1.75;color:#0f172a}
+.qa-direct-answer p{margin:.5rem 0}
+.qa-answer-detail{margin-top:1.15rem;padding-top:1.15rem;border-top:1px solid #f1f5f9;font-size:.98rem;line-height:1.7;color:#334155}
+.qa-answer-detail p{margin:.5rem 0}
+.qa-next-card{background:#ffffff;border:1.5px solid #e2e8f0;border-radius:14px;padding:1.3rem;margin:1.25rem 0;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.qa-next-title{font-size:1.15rem;font-weight:750;color:#0f2c59;margin:0 0 .65rem}
+.qa-next-desc{font-size:.95rem;color:#475569;line-height:1.6}
+.qa-next-desc p{margin:.35rem 0}
+.qa-next-question-tile{margin-top:1rem;padding:12px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;display:flex;flex-direction:column;gap:4px}
+.qa-next-label{font-size:.76rem;font-weight:750;color:#0f766e;text-transform:uppercase;letter-spacing:.02em}
+.qa-next-question-tile .question{display:inline-block;padding:0;font-size:.96rem;font-weight:700;color:#0f2c59;text-decoration:none;line-height:1.45;transition:color .15s ease}
+.qa-next-question-tile .question:hover{color:#0f766e;text-decoration:underline}
+.qa-sources-drawer{margin:1.5rem 0;border:1px solid #e2e8f0;border-radius:10px;background:#f8fafc;overflow:hidden}
+.qa-sources-summary{cursor:pointer;padding:10px 14px;font-size:.85rem;font-weight:650;color:#64748b;display:flex;align-items:center;gap:6px;min-height:44px;list-style:none}
+.qa-sources-summary::-webkit-details-marker{display:none}
+.qa-sources-summary::before{content:"📋";margin-right:6px}
+.qa-sources-summary:hover{color:#0f766e}
+.qa-sources-body{padding:12px 14px;border-top:1px solid #e2e8f0;background:#ffffff;font-size:.84rem;color:#475569;line-height:1.6}
+.qa-limit-item{margin-bottom:10px}
+.qa-limit-item p{margin:.25rem 0 0}
+.qa-evidence-item p{margin:.3rem 0}
 .qa-footer-notice{margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid #e2e8f0}.qa-footer-notice p{margin:0;font-size:.84rem;color:#64748b;line-height:1.6}`;
 const EN_TOPICS = ["Engineering: where to start", "Interests, maths and learning", "Engineering and other study routes", "What would I study?", "Compare computing fields", "Choosing a field", "Careers and changing direction", "Engineering admission routes", "Management quota", "Diploma and second-year entry", "TNEA application to joining", "Information and documents", "Eligibility, subjects and boards", "Nativity and special situations", "Cutoff, percentage and rank"];
 const COPY = {
@@ -187,5 +207,9 @@ export function renderQuestionCollection(collection: QuestionCollection, id: str
   if (answer.unit === "B03" && !copy.limit.endsWith(oldLateralLimit)) throw new Error("Reviewed lateral-entry limit has changed");
   const displayedLimit = answer.unit === "B03" ? copy.limit.slice(0, -oldLateralLimit.length).trim() : copy.limit;
   const step = TOPICS.find(([unit]) => unit === answer.unit)![2];
-  return { status: 200, html: shell(`<nav class="qa-breadcrumb"><a class="qa-breadcrumb-link" href="${escape(questionUrl(null, lang, answer.unit))}"><span aria-hidden="true">←</span> ${escape(title(answer.unit))}</a></nav><h1>${escape(copy.question)}</h1><section class="card" data-guidance-unit="${answer.unit}" data-answer-status="${copy.status}"><div data-direct-answer>${reviewedMarkup(copy.answer)}</div>${copy.status === "PARTIAL" ? `<p class="notice">${t.partial}</p>` : ""}${answer.unit === "B03" ? `<p class="notice">${t.lateral}</p>` : ""}${copy.detail ? `<details><summary>${t.why}</summary>${reviewedMarkup(copy.detail)}</details>` : ""}</section><section class="card"><h2>${t.next}</h2>${reviewedMarkup(copy.next)}${link(answer.nextId)}<details class="limits-details" style="margin: 0.75rem 0; padding: 0.5rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;"><summary style="cursor: pointer; font-weight: 600; color: #475569; font-size: 0.9rem;">${t.limits}</summary><div style="margin-top: 0.5rem; font-size: 0.88rem; color: #64748b;">${reviewedMarkup(displayedLimit)}</div></details><details><summary>${t.evidence}</summary>${answer.evidence.map((e) => `<p><a href="${escape(e.url)}" target="_blank" rel="noopener">${t.source} ${escape(e.key)}</a> — ${escape(lang === "ta" ? e.locationTa : e.location)}</p>`).join("")}</details></section>${answer.related?.length ? `<section><h2>${t.related}</h2>${answer.related.map(link).join("")}</section>` : ""}<nav class="actions"><a class="primary" href="/journey?step=${step}${lang === "en" ? "&amp;lang=en" : ""}">${t.return}</a><a class="secondary" href="${escape(questionUrl(null, lang, answer.unit))}">${t.more}</a></nav>`) };
+  const nextSection = `<section class="card qa-next-card"><h2 class="qa-next-title">${t.next}</h2><div class="qa-next-desc">${reviewedMarkup(copy.next)}</div><div class="qa-next-question-tile"><span class="qa-next-label">${lang === "ta" ? "அடுத்த பரிந்துரைக்கப்படும் கேள்வி" : "Recommended Next Question"}</span>${link(answer.nextId)}</div></section>`;
+  const sourcesDrawer = `<details class="qa-sources-drawer"><summary class="qa-sources-summary"><span>${lang === "ta" ? "அதிகாரப்பூர்வ ஆதாரங்கள் & நிபந்தனைகள்" : "Official Sources & Conditions"}</span></summary><div class="qa-sources-body"><div class="qa-limit-item"><strong>${t.limits}:</strong> ${reviewedMarkup(displayedLimit)}</div><div class="qa-evidence-item"><strong>${t.evidence}:</strong> ${answer.evidence.map((e) => `<p><a href="${escape(e.url)}" target="_blank" rel="noopener">${t.source} ${escape(e.key)}</a> — ${escape(lang === "ta" ? e.locationTa : e.location)}</p>`).join("")}</div></div></details>`;
+  const answerSection = `<section class="card qa-answer-card" data-guidance-unit="${answer.unit}" data-answer-status="${copy.status}"><div class="qa-direct-answer" data-direct-answer>${reviewedMarkup(copy.answer)}</div>${copy.detail ? `<div class="qa-answer-detail">${reviewedMarkup(copy.detail)}</div>` : ""}${copy.status === "PARTIAL" ? `<p class="notice">${t.partial}</p>` : ""}${answer.unit === "B03" ? `<p class="notice">${t.lateral}</p>` : ""}</section>`;
+  const relatedSection = answer.related?.length ? `<section class="card qa-next-card"><h2>${t.related}</h2>${answer.related.map(link).join("")}</section>` : "";
+  return { status: 200, html: shell(`<nav class="qa-breadcrumb"><a class="qa-breadcrumb-link" href="${escape(questionUrl(null, lang, answer.unit))}"><span aria-hidden="true">←</span> ${escape(title(answer.unit))}</a></nav><h1>${escape(copy.question)}</h1>${answerSection}${nextSection}${sourcesDrawer}${relatedSection}<nav class="actions"><a class="primary" href="/journey?step=${step}${lang === "en" ? "&amp;lang=en" : ""}">${t.return}</a><a class="secondary" href="${escape(questionUrl(null, lang, answer.unit))}">${t.more}</a></nav>`) };
 }

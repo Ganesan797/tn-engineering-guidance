@@ -102,7 +102,7 @@ async function main() {
     { name: "wave3_mobile_colleges_searched_390", url: `http://127.0.0.1:${PORT}/colleges?view=colleges&searched=1&lang=ta`, width: 390, height: 844 },
     { name: "wave3_mobile_colleges_filter_coimbatore_390", url: `http://127.0.0.1:${PORT}/colleges?view=colleges&district=COIMBATORE&lang=ta`, width: 390, height: 844 },
     { name: "wave3_mobile_qa_catalogue_390", url: `http://127.0.0.1:${PORT}/journey/questions?lang=ta`, width: 390, height: 844 },
-    { name: "wave3_mobile_qa_single_390", url: `http://127.0.0.1:${PORT}/journey/questions?id=Q071&lang=ta`, width: 390, height: 844 },
+    { name: "wave3_mobile_qa_single_390", url: `http://127.0.0.1:${PORT}/journey/questions?id=Q030&lang=ta`, width: 390, height: 844 },
     { name: "wave3_mobile_journey_step1_390", url: `http://127.0.0.1:${PORT}/journey?step=awareness&lang=ta`, width: 390, height: 844 },
 
     // Desktop 1280x800
@@ -111,7 +111,7 @@ async function main() {
     { name: "wave3_desktop_colleges_filtered_1280", url: `http://127.0.0.1:${PORT}/colleges?view=colleges&q=CEG&lang=ta`, width: 1280, height: 800 },
     { name: "wave3_desktop_journey_route_1280", url: `http://127.0.0.1:${PORT}/journey?step=route&lang=ta`, width: 1280, height: 800 },
     { name: "wave3_desktop_qa_catalogue_1280", url: `http://127.0.0.1:${PORT}/journey/questions?lang=ta`, width: 1280, height: 800 },
-    { name: "wave3_desktop_qa_single_1280", url: `http://127.0.0.1:${PORT}/journey/questions?id=Q071&lang=ta`, width: 1280, height: 800 },
+    { name: "wave3_desktop_qa_single_1280", url: `http://127.0.0.1:${PORT}/journey/questions?id=Q030&lang=ta`, width: 1280, height: 800 },
   ];
 
   for (const t of targets) {
