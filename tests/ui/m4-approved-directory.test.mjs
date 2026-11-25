@@ -88,11 +88,16 @@ test("owner exploration bridges study-area orientation and both real-record path
 });
 
 test("college groups, distinct counts and compact college detail preserve source limits", () => {
-  const all=render("lang=en&view=colleges");
-  assert.match(all,/389 colleges · 3128 matching programmes/);
-  assert.equal((all.match(/<article class="card result-card">/g) ?? []).length,15);
-  assert.equal((all.match(/<h2>University Departments of Anna University, Chennai - CEG Campus<\/h2>/g) ?? []).length,1);
-  const detail=render("lang=en&view=college&college=1");
+  const landing = render("lang=en&view=colleges");
+  assert.match(landing, /389 colleges/);
+  assert.equal((landing.match(/<article class="card result-card">/g) ?? []).length, 0);
+
+  const all = render("lang=en&view=colleges&all=1");
+  assert.match(all, /389 colleges · 3128 matching programmes/);
+  assert.equal((all.match(/<article class="card result-card">/g) ?? []).length, 10);
+  assert.ok(all.includes("University Departments of Anna University, Chennai - CEG Campus"));
+  assert.match(all, /<a class="college-title-link"[^>]*>University Departments of Anna University, Chennai - CEG Campus<\/a>/);
+  const detail = render("lang=en&view=college&college=1");
   assert.equal((detail.match(/<h1>University Departments of Anna University, Chennai - CEG Campus<\/h1>/g) ?? []).length,1);
   assert.match(detail,/Listed programmes/);assert.match(detail,/BIO MEDICAL ENGINEERING \(SS\)/);
   assert.match(detail,/does not confirm current availability/);
@@ -363,8 +368,9 @@ test("stage 4 marks-free college exploration supports official DOTE categories, 
   // 3. Specific college selection filters results directly to that college
   const gctOnly = render("lang=en&view=colleges&college=2005");
   assert.match(gctOnly, /1 college · \d+ matching programmes/);
-  assert.ok(gctOnly.includes("<h2>Government College of Technology (Autonomous)</h2>"), "Must show GCT result card");
-  assert.ok(!gctOnly.includes("<h2>Easwari Engineering College"), "Must not show other colleges in result cards when specific college is selected");
+  assert.ok(gctOnly.includes("Government College of Technology (Autonomous)"), "Must show GCT result card");
+  assert.match(gctOnly, /<a class="college-title-link"[^>]*>Government College of Technology \(Autonomous\)<\/a>/);
+  assert.doesNotMatch(gctOnly, /<article class="card result-card">[\s\S]*?Easwari Engineering College/, "Must not show other colleges in result cards when specific college is selected");
   assert.ok(gctOnly.includes('value="2005" selected'), "Must select GCT in dropdown");
   assert.match(gctOnly, /Clear search and filters/);
 
@@ -373,8 +379,10 @@ test("stage 4 marks-free college exploration supports official DOTE categories, 
   assert.ok(cbeOnly.includes("Government College of Technology"), "GCT is in Coimbatore");
 
   // 5. Category badges on result cards
-  assert.ok(htmlEn.includes('class="badge type-univ"'), "Must show university department badge on CEG");
-  assert.ok(htmlEn.includes('class="badge type-sfc"'), "Must show self-financing badge on Easwari");
+  const resultsEn = render("lang=en&view=colleges&all=1");
+  assert.ok(resultsEn.includes('class="badge type-univ"'), "Must show university department badge on CEG");
+  const easwari = render("lang=en&view=colleges&q=Easwari");
+  assert.ok(easwari.includes('class="badge type-sfc"'), "Must show self-financing badge on Easwari");
 
   // 6. Simple student guidance without confusing 55-college or 2025 cutoff wording
   assert.ok(!htmlEn.includes("55 colleges"), "Must not mention confusing 55 colleges split in scope banner");
