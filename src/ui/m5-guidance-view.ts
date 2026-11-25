@@ -1522,7 +1522,16 @@ function renderComparisonTab(
               )}</p>`
             : ""
         }
-        <div class="college-code-alert-banner" style="background: #fff7ed; border: 1.5px solid #fdba74; border-left: 4px solid #ea580c; border-radius: 8px; padding: 0.6rem 0.85rem; margin: 0.65rem 0 0.2rem; font-size: 0.85rem; color: #7c2d12; line-height: 1.45;">
+        <div class="student-safety-rule-banner" style="background: #f0fdf4; border: 1.5px solid #86efac; border-left: 4px solid #16a34a; border-radius: 8px; padding: 0.6rem 0.85rem; margin: 0.65rem 0 0.35rem; font-size: 0.86rem; color: #14532d; line-height: 1.45;">
+          <strong style="display: flex; align-items: center; gap: 0.35rem; color: #166534; font-size: 0.88rem; margin-bottom: 0.15rem;">
+            🛡️ ${t("மாணவர்களுக்கான பாதுகாப்பு விதி (Choice List Strategy)", "Student Choice Strategy &amp; Safety Rule")}
+          </strong>
+          <span>${t(
+            "கடந்த ஆண்டு கட்-ஆஃப்பை மட்டும் நம்பி 1 அல்லது 2 கல்லூரிகளை மட்டும் சாய்ஸில் வைக்காதீர்கள். உங்கள் கட்-ஆஃப்பை விட சற்று கூடுதலான விருப்பங்கள், சமமான விருப்பங்கள் மற்றும் பாதுகாப்பான வாய்ப்புகள் என <strong>மூன்று நிலைகளில் பரவலான விருப்பப் பட்டியலைத் (Choice List)</strong> தயாரிக்க வேண்டும்.",
+            "Never rely on past cutoffs or 1–2 colleges alone. Always build a balanced multi-tier choice list with aspirational, realistic, and safe fallback colleges."
+          )}</span>
+        </div>
+        <div class="college-code-alert-banner" style="background: #fff7ed; border: 1.5px solid #fdba74; border-left: 4px solid #ea580c; border-radius: 8px; padding: 0.6rem 0.85rem; margin: 0.35rem 0 0.2rem; font-size: 0.85rem; color: #7c2d12; line-height: 1.45;">
           <strong style="display: flex; align-items: center; gap: 0.35rem; color: #9a3412; font-size: 0.87rem; margin-bottom: 0.15rem;">
             ⚠️ ${t("கல்லூரிக் குறியீடு எச்சரிக்கை: ஒரே பெயர் கொண்ட கல்லூரிகள்", "College Code Alert: Watch out for similar college names")}
           </strong>
