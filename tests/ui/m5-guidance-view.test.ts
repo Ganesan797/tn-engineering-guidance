@@ -994,15 +994,17 @@ test("Mobile Experience: Tamil terminology regression check ensures 'கிள�
 });
 
 test("Choice Planner Progressive Disclosure: Landing shows compact Level 1 search and immediate college options with bottom pagination", () => {
-  // Step 1: Initial Landing shows compact Level 1 surface AND immediate college options
+  // Step 1: Initial Landing shows compact Level 1 surface and pre-search guide (no output without search)
   const landingEn = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
   assert.ok(landingEn.includes('class="m5-primary-surface'), "Landing view must render Level 1 primary surface");
-  assert.ok(landingEn.includes('<table class="comparison-table"'), "Landing view must render college options immediately under progressive disclosure");
+  assert.ok(landingEn.includes('class="m5-pre-search-guide'), "Landing view must render clean pre-search guide");
+  assert.ok(!landingEn.includes('class="college-group-card"'), "Landing view must not dump college cards before search");
   assert.ok(!landingEn.includes('class="category-legend'), "Category legend must not be rendered");
 
   // Step 2: Search Results View
   const resultsEn = renderM5GuidancePage(new URLSearchParams({ lang: "en", searched: "1" }));
   assert.ok(resultsEn.includes('<table class="comparison-table"'), "Results view must render college comparison table");
+  assert.ok(resultsEn.includes('class="college-group-card"'), "Results view must render college group cards");
   assert.ok(resultsEn.includes('class="change-search-details"'), "Results view must offer search form in Change search drawer");
   assert.ok(!resultsEn.includes('class="category-legend"'), "Results view must not render category legend row");
   assert.ok(resultsEn.includes("Change search"), "Results view must offer 'Change search' control");
@@ -1020,7 +1022,8 @@ test("Choice Planner Progressive Disclosure: Landing shows compact Level 1 searc
 
   // Step 4: Tamil language parity
   const landingTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
-  assert.ok(landingTa.includes('<table class="comparison-table"'), "Tamil landing view renders options immediately");
+  assert.ok(landingTa.includes('class="m5-pre-search-guide'), "Tamil landing view renders pre-search guide");
+  assert.ok(!landingTa.includes('class="college-group-card"'), "Tamil landing view does not dump cards before search");
   assert.ok(landingTa.includes("உங்கள் விருப்பங்களைத் தேடுங்கள்"), "Tamil landing has Tamil task heading");
 
   const resultsTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta", searched: "1" }));
@@ -1028,38 +1031,38 @@ test("Choice Planner Progressive Disclosure: Landing shows compact Level 1 searc
   assert.ok(resultsTa.includes("வடிகட்டிகளை மாற்ற"), "Tamil results view must offer 'வடிகட்டிகளை மாற்ற' action");
 });
 
-test("TNEA Historical Evidence & Round Exploration: No cutoff-to-round inference, All Published Rounds default, explicit round selection", () => {
-  // 1. Cutoff >= 179.0 does NOT infer Round 1; it defaults to All published rounds (ALL)
+test("TNEA Historical Evidence & Round Exploration: No cutoff-to-round inference, Round 1 benchmark default, explicit round selection", () => {
+  // 1. Cutoff >= 179.0 does NOT infer Round based on tier; it defaults to Round 1 benchmark (ROUND_1)
   const htmlR1 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), {
     studentCutoff: 185.5,
     quota: "GENERAL_ACADEMIC",
     community: "BC",
     communitySelected: true,
   });
-  assert.ok(htmlR1.includes('<option value="ALL" selected>'), "Cutoff 185.5 must default to All published rounds (no round inference)");
-  assert.ok(htmlR1.includes("All Available Rounds"), "Must display All Available Rounds in dropdown");
+  assert.ok(htmlR1.includes('<option value="ROUND_1" selected>'), "Cutoff 185.5 must default to Round 1 benchmark (no round inference)");
+  assert.ok(htmlR1.includes("Round 1"), "Must display Round 1 in dropdown");
 
-  // 2. Cutoff between 145.0 and 178.99 does NOT infer Round 2; it defaults to All published rounds (ALL)
+  // 2. Cutoff between 145.0 and 178.99 does NOT infer Round 2; it defaults to Round 1 benchmark (ROUND_1)
   const htmlR2 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), {
     studentCutoff: 160.0,
     quota: "GENERAL_ACADEMIC",
     community: "BC",
     communitySelected: true,
   });
-  assert.ok(htmlR2.includes('<option value="ALL" selected>'), "Cutoff 160.0 must default to All published rounds (no round inference)");
+  assert.ok(htmlR2.includes('<option value="ROUND_1" selected>'), "Cutoff 160.0 must default to Round 1 benchmark (no round inference)");
 
-  // 3. Cutoff < 145.0 does NOT infer Round 3; it defaults to All published rounds (ALL)
+  // 3. Cutoff < 145.0 does NOT infer Round 3; it defaults to Round 1 benchmark (ROUND_1)
   const htmlR3 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), {
     studentCutoff: 120.0,
     quota: "GENERAL_ACADEMIC",
     community: "BC",
     communitySelected: true,
   });
-  assert.ok(htmlR3.includes('<option value="ALL" selected>'), "Cutoff 120.0 must default to All published rounds (no round inference)");
+  assert.ok(htmlR3.includes('<option value="ROUND_1" selected>'), "Cutoff 120.0 must default to Round 1 benchmark (no round inference)");
 
-  // 4. Default 2026 landing (no cutoff specified) defaults to All published rounds (ALL)
+  // 4. Default 2026 landing (no cutoff specified) defaults to Round 1 benchmark (ROUND_1)
   const htmlDefault = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
-  assert.ok(htmlDefault.includes('<option value="ALL" selected>'), "Default 2026 landing must default to ALL");
+  assert.ok(htmlDefault.includes('<option value="ROUND_1" selected>'), "Default 2026 landing must default to Round 1 benchmark");
 
   // 5. Explicit round selection works when student requests a specific round
   const htmlExplicitR1 = renderM5GuidancePage(new URLSearchParams({ lang: "en", round: "ROUND_1", round_explicit: "1" }), {
@@ -1070,7 +1073,17 @@ test("TNEA Historical Evidence & Round Exploration: No cutoff-to-round inference
     roundExplicit: true,
     communitySelected: true,
   });
-  assert.ok(htmlExplicitR1.includes('<option value="ROUND_1" selected>Round 1</option>'), "Explicit Round 1 must be selected when requested");
+  assert.ok(htmlExplicitR1.includes('<option value="ROUND_1" selected>Round 1 (Default)</option>'), "Explicit Round 1 must be selected when requested");
+
+  const htmlExplicitAll = renderM5GuidancePage(new URLSearchParams({ lang: "en", round: "ALL", round_explicit: "1" }), {
+    studentCutoff: 185.5,
+    quota: "GENERAL_ACADEMIC",
+    community: "BC",
+    round: "ALL",
+    roundExplicit: true,
+    communitySelected: true,
+  });
+  assert.ok(htmlExplicitAll.includes('<option value="ALL" selected>'), "Explicit All rounds must be selected when requested");
 
   // 6. Guidance text explains Student Eligibility Band vs College Closing Cutoffs
   assert.ok(htmlDefault.includes("Counselling Rounds vs College Closing Cutoffs"), "Must explain rounds vs closing cutoffs in English");
@@ -1082,8 +1095,8 @@ test("Section 33 Regressions: Student-Centered Progressive Disclosure & Privacy 
   // 1. Cutoff no longer infers round
   const rHigh = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), { studentCutoff: 198.5 });
   const rLow = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), { studentCutoff: 95.0 });
-  assert.ok(rHigh.includes('value="ALL" selected'), "High cutoff defaults to ALL");
-  assert.ok(rLow.includes('value="ALL" selected'), "Low cutoff defaults to ALL");
+  assert.ok(rHigh.includes('value="ROUND_1" selected'), "High cutoff defaults to ROUND_1 benchmark");
+  assert.ok(rLow.includes('value="ROUND_1" selected'), "Low cutoff defaults to ROUND_1 benchmark");
 
   // 2. No prediction-tier language
   const html = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), { studentCutoff: 180.0, quota: "GENERAL_ACADEMIC", community: "BC", communitySelected: true });
@@ -1091,8 +1104,8 @@ test("Section 33 Regressions: Student-Centered Progressive Disclosure & Privacy 
   assert.ok(!html.includes("safe fallback"), "Must not contain safe fallback tier");
   assert.ok(!html.includes("admission chance"), "Must not contain admission chance");
 
-  // 3. All-published-round default
-  assert.ok(html.includes("All Available Rounds"), "Must default to all available rounds");
+  // 3. Round 1 benchmark default
+  assert.ok(html.includes("Round 1"), "Must default to Round 1 benchmark");
 
   // 4. Secondary filters hidden from primary layout into filter sheet
   assert.ok(html.includes('id="m5-filter-dialog" class="filter-sheet-modal"'), "Must provide secondary filter sheet dialog");

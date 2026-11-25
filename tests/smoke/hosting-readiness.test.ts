@@ -69,7 +69,7 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     const m5Res = await fetch(`${base}/m5-guidance?tab=comparison&lang=en`);
     assert.equal(m5Res.status, 200, "M5 guidance route should return 200 OK");
     const m5Html = await m5Res.text();
-    assert.ok(m5Html.includes("College Cutoff Comparison Table"), "M5 landing page renders college list immediately under progressive disclosure");
+    assert.ok(m5Html.includes("m5-pre-search-guide"), "M5 landing page renders pre-search guide");
     assert.ok(m5Html.includes("121 approved colleges"), "M5 page should cite approved 121 colleges");
 
     // B2. M5 Edit Search view (with edit_search=1)

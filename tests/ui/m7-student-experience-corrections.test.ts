@@ -117,8 +117,8 @@ test("Scenario B: Lower-cutoff beginner (110) receives deterministic round sync 
     }
   );
 
-  // Under P1-A, cutoff no longer infers round; defaults to All published rounds (ALL)
-  assert.ok(htmlAutoRound3.includes('value="ALL" selected'));
+  // Under student-centered flow, cutoff defaults to Round 1 benchmark (ROUND_1) without cutoff-to-round inference
+  assert.ok(htmlAutoRound3.includes('value="ROUND_1" selected'));
 
   // If student manually overrides to inspect Round 1
   const htmlInspectRound1 = renderM5GuidancePage(
