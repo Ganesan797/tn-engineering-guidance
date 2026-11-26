@@ -60,8 +60,8 @@ export function renderStudentEntryPage(
   ) => `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${GOOGLE_FONTS_HTML}<title>${message("entry.site")}</title><style>${STYLE}${SITE_SHELL_CSS}
 .home-main{max-width:860px;margin:0 auto;padding:20px 16px;box-sizing:border-box}
 .home-hero{text-align:center;margin-bottom:1.6rem}
-.home-hero-art{max-width:380px;width:100%;margin:0 auto 1.1rem;display:flex;justify-content:center}
-.home-hero-art svg{width:100%;height:auto;max-height:210px;border-radius:16px;box-shadow:0 4px 16px rgba(15,23,42,0.06)}
+.home-hero-art{max-width:360px;width:100%;margin:0 auto 1.1rem;display:flex;justify-content:center}
+.home-hero-img{width:100%;height:auto;max-height:195px;object-fit:cover;border-radius:14px;box-shadow:0 4px 14px rgba(15,23,42,0.08);display:block}
 .home-badge-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:9999px;font-size:0.78rem;font-weight:750;color:#0f766e;margin-bottom:0.65rem}
 .home-title{font-size:1.85rem;font-weight:800;color:#0f2c59;line-height:1.25;margin:0 0 0.45rem;letter-spacing:-0.02em}
 .home-sub{font-size:1.02rem;color:#475569;line-height:1.55;margin:0 auto 1.15rem;max-width:62ch}
@@ -88,7 +88,12 @@ export function renderStudentEntryPage(
 .home-explore{margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid #e2e8f0}
 .home-explore-title{font-size:0.86rem;font-weight:750;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;margin:0 0 0.85rem;text-align:center}
 .home-explore-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
-@media(min-width:640px){.home-explore-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:540px){.home-explore-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.privacy-declaration-strip{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:#ecfdf5;border:1px solid #a7f3d0;border-left:4px solid #059669;border-radius:8px;margin:0 0 1.25rem;font-size:0.86rem;line-height:1.45;color:#064e3b}
+.privacy-lock-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+.calc-recalculate-details{margin-top:1.25rem;border:1px solid #cbd5e1;border-radius:10px;background:#fff;padding:0.25rem 0.9rem}
+.calc-recalculate-details summary{cursor:pointer;padding:0.65rem 0.25rem;font-weight:700;color:#0f766e;font-size:0.95rem}
+.calc-recalculate-details .cutoff-calculator{border:none;box-shadow:none;margin:0;padding:0.5rem 0 1rem}
 .explore-card{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;text-decoration:none;color:#1e293b;transition:all 0.15s ease;min-width:0;box-sizing:border-box}
 .explore-card:hover{border-color:#0f766e;background:#f0fdfa;transform:translateY(-1px)}
 .explore-icon{font-size:1.35rem;flex-shrink:0}
@@ -159,59 +164,10 @@ export function renderStudentEntryPage(
       const ta = language === "ta";
       const ownerEntry = options.ownerPreview ? `<section class="home-review" aria-labelledby="owner-explore"><h2 id="owner-explore">${ta ? "உரிமையாளர் ஆய்வு" : "Owner review"}</h2><p>${ta ? "2026 மூலப் பட்டியலிலுள்ள உண்மையான கல்லூரி–படிப்பு பதிவுகளை ஆய்வுக்காக மட்டும் பாருங்கள். கல்வி விளக்கங்கள் தனியாக ஒப்புதல் பெற வேண்டும்; இது மாணவர் வெளியீடு அல்ல." : "Browse real college–programme records from the 2026 source listing for review only. Educational explanations need separate approval; this is not a student release."}</p><a class="choice-card" href="/internal/m4-pilot?lang=${language}"><strong>${ta ? "படிப்புகள் மற்றும் கல்லூரிகளைப் பார்க்கலாம்" : "Explore courses and colleges"}</strong><span class="action">${message("entry.action")} →</span></a></section>` : "";
       
-      const artSvg = `<svg viewBox="0 0 400 210" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <rect width="400" height="210" rx="16" fill="#FDFBF7"/>
-  <path d="M0 0H400V75C340 70 280 70 200 70C120 70 60 70 0 75V0Z" fill="#FBF0E4"/>
-  <path d="M0 35H400V42C320 40 240 40 200 40C160 40 80 40 0 42V35Z" fill="#E8D5C4"/>
-  <path d="M0 0H400V12H0V0Z" fill="#C25E3E"/>
-  <rect x="0" y="12" width="400" height="4" fill="#A44326"/>
-  <rect x="24" y="35" width="16" height="155" rx="3" fill="#EADBC8"/>
-  <rect x="20" y="32" width="24" height="6" rx="2" fill="#D3BEA6"/>
-  <rect x="18" y="185" width="28" height="10" rx="2" fill="#D3BEA6"/>
-  <path d="M400 0C370 20 340 10 320 35C305 48 300 70 315 85C335 105 380 90 400 80V0Z" fill="#2D5A27" fill-opacity="0.85"/>
-  <path d="M380 15C360 30 345 35 335 50C330 60 340 75 355 70C375 65 390 40 380 15Z" fill="#3D7A35"/>
-  <circle cx="360" cy="30" r="14" fill="#4E9944" fill-opacity="0.8"/>
-  <circle cx="330" cy="55" r="12" fill="#3D7A35" fill-opacity="0.7"/>
-  <rect x="60" y="172" width="280" height="20" rx="6" fill="#DCC7AF"/>
-  <rect x="80" y="190" width="20" height="18" rx="3" fill="#BFA78D"/>
-  <rect x="300" y="190" width="20" height="18" rx="3" fill="#BFA78D"/>
-  <rect x="120" y="150" width="22" height="42" rx="4" fill="#1E293B"/>
-  <rect x="146" y="150" width="20" height="42" rx="4" fill="#1E293B"/>
-  <rect x="116" y="188" width="28" height="8" rx="3" fill="#0F172A"/>
-  <rect x="144" y="188" width="26" height="8" rx="3" fill="#0F172A"/>
-  <path d="M112 110L125 152H170L178 110C170 102 155 100 144 100C132 100 120 102 112 110Z" fill="#38BDF8"/>
-  <path d="M135 100L144 116L153 100H135Z" fill="#0284C7"/>
-  <path d="M112 112L135 138L152 134" stroke="#D97706" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="144" cy="78" r="15" fill="#D97706"/>
-  <path d="M129 76C129 64 135 59 144 59C154 59 160 65 160 76C155 70 150 68 144 68C138 68 133 71 129 76Z" fill="#1E293B"/>
-  <circle cx="148" cy="77" r="1.5" fill="#1E293B"/>
-  <path d="M147 84C149 86 153 86 155 84" stroke="#1E293B" stroke-width="1.2" stroke-linecap="round"/>
-  <path d="M225 145L215 190H270L260 145Z" fill="#1E293B"/>
-  <rect x="220" y="188" width="22" height="7" rx="3" fill="#0F172A"/>
-  <rect x="250" y="188" width="22" height="7" rx="3" fill="#0F172A"/>
-  <path d="M222 108L225 150H265L268 108C260 101 248 99 245 99C238 99 228 101 222 108Z" fill="#38BDF8"/>
-  <path d="M232 99L245 130L258 99C252 104 238 104 232 99Z" fill="#1E293B"/>
-  <path d="M266 112L248 138L230 134" stroke="#D97706" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="246" cy="78" r="15" fill="#D97706"/>
-  <path d="M230 76C230 63 236 58 246 58C257 58 263 64 263 76C258 70 252 67 246 67C239 67 234 71 230 76Z" fill="#1E293B"/>
-  <path d="M258 80C264 90 266 108 265 120" stroke="#1E293B" stroke-width="5" stroke-linecap="round"/>
-  <circle cx="241" cy="77" r="1.5" fill="#1E293B"/>
-  <path d="M239 84C241 86 245 86 247 84" stroke="#1E293B" stroke-width="1.2" stroke-linecap="round"/>
-  <g transform="translate(162, 115)">
-    <path d="M5 24L38 16L72 24L70 46L38 38L6 46Z" fill="#B45309"/>
-    <path d="M8 22L38 15L68 22L66 42L38 35L10 42Z" fill="#FEF3C7"/>
-    <line x1="16" y1="23" x2="33" y2="20" stroke="#92400E" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="16" y1="27" x2="32" y2="24" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/>
-    <line x1="16" y1="31" x2="28" y2="28" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/>
-    <line x1="43" y1="20" x2="60" y2="23" stroke="#92400E" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="44" y1="24" x2="60" y2="27" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/>
-    <line x1="45" y1="28" x2="56" y2="31" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/>
-    <line x1="38" y1="15" x2="38" y2="36" stroke="#B45309" stroke-width="1.5"/>
-  </g>
-</svg>`;
+      const heroImg = `<img class="home-hero-img" src="/assets/tnea-hero.jpg" alt="${ta ? "தமிழ்நாடு பள்ளி மாணவர்கள் உயர்கல்வி வழிகாட்டிப் புத்தகத்தைப் படிக்கும் காட்சி" : "Tamil Nadu school students reading the TNEA Career Guidance book"}" width="360" height="201" loading="eager" decoding="async">`;
 
       const heroSection = `<section class="home-hero" aria-labelledby="home-hero-title">
-        <div class="home-hero-art">${artSvg}</div>
+        <div class="home-hero-art">${heroImg}</div>
         <div class="home-badge-tag"><span>${ta ? "தமிழ்நாடு பொறியியல் சேர்க்கை (TNEA) வழிகாட்டி" : "Tamil Nadu Engineering Admissions (TNEA) Guide"}</span></div>
         <h1 id="home-hero-title" class="home-title">${ta ? "சரியான வழிகாட்டல், சரியான நேரத்தில்" : "Right guidance, at the right time"}</h1>
         <p class="home-sub">${ta ? "12-ஆம் வகுப்பிற்குப் பிறகு பொறியியல் படிப்புகள், கட்-ஆஃப் மற்றும் கலந்தாய்வு பற்றிய எளிய, படிப்படியான வழிகாட்டல்." : "Clear, step-by-step guidance on engineering branches, cutoff calculation, and counselling for 12th students."}</p>
@@ -236,13 +192,13 @@ export function renderStudentEntryPage(
 
       const door2 = `<a class="choice-card door-mark" href="${entryHref("personal", language)}">
         <div>
-          <span class="door-tag">${ta ? "படி 2 • கட்-ஆஃப் &amp; சாய்ஸ் பிளானர்" : "Step 2 • Cutoff &amp; Choice Planner"}</span>
+          <span class="door-tag">${ta ? "படி 2 • கட்-ஆஃப் &amp; விருப்பத் தேர்வு நிரப்புதல்" : "Step 2 • Cutoff &amp; Choice Filling"}</span>
           <strong class="door-title">${ta ? "மதிப்பெண் உள்ளது — கட்-ஆஃப் &amp; கல்லூரிகள்" : "I Have My Marks — Check Cutoff &amp; Choices"}</strong>
           <p class="door-desc">${ta ? "200-க்கு கட்-ஆஃப் கணக்கீடு, 7.5% அரசுப் பள்ளி தகுதி மற்றும் 121 கல்லூரிகளின் கடந்த ஆண்டு கட்-ஆஃப் ஒப்பிட்டு விருப்பப் பட்டியல் தயாரிக்கலாம்." : "Calculate your 200-mark cutoff, verify 7.5% Govt School &amp; First Graduate fee waivers, and plan your choice order with past cutoff benchmarks."}</p>
         </div>
         <div class="door-action">
           <span>${ta ? "✓ 200-க்கு கட்-ஆஃப் கணக்கீடு" : "✓ 200-mark calc"}</span>
-          <span>${ta ? "கட்-ஆஃப் &amp; சாய்ஸ் பிளானர் →" : "Calculate &amp; Plan Choices →"}</span>
+          <span>${ta ? "கட்-ஆஃப் &amp; விருப்பத் தேர்வு நிரப்புதல் →" : "Calculate &amp; Plan Choices →"}</span>
         </div>
       </a>`;
 
@@ -275,6 +231,14 @@ export function renderStudentEntryPage(
             <div class="explore-text">
               <strong class="explore-heading">${ta ? "கல்லூரிகள் பட்டியல்" : "Colleges Directory"}</strong>
               <span class="explore-sub">${ta ? "121 கல்லூரிகள் விவரம்" : "Search &amp; browse colleges"}</span>
+            </div>
+            <span class="explore-arrow">→</span>
+          </a>
+          <a class="explore-card" href="/journey/questions?lang=${language}">
+            <span class="explore-icon">❓</span>
+            <div class="explore-text">
+              <strong class="explore-heading">${ta ? "கேள்விகள் &amp; பதில்கள் (FAQs)" : "Questions &amp; Answers (FAQs)"}</strong>
+              <span class="explore-sub">${ta ? "கட்-ஆஃப் vs ரேங்க், கலந்தாய்வு விதிகள்" : "Cutoff vs. Rank, rounds &amp; rules"}</span>
             </div>
             <span class="explore-arrow">→</span>
           </a>
@@ -322,7 +286,7 @@ export function renderStudentEntryPage(
       <li><strong>${ta ? "கணக்கீட்டு முறை: இது கணிதம் (100) + இயற்பியல் (50) + வேதியியல் (50) ஆகியவற்றின் அடிப்படையில் 200-க்குக் கணக்கிடப்பட்ட Cutoff மதிப்பெண் மட்டுமே." : "Calculation: This is the composite academic cutoff score calculated out of 200 from your subject marks (Maths 100, Physics 50, Chemistry 50)."}</strong></li>
       <li><strong>${ta ? "Cutoff வேறு; Rank வேறு:" : "Cutoff vs. Rank:"}</strong> ${ta ? "Cutoff என்பது சேர்க்கைக்கான உத்தரவாதமோ அதிகாரப்பூர்வ தரவரிசையோ (Rank) அல்ல. TNEA வெளியிடும் பொதுத் தரவரிசை (Overall Merit Rank), வகுப்புவாரித் தரவரிசை (Community Rank) மற்றும் 7.5% அரசுப் பள்ளித் தரவரிசை (Eligible 7.5% Govt School Rank) ஆகியவை முற்றிலும் வேறுபட்டவை." : "A cutoff score is not an admission guarantee or an official rank. It is distinct from the official Overall Merit Rank, Community Rank, and eligible 7.5% Government School Ranks."}</li>
       <li><strong>${ta ? "0.5 மதிப்பெண் உணர்திறன்:" : "0.5 Mark Sensitivity:"}</strong> ${ta ? "ஒரே 0.50 மதிப்பெண் இடைவெளியில் கூட (எ.கா. 199.5 vs 199.0) நூற்றுக்கணக்கான மாணவர்களின் ரேங்க் மாறும். சம மதிப்பெண் வரும்போது TNEA தகவல் கையேடு பிரிவு 6(a)(ii)-ன் படியான அதிகாரப்பூர்வ டை-பிரேக் வரிசைப்படியே (கணித %, இயற்பியல் %, விருப்பப் பாட %, 12-ஆம் வகுப்பு மொத்த %, பிறந்த தேதி, ரேண்டம் எண்) ரேங்க் தீர்மானிக்கப்படும். <a href=\"/journey/questions?id=Q086&amp;lang=ta\" target=\"_blank\" rel=\"noopener\">டை-பிரேக் விதிகள் பற்றி மேலும் அறிய (Q086) →</a>" : "In competitive brackets, hundreds of candidates share a 0.50 mark band (e.g. 199.5 vs 199.0). When cutoffs are equal, statutory TNEA tie-breakers govern rank order in strict sequence: (1) Maths %, (2) Physics %, (3) Optional 4th subject %, (4) Class XII total %, (5) Date of birth (elder), and (6) Random number [TNEA Information Brochure, §6(a)(ii)]. <a href=\"/journey/questions?id=Q086&amp;lang=en\" target=\"_blank\" rel=\"noopener\">Read tie-breaker &amp; rank rules (Q086) →</a>"}</li>
-      <li><strong>${ta ? "மாணவர்களுக்கான பாதுகாப்பு விதி:" : "Student Safety Rule:"}</strong> ${ta ? "கடந்த ஆண்டு கட்-ஆஃப்பை மட்டும் நம்பி 1 அல்லது 2 கல்லூரிகளை மட்டும் சாய்ஸில் வைக்காதீர்கள். உங்கள் மதிப்பெண்ணுக்கு சற்று மேலே உள்ளவை, சமமாக உள்ளவை, மற்றும் பாதுகாப்பான வாய்ப்புகள் எனப் பரவலான விருப்பப் பட்டியலைத் தயாரிக்க வேண்டும்." : "Never assume admission based on a single past closing number. Always prepare a multi-layer choice list with aspirational, realistic, and safe fallback colleges."}</li>
+      <li><strong>${ta ? "மாணவர்களுக்கான பாதுகாப்பு விதி:" : "Student Safety Rule:"}</strong> ${ta ? "கடந்த ஆண்டு கட்-ஆஃப்பை மட்டும் நம்பி 1 அல்லது 2 கல்லூரிகளை மட்டும் விருப்பப் பட்டியலில் வைக்காதீர்கள். உங்கள் மதிப்பெண்ணுக்கு சற்று மேலே உள்ளவை, சமமாக உள்ளவை, மற்றும் பாதுகாப்பான வாய்ப்புகள் எனப் பரவலான விருப்பப் பட்டியலைத் தயாரிக்க வேண்டும்." : "Never assume admission based on a single past closing number. Always prepare a multi-layer choice list with aspirational, realistic, and safe fallback colleges."}</li>
     </ul>
     <p class="source-ref" style="margin-top:0.65rem; margin-bottom:0;"><small>${ta ? "2026 TNEA சேர்க்கை நடைமுறைகளின்படி" : "Applicable to TNEA 2026 Admissions"} (${ta ? "அதிகாரப்பூர்வ தளம்: " : "Official portal: "}<a href="https://www.tneaonline.org/" target="_blank" rel="noopener">www.tneaonline.org</a>)</small></p>
   </div>
@@ -331,7 +295,7 @@ export function renderStudentEntryPage(
     <form method="POST" action="/m5-guidance?lang=${language}" style="margin:0;display:inline">
       <input type="hidden" name="cutoff" value="${calculatedCutoff}">
       <input type="hidden" name="tab" value="comparison">
-      <button type="submit" class="action">${ta ? "கட்-ஆஃப் ஒப்பீடு &amp; முன்னுரிமைத் திட்டம் →" : "Cutoff Comparison &amp; Plan Choices →"}</button>
+      <button type="submit" class="action">${ta ? "கட்-ஆஃப் ஒப்பீடு &amp; முன்னுரிமைத் திட்டம் (விருப்பத் தேர்வு நிரப்புதல்) →" : "Cutoff Comparison &amp; Plan Choices →"}</button>
     </form>` : `<a class="action" href="/m5-guidance?lang=${language}">${ta ? "மதிப்பெண் இன்றி கல்லூரிகளைப் பார்க்க →" : "Browse Colleges &amp; Choice Planner (No Marks) →"}</a>`}
     <a class="action secondary" href="/colleges?view=colleges&amp;lang=${language}">${ta ? "கல்லூரிகள் மற்றும் படிப்புகளைப் பார்க்க →" : "Explore colleges and programmes →"}</a>
     <a class="action secondary" href="/counselling?lang=${language}">${ta ? "கலந்தாய்வு நடைமுறைகள் மற்றும் விதிகள் →" : "TNEA Counselling procedures &amp; guidance →"}</a>
@@ -368,8 +332,12 @@ export function renderStudentEntryPage(
 
       const pageHeading = ta ? "உங்கள் TNEA கட்-ஆஃப் கணக்கிடுங்கள் (Cutoff Calculator)" : message("entry.personal");
       const cutoffNotice = `<p class="notice" style="margin: 0 0 1rem; padding: 0.75rem 1rem; background: #f8fafc; border-left: 4px solid #2563eb; border-radius: 6px; font-size: 0.95rem; color: #1e293b; line-height: 1.5;"><strong>${ta ? "முக்கியக் குறிப்பு:" : "Essential Note:"}</strong> ${ta ? "கட்-ஆஃப் என்பது கணக்கிடப்பட்ட மதிப்பெண் மட்டுமே. இது உங்கள் TNEA தரவரிசை (Rank) அல்ல; சேர்க்கைக்கான உத்தரவாதமும் அல்ல." : "Cutoff is a calculated mark. It is not your TNEA rank and does not guarantee a seat."}</p>`;
-      const privacyShield = `<div class="privacy-shield-card"><div class="privacy-shield-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div><div><p class="privacy-shield-title">${ta ? "தரவு சேமிக்கப்படாது (Zero Tracking)" : "Zero Tracking (Nothing Stored)"}</p><p class="privacy-shield-desc">${ta ? "உங்கள் மதிப்பெண்கள் URL அல்லது சர்வரில் சேமிக்கப்படாது. பாதுகாப்பான கணக்கீடு மட்டுமே." : "Marks are never placed in the URL or saved on the server. Safe private calculation only."}</p></div></div>`;
-      return shell(`<h1>${pageHeading}</h1>${cutoffNotice}${privacyShield}${resultBlock}${formBlock}${clientScript}${journeyCard}${directions}`, "cutoff", "cutoff");
+      const privacyDeclaration = `<div class="privacy-declaration-strip"><span class="privacy-lock-icon" aria-hidden="true">🔒</span><div><strong>${ta ? "தரவு சேமிக்கப்படாது (Zero Tracking):" : "Zero Tracking (Nothing Stored):"}</strong> <span>${ta ? "உங்கள் மதிப்பெண்கள் URL அல்லது சர்வரில் சேமிக்கப்படாது. பாதுகாப்பான நேரடி கணக்கீடு மட்டுமே." : "Marks are never placed in the URL or saved on the server. Safe private calculation only."}</span></div></div>`;
+      if (calculatedCutoff !== null) {
+        const recalcToggle = `<details class="calc-recalculate-details"><summary>${ta ? "↺ வேறு மதிப்பெண்களை உள்ளிட்டுக் கணக்கிட" : "↺ Recalculate with different marks"}</summary>${formBlock}</details>`;
+        return shell(`<h1>${pageHeading}</h1>${cutoffNotice}${privacyDeclaration}${resultBlock}${recalcToggle}${clientScript}`, "cutoff", "cutoff");
+      }
+      return shell(`<h1>${pageHeading}</h1>${cutoffNotice}${privacyDeclaration}${resultBlock}${formBlock}${clientScript}${journeyCard}${directions}`, "cutoff", "cutoff");
     }
     if (route === "counselling") {
       const ta = language === "ta";

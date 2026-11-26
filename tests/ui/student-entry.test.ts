@@ -353,7 +353,7 @@ test("Fix 2 & P0-A/P1-B/P1-C: Cutoff calculator provides marks privacy, stale cl
   assert.match(calcTa, /www\.tneaonline\.org/);
   assert.ok(calcTa.includes('<form method="POST" action="/m5-guidance?lang=ta" style="margin:0;display:inline">'));
   assert.ok(calcTa.includes('<input type="hidden" name="cutoff" value="185.5">'));
-  assert.ok(calcTa.includes("கட்-ஆஃப் ஒப்பீடு &amp; முன்னுரிமைத் திட்டம் →"));
+  assert.ok(calcTa.includes("கட்-ஆஃப் ஒப்பீடு &amp; முன்னுரிமைத் திட்டம் (விருப்பத் தேர்வு நிரப்புதல்) →"));
   assert.ok(calcTa.includes('href="/colleges?view=colleges&amp;lang=ta"'));
   assert.ok(calcTa.includes('href="/counselling?lang=ta"'));
 

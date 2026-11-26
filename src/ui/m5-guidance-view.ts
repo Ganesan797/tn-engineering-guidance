@@ -2067,7 +2067,7 @@ function renderComparisonTab(
             🛡️ ${t("மாணவர்களுக்கான வழிகாட்டுதல் (Choice List Guidance)", "Student Choice Guidance")}
           </strong>
           <span>${t(
-            "உங்கள் விருப்பங்களை பரவலாக ஆராய்ந்து பட்டியலிடுங்கள். கடந்த ஆண்டு பதிவுகளை ஒரு வழிகாட்டியாக மட்டுமே கருதி, உங்கள் உண்மையான விருப்ப வரிசையின் அடிப்படையில் சாய்ஸ் பட்டியலை உருவாக்குங்கள்.",
+            "உங்கள் விருப்பங்களை பரவலாக ஆராய்ந்து பட்டியலிடுங்கள். கடந்த ஆண்டு பதிவுகளை ஒரு வழிகாட்டியாக மட்டுமே கருதி, உங்கள் உண்மையான விருப்ப வரிசையின் அடிப்படையில் விருப்பப் பட்டியலை உருவாக்குங்கள்.",
             "Explore genuine preferences across a broad set of college/branch options and use historical observations only as one reference while preparing your own choice list."
           )}</span>
         </div>
@@ -2076,7 +2076,7 @@ function renderComparisonTab(
             ⚠️ ${t("கல்லூரிக் குறியீடு எச்சரிக்கை: ஒரே பெயர் கொண்ட கல்லூரிகள்", "College Code Alert: Watch out for similar college names")}
           </strong>
           <span>${t(
-            "தமிழ்நாட்டில் பல கல்லூரிகள் ஒரே பெயரிலோ அல்லது ஒரே குடும்பப் பெயரிலோ (Loyola, Venkateswara, Meenakshi, St. Joseph போன்றவை) வெவ்வேறு இடங்களில் இயங்குகின்றன. TNEA ஆன்லைன் சாய்ஸ் ஃபில்லிங்கில் கல்லூரியின் <strong>4-இலக்க அதிகாரப்பூர்வக் குறியீட்டை (College Code)</strong> கட்டாயம் சரிபார்த்துத் தேர்வு செய்யவும்.",
+            "தமிழ்நாட்டில் பல கல்லூரிகள் ஒரே பெயரிலோ அல்லது ஒரே குடும்பப் பெயரிலோ (Loyola, Venkateswara, Meenakshi, St. Joseph போன்றவை) வெவ்வேறு இடங்களில் இயங்குகின்றன. TNEA ஆன்லைன் விருப்பத் தேர்வு நிரப்புதலில் கல்லூரியின் <strong>4-இலக்க அதிகாரப்பூர்வக் குறியீட்டை (College Code)</strong> கட்டாயம் சரிபார்த்துத் தேர்வு செய்யவும்.",
             "Colleges with identical or similar family names (Loyola, Venkateswara, Meenakshi, St. Joseph, etc.) operate in different locations. Always verify the <strong>4-digit official TNEA College Code</strong> when filling choices on the official portal."
           )}</span>
         </div>
@@ -3089,7 +3089,7 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
         <h1>${esc(t("தமிழ்நாடு பொறியியல் சேர்க்கை (TNEA) — மாணவர் விருப்ப முன்னுரிமைப் பணித்தாள்", "Tamil Nadu Engineering Admissions (TNEA) — Student Choice Preference Worksheet"))}</h1>
         <p>${esc(t("அதிகாரப்பூர்வ TNEA விருப்பப் பதிவு முன்னுரிமைப் பணித்தாள் — கணிப்பு அல்லாத குறிப்புப் படிவம்", "Official TNEA Choice Entry Preference Worksheet — Non-predictive Reference"))}</p>
         <p style="margin-top: 4pt; font-size: 8.5pt; color: #555;">${esc(t("அதிகாரப்பூர்வ TNEA இணையதளத்தில் உங்கள் விருப்பங்களை வரிசைப்படி பதிவு செய்வதற்கான குறிப்புப் பட்டியல்.", "Student-controlled preference worksheet organized according to genuine priority for official TNEA online choice filling."))}</p>
-        <p style="margin-top: 4pt; font-size: 8.5pt; font-weight: bold; color: #b91c1c;">${esc(t("⚠️ முக்கியக் குறிப்பு: TNEA இணையதளத்தில் சாய்ஸ் போடும்போது கல்லூரியின் 4-இலக்கக் குறியீட்டை (College Code) கட்டாயம் சரிபார்க்கவும்! (ஒரே பெயரில் வெவ்வேறு கல்லூரிகள் உள்ளன)", "⚠️ Important: Always verify the 4-digit TNEA College Code when entering choices on tneaonline.org (Colleges with similar names have distinct codes)."))}</p>
+        <p style="margin-top: 4pt; font-size: 8.5pt; font-weight: bold; color: #b91c1c;">${esc(t("⚠️ முக்கியக் குறிப்பு: TNEA இணையதளத்தில் விருப்பத் தேர்வு நிரப்பும் போது கல்லூரியின் 4-இலக்கக் குறியீட்டை (College Code) கட்டாயம் சரிபார்க்கவும்! (ஒரே பெயரில் வெவ்வேறு கல்லூரிகள் உள்ளன)", "⚠️ Important: Always verify the 4-digit TNEA College Code when entering choices on tneaonline.org (Colleges with similar names have distinct codes)."))}</p>
       </div>
 
       <div class="screen-only" style="background: #ffffff; border: 1.5px solid #bfdbfe; border-left: 4px solid #2563eb; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;">
@@ -3098,7 +3098,7 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
           <li><strong>${t("திட்டமிடல் பட்டியல் மட்டுமே:", "Planning worksheet only:")}</strong> ${t("இது உங்களின் பயிற்சி மற்றும் திட்டமிடலுக்கான பட்டியல் மட்டுமே; அதிகாரப்பூர்வ TNEA இணையதளத்தில் நீங்களே விருப்பங்களைப் பதிவு செய்ய வேண்டும்.", "This is a student planning worksheet, not an official TNEA online submission.")}</li>
           <li><strong>${t("வரிசை உங்கள் கையில்:", "Student controls order:")}</strong> ${t("விருப்பங்களின் வரிசையை நீங்களே முழுமையாகத் தீர்மானிக்கலாம். இந்தத் தளம் தானாக எந்த வரிசையையும் மாற்றாது.", "You have full control over the preference order with zero automated ranking.")}</li>
           <li><strong>${t("வரிசை மிக முக்கியம்:", "Order matters:")}</strong> ${t("TNEA கணினி விருப்பம் #1-லிருந்து கீழ்நோக்கி வரிசையாக மட்டுமே பார்க்கும். 'மேல்நோக்கிய நகர்வு' (Upward Movement) எப்போதுமே #1-ஐ நோக்கி மட்டுமே உயர்த்தும் என்பதால், உங்களுக்கு மிகவும் பிடித்த கல்லூரிகளை மேலிருந்து கீழாக வரிசைப்படுத்துங்கள்.", "TNEA allocates strictly from Choice #1 downwards; upward movement only moves toward #1.")}</li>
-          <li><strong style="color: #c2410c;">${t("⚠️ 4-இலக்கக் குறியீட்டைச் சரிபார்க்கவும்:", "⚠️ Verify 4-digit College Code:")}</strong> ${t("ஒரே பெயர் கொண்ட கல்லூரிகளில் தவறு ஏற்படாமல் இருக்க, TNEA இணையதளத்தில் சாய்ஸ் பதிவு செய்யும்போது இங்குள்ள 4-இலக்கக் குறியீட்டை மட்டுமே முதன்மையாகச் சரிபார்க்கவும்.", "To avoid confusing colleges with similar names, cross-check the official 4-digit College Code printed in this worksheet on tneaonline.org.")}</li>
+          <li><strong style="color: #c2410c;">${t("⚠️ 4-இலக்கக் குறியீட்டைச் சரிபார்க்கவும்:", "⚠️ Verify 4-digit College Code:")}</strong> ${t("ஒரே பெயர் கொண்ட கல்லூரிகளில் தவறு ஏற்படாமல் இருக்க, TNEA இணையதளத்தில் விருப்பத் தேர்வு பதிவு செய்யும் போது இங்குள்ள 4-இலக்கக் குறியீட்டை மட்டுமே முதன்மையாகச் சரிபார்க்கவும்.", "To avoid confusing colleges with similar names, cross-check the official 4-digit College Code printed in this worksheet on tneaonline.org.")}</li>
         </ul>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid #f1f5f9;">
           <button type="button" class="btn-action btn-primary" onclick="window.print()" aria-label="${t("அச்சுப் படிவம் அல்லது PDF ஆகச் சேமி", "Print Worksheet or Save as PDF")}" title="${t("அச்சுப் படிவம் / PDF பதிவிறக்கு", "Print Worksheet / Save as PDF")}">

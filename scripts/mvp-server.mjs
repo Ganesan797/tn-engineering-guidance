@@ -217,6 +217,22 @@ const server = createServer(async (request, response) => {
     response.end(payload);
     return;
   }
+  if (request.method === "GET" && url.pathname === "/assets/tnea-hero.jpg") {
+    const assetPath = new URL("data/assets/tnea-hero.jpg", root);
+    try {
+      const data = readFileSync(assetPath);
+      response.writeHead(200, {
+        "Content-Type": "image/jpeg",
+        "Content-Length": data.byteLength,
+        "Cache-Control": "public, max-age=604800, immutable",
+      });
+      response.end(data);
+      return;
+    } catch {
+      send(response, 404, "<!doctype html><title>Not found</title><h1>Image not found</h1>");
+      return;
+    }
+  }
   if (request.method === "GET" && url.pathname === "/journey/questions") {
     const page = renderQuestionCollection(questions, url.searchParams.get("id"), url.searchParams.get("evidence"), language, url.searchParams.get("topic"), url.searchParams.get("review") === "1");
     send(response, page.status, page.html);
