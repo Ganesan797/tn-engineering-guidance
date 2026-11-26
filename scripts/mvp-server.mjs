@@ -217,8 +217,9 @@ const server = createServer(async (request, response) => {
     response.end(payload);
     return;
   }
-  if (request.method === "GET" && url.pathname === "/assets/tnea-hero.jpg") {
-    const assetPath = new URL("data/assets/tnea-hero.jpg", root);
+  if (request.method === "GET" && (url.pathname === "/assets/tnea-hero.jpg" || url.pathname === "/assets/tnea-hero-portrait.jpg")) {
+    const fileName = url.pathname === "/assets/tnea-hero-portrait.jpg" ? "tnea-hero-portrait.jpg" : "tnea-hero.jpg";
+    const assetPath = new URL(`data/assets/${fileName}`, root);
     try {
       const data = readFileSync(assetPath);
       response.writeHead(200, {

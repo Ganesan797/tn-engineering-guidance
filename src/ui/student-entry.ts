@@ -58,33 +58,37 @@ export function renderStudentEntryPage(
     navTab: "guide" | "colleges" | "cutoff" | "shortlist" = "guide",
     stepOverride?: "home" | "journey" | "study" | "colleges" | "review" | "planner" | "cutoff",
   ) => `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${GOOGLE_FONTS_HTML}<title>${message("entry.site")}</title><style>${STYLE}${SITE_SHELL_CSS}
-.home-main{max-width:860px;margin:0 auto;padding:20px 16px;box-sizing:border-box}
-.home-hero{text-align:center;margin-bottom:1.6rem}
-.home-hero-art{max-width:360px;width:100%;margin:0 auto 1.1rem;display:flex;justify-content:center}
-.home-hero-img{width:100%;height:auto;max-height:195px;object-fit:cover;border-radius:14px;box-shadow:0 4px 14px rgba(15,23,42,0.08);display:block}
-.home-badge-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:9999px;font-size:0.78rem;font-weight:750;color:#0f766e;margin-bottom:0.65rem}
-.home-title{font-size:1.85rem;font-weight:800;color:#0f2c59;line-height:1.25;margin:0 0 0.45rem;letter-spacing:-0.02em}
-.home-sub{font-size:1.02rem;color:#475569;line-height:1.55;margin:0 auto 1.15rem;max-width:62ch}
-.home-trust-bar{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px 16px;margin:0 auto 1.6rem;padding:9px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;font-size:0.82rem;color:#334155;font-weight:650;box-shadow:0 1px 3px rgba(0,0,0,0.02)}
-.home-trust-item{display:inline-flex;align-items:center;gap:5px}
-.home-doors{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-bottom:1.75rem}
-@media(min-width:640px){.home-doors{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
-.choice-card.recommended{background:#f0fdfa;border:1.5px solid #99f6e4;color:#0f766e;box-shadow:0 2px 8px rgba(15,118,110,0.06);display:flex;flex-direction:column;justify-content:space-between;padding:1.4rem 1.45rem;border-radius:14px;text-decoration:none;transition:transform 0.15s ease,box-shadow 0.15s ease;min-height:195px;min-width:0;box-sizing:border-box;position:relative}
-.choice-card.recommended:hover{border-color:#0d9488;box-shadow:0 6px 18px rgba(15,118,110,0.12);transform:translateY(-2px)}
-.choice-card.door-mark{background:#fffbeb;border:1.5px solid #fde68a;color:#92400e;box-shadow:0 2px 8px rgba(180,83,9,0.06);display:flex;flex-direction:column;justify-content:space-between;padding:1.4rem 1.45rem;border-radius:14px;text-decoration:none;transition:transform 0.15s ease,box-shadow 0.15s ease;min-height:195px;min-width:0;box-sizing:border-box;position:relative}
-.choice-card.door-mark:hover{border-color:#f59e0b;box-shadow:0 6px 18px rgba(180,83,9,0.12);transform:translateY(-2px)}
-.door-tag{display:inline-block;padding:3px 8px;border-radius:6px;font-size:0.72rem;font-weight:750;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.6rem;align-self:flex-start}
+.home-main{max-width:780px;margin:0 auto;padding:16px;box-sizing:border-box}
+.home-hero-split{display:grid;grid-template-columns:minmax(115px,42%) minmax(0,1fr);gap:14px;align-items:center;background:#FAF7F2;border:1px solid #EFEAE0;border-radius:16px;padding:12px 14px;margin-bottom:14px}
+@media(min-width:640px){.home-hero-split{grid-template-columns:minmax(220px,40%) minmax(0,1fr);gap:24px;padding:20px 24px}}
+.home-hero-art{width:100%;border-radius:12px;overflow:hidden;box-shadow:0 3px 12px rgba(15,23,42,0.08)}
+.home-hero-img{width:100%;height:195px;object-fit:cover;object-position:center 75%;display:block}
+@media(min-width:640px){.home-hero-img{height:245px}}
+.home-hero-copy{text-align:left;min-width:0}
+.home-badge-tag{display:inline-block;padding:3px 9px;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:9999px;font-size:0.72rem;font-weight:750;color:#0f766e;margin-bottom:0.45rem;line-height:1.3}
+.home-title{font-size:1.35rem;font-weight:800;color:#0f2c59;line-height:1.22;margin:0 0 0.4rem;letter-spacing:-0.02em;word-break:break-word}
+@media(min-width:640px){.home-title{font-size:1.85rem}}
+.home-sub{font-size:0.86rem;color:#475569;line-height:1.45;margin:0}
+@media(min-width:640px){.home-sub{font-size:1rem}}
+.home-trust-bar{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:6px 14px;margin:0 auto 1.4rem;padding:9px 12px;background:#FAF7F2;border:1px solid #EFEAE0;border-radius:10px;font-size:0.8rem;color:#334155;font-weight:650}
+.home-trust-item{display:inline-flex;align-items:center;gap:4px}
+.home-doors{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-bottom:1.1rem}
+.choice-card.recommended{background:#EAF4F0;border:1.5px solid #99f6e4;color:#0f766e;box-shadow:0 2px 6px rgba(15,118,110,0.05);display:flex;flex-direction:column;justify-content:space-between;padding:1.15rem 1.25rem;border-radius:14px;text-decoration:none;transition:transform 0.15s ease,box-shadow 0.15s ease;min-width:0;box-sizing:border-box;position:relative;margin:0}
+.choice-card.recommended:hover{border-color:#0d9488;box-shadow:0 6px 16px rgba(15,118,110,0.12);transform:translateY(-2px)}
+.choice-card.door-mark{background:#FFFFFF;border:1.5px solid #E29578;color:#7C2D12;box-shadow:0 2px 6px rgba(194,94,62,0.06);display:flex;flex-direction:column;justify-content:space-between;padding:1.15rem 1.25rem;border-radius:14px;text-decoration:none;transition:transform 0.15s ease,box-shadow 0.15s ease;min-width:0;box-sizing:border-box;position:relative;margin:0}
+.choice-card.door-mark:hover{border-color:#C25E3E;box-shadow:0 6px 16px rgba(194,94,62,0.12);transform:translateY(-2px)}
+.door-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:0.7rem;font-weight:750;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.45rem;align-self:flex-start}
 .choice-card.recommended .door-tag{background:#ccfbf1;color:#0f766e}
-.door-mark .door-tag{background:#fef3c7;color:#b45309}
-.door-title{font-size:1.22rem;font-weight:800;line-height:1.32;margin:0 0 0.45rem;display:block;word-break:break-word}
+.door-mark .door-tag{background:#FFEDD5;color:#C2410C}
+.door-title{font-size:1.15rem;font-weight:800;line-height:1.3;margin:0 0 0.35rem;display:block;word-break:break-word}
 .choice-card.recommended .door-title{color:#0f2c59}
-.door-mark .door-title{color:#78350f}
-.door-desc{font-size:0.9rem;line-height:1.52;margin:0 0 1rem;word-break:break-word}
+.door-mark .door-title{color:#7C2D12}
+.door-desc{font-size:0.88rem;line-height:1.48;margin:0 0 0.75rem;word-break:break-word}
 .choice-card.recommended .door-desc{color:#134e4a}
-.door-mark .door-desc{color:#854d0e}
-.door-action{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;font-weight:750;font-size:0.92rem;margin-top:auto;padding-top:0.6rem;border-top:1px dashed rgba(0,0,0,0.08)}
+.door-mark .door-desc{color:#78350F}
+.door-action{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;font-weight:750;font-size:0.9rem;margin-top:auto;padding-top:0.5rem;border-top:1px dashed rgba(0,0,0,0.08)}
 .choice-card.recommended .door-action{color:#0f766e}
-.door-mark .door-action{color:#b45309}
+.door-mark .door-action{color:#C2410C}
 .home-explore{margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid #e2e8f0}
 .home-explore-title{font-size:0.86rem;font-weight:750;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;margin:0 0 0.85rem;text-align:center}
 .home-explore-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
@@ -164,19 +168,22 @@ export function renderStudentEntryPage(
       const ta = language === "ta";
       const ownerEntry = options.ownerPreview ? `<section class="home-review" aria-labelledby="owner-explore"><h2 id="owner-explore">${ta ? "உரிமையாளர் ஆய்வு" : "Owner review"}</h2><p>${ta ? "2026 மூலப் பட்டியலிலுள்ள உண்மையான கல்லூரி–படிப்பு பதிவுகளை ஆய்வுக்காக மட்டும் பாருங்கள். கல்வி விளக்கங்கள் தனியாக ஒப்புதல் பெற வேண்டும்; இது மாணவர் வெளியீடு அல்ல." : "Browse real college–programme records from the 2026 source listing for review only. Educational explanations need separate approval; this is not a student release."}</p><a class="choice-card" href="/internal/m4-pilot?lang=${language}"><strong>${ta ? "படிப்புகள் மற்றும் கல்லூரிகளைப் பார்க்கலாம்" : "Explore courses and colleges"}</strong><span class="action">${message("entry.action")} →</span></a></section>` : "";
       
-      const heroImg = `<img class="home-hero-img" src="/assets/tnea-hero.jpg" alt="${ta ? "தமிழ்நாடு பள்ளி மாணவர்கள் உயர்கல்வி வழிகாட்டிப் புத்தகத்தைப் படிக்கும் காட்சி" : "Tamil Nadu school students reading the TNEA Career Guidance book"}" width="360" height="201" loading="eager" decoding="async">`;
+      const heroImg = `<img class="home-hero-img" src="/assets/tnea-hero-portrait.jpg" alt="${ta ? "தமிழ்நாடு பள்ளி மாணவர்கள் உயர்கல்வி வழிகாட்டிப் புத்தகத்தைப் படிக்கும் காட்சி" : "Tamil Nadu school students reading the TNEA Career Guidance book"}" width="240" height="245" loading="eager" decoding="async">`;
 
-      const heroSection = `<section class="home-hero" aria-labelledby="home-hero-title">
+      const heroSection = `<section class="home-hero-split" aria-labelledby="home-hero-title">
         <div class="home-hero-art">${heroImg}</div>
-        <div class="home-badge-tag"><span>${ta ? "தமிழ்நாடு பொறியியல் சேர்க்கை (TNEA) வழிகாட்டி" : "Tamil Nadu Engineering Admissions (TNEA) Guide"}</span></div>
-        <h1 id="home-hero-title" class="home-title">${ta ? "சரியான வழிகாட்டல், சரியான நேரத்தில்" : "Right guidance, at the right time"}</h1>
-        <p class="home-sub">${ta ? "12-ஆம் வகுப்பிற்குப் பிறகு பொறியியல் படிப்புகள், கட்-ஆஃப் மற்றும் கலந்தாய்வு பற்றிய எளிய, படிப்படியான வழிகாட்டல்." : "Clear, step-by-step guidance on engineering branches, cutoff calculation, and counselling for 12th students."}</p>
-        <div class="home-trust-bar" aria-label="${ta ? "முக்கிய உத்தரவாதங்கள்" : "Key Assurances"}">
-          <span class="home-trust-item">${ta ? "✓ TNEA சேர்க்கை வழிகாட்டல்" : "✓ Dedicated Guidance for TNEA"}</span>
-          <span class="home-trust-item">${ta ? "✓ 7.5% அரசுப் பள்ளி &amp; முதல் பட்டதாரி சலுகை" : "✓ 7.5% Govt School Quota &amp; Fee Support"}</span>
-          <span class="home-trust-item">${ta ? "✓ 100% இலவசம் • உள்நுழைவு தேவையில்லை" : "✓ 100% Free • No Login Needed"}</span>
+        <div class="home-hero-copy">
+          <div class="home-badge-tag"><span>${ta ? "TNEA பொறியியல் வழிகாட்டி" : "TNEA Engineering Guide"}</span></div>
+          <h1 id="home-hero-title" class="home-title">${ta ? "சரியான வழிகாட்டல், சரியான நேரத்தில்" : "Right guidance, at the right time"}</h1>
+          <p class="home-sub">${ta ? "12-ஆம் வகுப்பிற்குப் பிறகு பொறியியல் படிப்புகள், கட்-ஆஃப் &amp; கலந்தாய்வுக்கான எளிய வழிகாட்டல்." : "Simple, step-by-step guidance for Tamil Nadu engineering admissions."}</p>
         </div>
       </section>`;
+
+      const trustBar = `<div class="home-trust-bar" aria-label="${ta ? "முக்கிய உத்தரவாதங்கள்" : "Key Assurances"}">
+        <span class="home-trust-item">${ta ? "✓ TNEA சேர்க்கை வழிகாட்டல்" : "✓ Dedicated Guidance for TNEA"}</span>
+        <span class="home-trust-item">${ta ? "✓ 7.5% அரசுப் பள்ளி &amp; முதல் பட்டதாரி சலுகை" : "✓ 7.5% Govt School Quota &amp; Fee Support"}</span>
+        <span class="home-trust-item">${ta ? "✓ 100% இலவசம் • உள்நுழைவு தேவையில்லை" : "✓ 100% Free • No Login Needed"}</span>
+      </div>`;
 
       const door1 = `<a class="choice-card recommended" href="/journey${ta ? "" : "?lang=en"}">
         <div>
@@ -245,7 +252,7 @@ export function renderStudentEntryPage(
         </div>
       </section>`;
 
-      return shell(`<div class="home-main">${heroSection}${doorsGrid}${exploreSection}${ownerEntry}</div>`, "guide", "home");
+      return shell(`<div class="home-main">${heroSection}${doorsGrid}${trustBar}${exploreSection}${ownerEntry}</div>`, "guide", "home");
     }
     const directions = `<nav aria-label="${message("entry.next")}"><h2>${message("entry.next")}</h2><ul>${route !== "beginner" ? `<li>${link("beginner", "entry.beginner")}</li>` : ""}${route !== "personal" ? `<li>${link("personal", "entry.personal")}</li>` : ""}<li>${link("home", "entry.return")}</li></ul></nav>`;
     if (route === "beginner") {
