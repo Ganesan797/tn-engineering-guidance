@@ -58,80 +58,44 @@ export function renderStudentEntryPage(
     navTab: "guide" | "colleges" | "cutoff" | "shortlist" = "guide",
     stepOverride?: "home" | "journey" | "study" | "colleges" | "review" | "planner" | "cutoff",
   ) => `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${GOOGLE_FONTS_HTML}<title>${message("entry.site")}</title><style>${STYLE}${SITE_SHELL_CSS}
-.home-main{max-width:1160px;padding:24px 20px}
-.public-service-pill{display:inline-block;padding:5px 10px;background:#f0fdfa;border:1px solid #ccfbf1;border-left:3.5px solid #0f766e;border-radius:6px;font-size:0.78rem;font-weight:700;color:#0f766e;line-height:1.4;margin-bottom:0.65rem}
-.home-intro{background:#fff;border:1px solid #d8dde6;border-radius:14px;padding:1.75rem 2rem;margin-bottom:1.5rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.home-intro h1{font-size:2rem;font-weight:800;color:#0f2c59;margin:0 0 .4rem;letter-spacing:-0.02em}
-.home-intro p{font-size:1.05rem;color:#46536a;line-height:1.6;margin:0;max-width:75ch}
-.home-mental-model{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:.9rem;padding:4px 0;font-size:0.8rem}
-.mental-step{white-space:nowrap;padding:3px 8px;border-radius:5px;background:#f1f5f9;color:#475569;font-weight:600}
-.mental-step.active{background:#f0fdfa;color:#0f766e;font-weight:750;border:1px solid #ccfbf1}
-.mental-sep{color:#94a3b8;font-weight:700}
-.video-explainer-card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:linear-gradient(135deg,#0f766e 0%,#0d9488 50%,#0284c7 100%);border:none;border-radius:16px;padding:16px 18px;color:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(15,118,110,0.22);margin-bottom:1.5rem;transition:transform 0.15s ease,filter 0.15s ease}
-.video-explainer-card:hover{filter:brightness(1.04);transform:translateY(-1px)}
-.video-avatar-box{width:64px;height:64px;border-radius:14px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.video-student-svg{width:56px;height:56px}
-.video-card-text{flex:1;min-width:0}
-.video-card-pill{display:inline-block;padding:2px 8px;border-radius:9999px;background:rgba(255,255,255,0.2);font-size:0.72rem;font-weight:700;margin-bottom:4px;letter-spacing:0.02em}
-.video-card-title{font-size:1.05rem;font-weight:800;margin:0;line-height:1.3;color:#fff}
-.video-card-sub{font-size:0.82rem;color:#ccfbf1;margin:3px 0 0;line-height:1.35}
-.video-modal-dialog{border:none;border-radius:20px;padding:0;max-width:360px;width:90vw;box-shadow:0 20px 40px rgba(0,0,0,0.3);overflow:hidden}
-.video-modal-dialog::backdrop{background:rgba(15,23,42,0.75)}
-.video-preview-screen{background:#0f172a;padding:24px 16px;text-align:center;color:#fff}
-.video-play-icon-circle{width:48px;height:48px;border-radius:50%;background:rgba(13,148,136,0.95);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 4px 12px rgba(13,148,136,0.4)}
-.video-play-icon-circle svg{width:22px;height:22px;margin-left:2px;fill:#fff}
-.video-preview-title{font-size:0.92rem;font-weight:800;margin:0 0 2px}
-.video-preview-sub{font-size:0.75rem;color:#94a3b8;margin:0}
-.video-preview-track{width:100%;height:4px;background:#334155;border-radius:9999px;margin-top:14px;overflow:hidden}
-.video-preview-fill{width:35%;height:100%;background:#14b8a6;border-radius:9999px}
-.video-modal-body{padding:18px;background:#fff}
-.hosting-cost-badge{display:inline-block;padding:2px 8px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:9999px;color:#065f46;font-size:0.72rem;font-weight:750;margin-bottom:8px}
-.video-modal-text{font-size:0.85rem;color:#334155;line-height:1.5;margin:0 0 14px}
-.video-modal-close-btn{width:100%;min-height:44px;padding:10px;border-radius:10px;background:#0f172a;color:#fff;font-weight:700;font-size:0.88rem;border:none;cursor:pointer}
-.privacy-shield-card{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:14px;background:#ecfdf5;border:1px solid #a7f3d0;margin-bottom:1.25rem}
-.privacy-shield-icon{width:36px;height:36px;border-radius:10px;background:#059669;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.privacy-shield-icon svg{width:20px;height:20px}
-.privacy-shield-title{font-size:0.92rem;font-weight:800;color:#064e3b;margin:0 0 2px}
-.privacy-shield-desc{font-size:0.82rem;color:#065f46;line-height:1.45;margin:0}
-.home-recommended-section{margin-bottom:1.5rem}
-.choice-card.recommended{display:block;padding:1.4rem 1.6rem;border:1.5px solid #0f766e;border-top:5px solid #0f766e;border-radius:14px;background:#fff;box-shadow:0 2px 8px rgba(15,118,110,.07);text-decoration:none;transition:all .2s ease}
-.choice-card.recommended:hover{background:#f0fdfa;border-color:#0d9488;transform:translateY(-2px);box-shadow:0 6px 16px rgba(15,118,110,.12)}
-.recommended-card-top{display:flex;align-items:flex-start;gap:1.25rem}
-.recommended-icon-box{flex-shrink:0}
-.recommended-card-text{flex:1;min-width:0}
-.recommended-card-title{display:block;font-size:1.3rem;color:#0f2c59;font-weight:800;margin:0 0 .35rem;line-height:1.35}
-.recommended-card-desc{color:#4a5870;font-size:0.95rem;line-height:1.55;margin:0}
-.recommended-card-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-top:1.1rem;padding-top:.85rem;border-top:1px solid #f1f5f9}
-.recommended-feature-badge{display:inline-flex;align-items:center;font-size:0.82rem;font-weight:700;color:#0f766e;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:6px;padding:3px 8px}
-.choice-card.recommended .action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.55rem 1.25rem;background:#0f766e;color:#fff;border-radius:8px;font-weight:700;font-size:0.98rem}
-.choice-card.recommended:hover .action{background:#0d9488}
-.home-support-strip{margin-top:1.5rem}
-.support-links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0.85rem;margin-top:1rem}
-.support-link-card{display:flex;align-items:center;gap:0.85rem;padding:0.9rem 1.1rem;background:#fff;border:1px solid #e2e8f0;border-left:3.5px solid #0f766e;border-radius:10px;text-decoration:none;transition:all 0.15s ease;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
-.support-link-card:hover{background:#f0fdfa;border-color:#0f766e;transform:translateY(-1px);box-shadow:0 3px 8px rgba(15,118,110,0.08)}
-.support-link-icon{font-size:1.4rem;flex-shrink:0}
-.support-link-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-.support-link-text strong{font-size:0.94rem;color:#0f2c59;font-weight:750}
-.support-link-text span{font-size:0.82rem;color:#64748b;line-height:1.35}
-.support-link-arrow{color:#0f766e;font-weight:700;font-size:1.1rem;flex-shrink:0}
-.home-options{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1.15fr);gap:1.5rem;align-items:stretch}
-.home-options section{display:flex;flex-direction:column}
-.home-options section h2{font-size:1.25rem;color:#172033;margin:0 0 .4rem}
-.home-options section>p{color:#55627a;margin:0 0 .9rem;font-size:0.95rem}
-.home-secondary{padding:1.4rem;border:1px solid #d8dde6;border-radius:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.04);display:flex;flex-direction:column}
-.home-secondary h2{font-size:1.2rem;color:#172033;margin:0 0 .5rem;padding-bottom:.6rem;border-bottom:2px solid #0f766e}
-.gov-task-list{list-style:none;padding:0;margin:0}
-.gov-task-item{border-bottom:1px solid #d8dde6}
-.gov-task-item:last-child{border-bottom:none}
-.home-secondary a{display:block;min-height:48px;padding:.9rem .5rem;background:transparent;border:none;border-radius:0;text-decoration:none;margin:0;transition:background .15s ease}
-.home-secondary a:hover{background:#f0fdfa}
-.home-secondary a strong{display:flex;align-items:center;justify-content:space-between;color:#0f766e;font-size:0.98rem;font-weight:700;margin-bottom:.25rem}
-.home-secondary a strong::after{content:"➔";font-size:.9rem;color:#0f766e;margin-left:.5rem;flex-shrink:0}
-.home-secondary a span{display:block;color:#475569;font-size:.88rem;line-height:1.48}
-.home-steps-preview{list-style:none;padding:0;margin:.8rem 0}
-.home-steps-preview li{padding:.4rem 0;border-bottom:1px solid #f1f5f9;color:#334155;font-size:.92rem;line-height:1.5}
-.home-steps-preview li:last-child{border-bottom:none}
-.home-steps-preview li strong{color:#0f2c59;display:inline}
+.home-main{max-width:860px;margin:0 auto;padding:20px 16px;box-sizing:border-box}
+.home-hero{text-align:center;margin-bottom:1.6rem}
+.home-hero-art{max-width:380px;width:100%;margin:0 auto 1.1rem;display:flex;justify-content:center}
+.home-hero-art svg{width:100%;height:auto;max-height:210px;border-radius:16px;box-shadow:0 4px 16px rgba(15,23,42,0.06)}
+.home-badge-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:9999px;font-size:0.78rem;font-weight:750;color:#0f766e;margin-bottom:0.65rem}
+.home-title{font-size:1.85rem;font-weight:800;color:#0f2c59;line-height:1.25;margin:0 0 0.45rem;letter-spacing:-0.02em}
+.home-sub{font-size:1.02rem;color:#475569;line-height:1.55;margin:0 auto 1.15rem;max-width:62ch}
+.home-trust-bar{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px 16px;margin:0 auto 1.6rem;padding:9px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;font-size:0.82rem;color:#334155;font-weight:650;box-shadow:0 1px 3px rgba(0,0,0,0.02)}
+.home-trust-item{display:inline-flex;align-items:center;gap:5px}
+.home-doors{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-bottom:1.75rem}
+@media(min-width:640px){.home-doors{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
+.choice-card.recommended{background:#f0fdfa;border:1.5px solid #99f6e4;color:#0f766e;box-shadow:0 2px 8px rgba(15,118,110,0.06);display:flex;flex-direction:column;justify-content:space-between;padding:1.4rem 1.45rem;border-radius:14px;text-decoration:none;transition:transform 0.15s ease,box-shadow 0.15s ease;min-height:195px;min-width:0;box-sizing:border-box;position:relative}
+.choice-card.recommended:hover{border-color:#0d9488;box-shadow:0 6px 18px rgba(15,118,110,0.12);transform:translateY(-2px)}
+.choice-card.door-mark{background:#fffbeb;border:1.5px solid #fde68a;color:#92400e;box-shadow:0 2px 8px rgba(180,83,9,0.06);display:flex;flex-direction:column;justify-content:space-between;padding:1.4rem 1.45rem;border-radius:14px;text-decoration:none;transition:transform 0.15s ease,box-shadow 0.15s ease;min-height:195px;min-width:0;box-sizing:border-box;position:relative}
+.choice-card.door-mark:hover{border-color:#f59e0b;box-shadow:0 6px 18px rgba(180,83,9,0.12);transform:translateY(-2px)}
+.door-tag{display:inline-block;padding:3px 8px;border-radius:6px;font-size:0.72rem;font-weight:750;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.6rem;align-self:flex-start}
+.choice-card.recommended .door-tag{background:#ccfbf1;color:#0f766e}
+.door-mark .door-tag{background:#fef3c7;color:#b45309}
+.door-title{font-size:1.22rem;font-weight:800;line-height:1.32;margin:0 0 0.45rem;display:block;word-break:break-word}
+.choice-card.recommended .door-title{color:#0f2c59}
+.door-mark .door-title{color:#78350f}
+.door-desc{font-size:0.9rem;line-height:1.52;margin:0 0 1rem;word-break:break-word}
+.choice-card.recommended .door-desc{color:#134e4a}
+.door-mark .door-desc{color:#854d0e}
+.door-action{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;font-weight:750;font-size:0.92rem;margin-top:auto;padding-top:0.6rem;border-top:1px dashed rgba(0,0,0,0.08)}
+.choice-card.recommended .door-action{color:#0f766e}
+.door-mark .door-action{color:#b45309}
+.home-explore{margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid #e2e8f0}
+.home-explore-title{font-size:0.86rem;font-weight:750;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;margin:0 0 0.85rem;text-align:center}
+.home-explore-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+@media(min-width:640px){.home-explore-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.explore-card{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;text-decoration:none;color:#1e293b;transition:all 0.15s ease;min-width:0;box-sizing:border-box}
+.explore-card:hover{border-color:#0f766e;background:#f0fdfa;transform:translateY(-1px)}
+.explore-icon{font-size:1.35rem;flex-shrink:0}
+.explore-text{flex:1;min-width:0;overflow:hidden}
+.explore-heading{font-size:0.88rem;font-weight:750;margin:0 0 2px;color:#0f2c59;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.explore-sub{font-size:0.75rem;color:#64748b;margin:0;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.explore-arrow{font-size:1rem;color:#0f766e;font-weight:700;flex-shrink:0}
 .home-review{margin-top:1.75rem;padding:1.35rem 1.6rem;border:1px dashed #94a3b8;border-radius:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.03)}
 .home-review h2{margin:0 0 .3rem;font-size:1.15rem;color:#334155}
 .home-review>p{margin:0 0 .9rem;color:#64748b;font-size:.95rem;line-height:1.6;max-width:80ch}
@@ -139,8 +103,6 @@ export function renderStudentEntryPage(
 .home-review .choice-card:hover{background:#f1f5f9;border-color:#64748b}
 .home-review .choice-card strong{color:#1e293b;font-size:1.05rem;margin:0}
 .home-review .choice-card .action{margin:0;color:#0f766e;font-weight:700}
-.home-more{margin-top:1.5rem;padding:.85rem 1.2rem;background:#fff;border:1px solid #d8dde6;border-radius:10px}
-.home-more summary{font-weight:650;color:#0f766e}
 .content-main{max-width:1160px;margin:auto;padding:28px 20px}
 .content-main>h1{font-size:2.1rem;font-weight:800;color:#0f2c59;margin:0 0 .5rem}
 .content-main>p:first-of-type{font-size:1.12rem;color:#4a5870;line-height:1.65;margin:0 0 1.5rem;max-width:75ch}
@@ -196,66 +158,130 @@ export function renderStudentEntryPage(
     if (route === "home") {
       const ta = language === "ta";
       const ownerEntry = options.ownerPreview ? `<section class="home-review" aria-labelledby="owner-explore"><h2 id="owner-explore">${ta ? "உரிமையாளர் ஆய்வு" : "Owner review"}</h2><p>${ta ? "2026 மூலப் பட்டியலிலுள்ள உண்மையான கல்லூரி–படிப்பு பதிவுகளை ஆய்வுக்காக மட்டும் பாருங்கள். கல்வி விளக்கங்கள் தனியாக ஒப்புதல் பெற வேண்டும்; இது மாணவர் வெளியீடு அல்ல." : "Browse real college–programme records from the 2026 source listing for review only. Educational explanations need separate approval; this is not a student release."}</p><a class="choice-card" href="/internal/m4-pilot?lang=${language}"><strong>${ta ? "படிப்புகள் மற்றும் கல்லூரிகளைப் பார்க்கலாம்" : "Explore courses and colleges"}</strong><span class="action">${message("entry.action")} →</span></a></section>` : "";
-      const introPill = `<div class="public-service-pill"><span>${ta ? "தமிழ்நாடு அரசு பொறியியல் கலந்தாய்வு வழிகாட்டி" : "Tamil Nadu Engineering Admissions — Information Guide"}</span></div>`;
-      const mentalModel = `<div class="home-mental-model" aria-label="${ta ? "மாணவர் சேர்க்கை நிலைகள்" : "Student Admission Stages"}"><span class="mental-step active">1. ${ta ? "அறிமுகம்" : "Basics"}</span><span class="mental-sep">→</span><span class="mental-step">2. ${ta ? "தகுதி &amp; கட்-ஆஃப்" : "Cutoff &amp; Eligibility"}</span><span class="mental-sep">→</span><span class="mental-step">3. ${ta ? "கல்லூரிகள்" : "Colleges"}</span><span class="mental-sep">→</span><span class="mental-step">4. ${ta ? "விருப்ப வரிசை" : "Choice Planner"}</span><span class="mental-sep">→</span><span class="mental-step">5. ${ta ? "கலந்தாய்வு விதிகள்" : "Counselling Rules"}</span></div>`;
-      const heroCard = `<section class="home-intro" aria-labelledby="home-hero-title">
-        ${introPill}
-        <h1 id="home-hero-title">${ta ? "தமிழ்நாடு பொறியியல் சேர்க்கை — எளிய வழிகாட்டி" : "Tamil Nadu Engineering Admissions — Simple Guide"}</h1>
-        <p>${ta ? "பொறியியல் படிப்புகள், TNEA கலந்தாய்வு விதிகள் மற்றும் கல்லூரிகளைப் பற்றி எளிய தமிழில் படிப்படியாக அறிந்துகொள்ளுங்கள்." : "Understand engineering branches, TNEA counselling rules, and colleges step by step in clear, simple language."}</p>
-        ${mentalModel}
+      
+      const artSvg = `<svg viewBox="0 0 400 210" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <rect width="400" height="210" rx="16" fill="#FDFBF7"/>
+  <path d="M0 0H400V75C340 70 280 70 200 70C120 70 60 70 0 75V0Z" fill="#FBF0E4"/>
+  <path d="M0 35H400V42C320 40 240 40 200 40C160 40 80 40 0 42V35Z" fill="#E8D5C4"/>
+  <path d="M0 0H400V12H0V0Z" fill="#C25E3E"/>
+  <rect x="0" y="12" width="400" height="4" fill="#A44326"/>
+  <rect x="24" y="35" width="16" height="155" rx="3" fill="#EADBC8"/>
+  <rect x="20" y="32" width="24" height="6" rx="2" fill="#D3BEA6"/>
+  <rect x="18" y="185" width="28" height="10" rx="2" fill="#D3BEA6"/>
+  <path d="M400 0C370 20 340 10 320 35C305 48 300 70 315 85C335 105 380 90 400 80V0Z" fill="#2D5A27" fill-opacity="0.85"/>
+  <path d="M380 15C360 30 345 35 335 50C330 60 340 75 355 70C375 65 390 40 380 15Z" fill="#3D7A35"/>
+  <circle cx="360" cy="30" r="14" fill="#4E9944" fill-opacity="0.8"/>
+  <circle cx="330" cy="55" r="12" fill="#3D7A35" fill-opacity="0.7"/>
+  <rect x="60" y="172" width="280" height="20" rx="6" fill="#DCC7AF"/>
+  <rect x="80" y="190" width="20" height="18" rx="3" fill="#BFA78D"/>
+  <rect x="300" y="190" width="20" height="18" rx="3" fill="#BFA78D"/>
+  <rect x="120" y="150" width="22" height="42" rx="4" fill="#1E293B"/>
+  <rect x="146" y="150" width="20" height="42" rx="4" fill="#1E293B"/>
+  <rect x="116" y="188" width="28" height="8" rx="3" fill="#0F172A"/>
+  <rect x="144" y="188" width="26" height="8" rx="3" fill="#0F172A"/>
+  <path d="M112 110L125 152H170L178 110C170 102 155 100 144 100C132 100 120 102 112 110Z" fill="#38BDF8"/>
+  <path d="M135 100L144 116L153 100H135Z" fill="#0284C7"/>
+  <path d="M112 112L135 138L152 134" stroke="#D97706" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="144" cy="78" r="15" fill="#D97706"/>
+  <path d="M129 76C129 64 135 59 144 59C154 59 160 65 160 76C155 70 150 68 144 68C138 68 133 71 129 76Z" fill="#1E293B"/>
+  <circle cx="148" cy="77" r="1.5" fill="#1E293B"/>
+  <path d="M147 84C149 86 153 86 155 84" stroke="#1E293B" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M225 145L215 190H270L260 145Z" fill="#1E293B"/>
+  <rect x="220" y="188" width="22" height="7" rx="3" fill="#0F172A"/>
+  <rect x="250" y="188" width="22" height="7" rx="3" fill="#0F172A"/>
+  <path d="M222 108L225 150H265L268 108C260 101 248 99 245 99C238 99 228 101 222 108Z" fill="#38BDF8"/>
+  <path d="M232 99L245 130L258 99C252 104 238 104 232 99Z" fill="#1E293B"/>
+  <path d="M266 112L248 138L230 134" stroke="#D97706" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="246" cy="78" r="15" fill="#D97706"/>
+  <path d="M230 76C230 63 236 58 246 58C257 58 263 64 263 76C258 70 252 67 246 67C239 67 234 71 230 76Z" fill="#1E293B"/>
+  <path d="M258 80C264 90 266 108 265 120" stroke="#1E293B" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="241" cy="77" r="1.5" fill="#1E293B"/>
+  <path d="M239 84C241 86 245 86 247 84" stroke="#1E293B" stroke-width="1.2" stroke-linecap="round"/>
+  <g transform="translate(162, 115)">
+    <path d="M5 24L38 16L72 24L70 46L38 38L6 46Z" fill="#B45309"/>
+    <path d="M8 22L38 15L68 22L66 42L38 35L10 42Z" fill="#FEF3C7"/>
+    <line x1="16" y1="23" x2="33" y2="20" stroke="#92400E" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="16" y1="27" x2="32" y2="24" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="16" y1="31" x2="28" y2="28" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="43" y1="20" x2="60" y2="23" stroke="#92400E" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="44" y1="24" x2="60" y2="27" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="45" y1="28" x2="56" y2="31" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="38" y1="15" x2="38" y2="36" stroke="#B45309" stroke-width="1.5"/>
+  </g>
+</svg>`;
+
+      const heroSection = `<section class="home-hero" aria-labelledby="home-hero-title">
+        <div class="home-hero-art">${artSvg}</div>
+        <div class="home-badge-tag"><span>${ta ? "தமிழ்நாடு பொறியியல் சேர்க்கை (TNEA) வழிகாட்டி" : "Tamil Nadu Engineering Admissions (TNEA) Guide"}</span></div>
+        <h1 id="home-hero-title" class="home-title">${ta ? "சரியான வழிகாட்டல், சரியான நேரத்தில்" : "Right guidance, at the right time"}</h1>
+        <p class="home-sub">${ta ? "12-ஆம் வகுப்பிற்குப் பிறகு பொறியியல் படிப்புகள், கட்-ஆஃப் மற்றும் கலந்தாய்வு பற்றிய எளிய, படிப்படியான வழிகாட்டல்." : "Clear, step-by-step guidance on engineering branches, cutoff calculation, and counselling for 12th students."}</p>
+        <div class="home-trust-bar" aria-label="${ta ? "முக்கிய உத்தரவாதங்கள்" : "Key Assurances"}">
+          <span class="home-trust-item">${ta ? "✓ TNEA சேர்க்கை வழிகாட்டல்" : "✓ Dedicated Guidance for TNEA"}</span>
+          <span class="home-trust-item">${ta ? "✓ 7.5% அரசுப் பள்ளி &amp; முதல் பட்டதாரி சலுகை" : "✓ 7.5% Govt School Quota &amp; Fee Support"}</span>
+          <span class="home-trust-item">${ta ? "✓ 100% இலவசம் • உள்நுழைவு தேவையில்லை" : "✓ 100% Free • No Login Needed"}</span>
+        </div>
       </section>`;
-      const recommendedCard = `<section class="home-recommended-section" aria-labelledby="entry-choice">
-        <a class="choice-card recommended" href="/journey${ta ? "" : "?lang=en"}">
-          <div class="recommended-card-top">
-            <div class="recommended-icon-box">
-              <svg width="52" height="52" viewBox="0 0 64 64" fill="none" style="flex-shrink:0" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#F0FDFA"/><rect x="39" y="14" width="4" height="38" rx="2" fill="#64748B"/><path d="M40 16H57L60 20.5L57 25H40V16Z" fill="#0F766E"/><path d="M42 28H25L22 32.5L25 37H42V28Z" fill="#F59E0B"/><circle cx="20" cy="24" r="7" fill="#D99B66"/><path d="M13 23C13 18 16.5 15 20 15C24 15 27 18 27 23C24 20 17 20 13 23Z" fill="#1E293B"/><path d="M12 42C12 36 15.5 33 20 33C24.5 33 28 36 28 42V51H12V42Z" fill="#0284C7"/></svg>
+
+      const door1 = `<a class="choice-card recommended" href="/journey${ta ? "" : "?lang=en"}">
+        <div>
+          <span class="door-tag">${ta ? "படி 1 • தொடக்க வழிகாட்டி" : "Step 1 • Guided Start"}</span>
+          <strong id="entry-choice" class="door-title">${ta ? "தொடக்க நிலை வழிகாட்டல் — 3 எளிய அறிமுகப் படிகள்" : "Guided Journey — 3 Simple Steps to Begin"}</strong>
+          <p class="door-desc">${ta ? "5-நிலைப் பொறியியல் சேர்க்கைப் பயணத்தின் தொடக்கப் புரிதலுக்கான எளிய அறிமுகம். மதிப்பெண்கள் இன்றியே பொறியியல் படிப்புகள் (CSE, ECE, Mech...), கலந்தாய்வு முறை பற்றி எளிய தமிழில் அறிந்துகொள்ளலாம்." : "Introductory foundation for the 5-stage engineering admissions journey. Understand engineering branches (CSE, ECE, Mech...) and counselling procedures with zero marks required."}</p>
+        </div>
+        <div class="door-action">
+          <span>${ta ? "✓ மதிப்பெண் தேவையின்றி அறியலாம்" : "✓ Zero marks required"}</span>
+          <span>${ta ? "வழிகாட்டலைத் தொடங்க →" : "Start Guided Journey →"}</span>
+        </div>
+      </a>`;
+
+      const door2 = `<a class="choice-card door-mark" href="${entryHref("personal", language)}">
+        <div>
+          <span class="door-tag">${ta ? "படி 2 • கட்-ஆஃப் &amp; சாய்ஸ் பிளானர்" : "Step 2 • Cutoff &amp; Choice Planner"}</span>
+          <strong class="door-title">${ta ? "மதிப்பெண் உள்ளது — கட்-ஆஃப் &amp; கல்லூரிகள்" : "I Have My Marks — Check Cutoff &amp; Choices"}</strong>
+          <p class="door-desc">${ta ? "200-க்கு கட்-ஆஃப் கணக்கீடு, 7.5% அரசுப் பள்ளி தகுதி மற்றும் 121 கல்லூரிகளின் கடந்த ஆண்டு கட்-ஆஃப் ஒப்பிட்டு விருப்பப் பட்டியல் தயாரிக்கலாம்." : "Calculate your 200-mark cutoff, verify 7.5% Govt School &amp; First Graduate fee waivers, and plan your choice order with past cutoff benchmarks."}</p>
+        </div>
+        <div class="door-action">
+          <span>${ta ? "✓ 200-க்கு கட்-ஆஃப் கணக்கீடு" : "✓ 200-mark calc"}</span>
+          <span>${ta ? "கட்-ஆஃப் &amp; சாய்ஸ் பிளானர் →" : "Calculate &amp; Plan Choices →"}</span>
+        </div>
+      </a>`;
+
+      const doorsGrid = `<div class="home-doors" aria-label="${ta ? "முக்கிய வழிகாட்டல் தேர்வுகள்" : "Main Guidance Doors"}">
+        ${door1}
+        ${door2}
+      </div>`;
+
+      const exploreSection = `<section class="home-explore" aria-label="${ta ? "கூடுதல் TNEA வழிகாட்டல் பகுதிகள்" : "Helpful TNEA Guides"}">
+        <h2 class="home-explore-title">${ta ? "முக்கிய TNEA வழிகாட்டல் பகுதிகள்" : "Helpful TNEA Guides"}</h2>
+        <div class="home-explore-grid">
+          <a class="explore-card" href="/journey?step=study${ta ? "" : "&amp;lang=en"}">
+            <span class="explore-icon">⚙️</span>
+            <div class="explore-text">
+              <strong class="explore-heading">${ta ? "பொறியியல் படிப்புகள்" : "Engineering Branches"}</strong>
+              <span class="explore-sub">${ta ? "CSE, IT, ECE, EEE, Mech..." : "CSE, ECE, Mech &amp; scope"}</span>
             </div>
-            <div class="recommended-card-text">
-              <span class="welcome-step-pill">${ta ? "படி 1 / 4 • தொடக்க வழிகாட்டி" : "Step 1 / 4 • Guided Start"}</span>
-              <strong id="entry-choice" class="recommended-card-title">${ta ? "தொடக்க நிலை வழிகாட்டல் — 3 எளிய அறிமுகப் படிகள்" : "Guided Journey — 3 Simple Steps to Begin"}</strong>
-              <p class="recommended-card-desc">${ta ? "5-நிலைப் பொறியியல் சேர்க்கைப் பயணத்தின் தொடக்கப் புரிதலுக்கான எளிய அறிமுகம். மதிப்பெண்கள் மற்றும் கல்லூரி விவரங்கள் இன்றியே பொறியியல் பற்றி எளிய தமிழில் அறிந்துகொள்ளலாம்." : "Introductory foundation for the 5-stage engineering admissions journey. Understand engineering and admission pathways right from the basics without needing marks or college details."}</p>
-            </div>
-          </div>
-          <div class="recommended-card-footer">
-            <span class="recommended-feature-badge">${ta ? "✓ 0 மதிப்பெண் தேவை • எளிய தமிழ் விளக்கம்" : "✓ Zero marks required • Plain language"}</span>
-            <span class="action">${ta ? "தொடக்க வழிகாட்டலைத் தொடங்க →" : "Start guided journey →"}</span>
-          </div>
-        </a>
-      </section>`;
-      const quickHeading = `<div class="quick-section-heading">${ta ? "விரைவுப் பகுதிகள் (QUICK ACTIONS)" : "QUICK ACTIONS"}</div>`;
-      const quickGrid = `<div class="quick-grid" aria-label="${ta ? "விரைவுப் பகுதிகள்" : "Quick Actions"}"><a class="quick-tile" href="/journey?step=route${ta ? "" : "&amp;lang=en"}"><span class="quick-tile-icon" style="background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="6" cy="18" r="3" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.9"/><circle cx="18" cy="6" r="3" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.9"/><path d="M9 18h4a3 3 0 0 0 0-6h-2a3 3 0 0 1 0-6h4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span><span class="quick-tile-title">${ta ? "TNEA பயணம்" : "TNEA Journey"}</span><span class="quick-tile-sub">${ta ? "5 படிகள் Flowchart" : "5-step flowchart"}</span></a><a class="quick-tile" href="/journey?step=study${ta ? "" : "&amp;lang=en"}"><span class="quick-tile-icon" style="background:#F5F3FF;color:#6D28D9;border:1px solid #DDD6FE;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.9"/><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span><span class="quick-tile-title">${ta ? "படிப்புகள்" : "Branches"}</span><span class="quick-tile-sub">${ta ? "CSE, ECE, Mech..." : "CSE, ECE, Mech..."}</span></a><a class="quick-tile" href="/colleges?lang=${language}"><span class="quick-tile-icon" style="background:#E0F2FE;color:#0369A1;border:1px solid #BAE6FD;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 10l9-6 9 6H3z" fill="currentColor" fill-opacity="0.24" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M5 10v9M10 10v9M14 10v9M19 10v9M3 19h18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span><span class="quick-tile-title">${ta ? "கல்லூரிகள்" : "Colleges"}</span><span class="quick-tile-sub">${ta ? "தேடு &amp; ஒப்பிடு" : "Search &amp; browse"}</span></a><a class="quick-tile" href="${entryHref("personal", language)}"><span class="quick-tile-icon" style="background:#FFF7ED;color:#C2410C;border:1px solid #FED7AA;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="3" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.9"/><rect x="7.5" y="6" width="9" height="3.5" rx="1" fill="currentColor" fill-opacity="0.3" stroke="currentColor" stroke-width="1.5"/><path d="M8 13.5h2M14 13.5h2M8 17.5h2M14 17.5h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span class="quick-tile-title">${ta ? "கட்-ஆஃப்" : "Cutoff"}</span><span class="quick-tile-sub">${ta ? "200-க்கு கணக்கீடு" : "200-mark calc"}</span></a></div>`;
-      const statusChipsCard = `<div class="phone-chips-card" aria-label="${ta ? "கல்லூரி &amp; இடஒதுக்கீடு அடையாளங்கள்" : "College and Quota Badges"}"><div class="phone-chips-label">${ta ? "கல்லூரி &amp; இடஒதுக்கீடு அடையாளங்கள்" : "College &amp; Quota Badges"}</div><div class="chips-wrap"><a href="/colleges?lang=${language}" class="status-chip chip-govt">${ta ? "அரசு கல்லூரி" : "Govt College"}</a><a href="/colleges?lang=${language}" class="status-chip chip-aided">${ta ? "அரசு உதவி" : "Govt Aided"}</a><a href="/colleges?lang=${language}" class="status-chip chip-sf">${ta ? "சுயநிதி" : "Self-Financing"}</a><a href="${entryHref("counselling", language)}" class="status-chip chip-quota">${ta ? "7.5% இடஒதுக்கீடு" : "7.5% Quota"}</a><a href="/m5-guidance?lang=${language}" class="status-chip chip-hold">${ta ? "நிறுத்தி வைக்கப்பட்டது (Held)" : "Held Status"}</a></div></div>`;
-      const videoCard = `<button id="btn-open-video" type="button" class="video-explainer-card"><div class="video-avatar-box"><svg class="video-student-svg" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="28" fill="#ffffff" fill-opacity="0.14"/><path d="M16 54C16 44.5 23 40 32 40C41 40 48 44.5 48 54" fill="#FDE68A"/><path d="M22 41.5L32 47L42 41.5L46 54H18L22 41.5Z" fill="#0F766E"/><circle cx="32" cy="26" r="10" fill="#FCD34D"/><path d="M22 25C22 18.5 26.5 14 32 14C37.5 14 42 18.5 42 25C39 21 35 19.5 32 19.5C29 19.5 25 21 22 25Z" fill="#1E293B"/><circle cx="28.5" cy="26.5" r="1.2" fill="#1E293B"/><circle cx="35.5" cy="26.5" r="1.2" fill="#1E293B"/><path d="M29 30.5C30.2 32 33.8 32 35 30.5" stroke="#1E293B" stroke-width="1.5" stroke-linecap="round"/><circle cx="48" cy="46" r="11" fill="#FFFFFF"/><path d="M45.5 41.5L53 46L45.5 50.5V41.5Z" fill="#0D9488"/></svg></div><div class="video-card-text"><span class="video-card-pill">${ta ? "▶ 1.5 நிமிடம் • தமிழ்" : "▶ 1.5 min • Tamil Audio"}</span><h3 class="video-card-title">${ta ? "90 வினாடி தமிழ் விளக்க வீடியோ" : "90-sec Tamil Explainer Video: How TNEA Works"}</h3><p class="video-card-sub">${ta ? "படிக்க நேரம் இல்லையா? சுருக்கமாகப் பார்க்கவும்" : "Short on time? Watch a quick visual walkthrough"}</p></div></button><dialog id="video-modal" class="video-modal-dialog" aria-labelledby="modal-video-heading"><div class="video-preview-screen"><div class="video-play-icon-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p id="modal-video-heading" class="video-preview-title">${ta ? "TNEA 5 படிகள் — 90 வினாடி விளக்கம்" : "How TNEA Works — 90-sec Preview"}</p><p class="video-preview-sub">0:00 / 1:30 • YouTube Embed Preview</p><div class="video-preview-track"><div class="video-preview-fill"></div></div></div><div class="video-modal-body"><div class="hosting-cost-badge">$0 Server Hosting Cost</div><p class="video-modal-text">${ta ? "இந்தச் சிறிய தமிழ் வீடியோவை YouTube-இல் இலவசமாகப் பதிவேற்றி இங்கே இணைக்கலாம். இதனால் உங்கள் Render சர்வரில் எந்தக் கூடுதல் செலவோ, வேகக் குறைவோ ஏற்படாது." : "Hosting a short explainer video free on YouTube embeds cleanly here at $0 Render server cost—giving mobile students a quick visual start while keeping page loads lightweight."}</p><button id="btn-close-video" type="button" class="video-modal-close-btn">${ta ? "மூடு (Close)" : "Close Preview"}</button></div></dialog><script>(function(){var ob=document.getElementById('btn-open-video'),cb=document.getElementById('btn-close-video'),m=document.getElementById('video-modal');if(!ob||!m)return;ob.addEventListener('click',function(){if(typeof m.showModal==='function')m.showModal();else m.setAttribute('open','');});if(cb)cb.addEventListener('click',function(){if(typeof m.close==='function')m.close();else m.removeAttribute('open');});m.addEventListener('click',function(e){if(e.target===m){if(typeof m.close==='function')m.close();else m.removeAttribute('open');}});})();</script>`;
-      const supportStrip = `<section class="home-support-strip" aria-label="${ta ? "கூடுதல் வழிகாட்டல் பகுதிகள்" : "Additional Guidance Tools"}">
-        ${videoCard}
-        <div class="support-links-grid">
-          <a class="support-link-card" href="/m5-guidance?lang=${language}">
-            <span class="support-link-icon">📋</span>
-            <div class="support-link-text">
-              <strong>${ta ? "விருப்பப் பட்டியல் திட்டமிடல் (Choice Planner)" : "Choice Order Planner"}</strong>
-              <span>${ta ? "121 கல்லூரிகளின் கட்-ஆஃப் ஒப்பிட்டுப் பட்டியல் தயாரிக்க" : "Compare cutoffs across 121 colleges &amp; plan your choice order"}</span>
-            </div>
-            <span class="support-link-arrow">→</span>
+            <span class="explore-arrow">→</span>
           </a>
-          <a class="support-link-card" href="${entryHref("counselling", language)}">
-            <span class="support-link-icon">📘</span>
-            <div class="support-link-text">
-              <strong>${ta ? "கலந்தாய்வு நடைமுறைகள் &amp; விதிகள்" : "Counselling Procedures &amp; Rules"}</strong>
-              <span>${ta ? "ஒதுக்கீடு முறை, மேல்நோக்கி நகர்தல் &amp; 7.5% சலுகைகள்" : "Allotment rules, Upward Movement, &amp; 7.5% quota"}</span>
+          <a class="explore-card" href="${entryHref("counselling", language)}">
+            <span class="explore-icon">📘</span>
+            <div class="explore-text">
+              <strong class="explore-heading">${ta ? "கலந்தாய்வு விதிகள்" : "Counselling Rules"}</strong>
+              <span class="explore-sub">${ta ? "ஒதுக்கீடு, Upward Movement, 7.5%" : "Allotment &amp; 7.5% Quota"}</span>
             </div>
-            <span class="support-link-arrow">→</span>
+            <span class="explore-arrow">→</span>
           </a>
-          <a class="support-link-card" href="/journey/questions?lang=${language}">
-            <span class="support-link-icon">❓</span>
-            <div class="support-link-text">
-              <strong>${ta ? "அடிக்கடி கேட்கப்படும் கேள்விகள் (FAQs)" : "Frequently Asked Questions"}</strong>
-              <span>${ta ? "துறைகள், தகுதி, மற்றும் கட்-ஆஃப் vs. ரேங்க் விளக்கங்கள்" : "Clear answers on branches, cutoffs, and ranks"}</span>
+          <a class="explore-card" href="/colleges?lang=${language}">
+            <span class="explore-icon">🏛️</span>
+            <div class="explore-text">
+              <strong class="explore-heading">${ta ? "கல்லூரிகள் பட்டியல்" : "Colleges Directory"}</strong>
+              <span class="explore-sub">${ta ? "121 கல்லூரிகள் விவரம்" : "Search &amp; browse colleges"}</span>
             </div>
-            <span class="support-link-arrow">→</span>
+            <span class="explore-arrow">→</span>
           </a>
         </div>
       </section>`;
-      return shell(`${heroCard}${recommendedCard}${quickHeading}${quickGrid}${statusChipsCard}${supportStrip}${ownerEntry}`, "guide", "home");
+
+      return shell(`<div class="home-main">${heroSection}${doorsGrid}${exploreSection}${ownerEntry}</div>`, "guide", "home");
     }
     const directions = `<nav aria-label="${message("entry.next")}"><h2>${message("entry.next")}</h2><ul>${route !== "beginner" ? `<li>${link("beginner", "entry.beginner")}</li>` : ""}${route !== "personal" ? `<li>${link("personal", "entry.personal")}</li>` : ""}<li>${link("home", "entry.return")}</li></ul></nav>`;
     if (route === "beginner") {
