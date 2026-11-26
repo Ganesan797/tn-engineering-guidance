@@ -254,13 +254,11 @@ test("M7_PREP: H1, H3, H4, H5, M1-M7, L1-L3 student-facing readiness regressions
     searchQuery: "CEG",
   });
   assert.match(arrivalTa, /class="community-prompt\b/, "H1: Must prompt student to pick their community after cutoff arrival");
-  assert.match(arrivalTa, /class="active-context-strip\b/, "H1: Must show explicit year/quota/community/round context strip");
-  assert.match(arrivalTa, /சுற்று 1 தரவு இல்லை/, "H1: Must explain General Academic Round 1 coverage gap");
-  assert.match(arrivalTa, /class="scope-note\b/, "M2: Must explain 55-college vs 389-college scope difference");
+  assert.match(arrivalTa, /class="form-grid compact-search-card"/, "H1: Must show compact search card on Stage 1");
   assert.match(arrivalTa, /தேடு &amp; ஒப்பிடு|தேடு & ஒப்பிடு/, "M3: Submit button must clearly say Search & Compare");
   assert.doesNotMatch(arrivalTa, /கணக்கிடு \(தற்காலிக தரவு\)/, "M3: Misleading old submit label must be removed");
-  assert.match(arrivalTa, /class="community-guide\b/, "L2: Community code explainer (OC, BC, BCM, MBC, SC, SCA, ST) must be present");
-  assert.match(arrivalTa, /இது தளத்தின் பரிந்துரை அல்ல/, "L3: Must explain + சேர் adds to manual shortlist without system recommendation");
+  assert.match(arrivalTa, /class="community-guide\b/, "L2: Community code explainer (OC, BC, BCM, MBC, SC, SCA, ST) must be present in collapsed guide");
+  assert.match(arrivalTa, /class="learn-before-comparing\b/, "L3: Collapsed guide must be at bottom of search page");
   assert.match(arrivalTa, /<span lang="ta" aria-current="page">தமிழ்<\/span>.*(lang-switch.*English)/s, "L1: Consistent தமிழ் | English toggle");
 
   const withDeltaTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta", tab: "comparison" }), {
@@ -384,7 +382,7 @@ test("M7_PREP: H2 Live HTTP POST shortlist additions preserve cutoff, community,
       assert.equal(res.status, 200);
       const html = await res.text();
       assert.match(html, /value="185\.5"/, `Cutoff must remain 185.5 after adding ${key}`);
-      assert.match(html, /<option value="BC" selected>/, `Community BC must remain selected after adding ${key}`);
+      assert.match(html, /<strong>BC<\/strong>/, `Community BC must remain selected after adding ${key}`);
       assert.match(html, /value="ceg"/i, `Search query CEG must remain active after adding ${key}`);
       assert.match(html, /(?:✓\s*சேர்க்கப்பட்டது|சேர்க்கப்பட்டது\s*✓)/, `Added state must appear for ${key}`);
       // Verify NO sensitive parameters appear in any href attribute
@@ -445,7 +443,7 @@ test("FINAL_PRE_M7: Simulated Student Audit Scenarios (Stale 55-college removal,
 
   // 2. Point-of-use 7.5% eligibility warning
   for (const lang of ["ta", "en"] as const) {
-    const html75 = renderM5GuidancePage(new URLSearchParams({ lang, tab: "comparison" }), {
+    const html75 = renderM5GuidancePage(new URLSearchParams({ lang, tab: "comparison", edit_search: "1" }), {
       studentCutoff: 182.0,
       quota: "GOVT_SCHOOL_7_5",
       community: "BC",
@@ -453,16 +451,13 @@ test("FINAL_PRE_M7: Simulated Student Audit Scenarios (Stale 55-college removal,
       communitySelected: true,
     });
     assert.match(html75, /id="quota-75-warning" class="quota-75-warning" role="note"  style=/, "7.5% warning must be visible (not hidden) when GOVT_SCHOOL_7_5 is selected");
-    assert.match(html75, /class="quota-75-context-reminder"/, "7.5% reminder must appear in active context summary");
     if (lang === "ta") {
-      assert.match(html75, /தகுதி உறுதிப்படுத்தல் அல்ல/);
-      assert.match(html75, /உங்களின் 7\.5% இடஒதுக்கீட்டுத் தகுதியை உறுதிப்படுத்தாது/);
+      assert.match(html75, /6–12 அரசுப் பள்ளிச் சான்றிதழ் சரிபார்ப்பே தகுதியைத் தீர்மானிக்கும்/);
     } else {
-      assert.match(html75, /Not Proof of Eligibility/);
-      assert.match(html75, /does not establish or confirm your eligibility/);
+      assert.match(html75, /Std 6–12 Govt school verification determines eligibility/);
     }
 
-    const htmlGeneral = renderM5GuidancePage(new URLSearchParams({ lang, tab: "comparison" }), {
+    const htmlGeneral = renderM5GuidancePage(new URLSearchParams({ lang, tab: "comparison", edit_search: "1" }), {
       studentCutoff: 182.0,
       quota: "GENERAL_ACADEMIC",
       community: "BC",
@@ -482,10 +477,16 @@ test("FINAL_PRE_M7: Simulated Student Audit Scenarios (Stale 55-college removal,
   }
 
   const m5Html = renderM5GuidancePage(new URLSearchParams("lang=ta&tab=comparison"));
-  assert.doesNotMatch(m5Html, /more-filters-accordion/, "Choice Planner mandatory filters (sort, district, department, college type) must be directly visible without extra filters accordion");
-  for (const id of ["search-input", "cutoff-input", "quota-select", "community-select", "round-select", "year-select", "type-select", "district-select", "college-select", "branch-select", "sort-select", "only-available-check"]) {
+  assert.doesNotMatch(m5Html, /more-filters-accordion/, "Choice Planner compact pre-search controls must be directly visible without extra filters accordion");
+  for (const id of ["cutoff-input", "quota-select", "district-select", "branch-select", "round-select", "year-select"]) {
     assert.match(m5Html, new RegExp(`for="${id}"`), `Choice Planner control ${id} must have associated label[for]`);
     assert.match(m5Html, new RegExp(`id="${id}"[^>]*aria-label="[^"]+"`), `Choice Planner control ${id} must have non-empty aria-label`);
+  }
+  assert.match(m5Html, /role="radiogroup"[^>]*aria-label="[^"]+"/, "Community pills radiogroup must have non-empty aria-label");
+
+  const m5ResultsHtml = renderM5GuidancePage(new URLSearchParams("lang=ta&tab=comparison&searched=1"));
+  for (const id of ["m5-toolbar-type", "m5-toolbar-sort"]) {
+    assert.match(m5ResultsHtml, new RegExp(`for="${id}"`), `Results toolbar control ${id} must have associated label[for]`);
   }
 
   // 4. Long-shortlist persona (12+ choices) & Export/Copy accessibility

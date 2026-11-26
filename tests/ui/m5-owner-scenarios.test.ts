@@ -264,7 +264,7 @@ test("Owner Scenario 6: Governance Hold Case — College 1516 (Thanthai Periyar 
 
   const html = renderM5GuidancePage(
     new URLSearchParams({ q: "1516" }),
-    { studentCutoff: 190.0 }
+    { studentCutoff: 190.0, communitySelected: true }
   );
   assert.ok(html.includes("held-badge"));
   assert.ok(html.includes("Booklet carries &#39;(Previous year data)&#39; header"));
@@ -360,13 +360,17 @@ test("Owner Scenario 9: Out-of-Range or Malformed Input (205.00 / Negative)", ()
 });
 
 test("Owner Scenario 10: Complete Tamil Journey — Bilingual Parity & Localized Disclosures", () => {
+  const htmlStage1 = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
+  assert.ok(htmlStage1.includes("கடந்த ஆண்டு கட்-ஆஃப் ஒப்பீடு (தற்காலிக ஒதுக்கீடு)"));
+  assert.ok(htmlStage1.includes("அதிகாரப்பூர்வ வெளிப்படைத்தன்மை அறிவிப்பு:"));
+  assert.ok(htmlStage1.includes("சுற்று 1"));
+
   const html = renderM5GuidancePage(
     new URLSearchParams({ lang: "ta", q: "4960" })
   );
 
-  // Must render Tamil title and disclosures
+  // Must render Tamil title and compact results summary
   assert.ok(html.includes("கடந்த ஆண்டு கட்-ஆஃப் ஒப்பீடு (தற்காலிக ஒதுக்கீடு)"));
-  assert.ok(html.includes("பொதுக் கல்வி (General Academic)"));
-  assert.ok(html.includes("மிகவும் பிற்படுத்தப்பட்டோர் (MBC)"));
-  assert.ok(html.includes("அதிகாரப்பூர்வ வெளிப்படைத்தன்மை அறிவிப்பு:"));
+  assert.ok(html.includes("சுற்று 1"));
+  assert.ok(html.includes("கல்லூரிகள்"));
 });

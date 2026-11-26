@@ -34,15 +34,16 @@ test("M5 Privacy Regression: ZERO student cutoff marks or community in GET URLs,
 });
 
 test("M5 Governed Offerings Coverage: All 1,249 offerings listed; all unapproved data transparently marked", () => {
-  const html = renderM5GuidancePage(new URLSearchParams());
-
-  assert.ok(html.includes("All 1,249 governed offerings across the 121 approved institutions"), "Must disclose all 1,249 offerings");
-  assert.ok(html.includes("Not available for comparison"), "Must disclose lack of approved historical data for offerings without observations");
+  const htmlLanding = renderM5GuidancePage(new URLSearchParams());
+  assert.ok(htmlLanding.includes("All 1,249 governed offerings across the 121 approved institutions"), "Must disclose all 1,249 offerings in collapsed guide");
   assert.ok(
-    html.includes("Lowest observed provisional allotment mark across available official rounds") ||
-      html.includes("Minimum observed mark in official Round 1"),
-    "Approved runtime displays the historical disclosure by default"
+    htmlLanding.includes("Lowest observed provisional allotment mark across available official rounds") ||
+      htmlLanding.includes("Minimum observed mark in official Round 1"),
+    "Approved runtime displays the historical disclosure in guide"
   );
+
+  const html = renderM5GuidancePage(new URLSearchParams({ show_all: "1" }));
+  assert.ok(html.includes("Not available for comparison"), "Must disclose lack of approved historical data for offerings without observations");
 
   // Check presence of offerings across benchmark and expanded autonomous cohort
   assert.ok(html.includes("5022"), "Must include College 5022 (VOC College of Engineering)");
@@ -349,7 +350,7 @@ test("M6-T03 Acronym & Search Polish: Students can instantly search by college a
   assert.ok(htmlChennai.includes("College of Engineering Guindy (CEG)"));
   assert.ok(!htmlChennai.includes("Government College of Technology, Coimbatore"));
 
-  const htmlKovai = renderM5GuidancePage(new URLSearchParams({ q: "கோவை" }));
+  const htmlKovai = renderM5GuidancePage(new URLSearchParams({ q: "கோவை", show_all: "1" }));
   assert.ok(htmlKovai.includes("Government College of Technology, Coimbatore"));
   assert.ok(htmlKovai.includes("PSG College of Technology"));
   assert.ok(!htmlKovai.includes("College of Engineering Guindy (CEG)"));
@@ -651,6 +652,22 @@ test("M5 Real Browser Layout Verification: Zero horizontal overflow at 320px, 36
 });
 
 test("M5 Filters: District and Branch dropdowns filter offerings cleanly and preserve state", () => {
+  // Stage 1 (Search / Edit Search) renders District and Branch dropdowns with selected values
+  const htmlSearchStage = renderM5GuidancePage(
+    new URLSearchParams({ district: "Chennai", branch: "EI", lang: "en", edit_search: "1" }),
+    {
+      studentCutoff: 180.0,
+      quota: "GENERAL_ACADEMIC",
+      community: "BC",
+      round: "ROUND_1",
+      communitySelected: true,
+    }
+  );
+  assert.ok(htmlSearchStage.includes('id="district-select"'), "Must render District dropdown");
+  assert.ok(htmlSearchStage.includes('id="branch-select"'), "Must render Branch dropdown");
+  assert.ok(htmlSearchStage.includes('value="Chennai" selected'), "Must preserve selected District");
+  assert.ok(htmlSearchStage.includes('value="EI" selected'), "Must preserve selected Branch");
+
   const htmlCombined = renderM5GuidancePage(
     new URLSearchParams({ district: "Chennai", branch: "EI", lang: "en" }),
     {
@@ -662,15 +679,9 @@ test("M5 Filters: District and Branch dropdowns filter offerings cleanly and pre
     }
   );
 
-  // Dropdowns present with selected values
-  assert.ok(htmlCombined.includes('id="district-select"'), "Must render District dropdown");
-  assert.ok(htmlCombined.includes('id="branch-select"'), "Must render Branch dropdown");
-  assert.ok(htmlCombined.includes('value="Chennai" selected'), "Must preserve selected District");
-  assert.ok(htmlCombined.includes('value="EI" selected'), "Must preserve selected Branch");
-
-  // Compact result count pill and reset filters link
+  // Compact result count pill and Edit Search button
   assert.ok(htmlCombined.includes("results-count-pill"), "Must display compact result count pill");
-  assert.ok(htmlCombined.includes("Reset filters") || htmlCombined.includes("Clear Filters"), "Must show Reset filters link when filters are active");
+  assert.ok(htmlCombined.includes("Edit Search"), "Must show Edit Search button on results page");
 
   // Exact Chennai + EI matches only (Velammal 1120 is Chennai EI; PSG 2006 is Coimbatore)
   assert.ok(htmlCombined.includes("Velammal Engineering College"), "Must include Chennai EI offering (1120)");
@@ -704,9 +715,9 @@ test("M5 Feedback #1: Jargon copy '(அடிப்படை 55 கல்லூ�
 });
 
 test("M5 Feedback #2 & #3: College Type filter and intelligent cutoff descending sorting", () => {
-  // A. College Type filter for GOVERNMENT
-  const htmlGov = renderM5GuidancePage(new URLSearchParams({ type: "GOVERNMENT", lang: "en" }));
-  assert.ok(htmlGov.includes('id="type-select"'), "Must render College Type dropdown");
+  // A. College Type filter for GOVERNMENT (post-search toolbar)
+  const htmlGov = renderM5GuidancePage(new URLSearchParams({ type: "GOVERNMENT", lang: "en", show_all: "1" }));
+  assert.ok(htmlGov.includes('id="m5-toolbar-type"'), "Must render College Type dropdown on results page");
   assert.ok(htmlGov.includes('value="GOVERNMENT" selected'), "Must select GOVERNMENT");
   assert.ok(htmlGov.includes("Government College of Technology, Coimbatore"), "Must include GCT (2005)");
   assert.ok(htmlGov.includes("Alagappa Chettiar Government College"), "Must include ACGCET (5901)");
@@ -761,11 +772,16 @@ test("M5 Feedback #2 & #3: College Type filter and intelligent cutoff descending
   }
 
   // D. Sort option dropdown presence and shortlist form persistence
-  assert.ok(htmlSorted.includes('id="sort-select"'), "Must render Sort By dropdown");
+  assert.ok(htmlSorted.includes('id="m5-toolbar-sort"'), "Must render Sort By dropdown on results page");
   assert.ok(htmlSorted.includes('<input type="hidden" name="sort" value="cutoff_desc">'), "Must preserve sort in shortlist form");
 });
 
 test("M5 Feedback #4: Cool educational styling, college type badges, and header card", () => {
+  const htmlSearch = renderM5GuidancePage(new URLSearchParams({ lang: "ta", edit_search: "1" }));
+  assert.ok(htmlSearch.includes('class="m5-header-card"'), "Must use elevated header card container");
+  assert.ok(htmlSearch.includes("compact-search-card"), "Must use compact 2-stage search card");
+  assert.ok(htmlSearch.includes("compact-search-grid"), "Must use compact 2-column search grid");
+
   const html = renderM5GuidancePage(
     new URLSearchParams({ lang: "ta" }),
     {
@@ -779,16 +795,13 @@ test("M5 Feedback #4: Cool educational styling, college type badges, and header 
   );
 
   assert.ok(html.includes('class="m5-header-card"'), "Must use elevated header card container");
-  assert.ok(html.includes("form-tier form-tier-1"), "Must use structured form-tier-1");
-  assert.ok(html.includes("form-tier form-tier-2"), "Must use structured form-tier-2");
-  assert.ok(html.includes("form-tier form-tier-3"), "Must use structured form-tier-3");
   assert.ok(html.includes("type-pill"), "Must render college type badge pills");
   assert.ok(html.includes("type-gov"), "Must render type-gov style class");
   assert.ok(html.includes("cutoff-subtext"), "Must render round and year subtext under cutoff mark");
 });
 
 test("M5 Feedback #5: All Rounds closing cutoffs, cross-round intelligence, and modern typography", () => {
-  // A. All Rounds Mode (round="ALL"): CEG CS (199.50, Round 1) and Adhiparasakthi CS (102.50, Round 3) appear with actual cutoffs
+  // A. All Rounds Mode (round="ALL"): CEG CS (199.00, Round 1) and Adhiparasakthi CS (102.50, Round 3) appear with actual cutoffs
   const htmlAll = renderM5GuidancePage(
     new URLSearchParams({ branch: "CS", lang: "en" }),
     {
@@ -804,12 +817,24 @@ test("M5 Feedback #5: All Rounds closing cutoffs, cross-round intelligence, and 
   // Both colleges have real lowest observed marks rendered in the same table
   assert.ok(htmlAll.includes("199.00"), "Must show CEG CS closing cutoff 199.00");
   assert.ok(htmlAll.includes("102.50"), "Must show Adhiparasakthi CS closing cutoff 102.50");
-  assert.ok(htmlAll.includes("All Available Rounds (Lowest Observed Mark)"), "Must show All Available Rounds option in dropdown");
-  assert.ok(htmlAll.includes('value="ALL" selected'), "Must keep ALL option selected");
   assert.ok(htmlAll.includes("Round 1 · 2026"), "Must show Round 1 source for CEG");
   assert.ok(htmlAll.includes("Round 3 · 2026"), "Must show Round 3 source for Adhiparasakthi");
   assert.ok(!htmlAll.includes("Final Closing Cutoff"), "Must not use misleading Final Closing Cutoff terminology");
-  assert.ok(htmlAll.includes("Lowest observed provisional allotment mark across available official rounds"), "Must render factual lowest observed disclosure");
+
+  const htmlAllForm = renderM5GuidancePage(
+    new URLSearchParams({ branch: "CS", lang: "en", edit_search: "1" }),
+    {
+      studentCutoff: 198.0,
+      quota: "GENERAL_ACADEMIC",
+      community: "BC",
+      round: "ALL",
+      year: 2026,
+      communitySelected: true,
+    }
+  );
+  assert.ok(htmlAllForm.includes("All Available Rounds (Lowest Observed Mark)"), "Must show All Available Rounds option in dropdown");
+  assert.ok(htmlAllForm.includes('value="ALL" selected'), "Must keep ALL option selected");
+  assert.ok(htmlAllForm.includes("Lowest observed provisional allotment mark across available official rounds"), "Must render factual lowest observed disclosure in collapsed guide");
 
   // B. Cross-Round Record in specific round (Round 1 + query for Adhiparasakthi 1401)
   const htmlR1Query = renderM5GuidancePage(
@@ -878,54 +903,40 @@ test("M5 Feedback #5: All Rounds closing cutoffs, cross-round intelligence, and 
   assert.ok(htmlAll.includes('"Plus Jakarta Sans", "Inter"'), "Must apply modern font stack in CSS");
 });
 
-test("M5 DOTE Classification & College Selection: Exact categories from dte.tn.gov.in, college-select dropdown, and district filtering", () => {
-  // 1. Initial page load renders DOTE categories and college-select dropdown
-  const html = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
-
-  // Official DOTE category options in type-select
-  assert.ok(html.includes('id="type-select"'), "Must render type-select");
-  assert.ok(html.includes("Government Engineering Colleges (11)"), "Must include Government Engineering Colleges (11)");
-  assert.ok(html.includes("Government Aided Engineering Colleges (3)"), "Must include Government Aided Engineering Colleges (3)");
-  assert.ok(html.includes("Anna University Department Colleges (4)"), "Must include Anna University Department Colleges (4)");
-  assert.ok(html.includes("Annamalai University (1)"), "Must include Annamalai University (1)");
-  assert.ok(html.includes("Anna University Constituent Colleges (16)"), "Must include Anna University Constituent Colleges (16)");
-  assert.ok(html.includes("Self Financing Engineering Colleges — Autonomous (86)"), "Must include Self Financing Engineering Colleges (86)");
-
-  // College Selection dropdown with optgroup
-  assert.ok(html.includes('id="college-select"'), "Must render college-select dropdown");
-  assert.ok(html.includes('<optgroup label="Government Engineering Colleges (11)">'), "Must group Govt colleges in optgroup");
-  assert.ok(html.includes('<optgroup label="Government Aided Engineering Colleges (3)">'), "Must group Aided colleges in optgroup");
-  assert.ok(html.includes('<optgroup label="Anna University Department Colleges (4)">'), "Must group Anna Univ Dept colleges in optgroup");
-  assert.ok(html.includes('<optgroup label="Annamalai University (1)">'), "Must group Annamalai Univ in optgroup");
-  assert.ok(html.includes('<optgroup label="Anna University Constituent Colleges (16)">'), "Must group Constituent colleges in optgroup");
-  assert.ok(html.includes('<optgroup label="Self Financing Engineering Colleges (District-wise) (86)">'), "Must group SFC colleges in optgroup");
-
-  // DOTE Guide card with dte.tn.gov.in reference
-  assert.ok(html.includes("dte.tn.gov.in"), "Must reference official DOTE website");
-  assert.ok(html.includes("Directorate of Technical Education (DOTE) College Classification"), "Must explain DOTE classification");
+test("M5 DOTE Classification & College Selection: Exact categories from dte.tn.gov.in, post-search DOTE dropdown, and district filtering", () => {
+  // 1. Initial landing includes collapsed DOTE Guide with dte.tn.gov.in reference
+  const htmlLanding = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
+  assert.ok(htmlLanding.includes("dte.tn.gov.in"), "Must reference official DOTE website");
+  assert.ok(htmlLanding.includes("Directorate of Technical Education (DOTE) College Classification"), "Must explain DOTE classification");
+  assert.ok(htmlLanding.includes("Government Engineering Colleges (11)"), "Must include Government Engineering Colleges (11)");
+  assert.ok(htmlLanding.includes("Government Aided Engineering Colleges (3)"), "Must include Government Aided Engineering Colleges (3)");
+  assert.ok(htmlLanding.includes("Anna University Department Colleges (4)"), "Must include Anna University Department Colleges (4)");
+  assert.ok(htmlLanding.includes("Annamalai University (1)"), "Must include Annamalai University (1)");
+  assert.ok(htmlLanding.includes("Anna University Constituent Colleges (16)"), "Must include Anna University Constituent Colleges (16)");
+  assert.ok(htmlLanding.includes("Self Financing Engineering Colleges (86 Autonomous)"), "Must include Self Financing Engineering Colleges (86)");
 
   // 2. Tamil language parity
   const htmlTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
-  assert.ok(htmlTa.includes("அரசுப் பொறியியல் கல்லூரிகள் (11)"), "Must have Tamil Govt label");
-  assert.ok(htmlTa.includes("அரசு உதவிபெறும் பொறியியல் கல்லூரிகள் (3)"), "Must have Tamil Aided label");
-  assert.ok(htmlTa.includes("அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள் (4)"), "Must have Tamil Anna Univ Dept label");
-  assert.ok(htmlTa.includes("அண்ணாமலைப் பல்கலைக்கழகம் (1)"), "Must have Tamil Annamalai label");
-  assert.ok(htmlTa.includes("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள் (16)"), "Must have Tamil Constituent label");
+  assert.ok(htmlTa.includes("அரசுப் பொறியியல் கல்லூரிகள் (Government Engineering Colleges — 11)"), "Must have Tamil Govt label");
+  assert.ok(htmlTa.includes("அரசு உதவிபெறும் பொறியியல் கல்லூரிகள் (Government Aided Engineering Colleges — 3)"), "Must have Tamil Aided label");
+  assert.ok(htmlTa.includes("அண்ணா பல்கலைக்கழகத் துறைக் கல்லூரிகள் (Anna University Department Colleges — 4)"), "Must have Tamil Anna Univ Dept label");
+  assert.ok(htmlTa.includes("அண்ணாமலைப் பல்கலைக்கழகம் (Annamalai University — 1)"), "Must have Tamil Annamalai label");
+  assert.ok(htmlTa.includes("அண்ணா பல்கலைக்கழக உறுப்புக் கல்லூரிகள் (Anna University Constituent Colleges — 16)"), "Must have Tamil Constituent label");
   assert.ok(htmlTa.includes("சுயநிதிப் பொறியியல் கல்லூரிகள் — தன்னாட்சி (86)"), "Must have Tamil SFC label");
   assert.ok(htmlTa.includes("தமிழ்நாடு தொழில்நுட்பக் கல்வி இயக்ககம் (DOTE) கல்லூரி வகைப்பாடுகள்"), "Must have Tamil DOTE guide");
 
-  // 3. College selection filter: selecting college="2005" (GCT) narrows table to GCT only
+  // 3. Post-search toolbar renders DOTE category dropdown & college filtering works
   const htmlGct = renderM5GuidancePage(new URLSearchParams({ college: "2005", lang: "en" }));
-  assert.ok(htmlGct.includes('value="2005" selected'), "Must select GCT in college-select dropdown");
+  assert.ok(htmlGct.includes('id="m5-toolbar-type"'), "Must render DOTE type dropdown on results page");
   assert.ok(htmlGct.includes("Government College of Technology, Coimbatore"), "Must contain GCT offerings");
   assert.ok(!htmlGct.includes("Alagappa Chettiar Government College"), "Must exclude other colleges when college is selected");
   assert.ok(htmlGct.includes('<input type="hidden" name="college" value="2005">'), "Must preserve college in shortlist form");
 
-  // 4. District and Type filtering narrows college-select dropdown
+  // 4. District and Type filtering narrows results cleanly
   const htmlCbeAided = renderM5GuidancePage(new URLSearchParams({ district: "Coimbatore", type: "AIDED", lang: "en" }));
-  assert.ok(htmlCbeAided.includes("PSG Tech, Coimbatore"), "Must include PSG Tech in Coimbatore Aided");
-  assert.ok(htmlCbeAided.includes("CIT, Coimbatore"), "Must include CIT in Coimbatore Aided");
-  assert.ok(!htmlCbeAided.includes("TCE, Madurai"), "Must exclude TCE Madurai from Coimbatore district");
+  assert.ok(htmlCbeAided.includes("PSG College of Technology"), "Must include PSG Tech in Coimbatore Aided");
+  assert.ok(htmlCbeAided.includes("Coimbatore Institute of Technology"), "Must include CIT in Coimbatore Aided");
+  assert.ok(!htmlCbeAided.includes("Thiagarajar College of Engineering"), "Must exclude TCE Madurai from Coimbatore district");
 
   // 5. DOTE category badges on table rows (rendered when all offerings or filtered offerings are viewed)
   const htmlOfferings = renderM5GuidancePage(new URLSearchParams({ lang: "en", show_all: "1" }));
@@ -993,57 +1004,61 @@ test("Mobile Experience: Tamil terminology regression check ensures 'கிள�
   assert.ok(htmlCounselling.includes("துறை") || htmlCounselling.includes("பாடப்பிரிவு"), "Counselling tab must use 'துறை / பாடப்பிரிவு'");
 });
 
-test("Choice Planner Progressive Disclosure: Landing shows compact Level 1 search and immediate college options with bottom pagination", () => {
-  // Step 1: Initial Landing shows compact Level 1 surface and pre-search guide (no output without search)
+test("Choice Planner Progressive Disclosure: 2-stage flow separates compact search card from clean college-grouped results", () => {
+  // Step 1: Initial Landing shows compact pre-search card with NO college results and NO top disclaimers
   const landingEn = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
-  assert.ok(landingEn.includes('class="m5-primary-surface'), "Landing view must render Level 1 primary surface");
-  assert.ok(landingEn.includes('class="m5-pre-search-guide'), "Landing view must render clean pre-search guide");
+  assert.ok(landingEn.includes("compact-search-card"), "Landing view must render compact search card");
+  assert.ok(landingEn.includes('id="cutoff-input"'), "Landing view must render cutoff input");
+  assert.ok(landingEn.includes("required"), "Cutoff input must be mandatory");
+  assert.ok(!landingEn.includes('id="search-input"'), "Landing view must not show text search box");
+  assert.ok(!landingEn.includes('id="m5-filter-dialog"'), "Landing view must not show filter modal");
   assert.ok(!landingEn.includes('class="college-group-card"'), "Landing view must not dump college cards before search");
-  assert.ok(!landingEn.includes('class="category-legend'), "Category legend must not be rendered");
+  assert.ok(landingEn.includes('class="learn-before-comparing'), "Landing view keeps Learn Before Comparing collapsed at bottom");
 
   // Step 2: Search Results View
   const resultsEn = renderM5GuidancePage(new URLSearchParams({ lang: "en", searched: "1" }));
   assert.ok(resultsEn.includes('<table class="comparison-table"'), "Results view must render college comparison table");
   assert.ok(resultsEn.includes('class="college-group-card"'), "Results view must render college group cards");
-  assert.ok(resultsEn.includes('class="change-search-details"'), "Results view must offer search form in Change search drawer");
-  assert.ok(!resultsEn.includes('class="category-legend"'), "Results view must not render category legend row");
-  assert.ok(resultsEn.includes("Change search"), "Results view must offer 'Change search' control");
+  assert.ok(resultsEn.includes('id="m5-toolbar-type"'), "Results view must offer DOTE category filter");
+  assert.ok(resultsEn.includes('id="m5-toolbar-sort"'), "Results view must offer Sort By dropdown");
+  assert.ok(resultsEn.includes("Edit Search"), "Results view must offer 'Edit Search' button");
+  assert.ok(!resultsEn.includes('class="scope-note'), "Results view must not show top Dataset Scope disclaimer");
+  assert.ok(!resultsEn.includes('class="student-safety-rule-banner"'), "Results view must not show top safety banner");
   assert.ok(resultsEn.includes('<input type="hidden" name="searched" value="1">'), "Shortlist toggle forms must preserve searched=1");
 
-  // Verify top and bottom pagination bars (Codex 5A)
+  // Verify top and bottom pagination bars
   const paginationBars = resultsEn.match(/class="pagination-bar screen-only"/g) || [];
   assert.equal(paginationBars.length, 2, "Results view must have top and bottom pagination bars");
 
-  // Step 3: 'Change search' (edit_search=1) returns to focused search form
-  const editSearchEn = renderM5GuidancePage(new URLSearchParams({ lang: "en", edit_search: "1", q: "CEG" }));
-  assert.ok(editSearchEn.includes('class="form-grid"'), "Edit search must display search form");
+  // Step 3: 'Edit Search' (edit_search=1) returns to focused search form with preserved values
+  const editSearchEn = renderM5GuidancePage(new URLSearchParams({ lang: "en", edit_search: "1", district: "Chennai" }), { studentCutoff: 192.5 });
+  assert.ok(editSearchEn.includes("compact-search-card"), "Edit search must display compact search form");
   assert.ok(!editSearchEn.includes('<table class="comparison-table"'), "Edit search must hide results table");
-  assert.ok(editSearchEn.includes('value="ceg"'), "Edit search must preserve prior input values");
+  assert.ok(editSearchEn.includes('value="192.5"'), "Edit search must preserve prior cutoff value");
+  assert.ok(editSearchEn.includes('value="Chennai" selected'), "Edit search must preserve prior district value");
 
   // Step 4: Tamil language parity
   const landingTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
-  assert.ok(landingTa.includes('class="m5-pre-search-guide'), "Tamil landing view renders pre-search guide");
+  assert.ok(landingTa.includes("compact-search-card"), "Tamil landing view renders compact search card");
   assert.ok(!landingTa.includes('class="college-group-card"'), "Tamil landing view does not dump cards before search");
-  assert.ok(landingTa.includes("உங்கள் விருப்பங்களைத் தேடுங்கள்"), "Tamil landing has Tamil task heading");
 
   const resultsTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta", searched: "1" }));
   assert.ok(resultsTa.includes('<table class="comparison-table"'), "Tamil results view must render college comparison table");
-  assert.ok(resultsTa.includes("வடிகட்டிகளை மாற்ற"), "Tamil results view must offer 'வடிகட்டிகளை மாற்ற' action");
+  assert.ok(resultsTa.includes("தேடலை மாற்ற"), "Tamil results view must offer 'தேடலை மாற்ற' action");
 });
 
 test("TNEA Historical Evidence & Round Exploration: No cutoff-to-round inference, Round 1 benchmark default, explicit round selection", () => {
   // 1. Cutoff >= 179.0 does NOT infer Round based on tier; it defaults to Round 1 benchmark (ROUND_1)
-  const htmlR1 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), {
+  const htmlR1 = renderM5GuidancePage(new URLSearchParams({ lang: "en", edit_search: "1" }), {
     studentCutoff: 185.5,
     quota: "GENERAL_ACADEMIC",
     community: "BC",
     communitySelected: true,
   });
   assert.ok(htmlR1.includes('<option value="ROUND_1" selected>'), "Cutoff 185.5 must default to Round 1 benchmark (no round inference)");
-  assert.ok(htmlR1.includes("Round 1"), "Must display Round 1 in dropdown");
 
   // 2. Cutoff between 145.0 and 178.99 does NOT infer Round 2; it defaults to Round 1 benchmark (ROUND_1)
-  const htmlR2 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), {
+  const htmlR2 = renderM5GuidancePage(new URLSearchParams({ lang: "en", edit_search: "1" }), {
     studentCutoff: 160.0,
     quota: "GENERAL_ACADEMIC",
     community: "BC",
@@ -1052,7 +1067,7 @@ test("TNEA Historical Evidence & Round Exploration: No cutoff-to-round inference
   assert.ok(htmlR2.includes('<option value="ROUND_1" selected>'), "Cutoff 160.0 must default to Round 1 benchmark (no round inference)");
 
   // 3. Cutoff < 145.0 does NOT infer Round 3; it defaults to Round 1 benchmark (ROUND_1)
-  const htmlR3 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), {
+  const htmlR3 = renderM5GuidancePage(new URLSearchParams({ lang: "en", edit_search: "1" }), {
     studentCutoff: 120.0,
     quota: "GENERAL_ACADEMIC",
     community: "BC",
@@ -1065,7 +1080,7 @@ test("TNEA Historical Evidence & Round Exploration: No cutoff-to-round inference
   assert.ok(htmlDefault.includes('<option value="ROUND_1" selected>'), "Default 2026 landing must default to Round 1 benchmark");
 
   // 5. Explicit round selection works when student requests a specific round
-  const htmlExplicitR1 = renderM5GuidancePage(new URLSearchParams({ lang: "en", round: "ROUND_1", round_explicit: "1" }), {
+  const htmlExplicitR1 = renderM5GuidancePage(new URLSearchParams({ lang: "en", edit_search: "1", round: "ROUND_1", round_explicit: "1" }), {
     studentCutoff: 185.5,
     quota: "GENERAL_ACADEMIC",
     community: "BC",
@@ -1075,7 +1090,7 @@ test("TNEA Historical Evidence & Round Exploration: No cutoff-to-round inference
   });
   assert.ok(htmlExplicitR1.includes('<option value="ROUND_1" selected>Round 1 (Default)</option>'), "Explicit Round 1 must be selected when requested");
 
-  const htmlExplicitAll = renderM5GuidancePage(new URLSearchParams({ lang: "en", round: "ALL", round_explicit: "1" }), {
+  const htmlExplicitAll = renderM5GuidancePage(new URLSearchParams({ lang: "en", edit_search: "1", round: "ALL", round_explicit: "1" }), {
     studentCutoff: 185.5,
     quota: "GENERAL_ACADEMIC",
     community: "BC",
@@ -1085,16 +1100,16 @@ test("TNEA Historical Evidence & Round Exploration: No cutoff-to-round inference
   });
   assert.ok(htmlExplicitAll.includes('<option value="ALL" selected>'), "Explicit All rounds must be selected when requested");
 
-  // 6. Guidance text explains Student Eligibility Band vs College Closing Cutoffs
+  // 6. Guidance text in Stage 1 collapsed drawer explains Student Eligibility Band vs College Closing Cutoffs
   assert.ok(htmlDefault.includes("Counselling Rounds vs College Closing Cutoffs"), "Must explain rounds vs closing cutoffs in English");
   const htmlTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
   assert.ok(htmlTa.includes("கலந்தாய்வு சுற்றுகளும் கல்லூரிக் கட்-ஆஃப்களும்"), "Must explain rounds vs closing cutoffs in Tamil");
 });
 
-test("Section 33 Regressions: Student-Centered Progressive Disclosure & Privacy Invariants", () => {
+test("Section 33 Regressions: Clean 2-Stage Architecture, Mandatory Cutoff, & Privacy Invariants", () => {
   // 1. Cutoff no longer infers round
-  const rHigh = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), { studentCutoff: 198.5 });
-  const rLow = renderM5GuidancePage(new URLSearchParams({ lang: "en" }), { studentCutoff: 95.0 });
+  const rHigh = renderM5GuidancePage(new URLSearchParams({ lang: "en", edit_search: "1" }), { studentCutoff: 198.5 });
+  const rLow = renderM5GuidancePage(new URLSearchParams({ lang: "en", edit_search: "1" }), { studentCutoff: 95.0 });
   assert.ok(rHigh.includes('value="ROUND_1" selected'), "High cutoff defaults to ROUND_1 benchmark");
   assert.ok(rLow.includes('value="ROUND_1" selected'), "Low cutoff defaults to ROUND_1 benchmark");
 
@@ -1104,25 +1119,20 @@ test("Section 33 Regressions: Student-Centered Progressive Disclosure & Privacy 
   assert.ok(!html.includes("safe fallback"), "Must not contain safe fallback tier");
   assert.ok(!html.includes("admission chance"), "Must not contain admission chance");
 
-  // 3. Round 1 benchmark default
+  // 3. Round 1 benchmark default on results
   assert.ok(html.includes("Round 1"), "Must default to Round 1 benchmark");
 
-  // 4. Secondary filters hidden from primary layout into filter sheet
-  assert.ok(html.includes('id="m5-filter-dialog" class="filter-sheet-modal"'), "Must provide secondary filter sheet dialog");
-  assert.ok(html.includes('class="m5-filter-trigger-btn"'), "Must provide filter trigger button");
+  // 4. Stage 1 has compact search controls without text search or filter modal
+  const stage1 = renderM5GuidancePage(new URLSearchParams({ lang: "en" }));
+  assert.ok(!stage1.includes('id="m5-filter-dialog"'), "Must not render heavy filter modal");
+  assert.ok(!stage1.includes('id="search-input"'), "Must not render college name/code text search box");
+  assert.ok(stage1.includes('class="comm-pills-group"'), "Must render compact community radio pills");
 
-  // 5. Active chip removal preserves other state
-  const htmlWithChips = renderM5GuidancePage(new URLSearchParams({ lang: "en", q: "CEG", branch: "CS", district: "Chennai" }));
-  assert.ok(htmlWithChips.includes('class="active-chips-bar"'), "Must render active chips bar");
-  assert.ok(htmlWithChips.includes('🔍 "ceg"'), "Must render search chip");
-  assert.ok(htmlWithChips.includes('📚 CS'), "Must render branch chip");
-  assert.ok(htmlWithChips.includes('📍 Chennai'), "Must render district chip");
-
-  // 6. Shortlist add preserves scroll/context where testable
+  // 5. Shortlist add preserves context
   assert.ok(html.includes('class="shortlist-toggle-form"'), "Shortlist toggle forms exist");
   assert.ok(html.includes('name="tab" value="comparison"'), "Toggle preserves comparison tab");
 
-  // 7. Sensitive values absent from GET URLs
+  // 6. Sensitive values absent from GET URLs
   const getHrefs = Array.from(html.matchAll(/href="([^"]+)"/g)).map(m => m[1]);
   for (const h of getHrefs) {
     if (h.startsWith("?") || h.startsWith("/m5-guidance")) {
@@ -1131,18 +1141,12 @@ test("Section 33 Regressions: Student-Centered Progressive Disclosure & Privacy 
     }
   }
 
-  // 8. Held/no-data/filtered-out states remain distinct
+  // 7. Held/no-data/filtered-out states remain distinct
   const heldHtml = renderM5GuidancePage(new URLSearchParams({ q: "1516", lang: "en" }));
   assert.ok(heldHtml.includes("Booklet p. 160"), "Held college displays governance notice");
 
-  // 9. Branch switching preserves context
-  assert.ok(html.includes('class="branch-shortcuts-row"'), "Must render branch shortcuts row");
-  assert.ok(html.includes('CSE'), "Must include CSE shortcut");
-  assert.ok(html.includes('ECE'), "Must include ECE shortcut");
-
-  // 10. Tamil primary labels
-  const taHtml = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
-  assert.ok(taHtml.includes("உங்கள் விருப்பங்களைத் தேடுங்கள்"), "Must render Tamil task heading");
-  assert.ok(taHtml.includes("வடிகட்டிகள்"), "Must render Tamil filter button");
-  assert.ok(taHtml.includes("வரலாற்றுத் தரவு:"), "Must render Tamil evidence context strip");
+  // 8. Tamil Stage 1 & Stage 2 labels
+  const taStage1 = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
+  assert.ok(taStage1.includes("தேடு &amp; ஒப்பிடு"), "Must render Tamil Search button");
+  assert.ok(taStage1.includes("ஒப்பிடும் முன் தெரிந்துகொள்ள வேண்டியவை"), "Must render collapsed Tamil guide");
 });

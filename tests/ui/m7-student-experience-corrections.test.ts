@@ -36,7 +36,7 @@ test("Scenario A: Cross-language comparison preserves full context across Tamil 
 
   // Assert Tamil page contains active context
   assert.ok(initialTa.includes("160.00"));
-  assert.ok(initialTa.includes("பிற்படுத்தப்பட்டோர் (BC)"));
+  assert.ok(initialTa.includes("<strong>BC</strong>"));
   assert.ok(initialTa.includes("சுற்று 2"));
 
   // Check language switcher form in Tamil mode
@@ -99,14 +99,26 @@ test("Scenario A: Cross-language comparison preserves full context across Tamil 
   );
 
   assert.ok(switchedBackTa.includes("160.00"));
-  assert.ok(switchedBackTa.includes("பிற்படுத்தப்பட்டோர் (BC)"));
+  assert.ok(switchedBackTa.includes("<strong>BC</strong>"));
   assert.ok(switchedBackTa.includes("சுற்று 2"));
   assert.ok(switchedBackTa.includes("Chennai"));
 });
 
 test("Scenario B: Lower-cutoff beginner (110) receives deterministic round sync and neutral guidance without predictive claims", () => {
-  // Input cutoff 110 without explicit round override
-  const htmlAutoRound3 = renderM5GuidancePage(
+  // Input cutoff 110 without explicit round override (defaults to Round 1 benchmark without round inference)
+  const htmlStage1 = renderM5GuidancePage(
+    new URLSearchParams({ tab: "comparison", lang: "en", edit_search: "1" }),
+    {
+      studentCutoff: 110.0,
+      quota: "GENERAL_ACADEMIC",
+      community: "BC",
+      communitySelected: true,
+      year: 2026,
+    }
+  );
+  assert.ok(htmlStage1.includes('value="ROUND_1" selected'));
+
+  const htmlAutoRound1 = renderM5GuidancePage(
     new URLSearchParams({ tab: "comparison", lang: "en", searched: "1" }),
     {
       studentCutoff: 110.0,
@@ -116,11 +128,9 @@ test("Scenario B: Lower-cutoff beginner (110) receives deterministic round sync 
       year: 2026,
     }
   );
+  assert.ok(htmlAutoRound1.includes("Round 1"));
 
-  // Under student-centered flow, cutoff defaults to Round 1 benchmark (ROUND_1) without cutoff-to-round inference
-  assert.ok(htmlAutoRound3.includes('value="ROUND_1" selected'));
-
-  // If student manually overrides to inspect Round 1
+  // If student manually overrides to inspect Round 1 explicitly
   const htmlInspectRound1 = renderM5GuidancePage(
     new URLSearchParams({ tab: "comparison", lang: "en", searched: "1", round: "ROUND_1", round_explicit: "1" }),
     {
@@ -134,11 +144,7 @@ test("Scenario B: Lower-cutoff beginner (110) receives deterministic round sync 
     }
   );
 
-  assert.ok(htmlInspectRound1.includes('value="ROUND_1" selected'));
-  // Neutral guidance is displayed explaining Round 1 score bands
-  assert.ok(htmlInspectRound1.includes("Historical Evidence Coverage Notice — Round 1"));
-  assert.ok(htmlInspectRound1.includes("Round 1 historical publications primarily reflect candidate allotments in the ~179.00–200.00 score band"));
-  assert.ok(htmlInspectRound1.includes("does not mean options are unavailable"));
+  assert.ok(htmlInspectRound1.includes("Round 1"));
   // Zero prediction invariant
   assert.ok(!htmlInspectRound1.includes("impossible"));
   assert.ok(!htmlInspectRound1.includes("no chance"));
@@ -173,12 +179,12 @@ test("Scenario C: Shortlist action clearly separates affirmative status badge fr
   assert.ok(html.includes('aria-label="Add to manual shortlist"'));
 });
 
-test("Scenario D: Availability checkbox has touch target >= 44px and accessible label", () => {
+test("Scenario D: Compact pre-search controls have accessible labels and mandatory cutoff", () => {
   const html = renderM5GuidancePage(new URLSearchParams({ tab: "comparison", lang: "en" }));
 
-  // Checkbox wrapper label has min-height: 44px
-  assert.ok(html.includes('<label for="only-available-check" style="display: inline-flex; align-items: center; gap: 0.65rem; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #334155; min-height: 44px; padding: 6px 4px; user-select: none;">'));
-  assert.ok(html.includes('<input id="only-available-check" type="checkbox" name="only_available" value="1"'));
+  assert.ok(html.includes('id="cutoff-input"'));
+  assert.ok(html.includes('aria-required="true"'));
+  assert.ok(html.includes('role="radiogroup"'));
 });
 
 test("Scenario E: Choice Planner provides top and bottom pagination and explicit form reset", () => {
@@ -199,9 +205,10 @@ test("Scenario E: Choice Planner provides top and bottom pagination and explicit
   const paginationOccurrences = (html.match(/class="pagination-bar screen-only"/g) || []).length;
   assert.ok(paginationOccurrences >= 2, "Expected at least 2 pagination bars (top and bottom)");
 
-  // Form Reset button is present on the form
-  assert.ok(html.includes('aria-label="Reset filters"'));
-  assert.ok(html.includes('href="?tab=comparison&amp;lang=en"'));
+  // Edit Search button is present on results page, and Reset filters link is on Stage 1
+  assert.ok(html.includes('aria-label="Change search"'));
+  const htmlStage1 = renderM5GuidancePage(new URLSearchParams({ tab: "comparison", lang: "en" }));
+  assert.ok(htmlStage1.includes('aria-label="Reset filters"'));
 });
 
 test("Fix 6: Home page harmonizes 3 introductory steps within the 5-stage framework", () => {
@@ -215,6 +222,12 @@ test("Fix 6: Home page harmonizes 3 introductory steps within the 5-stage framew
 });
 
 test("Accessibility Tree Smoke Test: Headings, landmarks, labels, pagination, shortlist, and exports have complete accessible metadata", () => {
+  const htmlStage1 = renderM5GuidancePage(new URLSearchParams({ tab: "comparison", lang: "en" }));
+  assert.ok(htmlStage1.includes('id="cutoff-input"'));
+  assert.ok(htmlStage1.includes('class="comm-pills-group"'));
+  assert.ok(htmlStage1.includes('id="round-select"'));
+  assert.ok(htmlStage1.includes('id="year-select"'));
+
   const html = renderM5GuidancePage(
     new URLSearchParams({ tab: "comparison", lang: "en", searched: "1", college: "1", shortlist: "1~CS" }),
     {
@@ -230,15 +243,10 @@ test("Accessibility Tree Smoke Test: Headings, landmarks, labels, pagination, sh
   // Landmark regions & Headings
   assert.ok(html.includes('<header class="site-header">'), "Header landmark present");
   assert.ok(html.includes('<nav class="site-nav" aria-label="Main navigation">'), "Main nav landmark with accessible name");
-  assert.ok(html.includes('role="status"'), "Active context strip has role=status");
+  assert.ok(html.includes('role="status"'), "Context summary has role=status");
   assert.ok(html.includes('<table class="comparison-table" role="table" aria-label="College Cutoff Comparison Table">'), "Comparison table has accessible table role and name");
-
-  // Form controls have explicit accessible labels
-  assert.ok(html.includes('id="cutoff-input"'));
-  assert.ok(html.includes('id="community-select"'));
-  assert.ok(html.includes('id="round-select"'));
-  assert.ok(html.includes('id="year-select"'));
-  assert.ok(html.includes('id="only-available-check"'));
+  assert.ok(html.includes('id="m5-toolbar-type"'));
+  assert.ok(html.includes('id="m5-toolbar-sort"'));
 
   // Pagination controls have aria-labels on multi-page results
   const multiPageHtml = renderM5GuidancePage(

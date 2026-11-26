@@ -65,12 +65,13 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     const homeEnHtml = await homeEnRes.text();
     assert.ok(homeEnHtml.includes("TN Engineering Guidance"), "Home EN should include English title");
 
-    // B. M5 Comparison route (GET /m5-guidance) - Progressive disclosure renders options immediately
+    // B. M5 Comparison route (GET /m5-guidance) - Stage 1 compact search card with no output before search
     const m5Res = await fetch(`${base}/m5-guidance?tab=comparison&lang=en`);
     assert.equal(m5Res.status, 200, "M5 guidance route should return 200 OK");
     const m5Html = await m5Res.text();
-    assert.ok(m5Html.includes("m5-pre-search-guide"), "M5 landing page renders pre-search guide");
-    assert.ok(m5Html.includes("121 approved colleges"), "M5 page should cite approved 121 colleges");
+    assert.ok(m5Html.includes("compact-search-card"), "M5 landing page renders compact search card");
+    assert.ok(!m5Html.includes("College Cutoff Comparison Table"), "M5 landing page must not output results before search");
+    assert.ok(m5Html.includes("121 approved institutions"), "M5 page should cite approved 121 institutions in collapsed guide");
 
     // B2. M5 Edit Search view (with edit_search=1)
     const m5EditRes = await fetch(`${base}/m5-guidance?tab=comparison&lang=en&edit_search=1`);
@@ -84,7 +85,7 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     assert.equal(m5SearchRes.status, 200, "M5 search results route should return 200 OK");
     const m5SearchHtml = await m5SearchRes.text();
     assert.ok(m5SearchHtml.includes("College Cutoff Comparison Table"), "M5 search results should render comparison table");
-    assert.ok(m5SearchHtml.includes("Change search"), "M5 search results should offer Change search action");
+    assert.ok(m5SearchHtml.includes("Edit Search"), "M5 search results should offer Edit Search action");
 
     // C. Cutoff Calculator POST route (/personal)
     const calcRes = await fetch(`${base}/personal?lang=en`, {
