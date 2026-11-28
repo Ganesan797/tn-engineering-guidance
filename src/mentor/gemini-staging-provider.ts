@@ -12,7 +12,7 @@ export interface GeminiStagingOptions {
 const DEFAULT_MODEL = "gemini-3.6-flash";
 const FALLBACK_MODELS_ON_404: readonly string[] = ["gemini-2.5-flash-lite", "gemini-2.0-flash", "gemini-2.5-flash"];
 const DEFAULT_MAX_RPM = 15;
-const DEFAULT_TIMEOUT_MS = 25000;
+const DEFAULT_TIMEOUT_MS = 35000;
 
 const UNSAFE_OUTPUT_PATTERNS: readonly RegExp[] = [
   /\b(safe\s+college|target\s+college|dream\s+college|guaranteed\s+admission|sure\s+seat|\d+%\s*chance|will\s+definitely\s+get|i\s+recommend\s+(?:this|choosing|joining))\b/i,
@@ -96,6 +96,8 @@ export class GeminiStagingMentorProvider {
   private readonly timeoutMs: number;
   private readonly fetchImpl: typeof fetch;
   private readonly limiter: SlidingWindowRateLimiter;
+  private resolvedModel: string | null = null;
+  private useThinkingBudgetZero = true;
 
   constructor(options: GeminiStagingOptions) {
     this.apiKey = options.apiKey;
@@ -106,12 +108,8 @@ export class GeminiStagingMentorProvider {
     this.limiter = new SlidingWindowRateLimiter(options.maxRpm ?? DEFAULT_MAX_RPM, 60_000, options.nowFn);
   }
 
-  public async explainAsync(context: BoundedExplanationContext, question: string): Promise<string> {
-    if (!this.limiter.tryAcquire()) {
-      throw new StagingRateLimitError();
-    }
-
-    const payload = {
+  private buildPayload(context: BoundedExplanationContext, question: string, includeThinkingZero: boolean) {
+    return {
       systemInstruction: {
         parts: [{ text: buildSystemInstruction(context.language) }],
       },
@@ -128,50 +126,78 @@ export class GeminiStagingMentorProvider {
       generationConfig: {
         temperature: 0.2,
         maxOutputTokens: 1024,
+        ...(includeThinkingZero ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
       },
     };
+  }
 
-    const modelsToTry = this.explicitModel
-      ? [this.model]
-      : [this.model, ...FALLBACK_MODELS_ON_404.filter((m) => m !== this.model)];
-
-    let lastError: Error | null = null;
-    for (const candidateModel of modelsToTry) {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent`;
-      const response = await this.fetchImpl(endpoint, {
+  private async callModel(
+    candidateModel: string,
+    context: BoundedExplanationContext,
+    question: string
+  ): Promise<{ ok: true; text: string } | { ok: false; status: number; message: string }> {
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent`;
+    const send = async (includeThinkingZero: boolean) =>
+      this.fetchImpl(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "x-goog-api-key": this.apiKey,
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(this.buildPayload(context, question, includeThinkingZero)),
         signal: AbortSignal.timeout(this.timeoutMs),
       });
 
-      if (response.ok) {
-        const data = (await response.json()) as {
-          candidates?: Array<{
-            content?: { parts?: Array<{ text?: string }> };
-          }>;
-        };
-        const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join(" ") ?? "";
-        return validateGeneratedReply(text);
-      }
+    let response = await send(this.useThinkingBudgetZero);
+    if (!response.ok && response.status === 400 && this.useThinkingBudgetZero) {
+      this.useThinkingBudgetZero = false;
+      response = await send(false);
+    }
 
-      let apiMsg = "";
-      try {
-        const errBody = (await response.json()) as { error?: { message?: string } };
-        apiMsg = errBody?.error?.message ? `: ${errBody.error.message.slice(0, 100)}` : "";
-      } catch {
-        // ignore non-JSON error body
+    if (response.ok) {
+      const data = (await response.json()) as {
+        candidates?: Array<{
+          content?: { parts?: Array<{ text?: string }> };
+        }>;
+      };
+      const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join(" ") ?? "";
+      return { ok: true, text };
+    }
+
+    let apiMsg = "";
+    try {
+      const errBody = (await response.json()) as { error?: { message?: string } };
+      apiMsg = errBody?.error?.message ? `: ${errBody.error.message.slice(0, 100)}` : "";
+    } catch {
+      // ignore non-JSON error body
+    }
+    return { ok: false, status: response.status, message: `Gemini staging HTTP ${response.status} (${candidateModel})${apiMsg}` };
+  }
+
+  public async explainAsync(context: BoundedExplanationContext, question: string): Promise<string> {
+    if (!this.limiter.tryAcquire()) {
+      throw new StagingRateLimitError();
+    }
+
+    const startModel = this.resolvedModel ?? this.model;
+    const modelsToTry = this.explicitModel
+      ? [startModel]
+      : [startModel, ...FALLBACK_MODELS_ON_404.filter((m) => m !== startModel)];
+
+    let lastError: Error | null = null;
+    for (const candidateModel of modelsToTry) {
+      const res = await this.callModel(candidateModel, context, question);
+      if (res.ok) {
+        this.resolvedModel = candidateModel;
+        return validateGeneratedReply(res.text);
       }
-      lastError = new Error(`Gemini staging HTTP ${response.status} (${candidateModel})${apiMsg}`);
-      if (response.status !== 404) {
+      lastError = new Error(res.message);
+      if (res.status !== 404 && res.status !== 503) {
         throw lastError;
       }
     }
 
-    // If all candidate models returned 404, query v1beta/models once to discover an active Flash model
+    // If candidate models returned 404/503, query v1beta/models once to discover an active Flash model
     try {
       const listRes = await this.fetchImpl("https://generativelanguage.googleapis.com/v1beta/models", {
         method: "GET",
@@ -193,33 +219,15 @@ export class GeminiStagingMentorProvider {
           )
           .map((m) => m.name!.replace(/^models\//, ""));
         for (const m of discovered.slice(0, 5)) {
-          const retryRes = await this.fetchImpl(
-            `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json", "x-goog-api-key": this.apiKey },
-              body: JSON.stringify(payload),
-              signal: AbortSignal.timeout(this.timeoutMs),
-            }
-          );
-          if (retryRes.ok) {
-            const data = (await retryRes.json()) as {
-              candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
-            };
-            const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join(" ") ?? "";
-            if (text.trim()) {
-              return validateGeneratedReply(text);
+          const res = await this.callModel(m, context, question);
+          if (res.ok) {
+            if (res.text.trim()) {
+              this.resolvedModel = m;
+              return validateGeneratedReply(res.text);
             }
             lastError = new Error(`Gemini staging empty text (${m})`);
           } else {
-            let retryMsg = "";
-            try {
-              const errBody = (await retryRes.json()) as { error?: { message?: string } };
-              retryMsg = errBody?.error?.message ? `: ${errBody.error.message.slice(0, 100)}` : "";
-            } catch {
-              // ignore
-            }
-            lastError = new Error(`Gemini staging HTTP ${retryRes.status} (${m})${retryMsg}`);
+            lastError = new Error(res.message);
           }
         }
       }
