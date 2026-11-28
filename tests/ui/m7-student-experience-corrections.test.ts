@@ -214,11 +214,11 @@ test("Scenario E: Choice Planner provides top and bottom pagination and explicit
 test("Fix 6: Home page harmonizes 3 introductory steps within the 5-stage framework", () => {
   const homeEn = renderStudentEntryPage({ route: "home", language: "en" }, pack);
   assert.ok(homeEn.includes("Guided Journey — 3 Simple Steps to Begin"));
-  assert.ok(homeEn.includes("Introductory foundation for the 5-stage engineering admissions journey."));
+  assert.ok(homeEn.includes("Clear overview of CSE, ECE, Mech and other branches"));
 
   const homeTa = renderStudentEntryPage({ route: "home", language: "ta" }, pack);
-  assert.ok(homeTa.includes("தொடக்க நிலை வழிகாட்டல் — 3 எளிய அறிமுகப் படிகள்"));
-  assert.ok(homeTa.includes("5-நிலைப் பொறியியல் சேர்க்கைப் பயணத்தின் தொடக்கப் புரிதலுக்கான எளிய அறிமுகம்."));
+  assert.ok(homeTa.includes("பொறியியல் சேர்க்கை — எளிய அறிமுகம்"));
+  assert.ok(homeTa.includes("CSE, ECE, Mech போன்ற படிப்புகள் பற்றிய எளிய விளக்கம்"));
 });
 
 test("Accessibility Tree Smoke Test: Headings, landmarks, labels, pagination, shortlist, and exports have complete accessible metadata", () => {

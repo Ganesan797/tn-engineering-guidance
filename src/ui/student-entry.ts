@@ -74,27 +74,27 @@ export function renderStudentEntryPage(
 .home-sub{font-size:0.86rem;color:#475569;line-height:1.45;margin:0}
 @media(min-width:640px){.home-sub{font-size:1rem}}
 @media(min-width:900px){.home-sub{font-size:1.06rem;max-width:56ch}}
-.home-trust-bar{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:6px 14px;margin:0 auto 1.4rem;padding:9px 12px;background:#FAF7F2;border:1px solid #EFEAE0;border-radius:10px;font-size:0.8rem;color:#334155;font-weight:650}
-@media(min-width:900px){.home-trust-bar{gap:8px 24px;padding:10px 20px;font-size:0.86rem;margin-bottom:1.25rem}}
-.home-trust-item{display:inline-flex;align-items:center;gap:4px}
-.home-doors{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-bottom:1.1rem}
-@media(min-width:860px){.home-doors{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:1.25rem;align-items:stretch}}
-.choice-card.recommended{background:#EAF4F0;border:1.5px solid #99f6e4;color:#0f766e;box-shadow:0 2px 6px rgba(15,118,110,0.05);display:flex;flex-direction:column;justify-content:space-between;padding:1.15rem 1.25rem;border-radius:14px;text-decoration:none;transition:transform 0.15s ease,box-shadow 0.15s ease;min-width:0;box-sizing:border-box;position:relative;margin:0}
-.choice-card.recommended:hover{border-color:#0d9488;box-shadow:0 6px 16px rgba(15,118,110,0.12);transform:translateY(-2px)}
-.choice-card.door-mark{background:#FFFFFF;border:1.5px solid #E29578;color:#7C2D12;box-shadow:0 2px 6px rgba(194,94,62,0.06);display:flex;flex-direction:column;justify-content:space-between;padding:1.15rem 1.25rem;border-radius:14px;text-decoration:none;transition:transform 0.15s ease,box-shadow 0.15s ease;min-width:0;box-sizing:border-box;position:relative;margin:0}
-.choice-card.door-mark:hover{border-color:#C25E3E;box-shadow:0 6px 16px rgba(194,94,62,0.12);transform:translateY(-2px)}
-.door-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:0.7rem;font-weight:750;text-transform:uppercase;letter-spacing:0.03em;margin-bottom:0.45rem;align-self:flex-start}
-.choice-card.recommended .door-tag{background:#ccfbf1;color:#0f766e}
-.door-mark .door-tag{background:#FFEDD5;color:#C2410C}
-.door-title{font-size:1.15rem;font-weight:800;line-height:1.3;margin:0 0 0.35rem;display:block;word-break:break-word}
-.choice-card.recommended .door-title{color:#0f2c59}
-.door-mark .door-title{color:#7C2D12}
-.door-desc{font-size:0.88rem;line-height:1.48;margin:0 0 0.75rem;word-break:break-word}
-.choice-card.recommended .door-desc{color:#134e4a}
-.door-mark .door-desc{color:#78350F}
-.door-action{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;font-weight:750;font-size:0.9rem;margin-top:auto;padding-top:0.5rem;border-top:1px dashed rgba(0,0,0,0.08)}
-.choice-card.recommended .door-action{color:#0f766e}
-.door-mark .door-action{color:#C2410C}
+.home-trust-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:0.85rem}
+.home-trust-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:#ffffff;border:1px solid #e2e8f0;border-radius:9999px;font-size:0.78rem;color:#334155;font-weight:650;box-shadow:0 1px 2px rgba(15,23,42,0.03)}
+.home-doors{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-bottom:1.25rem}
+@media(min-width:860px){.home-doors{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:1.5rem;align-items:stretch}}
+.choice-card.recommended{background:#FFFFFF;border:1px solid #d1e7e2;border-top:3.5px solid #0f766e;color:#0f172a;box-shadow:0 2px 10px rgba(15,23,42,0.04);display:flex;flex-direction:column;justify-content:space-between;padding:1.35rem 1.45rem;border-radius:16px;text-decoration:none;transition:transform 0.15s ease,box-shadow 0.15s ease;min-width:0;box-sizing:border-box;position:relative;margin:0}
+.choice-card.recommended:hover{border-color:#0d9488;box-shadow:0 8px 20px rgba(15,118,110,0.12);transform:translateY(-2px)}
+.choice-card.door-mark{background:#FFFFFF;border:1px solid #fed7aa;border-top:3.5px solid #c2410c;color:#0f172a;box-shadow:0 2px 10px rgba(15,23,42,0.04);display:flex;flex-direction:column;justify-content:space-between;padding:1.35rem 1.45rem;border-radius:16px;text-decoration:none;transition:transform 0.15s ease,box-shadow 0.15s ease;min-width:0;box-sizing:border-box;position:relative;margin:0}
+.choice-card.door-mark:hover{border-color:#c2410c;box-shadow:0 8px 20px rgba(194,65,12,0.12);transform:translateY(-2px)}
+.door-tag{display:inline-block;padding:3px 10px;border-radius:9999px;font-size:0.72rem;font-weight:750;letter-spacing:0.02em;margin-bottom:0.65rem;align-self:flex-start}
+.choice-card.recommended .door-tag{background:#f0fdfa;color:#0f766e;border:1px solid #ccfbf1}
+.door-mark .door-tag{background:#fff7ed;color:#c2410c;border:1px solid #ffedd5}
+.door-title{font-size:1.2rem;font-weight:800;line-height:1.32;margin:0 0 0.75rem;display:block;word-break:break-word;color:#0f172a}
+.door-bullets{list-style:none;padding:0;margin:0 0 1.15rem;display:flex;flex-direction:column;gap:0.5rem}
+.door-bullets li{display:flex;align-items:flex-start;gap:8px;font-size:0.88rem;line-height:1.45;color:#334155}
+.door-check{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:9999px;font-size:0.7rem;font-weight:800;flex-shrink:0;margin-top:2px}
+.choice-card.recommended .door-check{background:#0f766e;color:#ffffff}
+.door-mark .door-check{background:#c2410c;color:#ffffff}
+.door-cta-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:0.78rem 1rem;border-radius:10px;font-weight:750;font-size:0.94rem;color:#ffffff;margin-top:auto;box-sizing:border-box;text-align:center;transition:filter 0.15s ease}
+.choice-card.recommended .door-cta-btn{background:#0f766e}
+.door-mark .door-cta-btn{background:#c2410c}
+.choice-card:hover .door-cta-btn{filter:brightness(1.06)}
 .home-explore{margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid #e2e8f0}
 .home-explore-title{font-size:0.86rem;font-weight:750;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;margin:0 0 0.85rem;text-align:center}
 .home-explore-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
@@ -180,40 +180,41 @@ export function renderStudentEntryPage(
       const heroSection = `<section class="home-hero-split" aria-labelledby="home-hero-title">
         <div class="home-hero-art">${heroImg}</div>
         <div class="home-hero-copy">
-          <div class="home-badge-tag"><span>${ta ? "TNEA பொறியியல் வழிகாட்டி" : "TNEA Engineering Guide"}</span></div>
-          <h1 id="home-hero-title" class="home-title">${ta ? "சரியான வழிகாட்டல், சரியான நேரத்தில்" : "Right guidance, at the right time"}</h1>
-          <p class="home-sub">${ta ? "12-ஆம் வகுப்பிற்குப் பிறகு பொறியியல் படிப்புகள், கட்-ஆஃப் &amp; கலந்தாய்வுக்கான எளிய வழிகாட்டல்." : "Simple, step-by-step guidance for Tamil Nadu engineering admissions."}</p>
+          <div class="home-badge-tag"><span>• ${ta ? "TNEA சேர்க்கை வழிகாட்டி" : "TNEA Engineering Guide"}</span></div>
+          <h1 id="home-hero-title" class="home-title">${ta ? "சரியான வழிகாட்டுதல், சரியான நேரத்தில்" : "Right guidance, at the right time"}</h1>
+          <p class="home-sub">${ta ? "பொறியியல் படிப்புகள், கட்-ஆஃப், கலந்தாய்வு — 12-ஆம் வகுப்புக்குப் பிறகு தேவைப்படும் அனைத்தும் எளிய தமிழில்." : "Simple, step-by-step guidance for Tamil Nadu engineering admissions."}</p>
+          <div class="home-trust-pills" aria-label="${ta ? "முக்கிய உத்தரவாதங்கள்" : "Key Assurances"}">
+            <span class="home-trust-pill">${ta ? "✓ 7.5% அரசுப் பள்ளி ஒதுக்கீடு" : "✓ 7.5% Govt School Quota"}</span>
+            <span class="home-trust-pill">${ta ? "✓ முதல் பட்டதாரி சலுகை" : "✓ First Graduate Fee Support"}</span>
+            <span class="home-trust-pill">${ta ? "✓ பதிவு தேவையில்லை" : "✓ No Login Needed"}</span>
+          </div>
         </div>
       </section>`;
 
-      const trustBar = `<div class="home-trust-bar" aria-label="${ta ? "முக்கிய உத்தரவாதங்கள்" : "Key Assurances"}">
-        <span class="home-trust-item">${ta ? "✓ TNEA சேர்க்கை வழிகாட்டல்" : "✓ Dedicated Guidance for TNEA"}</span>
-        <span class="home-trust-item">${ta ? "✓ 7.5% அரசுப் பள்ளி &amp; முதல் பட்டதாரி சலுகை" : "✓ 7.5% Govt School Quota &amp; Fee Support"}</span>
-        <span class="home-trust-item">${ta ? "✓ 100% இலவசம் • உள்நுழைவு தேவையில்லை" : "✓ 100% Free • No Login Needed"}</span>
-      </div>`;
-
       const door1 = `<a class="choice-card recommended" href="/journey${ta ? "" : "?lang=en"}">
         <div>
-          <span class="door-tag">${ta ? "படி 1 • தொடக்க வழிகாட்டி" : "Step 1 • Guided Start"}</span>
-          <strong id="entry-choice" class="door-title">${ta ? "தொடக்க நிலை வழிகாட்டல் — 3 எளிய அறிமுகப் படிகள்" : "Guided Journey — 3 Simple Steps to Begin"}</strong>
-          <p class="door-desc">${ta ? "5-நிலைப் பொறியியல் சேர்க்கைப் பயணத்தின் தொடக்கப் புரிதலுக்கான எளிய அறிமுகம். மதிப்பெண்கள் இன்றியே பொறியியல் படிப்புகள் (CSE, ECE, Mech...), கலந்தாய்வு முறை பற்றி எளிய தமிழில் அறிந்துகொள்ளலாம்." : "Introductory foundation for the 5-stage engineering admissions journey. Understand engineering branches (CSE, ECE, Mech...) and counselling procedures with zero marks required."}</p>
+          <span class="door-tag">${ta ? "படி 1 • முதலில் அறிந்துகொள்ள" : "Step 1 • Guided Start"}</span>
+          <strong id="entry-choice" class="door-title">${ta ? "பொறியியல் சேர்க்கை — எளிய அறிமுகம்" : "Guided Journey — 3 Simple Steps to Begin"}</strong>
+          <ul class="door-bullets">
+            <li><span class="door-check" aria-hidden="true">✓</span><span>${ta ? "CSE, ECE, Mech போன்ற படிப்புகள் பற்றிய எளிய விளக்கம்" : "Clear overview of CSE, ECE, Mech and other branches"}</span></li>
+            <li><span class="door-check" aria-hidden="true">✓</span><span>${ta ? "TNEA கலந்தாய்வு எப்படி நடக்கும்? (படிப்படியாக)" : "Step-by-step walkthrough of TNEA counselling rounds"}</span></li>
+            <li><span class="door-check" aria-hidden="true">✓</span><span>${ta ? "மதிப்பெண் இல்லாமலேயே இப்போதே தெரிந்துகொள்ளலாம்" : "Start learning now with zero marks required"}</span></li>
+          </ul>
         </div>
-        <div class="door-action">
-          <span>${ta ? "✓ மதிப்பெண் தேவையின்றி அறியலாம்" : "✓ Zero marks required"}</span>
-          <span>${ta ? "வழிகாட்டலைத் தொடங்க →" : "Start Guided Journey →"}</span>
-        </div>
+        <div class="door-cta-btn">${ta ? "இப்போதே தொடங்குங்கள் →" : "Start Guided Journey →"}</div>
       </a>`;
 
       const door2 = `<a class="choice-card door-mark" href="${entryHref("personal", language)}">
         <div>
-          <span class="door-tag">${ta ? "படி 2 • கட்-ஆஃப் &amp; விருப்பத் தேர்வு நிரப்புதல்" : "Step 2 • Cutoff &amp; Choice Filling"}</span>
-          <strong class="door-title">${ta ? "மதிப்பெண் உள்ளது — கட்-ஆஃப் &amp; கல்லூரிகள்" : "I Have My Marks — Check Cutoff &amp; Choices"}</strong>
-          <p class="door-desc">${ta ? "200-க்கு கட்-ஆஃப் கணக்கீடு, 7.5% அரசுப் பள்ளி தகுதி மற்றும் 300 கல்லூரிகளின் கடந்த ஆண்டு கட்-ஆஃப் ஒப்பிட்டு விருப்பப் பட்டியல் தயாரிக்கலாம்." : "Calculate your 200-mark cutoff, verify 7.5% Govt School &amp; First Graduate fee waivers, and plan your choice order with past cutoff benchmarks."}</p>
+          <span class="door-tag">${ta ? "படி 2 • மதிப்பெண் தெரிந்திருந்தால்" : "Step 2 • If You Have Marks"}</span>
+          <strong class="door-title">${ta ? "உங்கள் கட்-ஆஃப் மற்றும் கல்லூரிகள்" : "I Have My Marks — Check Cutoff &amp; Choices"}</strong>
+          <ul class="door-bullets">
+            <li><span class="door-check" aria-hidden="true">✓</span><span>${ta ? "200-க்கு உங்கள் கட்-ஆஃப் மதிப்பெண்ணை உடனே கணக்கிடலாம்" : "Calculate your 200-mark TNEA cutoff immediately"}</span></li>
+            <li><span class="door-check" aria-hidden="true">✓</span><span>${ta ? "7.5% அரசுப் பள்ளி மற்றும் இடஒதுக்கீடு விவரம்" : "Check 7.5% Govt School quota and category eligibility"}</span></li>
+            <li><span class="door-check" aria-hidden="true">✓</span><span>${ta ? "300+ கல்லூரிகளின் கடந்த ஆண்டு கட்-ஆஃப் ஒப்பீடு" : "Compare past cutoffs across 300+ approved colleges"}</span></li>
+          </ul>
         </div>
-        <div class="door-action">
-          <span>${ta ? "✓ 200-க்கு கட்-ஆஃப் கணக்கீடு" : "✓ 200-mark calc"}</span>
-          <span>${ta ? "கட்-ஆஃப் &amp; விருப்பத் தேர்வு நிரப்புதல் →" : "Calculate &amp; Plan Choices →"}</span>
-        </div>
+        <div class="door-cta-btn">${ta ? "கட்-ஆஃப் கணக்கிடுங்கள் →" : "Calculate &amp; Plan Choices →"}</div>
       </a>`;
 
       const doorsGrid = `<div class="home-doors" aria-label="${ta ? "முக்கிய வழிகாட்டல் தேர்வுகள்" : "Main Guidance Doors"}">
@@ -221,14 +222,14 @@ export function renderStudentEntryPage(
         ${door2}
       </div>`;
 
-      const exploreSection = `<section class="home-explore" aria-label="${ta ? "கூடுதல் TNEA வழிகாட்டல் பகுதிகள்" : "Helpful TNEA Guides"}">
-        <h2 class="home-explore-title">${ta ? "முக்கிய TNEA வழிகாட்டல் பகுதிகள்" : "Helpful TNEA Guides"}</h2>
+      const exploreSection = `<section class="home-explore" aria-label="${ta ? "முக்கியப் பகுதிகள்" : "Helpful TNEA Guides"}">
+        <h2 class="home-explore-title">${ta ? "முக்கியப் பகுதிகள்" : "Helpful TNEA Guides"}</h2>
         <div class="home-explore-grid">
           <a class="explore-card" href="/journey?step=study${ta ? "" : "&amp;lang=en"}">
             <span class="explore-icon">⚙️</span>
             <div class="explore-text">
               <strong class="explore-heading">${ta ? "பொறியியல் படிப்புகள்" : "Engineering Branches"}</strong>
-              <span class="explore-sub">${ta ? "CSE, IT, ECE, EEE, Mech..." : "CSE, ECE, Mech &amp; scope"}</span>
+              <span class="explore-sub">${ta ? "CSE, IT, ECE, EEE, Mech விவரம்" : "CSE, ECE, Mech &amp; scope"}</span>
             </div>
             <span class="explore-arrow">→</span>
           </a>
@@ -236,7 +237,7 @@ export function renderStudentEntryPage(
             <span class="explore-icon">📘</span>
             <div class="explore-text">
               <strong class="explore-heading">${ta ? "கலந்தாய்வு விதிகள்" : "Counselling Rules"}</strong>
-              <span class="explore-sub">${ta ? "ஒதுக்கீடு, Upward Movement, 7.5%" : "Allotment &amp; 7.5% Quota"}</span>
+              <span class="explore-sub">${ta ? "இடஒதுக்கீடு, 7.5%, Upward Movement" : "Allotment &amp; 7.5% Quota"}</span>
             </div>
             <span class="explore-arrow">→</span>
           </a>
@@ -244,22 +245,22 @@ export function renderStudentEntryPage(
             <span class="explore-icon">🏛️</span>
             <div class="explore-text">
               <strong class="explore-heading">${ta ? "கல்லூரிகள் பட்டியல்" : "Colleges Directory"}</strong>
-              <span class="explore-sub">${ta ? "300 கல்லூரிகள் விவரம்" : "Search &amp; browse colleges"}</span>
+              <span class="explore-sub">${ta ? "300+ கல்லூரிகள் மற்றும் கோடு" : "Search &amp; browse colleges"}</span>
             </div>
             <span class="explore-arrow">→</span>
           </a>
           <a class="explore-card" href="/journey/questions?lang=${language}">
             <span class="explore-icon">❓</span>
             <div class="explore-text">
-              <strong class="explore-heading">${ta ? "கேள்விகள் &amp; பதில்கள் (FAQs)" : "Questions &amp; Answers (FAQs)"}</strong>
-              <span class="explore-sub">${ta ? "கட்-ஆஃப் vs ரேங்க், கலந்தாய்வு விதிகள்" : "Cutoff vs. Rank, rounds &amp; rules"}</span>
+              <strong class="explore-heading">${ta ? "பொதுவான சந்தேகங்கள்" : "Questions &amp; Answers (FAQs)"}</strong>
+              <span class="explore-sub">${ta ? "கட்-ஆஃப், ரேங்க் மற்றும் விதிகள்" : "Cutoff vs. Rank, rounds &amp; rules"}</span>
             </div>
             <span class="explore-arrow">→</span>
           </a>
         </div>
       </section>`;
 
-      return shell(`<div class="home-main">${heroSection}${doorsGrid}${trustBar}${exploreSection}${ownerEntry}</div>`, "guide", "home");
+      return shell(`<div class="home-main">${heroSection}${doorsGrid}${exploreSection}${ownerEntry}</div>`, "guide", "home");
     }
     const directions = `<nav aria-label="${message("entry.next")}"><h2>${message("entry.next")}</h2><ul>${route !== "beginner" ? `<li>${link("beginner", "entry.beginner")}</li>` : ""}${route !== "personal" ? `<li>${link("personal", "entry.personal")}</li>` : ""}<li>${link("home", "entry.return")}</li></ul></nav>`;
     if (route === "beginner") {

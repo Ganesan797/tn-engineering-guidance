@@ -124,8 +124,8 @@ export function renderSiteHeader(
   const en = language === "en";
   const nav: readonly [string, string, typeof current][] = [
     [en ? "Home" : "முகப்பு", en ? "/?lang=en" : "/", "home"],
-    [en ? "Guidance" : "வழிகாட்டல்", `/journey?step=awareness&lang=${language}`, "journey"],
-    [en ? "Study" : "படிப்பு", `/journey?step=study&lang=${language}`, "study"],
+    [en ? "Guidance" : "வழிகாட்டி", `/journey?step=awareness&lang=${language}`, "journey"],
+    [en ? "Study" : "படிப்புகள்", `/journey?step=study&lang=${language}`, "study"],
     [en ? "Colleges" : "கல்லூரிகள்", `/colleges?lang=${language}`, "colleges"],
     [en ? "Choice Planner" : "விருப்பப் பட்டியல்", `/m5-guidance?lang=${language}`, "planner"],
   ];
@@ -154,7 +154,7 @@ export function renderSiteHeader(
 
 export function renderIndependenceFooter(language: "ta" | "en"): string {
   const en = language === "en";
-  return `<footer class="site-independence-footer" role="contentinfo"><div class="independence-inner"><p class="independence-title"><strong>${en ? "Independent Guidance Notice" : "சுயாதீன மாணவர் வழிகாட்டல் அறிக்கை"}</strong></p><p class="independence-text">${en ? "This application is an independent, public-interest guidance tool designed to help students and parents navigate admissions clearly. It is not an official portal of the Government of Tamil Nadu or TNEA. All historical cutoff and college data are verified against official TNEA and DOTE published sources. Official registration, document verification, counselling fee payment, and final choice submission must be performed exclusively on the official portal at <a href=\"https://www.tneaonline.org/\" target=\"_blank\" rel=\"noopener\">tneaonline.org</a>." : "இந்த வழிகாட்டி மாணவர்கள் மற்றும் பெற்றோரின் கல்விப் புரிதலுக்காக உருவாக்கப்பட்ட <strong>சுயாதீனமான பொதுச் சேவைத் தளம்</strong> ஆகும். இது தமிழ்நாடு அரசு அல்லது TNEA கலந்தாய்வு அமைப்பின் அதிகாரப்பூர்வ இணையதளம் அல்ல. இங்குள்ள தகவல்கள் அதிகாரப்பூர்வ TNEA மற்றும் DOTE அரசாணைகளின் அடிப்படையில் சரிபார்க்கப்பட்டவை. அதிகாரப்பூர்வ சேர்க்கை விண்ணப்பம், கட்டணம் செலுத்துதல் மற்றும் விருப்பப் பதிவு ஆகிய அனைத்தும் <a href=\"https://www.tneaonline.org/\" target=\"_blank\" rel=\"noopener\">tneaonline.org</a> என்ற அதிகாரப்பூர்வ தளத்தில் மட்டுமே மேற்கொள்ளப்பட வேண்டும்."}</p></div></footer>`;
+  return `<footer class="site-independence-footer" role="contentinfo"><div class="independence-inner"><p class="independence-title"><strong>${en ? "Independent Guidance Notice" : "முக்கிய அறிவிப்பு"}</strong></p><p class="independence-text">${en ? "This application is an independent, public-interest guidance tool designed to help students and parents navigate admissions clearly. It is not an official portal of the Government of Tamil Nadu or TNEA. All historical cutoff and college data are verified against official TNEA and DOTE published sources. Official registration, document verification, counselling fee payment, and final choice submission must be performed exclusively on the official portal at <a href=\"https://www.tneaonline.org/\" target=\"_blank\" rel=\"noopener\">tneaonline.org</a>." : "இது மாணவர்கள் மற்றும் பெற்றோர்களின் புரிதலுக்காக உருவாக்கப்பட்ட இலவச வழிகாட்டுதல் தளம் மட்டுமே; தமிழ்நாடு அரசு அல்லது TNEA அமைப்பின் அதிகாரப்பூர்வ இணையதளம் அல்ல. இங்குள்ள தகவல்கள் அதிகாரப்பூர்வ TNEA மற்றும் DOTE அறிவிப்புகளின் அடிப்படையில் தொகுக்கப்பட்டுள்ளன. சேர்க்கை விண்ணப்பம், கட்டணம் செலுத்துதல் மற்றும் விருப்பப் பதிவு அனைத்தையும் <a href=\"https://www.tneaonline.org/\" target=\"_blank\" rel=\"noopener\">tneaonline.org</a> என்ற அதிகாரப்பூர்வ இணையதளத்தில் மட்டுமே செய்ய வேண்டும்."}</p></div></footer>`;
 }
 
 export function renderSiteBottomNav(
