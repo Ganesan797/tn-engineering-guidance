@@ -19,6 +19,9 @@ The guided journey remains primary; governed Q&A is optional exploration. M2, M3
 - [M5-T04 clean-room extraction feasibility report](planning/m5_t04_extraction_report_v1.md) — VERIFIED & GATE A APPROVED (4,332 D5 candidate buckets across 55 colleges, 0 applicant data, benchmark spot checks PASS)
 - [M5 technical closeout report](planning/m5_technical_closeout_report_v1.md) — COMPLETE & ACCEPTED (M5 decision support fully verified, Gate A approved, 536/555 offerings with history active at runtime)
 - [M5 decision support execution proposal](planning/m5_decision_support_proposal_v1.md) — Planning proposal
+- [M6 technical closeout report](planning/m6_technical_closeout_report_v1.md) — COMPLETE & ACCEPTED (End-to-end product V1 integration & hosting readiness)
+- [M7 student validation contract](planning/m7_student_validation_contract_v1.md) — ACCEPTED (Evaluation dimensions, privacy boundaries, and participant observation protocol)
+- [M7 Wave 1 feedback, audit & baseline report](planning/m7_wave_1_feedback_and_action_report_v1.md) — COMPLETE (4 student observations, 1 teacher review, F-01 to F-14 commit links, Gate A-300 baseline reconciliation)
 
 ## Content to review
 
