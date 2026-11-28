@@ -1169,3 +1169,35 @@ test("Section 33 Regressions: Clean 2-Stage Architecture, Mandatory Cutoff, & Pr
   assert.ok(taStage1.includes("தேடு &amp; ஒப்பிடு"), "Must render Tamil Search button");
   assert.ok(taStage1.includes("ஒப்பிடும் முன் தெரிந்துகொள்ள வேண்டியவை"), "Must render collapsed Tamil guide");
 });
+
+test("F-07: Inline multi-year trend pill renders 2026/2025/2024 evidence and fails closed on missing years", () => {
+  // 1. Offering with 3-year evidence (CEG CS for OC General Academic Round 1)
+  const htmlFull = renderM5GuidancePage(new URLSearchParams({ q: "CEG", branch: "CS", lang: "en" }), {
+    studentCutoff: 199.0,
+    quota: "GENERAL_ACADEMIC",
+    community: "OC",
+    round: "ROUND_1",
+    communitySelected: true,
+    year: 2026,
+  });
+  assert.ok(htmlFull.includes('class="multiyear-trend-pill"'), "Must render multi-year trend pill");
+  assert.ok(htmlFull.includes("<strong>'26:</strong>"), "Must include '26 label");
+  assert.ok(htmlFull.includes("<strong>'25:</strong>"), "Must include '25 label");
+  assert.ok(htmlFull.includes("<strong>'24:</strong>"), "Must include '24 label");
+  const fullPillMatch = htmlFull.match(/<div class="multiyear-trend-pill"[\s\S]*?<\/div>/);
+  assert.ok(fullPillMatch, "Must find multi-year trend pill markup");
+  assert.ok(!fullPillMatch[0].includes("—"), "CEG CS OC Round 1 must have numeric values for all three years");
+
+  // 2. Offering with partial/missing evidence (college 1111 has zero 2024/2025 records, only 2026)
+  const htmlPartial = renderM5GuidancePage(new URLSearchParams({ q: "1111", lang: "en" }), {
+    studentCutoff: 150.0,
+    quota: "GENERAL_ACADEMIC",
+    community: "BC",
+    round: "ROUND_1",
+    communitySelected: true,
+    year: 2026,
+  });
+  assert.ok(htmlPartial.includes('class="multiyear-trend-pill"'), "Must render multi-year trend pill for partial offering");
+  assert.ok(htmlPartial.includes("<strong>'25:</strong> —"), "Missing 2025 year must fail closed as —");
+  assert.ok(htmlPartial.includes("<strong>'24:</strong> —"), "Missing 2024 year must fail closed as —");
+});

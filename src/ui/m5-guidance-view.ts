@@ -2970,6 +2970,29 @@ function renderOfferingRow(
     `;
   }
 
+  const getYearTrendVal = (targetYear: number): string => {
+    if (result.isHeld) return "—";
+    const yearResult =
+      targetYear === sessionState.year
+        ? result
+        : compareOffering({
+            studentCutoff: sessionState.studentCutoff,
+            year: targetYear,
+            stage: "PROVISIONAL_ALLOTMENT",
+            round: sessionState.round,
+            quota: sessionState.quota,
+            community: sessionState.community,
+            collegeCode: college.code,
+            programmeCode: offering.programmeCode,
+            metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK",
+          });
+    if (yearResult.isHeld || yearResult.historicalMin === null) return "—";
+    return yearResult.historicalMin.toFixed(1);
+  };
+  const val26 = getYearTrendVal(2026);
+  const val25 = getYearTrendVal(2025);
+  const val24 = getYearTrendVal(2024);
+
   return `
     <tr class="offering-row ${isGrouped ? "offering-grouped" : ""} ${isFirstInGroup ? "offering-first-in-group" : ""} ${isLastInGroup ? "offering-last-in-group" : ""}" data-college-code="${esc(college.code)}">
       <td>
@@ -2983,6 +3006,13 @@ function renderOfferingRow(
             ? result.historicalMin.toFixed(2)
             : "—"
         }</span>
+        <div class="multiyear-trend-pill" style="display: flex; flex-wrap: wrap; gap: 4px; font-size: 0.72rem; color: #475569; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px 5px; margin-top: 3px; width: fit-content; max-width: 100%;">
+          <span><strong>'26:</strong> ${val26}</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span><strong>'25:</strong> ${val25}</span>
+          <span style="color: #cbd5e1;">|</span>
+          <span><strong>'24:</strong> ${val24}</span>
+        </div>
         ${
           !result.isHeld && result.historicalMin !== null && result.round
             ? `<span class="cutoff-subtext">${esc(copy.roundName(result.round))} · ${result.year ?? 2026}</span>`
