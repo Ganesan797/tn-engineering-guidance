@@ -470,6 +470,14 @@ export const GATE_A_APPROVED_DATASETS: readonly GateAApprovedDatasetSpec[] = Obj
     year: 2025,
     cohort: "300",
   },
+  {
+    relPath: "../../experiments/m5-derived-minimum-candidates/run-2024-cohort-300/candidates.json",
+    sha256: "594580faa510c89b116b42a920afcdd248bed6c30bf78ec50eb1469af8fb1a53",
+    sha256Lf: "594580faa510c89b116b42a920afcdd248bed6c30bf78ec50eb1469af8fb1a53",
+    recordCount: 22360,
+    year: 2024,
+    cohort: "300",
+  },
 ]);
 
 export function parseVerifiedCandidateRecord(

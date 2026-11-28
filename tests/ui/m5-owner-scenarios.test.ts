@@ -283,7 +283,7 @@ test("Owner Scenario 7: Marks-Free Browsing — Student views directory without 
 
 test("Owner Scenario 8: Zero Approved Runtime History — Offering Retained and Shortlistable", () => {
   const counts = HISTORICAL_OBSERVATIONS.getOfferingsCount();
-  assert.equal(HISTORICAL_OBSERVATIONS.getAll().length, 50246);
+  assert.equal(HISTORICAL_OBSERVATIONS.getAll().length, 71930);
   assert.deepEqual(counts, { total: 2628, withHistory: 2628, missingHistory: 0 });
 
   // Synthetic repository verifies zero-history behavior

@@ -9,15 +9,15 @@ import {
   type DerivedHistoricalObservation,
 } from "../../src/m5/index.ts";
 
-test("M5 Runtime Historical Data: Verified 50,246 observations across 300 institutions loaded at runtime (Gate A Cleared)", () => {
-  // Verify that the runtime repository contains exactly 50,246 verified observations (622 ungoverned observations held fail-closed)
+test("M5 Runtime Historical Data: Verified 71,930 observations across 300 institutions loaded at runtime (Gate A Cleared)", () => {
+  // Verify that the runtime repository contains exactly 71,930 verified observations (1,298 ungoverned observations held fail-closed)
   const allObs = HISTORICAL_OBSERVATIONS.getAll();
-  assert.equal(allObs.length, 50246, "Must contain exactly 50,246 verified Gate A observations (622 ungoverned holds)");
+  assert.equal(allObs.length, 71930, "Must contain exactly 71,930 verified Gate A observations (1,298 ungoverned holds)");
 
-  // 622 ungoverned candidate observations rejected from keyIndex (0 true duplicate key conflicts)
+  // 1,298 ungoverned candidate observations rejected from keyIndex (0 true duplicate key conflicts)
   const rejected = HISTORICAL_OBSERVATIONS.getRejectedConflicts();
-  assert.equal(rejected.length, 622, "Must hold exactly 622 ungoverned observations");
-  assert.equal(rejected.filter((r) => r.reason === "CONFLICTING_DUPLICATE_KEY").length, 0, "Zero true duplicate key conflicts across all 6 datasets");
+  assert.equal(rejected.length, 1298, "Must hold exactly 1,298 ungoverned observations");
+  assert.equal(rejected.filter((r) => r.reason === "CONFLICTING_DUPLICATE_KEY").length, 0, "Zero true duplicate key conflicts across all 7 datasets");
 
   // All 2,628 governed options must remain discoverable
   const offerings = HISTORICAL_OBSERVATIONS.getAllGovernedOfferings();
@@ -28,6 +28,12 @@ test("M5 Runtime Historical Data: Verified 50,246 observations across 300 instit
   assert.equal(counts.total, 2628);
   assert.equal(counts.withHistory, 2628, "Cross-year historical data available must be 2,628 offerings");
   assert.equal(counts.missingHistory, 0);
+
+  // Active 2024 comparison coverage accounting: 2,420/2,628 offerings (296 unique colleges with 2024 observations)
+  const counts2024 = HISTORICAL_OBSERVATIONS.getOfferingsCount({ year: 2024 });
+  assert.equal(counts2024.total, 2628);
+  assert.equal(counts2024.withHistory, 2420, "Active 2024 comparison coverage must be 2,420 offerings");
+  assert.equal(counts2024.missingHistory, 208);
 
   // Active 2025 comparison coverage accounting: 2,526/2,628 offerings (298 unique colleges with 2025 observations)
   const counts2025 = HISTORICAL_OBSERVATIONS.getOfferingsCount({ year: 2025 });
@@ -42,7 +48,7 @@ test("M5 Runtime Historical Data: Verified 50,246 observations across 300 instit
   assert.equal(counts2026.missingHistory, 1);
 
   // Cohort 55 subset check within the runtime repository
-  assert.equal(HISTORICAL_OBSERVATIONS.getAll("55").length, 12212);
+  assert.equal(HISTORICAL_OBSERVATIONS.getAll("55").length, 17659);
   assert.equal(HISTORICAL_OBSERVATIONS.getAllGovernedOfferings("55").length, 555);
   const counts55 = HISTORICAL_OBSERVATIONS.getOfferingsCount("55");
   assert.equal(counts55.total, 555);
@@ -84,9 +90,9 @@ test("M5 Runtime Historical Data: Verified 50,246 observations across 300 instit
   assert.ok(runtimeResWithRound.locator?.includes("Document 'ROUND 2 - GENERAL ACADEMIC"));
 });
 
-test("M5 Research Candidates and Runtime Reconciliation: 121 institutions and 26,032 observations", () => {
+test("M5 Research Candidates and Runtime Reconciliation: 121 institutions and 37,561 observations", () => {
   const researchRepo121 = createResearchCandidateRepository("121");
-  assert.equal(researchRepo121.getAll().length, 26032, "Candidate repo loads 26,032 observations across 2025/2026 runs");
+  assert.equal(researchRepo121.getAll().length, 37561, "Candidate repo loads 37,561 observations across 2024/2025/2026 runs");
   assert.equal(researchRepo121.getAllGovernedOfferings().length, 1249, "Candidate repo covers 1,249 offerings across 121 institutions");
 
   const counts121 = researchRepo121.getOfferingsCount();
@@ -95,11 +101,11 @@ test("M5 Research Candidates and Runtime Reconciliation: 121 institutions and 26
   assert.equal(counts121.missingHistory, 0);
 
   // Cohort 55 subset in research candidate repo
-  assert.equal(researchRepo121.getAll("55").length, 12212);
+  assert.equal(researchRepo121.getAll("55").length, 17659);
   assert.equal(researchRepo121.getAllGovernedOfferings("55").length, 555);
 
   // Runtime singleton matches Gate A approved 300-institution cohort
-  assert.equal(HISTORICAL_OBSERVATIONS.getAll().length, 50246, "Production runtime singleton contains 50,246 observations");
+  assert.equal(HISTORICAL_OBSERVATIONS.getAll().length, 71930, "Production runtime singleton contains 71,930 observations");
   assert.equal(HISTORICAL_OBSERVATIONS.getAllGovernedOfferings().length, 2628, "Production runtime singleton covers 2,628 offerings");
 });
 
@@ -499,10 +505,23 @@ test("M5 Provenance, Denominator & Cross-Year Integrity Regression", async () =>
     assert.ok(count > 0, `Source ${s.sourceId} must have > 0 candidate records (got ${count})`);
   }
 
-  // 2. College coverage denominators match actual observations (298 in 2025; 300 in 2026)
+  // 1b. Source manifest entries for 2024 300-college dataset all have corresponding candidate records
+  const sources2024 = JSON.parse(fs.readFileSync("experiments/m5-derived-minimum-candidates/run-2024-cohort-300/sources.json", "utf8"));
+  const candidates2024 = JSON.parse(fs.readFileSync("experiments/m5-derived-minimum-candidates/run-2024-cohort-300/candidates.json", "utf8"));
+  assert.equal(sources2024.length, 6, "Must list all 6 official 2024 sources");
+  for (const s of sources2024) {
+    const count = candidates2024.filter((c: { source_title_literal: string; source_round_literal: string; source_route_literal: string }) =>
+      c.source_title_literal === s.title && c.source_round_literal === s.round && c.source_route_literal === s.route
+    ).length;
+    assert.ok(count > 0, `Source ${s.sourceId} must have > 0 candidate records (got ${count})`);
+  }
+
+  // 2. College coverage denominators match actual observations (296 in 2024; 298 in 2025; 300 in 2026)
   const allObs = HISTORICAL_OBSERVATIONS.getAll();
+  const cols2024 = new Set(allObs.filter((o) => o.year === 2024).map((o) => o.collegeCode));
   const cols2025 = new Set(allObs.filter((o) => o.year === 2025).map((o) => o.collegeCode));
   const cols2026 = new Set(allObs.filter((o) => o.year === 2026).map((o) => o.collegeCode));
+  assert.equal(cols2024.size, 296, "Actual colleges with 2024 observations must be 296");
   assert.equal(cols2025.size, 298, "Actual colleges with 2025 observations must be 298");
   assert.equal(cols2026.size, 300, "Actual colleges with 2026 observations must be 300");
 

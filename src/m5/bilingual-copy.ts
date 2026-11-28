@@ -33,7 +33,7 @@ const EN_COPY: ComparisonCopyText = {
   quotaLabel: "Admission Quota / Stream",
   communityLabel: "Reservation Community Category",
   roundLabel: "Counselling Round",
-  historicalMinLabel: "Observed Minimum Mark (2025)",
+  historicalMinLabel: "Observed Minimum Mark",
   deltaLabel: "Comparison Delta (Δ)",
   nonPredictionDisclaimer:
     "Past provisional allotments do not guarantee future admission. A positive or negative mark difference is a factual historical calculation and does not ensure, predict, or guarantee admission. Cutoffs vary each year based on applicant preferences, seat matrix, and marks distribution.",
@@ -94,7 +94,7 @@ const TA_COPY: ComparisonCopyText = {
   quotaLabel: "சேர்க்கை ஒதுக்கீடு (Quota)",
   communityLabel: "இட ஒதுக்கீட்டுப் பிரிவு (Community)",
   roundLabel: "கலந்தாய்வு சுற்று",
-  historicalMinLabel: "குறைந்தபட்ச ஒதுக்கீட்டு மதிப்பெண் (2025)",
+  historicalMinLabel: "குறைந்தபட்ச ஒதுக்கீட்டு மதிப்பெண்",
   deltaLabel: "கட்-ஆஃப் வித்தியாசம் (Δ)",
   nonPredictionDisclaimer:
     "கடந்த கால தற்காலிக ஒதுக்கீடுகள் எதிர்கால சேர்க்கையை உறுதிப்படுத்தாது. நேர்மறை அல்லது எதிர்மறை மதிப்பெண் வேறுபாடு என்பது ஒரு வரலாற்று கணக்கீடு மட்டுமே; அது சேர்க்கையை உறுதிப்படுத்தவோ கணிக்கவோ செய்யாது. விண்ணப்பதாரர்களின் விருப்பங்கள், இட ஒதுக்கீடு மற்றும் மதிப்பெண் பரவல் ஆகியவற்றின் அடிப்படையில் கட்-ஆஃப் ஆண்டுதோறும் மாறுபடும்.",

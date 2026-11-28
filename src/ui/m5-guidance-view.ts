@@ -390,10 +390,8 @@ export function renderM5GuidancePage(
       ? (rawRound as AllotmentRoundOrAll)
       : "ROUND_1";
 
-  const year: number =
-    inputState.year === 2025 || params.get("year") === "2025"
-      ? 2025
-      : 2026;
+  const rawYear = inputState.year ?? (params.get("year") ? Number(params.get("year")) : 2026);
+  const year: number = rawYear === 2024 ? 2024 : rawYear === 2025 ? 2025 : 2026;
 
   // Non-sensitive navigation / search filters from URL
   const query = (params.get("q") ?? "").trim().toLowerCase();
@@ -2057,7 +2055,12 @@ function renderComparisonTab(
             : ""
         }
         ${
-          year === 2025
+          year === 2024
+            ? `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
+                "<strong>2024 தரவு வரம்பு:</strong> 300 கல்லூரிகள் கொண்ட பட்டியலில் 296 கல்லூரிகளின் 2,420 படிப்புகளுக்கு 2024-ஆம் ஆண்டின் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு உள்ளது (4 கல்லூரிகள் உட்பட மீதமுள்ள 208 படிப்புகளுக்கு 'ஒப்பீட்டிற்குத் தரவு இல்லை' எனக் காட்டப்படும்). 2026-ஆம் ஆண்டின் தரவைப் பார்க்க மேலே உள்ள 'கலந்தாய்வு ஆண்டு' தேர்வில் <strong>2026</strong>-ஐத் தேர்ந்தெடுக்கவும்.",
+                "<strong>2024 Evidence Coverage:</strong> Across the 300-college catalogue (2,628 offerings), approved 2024 provisional allotment observations cover 296 colleges (2,420 offerings); the remaining 208 offerings (including 4 colleges with no 2024 provisional allotment records) appear as 'Not available for comparison'. Select <strong>2026</strong> in 'Counselling Year' above to inspect 2026 data."
+              )}</p>`
+            : year === 2025
             ? `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
                 "<strong>2025 தரவு வரம்பு:</strong> 300 கல்லூரிகள் கொண்ட பட்டியலில் 298 கல்லூரிகளின் 2,526 படிப்புகளுக்கு 2025-ஆம் ஆண்டின் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு உள்ளது (2 கல்லூரிகள் உட்பட மீதமுள்ள 102 படிப்புகளுக்கு 'ஒப்பீட்டிற்குத் தரவு இல்லை' எனக் காட்டப்படும்). 2026-ஆம் ஆண்டின் தரவைப் பார்க்க மேலே உள்ள 'கலந்தாய்வு ஆண்டு' தேர்வில் <strong>2026</strong>-ஐத் தேர்ந்தெடுக்கவும்.",
                 "<strong>2025 Evidence Coverage:</strong> Across the 300-college catalogue (2,628 offerings), approved 2025 provisional allotment observations cover 298 colleges (2,526 offerings); the remaining 102 offerings (including 2 colleges with no 2025 provisional allotment records) appear as 'Not available for comparison'. Select <strong>2026</strong> in 'Counselling Year' above to inspect 2026 data."
@@ -2175,6 +2178,7 @@ function renderComparisonTab(
             <select id="year-select" name="year" aria-label="${t("கலந்தாய்வு ஆண்டு", "Counselling Year")}">
               <option value="2026" ${year === 2026 ? "selected" : ""}>${t("2026 (300 கல்லூரிகள் · 2,627/2,628 படிப்புகள்)", "2026 (300 Colleges · 2,627/2,628 Offerings)")}</option>
               <option value="2025" ${year === 2025 ? "selected" : ""}>${t("2025 (298/300 கல்லூரிகள் · 2,526/2,628 படிப்புகள்)", "2025 (298/300 Colleges · 2,526/2,628 Offerings)")}</option>
+              <option value="2024" ${year === 2024 ? "selected" : ""}>${t("2024 (296/300 கல்லூரிகள் · 2,420/2,628 படிப்புகள்)", "2024 (296/300 Colleges · 2,420/2,628 Offerings)")}</option>
             </select>
           </div>
         </div>

@@ -1106,6 +1106,9 @@ test("TNEA Historical Evidence & Round Exploration: No cutoff-to-round inference
   assert.ok(!htmlDefault.includes("College Closing Cutoffs"), "Must not call derived provisional marks closing cutoffs");
   assert.ok(htmlDefault.includes("2026 (300 Colleges · 2,627/2,628 Offerings)"), "2026 year option must disclose 2,627/2,628 offerings");
   assert.ok(htmlDefault.includes("2025 (298/300 Colleges · 2,526/2,628 Offerings)"), "2025 year option must disclose 298/300 colleges and 2,526/2,628 offerings");
+  assert.ok(htmlDefault.includes("2024 (296/300 Colleges · 2,420/2,628 Offerings)"), "2024 year option must disclose 296/300 colleges and 2,420/2,628 offerings");
+  const html2024 = renderM5GuidancePage(new URLSearchParams({ lang: "en", year: "2024" }), { year: 2024 });
+  assert.ok(html2024.includes('<option value="2024" selected>'), "Year 2024 must be selectable");
   const htmlTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
   assert.ok(htmlTa.includes("கலந்தாய்வு சுற்றுகளும் ஒதுக்கீட்டு மதிப்பெண்களும்"), "Must explain rounds vs observed allotment marks in Tamil");
 });
