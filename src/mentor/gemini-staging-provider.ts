@@ -188,10 +188,11 @@ export class GeminiStagingMentorProvider {
               m.name &&
               m.supportedGenerationMethods?.includes("generateContent") &&
               /gemini/i.test(m.name) &&
-              /flash/i.test(m.name)
+              /flash/i.test(m.name) &&
+              !/image|tts|audio|robotics|computer-use|live|embedding|aqa|customtools/i.test(m.name)
           )
           .map((m) => m.name!.replace(/^models\//, ""));
-        for (const m of discovered.slice(0, 2)) {
+        for (const m of discovered.slice(0, 5)) {
           const retryRes = await this.fetchImpl(
             `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent`,
             {
@@ -206,7 +207,19 @@ export class GeminiStagingMentorProvider {
               candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
             };
             const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join(" ") ?? "";
-            return validateGeneratedReply(text);
+            if (text.trim()) {
+              return validateGeneratedReply(text);
+            }
+            lastError = new Error(`Gemini staging empty text (${m})`);
+          } else {
+            let retryMsg = "";
+            try {
+              const errBody = (await retryRes.json()) as { error?: { message?: string } };
+              retryMsg = errBody?.error?.message ? `: ${errBody.error.message.slice(0, 100)}` : "";
+            } catch {
+              // ignore
+            }
+            lastError = new Error(`Gemini staging HTTP ${retryRes.status} (${m})${retryMsg}`);
           }
         }
       }
