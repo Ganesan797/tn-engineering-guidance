@@ -1,4 +1,3 @@
-import { detectBlockedRequest } from "./policy.ts";
 import { MAX_RESPONSE_LENGTH, type BoundedExplanationContext } from "./types.ts";
 
 export interface GeminiStagingOptions {
@@ -15,7 +14,7 @@ const DEFAULT_MAX_RPM = 15;
 const DEFAULT_TIMEOUT_MS = 8000;
 
 const UNSAFE_OUTPUT_PATTERNS: readonly RegExp[] = [
-  /\b(safe\s+college|target\s+college|dream\s+college|guaranteed\s+admission|sure\s+seat|\d+%\s*chance)\b/i,
+  /\b(safe\s+college|target\s+college|dream\s+college|guaranteed\s+admission|sure\s+seat|\d+%\s*chance|will\s+definitely\s+get|i\s+recommend\s+(?:this|choosing|joining))\b/i,
   /(பாதுகாப்பான\s*கல்லூரி|உறுதியாக\s*கிடைக்கும்|சேர்க்கை\s*உத்தரவாதம்)/i,
 ];
 
@@ -82,7 +81,7 @@ export function validateGeneratedReply(rawText: string): string {
   if (!cleaned) {
     throw new UnsafeModelOutputError("Empty model reply");
   }
-  if (detectBlockedRequest(cleaned) || UNSAFE_OUTPUT_PATTERNS.some((re) => re.test(cleaned))) {
+  if (UNSAFE_OUTPUT_PATTERNS.some((re) => re.test(cleaned))) {
     throw new UnsafeModelOutputError("Generated text contained prohibited prediction/ranking wording");
   }
   return cleaned.length <= MAX_RESPONSE_LENGTH ? cleaned : cleaned.slice(0, MAX_RESPONSE_LENGTH - 1) + "…";

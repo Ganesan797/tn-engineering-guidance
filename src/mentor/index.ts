@@ -232,6 +232,7 @@ export async function explainWithMentorAsync(
 
   try {
     const reply = await gemini.explainAsync(context, minimizedQuestion);
+    console.log(`mentor_gemini_ok chars=${reply.length}`);
     const res: MentorResponse = {
       status: "ok",
       mentorMode: "STAGING_GEMINI",
@@ -240,13 +241,18 @@ export async function explainWithMentorAsync(
       contextOutcome: context.context_outcome,
       language,
       disclosure,
-      provenance,
+      provenance: `${provenance} [Gemini]`,
       reply,
       contextCount: context.selected_evidence.length,
     };
     options.onEvent?.({ mentor_route: res.route, mentor_status: res.status, mentor_mode: "STAGING_GEMINI" });
     return res;
-  } catch {
+  } catch (err) {
+    const safeReason =
+      err instanceof Error
+        ? `${err.name}:${err.message.replace(/AIza[0-9A-Za-z_-]+/g, "[redacted]").slice(0, 80)}`
+        : "unknown_error";
+    console.warn(`mentor_gemini_fallback reason=${safeReason}`);
     // Fail-closed safe fallback to deterministic/mock explanation on timeout, 429, rate-limit, or unsafe output
     const fallback = (options.provider ?? new MockMentorProvider()).explain(context, minimizedQuestion);
     const res: MentorResponse = {
@@ -257,7 +263,7 @@ export async function explainWithMentorAsync(
       contextOutcome: context.context_outcome,
       language,
       disclosure,
-      provenance,
+      provenance: `${provenance} [Mock fallback: ${err instanceof Error ? err.name : "error"}]`,
       reply: fallback,
       contextCount: context.selected_evidence.length,
     };
