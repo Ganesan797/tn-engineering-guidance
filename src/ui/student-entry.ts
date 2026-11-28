@@ -95,19 +95,24 @@ export function renderStudentEntryPage(
 .choice-card.recommended .door-cta-btn{background:#0f766e}
 .door-mark .door-cta-btn{background:#c2410c}
 .choice-card:hover .door-cta-btn{filter:brightness(1.06)}
-.home-explore{margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid #e2e8f0}
-.home-explore-title{font-size:0.86rem;font-weight:750;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;margin:0 0 0.85rem;text-align:center}
+.home-explore{margin-top:1.6rem;padding-top:0.5rem}
+.home-explore-title{display:flex;align-items:center;gap:12px;font-size:0.86rem;font-weight:750;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;margin:0 0 0.95rem;text-align:center}
+.home-explore-title::before,.home-explore-title::after{content:"";flex:1;height:1px;background:#e2e8f0}
 .home-explore-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
-@media(min-width:540px){.home-explore-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:540px){.home-explore-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
 @media(min-width:960px){.home-explore-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}}
 .privacy-declaration-strip{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:#ecfdf5;border:1px solid #a7f3d0;border-left:4px solid #059669;border-radius:8px;margin:0 0 1.25rem;font-size:0.86rem;line-height:1.45;color:#064e3b}
 .privacy-lock-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
 .calc-recalculate-details{margin-top:1.25rem;border:1px solid #cbd5e1;border-radius:10px;background:#fff;padding:0.25rem 0.9rem}
 .calc-recalculate-details summary{cursor:pointer;padding:0.65rem 0.25rem;font-weight:700;color:#0f766e;font-size:0.95rem}
 .calc-recalculate-details .cutoff-calculator{border:none;box-shadow:none;margin:0;padding:0.5rem 0 1rem}
-.explore-card{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;text-decoration:none;color:#1e293b;transition:all 0.15s ease;min-width:0;box-sizing:border-box}
-.explore-card:hover{border-color:#0f766e;background:#f0fdfa;transform:translateY(-1px)}
-.explore-icon{font-size:1.35rem;flex-shrink:0}
+.explore-card{display:flex;align-items:center;gap:12px;padding:13px 14px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;text-decoration:none;color:#1e293b;transition:all 0.15s ease;min-width:0;box-sizing:border-box;box-shadow:0 1px 2px rgba(15,23,42,0.03)}
+.explore-card:hover{border-color:#0f766e;background:#f0fdfa;transform:translateY(-1px);box-shadow:0 4px 12px rgba(15,118,110,0.08)}
+.explore-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.explore-icon--mint{background:#ecfdf5;color:#0f766e}
+.explore-icon--lavender{background:#eef2ff;color:#4f46e5}
+.explore-icon--peach{background:#fff7ed;color:#c2410c}
+.explore-icon--rose{background:#fef2f2;color:#dc2626}
 .explore-text{flex:1;min-width:0;overflow:hidden}
 .explore-heading{font-size:0.88rem;font-weight:750;margin:0 0 2px;color:#0f2c59;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .explore-sub{font-size:0.75rem;color:#64748b;margin:0;line-height:1.35;display:block}
@@ -226,7 +231,7 @@ export function renderStudentEntryPage(
         <h2 class="home-explore-title">${ta ? "முக்கியப் பகுதிகள்" : "Helpful TNEA Guides"}</h2>
         <div class="home-explore-grid">
           <a class="explore-card" href="/journey?step=study${ta ? "" : "&amp;lang=en"}">
-            <span class="explore-icon">⚙️</span>
+            <span class="explore-icon explore-icon--mint" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg></span>
             <div class="explore-text">
               <strong class="explore-heading">${ta ? "பொறியியல் படிப்புகள்" : "Engineering Branches"}</strong>
               <span class="explore-sub">${ta ? "CSE, IT, ECE, EEE, Mech விவரம்" : "CSE, ECE, Mech &amp; scope"}</span>
@@ -234,7 +239,7 @@ export function renderStudentEntryPage(
             <span class="explore-arrow">→</span>
           </a>
           <a class="explore-card" href="${entryHref("counselling", language)}">
-            <span class="explore-icon">📘</span>
+            <span class="explore-icon explore-icon--lavender" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
             <div class="explore-text">
               <strong class="explore-heading">${ta ? "கலந்தாய்வு விதிகள்" : "Counselling Rules"}</strong>
               <span class="explore-sub">${ta ? "இடஒதுக்கீடு, 7.5%, Upward Movement" : "Allotment &amp; 7.5% Quota"}</span>
@@ -242,7 +247,7 @@ export function renderStudentEntryPage(
             <span class="explore-arrow">→</span>
           </a>
           <a class="explore-card" href="/colleges?lang=${language}">
-            <span class="explore-icon">🏛️</span>
+            <span class="explore-icon explore-icon--peach" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-4h6v4"/></svg></span>
             <div class="explore-text">
               <strong class="explore-heading">${ta ? "கல்லூரிகள் பட்டியல்" : "Colleges Directory"}</strong>
               <span class="explore-sub">${ta ? "300+ கல்லூரிகள் மற்றும் கோடு" : "Search &amp; browse colleges"}</span>
@@ -250,7 +255,7 @@ export function renderStudentEntryPage(
             <span class="explore-arrow">→</span>
           </a>
           <a class="explore-card" href="/journey/questions?lang=${language}">
-            <span class="explore-icon">❓</span>
+            <span class="explore-icon explore-icon--rose" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
             <div class="explore-text">
               <strong class="explore-heading">${ta ? "பொதுவான சந்தேகங்கள்" : "Questions &amp; Answers (FAQs)"}</strong>
               <span class="explore-sub">${ta ? "கட்-ஆஃப், ரேங்க் மற்றும் விதிகள்" : "Cutoff vs. Rank, rounds &amp; rules"}</span>
