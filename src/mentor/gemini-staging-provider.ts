@@ -9,7 +9,8 @@ export interface GeminiStagingOptions {
   readonly nowFn?: () => number;
 }
 
-const DEFAULT_MODEL = "gemini-2.5-flash";
+const DEFAULT_MODEL = "gemini-2.5-flash-lite";
+const FALLBACK_MODELS_ON_404: readonly string[] = ["gemini-2.0-flash", "gemini-2.5-flash"];
 const DEFAULT_MAX_RPM = 15;
 const DEFAULT_TIMEOUT_MS = 8000;
 
@@ -91,12 +92,14 @@ export class GeminiStagingMentorProvider {
   public readonly name = "gemini" as const;
   private readonly apiKey: string;
   private readonly model: string;
+  private readonly explicitModel: boolean;
   private readonly timeoutMs: number;
   private readonly fetchImpl: typeof fetch;
   private readonly limiter: SlidingWindowRateLimiter;
 
   constructor(options: GeminiStagingOptions) {
     this.apiKey = options.apiKey;
+    this.explicitModel = Boolean(options.model);
     this.model = options.model ?? DEFAULT_MODEL;
     this.timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
     this.fetchImpl = options.fetchImpl ?? globalThis.fetch;
@@ -108,7 +111,6 @@ export class GeminiStagingMentorProvider {
       throw new StagingRateLimitError();
     }
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(this.model)}:generateContent`;
     const payload = {
       systemInstruction: {
         parts: [{ text: buildSystemInstruction(context.language) }],
@@ -129,26 +131,46 @@ export class GeminiStagingMentorProvider {
       },
     };
 
-    const response = await this.fetchImpl(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": this.apiKey,
-      },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(this.timeoutMs),
-    });
+    const modelsToTry = this.explicitModel
+      ? [this.model]
+      : [this.model, ...FALLBACK_MODELS_ON_404.filter((m) => m !== this.model)];
 
-    if (!response.ok) {
-      throw new Error(`Gemini staging HTTP ${response.status}`);
+    let lastError: Error | null = null;
+    for (const candidateModel of modelsToTry) {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent`;
+      const response = await this.fetchImpl(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": this.apiKey,
+        },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(this.timeoutMs),
+      });
+
+      if (response.ok) {
+        const data = (await response.json()) as {
+          candidates?: Array<{
+            content?: { parts?: Array<{ text?: string }> };
+          }>;
+        };
+        const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join(" ") ?? "";
+        return validateGeneratedReply(text);
+      }
+
+      let apiMsg = "";
+      try {
+        const errBody = (await response.json()) as { error?: { message?: string } };
+        apiMsg = errBody?.error?.message ? `: ${errBody.error.message.slice(0, 100)}` : "";
+      } catch {
+        // ignore non-JSON error body
+      }
+      lastError = new Error(`Gemini staging HTTP ${response.status} (${candidateModel})${apiMsg}`);
+      if (response.status !== 404) {
+        throw lastError;
+      }
     }
 
-    const data = (await response.json()) as {
-      candidates?: Array<{
-        content?: { parts?: Array<{ text?: string }> };
-      }>;
-    };
-    const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join(" ") ?? "";
-    return validateGeneratedReply(text);
+    throw lastError ?? new Error("Gemini staging HTTP 404");
   }
 }
