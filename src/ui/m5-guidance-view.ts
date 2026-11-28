@@ -50,13 +50,21 @@ import {
   COHORT_55_METADATA,
   COHORT_66_ADDITIONS_METADATA,
   COHORT_65_ADDITIONS_METADATA,
+  COHORT_79_ADDITIONS_METADATA,
+  COHORT_100_ADDITIONS_METADATA,
   COHORT_121_METADATA,
   COHORT_120_METADATA,
+  COHORT_200_METADATA,
+  COHORT_300_METADATA,
   COHORT_55_CODES,
   COHORT_66_ADDITIONS_CODES,
   COHORT_65_ADDITIONS_CODES,
+  COHORT_79_ADDITIONS_CODES,
+  COHORT_100_ADDITIONS_CODES,
   COHORT_121_CODES,
   COHORT_120_CODES,
+  COHORT_200_CODES,
+  COHORT_300_CODES,
 } from "../m5/cohort-metadata.ts";
 
 export {
@@ -64,13 +72,21 @@ export {
   COHORT_55_METADATA,
   COHORT_66_ADDITIONS_METADATA,
   COHORT_65_ADDITIONS_METADATA,
+  COHORT_79_ADDITIONS_METADATA,
+  COHORT_100_ADDITIONS_METADATA,
   COHORT_121_METADATA,
   COHORT_120_METADATA,
+  COHORT_200_METADATA,
+  COHORT_300_METADATA,
   COHORT_55_CODES,
   COHORT_66_ADDITIONS_CODES,
   COHORT_65_ADDITIONS_CODES,
+  COHORT_79_ADDITIONS_CODES,
+  COHORT_100_ADDITIONS_CODES,
   COHORT_121_CODES,
   COHORT_120_CODES,
+  COHORT_200_CODES,
+  COHORT_300_CODES,
 };
 
 export const SEARCH_ALIASES: Record<string, string> = {
@@ -423,11 +439,11 @@ export function renderM5GuidancePage(
       hasShortlist ||
       hasActiveCutoffSearch);
 
-  // Load ALL 1,249 governed offerings across 121 approved institutions
+  // Load ALL 2,628 governed offerings across 300 approved institutions
   const governedOfferings = HISTORICAL_OBSERVATIONS.getAllGovernedOfferings();
 
-  // All 121 colleges sorted by name
-  const allColleges = Object.values(COHORT_121_METADATA).sort((a, b) => {
+  // All 300 colleges sorted by name
+  const allColleges = Object.values(COHORT_300_METADATA).sort((a, b) => {
     const n = a.name.localeCompare(b.name);
     return n !== 0 ? n : a.code.localeCompare(b.code);
   });
@@ -463,7 +479,7 @@ export function renderM5GuidancePage(
       .toLowerCase()
       .replace(/\b[a-z]/g, (ch) => ch.toUpperCase());
   const districtMap = new Map<string, string>();
-  for (const c of Object.values(COHORT_121_METADATA)) {
+  for (const c of Object.values(COHORT_300_METADATA)) {
     const key = c.district.trim().toLowerCase();
     if (!key) continue;
     if (!districtMap.has(key)) {
@@ -493,7 +509,7 @@ export function renderM5GuidancePage(
   }> = [];
 
   for (const off of governedOfferings) {
-    const college = COHORT_121_METADATA[off.collegeCode] ?? {
+    const college = COHORT_300_METADATA[off.collegeCode] ?? {
       code: off.collegeCode,
       name: `College ${off.collegeCode}`,
       type: "GOVERNMENT",
@@ -2043,12 +2059,12 @@ function renderComparisonTab(
         ${
           year === 2025
             ? `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
-                "<strong>2025 தரவு வரம்பு:</strong> இந்தப் பட்டியலில் உள்ள 121 கல்லூரிகளின் 1,249 படிப்புகளில், 536 படிப்புகளுக்கு 2025-ஆம் ஆண்டின் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு உள்ளது (மீதமுள்ள 713 படிப்புகளுக்கு 'ஒப்பீட்டிற்குத் தரவு இல்லை' எனக் காட்டப்படும்). அனைத்து 121 கல்லூரிகளின் 1,249 படிப்புகளுக்குமான முழு ஒதுக்கீட்டுத் தரவைப் பார்க்க மேலே உள்ள 'கலந்தாய்வு ஆண்டு' தேர்வில் <strong>2026</strong>-ஐத் தேர்ந்தெடுக்கவும்.",
-                "<strong>2025 Evidence Coverage:</strong> Across the 121 governed colleges (1,249 offerings), approved 2025 provisional allotment observations are available for 536 offerings (the remaining 713 offerings appear as 'Not available for comparison'). Select <strong>2026</strong> in 'Counselling Year' above to inspect complete data across all 121 colleges (1,249 offerings)."
+                "<strong>2025 தரவு வரம்பு:</strong> இந்தப் பட்டியலில் உள்ள 300 கல்லூரிகளின் 2,628 படிப்புகளில், 536 படிப்புகளுக்கு 2025-ஆம் ஆண்டின் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு உள்ளது (மீதமுள்ள 2,092 படிப்புகளுக்கு 'ஒப்பீட்டிற்குத் தரவு இல்லை' எனக் காட்டப்படும்). அனைத்து 300 கல்லூரிகளின் 2,628 படிப்புகளுக்குமான முழு ஒதுக்கீட்டுத் தரவைப் பார்க்க மேலே உள்ள 'கலந்தாய்வு ஆண்டு' தேர்வில் <strong>2026</strong>-ஐத் தேர்ந்தெடுக்கவும்.",
+                "<strong>2025 Evidence Coverage:</strong> Across the 300 governed colleges (2,628 offerings), approved 2025 provisional allotment observations are available for 536 offerings (the remaining 2,092 offerings appear as 'Not available for comparison'). Select <strong>2026</strong> in 'Counselling Year' above to inspect complete data across all 300 colleges (2,628 offerings)."
               )}</p>`
             : `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
-                "<strong>2026 முழு வரம்பு:</strong> 2026-ஆம் ஆண்டின் தற்காலிக ஒதுக்கீட்டுத் தரவு 121 கல்லூரிகளுக்கும் (1,249 படிப்புகள்) முழுமையாகக் கிடைக்கிறது.",
-                "<strong>2026 Complete Scope:</strong> 2026 provisional allotment data is active across all 121 approved colleges (1,249 offerings)."
+                "<strong>2026 முழு வரம்பு:</strong> 2026-ஆம் ஆண்டின் தற்காலிக ஒதுக்கீட்டுத் தரவு 300 கல்லூரிகளுக்கும் (2,628 படிப்புகள்) முழுமையாகக் கிடைக்கிறது.",
+                "<strong>2026 Complete Scope:</strong> 2026 provisional allotment data is active across all 300 approved colleges (2,628 offerings)."
               )}</p>`
         }
         <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">
@@ -2165,8 +2181,8 @@ function renderComparisonTab(
           <div class="form-group">
             <label for="year-select">${t("ஆண்டு", "Year")}</label>
             <select id="year-select" name="year" aria-label="${t("கலந்தாய்வு ஆண்டு", "Counselling Year")}">
-              <option value="2026" ${year === 2026 ? "selected" : ""}>${t("2026 (121 கல்லூரிகள் · 1,249 படிப்புத் தரவுகள்)", "2026 (121 Colleges · 1,249 Offerings Data)")}</option>
-              <option value="2025" ${year === 2025 ? "selected" : ""}>${t("2025 (121 கல்லூரிகள் · 536 படிப்புத் தரவுகள்)", "2025 (121 Colleges · 536 Offerings Data)")}</option>
+              <option value="2026" ${year === 2026 ? "selected" : ""}>${t("2026 (300 கல்லூரிகள் · 2,628 படிப்புத் தரவுகள்)", "2026 (300 Colleges · 2,628 Offerings Data)")}</option>
+              <option value="2025" ${year === 2025 ? "selected" : ""}>${t("2025 (300 கல்லூரிகள் · 536 படிப்புத் தரவுகள்)", "2025 (300 Colleges · 536 Offerings Data)")}</option>
             </select>
           </div>
         </div>
@@ -2206,7 +2222,7 @@ function renderComparisonTab(
     activeFilterChips.push({ label: `🏛️ ${doteName}`, field: "type", clearValue: "all" });
   }
   if (collegeFilter && collegeFilter !== "all") {
-    const colMeta = COHORT_121_METADATA[collegeFilter];
+    const colMeta = COHORT_300_METADATA[collegeFilter];
     const colName = colMeta ? colMeta.code : collegeFilter;
     activeFilterChips.push({ label: `🏫 [${colName}]`, field: "college", clearValue: "all" });
   }
@@ -2448,8 +2464,8 @@ function renderComparisonTab(
             <p>${esc(copy.nonPredictionDisclaimer)}</p>
             <p style="font-size: 0.86rem; color: #4a5568;">
               ${t(
-                `அங்கீகரிக்கப்பட்ட 121 கல்லூரிகளில் உள்ள ${totalOfferingsFormatted} படிப்புகளும் கீழே பட்டியலிடப்பட்டுள்ளன. முந்தைய ஆண்டு அதிகாரப்பூர்வத் தரவு இல்லாத படிப்புகளுக்கு மட்டும் 'ஒப்பீட்டிற்குத் தரவு இல்லை' என்று தெளிவாகக் குறிக்கப்பட்டுள்ளது.`,
-                `All ${totalOfferingsFormatted} governed offerings across the 121 approved institutions are listed below. Where approved historical evidence is absent, offerings are transparently shown as 'Not available for comparison'.`
+                `அங்கீகரிக்கப்பட்ட 300 கல்லூரிகளில் உள்ள ${totalOfferingsFormatted} படிப்புகளும் கீழே பட்டியலிடப்பட்டுள்ளன. முந்தைய ஆண்டு அதிகாரப்பூர்வத் தரவு இல்லாத படிப்புகளுக்கு மட்டும் 'ஒப்பீட்டிற்குத் தரவு இல்லை' என்று தெளிவாகக் குறிக்கப்பட்டுள்ளது.`,
+                `All ${totalOfferingsFormatted} governed offerings across the 300 approved institutions are listed below. Where approved historical evidence is absent, offerings are transparently shown as 'Not available for comparison'.`
               )}
             </p>
           </aside>

@@ -2,7 +2,7 @@ import { buildGovernedPilotView, GOVERNED_PILOT, type PilotInput } from "../m4/g
 import { APPROVED_FAMILY_MAPPINGS, buildReleasedFamilies, type ReviewedFamilyMapping } from "../m4/family-mapping.ts";
 import { APPROVED_BRANCH_COPY, isReleasedBranchCopy } from "../m4/branch-copy.ts";
 import { renderSiteHeader, renderSiteBottomNav, renderIndependenceFooter, SITE_SHELL_CSS, GOOGLE_FONTS_HTML, SHARED_FONT_FAMILY } from "./site-shell.ts";
-import { COHORT_121_METADATA } from "../m5/cohort-metadata.ts";
+import { COHORT_300_METADATA } from "../m5/cohort-metadata.ts";
 import { getCollegeDoteCategory } from "./m5-guidance-view.ts";
 
 
@@ -72,7 +72,7 @@ function getDoteCategoryForItem(i: { college: string; type: string | null }): {
   nameTa: string;
   badgeClass: string;
 } {
-  const meta = COHORT_121_METADATA[i.college];
+  const meta = COHORT_300_METADATA[i.college];
   if (meta) {
     return getCollegeDoteCategory(meta);
   }
@@ -151,7 +151,7 @@ function formatCollegeDropdownLabel(code: string, rawName: string): string {
   if (code === "2006") return "PSG Tech, Coimbatore";
   if (code === "2007") return "CIT, Coimbatore";
   if (code === "5008") return "TCE, Madurai";
-  const meta = COHORT_121_METADATA[code];
+  const meta = COHORT_300_METADATA[code];
   if (meta) return meta.name.replace(/\bGovernment\b/g, "Govt.");
   return rawName.replace(/\bGovernment\b/g, "Govt.");
 }
@@ -189,13 +189,13 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
   if (branch && i.programme !== branch) return false;
   if (college && college !== "all" && i.college !== college) return false;
   if (district) {
-   const itemDist = (i.district ?? (usesApprovedDirectory ? COHORT_121_METADATA[i.college]?.district ?? "" : "")).toLowerCase();
+   const itemDist = (i.district ?? (usesApprovedDirectory ? COHORT_300_METADATA[i.college]?.district ?? "" : "")).toLowerCase();
    if (!itemDist || itemDist !== district.toLowerCase()) return false;
   }
   if (type) {
    const itemType = i.type;
    const cat = getDoteCategoryForItem(i).key;
-   const hasVerifiedType = (usesApprovedDirectory && !!COHORT_121_METADATA[i.college]) || !!i.type;
+   const hasVerifiedType = (usesApprovedDirectory && !!COHORT_300_METADATA[i.college]) || !!i.type;
    if (!hasVerifiedType) return false;
    const isMatch = (
     type === itemType ||
@@ -206,7 +206,7 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
    );
    if (!isMatch) return false;
   }
-  const meta = usesApprovedDirectory ? COHORT_121_METADATA[i.college] : undefined;
+  const meta = usesApprovedDirectory ? COHORT_300_METADATA[i.college] : undefined;
   const distText = i.district ?? meta?.district ?? "";
   const aliasText = (meta?.aliases ?? []).join(" ");
   return matchesSearch((i.collegeName+" "+i.college+" "+i.programmeName+" "+i.programme+(distText?" "+distText:"")+(aliasText?" "+aliasText:"")).toLowerCase(), i.collegeName, search);
@@ -228,7 +228,7 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
  const rawDistrictCandidates = usesApprovedDirectory
   ? [
      ...items.map(i=>i.district).filter((v):v is string=>!!v),
-     ...Object.values(COHORT_121_METADATA).map(m=>m.district).filter(Boolean),
+     ...Object.values(COHORT_300_METADATA).map(m=>m.district).filter(Boolean),
     ]
   : items.map(i=>i.district).filter((v):v is string=>!!v);
  const districtMap = new Map<string, string>();
@@ -264,7 +264,7 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
   const uniqueCols = new Map<string, { code: string; name: string; district: string; catKey: string }>();
   for (const i of items) {
    if (!uniqueCols.has(i.college)) {
-    const meta = COHORT_121_METADATA[i.college];
+    const meta = COHORT_300_METADATA[i.college];
     const dist = i.district ?? meta?.district ?? "";
     const cat = getDoteCategoryForItem(i).key;
     uniqueCols.set(i.college, {
@@ -383,7 +383,7 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
  const groupCard=(group:typeof items)=>{
    const first=group[0];
    const doteCat = getDoteCategoryForItem(first);
-   const hasVerifiedCat = !!COHORT_121_METADATA[first.college] || !!first.type;
+   const hasVerifiedCat = !!COHORT_300_METADATA[first.college] || !!first.type;
    const doteBadge = hasVerifiedCat ? `<span class="badge ${doteCat.badgeClass}">${esc(t(doteCat.nameTa, doteCat.nameEn))}</span>` : "";
    const codeChip = `<span class="meta-chip chip-code"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>${t("குறியீடு: ","Code: ")}<strong>${esc(first.college)}</strong></span></span>`;
    const districtChip = first.district ? `<span class="meta-chip chip-district"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>${t("மாவட்டம்: ","District: ")}${esc(first.district)}</span></span>` : "";
@@ -467,7 +467,7 @@ export function renderGovernedPilot(params: URLSearchParams, input: PilotInput =
   const rows=items.filter(i=>i.college===college), first=rows[0];
   const selected=branch?rows.find(i=>i.programme===branch):undefined;
   const doteCat = first ? getDoteCategoryForItem(first) : null;
-  const hasVerifiedCat = first && (!!COHORT_121_METADATA[first.college] || !!first.type);
+  const hasVerifiedCat = first && (!!COHORT_300_METADATA[first.college] || !!first.type);
   const doteBadge = hasVerifiedCat && doteCat ? `<div class="card-badge-row"><span class="badge ${doteCat.badgeClass}">${esc(t(doteCat.nameTa, doteCat.nameEn))}</span></div>` : "";
   const compactCourseRow = (i:(typeof items)[number]) => `<a class="compact-course-row" href="${esc(query({view:"detail",college:i.college,programme:i.programme}))}"><div class="compact-course-left"><strong class="compact-course-name">${esc(i.programmeName)} (${esc(i.programme)})</strong></div><span class="compact-course-arrow">→</span></a>`;
   const selectedSection = selected ? `<section class="compact-courses-section" aria-labelledby="matching-programme"><h2 id="matching-programme">${t("நீங்கள் தேர்ந்தெடுத்த பாடப்பிரிவு","Your matching programme")}</h2><div class="compact-course-list">${compactCourseRow(selected)}</div></section>` : "";

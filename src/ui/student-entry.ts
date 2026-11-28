@@ -59,20 +59,26 @@ export function renderStudentEntryPage(
     stepOverride?: "home" | "journey" | "study" | "colleges" | "review" | "planner" | "cutoff",
   ) => `<!doctype html><html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${GOOGLE_FONTS_HTML}<title>${message("entry.site")}</title><style>${STYLE}${SITE_SHELL_CSS}
 .home-main{max-width:780px;margin:0 auto;padding:16px;box-sizing:border-box}
+@media(min-width:900px){.home-main{max-width:1120px;padding:24px 20px}}
 .home-hero-split{display:grid;grid-template-columns:minmax(115px,42%) minmax(0,1fr);gap:14px;align-items:center;background:#FAF7F2;border:1px solid #EFEAE0;border-radius:16px;padding:12px 14px;margin-bottom:14px}
-@media(min-width:640px){.home-hero-split{grid-template-columns:minmax(220px,40%) minmax(0,1fr);gap:24px;padding:20px 24px}}
+@media(min-width:640px){.home-hero-split{grid-template-columns:minmax(220px,36%) minmax(0,1fr);gap:24px;padding:20px 24px}}
+@media(min-width:900px){.home-hero-split{grid-template-columns:280px minmax(0,1fr);gap:32px;padding:22px 32px;margin-bottom:18px}}
 .home-hero-art{width:100%;border-radius:12px;overflow:hidden;box-shadow:0 3px 12px rgba(15,23,42,0.08)}
 .home-hero-img{width:100%;height:195px;object-fit:cover;object-position:center 75%;display:block}
-@media(min-width:640px){.home-hero-img{height:245px}}
+@media(min-width:640px){.home-hero-img{height:230px}}
 .home-hero-copy{text-align:left;min-width:0}
 .home-badge-tag{display:inline-block;padding:3px 9px;background:#f0fdfa;border:1px solid #ccfbf1;border-radius:9999px;font-size:0.72rem;font-weight:750;color:#0f766e;margin-bottom:0.45rem;line-height:1.3}
 .home-title{font-size:1.35rem;font-weight:800;color:#0f2c59;line-height:1.22;margin:0 0 0.4rem;letter-spacing:-0.02em;word-break:break-word}
 @media(min-width:640px){.home-title{font-size:1.85rem}}
+@media(min-width:900px){.home-title{font-size:2.15rem}}
 .home-sub{font-size:0.86rem;color:#475569;line-height:1.45;margin:0}
 @media(min-width:640px){.home-sub{font-size:1rem}}
+@media(min-width:900px){.home-sub{font-size:1.06rem;max-width:56ch}}
 .home-trust-bar{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:6px 14px;margin:0 auto 1.4rem;padding:9px 12px;background:#FAF7F2;border:1px solid #EFEAE0;border-radius:10px;font-size:0.8rem;color:#334155;font-weight:650}
+@media(min-width:900px){.home-trust-bar{gap:8px 24px;padding:10px 20px;font-size:0.86rem;margin-bottom:1.25rem}}
 .home-trust-item{display:inline-flex;align-items:center;gap:4px}
 .home-doors{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-bottom:1.1rem}
+@media(min-width:860px){.home-doors{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:1.25rem;align-items:stretch}}
 .choice-card.recommended{background:#EAF4F0;border:1.5px solid #99f6e4;color:#0f766e;box-shadow:0 2px 6px rgba(15,118,110,0.05);display:flex;flex-direction:column;justify-content:space-between;padding:1.15rem 1.25rem;border-radius:14px;text-decoration:none;transition:transform 0.15s ease,box-shadow 0.15s ease;min-width:0;box-sizing:border-box;position:relative;margin:0}
 .choice-card.recommended:hover{border-color:#0d9488;box-shadow:0 6px 16px rgba(15,118,110,0.12);transform:translateY(-2px)}
 .choice-card.door-mark{background:#FFFFFF;border:1.5px solid #E29578;color:#7C2D12;box-shadow:0 2px 6px rgba(194,94,62,0.06);display:flex;flex-direction:column;justify-content:space-between;padding:1.15rem 1.25rem;border-radius:14px;text-decoration:none;transition:transform 0.15s ease,box-shadow 0.15s ease;min-width:0;box-sizing:border-box;position:relative;margin:0}
@@ -93,6 +99,7 @@ export function renderStudentEntryPage(
 .home-explore-title{font-size:0.86rem;font-weight:750;color:#64748b;text-transform:uppercase;letter-spacing:0.04em;margin:0 0 0.85rem;text-align:center}
 .home-explore-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
 @media(min-width:540px){.home-explore-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:960px){.home-explore-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}}
 .privacy-declaration-strip{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:#ecfdf5;border:1px solid #a7f3d0;border-left:4px solid #059669;border-radius:8px;margin:0 0 1.25rem;font-size:0.86rem;line-height:1.45;color:#064e3b}
 .privacy-lock-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
 .calc-recalculate-details{margin-top:1.25rem;border:1px solid #cbd5e1;border-radius:10px;background:#fff;padding:0.25rem 0.9rem}
@@ -103,7 +110,7 @@ export function renderStudentEntryPage(
 .explore-icon{font-size:1.35rem;flex-shrink:0}
 .explore-text{flex:1;min-width:0;overflow:hidden}
 .explore-heading{font-size:0.88rem;font-weight:750;margin:0 0 2px;color:#0f2c59;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.explore-sub{font-size:0.75rem;color:#64748b;margin:0;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.explore-sub{font-size:0.75rem;color:#64748b;margin:0;line-height:1.35;display:block}
 .explore-arrow{font-size:1rem;color:#0f766e;font-weight:700;flex-shrink:0}
 .home-review{margin-top:1.75rem;padding:1.35rem 1.6rem;border:1px dashed #94a3b8;border-radius:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.03)}
 .home-review h2{margin:0 0 .3rem;font-size:1.15rem;color:#334155}
@@ -201,7 +208,7 @@ export function renderStudentEntryPage(
         <div>
           <span class="door-tag">${ta ? "படி 2 • கட்-ஆஃப் &amp; விருப்பத் தேர்வு நிரப்புதல்" : "Step 2 • Cutoff &amp; Choice Filling"}</span>
           <strong class="door-title">${ta ? "மதிப்பெண் உள்ளது — கட்-ஆஃப் &amp; கல்லூரிகள்" : "I Have My Marks — Check Cutoff &amp; Choices"}</strong>
-          <p class="door-desc">${ta ? "200-க்கு கட்-ஆஃப் கணக்கீடு, 7.5% அரசுப் பள்ளி தகுதி மற்றும் 121 கல்லூரிகளின் கடந்த ஆண்டு கட்-ஆஃப் ஒப்பிட்டு விருப்பப் பட்டியல் தயாரிக்கலாம்." : "Calculate your 200-mark cutoff, verify 7.5% Govt School &amp; First Graduate fee waivers, and plan your choice order with past cutoff benchmarks."}</p>
+          <p class="door-desc">${ta ? "200-க்கு கட்-ஆஃப் கணக்கீடு, 7.5% அரசுப் பள்ளி தகுதி மற்றும் 300 கல்லூரிகளின் கடந்த ஆண்டு கட்-ஆஃப் ஒப்பிட்டு விருப்பப் பட்டியல் தயாரிக்கலாம்." : "Calculate your 200-mark cutoff, verify 7.5% Govt School &amp; First Graduate fee waivers, and plan your choice order with past cutoff benchmarks."}</p>
         </div>
         <div class="door-action">
           <span>${ta ? "✓ 200-க்கு கட்-ஆஃப் கணக்கீடு" : "✓ 200-mark calc"}</span>
@@ -237,7 +244,7 @@ export function renderStudentEntryPage(
             <span class="explore-icon">🏛️</span>
             <div class="explore-text">
               <strong class="explore-heading">${ta ? "கல்லூரிகள் பட்டியல்" : "Colleges Directory"}</strong>
-              <span class="explore-sub">${ta ? "121 கல்லூரிகள் விவரம்" : "Search &amp; browse colleges"}</span>
+              <span class="explore-sub">${ta ? "300 கல்லூரிகள் விவரம்" : "Search &amp; browse colleges"}</span>
             </div>
             <span class="explore-arrow">→</span>
           </a>

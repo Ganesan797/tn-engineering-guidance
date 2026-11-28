@@ -1,0 +1,68 @@
+[
+  {
+    "sourceId": "GA-2026-R1",
+    "title": "ROUND 1 - GENERAL ACADEMIC - PROVISIONAL ALLOTMENT LIST",
+    "url": "https://static.tneaonline.org/docs/TNEA-2026-ROUND-1-GENERAL-ACADEMIC-PROVISIONAL-ALLOTMENT-LIST.pdf",
+    "year": "2026",
+    "route": "GENERAL ACADEMIC",
+    "round": "ROUND 1",
+    "quota": "GENERAL_ACADEMIC",
+    "pdfPages": 549,
+    "sha256": "e76c1684bb27041441a0588f09f7540ef28b1c1423cdac9edaab57af086d49ba"
+  },
+  {
+    "sourceId": "GA-2026-R2",
+    "title": "ROUND 2 - GENERAL ACADEMIC - PROVISIONAL ALLOTMENT LIST",
+    "url": "https://static.tneaonline.org/docs/TNEA-2026-ROUND-2-GENERAL-ACADEMIC-PROVISIONAL-ALLOTMENT-LIST.pdf",
+    "year": "2026",
+    "route": "GENERAL ACADEMIC",
+    "round": "ROUND 2",
+    "quota": "GENERAL_ACADEMIC",
+    "pdfPages": 1136,
+    "sha256": "58f438d48e60718979a46b565cf4efd61aeff403029f7901b12efd7ba15b4466"
+  },
+  {
+    "sourceId": "GA-2026-R3",
+    "title": "ROUND 3 - GENERAL ACADEMIC - PROVISIONAL ALLOTMENT LIST",
+    "url": "https://static.tneaonline.org/docs/TNEA-2026-ROUND-3-GENERAL-ACADEMIC-PROVISIONAL-ALLOTMENT-LIST.pdf",
+    "year": "2026",
+    "route": "GENERAL ACADEMIC",
+    "round": "ROUND 3",
+    "quota": "GENERAL_ACADEMIC",
+    "pdfPages": 1176,
+    "sha256": "2d2626320c682dfdcb48eef7cc59797ef8c69a9d1aff9e3108cf5155f03f7d26"
+  },
+  {
+    "sourceId": "GS75-2026-R1",
+    "title": "GOVERNMRNT SCHOOL STUDIED (7.5% ) -  ACADEMIC - PROVISIONAL ALLOTMENT LIST - ROUND 1",
+    "url": "https://static.tneaonline.org/docs/TNEA-2026-ROUND-1-GOVT-ACADEMIC-PROVISIONAL-ALLOTMENT-LIST.pdf",
+    "year": "2026",
+    "route": "GOVERNMRNT SCHOOL STUDIED (7.5% ) - ACADEMIC",
+    "round": "ROUND 1",
+    "quota": "GOVT_SCHOOL_7_5",
+    "pdfPages": 50,
+    "sha256": "fee78480f49bba1d0f3dd2ff24e30b00a40cd734e94fe4acc835b129786ccee9"
+  },
+  {
+    "sourceId": "GS75-2026-R2",
+    "title": "ROUND 2 - GOVERNMRNT SCHOOL STUDIED (7.5% ) -  ACADEMIC - PROVISIONAL ALLOTMENT LIST",
+    "url": "https://static.tneaonline.org/docs/TNEA-2026-ROUND-2-GOVT-ACADEMIC-PROVISIONAL-ALLOTMENT-LIST.pdf",
+    "year": "2026",
+    "route": "GOVERNMRNT SCHOOL STUDIED (7.5% ) - ACADEMIC",
+    "round": "ROUND 2",
+    "quota": "GOVT_SCHOOL_7_5",
+    "pdfPages": 227,
+    "sha256": "9707f5194cba8fbdea21e6c8774405c043b6b5d4e043860e0011d639e352a949"
+  },
+  {
+    "sourceId": "GS75-2026-R3",
+    "title": "ROUND 3 - GOVERNMRNT SCHOOL STUDIED (7.5% ) -  ACADEMIC - PROVISIONAL ALLOTMENT LIST",
+    "url": "https://static.tneaonline.org/docs/TNEA-2026-ROUND-3-GOVT-ACADEMIC-PROVISIONAL-ALLOTMENT-LIST.pdf",
+    "year": "2026",
+    "route": "GOVERNMRNT SCHOOL STUDIED (7.5% ) - ACADEMIC",
+    "round": "ROUND 3",
+    "quota": "GOVT_SCHOOL_7_5",
+    "pdfPages": 55,
+    "sha256": "3915fda8546cf8f5b0c0ab42dd4c4f61affcec65f1cb6edfdf964f3d96229915"
+  }
+]

@@ -33,9 +33,9 @@ test("M5 Privacy Regression: ZERO student cutoff marks or community in GET URLs,
   );
 });
 
-test("M5 Governed Offerings Coverage: All 1,249 offerings listed; all unapproved data transparently marked", () => {
+test("M5 Governed Offerings Coverage: All 2,628 offerings listed; all unapproved data transparently marked", () => {
   const htmlLanding = renderM5GuidancePage(new URLSearchParams());
-  assert.ok(htmlLanding.includes("All 1,249 governed offerings across the 121 approved institutions"), "Must disclose all 1,249 offerings in collapsed guide");
+  assert.ok(htmlLanding.includes("All 2,628 governed offerings across the 300 approved institutions"), "Must disclose all 2,628 offerings in collapsed guide");
   assert.ok(
     htmlLanding.includes("Lowest observed provisional allotment mark across available official rounds") ||
       htmlLanding.includes("Minimum observed mark in official Round 1"),
@@ -355,11 +355,11 @@ test("M6-T03 Acronym & Search Polish: Students can instantly search by college a
   assert.ok(htmlKovai.includes("PSG College of Technology"));
   assert.ok(!htmlKovai.includes("College of Engineering Guindy (CEG)"));
 
-  const htmlMadurai = renderM5GuidancePage(new URLSearchParams({ q: "மதுரை" }));
+  const htmlMadurai = renderM5GuidancePage(new URLSearchParams({ q: "மதுரை", show_all: "1" }));
   assert.ok(htmlMadurai.includes("Thiagarajar College of Engineering"));
   assert.ok(!htmlMadurai.includes("Government College of Technology, Coimbatore"));
 
-  const htmlTrichy = renderM5GuidancePage(new URLSearchParams({ q: "திருச்சி" }));
+  const htmlTrichy = renderM5GuidancePage(new URLSearchParams({ q: "திருச்சி", show_all: "1" }));
   assert.ok(htmlTrichy.includes("(3011)"));
 });
 
@@ -950,18 +950,18 @@ test("M5 DOTE Classification & College Selection: Exact categories from dte.tn.g
   assert.ok(htmlOfferings.includes("Government Aided Engineering College"), "Must render Govt Aided badge text");
 });
 
-test("Mobile Experience: Bounded pagination prevents rendering all 1,249 offerings on initial load and enables full reachability", () => {
-  // 1. Initial search results render bounded window (50 offerings, not 1,249)
+test("Mobile Experience: Bounded pagination prevents rendering all 2,628 offerings on initial load and enables full reachability", () => {
+  // 1. Initial search results render bounded window (50 offerings, not 2,628)
   const htmlPage1 = renderM5GuidancePage(new URLSearchParams({ lang: "en", searched: "1" }));
   const rowsMatch1 = htmlPage1.match(/<tr/g) || [];
-  // 1 table header row + 50 data rows = 51 rows total
-  assert.ok(rowsMatch1.length <= 55, "Initial load must be bounded to pagination window, not full 1,249 offerings");
-  assert.ok(htmlPage1.includes("Page 1 of 25"), "Must show pagination metadata");
+  // Bounded window (50 offerings + college-group comparison headers, far below 2,628 offerings)
+  assert.ok(rowsMatch1.length <= 75, "Initial load must be bounded to pagination window, not full 2,628 offerings");
+  assert.ok(htmlPage1.includes("Page 1 of 53"), "Must show pagination metadata");
   assert.ok(htmlPage1.includes("Next"), "Must offer Next page navigation");
 
   // 2. Page 2 navigation
   const htmlPage2 = renderM5GuidancePage(new URLSearchParams({ page: "2", lang: "en" }));
-  assert.ok(htmlPage2.includes("Page 2 of 25"), "Must render page 2 metadata");
+  assert.ok(htmlPage2.includes("Page 2 of 53"), "Must render page 2 metadata");
   assert.ok(htmlPage2.includes("Prev"), "Must offer Previous page navigation on page 2");
 
   // 3. Shortlist toggle form preserves current page in hidden input

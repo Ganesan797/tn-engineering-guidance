@@ -44,16 +44,24 @@ export {
   COHORT_55_CODES,
   COHORT_66_ADDITIONS_CODES,
   COHORT_65_ADDITIONS_CODES,
+  COHORT_79_ADDITIONS_CODES,
+  COHORT_100_ADDITIONS_CODES,
   COHORT_121_CODES,
   COHORT_120_CODES,
+  COHORT_200_CODES,
+  COHORT_300_CODES,
 } from "./cohort-metadata.ts";
 import {
   COHORT_55_CODES,
   COHORT_121_CODES,
+  COHORT_200_CODES,
+  COHORT_300_CODES,
 } from "./cohort-metadata.ts";
 
 const COHORT_55_SET = new Set(COHORT_55_CODES);
 const COHORT_121_SET = new Set(COHORT_121_CODES);
+const COHORT_200_SET = new Set(COHORT_200_CODES);
+const COHORT_300_SET = new Set(COHORT_300_CODES);
 
 export interface HistoricalRepositoryOptions {
   cohortCodes?: readonly string[];
@@ -78,7 +86,7 @@ export class HistoricalRepository {
   ) {
     const allowedCodes = options?.cohortCodes
       ? new Set(options.cohortCodes)
-      : COHORT_121_SET;
+      : COHORT_300_SET;
 
     // Load complete governed offerings for the cohort from offering-candidates.csv FIRST
     // so governed offering membership is established before observations are registered.
@@ -407,7 +415,7 @@ export interface GateAApprovedDatasetSpec {
   sha256Lf: string;
   recordCount: number;
   year: number;
-  cohort: "55" | "66";
+  cohort: "55" | "66" | "79" | "100";
 }
 
 export const GATE_A_121_APPROVED_DATASETS: readonly GateAApprovedDatasetSpec[] = Object.freeze([
@@ -434,6 +442,22 @@ export const GATE_A_121_APPROVED_DATASETS: readonly GateAApprovedDatasetSpec[] =
     recordCount: 7057,
     year: 2026,
     cohort: "66",
+  },
+  {
+    relPath: "../../experiments/m5-derived-minimum-candidates/run-2026-cohort-79-additions/candidates.json",
+    sha256: "65eeb06afc7a42837e7be5822f30dc7f9d631fa1542cd337b7d865aab57fb64b",
+    sha256Lf: "e42a65efe9a6b7bfef9daac3f66f932db2d9f9254bf9e7d2d61e3201a23a0ba1",
+    recordCount: 6186,
+    year: 2026,
+    cohort: "79",
+  },
+  {
+    relPath: "../../experiments/m5-derived-minimum-candidates/run-2026-cohort-100-additions/candidates.json",
+    sha256: "a1e7565265c2da8bd7facc436ad62a9a536b4903deb4295c5de019f61a685dac",
+    sha256Lf: "a1e7565265c2da8bd7facc436ad62a9a536b4903deb4295c5de019f61a685dac",
+    recordCount: 6288,
+    year: 2026,
+    cohort: "100",
   },
 ]);
 

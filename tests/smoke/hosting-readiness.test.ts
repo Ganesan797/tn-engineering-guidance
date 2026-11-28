@@ -71,7 +71,7 @@ test("M6-T05: Hosting & Deployment Readiness Verification", async () => {
     const m5Html = await m5Res.text();
     assert.ok(m5Html.includes("compact-search-card"), "M5 landing page renders compact search card");
     assert.ok(!m5Html.includes("College Cutoff Comparison Table"), "M5 landing page must not output results before search");
-    assert.ok(m5Html.includes("121 approved institutions"), "M5 page should cite approved 121 institutions in collapsed guide");
+    assert.ok(m5Html.includes("300 approved institutions"), "M5 page should cite approved 300 institutions in collapsed guide");
 
     // B2. M5 Edit Search view (with edit_search=1)
     const m5EditRes = await fetch(`${base}/m5-guidance?tab=comparison&lang=en&edit_search=1`);
