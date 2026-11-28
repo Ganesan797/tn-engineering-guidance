@@ -111,6 +111,27 @@ export function resolveMentorConfig(
 ): MentorConfig {
   const enabled = env.MENTOR_QA_ENABLED === "1";
   const rawProvider = (env.MENTOR_QA_PROVIDER ?? "mock").trim().toLowerCase();
+  if (rawProvider === "gemini") {
+    if (env.MENTOR_STAGING_AUTHORIZED !== "1") {
+      return {
+        enabled: false,
+        provider: "mock",
+        configError: `Unsupported mentor provider "${rawProvider}" without MENTOR_STAGING_AUTHORIZED=1. Only "mock" is authorized by default.`,
+      };
+    }
+    if (!env.GEMINI_API_KEY?.trim()) {
+      return {
+        enabled: false,
+        provider: "mock",
+        configError: 'GEMINI_API_KEY is required when MENTOR_QA_PROVIDER="gemini" in staging mode.',
+      };
+    }
+    return {
+      enabled,
+      provider: "gemini",
+      configError: null,
+    };
+  }
   if (rawProvider !== "mock") {
     return {
       enabled: false,

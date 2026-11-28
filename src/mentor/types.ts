@@ -5,6 +5,7 @@ export type MentorRouteType =
   | "CANONICAL_REVIEWED"
   | "DETERMINISTIC"
   | "AI_EXPLANATION_MOCK"
+  | "AI_EXPLANATION_GEMINI"
   | "INSUFFICIENT_EVIDENCE"
   | "BLOCKED_REQUEST";
 
@@ -16,7 +17,7 @@ export type MentorIntent =
   | "SIMPLIFY_FOR_PARENT"
   | "GENERAL_GUIDANCE";
 
-export type MentorProviderName = "mock";
+export type MentorProviderName = "mock" | "gemini";
 
 export type ContextResolutionOutcome =
   | "VALID_CONTEXT"
@@ -91,7 +92,7 @@ export interface MentorRequest {
 
 export interface MentorResponse {
   readonly status: "ok" | "disabled" | "blocked" | "error";
-  readonly mentorMode: "MOCK_ONLY";
+  readonly mentorMode: "MOCK_ONLY" | "STAGING_GEMINI";
   readonly provider: MentorProviderName | "none";
   readonly route: MentorRouteType;
   readonly contextOutcome: ContextResolutionOutcome;

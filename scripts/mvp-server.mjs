@@ -32,7 +32,7 @@ const { answerJourneyQuestion, editJourneyAnswer, EMPTY_JOURNEY, nextJourneyQues
 const { parsePresentationSources } = await import("../src/student-semantics/provenance.ts");
 const { renderM2Journey } = await import("../src/ui/m2-journey.ts");
 const { loadQuestionCollection, renderQuestionCollection } = await import("../src/ui/explore-questions.ts");
-const { explainWithMentor, MAX_MENTOR_BODY_BYTES } = await import("../src/mentor/index.ts");
+const { explainWithMentorAsync, MAX_MENTOR_BODY_BYTES } = await import("../src/mentor/index.ts");
 
 const root = new URL("../", import.meta.url);
 const pkgJson = JSON.parse(readFileSync(new URL("package.json", root), "utf8"));
@@ -306,7 +306,7 @@ const server = createServer(async (request, response) => {
       response.end(JSON.stringify({ status: "error", mentorMode: "MOCK_ONLY", reply: "Expected JSON object." }));
       return;
     }
-    const result = explainWithMentor(parsed, {
+    const result = await explainWithMentorAsync(parsed, {
       onEvent: (ev) => {
         console.log(`mentor_route=${ev.mentor_route} mentor_status=${ev.mentor_status} mentor_mode=${ev.mentor_mode}`);
       },

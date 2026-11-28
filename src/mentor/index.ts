@@ -1,4 +1,5 @@
 import { resolveBoundedContext } from "./context-resolver.ts";
+import { GeminiStagingMentorProvider } from "./gemini-staging-provider.ts";
 import { MockMentorProvider } from "./mock-provider.ts";
 import {
   getAiIdentityDisclosure,
@@ -14,16 +15,18 @@ export * from "./policy.ts";
 export * from "./context-resolver.ts";
 export * from "./router.ts";
 export * from "./mock-provider.ts";
+export * from "./gemini-staging-provider.ts";
 
 export interface MentorOperationalEvent {
   readonly mentor_route: MentorResponse["route"];
   readonly mentor_status: MentorResponse["status"];
-  readonly mentor_mode: "MOCK_ONLY";
+  readonly mentor_mode: MentorResponse["mentorMode"];
 }
 
 export interface ExplainWithMentorOptions {
   readonly env?: Record<string, string | undefined>;
   readonly provider?: MentorProvider;
+  readonly geminiProvider?: GeminiStagingMentorProvider;
   readonly onEvent?: (event: MentorOperationalEvent) => void;
 }
 
@@ -158,6 +161,107 @@ export function explainWithMentor(
       contextCount: context.selected_evidence.length,
     };
     options.onEvent?.({ mentor_route: res.route, mentor_status: res.status, mentor_mode: "MOCK_ONLY" });
+    return res;
+  }
+}
+
+let sharedGeminiProvider: GeminiStagingMentorProvider | null = null;
+let sharedGeminiKey = "";
+
+export async function explainWithMentorAsync(
+  request: MentorRequest,
+  options: ExplainWithMentorOptions = {}
+): Promise<MentorResponse> {
+  const env =
+    options.env ??
+    ((globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {});
+  const config = resolveMentorConfig(env);
+
+  if (config.configError || !config.enabled || config.provider !== "gemini") {
+    return explainWithMentor(request, options);
+  }
+
+  const language = request.language === "en" ? "en" : "ta";
+  const disclosure = getAiIdentityDisclosure(language);
+  const provenance = getSourceProvenanceLabel(language);
+  const rawQuestion = String(request.question ?? "");
+
+  if (rawQuestion.length > MAX_QUESTION_LENGTH) {
+    return explainWithMentor(request, options);
+  }
+
+  const minimizedQuestion = minimizeQuestionText(rawQuestion);
+  const context = resolveBoundedContext({ ...request, language });
+  const routed = routeMentorRequest(request, minimizedQuestion, context);
+
+  if (routed.route !== "AI_EXPLANATION_MOCK") {
+    const isValidationError = routed.blockedReason === "CONTEXT_VALIDATION_ERROR";
+    const status: MentorResponse["status"] = isValidationError
+      ? "error"
+      : routed.route === "BLOCKED_REQUEST"
+      ? "blocked"
+      : "ok";
+    const res: MentorResponse = {
+      status,
+      mentorMode: "STAGING_GEMINI",
+      provider: "none",
+      route: routed.route,
+      contextOutcome: context.context_outcome,
+      language,
+      disclosure,
+      provenance,
+      reply: routed.canonicalAnswer ?? "",
+      contextCount: context.selected_evidence.length,
+    };
+    options.onEvent?.({ mentor_route: res.route, mentor_status: res.status, mentor_mode: "STAGING_GEMINI" });
+    return res;
+  }
+
+  const apiKey = env.GEMINI_API_KEY?.trim() ?? "";
+  let gemini = options.geminiProvider;
+  if (!gemini) {
+    if (!sharedGeminiProvider || sharedGeminiKey !== apiKey) {
+      sharedGeminiKey = apiKey;
+      sharedGeminiProvider = new GeminiStagingMentorProvider({
+        apiKey,
+        model: env.MENTOR_GEMINI_MODEL?.trim() || undefined,
+      });
+    }
+    gemini = sharedGeminiProvider;
+  }
+
+  try {
+    const reply = await gemini.explainAsync(context, minimizedQuestion);
+    const res: MentorResponse = {
+      status: "ok",
+      mentorMode: "STAGING_GEMINI",
+      provider: "gemini",
+      route: "AI_EXPLANATION_GEMINI",
+      contextOutcome: context.context_outcome,
+      language,
+      disclosure,
+      provenance,
+      reply,
+      contextCount: context.selected_evidence.length,
+    };
+    options.onEvent?.({ mentor_route: res.route, mentor_status: res.status, mentor_mode: "STAGING_GEMINI" });
+    return res;
+  } catch {
+    // Fail-closed safe fallback to deterministic/mock explanation on timeout, 429, rate-limit, or unsafe output
+    const fallback = (options.provider ?? new MockMentorProvider()).explain(context, minimizedQuestion);
+    const res: MentorResponse = {
+      status: "ok",
+      mentorMode: "STAGING_GEMINI",
+      provider: "mock",
+      route: "AI_EXPLANATION_MOCK",
+      contextOutcome: context.context_outcome,
+      language,
+      disclosure,
+      provenance,
+      reply: fallback,
+      contextCount: context.selected_evidence.length,
+    };
+    options.onEvent?.({ mentor_route: res.route, mentor_status: res.status, mentor_mode: "STAGING_GEMINI" });
     return res;
   }
 }
