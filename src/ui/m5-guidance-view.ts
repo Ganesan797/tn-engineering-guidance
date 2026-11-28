@@ -401,7 +401,7 @@ export function renderM5GuidancePage(
   const branchFilter = (params.get("branch") ?? "").trim().toUpperCase();
   const onlyAvailable = params.get("only_available") === "1";
   const showAllOfferings = params.get("show_all") === "1";
-  const sortOption = params.get("sort") ?? "college_name";
+  const sortOption = params.get("sort") ?? "cutoff_desc";
 
   const isEditingSearch = params.get("edit_search") === "1";
   const hasExplicitSearch = params.get("searched") === "1";
@@ -413,7 +413,7 @@ export function renderM5GuidancePage(
   const hasType = Boolean((params.has("type") && params.get("type") !== "all") || (inputState?.typeFilter && inputState?.typeFilter !== "all"));
   const hasCollege = Boolean((params.has("college") && params.get("college") !== "all") || (inputState?.collegeFilter && inputState?.collegeFilter !== "all"));
   const hasOnlyAvailable = params.get("only_available") === "1";
-  const hasCustomSort = params.has("sort") && params.get("sort") !== "college_name";
+  const hasCustomSort = params.has("sort") && params.get("sort") !== "cutoff_desc";
   const hasActiveCutoffSearch = studentCutoff !== null && communitySelected;
 
   // Shortlist state from URL params (choice IDs only, zero marks)
@@ -623,7 +623,7 @@ export function renderM5GuidancePage(
     if (districtFilter) p.set("district", districtFilter);
     if (collegeFilter && collegeFilter !== "all") p.set("college", collegeFilter);
     if (branchFilter) p.set("branch", branchFilter);
-    if (sortOption !== "college_name") p.set("sort", sortOption);
+    if (sortOption !== "cutoff_desc") p.set("sort", sortOption);
     if (onlyAvailable) p.set("only_available", "1");
     if (rawShortlist) p.set("shortlist", rawShortlist);
     return `?${p.toString()}`;
@@ -651,7 +651,7 @@ export function renderM5GuidancePage(
       ${districtFilter ? `<input type="hidden" name="district" value="${esc(districtFilter)}">` : ""}
       ${collegeFilter && collegeFilter !== "all" ? `<input type="hidden" name="college" value="${esc(collegeFilter)}">` : ""}
       ${branchFilter ? `<input type="hidden" name="branch" value="${esc(branchFilter)}">` : ""}
-      ${sortOption !== "college_name" ? `<input type="hidden" name="sort" value="${esc(sortOption)}">` : ""}
+      ${sortOption !== "cutoff_desc" ? `<input type="hidden" name="sort" value="${esc(sortOption)}">` : ""}
       ${onlyAvailable ? `<input type="hidden" name="only_available" value="1">` : ""}
       ${safePage > 1 ? `<input type="hidden" name="page" value="${safePage}">` : ""}
       ${hasSearched ? `<input type="hidden" name="searched" value="1">` : ""}
@@ -1949,7 +1949,7 @@ function renderComparisonTab(
         if (districtFilter) u.set("district", districtFilter);
         if (collegeFilter && collegeFilter !== "all") u.set("college", collegeFilter);
         if (branchFilter) u.set("branch", branchFilter);
-        if (sortOption !== "college_name") u.set("sort", sortOption);
+        if (sortOption !== "cutoff_desc") u.set("sort", sortOption);
         if (onlyAvailable) u.set("only_available", "1");
         if (rawShortlist) u.set("shortlist", rawShortlist);
         return `?${u.toString()}`;
@@ -3027,7 +3027,7 @@ function renderOfferingRow(
               ${sessionState.studentCutoff !== null ? `<input type="hidden" name="cutoff" value="${sessionState.studentCutoff}">` : ""}
               <button type="submit"
                  class="btn-action btn-remove-shortlist"
-                 style="font-size: 0.78rem; padding: 3px 8px; min-height: 32px; border: 1px solid #fca5a5; color: #b91c1c; background: #fff; cursor: pointer; border-radius: 4px; white-space: nowrap;"
+                 style="font-size: 0.78rem; padding: 3px 8px; min-height: 40px; border: 1px solid #fca5a5; color: #b91c1c; background: #fff; cursor: pointer; border-radius: 4px; white-space: nowrap;"
                  aria-label="${t("விருப்பப் பட்டியலிலிருந்து நீக்கு", "Remove from shortlist")}">
                 ${t("நீக்கு ✕", "Remove ✕")}
               </button>

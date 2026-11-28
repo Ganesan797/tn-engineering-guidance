@@ -731,7 +731,7 @@ test("M5 Feedback #2 & #3: College Type filter and intelligent cutoff descending
   assert.ok(htmlAided.includes("Thiagarajar College of Engineering"), "Must include TCE (5008)");
   assert.ok(!htmlAided.includes("College of Engineering Guindy"), "Must exclude University Departments");
 
-  // C. Neutral Default Sorting (college_name) & Explicit Numerical Sorting (cutoff_desc)
+  // C. Default Cutoff High-to-Low Sorting (cutoff_desc) & Explicit Alphabetical Sorting (college_name)
   const htmlDefault = renderM5GuidancePage(
     new URLSearchParams({ branch: "CS", lang: "en" }),
     {
@@ -744,14 +744,35 @@ test("M5 Feedback #2 & #3: College Type filter and intelligent cutoff descending
     }
   );
 
-  // Default sorting must be neutral alphabetical by College Name (A-Z)
-  const actDefaultIdx = htmlDefault.indexOf("Alagappa Chettiar Government College");
+  // Default sorting on /m5-guidance must be Cutoff High to Low (cutoff_desc)
   const cegDefaultIdx = htmlDefault.indexOf("College of Engineering Guindy");
-  assert.ok(actDefaultIdx !== -1 && cegDefaultIdx !== -1, "Must contain both colleges");
-  assert.ok(actDefaultIdx < cegDefaultIdx, "Alagappa Chettiar (A) must appear before CEG (C) in neutral default sort");
-  assert.ok(htmlDefault.includes('value="college_name" selected'), "Must select college_name by default");
+  const actDefaultIdx = htmlDefault.indexOf("Alagappa Chettiar Government College");
+  assert.ok(cegDefaultIdx !== -1, "Must contain CEG CS");
+  if (actDefaultIdx !== -1) {
+    assert.ok(cegDefaultIdx < actDefaultIdx, "In default cutoff_desc sort, CEG (199.00) must appear before Alagappa Chettiar (184.50)");
+  }
+  assert.ok(htmlDefault.includes('value="cutoff_desc" selected'), "Must select cutoff_desc by default");
 
-  // Explicit Numerical Sorting: Cutoff High to Low
+  // Explicit Alphabetical Sorting: College Name (A-Z)
+  const htmlAlpha = renderM5GuidancePage(
+    new URLSearchParams({ branch: "CS", sort: "college_name", lang: "en" }),
+    {
+      studentCutoff: 198.0,
+      quota: "GENERAL_ACADEMIC",
+      community: "BC",
+      round: "ROUND_1",
+      year: 2026,
+      communitySelected: true,
+    }
+  );
+
+  const actAlphaIdx = htmlAlpha.indexOf("Alagappa Chettiar Government College");
+  const cegAlphaIdx = htmlAlpha.indexOf("College of Engineering Guindy");
+  assert.ok(actAlphaIdx !== -1 && cegAlphaIdx !== -1, "Must contain both colleges");
+  assert.ok(actAlphaIdx < cegAlphaIdx, "Alagappa Chettiar (A) must appear before CEG (C) when sort=college_name");
+  assert.ok(htmlAlpha.includes('value="college_name" selected'), "Must select college_name when requested");
+
+  // D. Sort option dropdown presence and shortlist form persistence
   const htmlSorted = renderM5GuidancePage(
     new URLSearchParams({ branch: "CS", sort: "cutoff_desc", lang: "en" }),
     {
@@ -763,15 +784,6 @@ test("M5 Feedback #2 & #3: College Type filter and intelligent cutoff descending
       communitySelected: true,
     }
   );
-
-  const cegSortedIdx = htmlSorted.indexOf("College of Engineering Guindy");
-  const actSortedIdx = htmlSorted.indexOf("Alagappa Chettiar Government College");
-  assert.ok(cegSortedIdx !== -1, "Must contain CEG CS");
-  if (actSortedIdx !== -1) {
-    assert.ok(cegSortedIdx < actSortedIdx, "In numerical sort, CEG (199.00) must appear before Alagappa Chettiar (184.50)");
-  }
-
-  // D. Sort option dropdown presence and shortlist form persistence
   assert.ok(htmlSorted.includes('id="m5-toolbar-sort"'), "Must render Sort By dropdown on results page");
   assert.ok(htmlSorted.includes('<input type="hidden" name="sort" value="cutoff_desc">'), "Must preserve sort in shortlist form");
 });
@@ -803,7 +815,7 @@ test("M5 Feedback #4: Cool educational styling, college type badges, and header 
 test("M5 Feedback #5: All Rounds closing cutoffs, cross-round intelligence, and modern typography", () => {
   // A. All Rounds Mode (round="ALL"): CEG CS (199.00, Round 1) and Adhiparasakthi CS (102.50, Round 3) appear with actual cutoffs
   const htmlAll = renderM5GuidancePage(
-    new URLSearchParams({ branch: "CS", lang: "en" }),
+    new URLSearchParams({ branch: "CS", lang: "en", show_all: "1" }),
     {
       studentCutoff: 198.0,
       quota: "GENERAL_ACADEMIC",
