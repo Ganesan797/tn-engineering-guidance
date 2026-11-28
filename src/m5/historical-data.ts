@@ -403,8 +403,11 @@ interface RawCandidateRecord {
   source_allotted_category_literal: string;
   source_year_literal: string;
   source_title_literal: string;
+  derived_metric_type: string;
   derived_minimum_mark: number;
   allotment_count_in_bucket: number;
+  official_closing_value: number | null;
+  official_closing_value_status?: string;
   nonpersonal_source_locator: string;
   extraction_status: string;
 }
@@ -415,10 +418,10 @@ export interface GateAApprovedDatasetSpec {
   sha256Lf: string;
   recordCount: number;
   year: number;
-  cohort: "55" | "66" | "79" | "100";
+  cohort: "55" | "66" | "79" | "100" | "300";
 }
 
-export const GATE_A_121_APPROVED_DATASETS: readonly GateAApprovedDatasetSpec[] = Object.freeze([
+export const GATE_A_APPROVED_DATASETS: readonly GateAApprovedDatasetSpec[] = Object.freeze([
   {
     relPath: "../../experiments/m5-derived-minimum-candidates/run-2025-cohort-55/candidates.json",
     sha256: "1c6659838e848eaaf636a7c4ca70d895243ac9f32d6fe16eff94a092a2bb74c7",
@@ -459,13 +462,66 @@ export const GATE_A_121_APPROVED_DATASETS: readonly GateAApprovedDatasetSpec[] =
     year: 2026,
     cohort: "100",
   },
+  {
+    relPath: "../../experiments/m5-derived-minimum-candidates/run-2025-cohort-300-additions/candidates.json",
+    sha256: "c079423a4fb4c5513ac66f6b602db680ac8566062b3e0cf78d19a5c7bab63559",
+    sha256Lf: "c079423a4fb4c5513ac66f6b602db680ac8566062b3e0cf78d19a5c7bab63559",
+    recordCount: 20697,
+    year: 2025,
+    cohort: "300",
+  },
 ]);
 
+export function parseVerifiedCandidateRecord(
+  r: RawCandidateRecord,
+  expectedYear: number,
+  sourceLabel: string
+): DerivedHistoricalObservation {
+  if (r.source_year_literal !== String(expectedYear)) {
+    throw new Error(
+      `Integrity Exception: Year mismatch in ${sourceLabel} (${r.research_candidate_id}). Expected "${expectedYear}", got "${r.source_year_literal}".`
+    );
+  }
+  if (r.derived_metric_type !== "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK") {
+    throw new Error(
+      `Integrity Exception: Unexpected metric type in ${sourceLabel} (${r.research_candidate_id}): ${r.derived_metric_type}.`
+    );
+  }
+  if (r.official_closing_value !== null) {
+    throw new Error(
+      `Integrity Exception: official_closing_value must remain null for D5 observations in ${sourceLabel} (${r.research_candidate_id}).`
+    );
+  }
+  const quota = mapRouteLiteral(r.source_route_literal);
+  const round = mapRoundLiteral(r.source_round_literal);
+  const category = r.source_allotted_category_literal as CommunityCategory;
+  const isHeld = r.source_college_code_literal === "1516" || r.extraction_status === "HELD_NEEDS_REVIEW";
+  return {
+    candidateId: r.research_candidate_id,
+    year: expectedYear,
+    stage: "PROVISIONAL_ALLOTMENT" as const,
+    sourceTitle: r.source_title_literal,
+    round,
+    quota,
+    collegeCode: r.source_college_code_literal,
+    programmeCode: r.source_programme_code_literal,
+    allottedCategory: category,
+    metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK" as const,
+    derivedMinimumMark: r.derived_minimum_mark,
+    allotmentCount: r.allotment_count_in_bucket,
+    locator: r.nonpersonal_source_locator,
+    isHeld,
+    holdNotice: isHeld ? COLLEGE_1516_HOLD_NOTICE : null,
+  };
+}
+
+export const GATE_A_121_APPROVED_DATASETS = GATE_A_APPROVED_DATASETS;
+
 export function loadVerifiedHistoricalObservations(): DerivedHistoricalObservation[] {
-  // Gate A Approved Observations: SHA-256 validated across 121 colleges (2025 baseline + 2026 runs)
+  // Gate A Approved Observations: SHA-256 validated across 300 governed colleges (2025 + 2026 runs)
   const result: DerivedHistoricalObservation[] = [];
 
-  for (const spec of GATE_A_121_APPROVED_DATASETS) {
+  for (const spec of GATE_A_APPROVED_DATASETS) {
     try {
       const candidateUrl = new URL(spec.relPath, import.meta.url);
       const filePath = fileURLToPath(candidateUrl);
@@ -491,27 +547,7 @@ export function loadVerifiedHistoricalObservations(): DerivedHistoricalObservati
       }
 
       for (const r of records) {
-        const quota = mapRouteLiteral(r.source_route_literal);
-        const round = mapRoundLiteral(r.source_round_literal);
-        const category = r.source_allotted_category_literal as CommunityCategory;
-        const isHeld = r.source_college_code_literal === "1516" || r.extraction_status === "HELD_NEEDS_REVIEW";
-        result.push({
-          candidateId: r.research_candidate_id,
-          year: parseInt(r.source_year_literal, 10),
-          stage: "PROVISIONAL_ALLOTMENT" as const,
-          sourceTitle: r.source_title_literal,
-          round,
-          quota,
-          collegeCode: r.source_college_code_literal,
-          programmeCode: r.source_programme_code_literal,
-          allottedCategory: category,
-          metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK" as const,
-          derivedMinimumMark: r.derived_minimum_mark,
-          allotmentCount: r.allotment_count_in_bucket,
-          locator: r.nonpersonal_source_locator,
-          isHeld,
-          holdNotice: isHeld ? COLLEGE_1516_HOLD_NOTICE : null,
-        });
+        result.push(parseVerifiedCandidateRecord(r, spec.year, spec.relPath));
       }
     } catch (err) {
       console.error(`Warning: Failed to load Gate A verified candidates from ${spec.relPath}:`, err);
@@ -548,27 +584,7 @@ export function loadResearchCandidateObservations(
       const raw = readFileSync(filePath, "utf-8");
       const records = JSON.parse(raw) as RawCandidateRecord[];
       for (const r of records) {
-        const quota = mapRouteLiteral(r.source_route_literal);
-        const round = mapRoundLiteral(r.source_round_literal);
-        const category = r.source_allotted_category_literal as CommunityCategory;
-        const isHeld = r.source_college_code_literal === "1516" || r.extraction_status === "HELD_NEEDS_REVIEW";
-        result.push({
-          candidateId: r.research_candidate_id,
-          year: parseInt(r.source_year_literal, 10),
-          stage: "PROVISIONAL_ALLOTMENT" as const,
-          sourceTitle: r.source_title_literal,
-          round,
-          quota,
-          collegeCode: r.source_college_code_literal,
-          programmeCode: r.source_programme_code_literal,
-          allottedCategory: category,
-          metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK" as const,
-          derivedMinimumMark: r.derived_minimum_mark,
-          allotmentCount: r.allotment_count_in_bucket,
-          locator: r.nonpersonal_source_locator,
-          isHeld,
-          holdNotice: isHeld ? COLLEGE_1516_HOLD_NOTICE : null,
-        });
+        result.push(parseVerifiedCandidateRecord(r, 2026, relPath));
       }
     } catch (err) {
       console.error(`Warning: Failed to load research candidates from ${relPath}:`, err);

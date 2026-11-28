@@ -9,38 +9,40 @@ import {
   type DerivedHistoricalObservation,
 } from "../../src/m5/index.ts";
 
-test("M5 Runtime Historical Data: Verified 29,969 observations across 300 institutions loaded at runtime (Gate A Cleared)", () => {
-  // Verify that the runtime repository contains exactly 29,969 verified observations (202 ungoverned pairs held fail-closed)
+test("M5 Runtime Historical Data: Verified 50,246 observations across 300 institutions loaded at runtime (Gate A Cleared)", () => {
+  // Verify that the runtime repository contains exactly 50,246 verified observations (622 ungoverned observations held fail-closed)
   const allObs = HISTORICAL_OBSERVATIONS.getAll();
-  assert.equal(allObs.length, 29969, "Must contain exactly 29,969 verified Gate A observations (202 ungoverned pairs held)");
+  assert.equal(allObs.length, 50246, "Must contain exactly 50,246 verified Gate A observations (622 ungoverned holds)");
 
-  // 202 ungoverned candidate observations rejected from keyIndex
-  assert.equal(HISTORICAL_OBSERVATIONS.getRejectedConflicts().length, 202, "Must reject exactly 202 ungoverned observations");
+  // 622 ungoverned candidate observations rejected from keyIndex (0 true duplicate key conflicts)
+  const rejected = HISTORICAL_OBSERVATIONS.getRejectedConflicts();
+  assert.equal(rejected.length, 622, "Must hold exactly 622 ungoverned observations");
+  assert.equal(rejected.filter((r) => r.reason === "CONFLICTING_DUPLICATE_KEY").length, 0, "Zero true duplicate key conflicts across all 6 datasets");
 
   // All 2,628 governed options must remain discoverable
   const offerings = HISTORICAL_OBSERVATIONS.getAllGovernedOfferings();
   assert.equal(offerings.length, 2628, "Must contain exactly 2,628 governed offerings across 300 colleges");
 
-  // Cross-year accounting: 2,627/2,628 offerings have historical observations (1 without 2026 observations)
+  // Cross-year accounting: all 2,628 offerings have historical observations
   const counts = HISTORICAL_OBSERVATIONS.getOfferingsCount();
   assert.equal(counts.total, 2628);
-  assert.equal(counts.withHistory, 2627, "Cross-year historical data available must be 2,627 offerings");
-  assert.equal(counts.missingHistory, 1);
+  assert.equal(counts.withHistory, 2628, "Cross-year historical data available must be 2,628 offerings");
+  assert.equal(counts.missingHistory, 0);
 
-  // Active 2025 comparison coverage accounting: 536/2,628 offerings (covering benchmark 55 cohort)
+  // Active 2025 comparison coverage accounting: 2,526/2,628 offerings (298 unique colleges with 2025 observations)
   const counts2025 = HISTORICAL_OBSERVATIONS.getOfferingsCount({ year: 2025 });
   assert.equal(counts2025.total, 2628);
-  assert.equal(counts2025.withHistory, 536, "Active 2025 comparison coverage must be 536 offerings");
-  assert.equal(counts2025.missingHistory, 2092);
+  assert.equal(counts2025.withHistory, 2526, "Active 2025 comparison coverage must be 2,526 offerings");
+  assert.equal(counts2025.missingHistory, 102);
 
-  // Active 2026 comparison coverage accounting: 2,627/2,628 offerings across 300 colleges
+  // Active 2026 comparison coverage accounting: 2,627/2,628 offerings (300 unique colleges; 1217~CB missing 2026)
   const counts2026 = HISTORICAL_OBSERVATIONS.getOfferingsCount({ year: 2026 });
   assert.equal(counts2026.total, 2628);
   assert.equal(counts2026.withHistory, 2627, "Active 2026 comparison coverage must be 2,627 offerings");
   assert.equal(counts2026.missingHistory, 1);
 
   // Cohort 55 subset check within the runtime repository
-  assert.equal(HISTORICAL_OBSERVATIONS.getAll("55").length, 10640);
+  assert.equal(HISTORICAL_OBSERVATIONS.getAll("55").length, 12212);
   assert.equal(HISTORICAL_OBSERVATIONS.getAllGovernedOfferings("55").length, 555);
   const counts55 = HISTORICAL_OBSERVATIONS.getOfferingsCount("55");
   assert.equal(counts55.total, 555);
@@ -82,9 +84,9 @@ test("M5 Runtime Historical Data: Verified 29,969 observations across 300 instit
   assert.ok(runtimeResWithRound.locator?.includes("Document 'ROUND 2 - GENERAL ACADEMIC"));
 });
 
-test("M5 Research Candidates and Runtime Reconciliation: 121 institutions and 17,676 observations", () => {
+test("M5 Research Candidates and Runtime Reconciliation: 121 institutions and 26,032 observations", () => {
   const researchRepo121 = createResearchCandidateRepository("121");
-  assert.equal(researchRepo121.getAll().length, 17676, "Candidate repo loads 17,676 observations across 2025/2026 runs");
+  assert.equal(researchRepo121.getAll().length, 26032, "Candidate repo loads 26,032 observations across 2025/2026 runs");
   assert.equal(researchRepo121.getAllGovernedOfferings().length, 1249, "Candidate repo covers 1,249 offerings across 121 institutions");
 
   const counts121 = researchRepo121.getOfferingsCount();
@@ -93,11 +95,11 @@ test("M5 Research Candidates and Runtime Reconciliation: 121 institutions and 17
   assert.equal(counts121.missingHistory, 0);
 
   // Cohort 55 subset in research candidate repo
-  assert.equal(researchRepo121.getAll("55").length, 10640);
+  assert.equal(researchRepo121.getAll("55").length, 12212);
   assert.equal(researchRepo121.getAllGovernedOfferings("55").length, 555);
 
   // Runtime singleton matches Gate A approved 300-institution cohort
-  assert.equal(HISTORICAL_OBSERVATIONS.getAll().length, 29969, "Production runtime singleton contains 29,969 observations");
+  assert.equal(HISTORICAL_OBSERVATIONS.getAll().length, 50246, "Production runtime singleton contains 50,246 observations");
   assert.equal(HISTORICAL_OBSERVATIONS.getAllGovernedOfferings().length, 2628, "Production runtime singleton covers 2,628 offerings");
 });
 
@@ -477,9 +479,91 @@ test("M5 Bilingual Copy & Truth-in-Guidance Disclosures: English and Tamil verba
   assert.equal(en.formatDelta(-3.5), "-3.50 vs observed minimum");
   assert.equal(en.formatDelta(0.0), "0.00 (exact match with observed minimum)");
 
-  assert.equal(ta.formatDelta(5.25), "+5.25 (கடைசி கட்-ஆஃப்புடன் ஒப்பீடு)");
-  assert.equal(ta.formatDelta(-3.5), "-3.50 (கடைசி கட்-ஆஃப்புடன் ஒப்பீடு)");
+  assert.equal(ta.formatDelta(5.25), "+5.25 (குறைந்தபட்ச ஒதுக்கீட்டு மதிப்பெண்ணுடன் ஒப்பீடு)");
+  assert.equal(ta.formatDelta(-3.5), "-3.50 (குறைந்தபட்ச ஒதுக்கீட்டு மதிப்பெண்ணுடன் ஒப்பீடு)");
 
   assert.ok(en.noDataNotice.includes("Not available for comparison"));
   assert.ok(ta.noDataNotice.includes("ஒப்பீட்டிற்குத் தரவு இல்லை"));
+});
+
+test("M5 Provenance, Denominator & Cross-Year Integrity Regression", async () => {
+  const fs = await import("node:fs");
+  // 1. Source manifest entries for 2025 300-college additions all have corresponding candidate records
+  const sources = JSON.parse(fs.readFileSync("experiments/m5-derived-minimum-candidates/run-2025-cohort-300-additions/sources.json", "utf8"));
+  const candidates = JSON.parse(fs.readFileSync("experiments/m5-derived-minimum-candidates/run-2025-cohort-300-additions/candidates.json", "utf8"));
+  assert.equal(sources.length, 6, "Must list all 6 official 2025 sources");
+  for (const s of sources) {
+    const count = candidates.filter((c: { source_title_literal: string; source_round_literal: string; source_route_literal: string }) =>
+      c.source_title_literal === s.title && c.source_round_literal === s.round && c.source_route_literal === s.route
+    ).length;
+    assert.ok(count > 0, `Source ${s.sourceId} must have > 0 candidate records (got ${count})`);
+  }
+
+  // 2. College coverage denominators match actual observations (298 in 2025; 300 in 2026)
+  const allObs = HISTORICAL_OBSERVATIONS.getAll();
+  const cols2025 = new Set(allObs.filter((o) => o.year === 2025).map((o) => o.collegeCode));
+  const cols2026 = new Set(allObs.filter((o) => o.year === 2026).map((o) => o.collegeCode));
+  assert.equal(cols2025.size, 298, "Actual colleges with 2025 observations must be 298");
+  assert.equal(cols2026.size, 300, "Actual colleges with 2026 observations must be 300");
+
+  // 3. Representative 2025-only (1217~CB) and 2026-only (2744~CS) cross-year isolation
+  const res1217_2025 = compareOffering({
+    studentCutoff: 175.0,
+    year: 2025,
+    stage: "PROVISIONAL_ALLOTMENT",
+    round: "ALL",
+    quota: "GENERAL_ACADEMIC",
+    community: "OC",
+    collegeCode: "1217",
+    programmeCode: "CB",
+    metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK",
+  });
+  assert.equal(res1217_2025.status, "AVAILABLE", "1217~CB has 2025 observation");
+
+  const res1217_2026 = compareOffering({
+    studentCutoff: 175.0,
+    year: 2026,
+    stage: "PROVISIONAL_ALLOTMENT",
+    round: "ALL",
+    quota: "GENERAL_ACADEMIC",
+    community: "OC",
+    collegeCode: "1217",
+    programmeCode: "CB",
+    metricType: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK",
+  });
+  assert.equal(res1217_2026.status, "NO_HISTORICAL_DATA", "1217~CB must fail closed in 2026");
+
+  // 4. Strict year-literal validation rejects malformed values like "2025x" (must not accept parseInt prefix)
+  const { parseVerifiedCandidateRecord } = await import("../../src/m5/historical-data.ts");
+  const baseRaw = {
+    research_candidate_id: "TEST-001",
+    source_college_code_literal: "1",
+    source_programme_code_literal: "CS",
+    source_route_literal: "GENERAL ACADEMIC",
+    source_round_literal: "ROUND 1",
+    source_allotted_category_literal: "OC",
+    source_year_literal: "2025x",
+    source_title_literal: "TEST",
+    derived_metric_type: "DERIVED_PROVISIONAL_ALLOTMENT_MINIMUM_MARK",
+    derived_minimum_mark: 199.5,
+    allotment_count_in_bucket: 1,
+    official_closing_value: null,
+    nonpersonal_source_locator: "Test",
+    extraction_status: "COMPLETE_BUCKET_EXTRACTED",
+  };
+  assert.throws(
+    () => parseVerifiedCandidateRecord(baseRaw, 2025, "test-fixture"),
+    /Integrity Exception: Year mismatch/,
+    "Malformed year literal '2025x' must be rejected"
+  );
+  assert.throws(
+    () => parseVerifiedCandidateRecord({ ...baseRaw, source_year_literal: "2025", official_closing_value: 199.5 }, 2025, "test-fixture"),
+    /Integrity Exception: official_closing_value must remain null/,
+    "Non-null official_closing_value must be rejected"
+  );
+  assert.throws(
+    () => parseVerifiedCandidateRecord({ ...baseRaw, source_year_literal: "2025", derived_metric_type: "OFFICIAL_CLOSING" }, 2025, "test-fixture"),
+    /Integrity Exception: Unexpected metric type/,
+    "Unexpected derived_metric_type must be rejected"
+  );
 });

@@ -1,0 +1,74 @@
+[
+  {
+    "sourceId": "GA-2025-R1",
+    "title": "GENERAL ACADEMIC - PROVISIONAL ALLOTMENT LIST - ROUND 1",
+    "url": "https://static.tneaonline.org/docs/GENERAL_ACADEMIC_ROUND1_2025.pdf",
+    "year": "2025",
+    "route": "GENERAL ACADEMIC",
+    "round": "ROUND 1",
+    "quota": "GENERAL_ACADEMIC",
+    "pdfPages": 608,
+    "sha256": "f921f05bf5ed9580ecfca8080d0f909a1bea00a76be552203595fee83009153c",
+    "scope": "ALL_300"
+  },
+  {
+    "sourceId": "GA-2025-R2",
+    "title": "ROUND 2 - GENERAL ACADEMIC - PROVISIONAL ALLOTMENT LIST",
+    "url": "https://static.tneaonline.org/docs/GEN_ALLOTMENT_ROUND_2_2025.pdf",
+    "year": "2025",
+    "route": "GENERAL ACADEMIC",
+    "round": "ROUND 2",
+    "quota": "GENERAL_ACADEMIC",
+    "pdfPages": 1171,
+    "sha256": "b13e60ec2ca6a1768d5ed30db03de88a792c233223757fde5ec3843b60837e46",
+    "scope": "ONLY_245"
+  },
+  {
+    "sourceId": "GA-2025-R3",
+    "title": "ROUND 3 - GENERAL ACADEMIC - PROVISIONAL ALLOTMENT LIST",
+    "url": "https://static.tneaonline.org/docs/Round3-gen-allotments.pdf",
+    "year": "2025",
+    "route": "GENERAL ACADEMIC",
+    "round": "ROUND 3",
+    "quota": "GENERAL_ACADEMIC",
+    "pdfPages": 1114,
+    "sha256": "4278cded3625f721cec23b7ab81cc69676efd8cbdccefc366d60d0539d23971b",
+    "scope": "ONLY_245"
+  },
+  {
+    "sourceId": "GS75-2025-R1",
+    "title": "GOVERNMRNT SCHOOL STUDIED (7.5% ) -  ACADEMIC - PROVISIONAL ALLOTMENT LIST - ROUND 1",
+    "url": "https://static.tneaonline.org/docs/GOVT_ACADEMIC_ROUND1_2025.pdf",
+    "year": "2025",
+    "route": "GOVERNMRNT SCHOOL STUDIED (7.5% ) - ACADEMIC",
+    "round": "ROUND 1",
+    "quota": "GOVT_SCHOOL_7_5",
+    "pdfPages": 50,
+    "sha256": "cd5917c491c469f17196f4eeef12c005aeedc0d403e5ddbd1ac901dca7ad6337",
+    "scope": "ONLY_245"
+  },
+  {
+    "sourceId": "GS75-2025-R2",
+    "title": "ROUND 2 - GOVERNMRNT SCHOOL STUDIED (7.5% ) -  ACADEMIC - PROVISIONAL ALLOTMENT LIST",
+    "url": "https://static.tneaonline.org/docs/GOVT_ALLOTMENT_ROUND_2_2025.pdf",
+    "year": "2025",
+    "route": "GOVERNMRNT SCHOOL STUDIED (7.5% ) - ACADEMIC",
+    "round": "ROUND 2",
+    "quota": "GOVT_SCHOOL_7_5",
+    "pdfPages": 219,
+    "sha256": "d79efcf66d4a9f6fa8f3bd25df84e86a2e2cbac287ba064c67d2a290bf67b0bd",
+    "scope": "ONLY_245"
+  },
+  {
+    "sourceId": "GS75-2025-R3",
+    "title": "ROUND 3 - GOVERNMRNT SCHOOL STUDIED (7.5% ) -  ACADEMIC - PROVISIONAL ALLOTMENT LIST",
+    "url": "https://static.tneaonline.org/docs/Round3-govt-allotments.pdf",
+    "year": "2025",
+    "route": "GOVERNMRNT SCHOOL STUDIED (7.5% ) - ACADEMIC",
+    "round": "ROUND 3",
+    "quota": "GOVT_SCHOOL_7_5",
+    "pdfPages": 48,
+    "sha256": "3c6e0701d9abaa0afe0c2e028a489d7641bd918101cfe0ce8dcb36fc2a826325",
+    "scope": "ALL_300"
+  }
+]

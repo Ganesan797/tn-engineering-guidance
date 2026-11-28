@@ -2059,25 +2059,17 @@ function renderComparisonTab(
         ${
           year === 2025
             ? `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
-                "<strong>2025 தரவு வரம்பு:</strong> இந்தப் பட்டியலில் உள்ள 300 கல்லூரிகளின் 2,628 படிப்புகளில், 536 படிப்புகளுக்கு 2025-ஆம் ஆண்டின் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு உள்ளது (மீதமுள்ள 2,092 படிப்புகளுக்கு 'ஒப்பீட்டிற்குத் தரவு இல்லை' எனக் காட்டப்படும்). அனைத்து 300 கல்லூரிகளின் 2,628 படிப்புகளுக்குமான முழு ஒதுக்கீட்டுத் தரவைப் பார்க்க மேலே உள்ள 'கலந்தாய்வு ஆண்டு' தேர்வில் <strong>2026</strong>-ஐத் தேர்ந்தெடுக்கவும்.",
-                "<strong>2025 Evidence Coverage:</strong> Across the 300 governed colleges (2,628 offerings), approved 2025 provisional allotment observations are available for 536 offerings (the remaining 2,092 offerings appear as 'Not available for comparison'). Select <strong>2026</strong> in 'Counselling Year' above to inspect complete data across all 300 colleges (2,628 offerings)."
+                "<strong>2025 தரவு வரம்பு:</strong> 300 கல்லூரிகள் கொண்ட பட்டியலில் 298 கல்லூரிகளின் 2,526 படிப்புகளுக்கு 2025-ஆம் ஆண்டின் அதிகாரப்பூர்வ தற்காலிக ஒதுக்கீட்டுத் தரவு உள்ளது (2 கல்லூரிகள் உட்பட மீதமுள்ள 102 படிப்புகளுக்கு 'ஒப்பீட்டிற்குத் தரவு இல்லை' எனக் காட்டப்படும்). 2026-ஆம் ஆண்டின் தரவைப் பார்க்க மேலே உள்ள 'கலந்தாய்வு ஆண்டு' தேர்வில் <strong>2026</strong>-ஐத் தேர்ந்தெடுக்கவும்.",
+                "<strong>2025 Evidence Coverage:</strong> Across the 300-college catalogue (2,628 offerings), approved 2025 provisional allotment observations cover 298 colleges (2,526 offerings); the remaining 102 offerings (including 2 colleges with no 2025 provisional allotment records) appear as 'Not available for comparison'. Select <strong>2026</strong> in 'Counselling Year' above to inspect 2026 data."
               )}</p>`
             : `<p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">${t(
-                "<strong>2026 முழு வரம்பு:</strong> 2026-ஆம் ஆண்டின் தற்காலிக ஒதுக்கீட்டுத் தரவு 300 கல்லூரிகளுக்கும் (2,628 படிப்புகள்) முழுமையாகக் கிடைக்கிறது.",
-                "<strong>2026 Complete Scope:</strong> 2026 provisional allotment data is active across all 300 approved colleges (2,628 offerings)."
+                "<strong>2026 தரவு வரம்பு:</strong> 300 கல்லூரிகளில் உள்ள 2,628 படிப்புகளில், 2,627 படிப்புகளுக்கு 2026-ஆம் ஆண்டின் தற்காலிக ஒதுக்கீட்டுத் தரவு உள்ளது (1 படிப்பு: 1217~CB-க்கு 2026 தரவு இல்லை).",
+                "<strong>2026 Evidence Coverage:</strong> Across the 300 approved colleges (2,628 offerings), 2026 provisional allotment observations are available for 2,627 offerings (1 offering, 1217~CB, has no 2026 observation and appears as 'Not available for comparison')."
               )}</p>`
         }
         <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: #4a5568;">
           <strong>${t("அதிகாரப்பூர்வ வெளிப்படைத்தன்மை அறிவிப்பு:", "Official Truth-in-Guidance Disclosure:")}</strong> ${esc(historicalDisclosure)}
         </p>
-        ${
-          year === 2025 && quota === "GENERAL_ACADEMIC"
-            ? `<p style="margin: 0.4rem 0 0; font-size: 0.84rem; color: #2d3748;">${t(
-                "<strong>முக்கியக் குறிப்பு (சுற்று 1 தரவு இல்லை):</strong> பொதுக் கல்விப் பிரிவுக்கு 2025 அதிகாரப்பூர்வ <strong>சுற்று 2</strong> மற்றும் <strong>சுற்று 3</strong> வெளியீடுகள் மட்டுமே இங்கு அங்கீகரிக்கப்பட்டுள்ளன. சுற்று 1-லேயே அனைத்து இடங்களும் நிரம்பிய படிப்புகளுக்கு 'ஒப்பீட்டிற்கு கிடைக்கவில்லை' என்று காட்டப்படும் — இதன் பொருள் அந்தக் கல்லூரி அல்லது படிப்பு இல்லை என்பதல்ல. உங்கள் பிரிவு (எ.கா. BC, MBC, SC) அல்லது 7.5% ஒதுக்கீட்டைத் தேர்ந்தெடுத்துப் பார்க்கவும்.",
-                "<strong>Coverage note (No Round 1 for General Academic):</strong> Only official 2025 <strong>Round 2</strong> and <strong>Round 3</strong> publications are approved here for General Academic. Offerings where all seats were filled during Round 1 appear as 'Not available for comparison' — this does NOT mean the college or branch is unavailable."
-              )}</p>`
-            : ""
-        }
         <div class="student-safety-rule-banner" style="background: #f0fdf4; border: 1.5px solid #86efac; border-left: 4px solid #16a34a; border-radius: 8px; padding: 0.6rem 0.85rem; margin: 0.65rem 0 0.35rem; font-size: 0.86rem; color: #14532d; line-height: 1.45;">
           <strong style="display: flex; align-items: center; gap: 0.35rem; color: #166534; font-size: 0.88rem; margin-bottom: 0.15rem;">
             🛡️ ${t("மாணவர்களுக்கான வழிகாட்டுதல் (Choice List Guidance)", "Student Choice Guidance")}
@@ -2181,8 +2173,8 @@ function renderComparisonTab(
           <div class="form-group">
             <label for="year-select">${t("ஆண்டு", "Year")}</label>
             <select id="year-select" name="year" aria-label="${t("கலந்தாய்வு ஆண்டு", "Counselling Year")}">
-              <option value="2026" ${year === 2026 ? "selected" : ""}>${t("2026 (300 கல்லூரிகள் · 2,628 படிப்புத் தரவுகள்)", "2026 (300 Colleges · 2,628 Offerings Data)")}</option>
-              <option value="2025" ${year === 2025 ? "selected" : ""}>${t("2025 (300 கல்லூரிகள் · 536 படிப்புத் தரவுகள்)", "2025 (300 Colleges · 536 Offerings Data)")}</option>
+              <option value="2026" ${year === 2026 ? "selected" : ""}>${t("2026 (300 கல்லூரிகள் · 2,627/2,628 படிப்புகள்)", "2026 (300 Colleges · 2,627/2,628 Offerings)")}</option>
+              <option value="2025" ${year === 2025 ? "selected" : ""}>${t("2025 (298/300 கல்லூரிகள் · 2,526/2,628 படிப்புகள்)", "2025 (298/300 Colleges · 2,526/2,628 Offerings)")}</option>
             </select>
           </div>
         </div>
@@ -2582,11 +2574,11 @@ function renderComparisonTab(
 
               <div style="background: #eff6ff; border-left: 4px solid #2563eb; padding: 0.75rem 0.95rem; border-radius: 6px; font-size: 0.85rem; color: #1e3a8a; margin-top: 0.65rem; line-height: 1.55;">
                 <strong style="color: #1e40af; display: block; margin-bottom: 0.25rem;">
-                  📌 ${t("முக்கியக் குறிப்பு — கலந்தாய்வு சுற்றுகளும் கல்லூரிக் கட்-ஆஃப்களும்:", "Important Note — Counselling Rounds vs College Closing Cutoffs:")}
+                  📌 ${t("முக்கியக் குறிப்பு — கலந்தாய்வு சுற்றுகளும் ஒதுக்கீட்டு மதிப்பெண்களும்:", "Important Note — Counselling Rounds vs Observed Allotment Marks:")}
                 </strong>
                 ${t(
-                  "மேலே உள்ள கட்-ஆஃப் வரம்புகள் எந்த மாணவர் எந்தச் சுற்றில் கலந்தாய்வில் பங்கேற்க அழைக்கப்படுகிறார் என்பதற்கானவை (Student Eligibility Band). ஒவ்வொரு சுற்றிலும், ஒவ்வொரு கல்லூரி மற்றும் பாடப்பிரிவிற்கும் அந்தச் சுற்றுக்கான தனித்துவமான குறைந்தபட்ச சேர்க்கைக் கட்-ஆஃப் உண்டு. சுற்றுகளை ஒன்றாக இணைத்தால் தவறான புரிதல் ஏற்படும் என்பதால், உங்கள் மதிப்பெண்ணுக்குரிய சுற்றைத் தேர்ந்தெடுத்து அந்தச் சுற்றுக்கான உண்மையான கட்-ஆஃப்களை ஒப்பிடுவதே சரியானது.",
-                  "The cut-off ranges above determine which round of counselling a student is called for based on their 12th board marks (Student Eligibility Band). Within each round, every college and branch has its own distinct closing/minimum allotment mark. Combining rounds produces inaccurate comparisons; always select your assigned counselling round below to inspect meaningful, round-specific historical closing cutoffs."
+                  "மேலே உள்ள கட்-ஆஃப் வரம்புகள் எந்த மாணவர் எந்தச் சுற்றில் கலந்தாய்வில் பங்கேற்க அழைக்கப்படுகிறார் என்பதற்கானவை (Student Eligibility Band). ஒவ்வொரு சுற்றிலும், ஒவ்வொரு கல்லூரி மற்றும் பாடப்பிரிவிற்கும் அந்தச் சுற்றுக்கான தனித்துவமான குறைந்தபட்ச தற்காலிக ஒதுக்கீட்டு மதிப்பெண் உண்டு. சுற்றுகளை ஒன்றாக இணைத்தால் தவறான புரிதல் ஏற்படும் என்பதால், உங்கள் மதிப்பெண்ணுக்குரிய சுற்றைத் தேர்ந்தெடுத்து அந்தச் சுற்றுக்கான தற்காலிக ஒதுக்கீட்டு மதிப்பெண்களை ஒப்பிடுவதே சரியானது.",
+                  "The cut-off ranges above determine which round of counselling a student is called for based on their 12th board marks (Student Eligibility Band). Within each round, every college and branch has its own distinct observed minimum provisional allotment mark. Combining rounds produces inaccurate comparisons; always select your assigned counselling round below to inspect meaningful, round-specific observed provisional allotment marks."
                 )}
               </div>
             </div>
@@ -2775,7 +2767,7 @@ function renderComparisonTab(
                         <thead>
                           <tr>
                             <th scope="col">${t("கல்லூரி &amp; துறை", "College &amp; Programme")}</th>
-                            <th scope="col">${esc(t(`கடைசி கட்-ஆஃப் (${year})`, `Observed Minimum Mark (${year})`))}</th>
+                            <th scope="col">${esc(t(`குறைந்தபட்ச ஒதுக்கீட்டு மதிப்பெண் (${year})`, `Observed Minimum Mark (${year})`))}</th>
                             <th scope="col">${esc(copy.deltaLabel)}</th>
                             <th scope="col">${t("அதிகாரப்பூர்வ விவரம்", "Official Source")}</th>
                             <th scope="col">${t("விருப்பப் பட்டியல்", "Shortlist")}</th>
@@ -2908,7 +2900,7 @@ function renderOfferingRow(
     if (result.otherRound && result.otherRoundMark !== null && result.otherRoundMark !== undefined) {
       deltaHtml = `<span class="neutral-badge" style="background: #f8fafc; border-left: 3px solid #64748b;">${esc(
         t(
-          `இந்தச் சுற்றில் தரவு இல்லை; ${copy.roundName(result.otherRound)}-ல் கடைசி கட்-ஆஃப் உள்ளது (${result.otherRoundMark.toFixed(2)})`,
+          `இந்தச் சுற்றில் தரவு இல்லை; ${copy.roundName(result.otherRound)}-ல் குறைந்தபட்ச ஒதுக்கீட்டு மதிப்பெண் உள்ளது (${result.otherRoundMark.toFixed(2)})`,
           `No comparable record available for this round; a record exists in ${copy.roundName(result.otherRound)} (${result.otherRoundMark.toFixed(2)})`
         )
       )}</span>`;

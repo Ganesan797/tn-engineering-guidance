@@ -884,7 +884,7 @@ test("M5 Feedback #5: All Rounds closing cutoffs, cross-round intelligence, and 
     }
   );
   assert.ok(
-    htmlR1QueryTa.includes("இந்தச் சுற்றில் தரவு இல்லை; சுற்று 3-ல் கடைசி கட்-ஆஃப் உள்ளது (102.50)"),
+    htmlR1QueryTa.includes("இந்தச் சுற்றில் தரவு இல்லை; சுற்று 3-ல் குறைந்தபட்ச ஒதுக்கீட்டு மதிப்பெண் உள்ளது (102.50)"),
     "Must render Tamil factual cross-round record statement"
   );
   assert.ok(
@@ -1100,10 +1100,14 @@ test("TNEA Historical Evidence & Round Exploration: No cutoff-to-round inference
   });
   assert.ok(htmlExplicitAll.includes('<option value="ALL" selected>'), "Explicit All rounds must be selected when requested");
 
-  // 6. Guidance text in Stage 1 collapsed drawer explains Student Eligibility Band vs College Closing Cutoffs
-  assert.ok(htmlDefault.includes("Counselling Rounds vs College Closing Cutoffs"), "Must explain rounds vs closing cutoffs in English");
+  // 6. Guidance text in Stage 1 collapsed drawer explains Student Eligibility Band vs Observed Allotment Marks
+  assert.ok(htmlDefault.includes("Counselling Rounds vs Observed Allotment Marks"), "Must explain rounds vs observed allotment marks in English");
+  assert.ok(!htmlDefault.includes("historical closing cutoffs"), "Must not call derived provisional marks historical closing cutoffs");
+  assert.ok(!htmlDefault.includes("College Closing Cutoffs"), "Must not call derived provisional marks closing cutoffs");
+  assert.ok(htmlDefault.includes("2026 (300 Colleges · 2,627/2,628 Offerings)"), "2026 year option must disclose 2,627/2,628 offerings");
+  assert.ok(htmlDefault.includes("2025 (298/300 Colleges · 2,526/2,628 Offerings)"), "2025 year option must disclose 298/300 colleges and 2,526/2,628 offerings");
   const htmlTa = renderM5GuidancePage(new URLSearchParams({ lang: "ta" }));
-  assert.ok(htmlTa.includes("கலந்தாய்வு சுற்றுகளும் கல்லூரிக் கட்-ஆஃப்களும்"), "Must explain rounds vs closing cutoffs in Tamil");
+  assert.ok(htmlTa.includes("கலந்தாய்வு சுற்றுகளும் ஒதுக்கீட்டு மதிப்பெண்களும்"), "Must explain rounds vs observed allotment marks in Tamil");
 });
 
 test("Section 33 Regressions: Clean 2-Stage Architecture, Mandatory Cutoff, & Privacy Invariants", () => {

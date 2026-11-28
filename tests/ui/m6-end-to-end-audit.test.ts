@@ -438,8 +438,8 @@ test("FINAL_PRE_M7: Simulated Student Audit Scenarios (Stale 55-college removal,
   }
   const m52025Ta = renderM5GuidancePage(new URLSearchParams({ lang: "ta", tab: "comparison" }), { year: 2025 });
   const m52025En = renderM5GuidancePage(new URLSearchParams({ lang: "en", tab: "comparison" }), { year: 2025 });
-  assert.match(m52025Ta, /300 கல்லூரிகள் · 536 படிப்புத் தரவுகள்/, "2025 option must accurately state 300 colleges / 536 offerings data");
-  assert.match(m52025En, /300 Colleges · 536 Offerings Data/, "2025 EN option must accurately state 300 colleges / 536 offerings data");
+  assert.match(m52025Ta, /298\/300 கல்லூரிகள் · 2,526\/2,628 படிப்புகள்/, "2025 option must accurately state 298/300 colleges / 2,526/2,628 offerings");
+  assert.match(m52025En, /298\/300 Colleges · 2,526\/2,628 Offerings/, "2025 EN option must accurately state 298/300 colleges / 2,526/2,628 offerings");
 
   // 2. Point-of-use 7.5% eligibility warning
   for (const lang of ["ta", "en"] as const) {

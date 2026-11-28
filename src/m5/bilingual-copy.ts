@@ -94,7 +94,7 @@ const TA_COPY: ComparisonCopyText = {
   quotaLabel: "சேர்க்கை ஒதுக்கீடு (Quota)",
   communityLabel: "இட ஒதுக்கீட்டுப் பிரிவு (Community)",
   roundLabel: "கலந்தாய்வு சுற்று",
-  historicalMinLabel: "கடைசி கட்-ஆஃப் (2025)",
+  historicalMinLabel: "குறைந்தபட்ச ஒதுக்கீட்டு மதிப்பெண் (2025)",
   deltaLabel: "கட்-ஆஃப் வித்தியாசம் (Δ)",
   nonPredictionDisclaimer:
     "கடந்த கால தற்காலிக ஒதுக்கீடுகள் எதிர்கால சேர்க்கையை உறுதிப்படுத்தாது. நேர்மறை அல்லது எதிர்மறை மதிப்பெண் வேறுபாடு என்பது ஒரு வரலாற்று கணக்கீடு மட்டுமே; அது சேர்க்கையை உறுதிப்படுத்தவோ கணிக்கவோ செய்யாது. விண்ணப்பதாரர்களின் விருப்பங்கள், இட ஒதுக்கீடு மற்றும் மதிப்பெண் பரவல் ஆகியவற்றின் அடிப்படையில் கட்-ஆஃப் ஆண்டுதோறும் மாறுபடும்.",
@@ -113,12 +113,12 @@ const TA_COPY: ComparisonCopyText = {
   },
   formatDelta: (delta: number) => {
     if (delta > 0) {
-      return `+${delta.toFixed(2)} (கடைசி கட்-ஆஃப்புடன் ஒப்பீடு)`;
+      return `+${delta.toFixed(2)} (குறைந்தபட்ச ஒதுக்கீட்டு மதிப்பெண்ணுடன் ஒப்பீடு)`;
     }
     if (delta < 0) {
-      return `${delta.toFixed(2)} (கடைசி கட்-ஆஃப்புடன் ஒப்பீடு)`;
+      return `${delta.toFixed(2)} (குறைந்தபட்ச ஒதுக்கீட்டு மதிப்பெண்ணுடன் ஒப்பீடு)`;
     }
-    return "0.00 (கடைசி கட்-ஆஃப்பிற்கு சமம்)";
+    return "0.00 (குறைந்தபட்ச ஒதுக்கீட்டு மதிப்பெண்ணிற்கு சமம்)";
   },
   quotaName: (quota: QuotaStream) => {
     return quota === "GENERAL_ACADEMIC"
@@ -144,7 +144,7 @@ const TA_COPY: ComparisonCopyText = {
     }
   },
   roundName: (round: AllotmentRoundOrAll) => {
-    if (round === "ALL") return "அனைத்துச் சுற்றுகளும் (கடைசி கட்-ஆஃப்)";
+    if (round === "ALL") return "அனைத்துச் சுற்றுகளும் (கிடைத்த குறைந்தபட்சம்)";
     return `சுற்று ${ROUND_NUMBER_MAP[round] ?? round}`;
   },
 };
