@@ -32,6 +32,7 @@ const { answerJourneyQuestion, editJourneyAnswer, EMPTY_JOURNEY, nextJourneyQues
 const { parsePresentationSources } = await import("../src/student-semantics/provenance.ts");
 const { renderM2Journey } = await import("../src/ui/m2-journey.ts");
 const { loadQuestionCollection, renderQuestionCollection } = await import("../src/ui/explore-questions.ts");
+const { explainWithMentor, MAX_MENTOR_BODY_BYTES } = await import("../src/mentor/index.ts");
 
 const root = new URL("../", import.meta.url);
 const pkgJson = JSON.parse(readFileSync(new URL("package.json", root), "utf8"));
@@ -262,7 +263,7 @@ const server = createServer(async (request, response) => {
         ? rawRound
         : (quota === "GOVT_SCHOOL_7_5" ? "ROUND_1" : "ROUND_2");
       const rawYear = values.get("year");
-      const year = rawYear === "2025" ? 2025 : 2026;
+      const year = rawYear === "2024" ? 2024 : rawYear === "2025" ? 2025 : 2026;
 
       // Non-sensitive directory filtering parameters from POST body
       const effectiveParams = new URLSearchParams(url.searchParams);
@@ -279,6 +280,45 @@ const server = createServer(async (request, response) => {
       send(response, 200, renderM5GuidancePage(url.searchParams));
       return;
     }
+  }
+  if (request.method === "POST" && url.pathname === "/api/mentor/explain") {
+    let body = "";
+    try {
+      body = await readBoundedBody(request, MAX_MENTOR_BODY_BYTES);
+    } catch (err) {
+      if (err instanceof PayloadTooLargeError) {
+        response.writeHead(413, { "Content-Type": "application/json; charset=utf-8", "X-Robots-Tag": "noindex, nofollow" });
+        response.end(JSON.stringify({ status: "error", mentorMode: "MOCK_ONLY", reply: "Request payload too large." }));
+        return;
+      }
+      throw err;
+    }
+    let parsed;
+    try {
+      parsed = JSON.parse(body);
+    } catch {
+      response.writeHead(400, { "Content-Type": "application/json; charset=utf-8", "X-Robots-Tag": "noindex, nofollow" });
+      response.end(JSON.stringify({ status: "error", mentorMode: "MOCK_ONLY", reply: "Invalid JSON payload." }));
+      return;
+    }
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      response.writeHead(400, { "Content-Type": "application/json; charset=utf-8", "X-Robots-Tag": "noindex, nofollow" });
+      response.end(JSON.stringify({ status: "error", mentorMode: "MOCK_ONLY", reply: "Expected JSON object." }));
+      return;
+    }
+    const result = explainWithMentor(parsed, {
+      onEvent: (ev) => {
+        console.log(`mentor_route=${ev.mentor_route} mentor_status=${ev.mentor_status} mentor_mode=${ev.mentor_mode}`);
+      },
+    });
+    const httpStatus = result.status === "error" ? 400 : 200;
+    response.writeHead(httpStatus, {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      "X-Robots-Tag": "noindex, nofollow",
+    });
+    response.end(JSON.stringify(result));
+    return;
   }
   // Local, opt-in owner review only; no request parameter supplies approvals.
   if (request.method === "GET" && url.pathname === "/colleges" && publicDirectory) {

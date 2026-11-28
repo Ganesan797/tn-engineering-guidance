@@ -3084,7 +3084,7 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
 
   const items = shortIds.map((id, index) => {
     const [cCode, pCode] = id.split("~");
-    const meta = COHORT_55_METADATA[cCode] || COHORT_120_METADATA[cCode];
+    const meta = COHORT_300_METADATA[cCode] || COHORT_55_METADATA[cCode] || COHORT_120_METADATA[cCode];
     const name = meta ? meta.name : `College ${cCode}`;
     const govOff = HISTORICAL_OBSERVATIONS.getGovernedOffering(cCode, pCode);
     const progName = govOff ? govOff.programmeName : pCode;
@@ -3094,6 +3094,32 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
   const shortlistState: ShortlistState = { items };
   const plainTextExport = formatShortlistPlainText(shortlistState, lang);
   const csvExport = formatShortlistCsv(shortlistState, lang);
+
+  const mentorEnabled =
+    (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env?.MENTOR_QA_ENABLED === "1";
+  const mentorShortlistWidget = mentorEnabled
+    ? `
+      <details class="mentor-explain-details screen-only" style="margin-top: 0.9rem; padding: 0.75rem 0.9rem; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;">
+        <summary style="cursor: pointer; font-weight: 700; color: #0f766e; font-size: 0.9rem;">
+          ${t("AI உதவி விளக்கம் — என் பட்டியலை எளிய தமிழில் விளக்கவும்", "AI-assisted explanation — Explain my shortlist")}
+        </summary>
+        <p style="margin: 0.45rem 0; font-size: 0.8rem; color: #475569; line-height: 1.45;">
+          ${t(
+            "AI உதவி விளக்கம் (மனித ஆலோசகர் அல்ல; தவறுகள் இருக்கலாம்): தேர்ந்தெடுத்த அதிகாரப்பூர்வ/ஆளுகை செய்யப்பட்ட தகவலின் அடிப்படையில் மட்டுமே விளக்குகிறது. இது சேர்க்கையை கணிக்காது; உங்கள் விருப்பப் பட்டியலைத் தேர்ந்தெடுக்கவோ மாற்றவோ செய்யாது.",
+            "AI-assisted explanation (not a human counsellor; may be mistaken): based only on selected official/governed information. It does not predict admission or choose or reorder your final list."
+          )}
+        </p>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+          <label for="mentor-shortlist-q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0);">${t("கேள்வி", "Question")}</label>
+          <input id="mentor-shortlist-q" type="text" maxlength="280" placeholder="${esc(t("எ.கா: இந்த இரண்டு தேர்வுகளை பெற்றோருக்கு எளிமையாக விளக்கவும்", "e.g. Explain these choices simply for a parent"))}" style="flex: 1 1 220px; min-height: 40px; padding: 0.4rem 0.65rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem;">
+          <button type="button" class="btn-action" style="min-height: 40px; background: #0f766e; color: #fff; border: none; border-radius: 6px; padding: 0.45rem 0.9rem; font-weight: 700; cursor: pointer;" onclick="(function(btn){var out=document.getElementById('mentor-shortlist-out');var q=document.getElementById('mentor-shortlist-q');if(!out)return;out.textContent='${esc(t("விளக்கம் தயாராகிறது...", "Preparing explanation..."))}';fetch('/api/mentor/explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({intent:'EXPLAIN_SHORTLIST',language:'${lang}',question:q?q.value:'',contextIds:${esc(JSON.stringify(shortIds.slice(0, 6)))}})}).then(function(r){return r.json();}).then(function(d){out.textContent=(d.reply||'')+' — '+(d.provenance||'');}).catch(function(){out.textContent='${esc(t("தற்போது விளக்கம் கிடைக்கவில்லை.", "Explanation unavailable right now."))}';});})(this)">
+            ${t("விளக்கவும்", "Explain")}
+          </button>
+        </div>
+        <div id="mentor-shortlist-out" role="status" aria-live="polite" style="margin-top: 0.55rem; font-size: 0.85rem; color: #1e293b; line-height: 1.5;"></div>
+      </details>
+    `
+    : "";
 
   return `
     <section>
@@ -3113,6 +3139,7 @@ function renderShortlistTab(shortIds: string[], lang: SupportedLanguage): string
           <li><strong style="color: #c2410c;">${t("⚠️ 4-இலக்கக் குறியீட்டைச் சரிபார்க்கவும்:", "⚠️ Verify 4-digit College Code:")}</strong> ${t("ஒரே பெயர் கொண்ட கல்லூரிகளில் தவறு ஏற்படாமல் இருக்க, TNEA இணையதளத்தில் விருப்பத் தேர்வு பதிவு செய்யும் போது இங்குள்ள 4-இலக்கக் குறியீட்டை மட்டுமே முதன்மையாகச் சரிபார்க்கவும்.", "To avoid confusing colleges with similar names, cross-check the official 4-digit College Code printed in this worksheet on tneaonline.org.")}</li>
         </ul>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid #f1f5f9;">
+          ${mentorShortlistWidget}
           <button type="button" class="btn-action btn-primary" onclick="window.print()" aria-label="${t("அச்சுப் படிவம் அல்லது PDF ஆகச் சேமி", "Print Worksheet or Save as PDF")}" title="${t("அச்சுப் படிவம் / PDF பதிவிறக்கு", "Print Worksheet / Save as PDF")}">
             ${t("🖨️ அச்சிடு / PDF ஆகச் சேமி", "🖨️ Print / Save PDF")}
           </button>
