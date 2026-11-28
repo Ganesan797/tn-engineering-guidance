@@ -9,10 +9,10 @@ export interface GeminiStagingOptions {
   readonly nowFn?: () => number;
 }
 
-const DEFAULT_MODEL = "gemini-2.5-flash-lite";
-const FALLBACK_MODELS_ON_404: readonly string[] = ["gemini-2.0-flash", "gemini-2.5-flash"];
+const DEFAULT_MODEL = "gemini-3.6-flash";
+const FALLBACK_MODELS_ON_404: readonly string[] = ["gemini-2.5-flash-lite", "gemini-2.0-flash", "gemini-2.5-flash"];
 const DEFAULT_MAX_RPM = 15;
-const DEFAULT_TIMEOUT_MS = 8000;
+const DEFAULT_TIMEOUT_MS = 12000;
 
 const UNSAFE_OUTPUT_PATTERNS: readonly RegExp[] = [
   /\b(safe\s+college|target\s+college|dream\s+college|guaranteed\s+admission|sure\s+seat|\d+%\s*chance|will\s+definitely\s+get|i\s+recommend\s+(?:this|choosing|joining))\b/i,
@@ -127,7 +127,7 @@ export class GeminiStagingMentorProvider {
       ],
       generationConfig: {
         temperature: 0.2,
-        maxOutputTokens: 320,
+        maxOutputTokens: 1024,
       },
     };
 
