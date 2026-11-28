@@ -171,6 +171,49 @@ export class GeminiStagingMentorProvider {
       }
     }
 
+    // If all candidate models returned 404, query v1beta/models once to discover an active Flash model
+    try {
+      const listRes = await this.fetchImpl("https://generativelanguage.googleapis.com/v1beta/models", {
+        method: "GET",
+        headers: { "x-goog-api-key": this.apiKey },
+        signal: AbortSignal.timeout(this.timeoutMs),
+      });
+      if (listRes.ok) {
+        const listData = (await listRes.json()) as {
+          models?: Array<{ name?: string; supportedGenerationMethods?: string[] }>;
+        };
+        const discovered = (listData.models ?? [])
+          .filter(
+            (m) =>
+              m.name &&
+              m.supportedGenerationMethods?.includes("generateContent") &&
+              /gemini/i.test(m.name) &&
+              /flash/i.test(m.name)
+          )
+          .map((m) => m.name!.replace(/^models\//, ""));
+        for (const m of discovered.slice(0, 2)) {
+          const retryRes = await this.fetchImpl(
+            `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "x-goog-api-key": this.apiKey },
+              body: JSON.stringify(payload),
+              signal: AbortSignal.timeout(this.timeoutMs),
+            }
+          );
+          if (retryRes.ok) {
+            const data = (await retryRes.json()) as {
+              candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+            };
+            const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join(" ") ?? "";
+            return validateGeneratedReply(text);
+          }
+        }
+      }
+    } catch {
+      // keep lastError
+    }
+
     throw lastError ?? new Error("Gemini staging HTTP 404");
   }
 }
